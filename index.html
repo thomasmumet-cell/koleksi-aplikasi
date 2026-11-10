@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Koleksi Aplikasi Thomas</title>
+<style>
+  :root {
+    --latar:#f5f3ee; --kartu:#ffffff; --teks:#1f2a2e; --redup:#6b7378;
+    --utama:#1d4e5f; --aksen:#d98a2b; --garis:#e3dfd6;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family: "Segoe UI", Roboto, Arial, sans-serif; background:var(--latar); color:var(--teks); line-height:1.5; }
+  header { background:var(--utama); color:#fff; padding:40px 20px 72px; }
+  .wadah { max-width:1080px; margin:0 auto; }
+  header h1 { font-size:2rem; font-weight:700; }
+  header p { opacity:.85; margin-top:4px; }
+  .statistik { display:flex; gap:28px; margin-top:20px; flex-wrap:wrap; }
+  .statistik b { font-size:1.6rem; display:block; }
+  .statistik span { font-size:.85rem; opacity:.8; }
+
+  .panel { background:var(--kartu); border-radius:14px; padding:18px; margin:-48px auto 24px; box-shadow:0 6px 20px rgba(0,0,0,.08); }
+  #cari { width:100%; font-size:1.05rem; padding:14px 16px; border:2px solid var(--garis); border-radius:10px; outline:none; }
+  #cari:focus { border-color:var(--utama); }
+  .chip-baris { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; align-items:center; }
+  .chip { border:1px solid var(--garis); background:#fff; color:var(--teks); padding:6px 14px; border-radius:20px; cursor:pointer; font-size:.9rem; }
+  .chip.aktif { background:var(--utama); color:#fff; border-color:var(--utama); }
+  .opsi { margin-left:auto; font-size:.9rem; color:var(--redup); display:flex; gap:6px; align-items:center; cursor:pointer; }
+
+  main { padding:0 20px 40px; }
+  #info { color:var(--redup); font-size:.9rem; margin-bottom:12px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; }
+  .kartu { background:var(--kartu); border-radius:12px; padding:18px; border:1px solid var(--garis); display:flex; flex-direction:column; }
+  .kartu.segera { opacity:.6; }
+  .label { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+  .label span { font-size:.72rem; padding:2px 8px; border-radius:6px; background:#eef3f5; color:var(--utama); font-weight:600; }
+  .label .jenis { background:#fbf1e4; color:#9a5b12; }
+  .kartu h3 { font-size:1.08rem; margin-bottom:4px; }
+  .kartu p { font-size:.9rem; color:var(--redup); flex:1; }
+  .bawah { display:flex; justify-content:space-between; align-items:center; margin-top:14px; font-size:.82rem; color:var(--redup); }
+  .tombol { background:var(--aksen); color:#fff; text-decoration:none; padding:7px 16px; border-radius:8px; font-weight:600; font-size:.88rem; }
+  .tombol:hover { filter:brightness(.92); }
+  .belum { font-style:italic; }
+  .kosong { text-align:center; padding:40px; color:var(--redup); }
+  mark { background:#ffe7a8; padding:0 1px; }
+  footer { text-align:center; font-size:.82rem; color:var(--redup); padding:20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wadah">
+    <h1>Koleksi Aplikasi</h1>
+    <p>Kumpulan aplikasi buatan Thomas untuk sekolah, pembelajaran, dan organisasi</p>
+    <div class="statistik">
+      <div><b id="jmlTotal">0</b><span>aplikasi tercatat</span></div>
+      <div><b id="jmlAktif">0</b><span>siap dibuka</span></div>
+      <div><b id="jmlKategori">0</b><span>kategori</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wadah" style="padding:0 20px">
+  <div class="panel">
+    <input id="cari" type="search" placeholder="🔍  Cari aplikasi… (contoh: infak, TKA, ABK)" autocomplete="off">
+    <div class="chip-baris" id="chips"></div>
+  </div>
+</div>
+
+<main class="wadah">
+  <p id="info"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>Koleksi ini diperbarui setiap kali ada aplikasi baru.</footer>
+
+<script src="katalog.js"></script>
+<script>
+  let kategoriDipilih = "Semua";
+  let tampilkanSegera = true;
+
+  const elCari = document.getElementById("cari");
+  const elGrid = document.getElementById("grid");
+  const elChips = document.getElementById("chips");
+  const elInfo = document.getElementById("info");
+
+  const daftarKategori = ["Semua", ...[...new Set(APLIKASI.map(a => a.kategori))].sort()];
+
+  document.getElementById("jmlTotal").textContent = APLIKASI.length;
+  document.getElementById("jmlAktif").textContent = APLIKASI.filter(a => a.status === "aktif").length;
+  document.getElementById("jmlKategori").textContent = daftarKategori.length - 1;
+
+  function amankan(t) {
+    return String(t ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+  }
+  function sorot(teks, kata) {
+    const aman = amankan(teks);
+    if (!kata) return aman;
+    const pola = kata.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return aman.replace(new RegExp("(" + pola + ")", "gi"), "<mark>$1</mark>");
+  }
+  function formatTanggal(t) {
+    if (!t) return "";
+    const d = new Date(t + "T00:00:00");
+    return d.toLocaleDateString("id-ID", { day:"numeric", month:"short", year:"numeric" });
+  }
+
+  function gambarChips() {
+    elChips.innerHTML = daftarKategori.map(k =>
+      `<button class="chip ${k === kategoriDipilih ? "aktif" : ""}" data-k="${amankan(k)}">${amankan(k)}</button>`
+    ).join("") +
+    `<label class="opsi"><input type="checkbox" id="cekSegera" ${tampilkanSegera ? "checked" : ""}> Tampilkan yang belum diunggah</label>`;
+
+    elChips.querySelectorAll(".chip").forEach(b => b.onclick = () => { kategoriDipilih = b.dataset.k; gambarChips(); tampilkan(); });
+    document.getElementById("cekSegera").onchange = e => { tampilkanSegera = e.target.checked; tampilkan(); };
+  }
+
+  function tampilkan() {
+    const kata = elCari.value.trim();
+    const kataKecil = kata.toLowerCase();
+
+    const hasil = APLIKASI.filter(a => {
+      if (kategoriDipilih !== "Semua" && a.kategori !== kategoriDipilih) return false;
+      if (!tampilkanSegera && a.status !== "aktif") return false;
+      if (!kataKecil) return true;
+      return [a.nama, a.deskripsi, a.kategori, a.jenis].join(" ").toLowerCase().includes(kataKecil);
+    }).sort((x, y) => (x.status === "aktif" ? 0 : 1) - (y.status === "aktif" ? 0 : 1)
+                    || (y.tanggal || "").localeCompare(x.tanggal || ""));
+
+    elInfo.textContent = `Menampilkan ${hasil.length} dari ${APLIKASI.length} aplikasi`;
+
+    if (!hasil.length) {
+      elGrid.innerHTML = `<div class="kosong">Tidak ada aplikasi yang cocok dengan "<b>${amankan(kata)}</b>".</div>`;
+      return;
+    }
+
+    elGrid.innerHTML = hasil.map(a => `
+      <div class="kartu ${a.status === "aktif" ? "" : "segera"}">
+        <div class="label"><span>${amankan(a.kategori)}</span><span class="jenis">${amankan(a.jenis)}</span></div>
+        <h3>${sorot(a.nama, kata)}</h3>
+        <p>${sorot(a.deskripsi, kata)}</p>
+        <div class="bawah">
+          <span>${formatTanggal(a.tanggal)}</span>
+          ${a.status === "aktif"
+            ? `<a class="tombol" href="${amankan(a.tautan)}" target="_blank" rel="noopener">Buka ↗</a>`
+            : `<span class="belum">Belum diunggah</span>`}
+        </div>
+      </div>`).join("");
+  }
+
+  elCari.addEventListener("input", tampilkan);
+  gambarChips();
+  tampilkan();
+</script>
+</body>
+</html>
