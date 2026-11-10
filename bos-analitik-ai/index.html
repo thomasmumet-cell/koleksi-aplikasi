@@ -376,7 +376,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:10px 0 30px}
       <select class="in" id="sEngine"><option value="auto">Otomatis (Claude bila tersedia, lalu Gemini)</option><option value="claude">Claude</option><option value="gemini">Gemini (Google AI Studio)</option></select>
       <div class="grid g2 mt" style="gap:12px">
         <div><label class="f" for="sKey">API key Gemini</label><input class="in" id="sKey" type="password" placeholder="AIza…" autocomplete="off"></div>
-        <div><label class="f" for="sModel">Model Gemini</label><input class="in" id="sModel" placeholder="gemini-2.5-flash"></div>
+        <div><label class="f" for="sModel">Model Gemini</label><input class="in" id="sModel" placeholder="gemini-3.8-flash (otomatis)"></div>
       </div>
       <p class="hint mt">API key disimpan di browser ini saja. Buat key gratis di aistudio.google.com.</p>
     </div>
@@ -405,7 +405,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:10px 0 30px}
    yang membuka sumber halaman.
    ========================================================== */
 const GEMINI_API_KEY = '';
-const GEMINI_MODEL_DEFAULT = 'gemini-2.5-flash';
+const GEMINI_MODEL_DEFAULT = 'gemini-3.8-flash';
 
 /* ---------------- utilitas ---------------- */
 const $ = s => document.querySelector(s);
@@ -994,6 +994,28 @@ Usulan penyesuaian alokasi per komponen dengan alasan.
 ## 8. Narasi untuk Rapat Dewan Guru / Komite
 Satu paragraf siap dibacakan, bahasa santun dan transparan.`;
 
+async function geminiCall(model,messages,onText){
+  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':gKey()},
+    body:JSON.stringify({systemInstruction:{parts:[{text:SYS}]},contents:messages.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{maxOutputTokens:16384}})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error((j.error&&j.error.message)||('HTTP '+r.status));
+  const c=(j.candidates||[])[0]||{};
+  const t=((c.content&&c.content.parts)||[]).filter(p=>!p.thought).map(p=>p.text||'').join('');
+  if(!t) throw new Error('Gemini tidak mengembalikan jawaban'+(c.finishReason?' ('+c.finishReason+')':''));
+  onText&&onText(t); return t;
+}
+async function geminiPickModel(msg, current){
+  const m=String(msg).match(/models\/(gemini-[\w.\-]+)/g)||[];
+  const sug=m.map(x=>x.replace('models/','')).find(x=>x!==current);
+  if(sug) return sug;
+  try{
+    const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200',{headers:{'x-goog-api-key':gKey()}});
+    const j=await r.json(); const ver=n=>parseFloat((n.match(/gemini-(\d+(?:\.\d+)?)/)||[])[1]||0);
+    const ok=(j.models||[]).filter(x=>(x.supportedGenerationMethods||[]).includes('generateContent')).map(x=>x.name.replace('models/',''))
+      .filter(n=>/^gemini-[\d.]+-flash$/.test(n) || /^gemini-[\d.]+-flash-latest$/.test(n) || n==='gemini-flash-latest');
+    ok.sort((a,b)=>ver(b)-ver(a)); return ok.find(n=>n!==current)||null;
+  }catch(e){ return null; }
+}
 async function askAI(messages,onText){
   const e=engine();
   if(e==='claude'){
@@ -1003,13 +1025,16 @@ async function askAI(messages,onText){
   }
   if(e==='gemini'){
     const model=S.meta.gmodel||GEMINI_MODEL_DEFAULT;
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':gKey()},
-      body:JSON.stringify({systemInstruction:{parts:[{text:SYS}]},contents:messages.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{temperature:0.4,maxOutputTokens:8192}})});
-    const j=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(j.error?.message||('HTTP '+r.status));
-    const t=(j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');
-    if(!t) throw new Error('Gemini tidak mengembalikan jawaban'+(j.candidates?.[0]?.finishReason?' ('+j.candidates[0].finishReason+')':''));
-    onText&&onText(t); return t;
+    try{ return await geminiCall(model,messages,onText); }
+    catch(err){
+      // Model ditutup/tidak ditemukan: cari model pengganti lalu coba sekali lagi
+      if(!/no longer available|not found|is not supported|deprecated|404|update your code/i.test(err.message)) throw err;
+      const alt=await geminiPickModel(err.message, model);
+      if(!alt || alt===model) throw err;
+      const t=await geminiCall(alt,messages,onText);
+      S.meta.gmodel=alt; save(); updateEngineBadge(); toast('Model AI diperbarui otomatis ke '+alt);
+      return t;
+    }
   }
   const err=new Error('NO_ENGINE'); err.code='NO_ENGINE'; throw err;
 }
