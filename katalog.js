@@ -15,7 +15,7 @@ const APLIKASI = [
     jenis: "Apps Script",
     deskripsi: "Pengajuan dan Monitoring Izin Terpadu untuk guru dan karyawan: lapor izin lewat HP, laporan otomatis ke Kepala Sekolah dan Kurikulum (email/Telegram), daftar izin hari ini, dan rekap bulanan.",
     tanggal: "2026-11-10",
-    tautan: "pamit/",
+    tautan: "https://thomasmumet-cell.github.io/pamit/",
     status: "aktif"
   },
   {
