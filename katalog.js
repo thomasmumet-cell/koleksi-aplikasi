@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "BOS Analitik AI",
+    kategori: "AI Tool",
+    jenis: "AI Tool",
+    deskripsi: "Analisis dana BOS dari PDF DPA/DPPA SIPD atau Excel BKU/RKAS ARKAS: dashboard sumber dana dan jenis belanja, cek batas Juknis BOSP 2026, temuan otomatis, laporan dan tanya jawab AI (isi API key Gemini di Pengaturan).",
+    tanggal: "2026-11-11",
+    tautan: "bos-analitik-ai/",
+    status: "aktif"
+  },
+  {
     nama: "PAMIT",
     kategori: "Sekolah",
     jenis: "Apps Script",

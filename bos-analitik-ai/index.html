@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BOS Analitik AI — Analisis Dana BOSP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f4f6f9; --card:#ffffff; --ink:#152033; --ink2:#4a5568; --muted:#8692a6; --line:#e3e8ef;
+  --pri:#0f5c6e; --pri2:#147a91; --pri-soft:#e3f1f4; --acc:#e0a526;
+  --ok:#1f8a4c; --ok-soft:#e5f5ec; --warn:#b7791f; --warn-soft:#fdf3e1; --bad:#c53030; --bad-soft:#fdeaea;
+  --r:14px; --sh:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14.5px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 18px}
+header.top{background:linear-gradient(120deg,#0b4554,#0f5c6e 55%,#147a91);color:#fff;padding:18px 0 0}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.14);display:grid;place-items:center;flex:none}
+.brand h1{font-size:20px;margin:0;font-weight:800;letter-spacing:-.2px}
+.brand p{margin:0;opacity:.85;font-size:13px}
+.brand .meta{margin-left:auto;text-align:right;font-size:13px;opacity:.95}
+.brand .meta b{display:block;font-size:14px}
+nav.tabs{display:flex;gap:4px;margin-top:16px;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{background:transparent;border:0;color:rgba(255,255,255,.78);padding:11px 16px;border-radius:12px 12px 0 0;cursor:pointer;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:7px}
+nav.tabs button:hover{color:#fff;background:rgba(255,255,255,.08)}
+nav.tabs button.on{background:var(--bg);color:var(--pri)}
+nav.tabs .dot{width:8px;height:8px;border-radius:50%;background:var(--acc);display:none}
+nav.tabs .dot.show{display:inline-block}
+main{padding:22px 0 60px}
+section.view{display:none}
+section.view.on{display:block}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g2{grid-template-columns:1fr}}
+@media(max-width:560px){.g3,.g4{grid-template-columns:1fr}.brand .meta{margin-left:0;text-align:left}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px}
+.card h2{font-size:16px;margin:0 0 4px;font-weight:700}
+.card h3{font-size:14.5px;margin:0 0 8px;font-weight:700}
+.sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+.step{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--pri);color:#fff;font-size:12.5px;font-weight:700;margin-right:8px}
+label.f{display:block;font-size:12.5px;font-weight:600;color:var(--ink2);margin:0 0 5px}
+.in,select.in,textarea.in{width:100%;padding:9px 11px;border:1px solid #cfd7e3;border-radius:10px;background:#fff;outline:none;transition:border .15s,box-shadow .15s}
+.in:focus{border-color:var(--pri2);box-shadow:0 0 0 3px rgba(20,122,145,.15)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid transparent;border-radius:10px;padding:9px 15px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s,transform .05s;background:#eef2f6;color:var(--ink)}
+.btn:hover{background:#e3e9f0}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:var(--pri);color:#fff}
+.btn.pri:hover{background:#0c4d5d}
+.btn.acc{background:var(--acc);color:#2a1d00}
+.btn.acc:hover{background:#cf9619}
+.btn.ghost{background:#fff;border-color:#cfd7e3}
+.btn.sm{padding:6px 11px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.drop{border:2px dashed #b9c6d6;border-radius:14px;padding:28px 18px;text-align:center;background:#fafcfe;transition:background .15s,border .15s;cursor:pointer}
+.drop.over{background:var(--pri-soft);border-color:var(--pri2)}
+.drop b{display:block;font-size:15px;margin:8px 0 2px}
+.hint{font-size:12.5px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.info{background:var(--pri-soft);color:var(--pri)}
+.kpi{padding:16px 18px}
+.kpi .lb{font-size:12.5px;color:var(--muted);font-weight:600}
+.kpi .v{font-size:22px;font-weight:800;margin-top:2px;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:12.5px;color:var(--ink2);margin-top:2px}
+.bar{height:8px;background:#edf1f5;border-radius:99px;overflow:hidden;margin-top:9px;position:relative}
+.bar i{display:block;height:100%;background:var(--pri2);border-radius:99px}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t th{text-align:left;font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:9px 10px;border-bottom:1px solid var(--line);background:#fafbfd;position:sticky;top:0}
+table.t td{padding:9px 10px;border-bottom:1px solid #eef1f5;vertical-align:top}
+table.t td.n,table.t th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.t tr:hover td{background:#fafcfe}
+.tblwrap{overflow:auto;max-width:100%}
+.scroll{max-height:560px;overflow:auto;border:1px solid var(--line);border-radius:12px}
+.chartbox{position:relative;height:340px}
+.chartbox.sm{height:280px}
+.rule{display:grid;grid-template-columns:1fr auto;gap:6px 14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.rule:last-child{border-bottom:0}
+.rule .nm{font-weight:700}
+.rule .ds{grid-column:1/-1;font-size:13px;color:var(--ink2)}
+.gauge{grid-column:1/-1;height:12px;background:#edf1f5;border-radius:99px;position:relative;overflow:visible}
+.gauge i{position:absolute;left:0;top:0;height:100%;border-radius:99px}
+.gauge .mk{position:absolute;top:-4px;width:2px;height:20px;background:var(--ink)}
+.gauge .mkl{position:absolute;top:-22px;font-size:11px;font-weight:700;transform:translateX(-50%);white-space:nowrap;color:var(--ink2)}
+.finding{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.finding:last-child{border-bottom:0}
+.finding .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-weight:800}
+.finding .ic.tinggi{background:var(--bad-soft);color:var(--bad)}
+.finding .ic.sedang{background:var(--warn-soft);color:var(--warn)}
+.finding .ic.info{background:var(--pri-soft);color:var(--pri)}
+.finding h4{margin:0 0 2px;font-size:14px}
+.finding p{margin:0;font-size:13px;color:var(--ink2)}
+.finding ul{margin:6px 0 0;padding-left:18px;font-size:12.5px;color:var(--ink2)}
+.empty{text-align:center;padding:50px 20px;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+.ai-out{font-size:14.5px;line-height:1.65}
+.ai-out h2{font-size:17px;margin:20px 0 8px;color:var(--pri)}
+.ai-out h3{font-size:15.5px;margin:18px 0 6px;color:var(--pri)}
+.ai-out h4,.ai-out h5{font-size:14.5px;margin:14px 0 6px}
+.ai-out p{margin:0 0 10px}
+.ai-out ul,.ai-out ol{margin:0 0 10px;padding-left:22px}
+.ai-out li{margin:3px 0}
+.ai-out table.md{border-collapse:collapse;width:100%;margin:8px 0 14px;font-size:13.5px}
+.ai-out table.md th,.ai-out table.md td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+.ai-out table.md th{background:#f4f7fa}
+.ai-out code{background:#f1f4f8;padding:1px 5px;border-radius:5px;font-size:13px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:#fff;border:1px solid #cfd7e3;border-radius:99px;padding:6px 12px;font-size:13px;cursor:pointer;font-weight:500}
+.chip:hover{border-color:var(--pri2);color:var(--pri)}
+.chat{display:flex;flex-direction:column;gap:12px;max-height:520px;overflow:auto;padding:4px 2px}
+.msg{max-width:88%;padding:11px 14px;border-radius:14px}
+.msg.u{align-self:flex-end;background:var(--pri);color:#fff;border-bottom-right-radius:4px}
+.msg.a{align-self:flex-start;background:#f3f6f9;border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.a .ai-out{font-size:14px}
+.engine{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:99px;background:#eef2f6;color:var(--ink2)}
+.engine i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.engine.on i{background:var(--ok)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#152033;color:#fff;padding:10px 16px;border-radius:10px;font-size:13.5px;opacity:0;transition:all .25s;pointer-events:none;z-index:50;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.note{background:var(--warn-soft);border:1px solid #f1d9a8;color:#6b4a0e;border-radius:12px;padding:11px 14px;font-size:13px}
+.note.info{background:var(--pri-soft);border-color:#c5e1e8;color:#0b4554}
+.mapgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.preview{font-size:12.5px}
+.preview td,.preview th{white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+.chk{display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer}
+.chk input{width:16px;height:16px;accent-color:var(--pri)}
+.flag{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;margin:2px 3px 0 0;background:var(--warn-soft);color:var(--warn)}
+.flag.bad{background:var(--bad-soft);color:var(--bad)}
+select.mini{padding:4px 6px;border:1px solid #d5dce6;border-radius:8px;font-size:12.5px;max-width:210px;background:#fff}
+.spin{width:16px;height:16px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp 0.8s linear infinite;display:inline-block}
+.spin.dark{border-color:rgba(15,92,110,.25);border-top-color:var(--pri)}
+@keyframes sp{to{transform:rotate(360deg)}}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2);margin-bottom:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.muted{color:var(--muted)}
+.mt{margin-top:16px}
+.hide{display:none!important}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:10px 0 30px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/><circle cx="19" cy="8" r="1.4" fill="#e0a526" stroke="#e0a526"/></svg>
+      </div>
+      <div>
+        <h1>BOS Analitik AI</h1>
+        <p>Baca, analisis, dan cek kepatuhan dana BOSP dalam hitungan menit</p>
+      </div>
+      <div class="meta"><b id="hdrSekolah">Nama sekolah</b><span id="hdrTahun">Tahun anggaran</span></div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button data-v="impor" class="on">① Impor Data</button>
+      <button data-v="dashboard">② Dashboard</button>
+      <button data-v="kepatuhan">③ Kepatuhan &amp; Temuan <span class="dot" id="dotTemuan"></span></button>
+      <button data-v="transaksi" id="tabTrx">④ Transaksi</button>
+      <button data-v="ai">⑤ Analisis AI</button>
+      <button data-v="pengaturan">Pengaturan</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ================= IMPOR ================= -->
+<section class="view on" id="v-impor">
+  <div class="grid g2">
+    <div class="card">
+      <h2><span class="step">1</span>Profil sekolah &amp; pagu dana</h2>
+      <p class="sub">Pagu dipakai sebagai dasar persentase batas juknis. Kosongkan bila ingin dihitung dari total penerimaan di file.</p>
+      <div class="grid g2" style="gap:12px">
+        <div><label class="f" for="pSekolah">Nama sekolah</label><input class="in" id="pSekolah" placeholder="SMP Negeri ..."></div>
+        <div><label class="f" for="pTahun">Tahun anggaran</label><input class="in" id="pTahun" type="number" min="2020" max="2035"></div>
+        <div><label class="f" for="pStatus">Status sekolah</label>
+          <select class="in" id="pStatus"><option value="negeri">Negeri (pemerintah daerah)</option><option value="swasta">Swasta (masyarakat)</option></select></div>
+        <div><label class="f" for="pJenis">Jenis dana</label>
+          <select class="in" id="pJenis"><option>BOS Reguler</option><option>BOS Kinerja</option><option>BOS Afirmasi</option><option>BOS Daerah (BOSDA)</option><option>Gabungan</option></select></div>
+        <div style="grid-column:1/-1"><label class="f" for="pPagu">Pagu / total dana diterima tahun ini (Rp)</label><input class="in" id="pPagu" inputmode="numeric" placeholder="contoh: 760.000.000"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="step">2</span>Unggah file data BOS</h2>
+      <p class="sub">PDF DPA/DPPA dari SIPD, atau Excel/CSV: BKU ARKAS, rekap realisasi per komponen, RKAS, atau tabel buatan sendiri.</p>
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Pilih file">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#147a91" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M9 15l3-3 3 3"/></svg>
+        <b>Seret file ke sini atau klik untuk memilih</b>
+        <span class="hint">Data diolah di browser ini saja. Ke AI hanya dikirim ringkasan.</span>
+        <input type="file" id="file" accept=".pdf,.xlsx,.xls,.csv,.ods" class="hide">
+      </div>
+      <div class="row mt">
+        <button class="btn ghost sm" id="btnSample">▶ Coba dengan data contoh</button>
+        <button class="btn ghost sm" id="btnTemplate">⬇ Unduh template Excel</button>
+      </div>
+      <p class="hint" id="fileInfo" style="margin:10px 0 0"></p>
+    </div>
+  </div>
+
+  <div class="card mt hide" id="mapCard">
+    <h2><span class="step">3</span>Cocokkan kolom</h2>
+    <p class="sub">Kolom sudah ditebak otomatis. Periksa dan ubah bila ada yang keliru. Minimal perlu <b>Uraian</b> dan <b>Realisasi/Pengeluaran</b> (atau Anggaran).</p>
+    <div class="row" style="margin-bottom:12px">
+      <div><label class="f" for="selSheet">Sheet</label><select class="in" id="selSheet" style="min-width:200px"></select></div>
+      <div><label class="f" for="hdrRow">Baris judul kolom</label><input class="in" id="hdrRow" type="number" min="1" style="width:110px"></div>
+    </div>
+    <div class="mapgrid" id="mapGrid"></div>
+    <div class="row mt" style="gap:18px">
+      <label class="chk"><input type="checkbox" id="optTotal" checked> Abaikan baris Jumlah/Total/Saldo</label>
+      <label class="chk"><input type="checkbox" id="optPajak" checked> Abaikan pajak &amp; mutasi kas (PPN/PPh, tarik/setor tunai)</label>
+      <label class="chk"><input type="checkbox" id="optAppend"> Gabungkan dengan data sebelumnya</label>
+    </div>
+    <h3 class="mt">Pratinjau</h3>
+    <div class="tblwrap scroll" style="max-height:260px"><table class="t preview" id="previewTbl"></table></div>
+    <div class="row mt"><button class="btn pri" id="btnProcess">Proses &amp; Analisis →</button><span class="hint" id="procInfo"></span></div>
+  </div>
+
+  <div class="card mt">
+    <h3>Format yang dikenali</h3>
+    <div class="grid g4" style="gap:12px;font-size:13.5px">
+      <div><b>DPA / DPPA SIPD (PDF)</b><br><span class="muted">Cetakan "Rincian Belanja SKPD" dari SIPD. Dibaca per kode rekening, sumber dana, sebelum dan sesudah perubahan, plus rencana penarikan bulanan.</span></div>
+      <div><b>BKU / Buku Kas Umum (ARKAS)</b><br><span class="muted">Tanggal, No. Bukti, Uraian, Penerimaan, Pengeluaran. Komponen ditebak dari uraian.</span></div>
+      <div><b>Rekap realisasi per komponen</b><br><span class="muted">Komponen/Standar, Anggaran, Realisasi. Tanpa tanggal tetap bisa dianalisis.</span></div>
+      <div><b>RKAS / tabel sendiri</b><br><span class="muted">Kolom apa pun yang memuat uraian dan nilai rupiah. Format "Rp 1.250.000,00" dikenali.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DASHBOARD ================= -->
+<section class="view" id="v-dashboard">
+  <div id="dashEmpty" class="card empty"><b>Belum ada data</b>Impor file BOS atau klik "Coba dengan data contoh" di tab Impor Data.</div>
+  <div id="dashBody" class="hide">
+    <div class="note info hide" id="sampleNote" style="margin-bottom:14px">Anda sedang melihat <b>data contoh fiktif</b>. Impor file BOS sekolah untuk melihat analisis sebenarnya.</div>
+    <div class="card hide" id="docInfo" style="margin-bottom:16px;padding:14px 18px"></div>
+    <div class="grid g4" id="kpis"></div>
+    <div class="grid g2 mt">
+      <div class="card">
+        <h3 id="tKomp">Realisasi per komponen</h3>
+        <div class="legend" id="legKomp"></div>
+        <div class="chartbox"><canvas id="chKomp"></canvas></div>
+      </div>
+      <div class="card">
+        <h3 id="tBulan">Belanja per bulan &amp; serapan kumulatif</h3>
+        <div class="legend" id="legBulan"><span><i style="background:#147a91"></i>Belanja bulanan</span><span><i style="background:#e0a526"></i>Serapan kumulatif (% pagu)</span></div>
+        <div class="chartbox"><canvas id="chBulan"></canvas></div>
+        <p class="hint hide" id="noDateNote">Data tidak memuat tanggal, sehingga tren bulanan tidak bisa ditampilkan.</p>
+      </div>
+    </div>
+    <div class="grid g2 mt hide" id="dpaRow">
+      <div class="card">
+        <h3>Anggaran per jenis belanja</h3>
+        <div class="legend"><span><i style="background:#cdd6e1"></i>Sebelum perubahan</span><span><i style="background:#147a91"></i>Sesudah perubahan</span></div>
+        <div class="chartbox"><canvas id="chJenis"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Perubahan terbesar</h3>
+        <div class="tblwrap"><table class="t" id="tblChg"></table></div>
+      </div>
+    </div>
+    <div class="grid g2 mt">
+      <div class="card">
+        <h3 id="tTblKomp">Rekap per komponen</h3>
+        <div class="tblwrap"><table class="t" id="tblKomp"></table></div>
+      </div>
+      <div class="card">
+        <h3 id="tTblTop">10 transaksi terbesar</h3>
+        <div class="tblwrap"><table class="t" id="tblTop"></table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KEPATUHAN ================= -->
+<section class="view" id="v-kepatuhan">
+  <div id="kepEmpty" class="card empty"><b>Belum ada data</b>Impor data terlebih dahulu.</div>
+  <div id="kepBody" class="hide">
+    <div class="grid g2">
+      <div class="card">
+        <h2 id="tRules">Kepatuhan batas penggunaan dana</h2>
+        <p class="sub" id="sRules">Acuan: Permendikdasmen No. 8 Tahun 2026 (Juknis BOSP). Batas dapat disesuaikan di Pengaturan.</p>
+        <div id="rules"></div>
+        <div class="note mt" style="font-size:12.5px">Relaksasi honor (SE Mendikdasmen No. 6 Tahun 2026) hanya untuk ASN paruh waktu sesuai KepmenPANRB 16/2025, khusus TA 2026, dan berlaku bila daerah mengusulkan. Pastikan status sekolah sebelum menyimpulkan "melampaui".</div>
+      </div>
+      <div class="card">
+        <h2>Temuan otomatis</h2>
+        <p class="sub">Pola yang perlu dicek. Ini bukan vonis pelanggaran; verifikasi dengan bukti dan juknis.</p>
+        <div id="findings"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRANSAKSI ================= -->
+<section class="view" id="v-transaksi">
+  <div id="trxEmpty" class="card empty"><b>Belum ada data</b>Impor data terlebih dahulu.</div>
+  <div id="trxBody" class="card hide">
+    <div class="row" style="margin-bottom:12px">
+      <input class="in" id="fCari" placeholder="Cari uraian…" style="flex:1;min-width:200px">
+      <select class="in" id="fKomp" style="width:auto;min-width:200px"></select>
+      <select class="in" id="fBulan" style="width:auto"></select>
+      <label class="chk"><input type="checkbox" id="fFlag"> Hanya bertanda</label>
+    </div>
+    <p class="hint" style="margin:0 0 10px" id="trxHint">Komponen bisa diubah langsung di tabel bila tebakan otomatis kurang tepat. Analisis langsung diperbarui.</p>
+    <div class="tblwrap scroll"><table class="t" id="tblTrx"></table></div>
+    <div class="row mt"><span class="hint" id="trxInfo"></span><span style="flex:1"></span><button class="btn sm ghost" id="pgPrev">‹ Sebelumnya</button><button class="btn sm ghost" id="pgNext">Berikutnya ›</button></div>
+  </div>
+</section>
+
+<!-- ================= AI ================= -->
+<section class="view" id="v-ai">
+  <div id="aiEmpty" class="card empty"><b>Belum ada data</b>Impor data terlebih dahulu, lalu minta AI menganalisis.</div>
+  <div id="aiBody" class="hide">
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <h2>Laporan analisis AI</h2>
+          <p class="sub" style="margin:0">AI membaca ringkasan angka, kepatuhan, dan temuan, lalu menyusun laporan siap pakai untuk kepala sekolah.</p>
+        </div>
+        <span class="engine" id="engineBadge"><i></i><span>Memeriksa AI…</span></span>
+      </div>
+      <div class="row mt">
+        <button class="btn pri" id="btnReport">✦ Buat laporan analisis</button>
+        <button class="btn ghost sm hide" id="btnCopyRep">Salin teks</button>
+        <button class="btn ghost sm hide" id="btnDlRep">⬇ Unduh laporan</button>
+      </div>
+      <div id="aiWarn" class="note mt hide"></div>
+      <div class="ai-out mt" id="aiReport"></div>
+    </div>
+
+    <div class="card mt">
+      <h2>Tanya data BOS</h2>
+      <p class="sub">Ajukan pertanyaan bebas tentang data. Contoh:</p>
+      <div class="chips" id="chips"></div>
+      <div class="chat mt" id="chat"></div>
+      <form class="row mt" id="chatForm">
+        <input class="in" id="chatIn" placeholder="Tulis pertanyaan, misal: kenapa serapan bulan Juni rendah?" style="flex:1">
+        <button class="btn pri" id="chatBtn" type="submit">Kirim</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PENGATURAN ================= -->
+<section class="view" id="v-pengaturan">
+  <div class="grid g2">
+    <div class="card">
+      <h2>Batas juknis</h2>
+      <p class="sub">Nilai bawaan mengikuti Juknis BOSP 2026 untuk BOS Reguler. Ubah bila ada ketentuan khusus.</p>
+      <div class="grid g3" style="gap:12px">
+        <div><label class="f" for="sHonor">Honor maks. (%)</label><input class="in" id="sHonor" type="number" step="1"></div>
+        <div><label class="f" for="sBuku">Perpustakaan/buku min. (%)</label><input class="in" id="sBuku" type="number" step="1"></div>
+        <div><label class="f" for="sSarpras">Pemeliharaan maks. (%)</label><input class="in" id="sSarpras" type="number" step="1"></div>
+      </div>
+      <p class="hint mt">Bawaan: honor 20% (negeri) / 40% (swasta), buku min. 10%, pemeliharaan sarpras maks. 20% dari pagu.</p>
+      <button class="btn sm ghost" id="btnResetBatas">Kembalikan ke bawaan</button>
+    </div>
+    <div class="card">
+      <h2>Mesin AI</h2>
+      <p class="sub">Di claude.ai, tool memakai Claude secara otomatis. Saat disematkan di Google Sites/web sekolah, isi API key Gemini.</p>
+      <label class="f" for="sEngine">Pilih mesin</label>
+      <select class="in" id="sEngine"><option value="auto">Otomatis (Claude bila tersedia, lalu Gemini)</option><option value="claude">Claude</option><option value="gemini">Gemini (Google AI Studio)</option></select>
+      <div class="grid g2 mt" style="gap:12px">
+        <div><label class="f" for="sKey">API key Gemini</label><input class="in" id="sKey" type="password" placeholder="AIza…" autocomplete="off"></div>
+        <div><label class="f" for="sModel">Model Gemini</label><input class="in" id="sModel" placeholder="gemini-2.5-flash"></div>
+      </div>
+      <p class="hint mt">API key disimpan di browser ini saja. Buat key gratis di aistudio.google.com.</p>
+    </div>
+    <div class="card">
+      <h2>Ekspor</h2>
+      <p class="sub">Unduh hasil olahan untuk arsip atau lampiran laporan.</p>
+      <button class="btn ghost" id="btnXlsx">⬇ Unduh rekap analisis (.xlsx)</button>
+    </div>
+    <div class="card">
+      <h2>Data tersimpan</h2>
+      <p class="sub">Data yang sudah diproses disimpan di browser ini agar tidak perlu impor ulang.</p>
+      <button class="btn ghost" id="btnClear" style="color:var(--bad)">Hapus semua data</button>
+      <div class="row mt hide" id="clearConfirm"><span>Yakin menghapus semua data?</span><button class="btn sm" id="clearYes" style="background:var(--bad);color:#fff">Ya, hapus</button><button class="btn sm ghost" id="clearNo">Batal</button></div>
+    </div>
+  </div>
+</section>
+</main>
+<footer>BOS Analitik AI · Hasil analisis bersifat pendukung keputusan, bukan pengganti audit resmi.</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==========================================================
+   KONFIGURASI (untuk versi web/Google Sites)
+   Isi API key Gemini di sini bila ingin terpasang permanen.
+   Catatan: key yang ditulis di kode dapat dilihat orang lain
+   yang membuka sumber halaman.
+   ========================================================== */
+const GEMINI_API_KEY = '';
+const GEMINI_MODEL_DEFAULT = 'gemini-2.5-flash';
+
+/* ---------------- utilitas ---------------- */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const rp = n => 'Rp ' + Math.round(n||0).toLocaleString('id-ID');
+const rpS = n => { n=n||0; const a=Math.abs(n); if(a>=1e9) return 'Rp '+(n/1e9).toLocaleString('id-ID',{maximumFractionDigits:2})+' M'; if(a>=1e6) return 'Rp '+(n/1e6).toLocaleString('id-ID',{maximumFractionDigits:1})+' jt'; if(a>=1e3) return 'Rp '+(n/1e3).toLocaleString('id-ID',{maximumFractionDigits:0})+' rb'; return rp(n); };
+const pct = (n,d=1) => (isFinite(n)? n.toLocaleString('id-ID',{maximumFractionDigits:d,minimumFractionDigits:0}) : '0') + '%';
+const BLN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const BLN_FULL = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const ymKey = d => d ? d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0') : '';
+const ymLabel = k => { if(!k) return 'Tanpa tanggal'; const [y,m]=k.split('-'); return BLN[+m-1]+' '+y; };
+const dLabel = d => d ? d.getDate()+' '+BLN[d.getMonth()]+' '+d.getFullYear() : '–';
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600); }
+const store = { get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }, set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }, del(k){ try{ localStorage.removeItem(k);}catch(e){} } };
+
+function parseNum(v){
+  if(v==null||v==='') return 0;
+  if(typeof v==='number') return isFinite(v)?v:0;
+  let s=String(v).trim(); if(!s) return 0;
+  const neg = /^\(.*\)$/.test(s) || /^-/.test(s.replace(/^rp\.?\s*/i,''));
+  s=s.replace(/[^0-9.,]/g,''); if(!s) return 0;
+  const ld=s.lastIndexOf('.'), lc=s.lastIndexOf(',');
+  if(ld>-1 && lc>-1){ const dec = ld>lc?'.':','; const th = dec==='.'?',':'.'; s=s.split(th).join(''); s=s.replace(dec,'.'); }
+  else if(lc>-1){ const p=s.split(','); s = (p.length===2 && p[1].length!==3) ? p[0]+'.'+p[1] : p.join(''); }
+  else if(ld>-1){ const p=s.split('.'); if(!(p.length===2 && p[1].length!==3)) s=p.join(''); }
+  const n=parseFloat(s); return isNaN(n)?0:(neg?-n:n);
+}
+const BULAN_MAP={jan:0,januari:0,january:0,feb:1,februari:1,pebruari:1,february:1,peb:1,mar:2,maret:2,march:2,apr:3,april:3,mei:4,may:4,jun:5,juni:5,june:5,jul:6,juli:6,july:6,agu:7,agt:7,agus:7,agustus:7,aug:7,august:7,sep:8,sept:8,september:8,okt:9,oktober:9,oct:9,october:9,nov:10,nop:10,november:10,nopember:10,des:11,desember:11,dec:11,december:11};
+function parseDate(v){
+  if(v==null||v==='') return null;
+  if(v instanceof Date) return isNaN(v)?null:new Date(v.getFullYear(),v.getMonth(),v.getDate());
+  if(typeof v==='number'){ if(v>20000&&v<80000){ const d=new Date(Math.round((v-25569)*86400000)); return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()); } return null; }
+  const s=String(v).trim().toLowerCase().replace(/\s+/g,' ');
+  let m;
+  if(m=s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/)) return new Date(+m[1],+m[2]-1,+m[3]);
+  if(m=s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})/)){ let y=+m[3]; if(y<100) y+=2000; return new Date(y,+m[2]-1,+m[1]); }
+  if(m=s.match(/^(\d{1,2})[ -]([a-z]+)\.?[ -](\d{4})/)) if(BULAN_MAP[m[2]]!=null) return new Date(+m[3],BULAN_MAP[m[2]],+m[1]);
+  if(m=s.match(/^([a-z]+)\.?[ -](\d{4})$/)) if(BULAN_MAP[m[1]]!=null) return new Date(+m[2],BULAN_MAP[m[1]],1);
+  if(m=s.match(/^(?:bulan )?([a-z]+)$/)) if(BULAN_MAP[m[1]]!=null) return new Date(S.meta.tahun||new Date().getFullYear(),BULAN_MAP[m[1]],1);
+  return null;
+}
+
+/* ---------------- komponen BOS Reguler ---------------- */
+const KOMP = {
+  1:'Penerimaan Murid Baru', 2:'Pengembangan Perpustakaan', 3:'Pembelajaran & Ekstrakurikuler', 4:'Asesmen & Evaluasi',
+  5:'Administrasi Kegiatan Sekolah', 6:'Pengembangan Profesi GTK', 7:'Langganan Daya & Jasa', 8:'Pemeliharaan Sarpras',
+  9:'Alat Multimedia Pembelajaran', 10:'Kompetensi Keahlian (SMK)', 11:'Keterserapan Lulusan (SMK)', 12:'Pembayaran Honor', 0:'Belum terklasifikasi'
+};
+const KW = [
+  [1, /\bppdb\b|\bspmb\b|penerimaan (peserta didik|murid|siswa) baru|\bmpls\b|daftar ulang|pendaftaran (siswa|murid)/],
+  [4, /ujian|asesmen|assesmen|\bpts\b|\bpas\b|\bsts\b|\bsas\b|\bpat\b|ulangan|\banbk\b|\btka\b|\btkad\b|try ?out|evaluasi|penilaian|naskah soal|\bsoal\b|rapor|raport/],
+  [6, /pelatihan|workshop|diklat|bimtek|\bkkg\b|\bmgmp\b|seminar|in ?house|\biht\b|webinar|pengembangan profesi|kombel|komunitas belajar|lokakarya|narasumber/],
+  [11, /keterserapan|bursa kerja|\bbkk\b|tracer|penelusuran tamatan/],
+  [10, /kompetensi keahlian|uji kompetensi|\bukk\b/],
+  [3, /ekstrakurikuler|ekskul|ekstra|lomba|pramuka|\bo2sn\b|\bfls[23]n\b|\bosn\b|praktikum|bahan praktik|alat peraga|kokurikuler|\bp5\b|projek|proyek|pembelajaran|class ?meeting|\buks\b|olahraga|kesenian|study tour|outing|pentas|pembina|pelatih|kegiatan siswa|kegiatan murid/],
+  [8, /pemeliharaan|perbaikan|rehab|perawatan|pengecatan|\bcat\b|servis|service|tukang|semen|pasir|keramik|genteng|plafon|pipa|kran|\bkunci\b|engsel|lampu|kabel listrik|saluran|talang|\bwc\b|toilet|kloset|pintu|jendela|kaca|\blas\b|paving|atap/],
+  [7, /listrik|\bpln\b|pdam|rekening air|air bersih|internet|wi-?fi|indihome|telepon|telkom|pulsa|kuota|token|langganan|biznet|domain|hosting|zoom|lisensi/],
+  [9, /laptop|komputer|\bpc\b|printer|proyektor|projector|\blcd\b|infocus|papan interaktif|\bpid\b|smart ?tv|tablet|chromebook|kamera|speaker|sound ?system|router|access point|monitor|mouse|keyboard|scanner|flashdisk|hard ?disk/],
+  [2, /buku|perpustakaan|perpus|majalah|koran|novel|ensiklopedi|kamus|literasi/],
+  [5, /\batk\b|alat tulis|kertas|\bhvs\b|tinta|toner|cartridge|fotokopi|fotocopy|penggandaan|materai|meterai|rapat|konsumsi|snack|makan minum|transport|perjalanan dinas|\bsppd\b|administrasi|cetak|jilid|\bmap\b|amplop|alat kebersihan|sabun|pembersih|bendera|upacara|stempel|perangko|\bsurat\b|dokumen/],
+  [12, /honor|honorarium|gaji|insentif|\bgtt\b|\bptt\b|pppk|paruh waktu|tenaga kependidikan|satpam|penjaga|tukang kebun|pramubakti|caraka|operator sekolah|upah bulanan|tenaga kebersihan/]
+];
+const HONOR_RUTIN = /(honor|honorarium|gaji|insentif|upah)\b.*\b(guru|gtt|ptt|tendik|tenaga|pegawai|staf|staff|operator|satpam|penjaga|pustakawan|laboran|caraka|tukang kebun|pppk|bulan)|^(pembayaran )?(gaji|honor) (bulan|gtt|ptt)/;
+const HONOR_KEGIATAN = /narasumber|panitia|pembina|pelatih|juri|pengawas ujian|ujian|lomba|ekstra|workshop|pelatihan|\biht\b|asesmen/;
+function classify(text){
+  const t=String(text||'').toLowerCase();
+  if(!t.trim()) return 0;
+  const m=t.match(/^\s*(?:komponen\s*)?(\d{1,2})\s*[.)\-:]\s*\D/);
+  if(m && +m[1]>=1 && +m[1]<=12) return +m[1];
+  if(HONOR_RUTIN.test(t) && !HONOR_KEGIATAN.test(t)) return 12;
+  for(const [id,rx] of KW) if(rx.test(t)) return id;
+  return 0;
+}
+const SKIP_TOTAL = /^\s*(jumlah|total|sub ?total|grand total|saldo( awal| akhir| bulan)?|sisa (dana|kas)|pagu)\b/i;
+const SKIP_PAJAK = /\bppn\b|\bpph\b|pajak|tarik tunai|setor tunai|penarikan tunai|pergeseran kas|pemindahbukuan|pelimpahan|pengembalian saldo/i;
+
+/* ---------------- state ---------------- */
+const DEF_META = { sekolah:'', tahun:new Date().getFullYear(), status:'negeri', jenis:'BOS Reguler', pagu:0, batasHonor:20, batasBuku:10, batasSarpras:20, engine:'auto', gkey:'', gmodel:'' };
+const S = { mode:'trx', rows:[], dpa:null, meta:{...DEF_META}, sample:false, report:'', source:'' };
+(function load(){ const d=store.get('bosAnalitik.v1'); if(!d) return; Object.assign(S.meta, d.meta||{}); S.sample=!!d.sample; S.report=d.report||''; S.source=d.source||'';
+  S.mode=d.mode||'trx'; S.dpa=d.dpa||null;
+  S.rows=(d.rows||[]).map(r=>({...r, tgl:r.tgl?new Date(r.tgl):null})); })();
+function save(){ const ok=store.set('bosAnalitik.v1',{ mode:S.mode, dpa:S.dpa, meta:S.meta, sample:S.sample, report:S.report, source:S.source, rows:S.rows.map(r=>{ const {_flags,...x}=r; return {...x, tgl:r.tgl?r.tgl.toISOString():null}; }) }); if(!ok && (S.rows.length||S.dpa)) console.warn('Penyimpanan lokal tidak tersedia'); }
+
+/* ---------------- navigasi ---------------- */
+let currentView='impor';
+function go(v){ currentView=v; $$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===v)); $$('section.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v)); renderView(v); window.scrollTo({top:0,behavior:'smooth'}); }
+$('#tabs').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) go(b.dataset.v); });
+
+/* ---------------- profil ---------------- */
+function syncProfileUI(){
+  $('#pSekolah').value=S.meta.sekolah||''; $('#pTahun').value=S.meta.tahun||''; $('#pStatus').value=S.meta.status; $('#pJenis').value=S.meta.jenis;
+  $('#pPagu').value=S.meta.pagu?Math.round(S.meta.pagu).toLocaleString('id-ID'):'';
+  $('#sHonor').value=S.meta.batasHonor; $('#sBuku').value=S.meta.batasBuku; $('#sSarpras').value=S.meta.batasSarpras;
+  $('#sEngine').value=S.meta.engine||'auto'; $('#sKey').value=S.meta.gkey||''; $('#sModel').value=S.meta.gmodel||''; if(GEMINI_API_KEY && !S.meta.gkey) $('#sKey').placeholder='Key bawaan sudah terpasang (boleh dikosongkan)';
+  $('#hdrSekolah').textContent=S.meta.sekolah||'Nama sekolah belum diisi'; $('#hdrTahun').textContent=(S.meta.jenis||'')+' · TA '+(S.meta.tahun||'–');
+}
+function bindProfile(){
+  const upd=()=>{ S.meta.sekolah=$('#pSekolah').value.trim(); S.meta.tahun=+$('#pTahun').value||S.meta.tahun; S.meta.jenis=$('#pJenis').value; S.meta.pagu=parseNum($('#pPagu').value); save(); syncProfileUI(); };
+  ['#pSekolah','#pTahun','#pJenis'].forEach(id=>$(id).addEventListener('change',upd));
+  $('#pPagu').addEventListener('change',upd);
+  $('#pStatus').addEventListener('change',()=>{ S.meta.status=$('#pStatus').value; S.meta.batasHonor = S.meta.status==='swasta'?40:20; save(); syncProfileUI(); toast('Batas honor disesuaikan: '+S.meta.batasHonor+'%'); });
+  const updS=()=>{ S.meta.batasHonor=+$('#sHonor').value||0; S.meta.batasBuku=+$('#sBuku').value||0; S.meta.batasSarpras=+$('#sSarpras').value||0; save(); };
+  ['#sHonor','#sBuku','#sSarpras'].forEach(id=>$(id).addEventListener('change',updS));
+  $('#btnResetBatas').onclick=()=>{ S.meta.batasHonor=S.meta.status==='swasta'?40:20; S.meta.batasBuku=10; S.meta.batasSarpras=20; save(); syncProfileUI(); toast('Batas dikembalikan ke bawaan'); };
+  $('#sEngine').addEventListener('change',()=>{ S.meta.engine=$('#sEngine').value; save(); updateEngineBadge(); });
+  $('#sKey').addEventListener('change',()=>{ S.meta.gkey=$('#sKey').value.trim(); save(); updateEngineBadge(); });
+  $('#sModel').addEventListener('change',()=>{ S.meta.gmodel=$('#sModel').value.trim(); save(); });
+}
+
+/* ---------------- impor file ---------------- */
+let WB=null, AOA=null, MAP={}, HEADERS=[];
+const FIELDS=[
+  {k:'tanggal',  label:'Tanggal / Bulan',          rx:[/^(tanggal|tgl)\b|tanggal|tgl\b/, /bulan|periode|date/]},
+  {k:'kode',     label:'Kode / No. Bukti',         rx:[/no\.? ?bukti|no\.? ?kwitansi|nomor bukti/, /kode|rekening/]},
+  {k:'komponen', label:'Komponen / Standar',       rx:[/komponen|standar|\bsnp\b/, /program|kategori|jenis belanja/]},
+  {k:'uraian',   label:'Uraian / Kegiatan',        rx:[/uraian|keterangan|rincian|deskripsi/, /kegiatan|nama barang|nama belanja|item|barang/]},
+  {k:'anggaran', label:'Anggaran (RKAS / pagu)',   rx:[/anggaran|pagu|\brkas\b|rencana/, /alokasi/]},
+  {k:'penerimaan',label:'Penerimaan (dana masuk)', rx:[/penerimaan|pemasukan|\bdebet\b|\bdebit\b|diterima|uang masuk/, /masuk/]},
+  {k:'realisasi',label:'Realisasi / Pengeluaran',  rx:[/realisasi|pengeluaran|belanja|\bkredit\b|keluar|dibayar/, /jumlah|nominal|total|nilai|harga/]},
+];
+const HDR_HINT=/tanggal|tgl|uraian|kegiatan|keterangan|kode|komponen|standar|anggaran|pagu|realisasi|pengeluaran|penerimaan|jumlah|nominal|belanja|saldo|bukti|rekening|volume|harga|total|bulan/;
+
+const drop=$('#drop'), fileIn=$('#file');
+drop.addEventListener('click',()=>fileIn.click());
+drop.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fileIn.click(); }});
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+drop.addEventListener('drop',e=>{ const f=e.dataTransfer.files[0]; if(f) readFile(f); });
+fileIn.addEventListener('change',()=>{ if(fileIn.files[0]) readFile(fileIn.files[0]); fileIn.value=''; });
+
+function readFile(f){
+  if(/\.pdf$/i.test(f.name) || f.type==='application/pdf'){ readPdf(f); return; }
+  if(typeof XLSX==='undefined'){ toast('Pustaka Excel belum termuat. Periksa koneksi internet lalu muat ulang.'); return; }
+  const rd=new FileReader();
+  rd.onload=e=>{
+    try{
+      WB = XLSX.read(new Uint8Array(e.target.result), {type:'array', cellDates:true});
+      S.source=f.name;
+      $('#fileInfo').innerHTML='📄 <b>'+esc(f.name)+'</b> · '+WB.SheetNames.length+' sheet';
+      const sel=$('#selSheet'); sel.innerHTML=WB.SheetNames.map((n,i)=>`<option value="${i}">${esc(n)}</option>`).join('');
+      // pilih sheet dengan baris terbanyak yang punya judul kolom
+      let best=0,bestScore=-1;
+      WB.SheetNames.forEach((n,i)=>{ const a=XLSX.utils.sheet_to_json(WB.Sheets[n],{header:1,raw:true,defval:''}); const h=findHeaderRow(a); const sc=h.score*10+Math.min(a.length,500)/100; if(sc>bestScore){bestScore=sc;best=i;} });
+      sel.value=best; loadSheet(best);
+      $('#mapCard').classList.remove('hide');
+      $('#mapCard').scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(err){ console.error(err); toast('File tidak bisa dibaca: '+err.message); }
+  };
+  rd.readAsArrayBuffer(f);
+}
+$('#selSheet').addEventListener('change',e=>loadSheet(+e.target.value));
+$('#hdrRow').addEventListener('change',e=>{ const r=Math.max(1,+e.target.value||1)-1; buildHeaders(r); guessMap(); renderMap(); renderPreview(); });
+
+function findHeaderRow(aoa){
+  let best=0,bestScore=-1;
+  for(let i=0;i<Math.min(aoa.length,40);i++){
+    const row=aoa[i]||[]; let sc=0,ne=0;
+    row.forEach(c=>{ const t=String(c??'').toLowerCase().trim(); if(t) ne++; if(t && t.length<60 && HDR_HINT.test(t)) sc++; });
+    if(ne>=2 && sc>bestScore){ best=i; bestScore=sc; }
+  }
+  return {row:best, score:Math.max(bestScore,0)};
+}
+function loadSheet(i){
+  AOA = XLSX.utils.sheet_to_json(WB.Sheets[WB.SheetNames[i]],{header:1,raw:true,defval:''});
+  const h=findHeaderRow(AOA); $('#hdrRow').value=h.row+1; buildHeaders(h.row); guessMap(); renderMap(); renderPreview();
+}
+let HDR_IDX=0;
+function buildHeaders(r){
+  HDR_IDX=r; const row=AOA[r]||[], nxt=AOA[r+1]||[];
+  const width=Math.max(...AOA.slice(r,r+30).map(x=>x.length),row.length);
+  HEADERS=[];
+  for(let c=0;c<width;c++){
+    let h=String(row[c]??'').trim();
+    const n=String(nxt[c]??'').trim();
+    if(!h && n && isNaN(parseNum(n)||NaN) && !parseDate(nxt[c])) h=n;
+    else if(h && n && HDR_HINT.test(n.toLowerCase()) && !parseNum(n)) h=h+' '+n;
+    HEADERS.push(h||('Kolom '+XLSX.utils.encode_col(c)));
+  }
+}
+function guessMap(){
+  MAP={}; const used=new Set();
+  const cand=HEADERS.map((h,i)=>({h:h.toLowerCase(),i})).filter(x=>!/saldo|^no\.?$|^nomor$|^no urut/.test(x.h));
+  for(let pass=0;pass<2;pass++) for(const f of FIELDS){
+    if(MAP[f.k]!=null) continue;
+    const hit=cand.find(x=>!used.has(x.i) && f.rx[pass].test(x.h));
+    if(hit){ MAP[f.k]=hit.i; used.add(hit.i); }
+  }
+}
+function renderMap(){
+  const opts=i=>'<option value="">— tidak ada —</option>'+HEADERS.map((h,j)=>`<option value="${j}" ${i===j?'selected':''}>${esc(h)}</option>`).join('');
+  $('#mapGrid').innerHTML=FIELDS.map(f=>`<div><label class="f">${f.label}</label><select class="in" data-k="${f.k}">${opts(MAP[f.k])}</select></div>`).join('');
+  $$('#mapGrid select').forEach(s=>s.addEventListener('change',()=>{ MAP[s.dataset.k]= s.value===''?null:+s.value; renderPreview(); }));
+}
+function renderPreview(){
+  const rows=AOA.slice(HDR_IDX+1, HDR_IDX+9);
+  const mapped=new Set(Object.values(MAP).filter(v=>v!=null));
+  const fieldOf=i=>{ const f=FIELDS.find(f=>MAP[f.k]===i); return f?f.label.split(' (')[0]:''; };
+  $('#previewTbl').innerHTML='<thead><tr>'+HEADERS.map((h,i)=>`<th style="${mapped.has(i)?'color:var(--pri);background:var(--pri-soft)':''}">${esc(h)}${mapped.has(i)?'<br><span style="font-weight:600;text-transform:none">→ '+esc(fieldOf(i))+'</span>':''}</th>`).join('')+'</tr></thead><tbody>'+
+    rows.map(r=>'<tr>'+HEADERS.map((_,i)=>{ let v=r[i]; if(v instanceof Date) v=dLabel(v); return `<td>${esc(v)}</td>`; }).join('')+'</tr>').join('')+'</tbody>';
+}
+
+$('#btnProcess').addEventListener('click',()=>{
+  if(MAP.uraian==null && MAP.komponen==null){ toast('Pilih kolom Uraian atau Komponen terlebih dahulu'); return; }
+  if(MAP.realisasi==null && MAP.anggaran==null && MAP.penerimaan==null){ toast('Pilih kolom nilai (Realisasi, Anggaran, atau Penerimaan)'); return; }
+  const res=processAOA(AOA, HDR_IDX, MAP, { skipTotal:$('#optTotal').checked, skipPajak:$('#optPajak').checked });
+  if(!res.rows.length){ toast('Tidak ada baris data yang terbaca. Periksa pemetaan kolom.'); return; }
+  S.rows = $('#optAppend').checked && !S.sample && S.mode==='trx' ? S.rows.concat(res.rows) : res.rows;
+  S.mode='trx'; S.dpa=null; S.sample=false; S.report=''; chatHist=[]; $('#chat').innerHTML='';
+  if(!S.meta.tahun || res.tahun) S.meta.tahun = res.tahun || S.meta.tahun;
+  save(); syncProfileUI();
+  $('#procInfo').textContent=`${res.rows.length} baris terbaca · ${res.skipped} baris jumlah/total dilewati · ${res.pajak} baris pajak/mutasi kas ditandai`;
+  toast('Data berhasil diproses'); go('dashboard');
+});
+
+function processAOA(aoa, hIdx, map, opt){
+  const out=[]; let skipped=0, pajak=0; const years={};
+  const get=(r,k)=> map[k]==null ? '' : r[map[k]];
+  for(let i=hIdx+1;i<aoa.length;i++){
+    const r=aoa[i]; if(!r || r.every(c=>String(c??'').trim()==='')) continue;
+    const ur=String(get(r,'uraian')??'').trim();
+    const kpTxt=String(get(r,'komponen')??'').trim();
+    const firstText=(r.find(c=>typeof c==='string' && c.trim())||'').trim();
+    const real=parseNum(get(r,'realisasi')), ang=parseNum(get(r,'anggaran')), ter=parseNum(get(r,'penerimaan'));
+    if(!ur && !kpTxt && !real && !ang && !ter) continue;
+    if(opt.skipTotal && (SKIP_TOTAL.test(ur) || (!ur && SKIP_TOTAL.test(firstText)))){ skipped++; continue; }
+    if(!real && !ang && !ter) continue;
+    const tgl=parseDate(get(r,'tanggal'));
+    if(tgl) years[tgl.getFullYear()]=(years[tgl.getFullYear()]||0)+1;
+    let komp = classify(kpTxt); if(!komp) komp=classify(ur);
+    const isPajak = SKIP_PAJAK.test(ur);
+    if(isPajak) pajak++;
+    out.push({ tgl, uraian: ur || kpTxt || '(tanpa uraian)', kode:String(get(r,'kode')??'').trim(), kompTxt:kpTxt, komp: ter>0 && !real ? -1 : komp, realisasi:real, anggaran:ang, penerimaan:ter, excluded: opt.skipPajak && isPajak, pajak:isPajak, manual:false });
+  }
+  const tahun = +Object.entries(years).sort((a,b)=>b[1]-a[1])[0]?.[0] || 0;
+  return { rows:out, skipped, pajak, tahun };
+}
+
+/* ---------------- data contoh ---------------- */
+function rng(seed){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function buildSample(){
+  const R=rng(2026), Y=2026; const rows=[['Tanggal','No. Bukti','Uraian','Penerimaan','Pengeluaran']]; let nb=1;
+  const add=(m,d,u,ter,kel)=>rows.push([`${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}/${Y}`, ter?'':('BPU-'+String(nb++).padStart(3,'0')), u, ter||'', kel?Math.round(kel/500)*500:'']);
+  const vary=(b,p=.08)=>b*(1+(R()*2-1)*p);
+  add(1,20,'Terima Dana BOS Reguler Tahap I',380000000,0);
+  add(7,15,'Terima Dana BOS Reguler Tahap II',380000000,0);
+  for(let m=1;m<=10;m++){
+    add(m,25,`Pembayaran honor GTT/PTT bulan ${BLN_FULL[m-1]}`,0,13500000);
+    add(m,25,`Honor tenaga kebersihan dan satpam bulan ${BLN_FULL[m-1]}`,0,3200000);
+    add(m,10,`Pembayaran rekening listrik PLN bulan ${BLN_FULL[m-1]}`,0,vary(4300000,.15));
+    add(m,10,`Langganan internet sekolah bulan ${BLN_FULL[m-1]}`,0,1500000);
+    add(m,12,`Rekening air PDAM bulan ${BLN_FULL[m-1]}`,0,vary(620000,.2));
+    add(m,8,`Belanja ATK dan kertas HVS bulan ${BLN_FULL[m-1]}`,0,vary(2300000,.25));
+    add(m,28,`Honor pembina ekstrakurikuler bulan ${BLN_FULL[m-1]}`,0,3000000);
+    if(m%2===0) add(m,18,'Konsumsi rapat dinas dan rapat dewan guru',0,vary(1800000,.3));
+  }
+  add(3,9,'Belanja ATK dan kertas HVS bulan Maret',0,0); rows.pop(); // tidak dipakai
+  rows.push(['09/03/2026','BPU-900','Pembelian tinta printer dan toner','',1450000]);
+  rows.push(['09/03/2026','BPU-901','Pembelian tinta printer dan toner','',1450000]);
+  add(2,14,'Pengecatan ruang kelas 7A-7D',0,18200000);
+  add(4,22,'Perbaikan toilet siswa putri',0,12450000);
+  add(8,5,'Penggantian genteng dan talang ruang kelas 9',0,9350000);
+  add(9,17,'Perbaikan atap dan plafon laboratorium IPA',0,38500000);
+  add(5,6,'Servis AC ruang kepala sekolah dan TU',0,3850000);
+  add(10,3,'Perbaikan pintu dan jendela ruang kelas 8',0,7600000);
+  add(6,11,'Pembelian lampu dan kabel listrik',0,2150000);
+  add(1,30,'Pembelian buku teks pelajaran Kurikulum Merdeka',0,31200000);
+  add(8,20,'Pembelian buku bacaan non-teks perpustakaan',0,11800000);
+  add(10,9,'Langganan koran dan majalah perpustakaan',0,1450000);
+  add(3,4,'Pembelian laptop untuk pembelajaran (2 unit)',0,19400000);
+  add(3,4,'Pembelian proyektor LCD (2 unit)',0,12900000);
+  add(8,26,'Pengadaan Papan Interaktif Digital (PID) 1 unit',0,45000000);
+  add(3,16,'Penggandaan naskah soal PTS semester genap',0,6400000);
+  add(5,26,'Honor pengawas dan panitia ujian PAS',0,9800000);
+  add(6,2,'Try out TKA kelas 9',0,7200000);
+  add(9,24,'Penggandaan soal STS semester ganjil',0,6100000);
+  add(4,15,'Lomba O2SN tingkat kota: transport dan konsumsi',0,4250000);
+  add(5,19,'Bahan praktikum IPA semester genap',0,5600000);
+  add(9,8,'Kegiatan kokurikuler projek kebinekaan',0,8900000);
+  add(2,7,'In House Training Pembelajaran Mendalam',0,8750000);
+  add(4,29,'Kegiatan MGMP sekolah: konsumsi dan narasumber',0,4600000);
+  add(10,14,'Workshop penyusunan modul ajar dan asesmen',0,9300000);
+  add(6,24,'Kegiatan SPMB / penerimaan murid baru',0,6800000);
+  add(7,14,'Kegiatan MPLS tahun ajaran baru',0,5100000);
+  add(7,21,'Pembelian seragam olahraga siswa',0,8400000);
+  add(5,13,'Pembayaran ke CV Maju Jaya',0,6750000);
+  add(9,30,'Biaya perjalanan dinas dan transport rapat',0,2350000);
+  add(3,4,'Terima PPN belanja laptop',2134000,0);
+  add(3,5,'Setor PPN belanja laptop',0,2134000);
+  return rows;
+}
+$('#btnSample').onclick=()=>{
+  const aoa=buildSample();
+  const map={tanggal:0,kode:1,uraian:2,penerimaan:3,realisasi:4};
+  const res=processAOA(aoa,0,map,{skipTotal:true,skipPajak:true});
+  S.rows=res.rows; S.mode='trx'; S.dpa=null; S.sample=true; S.report=''; chatHist=[]; $('#chat').innerHTML=''; S.source='Data contoh (fiktif)';
+  if(!S.meta.sekolah) S.meta.sekolah='SMP Contoh (data fiktif)';
+  S.meta.tahun=2026; if(!S.meta.pagu) S.meta.pagu=760000000;
+  save(); syncProfileUI(); toast('Data contoh dimuat'); go('dashboard');
+};
+$('#btnTemplate').onclick=()=>{
+  if(typeof XLSX==='undefined'){ toast('Pustaka Excel belum termuat'); return; }
+  const aoa=[['Tanggal','No. Bukti','Uraian','Komponen','Anggaran','Penerimaan','Pengeluaran'],
+    ['20/01/2026','','Terima Dana BOS Reguler Tahap I','','',380000000,''],
+    ['25/01/2026','BPU-001','Pembayaran honor GTT bulan Januari','12. Pembayaran Honor','','',13500000],
+    ['30/01/2026','BPU-002','Pembelian buku teks pelajaran','2. Pengembangan Perpustakaan','','',31200000],
+    ['10/02/2026','BPU-003','Pembayaran rekening listrik PLN','7. Langganan Daya & Jasa','','',4300000]];
+  const ws=XLSX.utils.aoa_to_sheet(aoa); ws['!cols']=[{wch:12},{wch:11},{wch:42},{wch:30},{wch:14},{wch:14},{wch:14}];
+  const ref=XLSX.utils.aoa_to_sheet([['No','Komponen BOS Reguler'],...Object.entries(KOMP).filter(([k])=>k>0).map(([k,v])=>[+k,v])]); ref['!cols']=[{wch:5},{wch:36}];
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Data BOS'); XLSX.utils.book_append_sheet(wb,ref,'Daftar Komponen');
+  saveFile('Template-Data-BOS.xlsx', new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})]), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+};
+
+/* ---------------- analisis ---------------- */
+let A=null;
+function analyze(){
+  const R=S.rows.filter(r=>!r.excluded);
+  const bel=R.filter(r=>r.realisasi>0 && r.komp!==-1);
+  const totReal=bel.reduce((s,r)=>s+r.realisasi,0);
+  const totTerima=R.reduce((s,r)=>s+(r.penerimaan||0),0);
+  const totAngg=R.reduce((s,r)=>s+(r.anggaran||0),0);
+  let pagu=S.meta.pagu, paguSrc='diisi di profil';
+  if(!pagu && totTerima>0){ pagu=totTerima; paguSrc='total penerimaan di file'; }
+  if(!pagu && totAngg>0){ pagu=totAngg; paguSrc='total anggaran di file'; }
+  if(!pagu){ pagu=totReal; paguSrc='total realisasi (pagu belum diisi)'; }
+  const perK={}; for(const k of Object.keys(KOMP)) perK[k]={id:+k,nama:KOMP[k],real:0,angg:0,n:0};
+  R.forEach(r=>{ if(r.komp===-1) return; const k=perK[r.komp]||perK[0]; k.real+=r.realisasi||0; k.angg+=r.anggaran||0; if(r.realisasi>0||r.anggaran>0) k.n++; });
+  const kompList=Object.values(perK).filter(k=>k.real>0||k.angg>0).sort((a,b)=>b.real-a.real||b.angg-a.angg);
+  const hasAngg=totAngg>0;
+  const perB={}; let noDate=0;
+  R.forEach(r=>{ if(!r.tgl){ if(r.realisasi>0) noDate++; return; } const k=ymKey(r.tgl); perB[k]=perB[k]||{k,real:0,ter:0,n:0}; if(r.komp!==-1){ perB[k].real+=r.realisasi||0; } perB[k].ter+=r.penerimaan||0; perB[k].n++; });
+  const bulan=Object.values(perB).sort((a,b)=>a.k.localeCompare(b.k));
+  const dated=R.filter(r=>r.tgl).map(r=>r.tgl.getTime());
+  const periode= dated.length? {awal:new Date(Math.min(...dated)), akhir:new Date(Math.max(...dated))} : null;
+
+  // kepatuhan
+  const share=id=>pagu? (perK[id].real/pagu*100):0;
+  const shareA=id=>pagu&&hasAngg? (perK[id].angg/pagu*100):null;
+  const rules=[
+    {id:12, nama:'Pembayaran honor', jenis:'maks', batas:S.meta.batasHonor, nilai:share(12), nilaiA:shareA(12), ket:`Honor guru/tendik non-ASN maksimal ${S.meta.batasHonor}% dari pagu (${S.meta.status==='swasta'?'sekolah swasta':'sekolah negeri'}).`},
+    {id:2,  nama:'Pengembangan perpustakaan (buku)', jenis:'min', batas:S.meta.batasBuku, nilai:share(2), nilaiA:shareA(2), ket:`Minimal ${S.meta.batasBuku}% dari pagu untuk pengembangan perpustakaan (buku teks dan non-teks).`},
+    {id:8,  nama:'Pemeliharaan sarana & prasarana', jenis:'maks', batas:S.meta.batasSarpras, nilai:share(8), nilaiA:shareA(8), ket:`Pemeliharaan sarpras maksimal ${S.meta.batasSarpras}% dari pagu. Rehabilitasi berat tidak boleh dari BOS.`},
+  ].map(r=>{
+    let st='ok', lbl='Sesuai';
+    if(r.jenis==='maks'){ if(r.nilai>r.batas){st='bad';lbl='Melampaui batas';} else if(r.nilai>r.batas*0.9){st='warn';lbl='Mendekati batas';} }
+    else { if(r.nilai<r.batas){ st= r.nilai<r.batas*0.6?'bad':'warn'; lbl='Belum memenuhi'; } }
+    const selisih = pagu*Math.abs(r.nilai-r.batas)/100;
+    return {...r, st, lbl, selisih};
+  });
+
+  // temuan
+  const F=[];
+  // duplikat
+  const g={}; bel.forEach((r,i)=>{ const k=(r.tgl?ymKey(r.tgl)+'-'+r.tgl.getDate():'')+'|'+r.uraian.toLowerCase().replace(/\s+/g,' ').trim()+'|'+Math.round(r.realisasi); (g[k]=g[k]||[]).push(r); });
+  const dup=Object.values(g).filter(x=>x.length>1);
+  if(dup.length) F.push({lv:'tinggi', judul:`${dup.length} kelompok transaksi kembar`, detail:'Tanggal, uraian, dan nominal sama persis. Pastikan bukan pencatatan ganda.', contoh:dup.slice(0,5).map(x=>`${x[0].uraian} — ${rp(x[0].realisasi)} × ${x.length}`), tag:'Kembar', rows:dup.flat()});
+  // indikasi belanja terlarang
+  const LAR=[
+    [/seragam|sepatu|tas sekolah|kaos/, 'Seragam/sepatu/pakaian untuk kepentingan pribadi tidak dapat dibiayai BOSP.'],
+    [/\bmbg\b|makan bergizi|bahan pangan|susu|lauk/, 'Juknis 2026 melarang BOSP untuk pengadaan bahan pangan terkait program MBG.'],
+    [/dipinjamkan|pinjaman|deposito|investasi|saham|obligasi|bunga (bank|pinjaman|deposito)/, 'Dana BOSP tidak boleh dipinjamkan, disimpan untuk dibungakan, atau diinvestasikan.'],
+    [/rehab(ilitasi)? (sedang|berat|total)|pembangunan gedung|ruang kelas baru|\brkb\b|gedung baru|bangunan baru/, 'Rehabilitasi sedang/berat dan pembangunan baru tidak boleh dari BOS.'],
+    [/parsel|parcel|bingkisan|hadiah lebaran|\bthr\b|tunjangan hari raya/, 'Bingkisan/THR umumnya tidak termasuk komponen BOSP. Periksa dasar pembiayaannya.'],
+    [/iuran|sumbangan|donasi/, 'Iuran/sumbangan ke pihak lain perlu dicek kesesuaiannya dengan juknis.'],
+    [/pribadi|keluarga/, 'Ada indikasi kepentingan pribadi.']
+  ];
+  LAR.forEach(([rx,why])=>{ const hit=bel.filter(r=>rx.test(r.uraian.toLowerCase())); if(hit.length) F.push({lv:'tinggi', judul:'Perlu verifikasi kesesuaian: '+hit.length+' transaksi', detail:why, contoh:hit.slice(0,5).map(r=>`${r.uraian} — ${rp(r.realisasi)}`), tag:'Cek juknis', rows:hit}); });
+  // outlier
+  const vals=bel.map(r=>r.realisasi).sort((a,b)=>a-b);
+  if(vals.length>=12){ const q=p=>vals[Math.floor((vals.length-1)*p)]; const q1=q(.25),q3=q(.75),lim=q3+3*(q3-q1); const big=bel.filter(r=>r.realisasi>lim).sort((a,b)=>b.realisasi-a.realisasi);
+    if(big.length) F.push({lv:'sedang', judul:`${big.length} transaksi bernilai jauh di atas kebiasaan`, detail:`Di atas ${rp(lim)} (batas kewajaran statistik dari pola belanja sekolah ini). Pastikan ada RAB, SPJ, dan bukti lengkap.`, contoh:big.slice(0,5).map(r=>`${r.uraian} — ${rp(r.realisasi)}`), tag:'Nilai besar', rows:big}); }
+  // belum terklasifikasi
+  if(perK[0].real>0){ const un=bel.filter(r=>r.komp===0); F.push({lv:'sedang', judul:`${un.length} transaksi belum terklasifikasi (${rpS(perK[0].real)})`, detail:'Uraian tidak cukup jelas untuk ditentukan komponennya. Atur komponen di tab Transaksi agar analisis akurat. Uraian yang tidak jelas juga rawan dipertanyakan saat pemeriksaan.', contoh:un.slice(0,5).map(r=>`${r.uraian} — ${rp(r.realisasi)}`), tag:'Tanpa komponen', rows:un}); }
+  // melebihi anggaran
+  if(hasAngg){ const over=kompList.filter(k=>k.angg>0 && k.real>k.angg*1.0001); if(over.length) F.push({lv:'tinggi', judul:`${over.length} komponen realisasinya melebihi anggaran`, detail:'Realisasi lebih besar dari anggaran RKAS. Perlu revisi/pergeseran RKAS yang sah.', contoh:over.map(k=>`${k.nama}: ${rp(k.real)} dari anggaran ${rp(k.angg)}`), rows:[]});
+    const low=kompList.filter(k=>k.angg>0 && k.real<k.angg*0.5); if(low.length) F.push({lv:'info', judul:`${low.length} komponen serapannya di bawah 50% anggaran`, detail:'Perlu percepatan atau revisi RKAS bila kegiatan tidak terlaksana.', contoh:low.map(k=>`${k.nama}: ${pct(k.real/k.angg*100)} terserap`), rows:[]}); }
+  // saldo negatif
+  if(totTerima>0 && totReal>totTerima) F.push({lv:'tinggi', judul:'Belanja melebihi dana yang diterima', detail:`Total belanja ${rp(totReal)} lebih besar dari total penerimaan ${rp(totTerima)}. Cek kelengkapan data penerimaan atau saldo awal.`, contoh:[], rows:[]});
+  // akhir tahun
+  if(bulan.length){ const nd=bulan.filter(b=>/-(11|12)$/.test(b.k)).reduce((s,b)=>s+b.real,0); if(totReal && nd/totReal>0.3) F.push({lv:'sedang', judul:'Belanja menumpuk di akhir tahun', detail:`${pct(nd/totReal*100)} belanja terjadi di November–Desember. Pola ini sering menjadi sorotan pemeriksa; sebar belanja sesuai jadwal RKAS.`, contoh:[], rows:[]}); }
+  // bulan kosong
+  if(bulan.length>=3){ const ks=bulan.map(b=>b.k); const [y0,m0]=ks[0].split('-').map(Number), [y1,m1]=ks[ks.length-1].split('-').map(Number); const miss=[]; for(let y=y0,m=m0; y<y1||(y===y1&&m<=m1); m++){ if(m>12){m=1;y++;} if(y>y1||(y===y1&&m>m1)) break; const k=y+'-'+String(m).padStart(2,'0'); if(!perB[k]||perB[k].real===0) miss.push(ymLabel(k)); } if(miss.length) F.push({lv:'info', judul:'Bulan tanpa belanja: '+miss.join(', '), detail:'Bisa wajar (libur/menunggu pencairan), tetapi pastikan kebutuhan rutin seperti listrik dan honor tetap tercatat.', contoh:[], rows:[]}); }
+  // tanpa tanggal
+  if(noDate && dated.length) F.push({lv:'info', judul:`${noDate} transaksi tanpa tanggal`, detail:'Lengkapi tanggal agar tren bulanan akurat.', contoh:[], rows:[]});
+  // serapan
+  const serap = pagu? totReal/pagu*100 : 0;
+  if(periode && serap<50 && periode.akhir.getMonth()>=6) F.push({lv:'sedang', judul:`Serapan baru ${pct(serap)} per ${dLabel(periode.akhir)}`, detail:'Ingat: laporan realisasi minimal 50% dana tahap I menjadi syarat penyaluran tahap II. Percepat kegiatan yang sudah dianggarkan.', contoh:[], rows:[]});
+  const ex=S.rows.filter(r=>r.excluded);
+  if(ex.length) F.push({lv:'info', judul:`${ex.length} baris pajak/mutasi kas tidak dihitung`, detail:'Baris PPN/PPh, tarik/setor tunai, dan sejenisnya dikeluarkan dari analisis agar belanja tidak terhitung ganda.', contoh:ex.slice(0,4).map(r=>`${r.uraian} — ${rp(r.realisasi||r.penerimaan)}`), rows:[]});
+
+  const ord={tinggi:0,sedang:1,info:2}; F.sort((a,b)=>ord[a.lv]-ord[b.lv]);
+  // tandai baris
+  S.rows.forEach(r=>r._flags=[]);
+  F.forEach(f=>(f.rows||[]).forEach(r=>{ if(f.tag && !r._flags.includes(f.tag)) r._flags.push(f.tag); }));
+
+  A={R,bel,totReal,totTerima,totAngg,pagu,paguSrc,perK,kompList,hasAngg,bulan,periode,rules,F,serap,noDate};
+  $('#dotTemuan').classList.toggle('show', F.some(f=>f.lv==='tinggi') || rules.some(r=>r.st==='bad'));
+  return A;
+}
+
+/* ---------------- render ---------------- */
+let charts={};
+function hasData(){ return S.mode==='dpa' ? !!(S.dpa&&S.dpa.groups&&S.dpa.groups.length) : S.rows.length>0; }
+function applyModeUI(){
+  const d=S.mode==='dpa';
+  $('#tabTrx').textContent= d?'④ Rincian Anggaran':'④ Transaksi';
+  $('#trxHint').textContent= d?'Setiap baris adalah satu sub-rincian ([ - ]) di DPA, lengkap dengan item, sumber dana, serta nilai sebelum dan sesudah perubahan.':'Komponen bisa diubah langsung di tabel bila tebakan otomatis kurang tepat. Analisis langsung diperbarui.';
+  $('#tRules').textContent= d?'Kepatuhan & konsistensi anggaran':'Kepatuhan batas penggunaan dana';
+  $('#sRules').textContent= d?'BOS Reguler diuji dengan Juknis BOSP 2026 (Permendikdasmen No. 8 Tahun 2026). BOSDA (PAD) mengikuti peraturan daerah sehingga hanya ditampilkan sebagai informasi.':'Acuan: Permendikdasmen No. 8 Tahun 2026 (Juknis BOSP). Batas dapat disesuaikan di Pengaturan.';
+  $('#dpaRow').classList.toggle('hide',!d); $('#docInfo').classList.toggle('hide',!d);
+}
+function renderView(v){
+  const has=hasData();
+  ['dash','kep','trx','ai'].forEach(p=>{ $('#'+p+'Empty').classList.toggle('hide',has); $('#'+p+'Body').classList.toggle('hide',!has); });
+  applyModeUI();
+  if(!has) return;
+  if(S.mode==='dpa'){
+    analyzeDPA();
+    if(v==='dashboard') renderDashDPA();
+    if(v==='kepatuhan') renderKepDPA();
+    if(v==='transaksi') renderTrxDPA();
+    if(v==='ai') renderAI();
+    return;
+  }
+  analyze();
+  if(v==='dashboard') renderDash();
+  if(v==='kepatuhan') renderKep();
+  if(v==='transaksi') renderTrx();
+  if(v==='ai') renderAI();
+}
+function renderDash(){
+  $('#sampleNote').classList.toggle('hide',!S.sample);
+  $('#tKomp').textContent='Realisasi per komponen'; $('#tBulan').textContent='Belanja per bulan & serapan kumulatif';
+  $('#legBulan').innerHTML='<span><i style="background:#147a91"></i>Belanja bulanan</span><span><i style="background:#e0a526"></i>Serapan kumulatif (% pagu)</span>';
+  $('#tTblKomp').textContent='Rekap per komponen'; $('#tTblTop').textContent='10 transaksi terbesar';
+  const a=A, sisa=a.pagu-a.totReal, top=a.kompList[0];
+  const kpi=(lb,v,s,bar)=>`<div class="card kpi"><div class="lb">${lb}</div><div class="v">${v}</div><div class="s">${s}</div>${bar!=null?`<div class="bar"><i style="width:${Math.min(100,Math.max(0,bar))}%"></i></div>`:''}</div>`;
+  $('#kpis').innerHTML=
+    kpi('Pagu dana', rpS(a.pagu), 'Sumber: '+a.paguSrc)+
+    kpi('Total realisasi belanja', rpS(a.totReal), a.bel.length+' transaksi'+(a.periode?' · '+ymLabel(ymKey(a.periode.awal))+'–'+ymLabel(ymKey(a.periode.akhir)):''), null)+
+    kpi('Serapan anggaran', pct(a.serap), 'Sisa dana '+rpS(sisa), a.serap)+
+    kpi('Komponen terbesar', top?esc(top.nama):'–', top?rpS(top.real)+' · '+pct(top.real/(a.pagu||1)*100)+' dari pagu':'', null);
+  // legend
+  $('#legKomp').innerHTML='<span><i style="background:#147a91"></i>Realisasi</span>'+(a.hasAngg?'<span><i style="background:#cdd6e1"></i>Anggaran</span>':'');
+  // chart komponen
+  const list=a.kompList;
+  drawChart('chKomp',{type:'bar',data:{labels:list.map(k=>k.nama),datasets:[
+      ...(a.hasAngg?[{label:'Anggaran',data:list.map(k=>k.angg),backgroundColor:'#cdd6e1',borderRadius:4,barPercentage:.9,categoryPercentage:.8}]:[]),
+      {label:'Realisasi',data:list.map(k=>k.real),backgroundColor:list.map(k=>k.id===0?'#b9c3cf':'#147a91'),borderRadius:4,barPercentage:.9,categoryPercentage:.8}]},
+    options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+rp(c.raw)+' ('+pct(c.raw/(a.pagu||1)*100)+' pagu)'}}},
+      scales:{x:{ticks:{callback:v=>rpS(v),maxRotation:0,maxTicksLimit:6},grid:{color:'#eef1f5'}},y:{grid:{display:false},ticks:{font:{size:11.5}}}}}});
+  // chart bulan
+  const B=a.bulan.filter(b=>b.k);
+  $('#noDateNote').classList.toggle('hide',B.length>0);
+  $('#chBulan').parentElement.classList.toggle('hide',!B.length);
+  if(B.length){ let cum=0; const cumP=B.map(b=>{cum+=b.real; return a.pagu?cum/a.pagu*100:0;});
+    drawChart('chBulan',{data:{labels:B.map(b=>ymLabel(b.k)),datasets:[
+      {type:'bar',label:'Belanja',data:B.map(b=>b.real),backgroundColor:'#147a91',borderRadius:4,yAxisID:'y',order:2},
+      {type:'line',label:'Serapan kumulatif',data:cumP,borderColor:'#e0a526',backgroundColor:'#e0a526',tension:.25,pointRadius:3,borderWidth:2.5,yAxisID:'y2',order:1}]},
+      options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.type==='line'||c.dataset.label==='Serapan kumulatif'?'Serapan: '+pct(c.raw):'Belanja: '+rp(c.raw)}}},
+        scales:{y:{ticks:{callback:v=>rpS(v)},grid:{color:'#eef1f5'}},y2:{position:'right',min:0,max:Math.max(100,Math.ceil(Math.max(...cumP)/10)*10),ticks:{callback:v=>v+'%'},grid:{display:false}},x:{grid:{display:false}}}}}); }
+  // tabel komponen
+  $('#tblKomp').innerHTML='<thead><tr><th>Komponen</th>'+(a.hasAngg?'<th class="n">Anggaran</th>':'')+'<th class="n">Realisasi</th><th class="n">% pagu</th>'+(a.hasAngg?'<th class="n">% serap</th>':'')+'</tr></thead><tbody>'+
+    list.map(k=>`<tr><td>${k.id?k.id+'. ':''}${esc(k.nama)}</td>${a.hasAngg?`<td class="n">${rp(k.angg)}</td>`:''}<td class="n">${rp(k.real)}</td><td class="n">${pct(k.real/(a.pagu||1)*100)}</td>${a.hasAngg?`<td class="n">${k.angg?pct(k.real/k.angg*100):'–'}</td>`:''}</tr>`).join('')+
+    `<tr style="font-weight:700"><td>Jumlah</td>${a.hasAngg?`<td class="n">${rp(a.totAngg)}</td>`:''}<td class="n">${rp(a.totReal)}</td><td class="n">${pct(a.serap)}</td>${a.hasAngg?`<td class="n">${a.totAngg?pct(a.totReal/a.totAngg*100):'–'}</td>`:''}</tr></tbody>`;
+  const top10=[...a.bel].sort((x,y)=>y.realisasi-x.realisasi).slice(0,10);
+  $('#tblTop').innerHTML='<thead><tr><th>Tanggal</th><th>Uraian</th><th class="n">Nilai</th></tr></thead><tbody>'+top10.map(r=>`<tr><td style="white-space:nowrap">${dLabel(r.tgl)}</td><td>${esc(r.uraian)}<br><span class="hint">${esc(KOMP[r.komp]||'')}</span></td><td class="n">${rp(r.realisasi)}</td></tr>`).join('')+'</tbody>';
+}
+function drawChart(id,cfg){
+  if(typeof Chart==='undefined') return;
+  if(charts[id]) charts[id].destroy();
+  Chart.defaults.font.family="'Plus Jakarta Sans',system-ui,sans-serif"; Chart.defaults.color='#4a5568';
+  charts[id]=new Chart(document.getElementById(id),cfg);
+}
+function renderKep(){
+  const a=A;
+  $('#rules').innerHTML=a.rules.map(r=>{
+    const max=Math.max(r.batas*1.6, r.nilai*1.1, 1);
+    const col= r.st==='ok'?'var(--ok)':r.st==='warn'?'var(--warn)':'var(--bad)';
+    const saran = r.jenis==='maks' ? (r.st==='bad'?`Lebih ${rp(r.selisih)} dari batas.`:`Ruang tersisa ${rp(r.selisih)}.`) : (r.st!=='ok'?`Kurang ${rp(r.selisih)} untuk memenuhi minimal.`:`Sudah melebihi minimal ${rp(r.selisih)}.`);
+    return `<div class="rule"><div class="nm">${esc(r.nama)}</div><div><span class="pill ${r.st}">${r.lbl}</span></div>
+      <div class="ds"><b style="font-size:16px;color:${col}">${pct(r.nilai)}</b> dari pagu · ${r.jenis==='maks'?'batas maks.':'batas min.'} ${r.batas}% · ${rp(A.perK[r.id].real)}${r.nilaiA!=null?` · dianggarkan ${pct(r.nilaiA)}`:''}</div>
+      <div class="gauge" style="margin-top:24px"><i style="width:${Math.min(100,r.nilai/max*100)}%;background:${col}"></i><span class="mk" style="left:${r.batas/max*100}%"></span><span class="mkl" style="left:${r.batas/max*100}%">${r.batas}%</span></div>
+      <div class="ds">${esc(r.ket)} ${saran}</div></div>`;
+  }).join('') + (A.paguSrc.startsWith('total realisasi')?'<div class="note mt">Pagu belum diisi, sehingga persentase dihitung terhadap total realisasi. Isi pagu di tab Impor Data agar hasil kepatuhan akurat.</div>':'');
+  renderFindings(A.F);
+}
+function renderFindings(FL){
+  const ic={tinggi:'!',sedang:'?',info:'i'};
+  $('#findings').innerHTML = FL.length ? FL.map(f=>`<div class="finding"><div class="ic ${f.lv}">${ic[f.lv]}</div><div><h4>${esc(f.judul)} <span class="pill ${f.lv==='tinggi'?'bad':f.lv==='sedang'?'warn':'info'}" style="font-size:11px">${f.lv==='tinggi'?'Prioritas tinggi':f.lv==='sedang'?'Perlu dicek':'Info'}</span></h4><p>${esc(f.detail)}</p>${f.contoh&&f.contoh.length?'<ul>'+f.contoh.map(c=>'<li>'+esc(c)+'</li>').join('')+'</ul>':''}</div></div>`).join('')
+    : '<div class="empty" style="padding:30px"><b>Tidak ada temuan otomatis</b>Pola belanja terlihat wajar.</div>';
+}
+let page=0; const PER=100;
+function renderTrx(){
+  const fk=$('#fKomp'), fb=$('#fBulan');
+  if(!fk.options.length || fk._n!==S.rows.length || fk._mode!=='trx'){ fk._mode='trx';
+    fk.innerHTML='<option value="">Semua komponen</option>'+Object.entries(KOMP).map(([k,v])=>`<option value="${k}">${+k?k+'. ':''}${v}</option>`).join('')+'<option value="-1">Penerimaan dana</option><option value="x">Pajak/mutasi (tidak dihitung)</option>';
+    const ks=[...new Set(S.rows.map(r=>r.tgl?ymKey(r.tgl):''))].sort();
+    fb.innerHTML='<option value="">Semua bulan</option>'+ks.map(k=>`<option value="${k||'none'}">${ymLabel(k)}</option>`).join('');
+    fk._n=S.rows.length;
+  }
+  const q=$('#fCari').value.toLowerCase().trim(), kv=fk.value, bv=fb.value, onlyF=$('#fFlag').checked;
+  const list=S.rows.map((r,i)=>({r,i})).filter(({r})=>{
+    if(q && !r.uraian.toLowerCase().includes(q) && !(r.kode||'').toLowerCase().includes(q)) return false;
+    if(kv==='x'){ if(!r.excluded) return false; } else if(kv!==''){ if(r.excluded || String(r.komp)!==kv) return false; }
+    if(bv){ const k=r.tgl?ymKey(r.tgl):'none'; if(k!==bv) return false; }
+    if(onlyF && !(r._flags&&r._flags.length)) return false;
+    return true;
+  });
+  const pages=Math.max(1,Math.ceil(list.length/PER)); page=Math.min(page,pages-1);
+  const sl=list.slice(page*PER,page*PER+PER);
+  const opt=k=>Object.entries(KOMP).map(([id,v])=>`<option value="${id}" ${+id===k?'selected':''}>${+id?id+'. ':''}${v}</option>`).join('')+`<option value="-1" ${k===-1?'selected':''}>Penerimaan dana</option>`;
+  const showA=A.hasAngg;
+  $('#tblTrx').innerHTML='<thead><tr><th>Tanggal</th><th>Uraian</th><th>Komponen</th>'+(showA?'<th class="n">Anggaran</th>':'')+'<th class="n">Penerimaan</th><th class="n">Pengeluaran</th></tr></thead><tbody>'+
+    sl.map(({r,i})=>`<tr style="${r.excluded?'opacity:.5':''}"><td style="white-space:nowrap">${dLabel(r.tgl)}${r.kode?'<br><span class="hint">'+esc(r.kode)+'</span>':''}</td><td>${esc(r.uraian)}${(r._flags||[]).map(f=>`<span class="flag ${f==='Kembar'||f==='Cek juknis'?'bad':''}">${esc(f)}</span>`).join('')}${r.excluded?'<span class="flag">tidak dihitung</span>':''}</td>
+    <td><select class="mini" data-i="${i}" ${r.excluded?'disabled':''}>${opt(r.komp)}</select></td>${showA?`<td class="n">${r.anggaran?rp(r.anggaran):''}</td>`:''}<td class="n">${r.penerimaan?rp(r.penerimaan):''}</td><td class="n">${r.realisasi?rp(r.realisasi):''}</td></tr>`).join('')+'</tbody>';
+  $('#trxInfo').textContent=`${list.length.toLocaleString('id-ID')} baris · halaman ${page+1} dari ${pages}`;
+  $('#pgPrev').disabled=page===0; $('#pgNext').disabled=page>=pages-1;
+  $$('#tblTrx select.mini').forEach(s=>s.addEventListener('change',()=>{ const r=S.rows[+s.dataset.i]; r.komp=+s.value; r.manual=true; S.report=''; save(); analyze(); toast('Komponen diperbarui'); }));
+}
+const trxRender=()=> S.mode==='dpa'?renderTrxDPA():renderTrx();
+['#fCari','#fKomp','#fBulan','#fFlag'].forEach(id=>$(id).addEventListener(id==='#fCari'?'input':'change',()=>{page=0;pageD=0;trxRender();}));
+$('#pgPrev').onclick=()=>{ if(S.mode==='dpa') pageD--; else page--; trxRender();}; $('#pgNext').onclick=()=>{ if(S.mode==='dpa') pageD++; else page++; trxRender();};
+
+/* ---------------- AI ---------------- */
+let SAMPLE=null, DL=null, claudeReady=false;
+async function initClaude(){
+  try{ if(window.claude && typeof window.claude.use==='function'){
+      const [s,d]=await Promise.all([window.claude.use('sample').catch(()=>null), window.claude.use('downloads').catch(()=>null)]);
+      SAMPLE=s||null; DL=d||null; } }catch(e){}
+  claudeReady=true; updateEngineBadge();
+}
+initClaude(); setTimeout(()=>{ if(!SAMPLE && window.claude) initClaude(); },2500);
+function gKey(){ return S.meta.gkey || GEMINI_API_KEY; }
+function engine(){ const p=S.meta.engine||'auto'; if(p==='claude') return SAMPLE?'claude':null; if(p==='gemini') return gKey()?'gemini':null; return SAMPLE?'claude':(gKey()?'gemini':null); }
+function updateEngineBadge(){
+  const b=$('#engineBadge'); if(!b) return; const e=engine();
+  b.classList.toggle('on',!!e);
+  b.querySelector('span').textContent= e==='claude'?'AI: Claude' : e==='gemini'?'AI: Gemini ('+(S.meta.gmodel||GEMINI_MODEL_DEFAULT)+')' : (claudeReady?'AI belum aktif':'Memeriksa AI…');
+}
+const SYS=`Anda adalah analis keuangan sekolah sekaligus auditor internal dana BOSP di Indonesia yang membantu kepala sekolah.
+Acuan utama: Permendikdasmen Nomor 8 Tahun 2026 tentang Petunjuk Teknis Pengelolaan Dana BOSP (BOS Reguler: honor maksimal 20% dari pagu untuk sekolah negeri / 40% swasta; pengembangan perpustakaan/buku minimal 10%; pemeliharaan sarpras maksimal 20%; dilarang membiayai rehabilitasi berat/pembangunan baru, pengadaan bahan pangan program MBG, meminjamkan/membungakan dana, dan belanja untuk kepentingan pribadi), serta SE Mendikdasmen Nomor 6 Tahun 2026 tentang relaksasi pembiayaan honor ASN paruh waktu (sementara, khusus TA 2026, atas usulan pemerintah daerah).
+Aturan menjawab:
+- Gunakan HANYA angka yang ada di DATA. Jangan mengarang angka, nama, atau transaksi. Bila data tidak cukup, katakan terus terang.
+- Temuan otomatis adalah indikasi yang perlu diverifikasi, bukan vonis pelanggaran.
+- Dana BOSDA (bersumber PAD/APBD) diatur peraturan daerah (misalnya Perwal/juknis BOSDA), jadi batas Juknis BOSP tidak berlaku langsung padanya; sebutkan bila relevan.
+- Pada DPA/DPPA SIPD, belanja BOS Reguler biasanya tercatat gelondongan; rincian per komponen ada di RKAS ARKAS. Jangan menyimpulkan porsi honor/pemeliharaan BOS Reguler dari DPA.
+- Tulis dalam Bahasa Indonesia yang lugas dan mudah dipahami kepala sekolah, bendahara, dan komite. Rupiah ditulis lengkap dengan titik ribuan (contoh Rp 13.500.000).
+- Format Markdown: judul ##, poin dengan tanda -, tabel Markdown bila membandingkan.`;
+function contextData(withTrx){
+  const a=A;
+  const d={
+    sekolah:S.meta.sekolah||'(belum diisi)', tahun_anggaran:S.meta.tahun, status_sekolah:S.meta.status, jenis_dana:S.meta.jenis, data_contoh_fiktif:S.sample,
+    pagu:Math.round(a.pagu), sumber_pagu:a.paguSrc, total_penerimaan_tercatat:Math.round(a.totTerima), total_anggaran_tercatat:Math.round(a.totAngg),
+    total_realisasi:Math.round(a.totReal), sisa_dana:Math.round(a.pagu-a.totReal), serapan_persen:+a.serap.toFixed(1), jumlah_transaksi_belanja:a.bel.length,
+    periode_data: a.periode? dLabel(a.periode.awal)+' s.d. '+dLabel(a.periode.akhir) : 'tanpa tanggal',
+    per_komponen:a.kompList.map(k=>({komponen:(k.id?k.id+'. ':'')+k.nama, anggaran:Math.round(k.angg), realisasi:Math.round(k.real), persen_dari_pagu:+(k.real/(a.pagu||1)*100).toFixed(1), persen_serap_anggaran:k.angg?+(k.real/k.angg*100).toFixed(1):null, jumlah_transaksi:k.n})),
+    per_bulan:a.bulan.filter(b=>b.k).map(b=>({bulan:ymLabel(b.k), belanja:Math.round(b.real), penerimaan:Math.round(b.ter)})),
+    kepatuhan:a.rules.map(r=>({aturan:r.nama, nilai_persen_pagu:+r.nilai.toFixed(1), batas:(r.jenis==='maks'?'maks ':'min ')+r.batas+'%', status:r.lbl, nominal:Math.round(a.perK[r.id].real)})),
+    temuan_otomatis:a.F.map(f=>({tingkat:f.lv, judul:f.judul, keterangan:f.detail, contoh:f.contoh})),
+    transaksi_terbesar:[...a.bel].sort((x,y)=>y.realisasi-x.realisasi).slice(0,15).map(r=>({tanggal:dLabel(r.tgl), uraian:r.uraian, komponen:KOMP[r.komp], nilai:Math.round(r.realisasi)}))
+  };
+  if(withTrx){ let rows=[...a.bel]; let note='semua transaksi belanja';
+    if(rows.length>350){ rows=rows.sort((x,y)=>y.realisasi-x.realisasi).slice(0,250); note='250 transaksi terbesar dari '+a.bel.length; }
+    rows.sort((x,y)=>(x.tgl||0)-(y.tgl||0));
+    d.daftar_transaksi_keterangan=note; d.daftar_transaksi='tanggal | uraian | komponen | nilai\n'+rows.map(r=>`${r.tgl?r.tgl.toISOString().slice(0,10):'-'} | ${r.uraian} | ${r.komp} | ${Math.round(r.realisasi)}`).join('\n');
+  }
+  return JSON.stringify(d,null,1);
+}
+const REPORT_TASK=`Susun LAPORAN ANALISIS DANA BOS untuk kepala sekolah dengan struktur:
+## 1. Ringkasan Eksekutif
+3–5 kalimat: kondisi umum, serapan, dan 2–3 hal terpenting.
+## 2. Serapan Anggaran
+Analisis serapan terhadap pagu dan pola per bulan (bulan puncak, bulan sepi, tren).
+## 3. Struktur Belanja per Komponen
+Komponen dominan dan yang kecil; apakah komposisinya wajar untuk SMP.
+## 4. Kepatuhan Juknis BOSP 2026
+Tabel: Aturan | Capaian | Batas | Status | Keterangan. Lalu penjelasan singkat.
+## 5. Temuan dan Risiko
+Urutkan dari prioritas tertinggi. Untuk tiap temuan: apa masalahnya, risikonya bila diperiksa (Inspektorat/BPK), dan bukti yang perlu disiapkan.
+## 6. Rekomendasi Tindak Lanjut (sisa tahun berjalan)
+Langkah konkret, siapa yang melakukan (kepala sekolah/bendahara/operator), dan nominal bila relevan.
+## 7. Rekomendasi untuk RKAS Tahun Berikutnya
+Usulan penyesuaian alokasi per komponen dengan alasan.
+## 8. Narasi untuk Rapat Dewan Guru / Komite
+Satu paragraf siap dibacakan, bahasa santun dan transparan.`;
+
+async function askAI(messages,onText){
+  const e=engine();
+  if(e==='claude'){
+    const msgs=messages.map((m,i)=>i===0?{role:'user',content:SYS+'\n\n'+m.content}:m);
+    const res=await SAMPLE(msgs,{onText:({text})=>onText&&onText(text), modelTier:'default', cache:false});
+    return res.text;
+  }
+  if(e==='gemini'){
+    const model=S.meta.gmodel||GEMINI_MODEL_DEFAULT;
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':gKey()},
+      body:JSON.stringify({systemInstruction:{parts:[{text:SYS}]},contents:messages.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{temperature:0.4,maxOutputTokens:8192}})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(j.error?.message||('HTTP '+r.status));
+    const t=(j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');
+    if(!t) throw new Error('Gemini tidak mengembalikan jawaban'+(j.candidates?.[0]?.finishReason?' ('+j.candidates[0].finishReason+')':''));
+    onText&&onText(t); return t;
+  }
+  const err=new Error('NO_ENGINE'); err.code='NO_ENGINE'; throw err;
+}
+function aiErrMsg(e){
+  if(e&&e.code==='NO_ENGINE') return 'AI belum aktif. Bila tool ini dibuka di luar claude.ai (misalnya di Google Sites), isi API key Gemini di tab Pengaturan.';
+  if(e&&e.code==='not_granted') return 'Izin memakai Claude belum diberikan. Klik tombol lagi lalu setujui permintaan izin.';
+  if(e&&e.code==='rate_limited') return 'Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.';
+  return 'Gagal menghubungi AI: '+(e&&e.message||e);
+}
+function renderAI(){
+  updateEngineBadge();
+  const has=!!S.report; $('#aiReport').innerHTML= has? md(S.report) : '<p class="muted">Klik <b>Buat laporan analisis</b> untuk menyusun laporan lengkap: ringkasan, serapan, kepatuhan, temuan, rekomendasi, dan narasi untuk rapat.</p>';
+  $('#btnCopyRep').classList.toggle('hide',!has); $('#btnDlRep').classList.toggle('hide',!has);
+  $('#aiWarn').classList.toggle('hide',!!engine()); if(!engine()) $('#aiWarn').textContent=aiErrMsg({code:'NO_ENGINE'});
+  const qs= S.mode==='dpa' ? ['Pos belanja apa yang paling besar dan apakah wajar?','Jelaskan perubahan anggaran sebelum dan sesudah DPPA','Apa risiko temuan pemeriksaan dari DPPA ini?','Bagaimana pemenuhan buku 10% BOS Reguler?','Rincian mana yang perlu diperbaiki uraian atau rekeningnya?','Buat narasi untuk rapat komite'] : ['Komponen mana yang paling perlu diwaspadai?','Apa risiko jika diperiksa Inspektorat?','Buat narasi laporan untuk rapat komite','Saran realokasi untuk RKAS tahun depan','Bagaimana pola belanja per bulan?','Berapa sisa ruang belanja buku dan sarpras?'];
+  $('#chips').innerHTML=qs.map(q=>`<button class="chip" type="button">${esc(q)}</button>`).join('');
+  $$('#chips .chip').forEach(c=>c.onclick=()=>{ $('#chatIn').value=c.textContent; sendChat(); });
+}
+let busy=false;
+$('#btnReport').onclick=async()=>{
+  if(busy) return; if(!engine()){ $('#aiWarn').classList.remove('hide'); $('#aiWarn').textContent=aiErrMsg({code:'NO_ENGINE'}); return; }
+  busy=true; const b=$('#btnReport'); b.disabled=true; b.innerHTML='<span class="spin"></span> Menganalisis…';
+  $('#aiReport').innerHTML='<p class="muted"><span class="spin dark"></span> AI sedang membaca data dan menyusun laporan…</p>';
+  try{
+    const dpa=S.mode==='dpa';
+    const txt=await askAI([{role:'user',content:(dpa?'DATA DPA/DPPA DANA BOS (JSON):\n'+contextDPA(false):'DATA BOS (JSON):\n'+contextData(false))+'\n\nTUGAS:\n'+(dpa?REPORT_TASK_DPA:REPORT_TASK)}], t=>{ $('#aiReport').innerHTML=md(t); });
+    S.report=txt; save(); renderAI(); toast('Laporan selesai');
+  }catch(e){ console.error(e); $('#aiReport').innerHTML='<div class="note">'+esc(aiErrMsg(e))+'</div>'; }
+  busy=false; b.disabled=false; b.innerHTML='✦ Buat ulang laporan';
+};
+$('#btnCopyRep').onclick=async()=>{ try{ await navigator.clipboard.writeText(S.report); toast('Teks laporan disalin'); }catch(e){ toast('Tidak bisa menyalin otomatis. Blok teks lalu salin manual.'); } };
+$('#btnDlRep').onclick=()=>{
+  const inClaude=!!DL; const title='Laporan Analisis Dana BOS '+(S.meta.sekolah||'')+' TA '+S.meta.tahun;
+  const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${esc(title)}</title><style>body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.5;max-width:800px;margin:30px auto;color:#111}h1{font-size:16pt;text-align:center;margin-bottom:2px}h2{font-size:13pt;color:#0f5c6e;margin-top:18px}h3{font-size:12pt}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:4px 6px;font-size:10pt}th{background:#e8eef3}.sub{text-align:center;color:#555;margin-top:0}</style></head><body><h1>${esc(title)}</h1><p class="sub">Disusun dengan BOS Analitik AI · ${dLabel(new Date())}</p>${md(S.report)}</body></html>`;
+  const name='Laporan-Analisis-BOS-'+S.meta.tahun+(inClaude?'.html':'.doc');
+  saveFile(name, html, inClaude?'text/html':'application/msword');
+};
+let chatHist=[];
+$('#chatForm').addEventListener('submit',e=>{ e.preventDefault(); sendChat(); });
+async function sendChat(){
+  const q=$('#chatIn').value.trim(); if(!q||busy) return;
+  if(!engine()){ $('#aiWarn').classList.remove('hide'); $('#aiWarn').textContent=aiErrMsg({code:'NO_ENGINE'}); return; }
+  busy=true; $('#chatIn').value=''; $('#chatBtn').disabled=true;
+  const box=$('#chat'); box.insertAdjacentHTML('beforeend',`<div class="msg u">${esc(q)}</div>`);
+  const el=document.createElement('div'); el.className='msg a'; el.innerHTML='<div class="ai-out"><span class="spin dark"></span></div>'; box.appendChild(el); box.scrollTop=box.scrollHeight;
+  const content = chatHist.length ? q : (S.mode==='dpa'?'DATA DPA/DPPA DANA BOS (JSON):\n'+contextDPA(true):'DATA BOS (JSON):\n'+contextData(true))+'\n\nJawab pertanyaan kepala sekolah berikut secara ringkas dan langsung ke inti (maksimal sekitar 250 kata kecuali diminta lebih panjang):\n'+q;
+  const msgs=[...chatHist,{role:'user',content}];
+  try{
+    const txt=await askAI(msgs,t=>{ el.firstChild.innerHTML=md(t); box.scrollTop=box.scrollHeight; });
+    el.firstChild.innerHTML=md(txt); chatHist=[...msgs,{role:'assistant',content:txt}];
+    if(chatHist.length>16) chatHist=[chatHist[0],chatHist[1],...chatHist.slice(-12)];
+  }catch(e){ console.error(e); el.firstChild.innerHTML='<span style="color:var(--bad)">'+esc(aiErrMsg(e))+'</span>'; }
+  busy=false; $('#chatBtn').disabled=false; box.scrollTop=box.scrollHeight;
+}
+
+/* ---------------- markdown ---------------- */
+function md(src){
+  src=String(src||'');
+  const inline=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g,'$1<em>$2</em>').replace(/`([^`]+)`/g,'<code>$1</code>');
+  const L=src.split(/\r?\n/), out=[]; let i=0;
+  const isBlock=l=>/^(#{1,4}\s|\s*[-*•]\s+|\s*\d+[.)]\s+|\s*\|)/.test(l);
+  while(i<L.length){
+    const l=L[i]; let m;
+    if(/^\s*\|/.test(l) && i+1<L.length && /^\s*\|?\s*:?-{2,}/.test(L[i+1])){
+      const row=x=>x.trim().replace(/^\|/,'').replace(/\|$/,'').split('|').map(c=>c.trim());
+      const head=row(l); i+=2; const body=[];
+      while(i<L.length && /^\s*\|/.test(L[i])){ body.push(row(L[i])); i++; }
+      out.push('<div class="tblwrap"><table class="md"><thead><tr>'+head.map(h=>'<th>'+inline(h)+'</th>').join('')+'</tr></thead><tbody>'+body.map(r=>'<tr>'+r.map(c=>'<td>'+inline(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>'); continue;
+    }
+    if(m=l.match(/^(#{1,4})\s+(.*)/)){ const lv=Math.min(m[1].length+1,5); out.push(`<h${lv}>${inline(m[2])}</h${lv}>`); i++; continue; }
+    if(/^\s*[-*•]\s+/.test(l)){ const it=[]; while(i<L.length && /^\s*[-*•]\s+/.test(L[i])){ it.push(L[i].replace(/^\s*[-*•]\s+/,'')); i++; } out.push('<ul>'+it.map(x=>'<li>'+inline(x)+'</li>').join('')+'</ul>'); continue; }
+    if(/^\s*\d+[.)]\s+/.test(l)){ const it=[]; const st=parseInt(l); while(i<L.length && /^\s*\d+[.)]\s+/.test(L[i])){ it.push(L[i].replace(/^\s*\d+[.)]\s+/,'')); i++; } out.push(`<ol start="${st||1}">`+it.map(x=>'<li>'+inline(x)+'</li>').join('')+'</ol>'); continue; }
+    if(/^\s*(---|\*\*\*|___)\s*$/.test(l)){ out.push('<hr>'); i++; continue; }
+    if(!l.trim()){ i++; continue; }
+    const p=[]; while(i<L.length && L[i].trim() && !(p.length && isBlock(L[i])) && !/^\s*(---|\*\*\*)\s*$/.test(L[i])){ p.push(L[i]); i++; if(isBlock(L[i-1]) ) break; }
+    out.push('<p>'+p.map(inline).join('<br>')+'</p>');
+  }
+  return out.join('');
+}
+
+/* ---------------- unduh ---------------- */
+async function saveFile(filename,data,mime){
+  if(DL){
+    try{ await DL.save({filename,data}); toast('File disimpan'); return; }
+    catch(e){ if(e&&(e.code==='declined')) return; if(e&&e.code==='rate_limited'){ toast('Tunggu sebentar lalu coba lagi'); return; }
+      if(!(e&&['unavailable','not_granted','capability_disabled','capability_removed'].includes(e.code))){ toast('Gagal menyimpan: '+(e&&e.message||e)); return; } }
+  }
+  try{ const blob=data instanceof Blob?data:new Blob([data],{type:mime}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500); }
+  catch(e){ toast('Unduhan tidak didukung di tampilan ini'); }
+}
+$('#btnXlsx').onclick=()=>{
+  if(!hasData()){ toast('Belum ada data'); return; } if(typeof XLSX==='undefined'){ toast('Pustaka Excel belum termuat'); return; }
+  if(S.mode==='dpa'){ exportDPA(); return; }
+  analyze(); const a=A, wb=XLSX.utils.book_new();
+  const ring=[['Ringkasan Analisis Dana BOS'],['Sekolah',S.meta.sekolah],['Tahun anggaran',S.meta.tahun],['Jenis dana',S.meta.jenis],['Pagu',Math.round(a.pagu)],['Sumber pagu',a.paguSrc],['Total realisasi',Math.round(a.totReal)],['Sisa dana',Math.round(a.pagu-a.totReal)],['Serapan (%)',+a.serap.toFixed(2)],['Jumlah transaksi belanja',a.bel.length]];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ring),'Ringkasan');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['No','Komponen','Anggaran','Realisasi','% Pagu','% Serap Anggaran','Jumlah Transaksi'],...a.kompList.map(k=>[k.id||'',k.nama,Math.round(k.angg),Math.round(k.real),+(k.real/(a.pagu||1)*100).toFixed(2),k.angg?+(k.real/k.angg*100).toFixed(2):'',k.n])]),'Per Komponen');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['Bulan','Belanja','Penerimaan'],...a.bulan.map(b=>[ymLabel(b.k),Math.round(b.real),Math.round(b.ter)])]),'Per Bulan');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['Aturan','Capaian (% pagu)','Batas','Status','Nominal'],...a.rules.map(r=>[r.nama,+r.nilai.toFixed(2),(r.jenis==='maks'?'Maks ':'Min ')+r.batas+'%',r.lbl,Math.round(a.perK[r.id].real)])]),'Kepatuhan');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['Tingkat','Temuan','Keterangan','Contoh'],...a.F.map(f=>[f.lv,f.judul,f.detail,(f.contoh||[]).join('; ')])]),'Temuan');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['Tanggal','No. Bukti','Uraian','Komponen','Anggaran','Penerimaan','Pengeluaran','Tanda','Dihitung'],...S.rows.map(r=>[r.tgl?r.tgl.toISOString().slice(0,10):'',r.kode,r.uraian,r.komp===-1?'Penerimaan':KOMP[r.komp],r.anggaran||'',r.penerimaan||'',r.realisasi||'',(r._flags||[]).join(', '),r.excluded?'Tidak':'Ya'])]),'Transaksi');
+  if(S.report) XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(S.report.split('\n').map(l=>[l])),'Laporan AI');
+  saveFile('Analisis-BOS-'+S.meta.tahun+'.xlsx', new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})]), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+};
+$('#btnClear').onclick=()=>$('#clearConfirm').classList.remove('hide');
+$('#clearNo').onclick=()=>$('#clearConfirm').classList.add('hide');
+$('#clearYes').onclick=()=>{ S.rows=[]; S.dpa=null; S.mode='trx'; S.report=''; S.sample=false; chatHist=[]; $('#chat').innerHTML=''; store.del('bosAnalitik.v1'); $('#clearConfirm').classList.add('hide'); $('#fileInfo').textContent=''; $('#mapCard').classList.add('hide'); toast('Data dihapus'); $('#dotTemuan').classList.remove('show'); };
+
+/* ================= MODE DPA / DPPA SIPD ================= */
+/* ===== Pembaca PDF DPA/DPPA SIPD (dipakai juga di index.html) ===== */
+function linesFromItems(items){
+  // items: [{str, x, y, w}] satu halaman -> array string baris (urut atas->bawah)
+  const its=items.filter(t=>t.str && t.str.trim()!=='').sort((a,b)=>b.y-a.y||a.x-b.x);
+  const rows=[];
+  for(const t of its){
+    let r=rows.find(r=>Math.abs(r.y-t.y)<=2.5);
+    if(!r){ r={y:t.y,items:[]}; rows.push(r); }
+    r.items.push(t);
+  }
+  rows.sort((a,b)=>b.y-a.y);
+  return rows.map(r=>{
+    r.items.sort((a,b)=>a.x-b.x);
+    let s='', end=null;
+    for(const t of r.items){
+      if(end!==null){ const gap=t.x-end; s+= gap>6 ? '   ' : (gap>0.8 && !s.endsWith(' ') && !t.str.startsWith(' ') ? ' ' : ''); }
+      s+=t.str; end=t.x+t.w;
+    }
+    return s;
+  });
+}
+const RX_AMT=/\(\s*Rp\s?[\d.]+(?:,\d+)?\s*\)|Rp\s?[\d.]+(?:,\d+)?/g;
+function amtVal(s){ const neg=/^\(/.test(s.trim()); const n=parseFloat(s.replace(/[()\sRp]/g,'').replace(/\./g,'').replace(',','.'))||0; return neg?-n:n; }
+const BULAN_ID=['januari','februari','maret','april','mei','juni','juli','agustus','september','oktober','november','desember'];
+function parseSipd(lines){
+  const all=lines.join('\n');
+  const perubahan=/PERUBAHAN DOKUMEN|DPPA|Bertambah/i.test(all);
+  const meta={perubahan, nomor:'', tahun:0, unit:'', subKegiatan:'', sumberDana:[], alokasi:0, totalSebelum:0, totalSetelah:0, rencana:new Array(12).fill(0), tanggal:''};
+  let m;
+  if(m=all.match(/Nomor\s+DP{1,2}A\s*:\s*(\S+)/i)) meta.nomor=m[1];
+  if(m=all.match(/TAHUN ANGGARAN\s+(\d{4})/i)) meta.tahun=+m[1];
+  if(m=all.match(/\nUnit\s*:\s*[\d.]+\s*-\s*(.+)/)) meta.unit=m[1].trim();
+  if(m=all.match(/\n\s*((?:Kota|Kabupaten|Provinsi)\s+[A-Za-z .'-]+?)\s*(?:\n|\s{2,})/)) meta.daerah=m[1].trim();
+  if(m=all.match(/Sub Kegiatan\s*:\s*[\d.]+\s*-\s*(.+)/)) meta.subKegiatan=m[1].trim();
+  if(m=all.match(/Alokasi Tahun\s*:\s*(Rp[\d.,]+)/)) meta.alokasi=amtVal(m[1]);
+  if(m=all.match(/Jumlah Anggaran Sub Kegiatan\s+(Rp[\d.,]+)(?:\s+Jumlah Anggaran Sub Kegiatan\s+(Rp[\d.,]+))?/)){ if(m[2]){ meta.totalSebelum=amtVal(m[1]); meta.totalSetelah=amtVal(m[2]); } else meta.totalSetelah=amtVal(m[1]); }
+  if(m=all.match(/Yogyakarta\s*,\s*tanggal\s+([^\n]+?)(?:\s{2,}|\n)/i)||all.match(/,\s*tanggal\s+(\d{1,2}\s+\w+\s+\d{4})/i)) meta.tanggal=m[1].trim();
+  const rek={}; const groups=[]; let curRek=null, curLabel='', curSumber='', g=null, pend=[], inSumber=false;
+  for(let raw of lines){
+    const line=raw.replace(/\s+$/,''); const t=line.trim(); if(!t) continue;
+    // rencana bulanan
+    const bm=t.match(/^(Januari|Februari|Maret|April|Mei|Juni|Juli|Agustus|September|Oktober|November|Desember)\s+(Rp[\d.,]+)/i);
+    if(bm){ meta.rencana[BULAN_ID.indexOf(bm[1].toLowerCase())]=amtVal(bm[2]); continue; }
+    if(/^Sumber Pendanaan\s*:/.test(t)){ inSumber=true; const v=t.split(':').slice(1).join(':').trim(); if(v) meta.sumberDana.push(v); continue; }
+    if(inSumber){ if(/^:\s*/.test(t)){ meta.sumberDana.push(t.replace(/^:\s*/,'').trim()); continue; } inSumber=false; }
+    const amts=(t.match(RX_AMT)||[]).map(amtVal);
+    const txt=t.replace(RX_AMT,' ').replace(/\s+/g,' ').trim();
+    const rm=t.match(/^(5(?:\.\d+)+)\s+(.+)/);
+    if(rm && amts.length){ const code=rm[1]; const name=rm[2].replace(RX_AMT,' ').replace(/\s+/g,' ').trim(); rek[code]=name; if(code.split('.').length>=6){ curRek=code; g=null; } pend=[]; continue; }
+    if(/^\[\s*#\s*\]/.test(t)){ curLabel=txt.replace(/^\[\s*#\s*\]\s*/,''); curSumber=''; g=null; pend=[]; continue; }
+    if(/^Sumber Dana\s*:/.test(t)){ curSumber=t.replace(/^Sumber Dana\s*:\s*/,'').trim(); continue; }
+    if(/^\[\s*-\s*\]/.test(t)){
+      g={rek:curRek, label:curLabel, sumber:curSumber, uraian:txt.replace(/^\[\s*-\s*\]\s*/,''), sebelum:null, setelah:0, selisih:null, items:[]};
+      if(perubahan && amts.length>=2){ g.sebelum=amts[0]; g.setelah=amts[1]; g.selisih=amts.length>=3?amts[2]:amts[1]-amts[0]; }
+      else if(amts.length) g.setelah=amts[amts.length-1];
+      groups.push(g); pend=[]; continue;
+    }
+    if(/^(Spesifikasi|Alamat)\s*:|^https?:|Sistem Informasi Pemerintahan|^Rincian Perhitungan|^Kode Rekening|^Koefisien|^Bertambah|^\(Rp\)|^\d{1,2}\/\d{1,2}\/\d{2},/.test(t)){ pend=[]; continue; }
+    const need = perubahan?5:2;
+    if(g && amts.length>=need){
+      const segs=t.split(RX_AMT); // teks di antara nominal
+      const vol=s=>{ const mm=(s||'').trim().match(/^([\d.,]+)\s+(\S+)/); return mm?{v:parseFloat(mm[1].replace(/\./g,'').replace(',','.'))||0, sat:mm[2]}:{v:0,sat:''}; };
+      let it;
+      if(perubahan){ const v0=vol(segs[0]), v1=vol(segs[2]); it={nama:pend.join(' ').trim()||'(rincian)', volSebelum:v0.v, volSetelah:v1.v, satuan:v1.sat||v0.sat, hargaSebelum:amts[0], sebelum:amts[1], harga:amts[2], setelah:amts[3], selisih:amts[4]}; }
+      else { const v1=vol(segs[0]); it={nama:pend.join(' ').trim()||'(rincian)', volSetelah:v1.v, satuan:v1.sat, harga:amts[0], setelah:amts[1]}; }
+      g.items.push(it); pend=[]; continue;
+    }
+    if(amts.length) { pend=[]; continue; }
+    if(g && txt && !/^(Jumlah|Tim Anggaran|No\.|Mengesahkan|PPKD|NIP)/.test(txt)) { pend.push(txt); if(pend.length>2) pend.shift(); }
+  }
+  groups.forEach(x=>{ x.rekNama=rek[x.rek]||''; });
+  return {meta, rek, groups};
+}
+
+
+let pdfjsLoading=null;
+function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=src; s.onload=res; s.onerror=()=>rej(new Error('pustaka PDF gagal dimuat (cek koneksi internet)')); document.head.appendChild(s); }); }
+function loadPdfJs(){
+  if(window.pdfjsLib && window.pdfjsWorker) return Promise.resolve();
+  if(!pdfjsLoading){ const base='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+    pdfjsLoading=loadScript(base+'pdf.min.js').then(()=>loadScript(base+'pdf.worker.min.js')).then(()=>{ window.pdfjsLib.GlobalWorkerOptions.workerSrc=base+'pdf.worker.min.js'; });
+    pdfjsLoading.catch(()=>{ pdfjsLoading=null; }); }
+  return pdfjsLoading;
+}
+async function readPdf(f){
+  $('#fileInfo').innerHTML='<span class="spin dark"></span> Membaca PDF…';
+  try{
+    await loadPdfJs();
+    const doc=await window.pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise;
+    let lines=[];
+    for(let p=1;p<=doc.numPages;p++){ const pg=await doc.getPage(p); const tc=await pg.getTextContent();
+      lines=lines.concat(linesFromItems(tc.items.map(i=>({str:i.str,x:i.transform[4],y:i.transform[5],w:i.width})))); }
+    const res=parseSipd(lines);
+    if(!res.groups.length){ $('#fileInfo').innerHTML='⚠ PDF ini bukan cetakan DPA/DPPA SIPD yang dikenali. Untuk BKU/RKAS dari ARKAS, ekspor ke Excel lalu impor file Excel-nya.'; return; }
+    S.mode='dpa'; S.dpa={meta:res.meta, rek:res.rek, groups:res.groups, pages:doc.numPages}; S.rows=[];
+    S.sample=false; S.report=''; chatHist=[]; $('#chat').innerHTML=''; S.source=f.name;
+    if(res.meta.tahun) S.meta.tahun=res.meta.tahun;
+    if(res.meta.unit) S.meta.sekolah=res.meta.unit.replace(/^UPT\s+/i,'')+(res.meta.daerah?' '+res.meta.daerah.replace(/^(Kota|Kabupaten|Kab\.|Provinsi)\s+/i,''):'');
+    S.meta.jenis='Gabungan';
+    save(); syncProfileUI(); $('#mapCard').classList.add('hide');
+    $('#fileInfo').innerHTML=`📄 <b>${esc(f.name)}</b> · ${res.meta.perubahan?'DPPA':'DPA'} SIPD · ${res.groups.length} sub-rincian · ${res.groups.reduce((a,g)=>a+g.items.length,0)} item`;
+    toast('DPA/DPPA berhasil dibaca'); go('dashboard');
+  }catch(err){ console.error(err); $('#fileInfo').textContent='Gagal membaca PDF: '+(err&&err.message||err); }
+}
+const sumKat=s=>/Reguler/i.test(s)?'BOS Reguler':/Kinerja/i.test(s)?'BOS Kinerja':/Afirmasi/i.test(s)?'BOS Afirmasi':/PAD|Pendapatan Asli|BOSDA|APBD/i.test(s)?'BOSDA (PAD)':(s||'Tidak disebut');
+const jenisKey=c=>{ const s=String(c||'').split('.'); return s.slice(0, c&&c.startsWith('5.2')?3:4).join('.'); };
+const isBospRek=g=>/BOSP/i.test(g.rekNama||'') || /^5\.\d\.\d\d\.89\./.test(g.rek||'');
+const isBosSumber=g=>/BOS (Reguler|Kinerja|Afirmasi)|BOSP/i.test(g.sumber||'');
+let AD=null;
+function analyzeDPA(){
+  const D=S.dpa, G=D.groups, M=D.meta, per=!!M.perubahan;
+  const sb=g=>g.sebelum||0, st=g=>g.setelah||0;
+  const totSb=G.reduce((a,g)=>a+sb(g),0), totSt=G.reduce((a,g)=>a+st(g),0);
+  const agg=(keyFn,nameFn)=>{ const o={}; G.forEach(g=>{ const k=keyFn(g); if(!o[k]) o[k]={k,nama:nameFn?nameFn(k,g):k,sb:0,st:0,n:0}; o[k].sb+=sb(g); o[k].st+=st(g); o[k].n++; }); return Object.values(o).sort((a,b)=>b.st-a.st||b.sb-a.sb); };
+  const perSumber=agg(g=>sumKat(g.sumber));
+  const perJenis=agg(g=>jenisKey(g.rek), k=>D.rek[k]||k);
+  const perRek=agg(g=>g.rek||'-', (k,g)=>g.rekNama||k);
+  const items=G.flatMap(g=>g.items.map(i=>({...i,g})));
+  const reg=perSumber.find(s=>s.k==='BOS Reguler');
+  const bosda=perSumber.find(s=>s.k==='BOSDA (PAD)');
+  G.forEach(g=>g._flags=[]);
+  const flag=(arr,tag)=>arr.forEach(g=>{ if(!g._flags.includes(tag)) g._flags.push(tag); });
+  // --- kepatuhan
+  const rules=[];
+  if(reg && reg.st>0){
+    const bukuG=G.filter(g=>sumKat(g.sumber)==='BOS Reguler' && (/^5\.2\.05/.test(g.rek||'') || /buku|perpustakaan/i.test(g.uraian+' '+(g.rekNama||''))));
+    const buku=bukuG.reduce((a,g)=>a+st(g),0), nilai=buku/reg.st*100, bt=S.meta.batasBuku, kurang=Math.max(0,reg.st*bt/100-buku);
+    let s='ok',l='Sesuai'; if(nilai<bt){ if(nilai>=bt*0.95){s='warn';l='Hampir memenuhi';} else {s='bad';l='Belum memenuhi';} }
+    rules.push({nama:'Buku / perpustakaan (BOS Reguler)', st:s, lbl:l, nilai, batas:bt, jenis:'min', gauge:true, nominal:buku,
+      ket:`Belanja Modal Aset Tetap Lainnya (buku) dari BOS Reguler ${rp(buku)} dibanding pagu BOS Reguler ${rp(reg.st)}. Minimal ${bt}% = ${rp(reg.st*bt/100)}.`+(kurang>0?` Kurang ${rp(kurang)}. Buku yang dibelanjakan lewat Belanja Barang dan Jasa BOSP tidak terlihat di DPA, jadi cek totalnya di RKAS ARKAS.`:'')});
+    const lump=G.filter(g=>sumKat(g.sumber)==='BOS Reguler' && /^5\.1\.02\.89/.test(g.rek||'')).reduce((a,g)=>a+st(g),0);
+    rules.push({nama:'Honor (BOS Reguler)', st:'na', lbl:'Cek di ARKAS', batas:S.meta.batasHonor, jenis:'maks', gauge:false,
+      ket:`Belanja barang/jasa BOS Reguler tercatat gelondongan ${rp(lump)} (rekening 5.1.02.89), sehingga porsi honor tidak bisa dihitung dari DPA. Batas maksimal ${S.meta.batasHonor}% = ${rp(reg.st*S.meta.batasHonor/100)}. Bandingkan dengan RKAS/BKU ARKAS.`});
+    rules.push({nama:'Pemeliharaan sarpras (BOS Reguler)', st:'na', lbl:'Cek di ARKAS', batas:S.meta.batasSarpras, jenis:'maks', gauge:false,
+      ket:`Sama seperti honor, rinciannya ada di RKAS ARKAS. Batas maksimal ${S.meta.batasSarpras}% = ${rp(reg.st*S.meta.batasSarpras/100)}.`});
+  }
+  const rencanaTot=(M.rencana||[]).reduce((a,b)=>a+b,0);
+  const okTot = !M.totalSetelah || Math.abs(totSt-M.totalSetelah)<1;
+  const okRen = !rencanaTot || Math.abs(rencanaTot-totSt)<1;
+  rules.push({nama:'Kecocokan jumlah', st: okTot&&okRen?'ok':'bad', lbl: okTot&&okRen?'Cocok':'Tidak cocok', gauge:false,
+    ket:`Jumlah sub-rincian ${rp(totSt)}`+(M.totalSetelah?` · jumlah anggaran sub kegiatan ${rp(M.totalSetelah)}`:'')+(rencanaTot?` · rencana penarikan 12 bulan ${rp(rencanaTot)}`:'')+'.'});
+  if(bosda && bosda.st>0){
+    const bg=G.filter(g=>sumKat(g.sumber)==='BOSDA (PAD)');
+    const part=rx=>bg.filter(g=>rx.test(g.rekNama||'')).reduce((a,g)=>a+st(g),0);
+    const hon=part(/Honorarium|Jasa Tenaga|Gaji/i), pem=part(/Pemeliharaan/i), mm=part(/Makanan dan Minuman|Jamuan/i), modal=bg.filter(g=>/^5\.2/.test(g.rek||'')).reduce((a,g)=>a+st(g),0);
+    rules.push({nama:'Struktur BOSDA (PAD)', st:'info', lbl:'Informasi', gauge:false,
+      ket:`Honor & jasa tenaga ${rp(hon)} (${pct(hon/bosda.st*100)}), pemeliharaan ${rp(pem)} (${pct(pem/bosda.st*100)}), makan-minum rapat/kegiatan ${rp(mm)} (${pct(mm/bosda.st*100)}), belanja modal ${rp(modal)} (${pct(modal/bosda.st*100)}). Batas mengikuti juknis BOSDA daerah.`});
+  }
+  // --- temuan
+  const F=[];
+  const m1=G.filter(g=>isBospRek(g) && !isBosSumber(g) && (st(g)||sb(g)));
+  const m2=G.filter(g=>!isBospRek(g) && isBosSumber(g) && (st(g)||sb(g)));
+  const m3=G.filter(g=>/BOSDA/i.test(g.label||'') && isBosSumber(g));
+  if(m1.length||m2.length||m3.length){ const c=[];
+    m1.forEach(g=>c.push(`Rekening BOSP bersumber ${sumKat(g.sumber)}: ${g.uraian} (${g.rek}) ${per?rp(sb(g))+' → ':''}${rp(st(g))}`));
+    m2.forEach(g=>c.push(`Dana ${sumKat(g.sumber)} di rekening umum: ${g.uraian} (${g.rek}) ${rp(st(g))}`));
+    m3.filter(g=>!m1.includes(g)&&!m2.includes(g)).forEach(g=>c.push(`Label "${g.label}" tetapi sumber ${sumKat(g.sumber)}: ${g.uraian} ${rp(st(g))}`));
+    F.push({lv:'sedang', judul:'Sumber dana dan kode rekening tidak selaras', detail:'Dana BOS seharusnya dianggarkan di rekening khusus BOSP (kode .89), dan rekening BOSP tidak dipakai untuk dana PAD. Ketidakselarasan menyulitkan pelaporan dan rekonsiliasi dengan ARKAS.', contoh:c.slice(0,6), tag:'Sumber dana', gs:[...new Set([...m1,...m2,...m3])]}); }
+  const lumpItems=items.filter(i=>i.harga<=1 && i.setelah>0);
+  if(lumpItems.length){ const tot=lumpItems.reduce((a,i)=>a+i.setelah,0);
+    F.push({lv:'sedang', judul:`${lumpItems.length} rincian gelondongan (harga satuan Rp1), total ${rpS(tot)}`, detail:'Volume diisi sama dengan nilai rupiah sehingga jumlah barang/jasa sebenarnya tidak terlihat. Siapkan RAB pendukung karena pemeriksa biasanya meminta volume dan harga satuan riil.', contoh:lumpItems.sort((a,b)=>b.setelah-a.setelah).slice(0,6).map(i=>`${i.g.uraian}: ${i.nama} — ${rp(i.setelah)}`), tag:'Gelondongan', gs:[...new Set(lumpItems.map(i=>i.g))]}); }
+  const regis=G.filter(g=>/Pajak, Bea|Perizinan/i.test(g.rekNama||'') && /registrasi|pendaftaran|manasik|perkemahan|kemah|study|studi|pesantren|\bldk\b|lomba|outbound|outing|wisata/i.test(g.uraian) && st(g)>0);
+  if(regis.length){ const tot=regis.reduce((a,g)=>a+st(g),0);
+    F.push({lv:'sedang', judul:`${regis.length} kegiatan murid dianggarkan di rekening Pajak, Bea, dan Perizinan (${rpS(tot)})`, detail:'Kegiatan seperti perkemahan, LDK, manasik, atau outdoor study umumnya terdiri dari konsumsi, transport, sewa, dan honor. Menganggarkannya sebagai "registrasi" membuat pertanggungjawaban sulit diverifikasi. Pastikan ada tarif resmi dari penyelenggara, atau pecah ke rekening yang sesuai.', contoh:regis.sort((a,b)=>st(b)-st(a)).map(g=>`${g.uraian} — ${rp(st(g))}`).slice(0,8), tag:'Kode rekening', gs:regis}); }
+  if(per){
+    const big=G.filter(g=>{ const d=st(g)-sb(g); return Math.abs(d)>=10e6 || (Math.abs(d)>=5e6 && sb(g)>0 && Math.abs(d)/sb(g)>=0.5); }).sort((a,b)=>Math.abs(st(b)-sb(b))-Math.abs(st(a)-sb(a)));
+    if(big.length) F.push({lv:'info', judul:`${big.length} sub-rincian berubah besar dalam DPPA`, detail:'Perubahan di atas Rp10 juta atau lebih dari 50%. Pastikan alasan perubahan tercatat dalam berita acara/notulen perubahan RKAS.', contoh:big.slice(0,6).map(g=>`${g.uraian}: ${rp(sb(g))} → ${rp(st(g))} (${st(g)-sb(g)>=0?'+':'−'}${rp(Math.abs(st(g)-sb(g)))})`), tag:'Berubah besar', gs:big});
+    const del=G.filter(g=>sb(g)>0 && st(g)===0);
+    if(del.length) F.push({lv:'info', judul:`${del.length} sub-rincian dihapus (${rpS(del.reduce((a,g)=>a+sb(g),0))})`, detail:'Anggaran awal dinolkan. Periksa apakah kebutuhannya sudah tidak ada atau dipindah ke rincian lain.', contoh:del.sort((a,b)=>sb(b)-sb(a)).slice(0,6).map(g=>`${g.uraian} — semula ${rp(sb(g))}`), tag:'Dihapus', gs:del});
+    const neu=G.filter(g=>sb(g)===0 && st(g)>0);
+    if(neu.length) F.push({lv:'info', judul:`${neu.length} sub-rincian baru (${rpS(neu.reduce((a,g)=>a+st(g),0))})`, detail:'Muncul pada perubahan anggaran. Pastikan sudah melalui usulan dan persetujuan perubahan.', contoh:neu.sort((a,b)=>st(b)-st(a)).slice(0,6).map(g=>`${g.uraian} — ${rp(st(g))}`), tag:'Baru', gs:neu});
+  }
+  const zero=items.filter(i=>!i.setelah && !i.sebelum);
+  if(zero.length) F.push({lv:'info', judul:`${zero.length} item bernilai Rp0 masih tercantum`, detail:'Tidak berpengaruh pada jumlah, tetapi sebaiknya dibersihkan agar dokumen rapi.', contoh:zero.slice(0,5).map(i=>`${i.g.uraian}: ${i.nama}`), gs:[]});
+  if(rencanaTot){
+    const peak=(M.rencana||[]).map((v,i)=>({i,v})).filter(x=>x.v/rencanaTot>0.15);
+    if(peak.length) F.push({lv:'info', judul:'Rencana penarikan menumpuk di '+peak.map(x=>BLN_FULL[x.i]+' ('+pct(x.v/rencanaTot*100)+')').join(' dan '), detail:'Bulan puncak butuh kesiapan SPJ dan pengadaan lebih awal agar tidak terlambat.', contoh:[], gs:[]});
+    const tm=(M.tanggal||'').toLowerCase().match(/\d{1,2}\s+([a-z]+)\s+(\d{4})/);
+    if(tm && BULAN_MAP[tm[1]]!=null){ const mi=BULAN_MAP[tm[1]]; const sisa=(M.rencana||[]).slice(mi).reduce((a,b)=>a+b,0);
+      F.push({lv: sisa/rencanaTot>0.25?'sedang':'info', judul:`Rencana penarikan ${BLN_FULL[mi]}–Desember ${rpS(sisa)} (${pct(sisa/rencanaTot*100)})`, detail:`Dokumen ditetapkan ${M.tanggal}. Sisa ${12-mi} bulan harus menyerap porsi ini; siapkan jadwal pengadaan dan SPJ agar tidak menumpuk di Desember.`, contoh:[], gs:[]}); }
+  }
+  if(!okTot) F.push({lv:'tinggi', judul:'Jumlah rincian tidak sama dengan jumlah anggaran', detail:'Bisa karena halaman PDF tidak lengkap atau format berbeda. Periksa dokumen asli.', contoh:[], gs:[]});
+  const ord={tinggi:0,sedang:1,info:2}; F.sort((a,b)=>ord[a.lv]-ord[b.lv]);
+  F.forEach(f=>f.tag && flag(f.gs||[],f.tag));
+  AD={G,M,per,totSb,totSt,perSumber,perJenis,perRek,items,reg,bosda,rules,F,rencanaTot};
+  $('#dotTemuan').classList.toggle('show', F.some(f=>f.lv==='tinggi'||f.lv==='sedang') || rules.some(r=>r.st==='bad'));
+  return AD;
+}
+function renderDashDPA(){
+  const a=AD, M=a.M, diff=a.totSt-a.totSb;
+  $('#sampleNote').classList.add('hide');
+  $('#docInfo').innerHTML=`<div class="row" style="gap:6px 18px;font-size:13.5px"><span class="pill info">${a.per?'DPPA · Perubahan DPA':'DPA'} SIPD</span>${M.nomor?`<span><b>Nomor:</b> ${esc(M.nomor)}</span>`:''}${M.unit?`<span><b>Unit:</b> ${esc(M.unit)}</span>`:''}<span><b>TA:</b> ${M.tahun||'–'}</span>${M.tanggal?`<span><b>Ditetapkan:</b> ${esc(M.tanggal)}</span>`:''}${M.subKegiatan?`<span><b>Sub kegiatan:</b> ${esc(M.subKegiatan)}</span>`:''}</div>`;
+  const kpi=(lb,v,s)=>`<div class="card kpi"><div class="lb">${lb}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+  const nNew=a.G.filter(g=>!g.sebelum && g.setelah>0).length, nDel=a.G.filter(g=>g.sebelum>0 && !g.setelah).length;
+  const others=a.perSumber.filter(s=>s.k!=='BOS Reguler' && s.k!=='BOSDA (PAD)');
+  const sCard=s=> s? kpi(esc(s.k), rpS(s.st), pct(s.st/(a.totSt||1)*100)+' dari total'+(a.per?' · sebelum '+rpS(s.sb):'')) : '';
+  $('#kpis').innerHTML=
+    kpi('Total anggaran'+(a.per?' (sesudah perubahan)':''), rpS(a.totSt), a.per?'Sebelum perubahan '+rpS(a.totSb):a.G.length+' sub-rincian')+
+    (a.per? kpi('Perubahan anggaran', (diff>=0?'+':'−')+rpS(Math.abs(diff)).replace('Rp ','Rp '), pct(diff/(a.totSb||1)*100)+' · '+nNew+' rincian baru · '+nDel+' dihapus') : kpi('Jumlah item', a.items.length.toLocaleString('id-ID'), a.perRek.length+' kode rekening'))+
+    sCard(a.reg)+ (a.bosda? kpi('BOSDA (PAD)', rpS(a.bosda.st), pct(a.bosda.st/(a.totSt||1)*100)+' dari total'+(a.per?' · sebelum '+rpS(a.bosda.sb):'')+(others.length?' · '+others.map(o=>o.k+' '+rpS(o.st)).join(', '):'')) : sCard(others[0]));
+  // sumber dana
+  $('#tKomp').textContent='Anggaran per sumber dana';
+  $('#legKomp').innerHTML=(a.per?'<span><i style="background:#cdd6e1"></i>Sebelum</span>':'')+'<span><i style="background:#147a91"></i>'+(a.per?'Sesudah':'Anggaran')+'</span>';
+  const ds=(arr)=>[...(a.per?[{label:'Sebelum',data:arr.map(x=>x.sb),backgroundColor:'#cdd6e1',borderRadius:4,barPercentage:.9,categoryPercentage:.75}]:[]),{label:a.per?'Sesudah':'Anggaran',data:arr.map(x=>x.st),backgroundColor:'#147a91',borderRadius:4,barPercentage:.9,categoryPercentage:.75}];
+  const hopt={indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+rp(c.raw)}}},scales:{x:{ticks:{callback:v=>rpS(v),maxRotation:0,maxTicksLimit:6},grid:{color:'#eef1f5'}},y:{grid:{display:false},ticks:{font:{size:11.5},callback:function(v){ const s=this.getLabelForValue(v); return s.length>34?s.slice(0,33)+'…':s; }}}}};
+  drawChart('chKomp',{type:'bar',data:{labels:a.perSumber.map(s=>s.k),datasets:ds(a.perSumber)},options:hopt});
+  // rencana bulanan
+  const R=M.rencana||[]; const has=R.some(v=>v>0);
+  $('#tBulan').textContent='Rencana penarikan dana per bulan';
+  $('#legBulan').innerHTML='<span><i style="background:#147a91"></i>Rencana penarikan</span><span><i style="background:#e0a526"></i>Kumulatif (% total)</span>';
+  $('#noDateNote').textContent='Dokumen tidak memuat rencana penarikan bulanan.'; $('#noDateNote').classList.toggle('hide',has); $('#chBulan').parentElement.classList.toggle('hide',!has);
+  if(has){ let c=0; const cum=R.map(v=>{c+=v; return a.rencanaTot?c/a.rencanaTot*100:0;});
+    drawChart('chBulan',{data:{labels:BLN,datasets:[{type:'bar',label:'Rencana',data:R,backgroundColor:'#147a91',borderRadius:4,yAxisID:'y',order:2},{type:'line',label:'Kumulatif',data:cum,borderColor:'#e0a526',backgroundColor:'#e0a526',tension:.25,pointRadius:3,borderWidth:2.5,yAxisID:'y2',order:1}]},
+      options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label==='Kumulatif'?'Kumulatif: '+pct(c.raw):'Rencana: '+rp(c.raw)}}},scales:{y:{ticks:{callback:v=>rpS(v)},grid:{color:'#eef1f5'}},y2:{position:'right',min:0,max:100,ticks:{callback:v=>v+'%'},grid:{display:false}},x:{grid:{display:false}}}}}); }
+  // jenis belanja
+  drawChart('chJenis',{type:'bar',data:{labels:a.perJenis.map(j=>j.nama),datasets:ds(a.perJenis)},options:hopt});
+  const chg=a.per?[...a.G].filter(g=>(g.setelah||0)!==(g.sebelum||0)).sort((x,y)=>Math.abs(y.setelah-y.sebelum)-Math.abs(x.setelah-x.sebelum)).slice(0,8):[];
+  $('#tblChg').innerHTML= a.per ? '<thead><tr><th>Sub-rincian</th><th class="n">Sebelum</th><th class="n">Sesudah</th><th class="n">Selisih</th></tr></thead><tbody>'+chg.map(g=>{ const d=g.setelah-g.sebelum; return `<tr><td>${esc(g.uraian)}<br><span class="hint">${esc(sumKat(g.sumber))}</span></td><td class="n">${rp(g.sebelum)}</td><td class="n">${rp(g.setelah)}</td><td class="n" style="color:${d<0?'var(--bad)':'var(--ok)'};font-weight:700">${d<0?'−':'+'}${rp(Math.abs(d)).replace('Rp ','')}</td></tr>`; }).join('')+'</tbody>' : '<tbody><tr><td class="muted">Dokumen DPA murni (bukan perubahan), tidak ada data sebelum/sesudah.</td></tr></tbody>';
+  // rekap jenis
+  $('#tTblKomp').textContent='Rekap per jenis belanja';
+  $('#tblKomp').innerHTML='<thead><tr><th>Jenis belanja</th>'+(a.per?'<th class="n">Sebelum</th>':'')+'<th class="n">'+(a.per?'Sesudah':'Anggaran')+'</th><th class="n">% total</th></tr></thead><tbody>'+
+    a.perJenis.map(j=>`<tr><td>${esc(j.nama)}<br><span class="hint">${esc(j.k)} · ${j.n} sub-rincian</span></td>${a.per?`<td class="n">${rp(j.sb)}</td>`:''}<td class="n">${rp(j.st)}</td><td class="n">${pct(j.st/(a.totSt||1)*100)}</td></tr>`).join('')+
+    `<tr style="font-weight:700"><td>Jumlah</td>${a.per?`<td class="n">${rp(a.totSb)}</td>`:''}<td class="n">${rp(a.totSt)}</td><td class="n">100%</td></tr></tbody>`;
+  $('#tTblTop').textContent='10 sub-rincian terbesar';
+  const top=[...a.G].sort((x,y)=>y.setelah-x.setelah).slice(0,10);
+  $('#tblTop').innerHTML='<thead><tr><th>Sub-rincian</th><th class="n">Anggaran</th></tr></thead><tbody>'+top.map(g=>`<tr><td>${esc(g.uraian)}<br><span class="hint">${esc(sumKat(g.sumber))} · ${esc(g.rekNama)}</span></td><td class="n">${rp(g.setelah)}</td></tr>`).join('')+'</tbody>';
+}
+function renderKepDPA(){
+  const a=AD;
+  $('#rules').innerHTML=a.rules.map(r=>{
+    const col= r.st==='ok'?'var(--ok)':r.st==='warn'?'var(--warn)':r.st==='bad'?'var(--bad)':'var(--pri)';
+    const pill= r.st==='na'||r.st==='info'?'info':r.st;
+    let g='';
+    if(r.gauge){ const max=Math.max(r.batas*1.6,r.nilai*1.1,1); g=`<div class="ds"><b style="font-size:16px;color:${col}">${pct(r.nilai,2)}</b> · ${r.jenis==='maks'?'batas maks.':'batas min.'} ${r.batas}%</div><div class="gauge" style="margin-top:24px"><i style="width:${Math.min(100,r.nilai/max*100)}%;background:${col}"></i><span class="mk" style="left:${r.batas/max*100}%"></span><span class="mkl" style="left:${r.batas/max*100}%">${r.batas}%</span></div>`; }
+    return `<div class="rule"><div class="nm">${esc(r.nama)}</div><div><span class="pill ${pill}">${esc(r.lbl)}</span></div>${g}<div class="ds">${esc(r.ket)}</div></div>`;
+  }).join('');
+  renderFindings(a.F);
+}
+let pageD=0;
+function renderTrxDPA(){
+  const a=AD, fk=$('#fKomp'), fb=$('#fBulan');
+  if(fk._mode!=='dpa'){
+    fk.innerHTML='<option value="">Semua sumber dana</option>'+a.perSumber.map(s=>`<option>${esc(s.k)}</option>`).join('');
+    fb.innerHTML='<option value="">Semua jenis belanja</option>'+a.perJenis.map(j=>`<option value="${esc(j.k)}">${esc(j.nama)}</option>`).join('');
+    fk._mode='dpa'; fk._n=-1;
+  }
+  const q=$('#fCari').value.toLowerCase().trim(), kv=fk.value, bv=fb.value, onlyF=$('#fFlag').checked;
+  const list=a.G.filter(g=>{
+    if(q && !(g.uraian+' '+g.rekNama+' '+g.rek+' '+g.items.map(i=>i.nama).join(' ')).toLowerCase().includes(q)) return false;
+    if(kv && sumKat(g.sumber)!==kv) return false;
+    if(bv && jenisKey(g.rek)!==bv) return false;
+    if(onlyF && !g._flags.length) return false; return true; });
+  const pages=Math.max(1,Math.ceil(list.length/PER)); pageD=Math.min(pageD,pages-1);
+  const sl=list.slice(pageD*PER,pageD*PER+PER);
+  $('#tblTrx').innerHTML='<thead><tr><th>Kode rekening</th><th>Sub-rincian &amp; item</th><th>Sumber dana</th>'+(a.per?'<th class="n">Sebelum</th>':'')+'<th class="n">'+(a.per?'Sesudah':'Anggaran')+'</th>'+(a.per?'<th class="n">Selisih</th>':'')+'</tr></thead><tbody>'+
+    sl.map(g=>{ const d=(g.setelah||0)-(g.sebelum||0);
+      const its=g.items.slice(0,4).map(i=>`<div class="hint">• ${esc(i.nama)} — ${(i.volSetelah||0).toLocaleString('id-ID')} ${esc(i.satuan||'')} × ${rp(i.harga)} = ${rp(i.setelah)}</div>`).join('')+(g.items.length>4?`<div class="hint">+${g.items.length-4} item lain</div>`:'');
+      return `<tr><td style="white-space:nowrap">${esc(g.rek)}<br><span class="hint" style="white-space:normal">${esc(g.rekNama)}</span></td><td><b>${esc(g.uraian)}</b>${g._flags.map(f=>`<span class="flag ${/Sumber|Kode/.test(f)?'bad':''}">${esc(f)}</span>`).join('')}${its}</td><td>${esc(sumKat(g.sumber))}</td>${a.per?`<td class="n">${rp(g.sebelum)}</td>`:''}<td class="n">${rp(g.setelah)}</td>${a.per?`<td class="n" style="color:${d<0?'var(--bad)':d>0?'var(--ok)':'inherit'}">${d? (d<0?'−':'+')+rp(Math.abs(d)).replace('Rp ',''):'–'}</td>`:''}</tr>`; }).join('')+'</tbody>';
+  $('#trxInfo').textContent=`${list.length} sub-rincian · halaman ${pageD+1} dari ${pages}`;
+  $('#pgPrev').disabled=pageD===0; $('#pgNext').disabled=pageD>=pages-1;
+}
+function contextDPA(withTrx){
+  const a=AD, M=a.M, r0=n=>Math.round(n||0);
+  const d={
+    dokumen:(a.per?'DPPA (Perubahan DPA)':'DPA')+' SIPD', nomor:M.nomor, unit:M.unit, daerah:M.daerah, tahun_anggaran:M.tahun, tanggal_penetapan:M.tanggal, sub_kegiatan:M.subKegiatan, sumber_pendanaan:M.sumberDana, status_sekolah:S.meta.status,
+    total_sebelum:a.per?r0(a.totSb):null, total_sesudah:r0(a.totSt), perubahan:a.per?r0(a.totSt-a.totSb):null,
+    per_sumber_dana:a.perSumber.map(s=>({sumber:s.k, sebelum:a.per?r0(s.sb):null, sesudah:r0(s.st), persen_total:+(s.st/(a.totSt||1)*100).toFixed(1)})),
+    per_jenis_belanja:a.perJenis.map(j=>({kode:j.k, jenis:j.nama, sebelum:a.per?r0(j.sb):null, sesudah:r0(j.st), persen_total:+(j.st/(a.totSt||1)*100).toFixed(1), jumlah_subrincian:j.n})),
+    per_kode_rekening:a.perRek.map(j=>({kode:j.k, rekening:j.nama, sebelum:a.per?r0(j.sb):null, sesudah:r0(j.st)})),
+    rencana_penarikan_bulanan:(M.rencana||[]).map((v,i)=>({bulan:BLN_FULL[i], nilai:r0(v)})),
+    kepatuhan_dan_konsistensi:a.rules.map(r=>({aturan:r.nama, status:r.lbl, capaian_persen:r.nilai!=null?+r.nilai.toFixed(2):null, batas:r.batas!=null?(r.jenis==='maks'?'maks ':'min ')+r.batas+'%':null, keterangan:r.ket})),
+    temuan_otomatis:a.F.map(f=>({tingkat:f.lv, judul:f.judul, keterangan:f.detail, contoh:f.contoh})),
+    subrincian_terbesar:[...a.G].sort((x,y)=>y.setelah-x.setelah).slice(0,15).map(g=>({uraian:g.uraian, rekening:g.rekNama, sumber:sumKat(g.sumber), sesudah:r0(g.setelah)})),
+    perubahan_terbesar:a.per?[...a.G].filter(g=>g.setelah!==g.sebelum).sort((x,y)=>Math.abs(y.setelah-y.sebelum)-Math.abs(x.setelah-x.sebelum)).slice(0,15).map(g=>({uraian:g.uraian, rekening:g.rekNama, sumber:sumKat(g.sumber), sebelum:r0(g.sebelum), sesudah:r0(g.setelah)})):[]
+  };
+  if(withTrx){ d.daftar_subrincian='kode | rekening | sub-rincian | sumber | '+(a.per?'sebelum | ':'')+'sesudah | item (volume satuan x harga)\n'+a.G.map(g=>`${g.rek} | ${g.rekNama} | ${g.uraian} | ${sumKat(g.sumber)} | ${a.per?r0(g.sebelum)+' | ':''}${r0(g.setelah)} | ${g.items.filter(i=>i.setelah||i.sebelum).map(i=>`${i.nama} ${i.volSetelah} ${i.satuan} x ${r0(i.harga)}`).join('; ')}`).join('\n'); }
+  return JSON.stringify(d,null,1);
+}
+const REPORT_TASK_DPA=`Susun LAPORAN ANALISIS ANGGARAN DANA BOS (dari DPA/DPPA SIPD) untuk kepala sekolah dengan struktur:
+## 1. Ringkasan Eksekutif
+3–5 kalimat: besaran anggaran, perubahan, komposisi sumber dana, dan 2–3 hal terpenting.
+## 2. Struktur Anggaran per Sumber Dana
+BOS Reguler, BOS Kinerja, BOSDA (PAD): porsi dan perubahan. Jelaskan aturan yang berlaku untuk masing-masing.
+## 3. Struktur per Jenis Belanja
+Pos dominan, kewajarannya untuk SMP negeri, dan pos yang perlu dicermati (misalnya konsumsi, sewa kendaraan, pajak/bea/registrasi, honor/jasa tenaga).
+## 4. Analisis Perubahan Anggaran (DPPA)
+Apa yang ditambah, dikurangi, dihapus, dan apa maknanya bagi program sekolah. Lewati bagian ini bila bukan dokumen perubahan.
+## 5. Rencana Penarikan Dana per Bulan
+Pola, bulan puncak, porsi yang masih harus diserap setelah tanggal penetapan, dan risikonya.
+## 6. Kepatuhan dan Konsistensi
+Tabel: Aspek | Hasil | Acuan | Status | Keterangan. Mencakup buku 10% BOS Reguler, honor dan pemeliharaan (cek ARKAS), keselarasan sumber dana dengan kode rekening, kecocokan jumlah.
+## 7. Temuan dan Risiko
+Urut dari prioritas tertinggi; untuk tiap temuan: masalah, risiko bila diperiksa (Inspektorat/BPK), dan bukti yang perlu disiapkan.
+## 8. Rekomendasi Tindak Lanjut (sisa tahun anggaran)
+Langkah konkret beserta penanggung jawab (kepala sekolah/bendahara/operator ARKAS-SIPD) dan nominal bila relevan.
+## 9. Rekomendasi Penyusunan Anggaran Tahun Depan
+## 10. Narasi untuk Rapat Dewan Guru / Komite
+Satu paragraf siap dibacakan, bahasa santun dan transparan.`;
+function exportDPA(){
+  analyzeDPA(); const a=AD, M=a.M, wb=XLSX.utils.book_new(), add=(n,aoa)=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(aoa),n);
+  add('Ringkasan',[['Analisis Anggaran Dana BOS (DPA/DPPA SIPD)'],['Dokumen',a.per?'DPPA':'DPA'],['Nomor',M.nomor],['Unit',M.unit],['Tahun anggaran',M.tahun],['Ditetapkan',M.tanggal],['Total sebelum',a.per?Math.round(a.totSb):''],['Total sesudah',Math.round(a.totSt)],['Perubahan',a.per?Math.round(a.totSt-a.totSb):'']]);
+  add('Per Sumber Dana',[['Sumber dana','Sebelum','Sesudah','Selisih','% total'],...a.perSumber.map(s=>[s.k,Math.round(s.sb),Math.round(s.st),Math.round(s.st-s.sb),+(s.st/(a.totSt||1)*100).toFixed(2)])]);
+  add('Per Jenis Belanja',[['Kode','Jenis belanja','Sebelum','Sesudah','Selisih','% total'],...a.perJenis.map(j=>[j.k,j.nama,Math.round(j.sb),Math.round(j.st),Math.round(j.st-j.sb),+(j.st/(a.totSt||1)*100).toFixed(2)])]);
+  add('Rencana Bulanan',[['Bulan','Rencana penarikan'],...(M.rencana||[]).map((v,i)=>[BLN_FULL[i],Math.round(v)])]);
+  add('Kepatuhan',[['Aspek','Status','Capaian (%)','Batas','Keterangan'],...a.rules.map(r=>[r.nama,r.lbl,r.nilai!=null?+r.nilai.toFixed(2):'',r.batas!=null?r.batas+'%':'',r.ket])]);
+  add('Temuan',[['Tingkat','Temuan','Keterangan','Contoh'],...a.F.map(f=>[f.lv,f.judul,f.detail,(f.contoh||[]).join('; ')])]);
+  add('Sub-rincian',[['Kode rekening','Rekening','Label','Sumber dana','Sub-rincian','Sebelum','Sesudah','Selisih','Tanda'],...a.G.map(g=>[g.rek,g.rekNama,g.label,g.sumber,g.uraian,g.sebelum??'',g.setelah,(g.setelah||0)-(g.sebelum||0),(g._flags||[]).join(', ')])]);
+  add('Item',[['Kode rekening','Sub-rincian','Item','Volume sebelum','Volume sesudah','Satuan','Harga','Sebelum','Sesudah'],...a.items.map(i=>[i.g.rek,i.g.uraian,i.nama,i.volSebelum??'',i.volSetelah,i.satuan,i.harga,i.sebelum??'',i.setelah])]);
+  if(S.report) add('Laporan AI',S.report.split('\n').map(l=>[l]));
+  saveFile('Analisis-DPA-BOS-'+(M.tahun||S.meta.tahun)+'.xlsx', new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})]), 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+}
+
+/* ---------------- init ---------------- */
+syncProfileUI(); bindProfile();
+applyModeUI();
+if(hasData()){ if(S.mode==='dpa') analyzeDPA(); else analyze(); $('#fileInfo').innerHTML='Data tersimpan: <b>'+esc(S.source||'data sebelumnya')+'</b> · '+(S.mode==='dpa'?S.dpa.groups.length+' sub-rincian DPA':S.rows.length+' baris'); }
+</script>
+</body>
+</html>
