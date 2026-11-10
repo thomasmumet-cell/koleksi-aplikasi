@@ -41,6 +41,7 @@
   .tombol { background:var(--aksen); color:#fff; text-decoration:none; padding:7px 16px; border-radius:8px; font-weight:600; font-size:.88rem; }
   .tombol:hover { filter:brightness(.92); }
   .belum { font-style:italic; }
+  .kode { color:var(--utama); font-weight:600; }
   .kosong { text-align:center; padding:40px; color:var(--redup); }
   mark { background:#ffe7a8; padding:0 1px; }
   footer { text-align:center; font-size:.82rem; color:var(--redup); padding:20px; }
@@ -54,7 +55,7 @@
     <p>Kumpulan aplikasi buatan Thomas untuk sekolah, pembelajaran, dan organisasi</p>
     <div class="statistik">
       <div><b id="jmlTotal">0</b><span>aplikasi tercatat</span></div>
-      <div><b id="jmlAktif">0</b><span>siap dibuka</span></div>
+      <div><b id="jmlAktif">0</b><span>tersimpan</span></div>
       <div><b id="jmlKategori">0</b><span>kategori</span></div>
     </div>
   </div>
@@ -87,7 +88,7 @@
   const daftarKategori = ["Semua", ...[...new Set(APLIKASI.map(a => a.kategori))].sort()];
 
   document.getElementById("jmlTotal").textContent = APLIKASI.length;
-  document.getElementById("jmlAktif").textContent = APLIKASI.filter(a => a.status === "aktif").length;
+  document.getElementById("jmlAktif").textContent = APLIKASI.filter(a => a.status !== "segera").length;
   document.getElementById("jmlKategori").textContent = daftarKategori.length - 1;
 
   function amankan(t) {
@@ -121,10 +122,10 @@
 
     const hasil = APLIKASI.filter(a => {
       if (kategoriDipilih !== "Semua" && a.kategori !== kategoriDipilih) return false;
-      if (!tampilkanSegera && a.status !== "aktif") return false;
+      if (!tampilkanSegera && a.status === "segera") return false;
       if (!kataKecil) return true;
       return [a.nama, a.deskripsi, a.kategori, a.jenis].join(" ").toLowerCase().includes(kataKecil);
-    }).sort((x, y) => (x.status === "aktif" ? 0 : 1) - (y.status === "aktif" ? 0 : 1)
+    }).sort((x, y) => (x.status === "segera" ? 1 : 0) - (y.status === "segera" ? 1 : 0)
                     || (y.tanggal || "").localeCompare(x.tanggal || ""));
 
     elInfo.textContent = `Menampilkan ${hasil.length} dari ${APLIKASI.length} aplikasi`;
@@ -135,7 +136,7 @@
     }
 
     elGrid.innerHTML = hasil.map(a => `
-      <div class="kartu ${a.status === "aktif" ? "" : "segera"}">
+      <div class="kartu ${a.status === "segera" ? "segera" : ""}">
         <div class="label"><span>${amankan(a.kategori)}</span><span class="jenis">${amankan(a.jenis)}</span></div>
         <h3>${sorot(a.nama, kata)}</h3>
         <p>${sorot(a.deskripsi, kata)}</p>
@@ -143,7 +144,9 @@
           <span>${formatTanggal(a.tanggal)}</span>
           ${a.status === "aktif"
             ? `<a class="tombol" href="${amankan(a.tautan)}" target="_blank" rel="noopener">Buka ↗</a>`
-            : `<span class="belum">Belum diunggah</span>`}
+            : a.status === "kode"
+              ? `<span class="kode">🔒 Kode tersimpan</span>`
+              : `<span class="belum">Belum diunggah</span>`}
         </div>
       </div>`).join("");
   }

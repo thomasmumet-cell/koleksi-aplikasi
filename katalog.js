@@ -3,11 +3,20 @@
 //  Aplikasi terbaru cukup ditambahkan di bagian ATAS daftar.
 //
 //  status:  "aktif"  = sudah diunggah, tombol Buka berfungsi
+//           "kode"   = kode tersimpan di repo privat kode-apps-script
 //           "segera" = belum diunggah ke koleksi
 //  jenis:   "HTML" | "Apps Script" | "AI Tool"
 // =====================================================================
 
 const APLIKASI = [
+  {
+    nama: "SI-IZIN",
+    kategori: "Sekolah",
+    jenis: "Apps Script",
+    deskripsi: "Izin guru dan karyawan: pengajuan lewat HP dengan PIN, persetujuan Kepala Sekolah, daftar izin hari ini, dan rekap bulanan.",
+    tanggal: "2026-11-10",
+    status: "kode"
+  },
   {
     nama: "Toko Bunga Melati",
     kategori: "Latihan",
