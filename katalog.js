@@ -10,10 +10,10 @@
 
 const APLIKASI = [
   {
-    nama: "SI-IZIN",
+    nama: "PAMIT",
     kategori: "Sekolah",
     jenis: "Apps Script",
-    deskripsi: "Izin guru dan karyawan: pengajuan lewat HP dengan PIN, persetujuan Kepala Sekolah, daftar izin hari ini, dan rekap bulanan.",
+    deskripsi: "Pengajuan dan Monitoring Izin Terpadu untuk guru dan karyawan: pengajuan lewat HP dengan PIN, persetujuan Kepala Sekolah, daftar izin hari ini, dan rekap bulanan.",
     tanggal: "2026-11-10",
     status: "kode"
   },
