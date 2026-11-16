@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "E-Course Belajar HTML dari Nol",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Kursus HTML 12 bab untuk guru dan siswa: penjelasan singkat, editor kode dengan pratinjau langsung, tugas dinilai otomatis, contekan tag, dan sertifikat penyelesaian yang bisa dicetak.",
+    tanggal: "2026-11-17",
+    tautan: "belajar-html/",
+    status: "aktif"
+  },
+  {
     nama: "Meja Host Podcast",
     kategori: "Organisasi",
     jenis: "HTML",

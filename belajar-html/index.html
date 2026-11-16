@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E-Course Belajar HTML dari Nol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Arah: ruang kelas kode. Lexend (dirancang untuk keterbacaan pemula) untuk teks, Fira Code untuk kode.
+   Biru tinta untuk kerangka, oranye sebagai aksen "tag", hijau untuk tugas yang lulus.
+   Tata letak: daftar bab di kiri, materi di tengah, editor + pratinjau di kanan. */
+:root{
+  --bg:#eef2f7;
+  --surface:#ffffff;
+  --ink:#14213d;
+  --muted:#56617a;
+  --line:#d9dfea;
+  --accent:#d9480f;
+  --accent-soft:#fdebe1;
+  --ok:#1b7f4b;
+  --ok-soft:#e1f3e9;
+  --code-bg:#14213d;
+  --code-ink:#e6ebf5;
+  --tag:#ff9f6b;
+  --attr:#9fd3ff;
+  --font-body:"Lexend","Segoe UI",system-ui,sans-serif;
+  --font-code:"Fira Code",ui-monospace,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1322; --surface:#151d31; --ink:#e7ecf6; --muted:#a6b0c8; --line:#283252;
+    --accent:#ff8a4c; --accent-soft:#3b2216; --ok:#4fcf8b; --ok-soft:#14332a;
+    --code-bg:#0a0f1c; --code-ink:#e6ebf5; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1322; --surface:#151d31; --ink:#e7ecf6; --muted:#a6b0c8; --line:#283252;
+  --accent:#ff8a4c; --accent-soft:#3b2216; --ok:#4fcf8b; --ok-soft:#14332a;
+  --code-bg:#0a0f1c; --code-ink:#e6ebf5; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6}
+h1,h2,h3{margin:0;line-height:1.25;text-wrap:balance}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+code,kbd{font-family:var(--font-code);font-size:.92em}
+p code,li code,td code{background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:6px;white-space:nowrap}
+
+.top{background:var(--ink);color:#fff}
+:root[data-theme="dark"] .top{background:#0a0f1c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .top{background:#0a0f1c}}
+.top-inner{max-width:1500px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{font-family:var(--font-code);font-weight:600;background:var(--accent);color:#fff;border-radius:10px;padding:6px 10px;font-size:15px}
+.brand h1{font-size:19px;font-weight:700}
+.brand p{margin:0;font-size:13px;color:#b9c3dc}
+.prog{display:flex;align-items:center;gap:12px;min-width:240px}
+.prog-bar{flex:1;height:10px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden}
+.prog-bar span{display:block;height:100%;width:0;background:#4fcf8b;transition:width .4s}
+.prog-txt{font-size:14px;color:#dbe2f2;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+.layout{max-width:1500px;margin:0 auto;padding:18px 20px 40px;display:grid;grid-template-columns:250px minmax(0,1fr) minmax(0,1.1fr);gap:18px;align-items:start}
+nav.bab{position:sticky;top:12px;display:grid;gap:6px;max-height:calc(100vh - 24px);overflow:auto;padding-bottom:6px}
+.nav-h{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:6px 4px 2px}
+.nav-btn{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px;line-height:1.3}
+.nav-btn:hover{border-color:var(--accent)}
+.nav-btn[aria-current="true"]{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.nav-btn .n{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--bg);font-weight:700;font-size:13px;color:var(--muted)}
+.nav-btn.done .n{background:var(--ok);color:#fff}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.lesson{padding:22px 24px}
+.kicker{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.07em}
+.lesson h2{font-size:26px;margin:4px 0 4px}
+.meta{color:var(--muted);font-size:14px;margin-bottom:14px}
+.teori p{margin:0 0 12px}
+.teori ul{margin:0 0 12px;padding-left:20px}
+.teori li{margin-bottom:4px}
+.teori h3{font-size:17px;margin:18px 0 8px}
+pre.code{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:14px 16px;overflow-x:auto;font-family:var(--font-code);font-size:14px;line-height:1.55;margin:0 0 10px}
+.t{color:var(--tag)} .a{color:var(--attr)} .c{color:#8b97b4;font-style:italic}
+.try{border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:6px 12px;font-size:14px;font-weight:600;margin-bottom:12px}
+.try:hover{border-color:var(--accent);color:var(--accent)}
+.table-wrap{overflow-x:auto;margin:0 0 12px}
+table.ref{border-collapse:collapse;width:100%;font-size:14px;min-width:420px}
+table.ref th,table.ref td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+table.ref th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+
+.task{margin-top:18px;border:2px solid var(--accent);border-radius:12px;padding:16px 18px;background:var(--accent-soft)}
+.task.passed{border-color:var(--ok);background:var(--ok-soft)}
+.task h3{font-size:17px;display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.task p{margin:0 0 10px}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.checks li{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:start;font-size:15px}
+.ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);display:grid;place-items:center;font-size:13px;font-weight:700;margin-top:1px}
+.checks li.ok .ck{background:var(--ok);border-color:var(--ok);color:#fff}
+.checks li.ok span:last-child{color:var(--ok);font-weight:600}
+.task-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.btn{border:0;border-radius:9px;padding:9px 14px;font-weight:600;font-size:14px;background:var(--ink);color:var(--surface)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.go{background:var(--ok);color:#fff}
+.btn[disabled]{opacity:.45;cursor:default}
+.hint{margin-top:10px;font-size:15px;background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:10px 12px}
+.pass-msg{margin-top:10px;font-weight:700;color:var(--ok)}
+
+.work{position:sticky;top:12px;display:grid;grid-template-rows:auto minmax(260px,1fr) auto minmax(220px,1fr);height:calc(100vh - 24px);min-height:620px;overflow:hidden}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
+.bar strong{font-size:14px}
+.bar .tools{display:flex;gap:6px;flex-wrap:wrap}
+.bar .tools button{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:5px 10px;font-size:13px;font-weight:600}
+.bar .tools button:hover{border-color:var(--accent)}
+.editor-wrap{position:relative;background:var(--code-bg);display:grid;grid-template-columns:44px 1fr;min-height:0}
+.gutter{font-family:var(--font-code);font-size:14px;line-height:1.6;color:#5d6a89;text-align:right;padding:12px 8px 12px 0;overflow:hidden;user-select:none;white-space:pre}
+textarea#code{border:0;outline:0;resize:none;background:transparent;color:var(--code-ink);font-family:var(--font-code);font-size:14px;line-height:1.6;padding:12px 12px 12px 6px;white-space:pre;overflow:auto;tab-size:2;caret-color:#ff9f6b;min-height:0;height:100%;width:100%}
+textarea#code:focus-visible{outline:none;box-shadow:inset 0 0 0 2px var(--accent)}
+.prev-bar{border-top:1px solid var(--line)}
+iframe#preview{width:100%;height:100%;border:0;background:#fff;min-height:0}
+.saved{font-size:12px;color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.toast.show{opacity:1}
+
+
+/* ===== Landing page e-course ===== */
+.view[hidden]{display:none!important}
+.lp-nav{background:var(--ink);color:#fff}
+:root[data-theme="dark"] .lp-nav{background:#0a0f1c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lp-nav{background:#0a0f1c}}
+.lp-wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.lp-nav .lp-wrap{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px}
+.lp-links{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center}
+.lp-links a{color:#c8d1e6;text-decoration:none;font-weight:500;font-size:15px}
+.lp-links a:hover{color:#fff}
+.cta{display:inline-flex;align-items:center;min-height:46px;padding:12px 20px;border-radius:12px;background:var(--accent);color:#fff!important;text-decoration:none;font-weight:700;border:0;font-size:16px}
+.cta:hover{filter:brightness(1.08)}
+.cta.line{background:transparent;border:1px solid #4a5a82;color:#fff!important}
+.hero{background:var(--ink);color:#fff;padding:56px 0 76px}
+:root[data-theme="dark"] .hero{background:#0a0f1c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hero{background:#0a0f1c}}
+.hero .lp-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:48px;align-items:center}
+.eyebrow{font-family:var(--font-code);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#ffb38a;font-weight:600}
+.hero h2{font-size:clamp(34px,4.6vw,54px);line-height:1.1;font-weight:800;margin:14px 0 16px;letter-spacing:-.01em}
+.hero p.lead{font-size:18px;color:#c8d1e6;margin:0 0 24px;max-width:34em}
+.hero .row{display:flex;flex-wrap:wrap;gap:12px}
+.resume{margin-top:14px;color:#c8d1e6;font-size:15px}
+.mock{background:#0b1222;border:1px solid #2b3a62;border-radius:16px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.mock-top{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid #2b3a62}
+.mock-top i{width:11px;height:11px;border-radius:50%;background:#3a4870;display:block}
+.mock pre{margin:0;padding:16px 18px;font-family:var(--font-code);font-size:14px;line-height:1.6;color:#e6ebf5;overflow-x:auto}
+.mock-out{background:#fff;color:#14213d;margin:0 14px 14px;border-radius:10px;padding:14px 16px}
+.mock-out h3{font-family:Georgia,serif;font-size:22px;margin:0 0 6px}
+.mock-out p{margin:0;font-family:Georgia,serif;font-size:15px}
+.mock-out a{color:#1a0dab}
+.mock-ok{display:flex;gap:8px;align-items:center;margin:0 14px 14px;color:#4fcf8b;font-size:14px;font-weight:600}
+.facts{background:var(--surface);border-bottom:1px solid var(--line)}
+.facts .lp-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;padding-top:26px;padding-bottom:26px}
+.facts b{display:block;font-size:24px;font-weight:800}
+.facts span{color:var(--muted);font-size:15px}
+.lp-sec{padding:72px 0 0}
+.lp-sec h2{font-size:clamp(28px,3.2vw,38px);font-weight:800;line-height:1.15;margin:8px 0 10px}
+.lp-sec .sub{color:var(--muted);font-size:17px;margin:0 0 26px;max-width:42em}
+.grid-skill{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.skill{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:6px}
+.skill code{font-family:var(--font-code);color:var(--accent);font-size:15px;font-weight:600}
+.skill h3{font-size:17px}
+.skill p{margin:0;color:var(--muted);font-size:15px}
+.syl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px}
+.syl a{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-decoration:none;color:var(--ink)}
+.syl a:hover{border-color:var(--accent)}
+.syl .no{width:40px;height:40px;border-radius:10px;background:var(--bg);display:grid;place-items:center;font-weight:700;color:var(--muted)}
+.syl .done .no{background:var(--ok);color:#fff}
+.syl .ttl{font-weight:600;line-height:1.3}
+.syl .dur{font-size:13px;color:var(--muted)}
+.chip{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap;background:var(--bg);color:var(--muted)}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.steps3{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.steps3 li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:8px;align-content:start}
+.steps3 .big{width:44px;height:44px;border-radius:12px;background:var(--ink);color:var(--surface);display:grid;place-items:center;font-weight:800;font-size:19px}
+.steps3 li:last-child .big{background:var(--accent);color:#fff}
+.steps3 h3{font-size:18px}
+.steps3 p{margin:0;color:var(--muted)}
+.faq{display:grid;gap:12px;max-width:860px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.faq summary{font-weight:700;cursor:pointer;font-size:17px}
+.faq p{margin:10px 0 0;color:var(--muted)}
+.band{margin-top:76px;background:var(--ink);color:#fff;padding:56px 0}
+:root[data-theme="dark"] .band{background:#0a0f1c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .band{background:#0a0f1c}}
+.band .lp-wrap{display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+.band h2{font-size:clamp(26px,3vw,36px);margin:0 0 6px}
+.band p{margin:0;color:#c8d1e6}
+.lp-foot{padding:22px 0;color:var(--muted);font-size:14px}
+.lp-foot .lp-wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+.home-link{color:inherit;text-decoration:none;display:flex;align-items:center;gap:12px}
+
+/* ===== Sertifikat ===== */
+.cert{border:3px double var(--accent);border-radius:18px;padding:36px 28px;text-align:center;display:grid;gap:10px;background:var(--surface);margin-top:16px}
+.cert .eyebrow{color:var(--accent)}
+.cert h3{font-size:clamp(24px,3vw,32px)}
+.cert .nm{font-size:clamp(26px,4vw,40px);font-weight:800;border-bottom:2px solid var(--line);padding-bottom:6px;margin:6px auto;max-width:90%}
+.cert p{margin:0;color:var(--muted)}
+.cert .seal{font-family:var(--font-code);font-weight:600;color:var(--accent);font-size:20px}
+@media print{
+  body *{visibility:hidden!important}
+  #certBox,#certBox *{visibility:visible!important}
+  #certBox{position:fixed;inset:24px;margin:0;background:#fff!important;color:#000!important}
+  #certBox p{color:#333!important}
+}
+
+@media (max-width:1180px){
+  .layout{grid-template-columns:220px minmax(0,1fr)}
+  .work{grid-column:1 / -1;position:static;height:auto;grid-template-rows:auto 340px auto 320px}
+}
+@media (max-width:760px){
+  .layout{grid-template-columns:1fr}
+  nav.bab{position:static;max-height:none;grid-auto-flow:column;grid-auto-columns:minmax(180px,1fr);overflow-x:auto}
+  .nav-h{display:none}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="landing" class="view">
+<header class="lp-nav">
+  <div class="lp-wrap">
+    <a class="home-link" href="#beranda" style="color:#fff"><span class="logo" aria-hidden="true">&lt;/&gt;</span><strong style="font-size:18px">Belajar HTML dari Nol</strong></a>
+    <nav class="lp-links" aria-label="Navigasi landing page">
+      <a href="#silabus">Silabus</a>
+      <a href="#cara-belajar">Cara belajar</a>
+      <a href="#tanya-jawab">Tanya jawab</a>
+      <a class="cta js-start" href="#bab-1" style="min-height:42px;padding:9px 16px;font-size:15px">Mulai belajar</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="beranda">
+  <div class="lp-wrap">
+    <div>
+      <span class="eyebrow">E-course gratis · untuk guru dan siswa</span>
+      <h2>Bisa membuat halaman web sendiri dalam 12 bab singkat.</h2>
+      <p class="lead">Belajar HTML langsung dengan praktik: baca penjelasan singkat, ketik kode, lihat hasilnya seketika. Setiap tugas dinilai otomatis, dan di akhir kursus Anda mendapat sertifikat penyelesaian.</p>
+      <div class="row">
+        <a class="cta js-start" href="#bab-1">Mulai belajar</a>
+        <a class="cta line" href="#silabus">Lihat silabus</a>
+      </div>
+      <p class="resume" id="resumeTxt"></p>
+    </div>
+    <div class="mock" role="img" aria-label="Contoh editor: kode HTML di atas dan hasilnya di bawah, dengan tanda tugas lulus">
+      <div class="mock-top"><i></i><i></i><i></i></div>
+<pre><span class="t">&lt;h1&gt;</span>Halo, saya Bu Rina<span class="t">&lt;/h1&gt;</span>
+<span class="t">&lt;p&gt;</span>Guru IPA kelas 7.<span class="t">&lt;/p&gt;</span>
+<span class="t">&lt;a</span> <span class="a">href</span>=<span class="a">"https://sekolah.sch.id"</span><span class="t">&gt;</span>
+  Situs sekolah<span class="t">&lt;/a&gt;</span></pre>
+      <div class="mock-out"><h3>Halo, saya Bu Rina</h3><p>Guru IPA kelas 7.</p><p><a href="#beranda" tabindex="-1">Situs sekolah</a></p></div>
+      <div class="mock-ok">✓ Tugas lulus: tautan dibuat dengan benar</div>
+    </div>
+  </div>
+</section>
+
+<section class="facts" aria-label="Ringkasan kursus">
+  <div class="lp-wrap">
+    <div><b>12 bab</b><span>dari kerangka halaman sampai proyek akhir</span></div>
+    <div><b>± 2 jam 15 menit</b><span>bisa dicicil, kemajuan tersimpan</span></div>
+    <div><b>Dinilai otomatis</b><span>centang hijau saat syarat terpenuhi</span></div>
+    <div><b>Sertifikat</b><span>tanda selesai bisa dicetak atau disimpan PDF</span></div>
+  </div>
+</section>
+
+<section class="lp-sec">
+  <div class="lp-wrap">
+    <span class="eyebrow" style="color:var(--accent)">Yang akan Anda kuasai</span>
+    <h2>Dari halaman kosong sampai kartu profil yang siap diunggah</h2>
+    <p class="sub">Setiap bab membahas satu keterampilan dan langsung dipraktikkan di editor.</p>
+    <div class="grid-skill">
+      <div class="skill"><code>&lt;h1&gt; &lt;p&gt;</code><h3>Menyusun teks</h3><p>Judul bertingkat, paragraf, teks tebal, dan teks miring.</p></div>
+      <div class="skill"><code>&lt;a&gt; &lt;img&gt;</code><h3>Tautan dan gambar</h3><p>Menghubungkan halaman dan menampilkan foto dengan teks alt yang benar.</p></div>
+      <div class="skill"><code>&lt;ul&gt; &lt;table&gt;</code><h3>Daftar dan tabel</h3><p>Menyajikan jadwal, data, dan langkah kerja dengan rapi.</p></div>
+      <div class="skill"><code>&lt;form&gt;</code><h3>Formulir</h3><p>Membuat formulir pendaftaran dengan label dan kolom isian.</p></div>
+      <div class="skill"><code>&lt;header&gt; &lt;main&gt;</code><h3>Struktur halaman</h3><p>Menata halaman dengan tag semantik seperti situs profesional.</p></div>
+      <div class="skill"><code>&lt;style&gt;</code><h3>CSS pertama</h3><p>Mengatur warna, latar, dan ukuran huruf agar halaman lebih menarik.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="lp-sec" id="silabus">
+  <div class="lp-wrap">
+    <span class="eyebrow" style="color:var(--accent)">Silabus</span>
+    <h2>12 bab, tersusun dari yang paling dasar</h2>
+    <p class="sub">Klik bab mana pun untuk membukanya. Bab yang sudah lulus ditandai hijau.</p>
+    <ol class="syl" id="sylList"></ol>
+  </div>
+</section>
+
+<section class="lp-sec" id="cara-belajar">
+  <div class="lp-wrap">
+    <span class="eyebrow" style="color:var(--accent)">Cara belajar</span>
+    <h2>Baca, ketik, lulus</h2>
+    <ol class="steps3">
+      <li><span class="big">1</span><h3>Baca penjelasan singkat</h3><p>Setiap bab dimulai dengan penjelasan 1–2 menit dan contoh kode berwarna.</p></li>
+      <li><span class="big">2</span><h3>Ketik di editor</h3><p>Hasilnya langsung tampil di bawah editor. Ada petunjuk dan jawaban bila macet.</p></li>
+      <li><span class="big">3</span><h3>Lulus otomatis</h3><p>Syarat tugas berubah menjadi centang hijau satu per satu, lalu bab berikutnya terbuka.</p></li>
+      <li><span class="big">★</span><h3>Ambil sertifikat</h3><p>Setelah 12 bab lulus, tulis nama Anda dan cetak atau simpan sertifikat sebagai PDF.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="lp-sec" id="tanya-jawab">
+  <div class="lp-wrap">
+    <span class="eyebrow" style="color:var(--accent)">Tanya jawab</span>
+    <h2>Sebelum mulai</h2>
+    <div class="faq">
+      <details><summary>Apakah harus memasang aplikasi?</summary><p>Tidak. Cukup buka halaman ini di browser. Tidak perlu akun dan tidak perlu internet cepat.</p></details>
+      <details><summary>Bisa belajar lewat HP?</summary><p>Bisa, tampilannya menyesuaikan layar. Untuk mengetik kode, laptop atau tablet dengan papan ketik terasa jauh lebih nyaman.</p></details>
+      <details><summary>Apakah kemajuan saya tersimpan?</summary><p>Ya, kode dan bab yang sudah lulus tersimpan otomatis di browser perangkat yang Anda pakai. Gunakan perangkat dan browser yang sama untuk melanjutkan.</p></details>
+      <details><summary>Sertifikatnya resmi?</summary><p>Sertifikat ini adalah tanda selesai belajar mandiri, bukan sertifikat berjam pelajaran dari lembaga. Cocok sebagai bukti latihan pribadi atau tugas kelas.</p></details>
+      <details><summary>Siapa yang cocok mengikuti kursus ini?</summary><p>Guru yang ingin membuat halaman kelas atau aplikasi sederhana, siswa SMP dan SMA yang baru mengenal pemrograman, serta pengelola web sekolah.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="lp-wrap">
+    <div><h2>Halaman web pertama Anda tinggal 12 bab lagi.</h2><p>Mulai dari bab 1. Sepuluh menit pertama sudah menghasilkan halaman sungguhan.</p></div>
+    <a class="cta js-start" href="#bab-1">Mulai belajar</a>
+  </div>
+</section>
+<footer class="lp-foot"><div class="lp-wrap"><span>Belajar HTML dari Nol · e-course mandiri</span><span>Bagian dari <a href="https://thomasmumet-cell.github.io/koleksi-aplikasi/" style="color:var(--accent)">Koleksi Aplikasi</a></span></div></footer>
+</div>
+<div id="course" class="view" hidden>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand home-link" href="#beranda" title="Kembali ke beranda kursus">
+      <span class="logo" aria-hidden="true">&lt;/&gt;</span>
+      <div><h1>Belajar HTML dari Nol</h1><p>E-course 12 bab · klik untuk kembali ke beranda</p></div>
+    </a>
+    <div class="prog" aria-live="polite">
+      <div class="prog-bar"><span id="progBar"></span></div>
+      <span class="prog-txt" id="progTxt">0 dari 12 bab selesai</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="bab" id="nav" aria-label="Daftar bab"></nav>
+  <main id="lesson" class="card lesson"></main>
+  <section class="card work" aria-label="Editor kode dan pratinjau">
+    <div class="bar">
+      <strong>Editor kode</strong>
+      <div class="tools">
+        <button type="button" id="btnReset">Kembalikan kode awal</button>
+        <button type="button" id="btnCopy">Salin kode</button>
+      </div>
+    </div>
+    <div class="editor-wrap">
+      <div class="gutter" id="gutter" aria-hidden="true">1</div>
+      <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Tulis kode HTML di sini"></textarea>
+    </div>
+    <div class="bar prev-bar"><strong>Hasil di browser</strong><span class="saved" id="saved">Kode tersimpan otomatis di perangkat ini</span></div>
+    <iframe id="preview" title="Pratinjau hasil kode" sandbox=""></iframe>
+  </section>
+</div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+var KEY="belajar-html-dari-nol-v1";
+
+/* ---------- Pembantu tampilan kode ---------- */
+function hl(src){
+  var s=src.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  s=s.replace(/&lt;!--[\s\S]*?--&gt;/g,function(m){return '<span class="c">'+m+'</span>';});
+  s=s.replace(/(&lt;\/?)([a-zA-Z!][a-zA-Z0-9]*)([^&]*?)(\/?&gt;)/g,function(m,a,tag,attrs,b){
+    attrs=attrs.replace(/([a-zA-Z-]+)(=)("[^"]*")/g,'<span class="a">$1</span>$2<span class="a">$3</span>');
+    return '<span class="t">'+a+tag+'</span>'+attrs+'<span class="t">'+b+'</span>';
+  });
+  return s;
+}
+function ex(code){return '<pre class="code"><code>'+hl(code)+'</code></pre>';}
+
+var KERANGKA='<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="utf-8">\n  <title>Halaman Saya</title>\n</head>\n<body>\n\n</body>\n</html>';
+function wrap(body,title){return '<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="utf-8">\n  <title>'+(title||"Halaman Saya")+'</title>\n</head>\n<body>\n'+body+'\n</body>\n</html>';}
+
+/* ---------- Pemeriksa ---------- */
+function q(d,s){return d.querySelector(s);}
+function qa(d,s){return d.querySelectorAll(s);}
+function hasText(el){return !!(el&&el.textContent.trim().length);}
+function countText(d,s){var n=0;qa(d,s).forEach(function(e){if(hasText(e))n++;});return n;}
+
+/* ---------- Isi bab ---------- */
+var BAB=[
+{
+ id:"bab-1", judul:"Kenalan dengan HTML", durasi:"10 menit",
+ teori:'<p><strong>HTML</strong> (HyperText Markup Language) adalah bahasa untuk menyusun isi halaman web. HTML bukan bahasa pemrograman, melainkan bahasa <em>penanda</em>: kita membungkus isi dengan <strong>tag</strong> agar browser tahu mana judul, mana paragraf, mana gambar.</p>'+
+  '<p>Sebuah tag ditulis di antara tanda <code>&lt;</code> dan <code>&gt;</code>. Kebanyakan tag berpasangan: tag pembuka <code>&lt;p&gt;</code> dan tag penutup <code>&lt;/p&gt;</code> yang memakai garis miring.</p>'+
+  '<h3>Kerangka setiap halaman</h3>'+ex(KERANGKA)+
+  '<ul><li><code>&lt;!DOCTYPE html&gt;</code> memberi tahu browser bahwa ini dokumen HTML modern.</li><li><code>&lt;head&gt;</code> berisi keterangan halaman, misalnya <code>&lt;title&gt;</code> yang tampil di tab browser.</li><li><code>&lt;body&gt;</code> berisi semua yang terlihat di layar.</li></ul>',
+ contoh:wrap('  <h1>Halo, Dunia!</h1>',"Halaman Pertamaku"),
+ tugas:'Lengkapi kerangka di editor: ganti judul tab menjadi namamu, lalu tulis satu judul besar <code>&lt;h1&gt;</code> di dalam <code>&lt;body&gt;</code>.',
+ awal:KERANGKA,
+ cek:[
+  ["Ada baris <!DOCTYPE html>",function(d,c){return /<!doctype html>/i.test(c);}],
+  ["Ada tag <html>, <head>, dan <body>",function(d,c){return /<html[\s>]/i.test(c)&&/<head[\s>]/i.test(c)&&/<body[\s>]/i.test(c);}],
+  ["Judul tab diganti, bukan \"Halaman Saya\"",function(d){var t=q(d,"title");return hasText(t)&&t.textContent.trim()!=="Halaman Saya";}],
+  ["Ada <h1> berisi teks di dalam body",function(d){return countText(d,"body h1")>=1;}]
+ ],
+ petunjuk:'Ubah teks di antara <code>&lt;title&gt;</code> dan <code>&lt;/title&gt;</code>. Lalu di bawah <code>&lt;body&gt;</code> ketik <code>&lt;h1&gt;Halo, saya Thomas&lt;/h1&gt;</code>.',
+ jawaban:wrap('  <h1>Halo, saya Thomas</h1>',"Thomas")
+},
+{
+ id:"bab-2", judul:"Judul dan paragraf", durasi:"10 menit",
+ teori:'<p>HTML punya enam tingkat judul, dari <code>&lt;h1&gt;</code> (paling penting, paling besar) sampai <code>&lt;h6&gt;</code>. Gunakan satu <code>&lt;h1&gt;</code> per halaman, lalu <code>&lt;h2&gt;</code> untuk subjudul.</p>'+
+  '<p>Paragraf ditulis dengan <code>&lt;p&gt;</code>. Browser mengabaikan enter dan spasi berlebih di kode, jadi setiap paragraf harus dibungkus tag sendiri.</p>'+
+  ex('<h1>Profil Sekolah</h1>\n<h2>Sejarah</h2>\n<p>Sekolah kami berdiri tahun 1960.</p>\n<h2>Visi</h2>\n<p>Unggul dalam prestasi dan berkarakter.</p>'),
+ contoh:wrap('  <h1>Profil Sekolah</h1>\n  <h2>Sejarah</h2>\n  <p>Sekolah kami berdiri tahun 1960.</p>\n  <h2>Visi</h2>\n  <p>Unggul dalam prestasi dan berkarakter.</p>',"Profil Sekolah"),
+ tugas:'Buat halaman "Tentang Saya": satu <code>&lt;h1&gt;</code>, minimal dua <code>&lt;h2&gt;</code>, dan minimal dua paragraf <code>&lt;p&gt;</code>.',
+ awal:wrap('  '),
+ cek:[
+  ["Ada tepat satu <h1> berisi teks",function(d){return qa(d,"h1").length===1&&countText(d,"h1")===1;}],
+  ["Ada minimal dua <h2>",function(d){return countText(d,"h2")>=2;}],
+  ["Ada minimal dua paragraf <p>",function(d){return countText(d,"p")>=2;}]
+ ],
+ petunjuk:'Polanya: judul besar, lalu subjudul diikuti paragraf, ulangi untuk subjudul kedua.',
+ jawaban:wrap('  <h1>Tentang Saya</h1>\n  <h2>Pekerjaan</h2>\n  <p>Saya guru IPS kelas 8.</p>\n  <h2>Hobi</h2>\n  <p>Saya suka membuat aplikasi sekolah.</p>',"Tentang Saya")
+},
+{
+ id:"bab-3", judul:"Menebalkan dan memiringkan teks", durasi:"8 menit",
+ teori:'<p>Di dalam paragraf, kita bisa memberi penekanan:</p>'+
+  '<div class="table-wrap"><table class="ref"><thead><tr><th>Tag</th><th>Fungsi</th></tr></thead><tbody>'+
+  '<tr><td><code>&lt;strong&gt;</code></td><td>Teks penting, tampil tebal</td></tr>'+
+  '<tr><td><code>&lt;em&gt;</code></td><td>Penekanan, tampil miring</td></tr>'+
+  '<tr><td><code>&lt;mark&gt;</code></td><td>Stabilo</td></tr>'+
+  '<tr><td><code>&lt;br&gt;</code></td><td>Pindah baris (tanpa tag penutup)</td></tr>'+
+  '<tr><td><code>&lt;hr&gt;</code></td><td>Garis pemisah (tanpa tag penutup)</td></tr>'+
+  '</tbody></table></div>'+
+  ex('<p>Ujian dimulai <strong>pukul 07.30</strong>.<br>\nJangan lupa membawa <em>kartu peserta</em>.</p>\n<hr>\n<p><mark>Penting:</mark> datang 15 menit lebih awal.</p>'),
+ contoh:wrap('  <p>Ujian dimulai <strong>pukul 07.30</strong>.<br>\n  Jangan lupa membawa <em>kartu peserta</em>.</p>\n  <hr>\n  <p><mark>Penting:</mark> datang 15 menit lebih awal.</p>',"Pengumuman"),
+ tugas:'Tulis pengumuman kegiatan sekolah. Gunakan <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, dan minimal satu <code>&lt;br&gt;</code> atau <code>&lt;hr&gt;</code>.',
+ awal:wrap('  <h1>Pengumuman</h1>\n  <p>Tulis pengumuman di sini.</p>',"Pengumuman"),
+ cek:[
+  ["Ada teks tebal dengan <strong>",function(d){return countText(d,"strong")>=1;}],
+  ["Ada teks miring dengan <em>",function(d){return countText(d,"em")>=1;}],
+  ["Ada <br> atau <hr>",function(d){return !!q(d,"br,hr");}]
+ ],
+ petunjuk:'Bungkus kata yang ingin ditebalkan: <code>&lt;strong&gt;Senin&lt;/strong&gt;</code>. Tag <code>&lt;br&gt;</code> cukup ditulis sekali tanpa penutup.',
+ jawaban:wrap('  <h1>Pengumuman</h1>\n  <p>Upacara bendera dilaksanakan hari <strong>Senin</strong>.<br>\n  Seluruh siswa memakai <em>seragam lengkap</em>.</p>\n  <hr>',"Pengumuman")
+},
+{
+ id:"bab-4", judul:"Membuat tautan", durasi:"10 menit",
+ teori:'<p>Tautan dibuat dengan tag <code>&lt;a&gt;</code> (anchor). Alamat tujuan ditulis di <strong>atribut</strong> <code>href</code>. Atribut adalah keterangan tambahan yang ditulis di dalam tag pembuka: <code>nama="nilai"</code>.</p>'+
+  ex('<a href="https://www.pgri.or.id">Situs PGRI</a>\n\n<!-- membuka di tab baru -->\n<a href="https://www.kemendikdasmen.go.id" target="_blank">Kemendikdasmen</a>')+
+  '<ul><li>Teks di antara tag pembuka dan penutup adalah teks yang diklik.</li><li><code>target="_blank"</code> membuka tautan di tab baru.</li><li>Tautan ke email: <code>href="mailto:nama@sekolah.sch.id"</code>.</li></ul>',
+ contoh:wrap('  <p>Kunjungi <a href="https://www.pgri.or.id">situs PGRI</a>.</p>\n  <p><a href="https://www.kemendikdasmen.go.id" target="_blank">Kemendikdasmen</a> (tab baru)</p>',"Tautan"),
+ tugas:'Buat dua tautan: satu ke situs mana saja yang diawali <code>https://</code>, dan satu lagi yang terbuka di tab baru.',
+ awal:wrap('  <h1>Tautan Penting</h1>\n  ',"Tautan Penting"),
+ cek:[
+  ["Ada tautan dengan href diawali https://",function(d){return !!q(d,'a[href^="https://"],a[href^="http://"]');}],
+  ["Setiap tautan punya teks yang bisa diklik",function(d){var a=qa(d,"a");if(!a.length)return false;for(var i=0;i<a.length;i++)if(!hasText(a[i]))return false;return true;}],
+  ["Ada tautan dengan target=\"_blank\"",function(d){return !!q(d,'a[target="_blank"]');}]
+ ],
+ petunjuk:'Format lengkapnya: <code>&lt;a href="https://alamat" target="_blank"&gt;Teks&lt;/a&gt;</code>. Perhatikan tanda kutip pada nilai atribut.',
+ jawaban:wrap('  <h1>Tautan Penting</h1>\n  <p><a href="https://www.pgri.or.id">Situs PGRI</a></p>\n  <p><a href="https://www.kemendikdasmen.go.id" target="_blank">Kemendikdasmen</a></p>',"Tautan Penting")
+},
+{
+ id:"bab-5", judul:"Menampilkan gambar", durasi:"10 menit",
+ teori:'<p>Gambar ditampilkan dengan <code>&lt;img&gt;</code>. Tag ini tidak punya penutup. Dua atribut wajib:</p>'+
+  '<ul><li><code>src</code>: alamat atau nama file gambar, misalnya <code>logo.png</code> atau <code>https://…/foto.jpg</code>.</li><li><code>alt</code>: teks pengganti yang dibacakan pembaca layar dan tampil bila gambar gagal dimuat. Wajib untuk aksesibilitas.</li></ul>'+
+  ex('<img src="logo-sekolah.png" alt="Logo SMP Negeri 10" width="200">')+
+  '<p>Atribut <code>width</code> mengatur lebar dalam piksel. Bila gambar dari internet tidak muncul di pratinjau aplikasi ini, tidak apa-apa: yang dinilai adalah kodenya. Teks <code>alt</code> akan tampil sebagai gantinya.</p>',
+ contoh:wrap('  <h1>Galeri</h1>\n  <img src="kegiatan-pramuka.jpg" alt="Siswa berkemah pada kegiatan Pramuka" width="300">',"Galeri"),
+ tugas:'Tampilkan satu gambar lengkap dengan <code>src</code>, teks <code>alt</code> yang menjelaskan isi gambar, dan lebar <code>width</code>.',
+ awal:wrap('  <h1>Foto Kegiatan</h1>\n  ',"Foto Kegiatan"),
+ cek:[
+  ["Ada tag <img> dengan atribut src",function(d){var i=q(d,"img");return !!(i&&i.getAttribute("src"));}],
+  ["Teks alt diisi (minimal 5 huruf)",function(d){var i=q(d,"img");return !!(i&&(i.getAttribute("alt")||"").trim().length>=5);}],
+  ["Ada atribut width",function(d){var i=q(d,"img");return !!(i&&i.getAttribute("width"));}]
+ ],
+ petunjuk:'Contoh: <code>&lt;img src="upacara.jpg" alt="Upacara hari Senin" width="320"&gt;</code>',
+ jawaban:wrap('  <h1>Foto Kegiatan</h1>\n  <img src="upacara.jpg" alt="Upacara bendera hari Senin" width="320">',"Foto Kegiatan")
+},
+{
+ id:"bab-6", judul:"Daftar berbutir dan bernomor", durasi:"10 menit",
+ teori:'<p>Ada dua jenis daftar. Setiap butir ditulis dengan <code>&lt;li&gt;</code> (list item).</p>'+
+  '<ul><li><code>&lt;ul&gt;</code> (unordered list): daftar berbutir, urutan tidak penting.</li><li><code>&lt;ol&gt;</code> (ordered list): daftar bernomor, urutan penting.</li></ul>'+
+  ex('<h2>Alat tulis</h2>\n<ul>\n  <li>Pensil</li>\n  <li>Penggaris</li>\n</ul>\n\n<h2>Langkah upacara</h2>\n<ol>\n  <li>Persiapan barisan</li>\n  <li>Pengibaran bendera</li>\n</ol>'),
+ contoh:wrap('  <h2>Alat tulis</h2>\n  <ul>\n    <li>Pensil</li>\n    <li>Penggaris</li>\n  </ul>\n  <h2>Langkah upacara</h2>\n  <ol>\n    <li>Persiapan barisan</li>\n    <li>Pengibaran bendera</li>\n  </ol>',"Daftar"),
+ tugas:'Buat satu daftar berbutir <code>&lt;ul&gt;</code> berisi minimal 3 butir (misalnya mata pelajaran favorit) dan satu daftar bernomor <code>&lt;ol&gt;</code> berisi minimal 3 langkah.',
+ awal:wrap('  <h1>Daftarku</h1>\n  ',"Daftarku"),
+ cek:[
+  ["Ada <ul> dengan minimal 3 <li>",function(d){var u=qa(d,"ul");for(var i=0;i<u.length;i++){if(u[i].querySelectorAll(":scope > li").length>=3)return true;}return false;}],
+  ["Ada <ol> dengan minimal 3 <li>",function(d){var o=qa(d,"ol");for(var i=0;i<o.length;i++){if(o[i].querySelectorAll(":scope > li").length>=3)return true;}return false;}],
+  ["Semua butir berisi teks",function(d){var l=qa(d,"li");if(!l.length)return false;for(var i=0;i<l.length;i++)if(!hasText(l[i]))return false;return true;}]
+ ],
+ petunjuk:'Setiap <code>&lt;li&gt;</code> harus berada di dalam <code>&lt;ul&gt;</code> atau <code>&lt;ol&gt;</code>.',
+ jawaban:wrap('  <h1>Daftarku</h1>\n  <ul>\n    <li>IPS</li>\n    <li>Matematika</li>\n    <li>Bahasa Indonesia</li>\n  </ul>\n  <ol>\n    <li>Bangun pagi</li>\n    <li>Sarapan</li>\n    <li>Berangkat sekolah</li>\n  </ol>',"Daftarku")
+},
+{
+ id:"bab-7", judul:"Tabel", durasi:"12 menit",
+ teori:'<p>Tabel cocok untuk data berbaris dan berkolom, misalnya jadwal pelajaran.</p>'+
+  '<div class="table-wrap"><table class="ref"><thead><tr><th>Tag</th><th>Fungsi</th></tr></thead><tbody>'+
+  '<tr><td><code>&lt;table&gt;</code></td><td>Pembungkus seluruh tabel</td></tr>'+
+  '<tr><td><code>&lt;tr&gt;</code></td><td>Satu baris (table row)</td></tr>'+
+  '<tr><td><code>&lt;th&gt;</code></td><td>Sel judul kolom, tampil tebal</td></tr>'+
+  '<tr><td><code>&lt;td&gt;</code></td><td>Sel data biasa</td></tr>'+
+  '</tbody></table></div>'+
+  ex('<table border="1">\n  <tr>\n    <th>Hari</th>\n    <th>Pelajaran</th>\n  </tr>\n  <tr>\n    <td>Senin</td>\n    <td>IPS</td>\n  </tr>\n</table>'),
+ contoh:wrap('  <table border="1">\n    <tr>\n      <th>Hari</th>\n      <th>Pelajaran</th>\n    </tr>\n    <tr>\n      <td>Senin</td>\n      <td>IPS</td>\n    </tr>\n  </table>',"Jadwal"),
+ tugas:'Buat tabel jadwal dengan 2 kolom judul <code>&lt;th&gt;</code> dan minimal 2 baris data (jadi minimal 3 baris <code>&lt;tr&gt;</code>).',
+ awal:wrap('  <h1>Jadwal Pelajaran</h1>\n  ',"Jadwal"),
+ cek:[
+  ["Ada <table>",function(d){return !!q(d,"table");}],
+  ["Ada minimal 2 sel judul <th>",function(d){return countText(d,"th")>=2;}],
+  ["Ada minimal 3 baris <tr>",function(d){return qa(d,"tr").length>=3;}],
+  ["Ada minimal 4 sel data <td>",function(d){return countText(d,"td")>=4;}]
+ ],
+ petunjuk:'Baris pertama berisi <code>&lt;th&gt;</code>, baris berikutnya berisi <code>&lt;td&gt;</code>. Tambahkan <code>border="1"</code> agar garis tabel terlihat.',
+ jawaban:wrap('  <h1>Jadwal Pelajaran</h1>\n  <table border="1">\n    <tr><th>Hari</th><th>Pelajaran</th></tr>\n    <tr><td>Senin</td><td>IPS</td></tr>\n    <tr><td>Selasa</td><td>Matematika</td></tr>\n  </table>',"Jadwal")
+},
+{
+ id:"bab-8", judul:"Formulir isian", durasi:"12 menit",
+ teori:'<p>Formulir mengumpulkan isian pengguna, misalnya pendaftaran ekstrakurikuler.</p>'+
+  '<ul><li><code>&lt;form&gt;</code> membungkus semua isian.</li><li><code>&lt;label&gt;</code> adalah tulisan keterangan. Atribut <code>for</code> harus sama dengan <code>id</code> kolom isiannya, supaya mengklik label langsung mengaktifkan kolom.</li><li><code>&lt;input&gt;</code> adalah kolom isian; jenisnya diatur dengan <code>type</code>: <code>text</code>, <code>email</code>, <code>number</code>, <code>date</code>.</li><li><code>&lt;button&gt;</code> adalah tombol kirim.</li></ul>'+
+  ex('<form>\n  <label for="nama">Nama lengkap</label>\n  <input type="text" id="nama">\n\n  <label for="email">Email</label>\n  <input type="email" id="email">\n\n  <button type="submit">Daftar</button>\n</form>'),
+ contoh:wrap('  <form>\n    <label for="nama">Nama lengkap</label>\n    <input type="text" id="nama">\n    <br>\n    <label for="email">Email</label>\n    <input type="email" id="email">\n    <br>\n    <button type="submit">Daftar</button>\n  </form>',"Formulir"),
+ tugas:'Buat formulir pendaftaran ekstrakurikuler: minimal dua isian dengan <code>&lt;label&gt;</code> yang tersambung lewat <code>for</code>/<code>id</code>, salah satunya bertipe <code>email</code>, dan satu tombol.',
+ awal:wrap('  <h1>Pendaftaran Ekstrakurikuler</h1>\n  ',"Pendaftaran"),
+ cek:[
+  ["Ada <form>",function(d){return !!q(d,"form");}],
+  ["Minimal dua <label> tersambung ke input lewat for/id",function(d){var n=0;qa(d,"label[for]").forEach(function(l){var f=l.getAttribute("for");if(f&&d.getElementById(f))n++;});return n>=2;}],
+  ["Ada input type=\"email\"",function(d){return !!q(d,'input[type="email"]');}],
+  ["Ada tombol <button>",function(d){return countText(d,"button")>=1;}]
+ ],
+ petunjuk:'Pastikan nilai <code>for</code> pada label sama persis dengan <code>id</code> pada input, misalnya <code>for="kelas"</code> dan <code>id="kelas"</code>.',
+ jawaban:wrap('  <h1>Pendaftaran Ekstrakurikuler</h1>\n  <form>\n    <label for="nama">Nama</label>\n    <input type="text" id="nama">\n    <label for="email">Email</label>\n    <input type="email" id="email">\n    <button type="submit">Daftar</button>\n  </form>',"Pendaftaran")
+},
+{
+ id:"bab-9", judul:"Struktur semantik", durasi:"10 menit",
+ teori:'<p>Tag <strong>semantik</strong> memberi makna pada bagian-bagian halaman. Hasil tampilannya biasa saja, tetapi membantu mesin pencari dan pembaca layar memahami halaman.</p>'+
+  '<div class="table-wrap"><table class="ref"><thead><tr><th>Tag</th><th>Bagian</th></tr></thead><tbody>'+
+  '<tr><td><code>&lt;header&gt;</code></td><td>Kepala halaman: logo, judul situs</td></tr>'+
+  '<tr><td><code>&lt;nav&gt;</code></td><td>Menu navigasi</td></tr>'+
+  '<tr><td><code>&lt;main&gt;</code></td><td>Isi utama halaman (hanya satu)</td></tr>'+
+  '<tr><td><code>&lt;section&gt;</code></td><td>Kelompok isi bertema</td></tr>'+
+  '<tr><td><code>&lt;footer&gt;</code></td><td>Kaki halaman: alamat, hak cipta</td></tr>'+
+  '</tbody></table></div>'+
+  ex('<header>\n  <h1>SMP Negeri 10</h1>\n  <nav>\n    <a href="#profil">Profil</a>\n    <a href="#kontak">Kontak</a>\n  </nav>\n</header>\n<main>\n  <section id="profil">…</section>\n</main>\n<footer>Alamat sekolah</footer>'),
+ contoh:wrap('  <header>\n    <h1>SMP Negeri 10</h1>\n    <nav>\n      <a href="#profil">Profil</a> |\n      <a href="#kontak">Kontak</a>\n    </nav>\n  </header>\n  <main>\n    <section id="profil">\n      <h2>Profil</h2>\n      <p>Sekolah yang ramah anak.</p>\n    </section>\n  </main>\n  <footer>\n    <p>Jl. Contoh No. 1, Yogyakarta</p>\n  </footer>',"Situs Sekolah"),
+ tugas:'Susun halaman sekolah dengan <code>&lt;header&gt;</code> berisi <code>&lt;nav&gt;</code> dan minimal 2 tautan, lalu <code>&lt;main&gt;</code> berisi <code>&lt;section&gt;</code>, dan <code>&lt;footer&gt;</code>.',
+ awal:wrap('  ',"Situs Sekolah"),
+ cek:[
+  ["Ada <header> dan di dalamnya <nav>",function(d){return !!q(d,"header nav");}],
+  ["<nav> berisi minimal 2 tautan",function(d){var n=q(d,"nav");return !!(n&&n.querySelectorAll("a").length>=2);}],
+  ["Ada <main> berisi <section>",function(d){return !!q(d,"main section");}],
+  ["Ada <footer> berisi teks",function(d){return countText(d,"footer")>=1;}]
+ ],
+ petunjuk:'Ikuti urutan: header → main → footer. <code>&lt;nav&gt;</code> diletakkan di dalam header.',
+ jawaban:wrap('  <header>\n    <h1>SMP Negeri 10</h1>\n    <nav><a href="#profil">Profil</a> <a href="#kontak">Kontak</a></nav>\n  </header>\n  <main>\n    <section id="profil"><h2>Profil</h2><p>Sekolah ramah anak.</p></section>\n  </main>\n  <footer><p>Yogyakarta</p></footer>',"Situs Sekolah")
+},
+{
+ id:"bab-10", judul:"id, class, dan komentar", durasi:"8 menit",
+ teori:'<p>Dua atribut yang bisa dipasang di tag apa saja:</p>'+
+  '<ul><li><code>id</code>: nama unik untuk satu elemen. Dipakai untuk tautan dalam halaman (<code>href="#kontak"</code>) dan untuk CSS.</li><li><code>class</code>: nama kelompok; banyak elemen boleh memakai class yang sama.</li></ul>'+
+  '<p><strong>Komentar</strong> adalah catatan untuk diri sendiri yang tidak tampil di browser: <code>&lt;!-- catatan --&gt;</code>.</p>'+
+  ex('<!-- Bagian kontak sekolah -->\n<section id="kontak">\n  <p class="penting">Telepon: (0274) 123456</p>\n  <p class="penting">Email: info@sekolah.sch.id</p>\n</section>'),
+ contoh:wrap('  <!-- Bagian kontak sekolah -->\n  <section id="kontak">\n    <h2>Kontak</h2>\n    <p class="penting">Telepon: (0274) 123456</p>\n    <p class="penting">Email: info@sekolah.sch.id</p>\n  </section>',"Kontak"),
+ tugas:'Tulis satu komentar, satu elemen dengan <code>id</code>, dan minimal dua elemen dengan <code>class</code> yang sama.',
+ awal:wrap('  <h1>Kontak Sekolah</h1>\n  ',"Kontak"),
+ cek:[
+  ["Ada komentar <!-- … -->",function(d,c){return /<!--[\s\S]*?-->/.test(c);}],
+  ["Ada elemen dengan atribut id",function(d){return !!q(d,"body [id]");}],
+  ["Minimal dua elemen memakai class yang sama",function(d){var m={},ok=false;qa(d,"body [class]").forEach(function(e){e.classList.forEach(function(c){m[c]=(m[c]||0)+1;if(m[c]>=2)ok=true;});});return ok;}]
+ ],
+ petunjuk:'Nama class bebas, misalnya <code>class="info"</code>, asal ditulis sama persis pada dua elemen.',
+ jawaban:wrap('  <h1>Kontak Sekolah</h1>\n  <!-- kontak resmi -->\n  <section id="kontak">\n    <p class="info">Telepon: (0274) 123456</p>\n    <p class="info">Email: info@sekolah.sch.id</p>\n  </section>',"Kontak")
+},
+{
+ id:"bab-11", judul:"Sentuhan CSS pertama", durasi:"15 menit",
+ teori:'<p>HTML menyusun <em>isi</em>, sedangkan <strong>CSS</strong> mengatur <em>tampilan</em>: warna, huruf, jarak. Cara termudah: tulis CSS di dalam tag <code>&lt;style&gt;</code> di bagian <code>&lt;head&gt;</code>.</p>'+
+  ex('<style>\n  body { background: #f0f7ff; font-family: Arial, sans-serif; }\n  h1 { color: #0b5394; }\n  .info { font-size: 18px; }\n</style>')+
+  '<ul><li>Pilih elemen dengan nama tag (<code>h1</code>), class (<code>.info</code>), atau id (<code>#kontak</code>).</li><li>Di dalam kurung kurawal tulis <code>sifat: nilai;</code>.</li><li>Sifat yang sering dipakai: <code>color</code>, <code>background</code>, <code>font-size</code>, <code>font-family</code>, <code>padding</code>, <code>text-align</code>.</li></ul>',
+ contoh:'<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="utf-8">\n  <title>Bergaya</title>\n  <style>\n    body { background: #f0f7ff; font-family: Arial, sans-serif; padding: 20px; }\n    h1 { color: #0b5394; text-align: center; }\n    .info { font-size: 18px; color: #333; }\n  </style>\n</head>\n<body>\n  <h1>Selamat Datang</h1>\n  <p class="info">Halaman ini sudah memakai CSS.</p>\n</body>\n</html>',
+ tugas:'Tambahkan <code>&lt;style&gt;</code> di <code>&lt;head&gt;</code>: ubah warna latar <code>body</code>, warna <code>h1</code>, dan ukuran huruf sebuah class.',
+ awal:'<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="utf-8">\n  <title>Halaman Bergaya</title>\n</head>\n<body>\n  <h1>Halaman Bergaya</h1>\n  <p class="info">Ubah tampilan saya dengan CSS.</p>\n</body>\n</html>',
+ cek:[
+  ["Ada tag <style>",function(d){return !!q(d,"style");}],
+  ["body diberi background",function(d){var s=cssText(d);return /body\s*\{[^}]*background/i.test(s);}],
+  ["h1 diberi color",function(d){var s=cssText(d);return /h1[^{]*\{[^}]*(^|[;\s{])color\s*:/im.test(s);}],
+  ["Sebuah class diberi font-size",function(d){var s=cssText(d);return /\.[a-zA-Z][\w-]*[^{]*\{[^}]*font-size\s*:/i.test(s);}]
+ ],
+ petunjuk:'Salin pola contoh di atas ke dalam <code>&lt;head&gt;</code>, lalu ganti warnanya sesuka hati. Kode warna bisa berupa nama (<code>navy</code>) atau kode heksa (<code>#0b5394</code>).',
+ jawaban:'<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="utf-8">\n  <title>Halaman Bergaya</title>\n  <style>\n    body { background: #fff8e7; }\n    h1 { color: darkgreen; }\n    .info { font-size: 20px; }\n  </style>\n</head>\n<body>\n  <h1>Halaman Bergaya</h1>\n  <p class="info">Ubah tampilan saya dengan CSS.</p>\n</body>\n</html>'
+},
+{
+ id:"bab-12", judul:"Proyek akhir: kartu profil guru", durasi:"20 menit",
+ teori:'<p>Saatnya menggabungkan semua yang sudah dipelajari menjadi satu halaman utuh: <strong>kartu profil guru</strong>. Halaman ini bisa diunggah ke GitHub Pages atau disematkan di Google Sites.</p>'+
+  '<h3>Yang perlu ada</h3><ul><li><code>&lt;header&gt;</code> dengan nama sebagai <code>&lt;h1&gt;</code></li><li>Foto dengan teks <code>alt</code></li><li>Daftar mata pelajaran atau keahlian</li><li>Tautan ke media sosial atau situs sekolah</li><li><code>&lt;footer&gt;</code></li><li>Gaya CSS di <code>&lt;style&gt;</code></li></ul>'+
+  '<p>Kode awal di editor sudah berisi kerangka. Lengkapi dan percantik sesuai seleramu.</p>',
+ contoh:null,
+ tugas:'Lengkapi kartu profil guru sampai semua syarat di bawah terpenuhi.',
+ awal:'<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="utf-8">\n  <title>Profil Guru</title>\n  <style>\n    body { font-family: Arial, sans-serif; background: #eef4f1; padding: 24px; }\n    .kartu { background: white; max-width: 420px; margin: auto; padding: 24px; border-radius: 16px; }\n  </style>\n</head>\n<body>\n  <div class="kartu">\n    <!-- 1. header berisi h1 nama -->\n\n    <!-- 2. foto dengan alt -->\n\n    <!-- 3. daftar keahlian -->\n\n    <!-- 4. tautan -->\n\n    <!-- 5. footer -->\n  </div>\n</body>\n</html>',
+ cek:[
+  ["<header> berisi <h1> nama",function(d){return countText(d,"header h1")>=1;}],
+  ["Foto <img> dengan alt",function(d){var i=q(d,"img");return !!(i&&i.getAttribute("src")&&(i.getAttribute("alt")||"").trim().length>=3);}],
+  ["Daftar <ul> atau <ol> minimal 3 butir",function(d){return countText(d,"ul > li, ol > li")>=3;}],
+  ["Minimal satu tautan https://",function(d){return !!q(d,'a[href^="https://"],a[href^="http://"]');}],
+  ["Ada <footer>",function(d){return !!q(d,"footer");}],
+  ["CSS mengatur warna (color) sesuatu",function(d){return /(^|[;\s{])color\s*:/im.test(cssText(d));}]
+ ],
+ petunjuk:'Isi setiap komentar bernomor dengan tag yang sesuai. Untuk warna, tambahkan misalnya <code>h1 { color: #1b7f4b; }</code> di dalam <code>&lt;style&gt;</code>.',
+ jawaban:'<!DOCTYPE html>\n<html lang="id">\n<head>\n  <meta charset="utf-8">\n  <title>Profil Guru</title>\n  <style>\n    body { font-family: Arial, sans-serif; background: #eef4f1; padding: 24px; }\n    .kartu { background: white; max-width: 420px; margin: auto; padding: 24px; border-radius: 16px; text-align: center; }\n    h1 { color: #1b7f4b; }\n    ul { text-align: left; }\n  </style>\n</head>\n<body>\n  <div class="kartu">\n    <header><h1>Thomas</h1><p>Guru IPS SMP</p></header>\n    <img src="foto-thomas.jpg" alt="Foto Thomas" width="160">\n    <ul>\n      <li>IPS kelas 8</li>\n      <li>Membuat aplikasi sekolah</li>\n      <li>Podcast pendidikan</li>\n    </ul>\n    <p><a href="https://github.com" target="_blank">Kunjungi GitHub saya</a></p>\n    <footer><p>Yogyakarta, 2026</p></footer>\n  </div>\n</body>\n</html>'
+}
+];
+function cssText(d){var s="";qa(d,"style").forEach(function(e){s+=e.textContent+"\n";});return s;}
+
+var CONTEKAN='<p>Ringkasan tag yang sudah dipelajari. Klik sebuah bab di kiri untuk kembali berlatih.</p>'+
+ '<div class="table-wrap"><table class="ref"><thead><tr><th>Tag</th><th>Kegunaan</th><th>Contoh</th></tr></thead><tbody>'+
+ [["&lt;h1&gt;…&lt;h6&gt;","Judul bertingkat","&lt;h2&gt;Visi&lt;/h2&gt;"],["&lt;p&gt;","Paragraf","&lt;p&gt;Teks&lt;/p&gt;"],["&lt;strong&gt; &lt;em&gt;","Tebal, miring","&lt;strong&gt;Penting&lt;/strong&gt;"],["&lt;br&gt; &lt;hr&gt;","Baris baru, garis","&lt;br&gt;"],["&lt;a&gt;","Tautan","&lt;a href=\"https://…\"&gt;Klik&lt;/a&gt;"],["&lt;img&gt;","Gambar","&lt;img src=\"a.jpg\" alt=\"…\"&gt;"],["&lt;ul&gt; &lt;ol&gt; &lt;li&gt;","Daftar","&lt;ul&gt;&lt;li&gt;IPS&lt;/li&gt;&lt;/ul&gt;"],["&lt;table&gt; &lt;tr&gt; &lt;th&gt; &lt;td&gt;","Tabel","&lt;tr&gt;&lt;td&gt;Senin&lt;/td&gt;&lt;/tr&gt;"],["&lt;form&gt; &lt;label&gt; &lt;input&gt; &lt;button&gt;","Formulir","&lt;input type=\"email\" id=\"e\"&gt;"],["&lt;header&gt; &lt;nav&gt; &lt;main&gt; &lt;section&gt; &lt;footer&gt;","Struktur semantik","&lt;main&gt;…&lt;/main&gt;"],["id / class","Penanda elemen","&lt;p class=\"info\"&gt;"],["&lt;!-- --&gt;","Komentar","&lt;!-- catatan --&gt;"],["&lt;style&gt;","CSS di dalam halaman","h1 { color: navy; }"]]
+ .map(function(r){return '<tr><td><code>'+r[0]+'</code></td><td>'+r[1]+'</td><td><code>'+r[2]+'</code></td></tr>';}).join("")+
+ '</tbody></table></div>'+
+ '<h3>Langkah berikutnya</h3><ul><li>Simpan kode proyek akhir sebagai <code>index.html</code>, lalu unggah ke GitHub Pages.</li><li>Pelajari CSS lebih dalam: <code>margin</code>, <code>padding</code>, <code>display: flex</code>.</li><li>Lanjut ke JavaScript untuk membuat halaman interaktif.</li></ul>';
+
+/* ---------- Status ---------- */
+var S={done:{},code:{},nama:""};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);S.done=p.done||{};S.code=p.code||{};S.nama=p.nama||"";}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+var cur=null;
+
+var nav=document.getElementById("nav"), lessonEl=document.getElementById("lesson");
+var ta=document.getElementById("code"), gutter=document.getElementById("gutter"), frame=document.getElementById("preview");
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove("show");},1800);}
+
+function renderNav(){
+  var h='<p class="nav-h">Bab</p>';
+  BAB.forEach(function(b,i){
+    h+='<button type="button" class="nav-btn'+(S.done[b.id]?' done':'')+'" data-go="'+b.id+'" aria-current="'+(cur===b.id)+'"><span class="n">'+(S.done[b.id]?'✓':(i+1))+'</span><span>'+b.judul+'</span></button>';
+  });
+  h+='<p class="nav-h">Rangkuman</p><button type="button" class="nav-btn" data-go="contekan" aria-current="'+(cur==="contekan")+'"><span class="n">&lt;/&gt;</span><span>Contekan tag HTML</span></button>';
+  h+='<button type="button" class="nav-btn'+(allDone()?' done':'')+'" data-go="sertifikat" aria-current="'+(cur==="sertifikat")+'"><span class="n">★</span><span>Sertifikat</span></button>';
+  nav.innerHTML=h;
+  var n=BAB.filter(function(b){return S.done[b.id];}).length;
+  document.getElementById("progBar").style.width=(n/BAB.length*100)+"%";
+  document.getElementById("progTxt").textContent=n+" dari "+BAB.length+" bab selesai";
+}
+
+function renderLesson(id){
+  cur=id;
+  if(id==="sertifikat"){ renderCert(); renderNav(); return; }
+  if(id==="contekan"){
+    lessonEl.innerHTML='<span class="kicker">Rangkuman</span><h2>Contekan tag HTML</h2><div class="teori">'+CONTEKAN+'</div>';
+    renderNav(); if(!ta.value)setCode(KERANGKA); return;
+  }
+  var i=-1;BAB.forEach(function(b,k){if(b.id===id)i=k;});
+  if(i<0){i=0;id=BAB[0].id;cur=id;}
+  var b=BAB[i];
+  var h='<span class="kicker">Bab '+(i+1)+' dari '+BAB.length+'</span><h2>'+b.judul+'</h2><div class="meta">± '+b.durasi+'</div><div class="teori">'+b.teori+'</div>';
+  if(b.contoh) h+='<button type="button" class="try" id="tryEx">Coba contoh ini di editor</button>';
+  h+='<section class="task" id="task" aria-labelledby="taskH"><h3 id="taskH">Tugas</h3><p>'+b.tugas+'</p><ul class="checks" id="checks">'+
+     b.cek.map(function(c,k){return '<li data-k="'+k+'"><span class="ck" aria-hidden="true"></span><span>'+escapeHtml(c[0])+'</span></li>';}).join("")+
+     '</ul><div class="task-actions"><button type="button" class="btn ghost" id="btnHint">Petunjuk</button><button type="button" class="btn ghost" id="btnAns">Lihat jawaban</button>'+
+     (i<BAB.length-1?'<button type="button" class="btn go" id="btnNext" disabled>Lanjut ke bab '+(i+2)+'</button>':'<button type="button" class="btn go" id="btnNext" disabled>Ambil sertifikat</button>')+
+     '</div><div class="hint" id="hint" hidden>'+b.petunjuk+'</div><p class="pass-msg" id="passMsg" hidden></p></section>';
+  lessonEl.innerHTML=h;
+  setCode(S.code[b.id]!=null?S.code[b.id]:b.awal);
+  if(b.contoh) document.getElementById("tryEx").addEventListener("click",function(){
+    if(ta.value!==b.awal&&ta.value!==b.contoh&&!confirmSwap())return;
+    setCode(b.contoh); toast("Contoh dimuat. Tugas tetap dinilai dari kode di editor.");
+  });
+  document.getElementById("btnHint").addEventListener("click",function(){var e=document.getElementById("hint");e.hidden=!e.hidden;});
+  document.getElementById("btnAns").addEventListener("click",function(){
+    var btn=this;
+    if(btn.dataset.arm!=="1"){btn.dataset.arm="1";btn.textContent="Klik lagi untuk memuat jawaban";setTimeout(function(){btn.dataset.arm="";btn.textContent="Lihat jawaban";},3000);return;}
+    btn.dataset.arm="";btn.textContent="Lihat jawaban"; setCode(b.jawaban); toast("Jawaban dimuat. Pelajari, lalu coba ubah sendiri.");
+  });
+  document.getElementById("btnNext").addEventListener("click",function(){go(i<BAB.length-1?BAB[i+1].id:"sertifikat");});
+  renderNav(); check();
+  lessonEl.scrollTop=0;
+}
+var swapArmed=false;
+function confirmSwap(){ if(swapArmed){swapArmed=false;return true;} swapArmed=true; toast("Kode Anda akan diganti contoh. Klik sekali lagi untuk melanjutkan."); setTimeout(function(){swapArmed=false;},3000); return false; }
+function escapeHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+/* ---------- Editor ---------- */
+function setCode(v){ta.value=v;onChange(true);}
+function lines(){var n=ta.value.split("\n").length,s="";for(var i=1;i<=n;i++)s+=i+"\n";gutter.textContent=s;}
+var tmr=null;
+function onChange(now){
+  lines();
+  clearTimeout(tmr);
+  tmr=setTimeout(function(){
+    frame.srcdoc=ta.value;
+    if(cur&&cur!=="contekan"){S.code[cur]=ta.value;save();check();}
+  },now?0:300);
+}
+ta.addEventListener("input",function(){onChange(false);});
+ta.addEventListener("scroll",function(){gutter.scrollTop=ta.scrollTop;});
+ta.addEventListener("keydown",function(e){
+  if(e.key==="Tab"&&!e.shiftKey&&!e.altKey&&!e.ctrlKey&&!e.metaKey){
+    e.preventDefault();
+    var s=ta.selectionStart,en=ta.selectionEnd;
+    ta.value=ta.value.slice(0,s)+"  "+ta.value.slice(en);
+    ta.selectionStart=ta.selectionEnd=s+2; onChange(false);
+  } else if(e.key==="Escape"){ ta.blur(); }
+});
+document.getElementById("btnReset").addEventListener("click",function(){
+  var btn=this;
+  if(btn.dataset.arm!=="1"){btn.dataset.arm="1";btn.textContent="Klik lagi untuk mengembalikan";setTimeout(function(){btn.dataset.arm="";btn.textContent="Kembalikan kode awal";},3000);return;}
+  btn.dataset.arm="";btn.textContent="Kembalikan kode awal";
+  var b=BAB.filter(function(x){return x.id===cur;})[0]; setCode(b?b.awal:KERANGKA); toast("Kode dikembalikan ke awal");
+});
+document.getElementById("btnCopy").addEventListener("click",function(){
+  try{navigator.clipboard.writeText(ta.value).then(function(){toast("Kode tersalin");},function(){toast("Gagal menyalin. Blok kode lalu salin manual.");});}
+  catch(e){toast("Gagal menyalin. Blok kode lalu salin manual.");}
+});
+
+/* ---------- Penilaian ---------- */
+function check(){
+  var b=BAB.filter(function(x){return x.id===cur;})[0]; if(!b)return;
+  var d=new DOMParser().parseFromString(ta.value,"text/html"), all=true;
+  b.cek.forEach(function(c,k){
+    var ok=false; try{ok=!!c[1](d,ta.value);}catch(e){ok=false;}
+    var li=document.querySelector('#checks li[data-k="'+k+'"]'); if(!li)return;
+    li.classList.toggle("ok",ok); li.querySelector(".ck").textContent=ok?"✓":"";
+    if(!ok)all=false;
+  });
+  var task=document.getElementById("task"), next=document.getElementById("btnNext"), msg=document.getElementById("passMsg");
+  task.classList.toggle("passed",all); next.disabled=!all;
+  if(all){
+    msg.hidden=false;
+    msg.textContent=(b.id==="bab-12")?"Selamat! Semua bab selesai. Kode proyek ini siap disalin dan diunggah.":"Mantap, tugas bab ini lulus.";
+    if(!S.done[b.id]){S.done[b.id]=true;save();renderNav();toast(allDone()?"Semua bab lulus! Sertifikat Anda sudah terbuka.":"Bab selesai: "+b.judul);}
+  } else msg.hidden=true;
+}
+
+/* ---------- Navigasi ---------- */
+function allDone(){return BAB.every(function(b){return S.done[b.id];});}
+function nextBab(){for(var i=0;i<BAB.length;i++){if(!S.done[BAB[i].id])return BAB[i];}return null;}
+var COURSE=BAB.map(function(b){return b.id;}).concat(["contekan","sertifikat"]);
+function showView(v){
+  document.getElementById("landing").hidden=(v!=="landing");
+  document.getElementById("course").hidden=(v!=="course");
+}
+function renderLanding(){
+  var n=BAB.filter(function(b){return S.done[b.id];}).length, nb=nextBab();
+  document.getElementById("sylList").innerHTML=BAB.map(function(b,i){
+    var d=!!S.done[b.id];
+    return '<li class="'+(d?'done':'')+'"><a href="#'+b.id+'"><span class="no">'+(d?'✓':(i+1))+'</span><span><span class="ttl">'+b.judul+'</span><br><span class="dur">± '+b.durasi+'</span></span><span class="chip'+(d?' ok':'')+'">'+(d?'Lulus':'Belum')+'</span></a></li>';
+  }).join("");
+  var label, href;
+  if(allDone()){label="Ambil sertifikat";href="#sertifikat";}
+  else if(n>0){label="Lanjutkan bab "+(BAB.indexOf(nb)+1);href="#"+nb.id;}
+  else {label="Mulai belajar";href="#bab-1";}
+  document.querySelectorAll(".js-start").forEach(function(a){a.textContent=label;a.setAttribute("href",href);});
+  document.getElementById("resumeTxt").textContent= n===0?"Belum ada bab yang dikerjakan. Bab 1 hanya butuh sekitar 10 menit.":(allDone()?"Selamat, 12 dari 12 bab sudah lulus.":"Kemajuan Anda: "+n+" dari 12 bab lulus. Lanjutkan dari "+nb.judul+".");
+}
+function renderCert(){
+  cur="sertifikat";
+  if(!allDone()){
+    var sisa=BAB.filter(function(b){return !S.done[b.id];});
+    lessonEl.innerHTML='<span class="kicker">Penutup</span><h2>Sertifikat penyelesaian</h2><p class="meta">Sertifikat terbuka setelah semua bab lulus. Masih ada '+sisa.length+' bab:</p><ul class="teori">'+sisa.map(function(b){return '<li><a href="#'+b.id+'" style="color:var(--accent)">'+b.judul+'</a></li>';}).join("")+'</ul>';
+    return;
+  }
+  var d=new Date(), bl=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  var tgl=d.getDate()+" "+bl[d.getMonth()]+" "+d.getFullYear();
+  lessonEl.innerHTML='<span class="kicker">Penutup</span><h2>Sertifikat penyelesaian</h2><p class="meta">Selamat, 12 bab sudah lulus. Tulis nama Anda, lalu cetak atau simpan sebagai PDF.</p>'+
+    '<label for="certName" style="font-weight:600;display:block;margin-bottom:6px">Nama lengkap dan gelar</label>'+
+    '<input id="certName" type="text" value="'+escapeHtml(S.nama||"")+'" placeholder="Tulis nama Anda" style="width:100%;max-width:440px;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)">'+
+    '<div class="task-actions"><button type="button" class="btn" id="btnPrint">Cetak / simpan PDF</button></div>'+
+    '<div class="cert" id="certBox"><span class="seal">&lt;/&gt;</span><span class="eyebrow">Sertifikat penyelesaian</span><h3>E-Course Belajar HTML dari Nol</h3><p>diberikan kepada</p>'+
+    '<div class="nm" id="certShow">'+escapeHtml(S.nama||"Nama Peserta")+'</div>'+
+    '<p>yang telah menyelesaikan 12 bab: kerangka halaman, teks, tautan, gambar, daftar, tabel, formulir, struktur semantik, id dan class, CSS dasar, serta proyek akhir kartu profil.</p>'+
+    '<p style="margin-top:8px;font-variant-numeric:tabular-nums">'+tgl+' · ± 2 jam 15 menit belajar mandiri</p></div>'+
+    '<p class="meta" style="margin-top:10px">Sertifikat ini tanda selesai belajar mandiri, bukan sertifikat berjam pelajaran dari lembaga.</p>';
+  var inp=document.getElementById("certName");
+  inp.addEventListener("input",function(){S.nama=inp.value;save();document.getElementById("certShow").textContent=inp.value||"Nama Peserta";});
+  document.getElementById("btnPrint").addEventListener("click",function(){
+    if(!S.nama.trim()){toast("Tulis nama Anda dulu");inp.focus();return;}
+    try{window.print();}catch(e){toast("Cetak tidak tersedia di tampilan ini. Simpan dengan tangkapan layar.");}
+  });
+}
+function route(){
+  var h=location.hash.slice(1);
+  if(COURSE.indexOf(h)>-1){ showView("course"); renderLesson(h); window.scrollTo(0,0); }
+  else{
+    showView("landing"); renderLanding();
+    var el=h&&document.getElementById(h);
+    if(el&&h!=="beranda") el.scrollIntoView({behavior:"smooth"}); else window.scrollTo(0,0);
+  }
+}
+function go(id){ if(location.hash.slice(1)===id) route(); else location.hash=id; }
+nav.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(b)go(b.dataset.go);});
+window.addEventListener("hashchange",route);
+route();
+})();
+</script>
+</body>
+</html>
