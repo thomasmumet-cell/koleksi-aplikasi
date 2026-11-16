@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Meja Host Podcast",
+    kategori: "Organisasi",
+    jenis: "HTML",
+    deskripsi: "Pemandu host podcast PGRI DIY untuk satu tema dengan 2 atau 3 narasumber: rundown otomatis, naskah host, bank pertanyaan, dan Mode Siaran dengan timer serta pencatat waktu bicara. Dilengkapi landing page.",
+    tanggal: "2026-11-16",
+    tautan: "meja-host-podcast/",
+    status: "aktif"
+  },
+  {
     nama: "BOS Analitik AI",
     kategori: "AI Tool",
     jenis: "AI Tool",
