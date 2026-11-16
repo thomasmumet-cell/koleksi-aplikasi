@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRANATA — Administrasi Kepala Sekolah</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#172044; --ink2:#4a5275; --mute:#8189a8; --line:#e4e7f2; --bg:#f3f4fa; --card:#fff;
+  --side:#161d42; --side2:#222b5c; --brand:#2f3fa0; --brand-soft:#e9ecfb; --gold:#e3a51f; --gold-soft:#fdf3d9;
+  --ok:#17824f; --ok-soft:#e0f4ea; --warn:#b06a00; --warn-soft:#fdeed3; --bad:#c2372f; --bad-soft:#fde5e3; --info:#2f5fc4; --info-soft:#e4ecfc;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{margin:0;line-height:1.25}
+svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* layout */
+.side{position:fixed;inset:0 auto 0 0;width:250px;background:var(--side);color:#c9cdea;display:flex;flex-direction:column;z-index:30;transition:transform .2s}
+.brand{display:flex;gap:11px;align-items:center;padding:20px 20px 16px}
+.logo{width:38px;height:38px;border-radius:11px;background:var(--gold);color:var(--side);display:grid;place-items:center;font-weight:800;font-size:18px}
+.brand b{display:block;color:#fff;font-size:17px;letter-spacing:.06em}
+.brand span{font-size:11px;color:#9aa1cf}
+.nav{flex:1;overflow:auto;padding:4px 12px 16px}
+.nav h4{margin:16px 10px 6px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#7c84b8;font-weight:600}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;color:inherit;text-decoration:none;font-weight:500}
+.nav a:hover{background:var(--side2);color:#fff}
+.nav a.on{background:var(--gold);color:var(--side);font-weight:700}
+.nav a i{margin-left:auto;font-style:normal;font-size:11px;font-weight:700;background:rgba(255,255,255,.14);padding:1px 7px;border-radius:99px}
+.nav a.on i{background:rgba(22,29,66,.16)}
+.sch{padding:14px 20px;border-top:1px solid rgba(255,255,255,.09);font-size:12px}
+.sch b{display:block;color:#fff;font-size:13px}
+.main{margin-left:250px;min-height:100%;padding:26px 30px 60px;max-width:1280px}
+.top{display:none}
+.shade{display:none}
+.head{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;margin-bottom:20px}
+.head h1{font-size:24px;font-weight:800}
+.head p{margin:3px 0 0;color:var(--ink2)}
+
+/* controls */
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:10px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:#c7cce3}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.pri:hover{background:#26348a}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--side)}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.sm{padding:5px 9px;font-size:12px;border-radius:8px}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink2)}
+.btn.ghost:hover{background:var(--brand-soft);color:var(--brand)}
+.inp,select.inp,textarea.inp{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 11px;outline:none}
+.inp:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+textarea.inp{min-height:84px;resize:vertical}
+.bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;align-items:center}
+.bar .inp{max-width:280px}
+.bar select.inp{max-width:200px}
+.bar .sp{flex:1}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.card h3{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card h3 a{font-size:12px;font-weight:600;color:var(--brand);text-decoration:none}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;gap:13px;align-items:flex-start;text-decoration:none;color:inherit}
+.stat:hover{border-color:#c7cce3}
+.stat .dot{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex:none}
+.stat small{display:block;color:var(--ink2);font-weight:600;font-size:12px}
+.stat b{font-size:26px;font-weight:800;line-height:1.15}
+.stat b span{font-size:14px;color:var(--mute);font-weight:600}
+.stat em{display:block;font-style:normal;font-size:12px;color:var(--mute)}
+.grid2{display:grid;grid-template-columns:1.15fr 1fr;gap:16px;margin-bottom:16px}
+.t-brand{background:var(--brand-soft);color:var(--brand)} .t-gold{background:var(--gold-soft);color:#9a6c00}
+.t-ok{background:var(--ok-soft);color:var(--ok)} .t-bad{background:var(--bad-soft);color:var(--bad)}
+.rowi{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.rowi:first-of-type{border-top:0;padding-top:2px}
+.rowi .when{flex:none;width:46px;text-align:center;background:var(--brand-soft);color:var(--brand);border-radius:10px;padding:5px 0;font-weight:800;font-size:16px;line-height:1.1}
+.rowi .when small{display:block;font-size:10px;font-weight:700;text-transform:uppercase}
+.rowi b{display:block;font-weight:600}
+.rowi span{color:var(--ink2);font-size:12.5px}
+.rowi .tag{margin-left:auto;flex:none}
+.empty{color:var(--mute);padding:18px 0;text-align:center}
+.pb{height:8px;background:#eceef7;border-radius:99px;overflow:hidden;min-width:70px}
+.pb i{display:block;height:100%;background:var(--brand);border-radius:99px}
+.pb.done i{background:var(--ok)}
+.prog{padding:9px 0;border-top:1px solid var(--line)}
+.prog:first-of-type{border-top:0}
+.prog div.l{display:flex;justify-content:space-between;gap:10px;margin-bottom:6px;font-weight:600}
+.prog div.l span{color:var(--ink2);font-weight:700}
+
+/* table */
+.tw{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:auto}
+table{border-collapse:collapse;width:100%}
+th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--mute);text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:#fafbfe}
+td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td b{font-weight:600}
+td small{display:block;color:var(--ink2);font-size:12.5px;max-width:420px}
+td.act{white-space:nowrap;text-align:right}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.tag.ok{background:var(--ok-soft);color:var(--ok)} .tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.bad{background:var(--bad-soft);color:var(--bad)} .tag.info{background:var(--info-soft);color:var(--info)}
+.tag.mute{background:#eef0f6;color:var(--ink2)}
+.ckr{display:grid;grid-template-columns:28px 1fr 120px 240px;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.ckr .no{width:26px;height:26px;border-radius:50%;background:var(--brand-soft);color:var(--brand);font-weight:800;font-size:12px;display:grid;place-items:center}
+.ckr b{display:block;font-weight:600}.ckr span{font-size:12.5px;color:var(--ink2)}.ckr a{color:var(--brand);font-weight:600;text-decoration:none}
+@media (max-width:900px){.ckr{grid-template-columns:28px 1fr}.ckr select,.ckr input{grid-column:2}}
+.late{color:var(--bad);font-weight:700;font-size:11.5px;display:block}
+
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.cal .dh{background:#fafbfe;padding:8px;font-size:11px;font-weight:700;color:var(--mute);text-transform:uppercase;text-align:center}
+.cal .d{background:#fff;min-height:86px;padding:6px;cursor:pointer;border:0;text-align:left;display:block;width:100%}
+.cal .d:hover{background:#fafbff}
+.cal .d.off{background:#fafbfe;cursor:default}
+.cal .d .n{font-weight:700;font-size:12.5px;display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%}
+.cal .d.today .n{background:var(--brand);color:#fff}
+.cal .d.sun .n{color:var(--bad)} .cal .d.today.sun .n{color:#fff}
+.ev{display:block;font-size:11px;font-weight:600;padding:1px 6px;border-radius:6px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev.a{background:var(--brand-soft);color:var(--brand)} .ev.s{background:var(--gold-soft);color:#8a6100} .ev.t{background:var(--bad-soft);color:var(--bad)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2);align-items:center}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(18,23,54,.5);display:none;align-items:flex-start;justify-content:center;padding:5vh 14px;z-index:50;overflow:auto}
+.ov.show{display:flex}
+.dlg{background:#fff;border-radius:16px;width:100%;max-width:620px;padding:22px;box-shadow:0 20px 60px rgba(10,15,50,.3)}
+.dlg.sm{max-width:420px}
+.dlg h2{font-size:18px;font-weight:800;margin-bottom:14px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg label{display:block;font-size:12px;font-weight:700;color:var(--ink2)}
+.fg label.w{grid-column:1/-1}
+.fg label .inp{margin-top:5px;font-weight:400;color:var(--ink)}
+.fg label em{color:var(--bad);font-style:normal}
+.df{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--side);color:#fff;padding:10px 18px;border-radius:99px;font-weight:600;opacity:0;transition:.25s;z-index:60;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.note{background:var(--gold-soft);border:1px solid #f2dca0;color:#6d4d00;border-radius:12px;padding:11px 14px;margin-bottom:16px;font-size:13px}
+
+/* report */
+.rep{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:34px 38px;max-width:900px}
+.rep .kop{text-align:center;border-bottom:3px double var(--ink);padding-bottom:12px;margin-bottom:18px}
+.rep .kop h2{font-size:19px;text-transform:uppercase;letter-spacing:.04em}
+.rep .kop p{margin:3px 0 0;color:var(--ink2)}
+.rep h3{font-size:14.5px;margin:22px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+.rep table{font-size:12.5px;border:1px solid var(--line)}
+.rep th,.rep td{padding:7px 9px;border:1px solid var(--line)}
+.rep .sum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.rep .sum div{border:1px solid var(--line);border-radius:10px;padding:10px}
+.rep .sum b{display:block;font-size:20px;font-weight:800}
+.rep .sum span{font-size:11.5px;color:var(--ink2)}
+.rep .ttd{margin-top:36px;margin-left:auto;width:260px;text-align:left}
+.rep .ttd .sp{height:64px}
+
+@media (max-width:900px){
+  .side{transform:translateX(-100%)} body.menu .side{transform:none}
+  body.menu .shade{display:block;position:fixed;inset:0;background:rgba(18,23,54,.45);z-index:25}
+  .main{margin-left:0;padding:74px 14px 50px}
+  .top{display:flex;position:fixed;inset:0 0 auto 0;height:56px;background:var(--side);color:#fff;align-items:center;gap:12px;padding:0 14px;z-index:20}
+  .top button{background:var(--side2);border:0;color:#fff;border-radius:9px;width:38px;height:38px;display:grid;place-items:center;cursor:pointer}
+  .top b{letter-spacing:.06em}
+  .stats{grid-template-columns:1fr 1fr} .grid2{grid-template-columns:1fr}
+  .fg{grid-template-columns:1fr} .rep{padding:20px 16px} .rep .sum{grid-template-columns:1fr 1fr}
+  .cal .d{min-height:62px;padding:3px} .ev{font-size:9.5px;padding:0 3px}
+  .head h1{font-size:20px}
+}
+@media print{
+  .side,.top,.bar,.head,.noprint,.toast{display:none!important}
+  body{background:#fff} .main{margin:0;padding:0;max-width:none} .rep{border:0;padding:0;max-width:none}
+}
+</style>
+</head>
+<body>
+<aside class="side">
+  <div class="brand"><div class="logo">P</div><div><b>PRANATA</b><span>Administrasi Kepala Sekolah</span></div></div>
+  <nav class="nav" id="nav"></nav>
+  <div class="sch" id="sch"></div>
+</aside>
+<div class="shade" data-act="menu"></div>
+<div class="top"><button data-act="menu" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><b>PRANATA</b></div>
+<main class="main" id="main"></main>
+<div class="ov" id="ov"><div class="dlg" id="dlg"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= util ================= */
+const KEY='pranata-ks-v1';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=()=>iso(new Date());
+const plus=n=>{const d=new Date();d.setDate(d.getDate()+n);return iso(d)};
+const toDate=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const fmt=(s,o)=>s?toDate(s).toLocaleDateString('id-ID',o||{day:'numeric',month:'short',year:'numeric'}):'—';
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const ICON={
+ dasbor:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+ program:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+ rapat:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.5c1.9.8 3 2.6 3 5.5"/>',
+ tugas:'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="m8 12 3 3 5-6"/>',
+ supervisi:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+ kesiswaan:'<path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11.5V16c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5M22 9v6"/>',
+ agenda:'<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+ sarana:'<path d="M4 21V6l8-3 8 3v15M2 21h20M9 21v-5h6v5M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/>',
+ laporan:'<path d="M6 3h8l5 5v13H6V3Z"/><path d="M14 3v5h5M9 13h7M9 17h7"/>',
+ pengaturan:'<path d="M4 6h10M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+ tupoksi:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/>',
+ jurnal:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4Z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6"/>',
+ wira:'<rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>',
+ gtk:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>'
+};
+const ic=n=>`<svg class="ic" viewBox="0 0 24 24">${ICON[n]}</svg>`;
+const TONE={Selesai:'ok',Tuntas:'ok',Terlaksana:'ok',Baik:'ok',Prestasi:'ok',Berjalan:'info',Proses:'info',Terjadwal:'info',Sedang:'info',
+ Rencana:'mute',Belum:'mute',Rendah:'mute','Perlu Tindak Lanjut':'warn','Rusak Ringan':'warn',Konseling:'warn',Tinggi:'bad','Rusak Berat':'bad',Pelanggaran:'bad',Manajerial:'info','Pengembangan Kewirausahaan':'warn','Supervisi Guru & Tendik':'ok',Guru:'info','Tenaga Kependidikan':'mute'};
+const tag=v=>v?`<span class="tag ${TONE[v]||'mute'}">${esc(v)}</span>`:'—';
+const pbar=n=>{n=Math.max(0,Math.min(100,Number(n)||0));return `<div style="display:flex;align-items:center;gap:8px"><div class="pb ${n>=100?'done':''}" style="flex:1"><i style="width:${n}%"></i></div><b style="font-size:12px">${n}%</b></div>`};
+const due=(d,done)=>`${fmt(d)}${d&&!done&&d<today()?'<span class="late">Terlambat</span>':''}`;
+const cut=(s,n=90)=>{s=String(s||'');return s.length>n?s.slice(0,n)+'…':s};
+
+/* ================= data ================= */
+let db={profil:{sekolah:'',kepala:'',nip:'',tahun:'',kota:''},program:[],rapat:[],tugas:[],supervisi:[],kesiswaan:[],agenda:[],sarana:[],jurnal:[],wira:[],gtk:[],ceklis:{}};
+let storageOK=true;
+function load(){try{const s=localStorage.getItem(KEY);if(s)db=Object.assign(db,JSON.parse(s))}catch(e){storageOK=false}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){storageOK=false}}
+
+/* ================= modul ================= */
+const MODS={
+ program:{label:'Program & Target',one:'Program',desc:'Program kerja sekolah, target, penanggung jawab, dan capaiannya.',filter:'status',sort:'tenggat',dir:1,
+  fields:[
+   {k:'nama',l:'Nama program',req:1,w:1},
+   {k:'bidang',l:'Bidang',t:'select',o:['Kurikulum','Kesiswaan','Sarana Prasarana','Humas','Keuangan','SDM / GTK','Lainnya']},
+   {k:'pj',l:'Penanggung jawab'},
+   {k:'target',l:'Target / indikator keberhasilan',w:1},
+   {k:'tenggat',l:'Tenggat',t:'date'},
+   {k:'status',l:'Status',t:'select',o:['Rencana','Berjalan','Selesai']},
+   {k:'progres',l:'Progres (%)',t:'number',def:0},
+   {k:'catatan',l:'Catatan',t:'textarea',w:1}],
+  cols:[['Program',r=>`<b>${esc(r.nama)}</b><small>${esc(r.target)}</small>`],['Bidang',r=>esc(r.bidang)],['Penanggung jawab',r=>esc(r.pj)||'—'],
+   ['Tenggat',r=>due(r.tenggat,r.status==='Selesai')],['Progres',r=>pbar(r.progres)],['Status',r=>tag(r.status)]]},
+ rapat:{label:'Rapat',one:'Rapat',desc:'Notulen, keputusan rapat, dan tindak lanjutnya.',filter:'jenis',sort:'tanggal',dir:-1,
+  fields:[
+   {k:'judul',l:'Agenda / judul rapat',req:1,w:1},
+   {k:'tanggal',l:'Tanggal',t:'date',req:1,def:'today'},
+   {k:'jenis',l:'Jenis',t:'select',o:['Rapat Dinas','Koordinasi','Komite Sekolah','Orang Tua / Wali','Lainnya']},
+   {k:'pimpinan',l:'Pimpinan rapat'},{k:'peserta',l:'Peserta'},
+   {k:'notulen',l:'Notulen / pembahasan',t:'textarea',w:1},
+   {k:'keputusan',l:'Keputusan',t:'textarea',w:1}],
+  cols:[['Tanggal',r=>fmt(r.tanggal)],['Rapat',r=>`<b>${esc(r.judul)}</b><small>${esc(cut(r.notulen))}</small>`],['Jenis',r=>tag(r.jenis)],['Keputusan',r=>`<small>${esc(cut(r.keputusan,120))||'—'}</small>`]],
+  extra:[['Buat tugas','toTugas']]},
+ tugas:{label:'Tugas & Tindak Lanjut',one:'Tugas',desc:'Penugasan dan tindak lanjut hasil rapat, supervisi, atau disposisi.',filter:'status',sort:'tenggat',dir:1,
+  fields:[
+   {k:'tugas',l:'Uraian tugas',req:1,w:1},
+   {k:'pj',l:'Penanggung jawab'},{k:'sumber',l:'Sumber (rapat, supervisi, dll.)'},
+   {k:'tenggat',l:'Tenggat',t:'date'},
+   {k:'prioritas',l:'Prioritas',t:'select',o:['Sedang','Tinggi','Rendah']},
+   {k:'status',l:'Status',t:'select',o:['Belum','Proses','Selesai']},
+   {k:'catatan',l:'Catatan / hasil',t:'textarea',w:1}],
+  cols:[['Tugas',r=>`<b>${esc(r.tugas)}</b><small>${esc(r.sumber)}</small>`],['Penanggung jawab',r=>esc(r.pj)||'—'],['Tenggat',r=>due(r.tenggat,r.status==='Selesai')],['Prioritas',r=>tag(r.prioritas)],['Status',r=>tag(r.status)]],
+  extra:[['Selesai','done']]},
+ supervisi:{label:'Supervisi Guru & Tendik',one:'Supervisi',desc:'Tugas pokok supervisi: jadwal, hasil, temuan, dan tindak lanjut supervisi guru dan tenaga kependidikan.',filter:'status',sort:'tanggal',dir:-1,
+  fields:[
+   {k:'sasaran',l:'Sasaran',t:'select',o:['Guru','Tenaga Kependidikan']},{k:'guru',l:'Nama guru / tendik',req:1},
+   {k:'mapel',l:'Mata pelajaran / bagian'},
+   {k:'kelas',l:'Kelas'},{k:'tanggal',l:'Tanggal',t:'date',req:1,def:'today'},
+   {k:'jenis',l:'Jenis',t:'select',o:['Akademik (kelas)','Administrasi pembelajaran','Manajerial']},
+   {k:'status',l:'Status',t:'select',o:['Terjadwal','Terlaksana','Perlu Tindak Lanjut','Tuntas']},
+   {k:'nilai',l:'Nilai (0–100)',t:'number'},
+   {k:'temuan',l:'Temuan / catatan observasi',t:'textarea',w:1},
+   {k:'tindak',l:'Rencana tindak lanjut',t:'textarea',w:1}],
+  cols:[['Tanggal',r=>fmt(r.tanggal)],['Guru / tendik',r=>`<b>${esc(r.guru)}</b><small>${esc([r.sasaran,r.mapel,r.kelas].filter(Boolean).join(' · '))}</small>`],['Jenis',r=>esc(r.jenis)],['Nilai',r=>r.nilai!==''&&r.nilai!=null?`<b>${esc(r.nilai)}</b>`:'—'],['Status',r=>tag(r.status)]],
+  extra:[['Buat tugas','toTugas']]},
+ kesiswaan:{label:'Kesiswaan',one:'Catatan siswa',desc:'Prestasi, pelanggaran, mutasi, dan catatan perkembangan siswa.',filter:'kategori',sort:'tanggal',dir:-1,
+  fields:[
+   {k:'siswa',l:'Nama siswa',req:1},{k:'kelas',l:'Kelas'},
+   {k:'tanggal',l:'Tanggal',t:'date',req:1,def:'today'},
+   {k:'kategori',l:'Kategori',t:'select',o:['Prestasi','Pelanggaran','Konseling','Mutasi Masuk','Mutasi Keluar','Lainnya']},
+   {k:'uraian',l:'Uraian',t:'textarea',w:1},
+   {k:'tindak',l:'Tindak lanjut',t:'textarea',w:1},
+   {k:'status',l:'Status',t:'select',o:['Proses','Selesai']}],
+  cols:[['Tanggal',r=>fmt(r.tanggal)],['Siswa',r=>`<b>${esc(r.siswa)}</b><small>${esc(r.kelas)}</small>`],['Kategori',r=>tag(r.kategori)],['Uraian',r=>`<small>${esc(cut(r.uraian,120))}</small>`],['Status',r=>tag(r.status)]]},
+ agenda:{label:'Agenda',one:'Agenda',desc:'Kalender kegiatan kepala sekolah dan sekolah.',filter:'kategori',sort:'tanggal',dir:1,
+  fields:[
+   {k:'kegiatan',l:'Kegiatan',req:1,w:1},
+   {k:'tanggal',l:'Tanggal',t:'date',req:1,def:'today'},{k:'waktu',l:'Waktu',t:'time'},
+   {k:'tempat',l:'Tempat'},
+   {k:'kategori',l:'Kategori',t:'select',o:['Akademik','Rapat','Dinas Luar','Kesiswaan','Hari Besar','Lainnya']},
+   {k:'ket',l:'Keterangan',t:'textarea',w:1}],
+  cols:[['Tanggal',r=>`${fmt(r.tanggal,{weekday:'short',day:'numeric',month:'short',year:'numeric'})}<small>${esc(r.waktu)}</small>`],['Kegiatan',r=>`<b>${esc(r.kegiatan)}</b><small>${esc(cut(r.ket))}</small>`],['Tempat',r=>esc(r.tempat)||'—'],['Kategori',r=>tag(r.kategori)]]},
+ sarana:{label:'Sarana & Prasarana',one:'Sarana',desc:'Inventaris ringkas dan kondisi sarana prasarana.',filter:'kondisi',sort:'nama',dir:1,
+  fields:[
+   {k:'nama',l:'Nama barang / ruang',req:1,w:1},
+   {k:'kategori',l:'Kategori',t:'select',o:['Ruang','Mebel','Elektronik','Buku & Alat Peraga','Lainnya']},
+   {k:'lokasi',l:'Lokasi'},
+   {k:'jumlah',l:'Jumlah',t:'number',def:1},{k:'tahun',l:'Tahun perolehan',t:'number'},
+   {k:'kondisi',l:'Kondisi',t:'select',o:['Baik','Rusak Ringan','Rusak Berat']},
+   {k:'ket',l:'Keterangan / kebutuhan perbaikan',t:'textarea',w:1}],
+  cols:[['Nama',r=>`<b>${esc(r.nama)}</b><small>${esc(cut(r.ket))}</small>`],['Kategori',r=>esc(r.kategori)],['Lokasi',r=>esc(r.lokasi)||'—'],['Jumlah',r=>esc(r.jumlah)],['Tahun',r=>esc(r.tahun)||'—'],['Kondisi',r=>tag(r.kondisi)]]}
+};
+Object.assign(MODS,{
+ jurnal:{label:'Jurnal Harian',one:'Catatan jurnal',desc:'Catatan kegiatan harian kepala sekolah, dikelompokkan menurut tugas pokok dan peran EMASLIM.',filter:'tp',sort:'tanggal',dir:-1,
+  fields:[
+   {k:'kegiatan',l:'Kegiatan',req:1,w:1},
+   {k:'tanggal',l:'Tanggal',t:'date',req:1,def:'today'},
+   {k:'tp',l:'Tugas pokok',t:'select',o:['Manajerial','Pengembangan Kewirausahaan','Supervisi Guru & Tendik']},
+   {k:'peran',l:'Peran (EMASLIM)',t:'select',o:['Edukator','Manajer','Administrator','Supervisor','Leader','Inovator','Motivator']},
+   {k:'bukti',l:'Bukti / tautan dokumen'},
+   {k:'hasil',l:'Hasil',t:'textarea',w:1},
+   {k:'tindak',l:'Tindak lanjut',t:'textarea',w:1}],
+  cols:[['Tanggal',r=>fmt(r.tanggal)],['Kegiatan',r=>`<b>${esc(r.kegiatan)}</b><small>${esc(cut(r.hasil,120))}</small>`],['Tugas pokok',r=>tag(r.tp)],['Peran',r=>tag(r.peran)],['Bukti',r=>`<small>${esc(cut(r.bukti,40))||'—'}</small>`]]},
+ wira:{label:'Kewirausahaan & Kemitraan',one:'Kegiatan',desc:'Tugas pokok pengembangan kewirausahaan: inovasi layanan, kemitraan, unit usaha, dan penggalian sumber daya.',filter:'status',sort:'mulai',dir:-1,
+  fields:[
+   {k:'nama',l:'Nama kegiatan / program',req:1,w:1},
+   {k:'jenis',l:'Jenis',t:'select',o:['Inovasi layanan sekolah','Kemitraan','Unit usaha / koperasi','Kewirausahaan murid','Penggalian sumber daya','Lainnya']},
+   {k:'mitra',l:'Mitra'},{k:'pj',l:'Penanggung jawab'},
+   {k:'mulai',l:'Mulai',t:'date',def:'today'},
+   {k:'status',l:'Status',t:'select',o:['Rencana','Berjalan','Selesai']},
+   {k:'hasil',l:'Hasil / manfaat bagi sekolah',t:'textarea',w:1}],
+  cols:[['Kegiatan',r=>`<b>${esc(r.nama)}</b><small>${esc(cut(r.hasil,110))}</small>`],['Jenis',r=>esc(r.jenis)],['Mitra',r=>esc(r.mitra)||'—'],['Penanggung jawab',r=>esc(r.pj)||'—'],['Mulai',r=>fmt(r.mulai)],['Status',r=>tag(r.status)]]},
+ gtk:{label:'Guru & Tendik',one:'Guru / tendik',desc:'Data ringkas guru dan tenaga kependidikan, pembagian tugas, dan catatan pengembangan kompetensi.',filter:'jenis',sort:'nama',dir:1,
+  fields:[
+   {k:'nama',l:'Nama (dengan gelar)',req:1,w:1},
+   {k:'jenis',l:'Jenis',t:'select',o:['Guru','Tenaga Kependidikan']},
+   {k:'kepeg',l:'Status kepegawaian',t:'select',o:['PNS','PPPK','GTY / PTY','Honorer','Lainnya']},
+   {k:'tugas',l:'Mata pelajaran / bagian'},{k:'tambahan',l:'Tugas tambahan'},
+   {k:'pengembangan',l:'Catatan pengembangan kompetensi',t:'textarea',w:1}],
+  cols:[['Nama',r=>`<b>${esc(r.nama)}</b><small>${esc(cut(r.pengembangan,100))}</small>`],['Jenis',r=>tag(r.jenis)],['Kepegawaian',r=>esc(r.kepeg)],['Mapel / bagian',r=>esc(r.tugas)||'—'],['Tugas tambahan',r=>esc(r.tambahan)||'—']]}
+});
+/* tugas pokok dan fungsi: [id, kegiatan, bukti yang lazim, modul terkait] */
+const TP=[
+ {k:'man',nama:'Manajerial',desc:'Merencanakan, mengorganisasi, melaksanakan, dan mengendalikan seluruh sumber daya sekolah agar tujuan sekolah tercapai.',items:[
+  ['m1','Merumuskan atau meninjau visi, misi, dan tujuan sekolah','Dokumen visi-misi, berita acara peninjauan'],
+  ['m2','Menyusun Rencana Kerja Jangka Menengah (RKJM)','Dokumen RKJM 4 tahun'],
+  ['m3','Menyusun Rencana Kerja Tahunan (RKT) dan RKAS','Dokumen RKT dan RKAS','program'],
+  ['m4','Melakukan evaluasi diri dan perencanaan berbasis data Rapor Pendidikan','Hasil identifikasi, refleksi, dan benahi'],
+  ['m5','Mengembangkan dan mengesahkan kurikulum satuan pendidikan','Dokumen kurikulum, kalender pendidikan'],
+  ['m6','Membagi tugas guru dan tenaga kependidikan','SK pembagian tugas, jadwal pelajaran','gtk'],
+  ['m7','Mengelola peserta didik: penerimaan, pembinaan, dan mutasi','Data murid, program kesiswaan','kesiswaan'],
+  ['m8','Mengelola sarana dan prasarana','Buku inventaris, rencana pemeliharaan','sarana'],
+  ['m9','Mengelola keuangan sekolah secara transparan dan akuntabel','BKU, laporan realisasi, pertanggungjawaban'],
+  ['m10','Mengelola ketatausahaan dan sistem informasi sekolah','Agenda surat, pemutakhiran Dapodik'],
+  ['m11','Mengelola hubungan dengan komite, orang tua, dan masyarakat','Notulen rapat komite, program humas','rapat'],
+  ['m12','Mewujudkan lingkungan belajar yang aman, nyaman, dan inklusif','SK tim pencegahan kekerasan, tata tertib, program inklusi'],
+  ['m13','Memantau, mengevaluasi, dan melaporkan pelaksanaan program','Laporan monev, laporan tahunan','laporan']]},
+ {k:'wir',nama:'Pengembangan Kewirausahaan',desc:'Menumbuhkan inovasi, kerja keras, kemandirian, dan kemitraan untuk menambah sumber daya dan mutu layanan sekolah.',items:[
+  ['k1','Menyusun program pengembangan kewirausahaan sekolah','Dokumen program','wira'],
+  ['k2','Melaksanakan inovasi program atau layanan sekolah','Deskripsi inovasi, dokumentasi','wira'],
+  ['k3','Menjalin kemitraan dengan dunia usaha, lembaga, perguruan tinggi, atau alumni','Naskah kerja sama (MoU)','wira'],
+  ['k4','Mengembangkan unit usaha, koperasi, kantin sehat, atau kegiatan wirausaha murid','Laporan kegiatan dan pembukuan','wira'],
+  ['k5','Menggali sumber daya dan pendanaan tambahan yang sah','Proposal, bukti bantuan atau hibah','wira'],
+  ['k6','Mengevaluasi program kewirausahaan','Laporan evaluasi','wira']]},
+ {k:'sup',nama:'Supervisi Guru & Tendik',desc:'Merencanakan, melaksanakan, dan menindaklanjuti supervisi untuk meningkatkan mutu pembelajaran dan layanan.',items:[
+  ['s1','Menyusun program supervisi guru','Program dan jadwal supervisi akademik','supervisi'],
+  ['s2','Melaksanakan supervisi guru (pra-observasi, observasi, pasca-observasi)','Instrumen terisi, catatan percakapan','supervisi'],
+  ['s3','Menindaklanjuti hasil supervisi guru','Umpan balik, rencana pengembangan, komunitas belajar','tugas'],
+  ['s4','Menyusun program supervisi tenaga kependidikan','Program dan jadwal supervisi tendik','supervisi'],
+  ['s5','Melaksanakan supervisi tenaga kependidikan','Instrumen terisi','supervisi'],
+  ['s6','Menindaklanjuti hasil supervisi tenaga kependidikan','Rencana pembinaan','tugas'],
+  ['s7','Menyusun laporan supervisi dan penilaian kinerja guru dan tendik','Laporan supervisi, hasil penilaian kinerja','laporan']]}
+];
+const EMASLIM=[['Edukator','Membina guru, tendik, dan murid serta menjadi teladan dalam pembelajaran.'],['Manajer','Merencanakan, mengorganisasi, menggerakkan, dan mengendalikan sumber daya sekolah.'],['Administrator','Menata administrasi kurikulum, kesiswaan, kepegawaian, keuangan, sarana, dan persuratan.'],['Supervisor','Mengamati, menilai, dan membina kinerja guru dan tenaga kependidikan.'],['Leader','Menetapkan arah, mengambil keputusan, dan menggerakkan warga sekolah.'],['Inovator','Mencari dan menerapkan pembaruan dalam program dan layanan sekolah.'],['Motivator','Membangun semangat dan iklim kerja lewat penghargaan, dukungan, dan keteladanan.']];
+const ck=id=>db.ceklis[id]||{};
+const ckStat=t=>{const n=t.items.length,d=t.items.filter(i=>ck(i[0]).s==='Selesai').length,p=t.items.filter(i=>ck(i[0]).s==='Proses').length;return{n,d,p,pct:Math.round((d+p*.5)/n*100)}};
+const NAV=[['Utama',['dasbor','tupoksi','jurnal']],['Tugas manajerial',['program','rapat','tugas','gtk','kesiswaan','sarana','agenda']],['Kewirausahaan',['wira']],['Supervisi',['supervisi']],['Lainnya',['laporan','pengaturan']]];
+const LABEL={dasbor:'Dasbor',tupoksi:'Peta Tupoksi',laporan:'Laporan',pengaturan:'Pengaturan'};
+const VIEWS=NAV.flatMap(g=>g[1]);
+const ui={view:'dasbor',q:'',f:'',cal:null,rep:null};
+
+/* ================= kerangka ================= */
+function drawNav(){
+  const open=db.tugas.filter(t=>t.status!=='Selesai').length;
+  $('#nav').innerHTML=NAV.map(([g,items])=>`<h4>${g}</h4>`+items.map(v=>
+    `<a href="#${v}" class="${ui.view===v?'on':''}">${ic(v)}<span>${MODS[v]?MODS[v].label:LABEL[v]}</span>${v==='tugas'&&open?`<i>${open}</i>`:''}</a>`).join('')).join('');
+  const p=db.profil;
+  $('#sch').innerHTML=`<b>${esc(p.sekolah||'Nama sekolah belum diisi')}</b>${esc(p.tahun?'Tahun ajaran '+p.tahun:'Lengkapi di Pengaturan')}`;
+}
+function render(){
+  drawNav();document.body.classList.remove('menu');
+  const v=ui.view;
+  if(v==='dasbor')viewDasbor();else if(v==='tupoksi')viewTupoksi();else if(v==='laporan')viewLaporan();else if(v==='pengaturan')viewPengaturan();else viewList(v);
+  window.scrollTo(0,0);
+}
+function route(){const h=location.hash.slice(1);ui.view=VIEWS.includes(h)?h:'dasbor';ui.q='';ui.f='';render()}
+const warn=()=>storageOK?'':'<div class="note">Penyimpanan browser tidak tersedia di sini, jadi data hilang saat halaman ditutup. Gunakan Cadangkan data di Pengaturan sebelum keluar.</div>';
+
+/* ================= dasbor ================= */
+function viewDasbor(){
+  const t=today(),p=db.profil,h=new Date().getHours();
+  const sapa=h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam';
+  const kosong=Object.keys(MODS).every(m=>!db[m].length);
+  const prog=db.program,pd=prog.filter(x=>x.status==='Selesai').length;
+  const tOpen=db.tugas.filter(x=>x.status!=='Selesai'),tLate=tOpen.filter(x=>x.tenggat&&x.tenggat<t);
+  const sv=db.supervisi,svDone=sv.filter(x=>x.status!=='Terjadwal').length,svTL=sv.filter(x=>x.status==='Perlu Tindak Lanjut');
+  const ag=db.agenda.filter(x=>x.tanggal>=t).sort((a,b)=>(a.tanggal+(a.waktu||'')).localeCompare(b.tanggal+(b.waktu||'')));
+  const ag7=ag.filter(x=>x.tanggal<=plus(7)).length;
+  const rusak=db.sarana.filter(x=>x.kondisi==='Rusak Berat');
+  const pLate=prog.filter(x=>x.status!=='Selesai'&&x.tenggat&&x.tenggat<t);
+  const att=[
+    ...tLate.map(x=>['tugas',x.tugas,`Tugas lewat tenggat ${fmt(x.tenggat)}${x.pj?' · '+x.pj:''}`,'Terlambat','bad']),
+    ...svTL.map(x=>['supervisi',x.guru,`Supervisi ${fmt(x.tanggal)} belum ditindaklanjuti`,'Tindak lanjut','warn']),
+    ...pLate.map(x=>['program',x.nama,`Program lewat tenggat ${fmt(x.tenggat)} · progres ${Number(x.progres)||0}%`,'Program','warn']),
+    ...rusak.map(x=>['sarana',x.nama,`Rusak berat${x.lokasi?' · '+x.lokasi:''}`,'Sarana','bad'])];
+  $('#main').innerHTML=`${warn()}${db.demo?'<div class="note">Yang tampil sekarang adalah <b>data contoh (dumi)</b>, bukan data sekolah sebenarnya. Setelah selesai mencoba, hapus lewat tombol ini lalu isi data asli. <button class="btn sm" data-act="reset" style="margin-left:6px">Hapus data contoh</button></div>':''}
+  <div class="head"><div><h1>${sapa}${p.kepala?', '+esc(p.kepala):''}</h1><p>${new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}${p.sekolah?' · '+esc(p.sekolah):''}</p></div>
+   <div><button class="btn pri" data-act="add" data-m="tugas">${ic('plus')}Tugas baru</button> <button class="btn" data-act="add" data-m="jurnal">${ic('plus')}Jurnal</button> <button class="btn" data-act="add" data-m="agenda">${ic('plus')}Agenda</button></div></div>
+  ${kosong?`<div class="card" style="margin-bottom:16px"><h3>Aplikasi masih kosong</h3><p style="margin:0 0 12px;color:var(--ink2)">Isi profil sekolah di Pengaturan, lalu mulai catat program, rapat, tugas, dan supervisi. Ingin melihat tampilannya dulu? Muat data contoh, nanti bisa dihapus.</p><a class="btn pri" href="#pengaturan">Isi profil sekolah</a> <button class="btn gold" data-act="seed">Muat data contoh</button></div>`:''}
+  <div class="stats">
+   <a class="stat" href="#program"><div class="dot t-brand">${ic('program')}</div><div><small>Program selesai</small><b>${pd}<span> / ${prog.length}</span></b><em>${prog.length?'rata-rata progres '+Math.round(prog.reduce((s,x)=>s+(Number(x.progres)||0),0)/prog.length)+'%':'belum ada program'}</em></div></a>
+   <a class="stat" href="#tugas"><div class="dot t-gold">${ic('tugas')}</div><div><small>Tugas belum tuntas</small><b>${tOpen.length}</b><em>${tLate.length?tLate.length+' terlambat':'tidak ada yang terlambat'}</em></div></a>
+   <a class="stat" href="#supervisi"><div class="dot t-ok">${ic('supervisi')}</div><div><small>Supervisi terlaksana</small><b>${svDone}<span> / ${sv.length}</span></b><em>${svTL.length} perlu tindak lanjut</em></div></a>
+   <a class="stat" href="#agenda"><div class="dot t-bad">${ic('agenda')}</div><div><small>Agenda 7 hari ke depan</small><b>${ag7}</b><em>${ag.length} agenda mendatang</em></div></a>
+  </div>
+  <div class="grid2">
+   <div class="card"><h3>Keterlaksanaan tugas pokok <a href="#tupoksi">Buka ceklis</a></h3>
+    ${TP.map(x=>{const s=ckStat(x);return `<div class="prog"><div class="l">${x.nama}<span>${s.d} dari ${s.n} selesai</span></div><div class="pb ${s.d===s.n?'done':''}"><i style="width:${s.pct}%"></i></div></div>`}).join('')}</div>
+   <div class="card"><h3>Sebaran peran EMASLIM <a href="#jurnal">Jurnal harian</a></h3>
+    ${(()=>{const j=db.jurnal.filter(x=>x.tanggal>=plus(-30)),c=EMASLIM.map(e=>[e[0],j.filter(x=>x.peran===e[0]).length]),mx=Math.max(1,...c.map(x=>x[1]));
+      return j.length?c.map(x=>`<div style="display:flex;align-items:center;gap:10px;padding:4px 0"><span style="width:104px;font-weight:600">${x[0]}</span><div class="pb" style="flex:1"><i style="width:${x[1]/mx*100}%;background:var(--gold)"></i></div><b style="width:22px;text-align:right">${x[1]}</b></div>`).join('')+'<p style="margin:8px 0 0;font-size:12px;color:var(--mute)">Jumlah catatan jurnal 30 hari terakhir per peran.</p>':'<div class="empty">Isi Jurnal Harian untuk melihat peran mana yang paling sering dan paling jarang dijalankan.</div>'})()}</div>
+  </div>
+  <div class="grid2">
+   <div class="card"><h3>Perlu perhatian <span class="tag ${att.length?'bad':'ok'}">${att.length}</span></h3>
+    ${att.length?att.slice(0,8).map(a=>`<div class="rowi"><div><b><a href="#${a[0]}" style="color:inherit;text-decoration:none">${esc(a[1])}</a></b><span>${esc(a[2])}</span></div><span class="tag ${a[4]}">${a[3]}</span></div>`).join(''):'<div class="empty">Tidak ada yang mendesak. Semua terkendali.</div>'}</div>
+   <div class="card"><h3>Agenda terdekat <a href="#agenda">Lihat kalender</a></h3>
+    ${ag.length?ag.slice(0,6).map(a=>{const d=toDate(a.tanggal);return `<div class="rowi"><div class="when">${d.getDate()}<small>${d.toLocaleDateString('id-ID',{month:'short'})}</small></div><div><b>${esc(a.kegiatan)}</b><span>${esc([a.waktu,a.tempat].filter(Boolean).join(' · ')||a.kategori||'')}</span></div></div>`}).join(''):'<div class="empty">Belum ada agenda mendatang.</div>'}</div>
+  </div>
+  <div class="grid2">
+   <div class="card"><h3>Progres program <a href="#program">Semua program</a></h3>
+    ${prog.length?prog.slice().sort((a,b)=>(a.tenggat||'9').localeCompare(b.tenggat||'9')).slice(0,6).map(x=>{const n=Math.max(0,Math.min(100,Number(x.progres)||0));return `<div class="prog"><div class="l">${esc(x.nama)}<span>${n}%</span></div><div class="pb ${n>=100?'done':''}"><i style="width:${n}%"></i></div></div>`}).join(''):'<div class="empty">Belum ada program.</div>'}</div>
+   <div class="card"><h3>Tugas berjalan <a href="#tugas">Semua tugas</a></h3>
+    ${tOpen.length?tOpen.slice().sort((a,b)=>(a.tenggat||'9').localeCompare(b.tenggat||'9')).slice(0,6).map(x=>`<div class="rowi"><div><b>${esc(x.tugas)}</b><span>${esc(x.pj||'Belum ada penanggung jawab')} · tenggat ${fmt(x.tenggat)}</span></div><span class="tag ${x.tenggat&&x.tenggat<t?'bad':TONE[x.status]}">${x.tenggat&&x.tenggat<t?'Terlambat':esc(x.status)}</span></div>`).join(''):'<div class="empty">Tidak ada tugas terbuka.</div>'}</div>
+  </div>`;
+}
+
+/* ================= tupoksi ================= */
+function viewTupoksi(){
+  $('#main').innerHTML=`<div class="head"><div><h1>Peta Tupoksi Kepala Sekolah</h1><p>Tiga tugas pokok, tujuh fungsi, dan ceklis keterlaksanaannya pada tahun ajaran berjalan.</p></div><button class="btn" data-act="ckreset">Kosongkan ceklis</button></div>
+  <div class="grid2">
+   <div class="card"><h3>Tiga tugas pokok</h3>${TP.map(t=>{const s=ckStat(t);return `<div class="prog"><div class="l">${t.nama}<span>${s.pct}%</span></div><div class="pb ${s.d===s.n?'done':''}"><i style="width:${s.pct}%"></i></div><small style="display:block;color:var(--ink2);margin-top:6px">${t.desc}</small></div>`}).join('')}
+    <p style="margin:12px 0 0;font-size:12px;color:var(--mute)">Rujukan: beban kerja kepala sekolah menurut PP 19/2017 dan Permendikbud 15/2018, penugasan menurut Permendikdasmen 7/2025, kompetensi menurut Permendikdasmen 21/2025. Butir ceklis adalah rincian kerja yang lazim; sesuaikan dengan petunjuk dinas dan instrumen penilaian kinerja yang berlaku.</p></div>
+   <div class="card"><h3>Tujuh fungsi (EMASLIM)</h3>${EMASLIM.map(e=>`<div class="rowi"><div><b>${e[0]}</b><span>${e[1]}</span></div></div>`).join('')}</div>
+  </div>
+  ${TP.map(t=>{const s=ckStat(t);return `<div class="card" style="margin-bottom:16px"><h3>${t.nama}<span class="tag ${s.d===s.n?'ok':'info'}">${s.d} dari ${s.n} selesai</span></h3>
+   ${t.items.map((i,n)=>{const c=ck(i[0]);return `<div class="ckr"><div class="no">${n+1}</div><div><b>${i[1]}</b><span>Bukti: ${i[2]}${i[3]?` · <a href="#${i[3]}">buka ${(MODS[i[3]]?MODS[i[3]].label:LABEL[i[3]])}</a>`:''}</span></div>
+    <select class="inp ck" data-id="${i[0]}" data-f="s">${['Belum','Proses','Selesai'].map(o=>`<option ${(c.s||'Belum')===o?'selected':''}>${o}</option>`).join('')}</select>
+    <input class="inp ck" data-id="${i[0]}" data-f="c" placeholder="Catatan / lokasi bukti" value="${esc(c.c)}"></div>`}).join('')}</div>`}).join('')}`;
+}
+
+/* ================= daftar ================= */
+function viewList(m){
+  const M=MODS[m],fo=M.fields.find(f=>f.k===M.filter);
+  $('#main').innerHTML=`${warn()}
+  <div class="head"><div><h1>${M.label}</h1><p>${M.desc}</p></div><button class="btn pri" data-act="add" data-m="${m}">${ic('plus')}Tambah ${M.one.toLowerCase()}</button></div>
+  ${m==='agenda'?'<div id="calbox"></div>':''}
+  <div class="bar"><input class="inp" id="q" placeholder="Cari…" value="${esc(ui.q)}">
+   ${fo?`<select class="inp" id="f"><option value="">Semua ${fo.l.toLowerCase()}</option>${fo.o.map(o=>`<option ${ui.f===o?'selected':''}>${esc(o)}</option>`).join('')}</select>`:''}
+   <span class="sp"></span><span id="cnt" style="color:var(--ink2)"></span></div>
+  <div class="tw" id="tw"></div>`;
+  if(m==='agenda')drawCal();
+  drawTable(m);
+}
+function drawTable(m){
+  const M=MODS[m],q=ui.q.trim().toLowerCase();
+  let rows=db[m].filter(r=>(!ui.f||r[M.filter]===ui.f)&&(!q||Object.values(r).join(' ').toLowerCase().includes(q)));
+  rows.sort((a,b)=>String(a[M.sort]||'').localeCompare(String(b[M.sort]||''))*M.dir);
+  $('#cnt').textContent=rows.length+' dari '+db[m].length+' data';
+  $('#tw').innerHTML=rows.length?`<table><thead><tr>${M.cols.map(c=>`<th>${c[0]}</th>`).join('')}<th></th></tr></thead><tbody>${rows.map(r=>
+   `<tr>${M.cols.map(c=>`<td>${c[1](r)}</td>`).join('')}<td class="act">${(M.extra||[]).filter(e=>!(e[1]==='done'&&r.status==='Selesai')).map(e=>`<button class="btn sm" data-act="${e[1]}" data-m="${m}" data-id="${r.id}">${e[0]}</button> `).join('')}<button class="btn sm ghost" data-act="edit" data-m="${m}" data-id="${r.id}">Ubah</button><button class="btn sm ghost" data-act="del" data-m="${m}" data-id="${r.id}">Hapus</button></td></tr>`).join('')}</tbody></table>`
+   :`<div class="empty" style="padding:38px 16px">${db[m].length?'Tidak ada data yang cocok dengan pencarian.':'Belum ada data. Klik “Tambah '+M.one.toLowerCase()+'” untuk memulai.'}</div>`;
+}
+function drawCal(){
+  if(!ui.cal){const d=new Date();ui.cal={y:d.getFullYear(),m:d.getMonth()}}
+  const {y,m}=ui.cal,first=new Date(y,m,1),lead=(first.getDay()+6)%7,n=new Date(y,m+1,0).getDate(),t=today();
+  const ev={};const push=(d,c,s)=>{if(d)(ev[d]=ev[d]||[]).push([c,s])};
+  db.agenda.forEach(a=>push(a.tanggal,'a',(a.waktu?a.waktu+' ':'')+a.kegiatan));
+  db.supervisi.forEach(s=>push(s.tanggal,'s','Supervisi '+s.guru));
+  db.tugas.filter(x=>x.status!=='Selesai').forEach(x=>push(x.tenggat,'t','Tenggat: '+x.tugas));
+  let cells='';for(let i=0;i<lead;i++)cells+='<div class="d off"></div>';
+  for(let d=1;d<=n;d++){const k=iso(new Date(y,m,d)),e=ev[k]||[],dow=new Date(y,m,d).getDay();
+    cells+=`<button class="d ${k===t?'today':''} ${dow===0?'sun':''}" data-act="calday" data-d="${k}" title="Tambah agenda ${fmt(k)}"><span class="n">${d}</span>${e.slice(0,3).map(x=>`<span class="ev ${x[0]}">${esc(x[1])}</span>`).join('')}${e.length>3?`<span class="ev" style="color:var(--mute)">+${e.length-3} lagi</span>`:''}</button>`}
+  const tail=(7-(lead+n)%7)%7;for(let i=0;i<tail;i++)cells+='<div class="d off"></div>';
+  $('#calbox').innerHTML=`<div class="bar"><button class="btn sm" data-act="calnav" data-n="-1">‹</button><b style="font-size:16px;min-width:150px;text-align:center">${first.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</b><button class="btn sm" data-act="calnav" data-n="1">›</button><button class="btn sm ghost" data-act="calnav" data-n="0">Hari ini</button><span class="sp"></span>
+   <span class="legend"><span><i style="background:var(--brand)"></i>Agenda</span><span><i style="background:var(--gold)"></i>Supervisi</span><span><i style="background:var(--bad)"></i>Tenggat tugas</span></span></div>
+   <div class="cal">${['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map(d=>`<div class="dh">${d}</div>`).join('')}${cells}</div>`;
+}
+
+/* ================= form & dialog ================= */
+function modal(html,small){$('#dlg').className='dlg'+(small?' sm':'');$('#dlg').innerHTML=html;$('#ov').classList.add('show');const f=$('#dlg input,#dlg textarea,#dlg select');if(f&&!small)f.focus()}
+function closeModal(){$('#ov').classList.remove('show');$('#dlg').innerHTML=''}
+function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),2200)}
+function openForm(m,id,preset){
+  const M=MODS[m];let r=id?db[m].find(x=>x.id===id):null;
+  if(!r){r={};M.fields.forEach(f=>{r[f.k]=f.def==='today'?today():f.def!==undefined?f.def:f.t==='select'?f.o[0]:''});Object.assign(r,preset||{})}
+  modal(`<h2>${id?'Ubah':'Tambah'} ${M.one.toLowerCase()}</h2><form id="frm" data-m="${m}" data-id="${id||''}"><div class="fg">${M.fields.map(f=>{
+    const v=r[f.k]??'',a=`class="inp" name="${f.k}" ${f.req?'required':''}`;
+    const el=f.t==='select'?`<select ${a}>${f.o.map(o=>`<option ${v===o?'selected':''}>${esc(o)}</option>`).join('')}</select>`
+      :f.t==='textarea'?`<textarea ${a}>${esc(v)}</textarea>`
+      :`<input ${a} type="${f.t||'text'}" value="${esc(v)}" ${f.k==='progres'||f.k==='nilai'?'min="0" max="100"':''}>`;
+    return `<label class="${f.w||f.t==='textarea'?'w':''}">${f.l}${f.req?' <em>*</em>':''}${el}</label>`}).join('')}</div>
+   <div class="df"><button type="button" class="btn" data-act="close">Batal</button><button class="btn pri">Simpan</button></div></form>`);
+}
+function saveForm(frm){
+  const m=frm.dataset.m,id=frm.dataset.id,M=MODS[m],fd=new FormData(frm),r={};
+  M.fields.forEach(f=>{let v=(fd.get(f.k)||'').toString().trim();if(f.t==='number'&&v!=='')v=Number(v);r[f.k]=v});
+  if(m==='program'){if(r.status==='Selesai')r.progres=100;else if(Number(r.progres)>=100)r.status='Selesai'}
+  if(id)Object.assign(db[m].find(x=>x.id===id),r);else db[m].push(Object.assign({id:uid()},r));
+  save();closeModal();if(ui.view!==m&&ui.view!=='dasbor'){location.hash=m}else render();toast('Tersimpan');
+}
+function askDelete(m,id){modal(`<h2>Hapus data ini?</h2><p style="margin:0;color:var(--ink2)">Data yang dihapus tidak dapat dikembalikan.</p><div class="df"><button class="btn" data-act="close">Batal</button><button class="btn danger" data-act="delok" data-m="${m}" data-id="${id}">Hapus</button></div>`,1)}
+
+/* ================= laporan ================= */
+function viewLaporan(){
+  if(!ui.rep){const d=new Date();ui.rep={a:iso(new Date(d.getFullYear(),d.getMonth(),1)),b:iso(new Date(d.getFullYear(),d.getMonth()+1,0))}}
+  const {a,b}=ui.rep,p=db.profil,inP=d=>d&&d>=a&&d<=b,t=today();
+  const T=(heads,rows)=>rows.length?`<table><thead><tr><th>No</th>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>`<tr><td>${i+1}</td>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`:'<p style="color:var(--mute);margin:0">Tidak ada data pada periode ini.</p>';
+  const rp=db.rapat.filter(x=>inP(x.tanggal)).sort((x,y)=>x.tanggal.localeCompare(y.tanggal));
+  const sv=db.supervisi.filter(x=>inP(x.tanggal)).sort((x,y)=>x.tanggal.localeCompare(y.tanggal));
+  const nilai=sv.filter(x=>x.nilai!==''&&x.nilai!=null).map(x=>Number(x.nilai));
+  const ks=db.kesiswaan.filter(x=>inP(x.tanggal)).sort((x,y)=>x.tanggal.localeCompare(y.tanggal));
+  const ag=db.agenda.filter(x=>inP(x.tanggal)).sort((x,y)=>x.tanggal.localeCompare(y.tanggal));
+  const tg=db.tugas.filter(x=>inP(x.tenggat)||x.status!=='Selesai').sort((x,y)=>(x.tenggat||'9').localeCompare(y.tenggat||'9'));
+  const kond=k=>db.sarana.filter(x=>x.kondisi===k).reduce((s,x)=>s+(Number(x.jumlah)||0),0);
+  $('#main').innerHTML=`<div class="head"><div><h1>Laporan</h1><p>Rekap kegiatan kepala sekolah untuk periode yang dipilih.</p></div></div>
+  <div class="bar"><label>Dari <input type="date" class="inp" id="ra" value="${a}" style="width:auto;display:inline-block"></label><label>sampai <input type="date" class="inp" id="rb" value="${b}" style="width:auto;display:inline-block"></label><span class="sp"></span>
+   <button class="btn" data-act="copyrep">Salin teks</button><button class="btn pri" data-act="print">Cetak / simpan PDF</button></div>
+  <div class="rep" id="rep">
+   <div class="kop"><h2>${esc(p.sekolah||'Nama Sekolah')}</h2><p>Laporan Administrasi Kepala Sekolah${p.tahun?' · Tahun Ajaran '+esc(p.tahun):''}</p><p>Periode ${fmt(a,{day:'numeric',month:'long',year:'numeric'})} s.d. ${fmt(b,{day:'numeric',month:'long',year:'numeric'})}</p></div>
+   <div class="sum"><div><b>${db.program.filter(x=>x.status==='Selesai').length}/${db.program.length}</b><span>Program selesai</span></div><div><b>${rp.length}</b><span>Rapat</span></div><div><b>${sv.length}</b><span>Supervisi${nilai.length?' · rata-rata '+(nilai.reduce((s,x)=>s+x,0)/nilai.length).toFixed(1):''}</span></div><div><b>${db.tugas.filter(x=>x.status!=='Selesai').length}</b><span>Tugas belum tuntas</span></div></div>
+   <h3>A. Keterlaksanaan Tugas Pokok</h3><p style="margin:0 0 8px">${TP.map(x=>{const s=ckStat(x);return `${x.nama}: <b>${s.d}/${s.n}</b> selesai`}).join(' · ')}</p>${T(['Tugas pokok','Kegiatan','Status','Catatan / bukti'],TP.flatMap(x=>x.items.map(i=>[x.nama,i[1],ck(i[0]).s||'Belum',ck(i[0]).c||''])))}
+   <h3>B. Program dan Target</h3>${T(['Program','Bidang','Target','Tenggat','Progres','Status'],db.program.map(x=>[x.nama,x.bidang,x.target,fmt(x.tenggat),(Number(x.progres)||0)+'%',x.status]))}
+   <h3>C. Rapat</h3>${T(['Tanggal','Rapat','Jenis','Keputusan'],rp.map(x=>[fmt(x.tanggal),x.judul,x.jenis,x.keputusan]))}
+   <h3>D. Tugas dan Tindak Lanjut</h3>${T(['Tugas','Penanggung jawab','Tenggat','Status'],tg.map(x=>[x.tugas,x.pj,fmt(x.tenggat),x.status+(x.status!=='Selesai'&&x.tenggat&&x.tenggat<t?' (terlambat)':'')]))}
+   <h3>E. Supervisi Guru dan Tenaga Kependidikan</h3>${T(['Tanggal','Sasaran','Nama','Mapel / Bagian','Nilai','Status','Tindak lanjut'],sv.map(x=>[fmt(x.tanggal),x.sasaran||'Guru',x.guru,[x.mapel,x.kelas].filter(Boolean).join(' / '),x.nilai,x.status,x.tindak]))}
+   <h3>F. Pengembangan Kewirausahaan dan Kemitraan</h3>${T(['Kegiatan','Jenis','Mitra','Status','Hasil'],db.wira.map(x=>[x.nama,x.jenis,x.mitra,x.status,x.hasil]))}
+   <h3>G. Jurnal Harian Kepala Sekolah</h3>${T(['Tanggal','Kegiatan','Tugas pokok','Peran','Hasil','Tindak lanjut'],db.jurnal.filter(x=>inP(x.tanggal)).sort((x,y)=>x.tanggal.localeCompare(y.tanggal)).map(x=>[fmt(x.tanggal),x.kegiatan,x.tp,x.peran,x.hasil,x.tindak]))}
+   <h3>H. Kesiswaan</h3>${T(['Tanggal','Siswa','Kelas','Kategori','Uraian','Status'],ks.map(x=>[fmt(x.tanggal),x.siswa,x.kelas,x.kategori,x.uraian,x.status]))}
+   <h3>I. Agenda Kegiatan</h3>${T(['Tanggal','Kegiatan','Tempat','Kategori'],ag.map(x=>[fmt(x.tanggal),x.kegiatan,x.tempat,x.kategori]))}
+   <h3>J. Sarana dan Prasarana</h3><p style="margin:0 0 8px">Baik: <b>${kond('Baik')}</b> unit · Rusak ringan: <b>${kond('Rusak Ringan')}</b> unit · Rusak berat: <b>${kond('Rusak Berat')}</b> unit</p>${T(['Nama','Lokasi','Jumlah','Kondisi','Keterangan'],db.sarana.filter(x=>x.kondisi!=='Baik').map(x=>[x.nama,x.lokasi,x.jumlah,x.kondisi,x.ket]))}
+   <div class="ttd"><div>${esc(p.kota||'................')}, ${fmt(t,{day:'numeric',month:'long',year:'numeric'})}</div><div>Kepala Sekolah,</div><div class="sp"></div><div><b><u>${esc(p.kepala||'................................')}</u></b></div><div>NIP ${esc(p.nip||'................................')}</div></div>
+  </div>
+  <p class="noprint" style="color:var(--mute);font-size:12.5px;margin-top:12px">Jika tombol Cetak tidak merespons di pratinjau ini, buka aplikasi sebagai berkas HTML di browser, atau gunakan Salin teks.</p>`;
+}
+
+/* ================= pengaturan ================= */
+function viewPengaturan(){
+  const p=db.profil,total=Object.keys(MODS).reduce((s,m)=>s+db[m].length,0);
+  $('#main').innerHTML=`${warn()}<div class="head"><div><h1>Pengaturan</h1><p>Profil sekolah dan pengelolaan data.</p></div></div>
+  <div class="grid2">
+   <form class="card" id="prof"><h3>Profil sekolah</h3><div class="fg">
+    <label class="w">Nama sekolah<input class="inp" name="sekolah" value="${esc(p.sekolah)}"></label>
+    <label class="w">Nama kepala sekolah (dengan gelar)<input class="inp" name="kepala" value="${esc(p.kepala)}"></label>
+    <label>NIP<input class="inp" name="nip" value="${esc(p.nip)}"></label>
+    <label>Tahun ajaran<input class="inp" name="tahun" placeholder="2026/2027" value="${esc(p.tahun)}"></label>
+    <label class="w">Kota / kabupaten (untuk titimangsa laporan)<input class="inp" name="kota" value="${esc(p.kota)}"></label>
+   </div><div class="df"><button class="btn pri">Simpan profil</button></div></form>
+   <div class="card"><h3>Data</h3>
+    <p style="margin:0 0 12px;color:var(--ink2)">Tersimpan <b>${total}</b> catatan di browser perangkat ini. Data tidak dikirim ke mana pun. Cadangkan secara berkala, dan gunakan cadangan itu untuk memindahkan data ke perangkat lain.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px"><button class="btn pri" data-act="backup">Cadangkan data</button><button class="btn" data-act="restore">Pulihkan dari cadangan</button><button class="btn gold" data-act="seed">Muat data contoh</button><button class="btn ghost" data-act="reset" style="color:var(--bad)">Hapus semua data</button></div></div>
+  </div>`;
+}
+function download(name,text){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'application/json'}));a.download=name;document.body.appendChild(a);a.click();a.remove()}catch(e){}}
+function copy(text,ok){try{navigator.clipboard.writeText(text).then(()=>toast(ok),()=>toast('Tidak bisa menyalin otomatis. Blok teks lalu salin manual.'))}catch(e){toast('Tidak bisa menyalin otomatis. Blok teks lalu salin manual.')}}
+function seed(){
+  const P={sekolah:'SMP Negeri Contoh',kepala:'Drs. Nama Kepala Sekolah, M.Pd.',nip:'19700101 199503 1 001',tahun:'2026/2027',kota:'Kota Contoh'};
+  db={profil:P,ceklis:{},demo:true,seeded:true};Object.keys(MODS).forEach(k=>db[k]=[]);
+  const A=(m,keys,rows)=>rows.forEach(r=>{const o={id:uid()};keys.forEach((k,i)=>o[k]=r[i]??'');db[m].push(o)});
+  A('gtk',['nama','jenis','kepeg','tugas','tambahan','pengembangan'],[
+   ['Sari Wulandari, S.Pd.','Guru','PNS','Matematika','Wakil Kurikulum','Narasumber komunitas belajar numerasi.'],
+   ['Bambang Prasetyo, S.Pd.','Guru','PNS','IPA','Wakil Sarana Prasarana','Pelatihan pengelolaan laboratorium.'],
+   ['Rina Kusumawati, M.Pd.','Guru','PNS','Bahasa Indonesia','Koordinator Literasi','Menulis praktik baik literasi.'],
+   ['Agus Setiawan, S.Pd.','Guru','PPPK','PJOK','Wakil Kesiswaan',''],
+   ['Dewi Lestari, S.Pd.','Guru','PPPK','Bahasa Inggris','Wali kelas 8B','Pendampingan asesmen formatif.'],
+   ['Yusuf Hidayat, S.Pd.','Guru','PPPK','IPS','Wali kelas 7A','Pelatihan pembelajaran mendalam.'],
+   ['Maria Kristiani, S.Pd.','Guru','PNS','Bimbingan Konseling','Koordinator BK',''],
+   ['Fajar Nugroho, S.Kom.','Guru','Honorer','Informatika','Wakil Humas','Pelatihan koding dan kecerdasan artifisial.'],
+   ['Sutrisno','Tenaga Kependidikan','PNS','Kepala Tata Usaha','',''],
+   ['Lina Marlina, A.Md.','Tenaga Kependidikan','PPPK','Bendahara','','Bimtek penatausahaan keuangan.'],
+   ['Eko Purnomo','Tenaga Kependidikan','Honorer','Operator Dapodik','Admin web sekolah',''],
+   ['Siti Aminah','Tenaga Kependidikan','Honorer','Pustakawan','','Pelatihan pengelolaan perpustakaan digital.']]);
+  A('program',['nama','bidang','pj','target','tenggat','status','progres','catatan'],[
+   ['Gerakan Literasi 15 Menit','Kurikulum','Rina Kusumawati, M.Pd.','90% murid mengisi jurnal baca tiap minggu',plus(45),'Berjalan',60,''],
+   ['Pelatihan Pembelajaran Mendalam untuk guru','SDM / GTK','Sari Wulandari, S.Pd.','Seluruh guru mengikuti 3 sesi pelatihan di sekolah',plus(20),'Berjalan',35,'Sesi pertama sudah terlaksana.'],
+   ['Penataan laboratorium IPA','Sarana Prasarana','Bambang Prasetyo, S.Pd.','Laboratorium siap pakai sebelum semester genap',plus(-5),'Berjalan',80,'Menunggu pemasangan instalasi air.'],
+   ['Sosialisasi tata tertib dan anti perundungan','Kesiswaan','Agus Setiawan, S.Pd.','Semua kelas menerima sosialisasi',plus(-30),'Selesai',100,''],
+   ['Kelas tambahan persiapan tes kemampuan akademik','Kurikulum','Sari Wulandari, S.Pd.','Rata-rata tryout kelas 9 naik 10 poin',plus(90),'Berjalan',25,''],
+   ['Pemutakhiran web dan media sosial sekolah','Humas','Fajar Nugroho, S.Kom.','Minimal 4 berita kegiatan per bulan',plus(60),'Berjalan',50,''],
+   ['Penyusunan RKAS tahun anggaran berikutnya','Keuangan','Lina Marlina, A.Md.','RKAS disahkan sebelum akhir Desember',plus(40),'Rencana',10,''],
+   ['Sekolah ramah lingkungan','Sarana Prasarana','Bambang Prasetyo, S.Pd.','Bank sampah berjalan dan setiap kelas punya taman',plus(120),'Rencana',0,'']]);
+  A('rapat',['judul','tanggal','jenis','pimpinan','peserta','notulen','keputusan'],[
+   ['Rapat dinas bulanan November',plus(-6),'Rapat Dinas','Kepala Sekolah','Seluruh guru dan karyawan','Evaluasi kegiatan Oktober, persiapan asesmen sumatif, dan kedisiplinan kehadiran.','Jadwal asesmen disahkan. Kisi-kisi dikumpulkan paling lambat akhir pekan depan.'],
+   ['Koordinasi pengurus komite',plus(-14),'Komite Sekolah','Kepala Sekolah','Pengurus komite, wakil kepala sekolah','Paparan program sekolah dan rencana kegiatan akhir semester.','Komite mendukung gelar karya murid dan pasar karya.'],
+   ['Koordinasi wakil kepala sekolah',plus(-2),'Koordinasi','Kepala Sekolah','Empat wakil kepala sekolah, Kepala TU','Pembahasan progres program, sarana rusak, dan agenda dua minggu ke depan.','Proyektor 8B diganti minggu ini. Laporan progres program dikirim tiap Jumat.'],
+   ['Pertemuan orang tua kelas 9',plus(-20),'Orang Tua / Wali','Kepala Sekolah','Orang tua kelas 9, wali kelas','Sosialisasi tes kemampuan akademik dan program kelas tambahan.','Kelas tambahan dimulai awal bulan, dua kali seminggu.'],
+   ['Rapat tim penyusun RKAS',plus(-9),'Koordinasi','Kepala Sekolah','Bendahara, wakil kepala sekolah, komite','Identifikasi kebutuhan dari Rapor Pendidikan dan usulan tiap bidang.','Usulan tiap bidang masuk paling lambat dua minggu lagi.']]);
+  A('tugas',['tugas','pj','sumber','tenggat','prioritas','status','catatan'],[
+   ['Kumpulkan kisi-kisi asesmen sumatif','Sari Wulandari, S.Pd.','Rapat dinas bulanan November',plus(3),'Tinggi','Proses','18 dari 24 mapel sudah masuk.'],
+   ['Ganti proyektor ruang kelas 8B','Bambang Prasetyo, S.Pd.','Koordinasi wakil kepala sekolah',plus(-2),'Sedang','Belum',''],
+   ['Susun laporan kegiatan literasi semester ganjil','Rina Kusumawati, M.Pd.','Program literasi',plus(10),'Sedang','Belum',''],
+   ['Kirim undangan pertemuan orang tua kelas 9','Sutrisno','Disposisi',plus(-22),'Tinggi','Selesai','Terkirim lewat grup kelas.'],
+   ['Kumpulkan usulan anggaran tiap bidang','Lina Marlina, A.Md.','Rapat tim penyusun RKAS',plus(5),'Tinggi','Proses',''],
+   ['Pendampingan asesmen formatif untuk Dewi Lestari','Sari Wulandari, S.Pd.','Supervisi Dewi Lestari',plus(7),'Sedang','Belum',''],
+   ['Mutakhirkan data murid mutasi di Dapodik','Eko Purnomo','Disposisi',plus(-1),'Sedang','Proses',''],
+   ['Unggah berita gelar karya ke web sekolah','Fajar Nugroho, S.Kom.','Program humas',plus(14),'Rendah','Belum',''],
+   ['Jadwalkan pemanggilan orang tua murid terlambat','Maria Kristiani, S.Pd.','Laporan wali kelas',plus(2),'Sedang','Belum',''],
+   ['Serahkan laporan realisasi anggaran triwulan','Lina Marlina, A.Md.','Disposisi',plus(-10),'Tinggi','Selesai','Sudah diserahkan ke dinas.']]);
+  A('supervisi',['sasaran','guru','mapel','kelas','tanggal','jenis','status','nilai','temuan','tindak'],[
+   ['Guru','Sari Wulandari, S.Pd.','Matematika','8A',plus(-12),'Akademik (kelas)','Tuntas',91,'Pembelajaran aktif, diferensiasi sudah tampak.','Berbagi praktik baik di komunitas belajar.'],
+   ['Guru','Rina Kusumawati, M.Pd.','Bahasa Indonesia','7C',plus(-10),'Akademik (kelas)','Tuntas',89,'Kegiatan literasi terintegrasi dengan baik.','Dokumentasikan sebagai praktik baik.'],
+   ['Guru','Dewi Lestari, S.Pd.','Bahasa Inggris','8B',plus(-4),'Akademik (kelas)','Perlu Tindak Lanjut',74,'Refleksi akhir pembelajaran belum dilakukan, asesmen formatif belum terencana.','Pendampingan penyusunan asesmen formatif.'],
+   ['Guru','Yusuf Hidayat, S.Pd.','IPS','7A',plus(-3),'Akademik (kelas)','Terlaksana',85,'Diskusi kelompok hidup, pengelolaan waktu perlu dirapikan.','Percakapan pasca-observasi.'],
+   ['Guru','Agus Setiawan, S.Pd.','PJOK','9B',plus(-7),'Administrasi pembelajaran','Perlu Tindak Lanjut',70,'Modul ajar belum lengkap untuk semester ini.','Lengkapi modul ajar dalam dua minggu.'],
+   ['Guru','Bambang Prasetyo, S.Pd.','IPA','9A',plus(4),'Akademik (kelas)','Terjadwal','','',''],
+   ['Guru','Fajar Nugroho, S.Kom.','Informatika','7B',plus(6),'Akademik (kelas)','Terjadwal','','',''],
+   ['Tenaga Kependidikan','Lina Marlina, A.Md.','Bendahara','',plus(-8),'Manajerial','Tuntas',88,'Pembukuan tertib dan mutakhir.','Pertahankan.'],
+   ['Tenaga Kependidikan','Eko Purnomo','Operator Dapodik','',plus(-5),'Manajerial','Perlu Tindak Lanjut',76,'Data mutasi murid belum dimutakhirkan.','Mutakhirkan data paling lambat akhir pekan.'],
+   ['Tenaga Kependidikan','Siti Aminah','Pustakawan','',plus(9),'Manajerial','Terjadwal','','','']]);
+  A('kesiswaan',['siswa','kelas','tanggal','kategori','uraian','tindak','status'],[
+   ['Murid Contoh A','8B',plus(-3),'Prestasi','Juara 2 lomba cerdas cermat tingkat kota.','Penghargaan saat upacara.','Selesai'],
+   ['Murid Contoh B','7A',plus(-2),'Pelanggaran','Terlambat tiga kali dalam satu minggu.','Pemanggilan orang tua oleh wali kelas.','Proses'],
+   ['Murid Contoh C','9A',plus(-11),'Prestasi','Juara 1 pencak silat tingkat provinsi.','Diusulkan menerima beasiswa prestasi.','Proses'],
+   ['Murid Contoh D','8A',plus(-6),'Konseling','Motivasi belajar menurun, sering tidak mengumpulkan tugas.','Konseling individu dan komunikasi dengan orang tua.','Proses'],
+   ['Murid Contoh E','7C',plus(-15),'Mutasi Masuk','Pindahan dari sekolah luar kota.','Data dimasukkan ke Dapodik.','Selesai'],
+   ['Murid Contoh F','9C',plus(-9),'Pelanggaran','Membawa gawai saat asesmen.','Pembinaan oleh guru BK.','Selesai'],
+   ['Murid Contoh G','8C',plus(-18),'Mutasi Keluar','Pindah mengikuti orang tua.','Surat pindah diterbitkan.','Selesai']]);
+  A('agenda',['kegiatan','tanggal','waktu','tempat','kategori','ket'],[
+   ['Upacara bendera',plus(1),'07:00','Lapangan sekolah','Akademik','Pembina: kepala sekolah.'],
+   ['Rapat MKKS',plus(3),'09:00','Dinas Pendidikan','Dinas Luar',''],
+   ['Supervisi kelas IPA 9A',plus(4),'08:30','Ruang 9A','Akademik',''],
+   ['Pertemuan orang tua kelas 9',plus(6),'08:00','Aula','Kesiswaan','Laporan perkembangan kelas tambahan.'],
+   ['Pelatihan pembelajaran mendalam sesi 2',plus(8),'13:00','Ruang guru','Akademik',''],
+   ['Rapat pleno komite',plus(10),'09:00','Aula','Rapat',''],
+   ['Gelar karya dan pasar karya murid',plus(12),'08:00','Halaman sekolah','Kesiswaan',''],
+   ['Asesmen sumatif akhir semester',plus(17),'07:30','Ruang kelas','Akademik','Berlangsung satu minggu.'],
+   ['Peringatan Hari Guru Nasional',plus(10),'07:00','Lapangan sekolah','Hari Besar',''],
+   ['Rapat dinas bulanan November',plus(-6),'13:00','Ruang guru','Rapat','']]);
+  A('sarana',['nama','kategori','lokasi','jumlah','tahun','kondisi','ket'],[
+   ['Ruang kelas','Ruang','Gedung A dan B',24,2010,'Baik',''],
+   ['Laboratorium IPA','Ruang','Gedung C',1,2012,'Rusak Ringan','Instalasi air sedang diperbaiki.'],
+   ['Proyektor','Elektronik','Ruang kelas',20,2022,'Baik',''],
+   ['Proyektor kelas 8B','Elektronik','Ruang 8B',1,2019,'Rusak Berat','Lampu mati, perlu penggantian.'],
+   ['Komputer laboratorium','Elektronik','Lab komputer',36,2021,'Baik',''],
+   ['Komputer laboratorium','Elektronik','Lab komputer',4,2017,'Rusak Berat','Tidak menyala, diusulkan penghapusan.'],
+   ['Meja murid','Mebel','Ruang kelas',700,2018,'Baik',''],
+   ['Meja murid','Mebel','Gudang',12,2015,'Rusak Ringan','Daun meja perlu dipelitur ulang.'],
+   ['Buku teks utama','Buku & Alat Peraga','Perpustakaan',4200,2024,'Baik',''],
+   ['Toilet murid','Ruang','Gedung B',8,2014,'Rusak Ringan','Dua kran bocor.']]);
+  A('wira',['nama','jenis','mitra','pj','mulai','status','hasil'],[
+   ['Kunjungan belajar ke pelaku usaha setempat','Kemitraan','Sentra kerajinan setempat','Fajar Nugroho, S.Kom.',plus(-3),'Berjalan','Murid belajar proses produksi dan pemasaran secara langsung.'],
+   ['Kantin sehat dikelola koperasi sekolah','Unit usaha / koperasi','Koperasi sekolah','Sutrisno',plus(-60),'Berjalan','Sisa hasil usaha dipakai untuk kegiatan murid.'],
+   ['Pasar karya murid','Kewirausahaan murid','Komite sekolah','Agus Setiawan, S.Pd.',plus(12),'Rencana',''],
+   ['Kelas koding bersama perguruan tinggi','Kemitraan','Perguruan tinggi mitra','Fajar Nugroho, S.Kom.',plus(-25),'Berjalan','Dua puluh murid mengikuti kelas mingguan.'],
+   ['Layanan izin dan presensi daring','Inovasi layanan sekolah','','Eko Purnomo',plus(-40),'Selesai','Orang tua melapor ketidakhadiran lewat formulir daring.'],
+   ['Proposal bantuan buku ke alumni','Penggalian sumber daya','Ikatan alumni','Rina Kusumawati, M.Pd.',plus(-15),'Berjalan','Terkumpul 150 buku bacaan.']]);
+  A('jurnal',['kegiatan','tanggal','tp','peran','bukti','hasil','tindak'],[
+   ['Meninjau visi dan misi bersama tim pengembang sekolah',plus(-27),'Manajerial','Leader','Berita acara','Rumusan misi disederhanakan menjadi lima butir.',''],
+   ['Mengisi sesi pembuka pelatihan pembelajaran mendalam',plus(-24),'Manajerial','Edukator','Daftar hadir, materi','Seluruh guru hadir.','Siapkan sesi kedua.'],
+   ['Menandatangani SK pembagian tugas tambahan',plus(-22),'Manajerial','Administrator','SK pembagian tugas','',''],
+   ['Pertemuan orang tua kelas 9',plus(-20),'Manajerial','Leader','Notulen, daftar hadir','Kelas tambahan disepakati.',''],
+   ['Mengesahkan proposal bantuan buku ke alumni',plus(-15),'Pengembangan Kewirausahaan','Inovator','Proposal','Proposal dikirim.','Pantau tanggapan alumni.'],
+   ['Observasi kelas Matematika 8A',plus(-12),'Supervisi Guru & Tendik','Supervisor','Instrumen supervisi','Diferensiasi berjalan baik.','Minta berbagi di komunitas belajar.'],
+   ['Rapat tim penyusun RKAS',plus(-9),'Manajerial','Manajer','Notulen','Kebutuhan prioritas teridentifikasi.','Tunggu usulan tiap bidang.'],
+   ['Supervisi pembukuan bendahara',plus(-8),'Supervisi Guru & Tendik','Supervisor','Instrumen supervisi tendik','Pembukuan tertib.',''],
+   ['Memimpin rapat dinas bulanan',plus(-6),'Manajerial','Leader','Notulen rapat','Jadwal asesmen disepakati.','Pantau pengumpulan kisi-kisi.'],
+   ['Observasi kelas Bahasa Inggris 8B',plus(-4),'Supervisi Guru & Tendik','Supervisor','Instrumen supervisi','Refleksi pembelajaran belum muncul.','Jadwalkan pendampingan.'],
+   ['Menandatangani kerja sama kunjungan belajar',plus(-3),'Pengembangan Kewirausahaan','Inovator','Naskah kerja sama','Kelas 8 mendapat jadwal kunjungan.',''],
+   ['Memeriksa laporan realisasi anggaran triwulan',plus(-2),'Manajerial','Administrator','Laporan realisasi','Dua pos belanja perlu dipercepat.','Koordinasi dengan bendahara.'],
+   ['Koordinasi wakil kepala sekolah',plus(-2),'Manajerial','Manajer','Notulen','Progres program dipetakan.',''],
+   ['Memberi penghargaan guru dan murid berprestasi saat upacara',plus(-1),'Manajerial','Motivator','Dokumentasi upacara','',''],
+   ['Percakapan pasca-observasi dengan guru IPS',plus(-1),'Supervisi Guru & Tendik','Edukator','Catatan percakapan','Guru menyusun rencana perbaikan pengelolaan waktu.','']]);
+  db.ceklis={m1:{s:'Selesai',c:'Berita acara peninjauan'},m2:{s:'Selesai',c:'RKJM 2025–2029'},m3:{s:'Proses',c:'RKT selesai, RKAS tahun depan disusun'},m4:{s:'Selesai',c:'Hasil identifikasi Rapor Pendidikan'},m5:{s:'Selesai',c:'Disahkan awal tahun ajaran'},m6:{s:'Selesai',c:'SK pembagian tugas'},m7:{s:'Proses',c:''},m8:{s:'Proses',c:'Inventaris dimutakhirkan'},m9:{s:'Proses',c:'Laporan triwulan diserahkan'},m10:{s:'Proses',c:'Data mutasi belum mutakhir'},m11:{s:'Selesai',c:'Notulen rapat komite'},
+   k1:{s:'Selesai',c:'Masuk dalam RKT'},k2:{s:'Selesai',c:'Layanan izin daring'},k3:{s:'Proses',c:'Dua naskah kerja sama'},k4:{s:'Proses',c:'Kantin sehat berjalan'},
+   s1:{s:'Selesai',c:'Program supervisi semester ganjil'},s2:{s:'Proses',c:'5 dari 7 guru'},s3:{s:'Proses',c:''},s4:{s:'Selesai',c:''},s5:{s:'Proses',c:'2 dari 3 tendik'}};
+  save();render();toast('Data contoh dimuat');
+}
+
+/* ================= peristiwa ================= */
+document.addEventListener('click',e=>{
+  if(e.target.id==='ov'){closeModal();return}
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const {act,m,id}=b.dataset;
+  if(act==='menu')document.body.classList.toggle('menu');
+  else if(act==='add')openForm(m);
+  else if(act==='edit')openForm(m,id);
+  else if(act==='del')askDelete(m,id);
+  else if(act==='delok'){db[m]=db[m].filter(x=>x.id!==id);save();closeModal();render();toast('Dihapus')}
+  else if(act==='close')closeModal();
+  else if(act==='done'){const r=db.tugas.find(x=>x.id===id);r.status='Selesai';save();render();toast('Tugas ditandai selesai')}
+  else if(act==='toTugas'){const r=db[m].find(x=>x.id===id);
+    openForm('tugas',null,m==='rapat'?{sumber:`Rapat: ${r.judul} (${fmt(r.tanggal)})`,catatan:r.keputusan||''}:{tugas:r.tindak||`Tindak lanjut supervisi ${r.guru}`,pj:r.guru,sumber:`Supervisi ${r.guru} (${fmt(r.tanggal)})`})}
+  else if(act==='calday')openForm('agenda',null,{tanggal:b.dataset.d});
+  else if(act==='calnav'){const n=+b.dataset.n;if(!n){const d=new Date();ui.cal={y:d.getFullYear(),m:d.getMonth()}}else{const d=new Date(ui.cal.y,ui.cal.m+n,1);ui.cal={y:d.getFullYear(),m:d.getMonth()}}drawCal()}
+  else if(act==='seed'){if(Object.keys(MODS).some(k=>db[k].length))modal(`<h2>Ganti dengan data contoh?</h2><p style="margin:0;color:var(--ink2)">Seluruh data dan profil di perangkat ini akan <b>diganti</b> dengan data contoh.</p><div class="df"><button class="btn" data-act="close">Batal</button><button class="btn danger" data-act="seedok">Ganti</button></div>`,1);else seed()}
+  else if(act==='seedok'){closeModal();seed()}
+  else if(act==='ckreset')modal(`<h2>Kosongkan ceklis tupoksi?</h2><p style="margin:0;color:var(--ink2)">Semua status dan catatan ceklis kembali ke Belum, misalnya untuk tahun ajaran baru. Data modul lain tidak berubah.</p><div class="df"><button class="btn" data-act="close">Batal</button><button class="btn danger" data-act="ckresetok">Kosongkan</button></div>`,1);
+  else if(act==='ckresetok'){db.ceklis={};save();closeModal();viewTupoksi();toast('Ceklis dikosongkan')}
+  else if(act==='print'){try{window.print()}catch(x){}}
+  else if(act==='copyrep')copy($('#rep').innerText,'Teks laporan disalin');
+  else if(act==='backup'){const j=JSON.stringify(db,null,1);
+    modal(`<h2>Cadangkan data</h2><p style="margin:0 0 10px;color:var(--ink2)">Unduh berkas cadangan, atau salin teks di bawah dan simpan di tempat aman.</p><textarea class="inp" id="bk" readonly style="min-height:160px;font-family:monospace;font-size:12px">${esc(j)}</textarea><div class="df"><button class="btn" data-act="close">Tutup</button><button class="btn" data-act="bkcopy">Salin teks</button><button class="btn pri" data-act="bkdl">Unduh berkas</button></div>`)}
+  else if(act==='bkcopy'){$('#bk').select();copy($('#bk').value,'Cadangan disalin')}
+  else if(act==='bkdl'){download('cadangan-pranata-'+today()+'.json',$('#bk').value);toast('Jika unduhan tidak muncul, gunakan Salin teks')}
+  else if(act==='restore')modal(`<h2>Pulihkan dari cadangan</h2><p style="margin:0 0 10px;color:var(--ink2)">Pilih berkas cadangan atau tempel teksnya. Data saat ini akan <b>diganti</b>.</p><input type="file" id="rf" accept=".json,application/json" class="inp" style="margin-bottom:10px"><textarea class="inp" id="rt" placeholder="Tempel teks cadangan di sini" style="min-height:140px;font-family:monospace;font-size:12px"></textarea><div class="df"><button class="btn" data-act="close">Batal</button><button class="btn pri" data-act="restoreok">Pulihkan</button></div>`);
+  else if(act==='restoreok'){try{const o=JSON.parse($('#rt').value);if(!o||typeof o!=='object'||!o.profil)throw 0;
+      const n={profil:Object.assign({sekolah:'',kepala:'',nip:'',tahun:'',kota:''},o.profil)};Object.keys(MODS).forEach(k=>n[k]=Array.isArray(o[k])?o[k]:[]);n.ceklis=o.ceklis&&typeof o.ceklis==='object'?o.ceklis:{};n.demo=!!o.demo;n.seeded=true;db=n;save();closeModal();render();toast('Data dipulihkan')}
+    catch(x){toast('Teks cadangan tidak valid')}}
+  else if(act==='reset')modal(`<h2>Hapus semua data?</h2><p style="margin:0;color:var(--ink2)">Seluruh catatan dan profil sekolah di perangkat ini akan dihapus permanen. Cadangkan dulu bila masih diperlukan.</p><div class="df"><button class="btn" data-act="close">Batal</button><button class="btn danger" data-act="resetok">Hapus semua</button></div>`,1);
+  else if(act==='resetok'){db={profil:{sekolah:'',kepala:'',nip:'',tahun:'',kota:''},ceklis:{},seeded:true};Object.keys(MODS).forEach(k=>db[k]=[]);save();closeModal();render();toast('Semua data dihapus')}
+});
+document.addEventListener('submit',e=>{e.preventDefault();
+  if(e.target.id==='frm')saveForm(e.target);
+  else if(e.target.id==='prof'){new FormData(e.target).forEach((v,k)=>db.profil[k]=v.toString().trim());save();drawNav();toast('Profil disimpan')}
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='q'){ui.q=e.target.value;drawTable(ui.view)}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.classList.contains('ck')){const o=db.ceklis[t.dataset.id]=db.ceklis[t.dataset.id]||{};o[t.dataset.f]=t.value.trim();save();if(t.dataset.f==='s')viewTupoksi();toast('Tersimpan')}
+  else if(t.id==='f'){ui.f=t.value;drawTable(ui.view)}
+  else if(t.id==='ra'||t.id==='rb'){if(t.value){ui.rep[t.id==='ra'?'a':'b']=t.value;viewLaporan()}}
+  else if(t.id==='rf'&&t.files[0]){const fr=new FileReader();fr.onload=()=>{$('#rt').value=fr.result};fr.readAsText(t.files[0])}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+window.addEventListener('hashchange',route);
+load();
+if(!db.seeded&&(Object.keys(MODS).every(k=>!db[k].length)||db.program.some(x=>x.nama==='Gerakan Literasi 15 Menit')&&db.program.length<=4)){ui.view='dasbor';seed()}
+route();
+</script>
+</body>
+</html>

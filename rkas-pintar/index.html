@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RKAS Pintar – Agen AI Bendahara</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<style>
+:root{
+  --pri:#0f4c81; --pri2:#1565a8; --acc:#0ea5a4; --bg:#f3f6fa; --card:#fff; --line:#dfe6ee;
+  --txt:#1d2733; --mut:#64748b; --ok:#15803d; --okb:#e8f6ee; --warn:#b45309; --warnb:#fff6e5;
+  --err:#c62828; --errb:#fdecec; --info:#1d4ed8; --infob:#eaf1ff; --rad:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;line-height:1.45}
+button{font:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+#printArea{display:none}
+
+/* ===== Top bar ===== */
+.topbar{position:sticky;top:0;z-index:30;background:linear-gradient(90deg,var(--pri),var(--pri2));color:#fff;display:flex;align-items:center;gap:12px;padding:10px 16px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo{width:38px;height:38px;border-radius:10px;background:#fff;color:var(--pri);display:grid;place-items:center;font-weight:800;font-size:18px;flex:none}
+.brand h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.2px}
+.brand small{opacity:.85;font-size:12px}
+.topbar .sp{flex:1}
+.topbar .school{font-size:12.5px;text-align:right;opacity:.95;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbtn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:9px;padding:7px 11px;font-size:13px}
+.tbtn:hover{background:rgba(255,255,255,.25)}
+#btnAgentToggle{display:none}
+
+/* ===== Layout ===== */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:14px;padding:14px;align-items:start}
+.work{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:16px;margin-bottom:14px}
+.card h2{font-size:15.5px;margin:0 0 4px;color:var(--pri)}
+.card h3{font-size:14px;margin:16px 0 8px;color:var(--pri)}
+.card p.hint{margin:0 0 12px;color:var(--mut);font-size:12.5px}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 11px;border-left:4px solid var(--line)}
+.kpi .l{font-size:11.5px;color:var(--mut)}
+.kpi .v{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .s{font-size:11px;color:var(--mut)}
+.kpi.ok{border-left-color:var(--ok)} .kpi.warn{border-left-color:#f59e0b} .kpi.err{border-left-color:var(--err)} .kpi.info{border-left-color:var(--pri)}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tab{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;color:var(--mut);font-weight:600;font-size:13px}
+.tab.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.pane{display:none}
+.pane.active{display:block}
+
+/* Forms */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px}
+.grid.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.fld label{display:block;font-size:12px;color:var(--mut);margin-bottom:3px;font-weight:600}
+.fld input,.fld select,.fld textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fbfdff}
+.fld input:focus,.fld select:focus,.fld textarea:focus,.tbl input:focus,.tbl select:focus{outline:2px solid rgba(14,165,164,.35);border-color:var(--acc);background:#fff}
+.fld textarea{min-height:92px;resize:vertical}
+.fld .note{font-size:11.5px;color:var(--mut);margin-top:3px}
+.span2{grid-column:span 2} .span3{grid-column:1/-1}
+.calcbox{background:var(--infob);border:1px dashed #9bb7f0;border-radius:9px;padding:9px 12px;font-size:13px;color:#1e3a8a}
+
+/* Buttons */
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 12px;font-size:13px;font-weight:600;color:var(--txt)}
+.btn:hover{background:#f1f5f9}
+.btn.pri{background:var(--pri);color:#fff;border-color:var(--pri)}
+.btn.pri:hover{background:var(--pri2)}
+.btn.acc{background:var(--acc);color:#fff;border-color:var(--acc)}
+.btn.danger{color:var(--err);border-color:#f3c2c2}
+.btn.sm{padding:4px 9px;font-size:12px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.toolbar .sp{flex:1}
+.toolbar input[type=search],.toolbar select{border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:#fff}
+
+/* Table */
+.tblwrap{overflow:auto;border:1px solid var(--line);border-radius:10px;max-height:62vh;background:#fff}
+table.tbl{border-collapse:separate;border-spacing:0;width:100%;min-width:1280px;font-size:12.5px}
+.tbl th{position:sticky;top:0;background:#eef3f9;color:#334155;text-align:left;font-weight:700;padding:8px 6px;border-bottom:1px solid var(--line);z-index:2;white-space:nowrap}
+.tbl td{padding:3px 4px;border-bottom:1px solid #eef2f6;vertical-align:middle}
+.tbl tr:hover td{background:#fafcff}
+.tbl input,.tbl select{width:100%;border:1px solid transparent;border-radius:6px;padding:5px 6px;background:transparent}
+.tbl input:hover,.tbl select:hover{border-color:var(--line)}
+.tbl input.num{text-align:right}
+.tbl .c-no{width:34px;text-align:center;color:var(--mut)}
+.tbl .c-jml{text-align:right;font-weight:600;white-space:nowrap;padding-right:8px}
+.tbl tfoot td{position:sticky;bottom:0;background:#eef3f9;font-weight:700;padding:8px 6px;border-top:1px solid var(--line)}
+.tbl .act{white-space:nowrap}
+.tbl .act button{border:none;background:none;color:var(--mut);padding:3px 5px;border-radius:5px}
+.tbl .act button:hover{background:#eef2f6;color:var(--txt)}
+.tbl tr.flash td{animation:flash 1.6s ease}
+@keyframes flash{0%{background:#fff7c2}100%{background:transparent}}
+.empty{padding:30px;text-align:center;color:var(--mut)}
+
+/* Checks */
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.checks li{padding:9px 12px;border-radius:9px;font-size:13px;display:flex;gap:9px;align-items:flex-start}
+.checks li .ic{font-weight:800;flex:none;width:18px;text-align:center}
+.checks li.ok{background:var(--okb);color:#14532d} .checks li.warn{background:var(--warnb);color:#7c2d12}
+.checks li.err{background:var(--errb);color:#7f1d1d} .checks li.info{background:var(--infob);color:#1e3a8a}
+.rekap{width:100%;border-collapse:collapse;font-size:13px}
+.rekap th,.rekap td{padding:7px 8px;border-bottom:1px solid #edf1f5;text-align:left}
+.rekap th{background:#f5f8fb;color:#475569;font-size:12px}
+.rekap td.r,.rekap th.r{text-align:right;white-space:nowrap}
+.bar{height:8px;background:#edf2f7;border-radius:6px;overflow:hidden;min-width:80px}
+.bar i{display:block;height:100%;background:var(--acc)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* Agent panel */
+.agent{position:sticky;top:72px;height:calc(100vh - 86px);display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:var(--rad);overflow:hidden}
+.agent-h{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;background:linear-gradient(180deg,#f7fbff,#fff)}
+.agent-h .av{width:32px;height:32px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-size:16px;flex:none}
+.agent-h b{font-size:14px;color:var(--pri)}
+.agent-h small{display:block;color:var(--mut);font-size:11.5px}
+.agent-h .sp{flex:1}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:9px 12px;border-bottom:1px solid var(--line)}
+.chip{border:1px solid #bfe3e3;background:#effafa;color:#0b6b6a;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600}
+.chip:hover{background:#dff4f4}
+.msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#fbfcfe}
+.msg{max-width:94%;padding:9px 12px;border-radius:12px;font-size:13px;word-wrap:break-word}
+.msg.user{align-self:flex-end;background:var(--pri);color:#fff;border-bottom-right-radius:4px;white-space:pre-wrap}
+.msg.bot{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.bot h4{margin:8px 0 4px;font-size:13.5px;color:var(--pri)}
+.msg.bot ul,.msg.bot ol{margin:4px 0;padding-left:20px}
+.msg.bot p{margin:4px 0}
+.msg .tools{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.msg .tools button{border:1px solid var(--line);background:#f8fafc;border-radius:7px;font-size:11.5px;padding:3px 8px;color:var(--mut)}
+.msg .att{font-size:11.5px;opacity:.85;margin-top:4px}
+.actcard{margin-top:8px;border:1px solid #bfe3e3;background:#f2fbfb;border-radius:10px;padding:9px 10px;font-size:12.5px}
+.actcard ul{margin:4px 0 8px;padding-left:18px}
+.actcard .row{display:flex;gap:6px;flex-wrap:wrap}
+.actcard.done{background:#f1f5f9;border-color:var(--line);color:var(--mut)}
+.typing{align-self:flex-start;color:var(--mut);font-size:12.5px;display:flex;gap:8px;align-items:center}
+.dots i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--acc);margin-right:3px;animation:bl 1s infinite}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,100%{opacity:.2}50%{opacity:1}}
+.composer{border-top:1px solid var(--line);padding:9px;display:flex;flex-direction:column;gap:6px;background:#fff}
+.composer .attprev{font-size:12px;background:#eef6ff;border:1px solid #c9dcf6;border-radius:8px;padding:4px 8px;display:none;align-items:center;gap:6px}
+.composer .attprev button{border:none;background:none;color:var(--err);font-weight:700}
+.composer .rowc{display:flex;gap:6px;align-items:flex-end}
+.composer textarea{flex:1;border:1px solid var(--line);border-radius:10px;padding:8px 10px;resize:none;min-height:40px;max-height:140px}
+.icbtn{border:1px solid var(--line);background:#fff;border-radius:10px;width:40px;height:40px;font-size:17px;flex:none}
+.sendbtn{background:var(--acc);color:#fff;border:none;border-radius:10px;height:40px;padding:0 14px;font-weight:700;flex:none}
+.sendbtn:disabled{opacity:.5;cursor:not-allowed}
+.nokey{margin:10px 12px 0;padding:9px 11px;border-radius:9px;background:var(--warnb);color:#7c2d12;font-size:12.5px;display:none}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal.open{display:flex}
+.modal .box{background:#fff;border-radius:14px;max-width:560px;width:100%;max-height:90vh;overflow:auto;padding:18px}
+.modal h2{margin:0 0 6px;color:var(--pri);font-size:17px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:9px 16px;border-radius:9px;font-size:13px;z-index:200;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw}
+.toast.show{opacity:1}
+
+/* Print preview */
+.doc{background:#fff;border:1px solid var(--line);padding:26px 30px;border-radius:6px;font-family:"Times New Roman",Times,serif;font-size:12pt;color:#000;max-height:70vh;overflow:auto}
+.doc h1{text-align:center;font-size:14pt;margin:0}
+.doc .sub{text-align:center;font-weight:bold;margin:2px 0 14px}
+.doc table{border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:10.5pt}
+.doc th,.doc td{border:1px solid #000;padding:3px 5px;vertical-align:top}
+.doc th{background:#e9eef4}
+.doc td.r{text-align:right;white-space:nowrap}
+.doc .noborder td{border:none;padding:1px 4px}
+.doc .grp td{background:#f1f5f9;font-weight:bold}
+.doc .sec{font-weight:bold;margin:14px 0 4px}
+.doc .ttd{display:flex;justify-content:space-between;margin-top:30px;text-align:center;gap:10px}
+.doc .ttd div{flex:1}
+.doc .narasi{white-space:pre-wrap;text-align:justify}
+
+@media (max-width:1100px){
+  .layout{grid-template-columns:1fr}
+  .agent{position:fixed;right:0;top:0;height:100vh;width:min(420px,100vw);border-radius:0;z-index:60;transform:translateX(105%);transition:transform .25s;box-shadow:-6px 0 24px rgba(0,0,0,.2)}
+  .agent.open{transform:none}
+  #btnAgentToggle{display:inline-block}
+  #btnAgentClose{display:inline-block!important}
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:700px){
+  .grid,.grid.g2,.two{grid-template-columns:1fr}
+  .span2{grid-column:auto}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topbar .school{display:none}
+}
+@media print{
+  body{background:#fff}
+  #app,.modal,.toast{display:none!important}
+  #printArea{display:block!important}
+  #printArea .doc{border:none;padding:0;max-height:none;overflow:visible}
+  @page{size:A4;margin:15mm 12mm}
+  .doc tr{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="logo">R</div>
+    <div class="brand"><h1>RKAS Pintar</h1><small>Agen AI Bendahara · Juknis BOSP 2026</small></div>
+    <div class="sp"></div>
+    <div class="school" id="hdrSchool">–</div>
+    <button class="tbtn" id="btnSettings" title="Pengaturan API & model">⚙ Pengaturan</button>
+    <button class="tbtn" id="btnAgentToggle">🤖 Agen</button>
+  </header>
+
+  <div class="layout">
+    <main class="work">
+      <div class="kpis" id="kpis"></div>
+      <nav class="tabs">
+        <button class="tab active" data-tab="1">1. Profil &amp; Pagu</button>
+        <button class="tab" data-tab="2">2. Rincian Kegiatan</button>
+        <button class="tab" data-tab="3">3. Rekap &amp; Validasi</button>
+        <button class="tab" data-tab="4">4. Cetak &amp; Ekspor</button>
+      </nav>
+
+      <!-- TAB 1 -->
+      <section class="pane active" id="tab-1">
+        <div class="card">
+          <h2>Identitas Sekolah</h2>
+          <p class="hint">Isi sekali saja. Data tersimpan otomatis di browser ini.</p>
+          <div class="grid">
+            <div class="fld span2"><label>Nama sekolah</label><input data-p="sekolah" placeholder="SMP Negeri ... "></div>
+            <div class="fld"><label>NPSN</label><input data-p="npsn"></div>
+            <div class="fld"><label>Jenjang</label><select data-p="jenjang"><option>SD</option><option selected>SMP</option><option>SMA</option><option>SMK</option><option>SLB</option></select></div>
+            <div class="fld"><label>Status</label><select data-p="status"><option>Negeri</option><option>Swasta</option></select></div>
+            <div class="fld"><label>Kabupaten/Kota</label><input data-p="kota" placeholder="Kota Yogyakarta"></div>
+            <div class="fld"><label>Tahun anggaran</label><input data-p="tahun" type="number" min="2024" max="2100"></div>
+            <div class="fld span2"><label>Alamat sekolah</label><input data-p="alamat"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Dana BOS Reguler</h2>
+          <p class="hint">Pagu dihitung otomatis dari jumlah peserta didik × satuan biaya. Jika sudah ada angka resmi, isi kolom "Pagu resmi".</p>
+          <div class="grid">
+            <div class="fld"><label>Jumlah peserta didik</label><input data-p="siswa" type="number" min="0"></div>
+            <div class="fld"><label>Satuan biaya per siswa (Rp)</label><input data-p="satuan" type="number" min="0" step="1000"></div>
+            <div class="fld"><label>Pagu resmi (Rp) – opsional</label><input data-p="paguManual" type="number" min="0" step="1000" placeholder="kosongkan = otomatis"></div>
+            <div class="fld"><label>Sisa dana tahun lalu / SiLPA (Rp)</label><input data-p="silpa" type="number" min="0" step="1000"></div>
+            <div class="fld"><label>Porsi penyaluran tahap I (%)</label><input data-p="tahap1" type="number" min="0" max="100"></div>
+            <div class="fld"><div class="calcbox" id="paguBox">–</div></div>
+          </div>
+          <h3>Batas penggunaan (Permendikdasmen 8/2026, dihitung dari pagu BOS Reguler)</h3>
+          <div class="grid">
+            <div class="fld"><label>Honor maksimal (%)</label><input data-p="honorMax" type="number" min="0" max="100" step="0.1"><div class="note">20% negeri · 40% swasta. Sesuaikan bila memakai relaksasi SE Mendikdasmen 6/2026.</div></div>
+            <div class="fld"><label>Buku minimal (%)</label><input data-p="bukuMin" type="number" min="0" max="100" step="0.1"></div>
+            <div class="fld"><label>Pemeliharaan sarpras maksimal (%)</label><input data-p="pemeliharaanMax" type="number" min="0" max="100" step="0.1"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Prioritas &amp; Kebutuhan (bahan untuk Agen)</h2>
+          <p class="hint">Semakin lengkap, semakin tepat draf RKAS yang disusun Agen.</p>
+          <div class="grid g2">
+            <div class="fld"><label>Prioritas hasil Perencanaan Berbasis Data (Rapor Pendidikan)</label><textarea data-p="prioritas" placeholder="Contoh:&#10;- Literasi membaca turun (A.1) → perbanyak buku bacaan &amp; program literasi&#10;- Iklim keamanan sekolah perlu ditingkatkan (D.4)&#10;- Kualitas pembelajaran: pemanfaatan TIK masih rendah"></textarea></div>
+            <div class="fld"><label>Kebutuhan rutin &amp; catatan lain</label><textarea data-p="kebutuhan" placeholder="Contoh:&#10;- Listrik ±Rp4.500.000/bulan, internet Rp1.500.000/bulan, air Rp400.000/bulan&#10;- 3 tenaga honorer (TU, kebersihan, satpam)&#10;- ANBK kelas 8, Asesmen sumatif semester&#10;- Atap perpustakaan bocor ringan"></textarea></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Penandatangan</h2>
+          <div class="grid">
+            <div class="fld"><label>Kepala sekolah</label><input data-p="kepsek"></div>
+            <div class="fld"><label>NIP kepala sekolah</label><input data-p="nipKepsek"></div>
+            <div class="fld"><label>Ketua komite</label><input data-p="komite"></div>
+            <div class="fld"><label>Bendahara BOS</label><input data-p="bendahara"></div>
+            <div class="fld"><label>NIP bendahara</label><input data-p="nipBendahara"></div>
+            <div class="fld"><label>Tempat, tanggal pengesahan</label><input data-p="tglSah" placeholder="Yogyakarta, 5 Januari 2027"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2 -->
+      <section class="pane" id="tab-2">
+        <div class="card">
+          <div class="toolbar">
+            <button class="btn pri" id="btnAddRow">+ Tambah baris</button>
+            <select id="fKomp"><option value="">Semua komponen</option></select>
+            <input type="search" id="fCari" placeholder="Cari uraian/kegiatan…">
+            <div class="sp"></div>
+            <button class="btn" id="btnImport">⬆ Impor Excel/CSV</button>
+            <button class="btn" id="btnTemplate">⬇ Template</button>
+            <button class="btn danger" id="btnClearRows">Kosongkan</button>
+            <input type="file" id="fileImport" accept=".xlsx,.xls,.csv" hidden>
+          </div>
+          <div class="tblwrap">
+            <table class="tbl">
+              <thead><tr>
+                <th>No</th><th style="min-width:170px">Komponen</th><th style="min-width:170px">Kegiatan</th><th style="min-width:220px">Uraian barang/jasa</th>
+                <th style="min-width:72px">Vol</th><th style="min-width:85px">Satuan</th><th style="min-width:115px">Harga satuan</th><th style="min-width:125px">Jumlah</th>
+                <th style="min-width:130px">Bulan</th><th title="Centang bila pengadaan buku">Buku</th><th style="min-width:150px">Kode rekening</th><th style="min-width:140px">Keterangan</th><th></th>
+              </tr></thead>
+              <tbody id="tbody"></tbody>
+              <tfoot><tr><td colspan="7" id="footLbl">Total</td><td class="c-jml" id="footTotal">Rp 0</td><td colspan="5"></td></tr></tfoot>
+            </table>
+          </div>
+          <p class="hint" style="margin-top:8px">Bulan "Rutin" = dibagi rata Januari–Desember (listrik, internet, honor bulanan). Untuk baris rutin, isi volume setahun (mis. 12 bulan atau 3 orang × 12 = 36 OB).</p>
+        </div>
+      </section>
+
+      <!-- TAB 3 -->
+      <section class="pane" id="tab-3">
+        <div class="card">
+          <h2>Validasi Otomatis Juknis BOSP 2026</h2>
+          <p class="hint">Diperiksa langsung oleh aplikasi (tanpa AI). Untuk telaah lebih dalam, tekan "Periksa RKAS" pada panel Agen.</p>
+          <ul class="checks" id="checks"></ul>
+        </div>
+        <div class="card">
+          <h2>Rekap per Komponen</h2>
+          <table class="rekap" id="rekapKomp"></table>
+        </div>
+        <div class="two">
+          <div class="card"><h2>Rencana Penarikan per Bulan</h2><table class="rekap" id="rekapBulan"></table></div>
+          <div class="card"><h2>Kecukupan Dana per Tahap</h2><table class="rekap" id="rekapTahap"></table></div>
+        </div>
+      </section>
+
+      <!-- TAB 4 -->
+      <section class="pane" id="tab-4">
+        <div class="card">
+          <div class="toolbar">
+            <button class="btn pri" id="btnPrint">🖨 Cetak / Simpan PDF</button>
+            <button class="btn acc" id="btnXlsx">⬇ Unduh Excel</button>
+            <button class="btn" id="btnDoc">⬇ Unduh Word</button>
+            <div class="sp"></div>
+            <button class="btn" id="btnBackup">💾 Simpan cadangan (.json)</button>
+            <button class="btn" id="btnRestore">📂 Buka cadangan</button>
+            <input type="file" id="fileRestore" accept=".json" hidden>
+          </div>
+          <div class="fld" style="margin-bottom:12px"><label>Narasi RKAS (opsional – bisa dibuat oleh Agen lalu tekan "Pakai sebagai narasi")</label><textarea data-p="narasi" style="min-height:110px"></textarea></div>
+          <div class="doc" id="docPreview"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- AGENT -->
+    <aside class="agent" id="agent">
+      <div class="agent-h">
+        <div class="av">🤖</div>
+        <div><b>Agen RKAS</b><small id="agentModel">–</small></div>
+        <div class="sp"></div>
+        <button class="btn sm" id="btnClearChat" title="Hapus percakapan">Bersihkan</button>
+        <button class="btn sm" id="btnAgentClose" style="display:none">✕</button>
+      </div>
+      <div class="nokey" id="noKey">API key Gemini belum diisi. Buka <b>⚙ Pengaturan</b> untuk mengaktifkan Agen. Tabel, rekap, dan validasi tetap bisa dipakai tanpa API key.</div>
+      <div class="chips">
+        <button class="chip" data-q="draf">✨ Susun draf RKAS</button>
+        <button class="chip" data-q="periksa">🔍 Periksa RKAS</button>
+        <button class="chip" data-q="seimbang">⚖ Pas-kan ke pagu</button>
+        <button class="chip" data-q="tahap">📅 Atur tahap</button>
+        <button class="chip" data-q="harga">💰 Cek harga</button>
+        <button class="chip" data-q="narasi">📝 Buat narasi</button>
+      </div>
+      <div class="msgs" id="msgs"></div>
+      <div class="composer">
+        <div class="attprev" id="attPrev"><span id="attName"></span><button id="attDel" title="Hapus lampiran">✕</button></div>
+        <div class="rowc">
+          <button class="icbtn" id="btnAttach" title="Lampirkan RKAS lama, DPPA, Rapor (PDF, gambar, Excel, CSV)">📎</button>
+          <textarea id="chatIn" rows="1" placeholder="Perintahkan agen… mis. 'Tambahkan pengadaan 150 buku bacaan nonteks'"></textarea>
+          <button class="sendbtn" id="btnSend">Kirim</button>
+        </div>
+        <input type="file" id="fileAttach" accept=".pdf,.png,.jpg,.jpeg,.webp,.xlsx,.xls,.csv,.txt" hidden>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- Settings modal -->
+<div class="modal" id="mSettings">
+  <div class="box">
+    <h2>⚙ Pengaturan Agen AI</h2>
+    <p class="hint" style="color:#64748b;font-size:12.5px">Agen memakai Gemini API dari Google AI Studio. Buat API key gratis di <b>aistudio.google.com/apikey</b>, lalu tempel di bawah. Key disimpan hanya di browser ini.</p>
+    <div class="fld" style="margin-bottom:10px"><label>Gemini API key</label>
+      <div style="display:flex;gap:6px"><input id="sKey" type="password" placeholder="AIza…" autocomplete="off"><button class="btn" id="sShow">👁</button></div></div>
+    <div class="fld" style="margin-bottom:6px"><label>Model</label>
+      <div style="display:flex;gap:6px"><input id="sModel" list="modelList" placeholder="gemini-3.8-flash"><button class="btn" id="sLoad">Muat daftar</button></div>
+      <datalist id="modelList"></datalist>
+      <div class="note">Disarankan model "flash" (cepat &amp; hemat). Jika muncul galat "model tidak ditemukan", tekan "Muat daftar" lalu pilih model yang tersedia.</div></div>
+    <div id="sMsg" style="font-size:12.5px;margin:8px 0;min-height:18px"></div>
+    <div class="toolbar" style="margin-top:10px">
+      <button class="btn" id="sTest">Tes koneksi</button>
+      <div class="sp"></div>
+      <button class="btn danger" id="sReset">Hapus semua data</button>
+      <button class="btn" id="sCancel">Tutup</button>
+      <button class="btn pri" id="sSave">Simpan</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+/* ============================================================
+   RKAS Pintar – Agen AI Bendahara
+   Isi DEFAULT_API_KEY bila ingin key terpasang permanen
+   (perhatian: siapa pun yang membuka halaman bisa melihat key).
+   ============================================================ */
+const DEFAULT_API_KEY = ""; // kunci sengaja dikosongkan di versi publik; isi kunci sendiri di Pengaturan
+const DEFAULT_MODEL = "gemini-3.8-flash";
+const LS_DATA = "rkasPintar.data.v1";
+const LS_SET = "rkasPintar.settings.v1";
+
+const KOMPONEN = [
+  {k:1,n:"Penerimaan Peserta Didik Baru",s:"PPDB/SPMB"},
+  {k:2,n:"Pengembangan Perpustakaan",s:"Perpustakaan"},
+  {k:3,n:"Pelaksanaan Kegiatan Pembelajaran dan Ekstrakurikuler",s:"Pembelajaran & Ekskul"},
+  {k:4,n:"Pelaksanaan Kegiatan Asesmen/Evaluasi Pembelajaran",s:"Asesmen/Evaluasi"},
+  {k:5,n:"Pelaksanaan Administrasi Kegiatan Sekolah",s:"Administrasi"},
+  {k:6,n:"Pengembangan Profesi Pendidik dan Tenaga Kependidikan",s:"Pengembangan GTK"},
+  {k:7,n:"Pembiayaan Langganan Daya dan Jasa",s:"Daya & Jasa"},
+  {k:8,n:"Pemeliharaan Sarana dan Prasarana Sekolah",s:"Pemeliharaan Sarpras"},
+  {k:9,n:"Penyediaan Alat Multimedia Pembelajaran",s:"Alat Multimedia"},
+  {k:10,n:"Penyelenggaraan Kegiatan Peningkatan Kompetensi Keahlian (khusus SMK/SMALB)",s:"Kompetensi Keahlian*"},
+  {k:11,n:"Penyelenggaraan Kegiatan dalam Mendukung Keterserapan Lulusan (khusus SMK/SMALB)",s:"Keterserapan Lulusan*"},
+  {k:12,n:"Pembayaran Honor",s:"Honor"}
+];
+const BLN = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+const BLN_FULL = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
+/* ---------- helpers ---------- */
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nIn = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
+function parseAngka(v){
+  if(typeof v==="number") return isFinite(v)?v:0;
+  let s=String(v??"").trim().replace(/rp\.?/i,"").replace(/\s/g,"");
+  if(!s) return 0;
+  if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s=s.replace(/\./g,"").replace(",",".");
+  else if(/^-?\d{1,3}(,\d{3})+(\.\d+)?$/.test(s)) s=s.replace(/,/g,"");
+  else s=s.replace(",",".");
+  const n=parseFloat(s.replace(/[^\d.-]/g,""));
+  return isFinite(n)?n:0;
+}
+const rp = n => "Rp " + Math.round(n||0).toLocaleString("id-ID");
+const rpn = n => Math.round(n||0).toLocaleString("id-ID");
+const pc = (a,b) => b>0 ? (a/b*100).toLocaleString("id-ID",{maximumFractionDigits:1})+"%" : "–";
+function toast(msg,ms=2600){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("show"),ms); }
+function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
+function download(name, content, mime){
+  const blob = content instanceof Blob ? content : new Blob([content],{type:mime||"text/plain"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},1500);
+}
+function safeName(s){ return String(s||"Sekolah").replace(/[^\w\- ]+/g,"").trim().replace(/\s+/g,"_").slice(0,40)||"Sekolah"; }
+function copyText(t){
+  if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(t).then(()=>toast("Disalin"),()=>fallback()); }
+  else fallback();
+  function fallback(){ const ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand("copy"); toast("Disalin");}catch(e){toast("Gagal menyalin");} ta.remove(); }
+}
+
+/* ---------- state ---------- */
+function defaultTahun(){ const d=new Date(); return d.getMonth()>=8 ? d.getFullYear()+1 : d.getFullYear(); }
+function defaultState(){
+  return { seq:0, rows:[], chat:[],
+    profil:{sekolah:"",npsn:"",jenjang:"SMP",status:"Negeri",kota:"",tahun:defaultTahun(),alamat:"",
+      siswa:"",satuan:"",paguManual:"",silpa:"",tahap1:50,honorMax:20,bukuMin:10,pemeliharaanMax:20,
+      prioritas:"",kebutuhan:"",kepsek:"",nipKepsek:"",komite:"",bendahara:"",nipBendahara:"",tglSah:"",narasi:""} };
+}
+let state = (()=>{ const s=lsGet(LS_DATA); const d=defaultState(); if(!s) return d;
+  return {...d,...s,profil:{...d.profil,...(s.profil||{})},rows:Array.isArray(s.rows)?s.rows:[],chat:Array.isArray(s.chat)?s.chat:[]}; })();
+let settings = {apiKey:"",model:DEFAULT_MODEL,...(lsGet(LS_SET)||{})};
+let saveTimer=null;
+function save(){ clearTimeout(saveTimer); saveTimer=setTimeout(()=>{ if(!lsSet(LS_DATA,state)) toast("Peringatan: data tidak bisa disimpan di browser ini. Gunakan 'Simpan cadangan'."); },300); }
+function apiKey(){ return (settings.apiKey||DEFAULT_API_KEY||"").trim(); }
+function model(){ return (settings.model||DEFAULT_MODEL).trim().replace(/^models\//,""); }
+
+/* ---------- rows ---------- */
+function newId(){ state.seq=(state.seq||0)+1; return "R"+state.seq; }
+function sanitizeRow(r, keepId){
+  r=r||{};
+  let k=parseInt(r.komponen,10);
+  if(!(k>=1&&k<=12)) k=matchKomponen(r.komponen)||5;
+  let b=r.bulan;
+  if(typeof b==="string"){ const t=b.trim().toLowerCase(); if(/rutin|tiap|setiap|jan.*des/.test(t)) b=0; else { const i=BLN_FULL.findIndex(x=>t.startsWith(x.toLowerCase().slice(0,3))); b= i>=0? i+1 : parseInt(t,10); } }
+  b=parseInt(b,10); if(!(b>=0&&b<=12)) b=0;
+  const o={ id: keepId && r.id ? String(r.id) : newId(), komponen:k,
+    kegiatan:String(r.kegiatan??"").trim(), uraian:String(r.uraian??"").trim(),
+    vol: parseAngka(r.volume ?? r.vol), satuan:String(r.satuan??"").trim(),
+    harga: Math.round(parseAngka(r.harga ?? r.harga_satuan)), bulan:b,
+    buku: r.buku===true || r.buku==="true" || r.buku===1 || /^(ya|y|v|x|✓|1)$/i.test(String(r.buku??"")),
+    rek:String(r.rek ?? r.kode_rekening ?? "").trim(), ket:String(r.ket ?? r.keterangan ?? "").trim() };
+  return o;
+}
+function matchKomponen(v){
+  const t=String(v||"").toLowerCase(); if(!t) return 0;
+  const m=t.match(/^\s*(\d{1,2})\b/); if(m){ const k=+m[1]; if(k>=1&&k<=12) return k; }
+  const keys=[[1,/peserta didik baru|ppdb|spmb/],[2,/perpustakaan|buku/],[3,/pembelajaran dan ekstra|ekstrakurikuler|ekskul/],[4,/asesmen|evaluasi/],[5,/administrasi/],[6,/profesi|pengembangan (guru|gtk|ptk)/],[7,/daya|jasa|listrik|internet/],[8,/pemeliharaan|perawatan/],[9,/multimedia/],[10,/kompetensi keahlian/],[11,/keterserapan/],[12,/honor/]];
+  for(const [k,re] of keys) if(re.test(t)) return k;
+  return 0;
+}
+const rowTotal = r => (nIn(r.vol)||0)*(nIn(r.harga)||0);
+
+/* ---------- calculations ---------- */
+function paguAuto(){ const p=state.profil; return nIn(p.siswa)*nIn(p.satuan); }
+function pagu(){ const p=state.profil; return nIn(p.paguManual)>0 ? nIn(p.paguManual) : paguAuto(); }
+function calc(){
+  const p=state.profil, pg=pagu(), silpa=nIn(p.silpa), dana=pg+silpa;
+  const t1pct=Math.min(100,Math.max(0,nIn(p.tahap1)||0));
+  const byK=Array(13).fill(0), byM=Array(13).fill(0); let total=0, buku=0;
+  for(const r of state.rows){
+    const j=rowTotal(r); total+=j; byK[r.komponen]=(byK[r.komponen]||0)+j; if(r.buku) buku+=j;
+    if(!r.bulan){ for(let m=1;m<=12;m++) byM[m]+=j/12; } else byM[r.bulan]+=j;
+  }
+  let t1=0,t2=0; for(let m=1;m<=12;m++){ if(m<=6) t1+=byM[m]; else t2+=byM[m]; }
+  const dana1=pg*t1pct/100+silpa, dana2=pg-pg*t1pct/100;
+  return {pagu:pg,silpa,dana,total,sisa:dana-total,byK,byM,t1,t2,dana1,dana2,buku,
+    honor:byK[12],pemeliharaan:byK[8],
+    honorLim:pg*nIn(p.honorMax)/100, bukuMin:pg*nIn(p.bukuMin)/100, pemLim:pg*nIn(p.pemeliharaanMax)/100};
+}
+const LARANGAN = [
+  {re:/makan bergizi|\bmbg\b|susu (untuk )?(siswa|murid)|lauk ?pauk|bahan pangan/i, lv:"err", msg:"Pengadaan pangan untuk program Makan Bergizi Gratis tidak boleh dibiayai BOSP"},
+  {re:/rehab(ilitasi)?\s*(sedang|berat)|rusak (sedang|berat)|ruang (kelas )?baru|bangunan baru|pembangunan (gedung|ruang)|membangun/i, lv:"err", msg:"Perbaikan kerusakan sedang/berat dan pembangunan ruang baru dilarang"},
+  {re:/deposito|saham|reksa ?dana|obligasi|investasi/i, lv:"err", msg:"Pembelian instrumen investasi dilarang"},
+  {re:/pinjam(an|kan)|dipinjamkan|talangan/i, lv:"err", msg:"Meminjamkan dana kepada pihak lain dilarang"},
+  {re:/reseller|distributor|dijual (kembali|ke siswa)|penjualan/i, lv:"err", msg:"Sekolah tidak boleh bertindak sebagai distributor/pengecer"},
+  {re:/rekening pribadi|keperluan pribadi|kepentingan pribadi/i, lv:"err", msg:"Penggunaan untuk kepentingan pribadi dilarang"},
+  {re:/seragam|sepatu|tas sekolah/i, lv:"warn", msg:"Pastikan pengadaan seragam/sepatu/tas untuk kebutuhan sekolah, bukan kepentingan pribadi"},
+  {re:/\bthr\b|bonus|parsel|hadiah pribadi|tunjangan hari raya/i, lv:"warn", msg:"Periksa: THR/bonus/parsel berisiko tidak sesuai juknis"}
+];
+function checks(c){
+  const L=[], p=state.profil, R=state.rows;
+  const add=(lv,txt)=>L.push({lv,txt});
+  if(!c.pagu) add("err","Pagu BOS Reguler belum diisi (isi jumlah peserta didik × satuan biaya atau pagu resmi) di tab Profil & Pagu.");
+  if(!R.length) add("info","Tabel rincian masih kosong. Tambahkan baris manual atau minta Agen menyusun draf.");
+  if(c.dana>0 && R.length){
+    if(c.total>c.dana+0.5) add("err",`Total belanja ${rp(c.total)} melebihi dana tersedia ${rp(c.dana)} (lebih ${rp(c.total-c.dana)}).`);
+    else if(c.sisa>c.dana*0.02) add("warn",`Masih ada dana belum dianggarkan ${rp(c.sisa)} (${pc(c.sisa,c.dana)}).`);
+    else add("ok",`Total belanja ${rp(c.total)} sesuai dana tersedia (sisa ${rp(c.sisa)}).`);
+  }
+  if(c.pagu>0){
+    if(c.honor>c.honorLim+0.5) add("err",`Honor ${rp(c.honor)} (${pc(c.honor,c.pagu)}) melebihi batas ${p.honorMax}% = ${rp(c.honorLim)}.`);
+    else if(c.honor>0) add("ok",`Honor ${pc(c.honor,c.pagu)} dari pagu, dalam batas ${p.honorMax}%.`);
+    if(R.length){
+      if(c.buku+0.5<c.bukuMin) add("err",`Belanja buku ${rp(c.buku)} (${pc(c.buku,c.pagu)}) belum mencapai minimal ${p.bukuMin}% = ${rp(c.bukuMin)}. Centang kolom "Buku" pada baris pengadaan buku.`);
+      else add("ok",`Belanja buku ${pc(c.buku,c.pagu)}, memenuhi minimal ${p.bukuMin}%.`);
+    }
+    if(c.pemeliharaan>c.pemLim+0.5) add("err",`Pemeliharaan sarpras ${rp(c.pemeliharaan)} (${pc(c.pemeliharaan,c.pagu)}) melebihi batas ${p.pemeliharaanMax}% = ${rp(c.pemLim)}.`);
+    else if(c.pemeliharaan>0) add("ok",`Pemeliharaan sarpras ${pc(c.pemeliharaan,c.pagu)}, dalam batas ${p.pemeliharaanMax}%.`);
+    if(R.length){
+      if(c.t1>c.dana1+0.5) add("warn",`Rencana belanja tahap I (Jan–Jun) ${rp(c.t1)} melebihi dana tahap I ${rp(c.dana1)}. Geser sebagian kegiatan ke Juli–Desember.`);
+      else if(c.dana1>0 && c.t1<c.dana1*0.5) add("warn",`Rencana belanja tahap I baru ${pc(c.t1,c.dana1)} dari dana tahap I. Penyaluran tahap II mensyaratkan realisasi tahap I minimal 50%.`);
+      else if(c.dana1>0) add("ok",`Rencana tahap I ${pc(c.t1,c.dana1)} dari dana tahap I.`);
+      if(c.t1+c.t2>c.dana+0.5 && c.t2>c.dana2+(c.dana1-c.t1)+0.5) add("warn",`Rencana tahap II melebihi sisa dana yang tersedia untuk Juli–Desember.`);
+    }
+  }
+  if(!["SMK","SLB"].includes(p.jenjang)){
+    const n=R.filter(r=>r.komponen===10||r.komponen===11).length;
+    if(n) add("warn",`${n} baris memakai komponen 10/11 yang khusus SMK/SMALB.`);
+  }
+  const kosong=R.filter(r=>!r.uraian||!(nIn(r.vol)>0)||!(nIn(r.harga)>0));
+  if(kosong.length) add("warn",`${kosong.length} baris belum lengkap (uraian, volume, atau harga kosong): ${kosong.slice(0,8).map(r=>r.id).join(", ")}${kosong.length>8?"…":""}.`);
+  for(const L2 of LARANGAN){
+    const hit=R.filter(r=>L2.re.test(r.kegiatan+" "+r.uraian+" "+r.ket));
+    if(hit.length) add(L2.lv,`${L2.msg}: ${hit.slice(0,6).map(r=>`${r.id} "${r.uraian||r.kegiatan}"`).join("; ")}.`);
+  }
+  if(c.honor>0) add("info","Pastikan penerima honor memenuhi syarat Juknis BOSP 2026 (terdata di Dapodik/Info GTK) dan sesuai ketentuan relaksasi yang berlaku.");
+  const noRek=R.filter(r=>!r.rek).length;
+  if(noRek && R.length) add("info",`${noRek} baris belum memiliki kode rekening belanja. Lengkapi sesuai SIPD/ARKAS sebelum diinput.`);
+  return L;
+}
+
+/* ---------- render: header & KPIs ---------- */
+function renderHeader(){
+  const p=state.profil;
+  $("#hdrSchool").textContent = (p.sekolah||"Nama sekolah belum diisi") + " · TA " + (p.tahun||"");
+  $("#agentModel").textContent = apiKey() ? "Gemini · "+model() : "Belum aktif – isi API key";
+  $("#noKey").style.display = apiKey() ? "none" : "block";
+}
+function renderKPIs(){
+  const c=calc(), p=state.profil;
+  const k=(cls,l,v,s)=>`<div class="kpi ${cls}"><div class="l">${l}</div><div class="v" title="${esc(v)}">${v}</div><div class="s">${s}</div></div>`;
+  const sisaCls = !c.dana ? "info" : c.sisa < -0.5 ? "err" : c.sisa > c.dana*0.02 ? "warn" : "ok";
+  const hCls = c.honor>c.honorLim+0.5 ? "err" : "ok";
+  const bCls = !state.rows.length ? "info" : c.buku+0.5<c.bukuMin ? "err" : "ok";
+  const mCls = c.pemeliharaan>c.pemLim+0.5 ? "err" : "ok";
+  $("#kpis").innerHTML =
+    k("info","Dana tersedia",rp(c.dana),c.silpa?`pagu ${rp(c.pagu)} + SiLPA`:"pagu BOS Reguler") +
+    k("info","Direncanakan",rp(c.total),`${state.rows.length} baris`) +
+    k(sisaCls,"Sisa belum dianggarkan",rp(c.sisa),pc(c.sisa,c.dana)) +
+    k(hCls,"Honor",pc(c.honor,c.pagu),`maks ${p.honorMax}%`) +
+    k(bCls,"Buku",pc(c.buku,c.pagu),`min ${p.bukuMin}%`) +
+    k(mCls,"Pemeliharaan",pc(c.pemeliharaan,c.pagu),`maks ${p.pemeliharaanMax}%`);
+  const pa=paguAuto();
+  $("#paguBox").innerHTML = `Pagu otomatis: <b>${rp(pa)}</b><br>Pagu dipakai: <b>${rp(c.pagu)}</b>${nIn(p.paguManual)>0?" (resmi)":""}<br>Dana tahap I: ${rp(c.dana1)} · tahap II: ${rp(c.dana2)}`;
+}
+
+/* ---------- render: profile ---------- */
+function renderProfil(){
+  $$("[data-p]").forEach(el=>{ const v=state.profil[el.dataset.p]; if(document.activeElement!==el) el.value = v ?? ""; });
+}
+
+/* ---------- render: table ---------- */
+const kompOpts = KOMPONEN.map(x=>`<option value="${x.k}">${x.k}. ${esc(x.s)}</option>`).join("");
+const blnOpts = `<option value="0">Rutin (Jan–Des)</option>`+BLN_FULL.map((b,i)=>`<option value="${i+1}">${b}</option>`).join("");
+function filteredRows(){
+  const fk=$("#fKomp").value, q=$("#fCari").value.trim().toLowerCase();
+  return state.rows.filter(r=>(!fk||String(r.komponen)===fk) && (!q || (r.kegiatan+" "+r.uraian+" "+r.ket+" "+r.id).toLowerCase().includes(q)));
+}
+function rowHTML(r,i){
+  return `<tr data-id="${esc(r.id)}">
+  <td class="c-no" title="${esc(r.id)}">${i+1}</td>
+  <td><select data-f="komponen">${kompOpts}</select></td>
+  <td><input data-f="kegiatan" value="${esc(r.kegiatan)}" title="${esc(r.kegiatan)}"></td>
+  <td><input data-f="uraian" value="${esc(r.uraian)}" title="${esc(r.uraian)}"></td>
+  <td><input data-f="vol" type="number" min="0" step="any" class="num" value="${r.vol||""}"></td>
+  <td><input data-f="satuan" value="${esc(r.satuan)}"></td>
+  <td><input data-f="harga" type="number" min="0" step="any" class="num" value="${r.harga||""}"></td>
+  <td class="c-jml">${rp(rowTotal(r))}</td>
+  <td><select data-f="bulan">${blnOpts}</select></td>
+  <td style="text-align:center"><input type="checkbox" data-f="buku" ${r.buku?"checked":""} style="width:auto"></td>
+  <td><input data-f="rek" value="${esc(r.rek)}" title="${esc(r.rek)}"></td>
+  <td><input data-f="ket" value="${esc(r.ket)}" title="${esc(r.ket)}"></td>
+  <td class="act"><button data-act="dup" title="Duplikat">⧉</button><button data-act="del" title="Hapus">✕</button></td></tr>`;
+}
+function renderTable(flashIds){
+  const rows=filteredRows(), tb=$("#tbody");
+  if(!rows.length){ tb.innerHTML=`<tr><td colspan="13" class="empty">${state.rows.length?"Tidak ada baris yang cocok dengan filter.":"Belum ada rincian. Klik <b>+ Tambah baris</b> atau minta Agen <b>✨ Susun draf RKAS</b>."}</td></tr>`; }
+  else {
+    tb.innerHTML=rows.map(rowHTML).join("");
+    $$("tr[data-id]",tb).forEach(tr=>{ const r=state.rows.find(x=>x.id===tr.dataset.id); $("select[data-f=komponen]",tr).value=r.komponen; $("select[data-f=bulan]",tr).value=r.bulan||0; if(flashIds&&flashIds.has(r.id)) tr.classList.add("flash"); });
+  }
+  updateFoot();
+}
+function updateFoot(){
+  const rows=filteredRows(), all=state.rows.reduce((a,r)=>a+rowTotal(r),0), f=rows.reduce((a,r)=>a+rowTotal(r),0);
+  const filtered = rows.length!==state.rows.length;
+  $("#footLbl").textContent = filtered ? `Total (${rows.length} baris terfilter) – total keseluruhan ${rp(all)}` : `Total (${rows.length} baris)`;
+  $("#footTotal").textContent = rp(f);
+}
+
+/* ---------- render: rekap ---------- */
+function renderRekap(){
+  const c=calc(), L=checks(c);
+  const icon={ok:"✓",warn:"!",err:"✕",info:"i"};
+  $("#checks").innerHTML = L.map(x=>`<li class="${x.lv}"><span class="ic">${icon[x.lv]}</span><span>${esc(x.txt)}</span></li>`).join("") || `<li class="info"><span class="ic">i</span>Belum ada data.</li>`;
+  const max=Math.max(1,...c.byK);
+  $("#rekapKomp").innerHTML = `<tr><th>No</th><th>Komponen</th><th class="r">Jumlah</th><th class="r">% pagu</th><th style="width:30%"></th></tr>` +
+    KOMPONEN.map(x=>`<tr><td>${x.k}</td><td>${esc(x.n)}</td><td class="r">${rp(c.byK[x.k])}</td><td class="r">${pc(c.byK[x.k],c.pagu)}</td><td><div class="bar"><i style="width:${(c.byK[x.k]/max*100).toFixed(1)}%"></i></div></td></tr>`).join("") +
+    `<tr><th></th><th>Total</th><th class="r">${rp(c.total)}</th><th class="r">${pc(c.total,c.pagu)}</th><th></th></tr>`;
+  let cum=0;
+  $("#rekapBulan").innerHTML = `<tr><th>Bulan</th><th class="r">Rencana</th><th class="r">Kumulatif</th></tr>` +
+    BLN_FULL.map((b,i)=>{ cum+=c.byM[i+1]; return `<tr><td>${b}</td><td class="r">${rp(c.byM[i+1])}</td><td class="r">${rp(cum)}</td></tr>`; }).join("");
+  $("#rekapTahap").innerHTML = `<tr><th>Tahap</th><th class="r">Dana</th><th class="r">Rencana</th><th class="r">%</th></tr>
+    <tr><td>Tahap I (Jan–Jun)${c.silpa?" + SiLPA":""}</td><td class="r">${rp(c.dana1)}</td><td class="r">${rp(c.t1)}</td><td class="r">${pc(c.t1,c.dana1)}</td></tr>
+    <tr><td>Tahap II (Jul–Des)</td><td class="r">${rp(c.dana2)}</td><td class="r">${rp(c.t2)}</td><td class="r">${pc(c.t2,c.dana2)}</td></tr>
+    <tr><th>Total</th><th class="r">${rp(c.dana)}</th><th class="r">${rp(c.total)}</th><th class="r">${pc(c.total,c.dana)}</th></tr>`;
+}
+
+/* ---------- document (print/word) ---------- */
+function docHTML(){
+  const p=state.profil, c=calc();
+  const groups=KOMPONEN.map(x=>({...x,rows:state.rows.filter(r=>r.komponen===x.k)})).filter(g=>g.rows.length);
+  let no=0;
+  const rincian = groups.map(g=>{
+    const sub=g.rows.reduce((a,r)=>a+rowTotal(r),0);
+    return `<tr class="grp"><td>${g.k}</td><td colspan="6">${esc(g.n)}</td><td class="r">${rpn(sub)}</td></tr>` +
+      g.rows.map(r=>{ no++; return `<tr><td>${g.k}.${no}</td><td>${esc(r.kegiatan)}</td><td>${esc(r.uraian)}${r.ket?`<br><i style="font-size:9pt">${esc(r.ket)}</i>`:""}</td><td>${esc(r.rek)}</td><td class="r">${(+r.vol||0).toLocaleString("id-ID")} ${esc(r.satuan)}</td><td class="r">${rpn(r.harga)}</td><td>${r.bulan?BLN[r.bulan-1]:"Rutin"}</td><td class="r">${rpn(rowTotal(r))}</td></tr>`; }).join("");
+  }).join("");
+  const rekap = KOMPONEN.filter(x=>c.byK[x.k]>0 || x.k<=9 || x.k===12).map(x=>`<tr><td>${x.k}</td><td>${esc(x.n)}</td><td class="r">${rpn(c.byK[x.k])}</td><td class="r">${pc(c.byK[x.k],c.pagu)}</td></tr>`).join("");
+  const bulanRow = `<tr>${BLN.map(b=>`<th>${b}</th>`).join("")}</tr><tr>${BLN.map((b,i)=>`<td class="r" style="font-size:9pt">${rpn(c.byM[i+1])}</td>`).join("")}</tr>`;
+  const ok=(a,b,min)=> min ? (a+0.5>=b?"Memenuhi":"Belum memenuhi") : (a<=b+0.5?"Memenuhi":"Melebihi batas");
+  return `
+  <h1>RENCANA KEGIATAN DAN ANGGARAN SEKOLAH (RKAS)</h1>
+  <div class="sub">DANA BOS REGULER TAHUN ANGGARAN ${esc(p.tahun)}</div>
+  <table class="noborder" style="width:auto">
+   <tr><td>Nama Sekolah</td><td>: ${esc(p.sekolah)}</td></tr>
+   <tr><td>NPSN</td><td>: ${esc(p.npsn)}</td></tr>
+   <tr><td>Alamat</td><td>: ${esc(p.alamat)}</td></tr>
+   <tr><td>Kabupaten/Kota</td><td>: ${esc(p.kota)}</td></tr>
+   <tr><td>Jumlah Peserta Didik</td><td>: ${nIn(p.siswa).toLocaleString("id-ID")} orang</td></tr>
+   <tr><td>Pagu Dana BOS Reguler</td><td>: ${rp(c.pagu)}</td></tr>
+   <tr><td>Sisa Dana Tahun Lalu (SiLPA)</td><td>: ${rp(c.silpa)}</td></tr>
+   <tr><td>Total Dana Tersedia</td><td>: <b>${rp(c.dana)}</b></td></tr>
+  </table>
+  ${p.narasi?`<div class="sec">A. NARASI</div><div class="narasi">${esc(p.narasi)}</div>`:""}
+  <div class="sec">${p.narasi?"B":"A"}. REKAPITULASI PER KOMPONEN</div>
+  <table><tr><th style="width:30px">No</th><th>Komponen Penggunaan</th><th style="width:130px">Jumlah (Rp)</th><th style="width:70px">% Pagu</th></tr>${rekap}
+   <tr><th></th><th>JUMLAH</th><th class="r">${rpn(c.total)}</th><th class="r">${pc(c.total,c.pagu)}</th></tr>
+   <tr><td></td><td>Sisa dana belum dianggarkan</td><td class="r">${rpn(c.sisa)}</td><td></td></tr></table>
+  <div class="sec">${p.narasi?"C":"B"}. RINCIAN KEGIATAN DAN ANGGARAN</div>
+  <table><tr><th style="width:42px">No</th><th>Kegiatan</th><th>Uraian Barang/Jasa</th><th>Kode Rekening</th><th>Volume</th><th>Harga Satuan</th><th>Bulan</th><th>Jumlah (Rp)</th></tr>
+   ${rincian||`<tr><td colspan="8" style="text-align:center">Belum ada rincian</td></tr>`}
+   <tr><th colspan="7">TOTAL</th><th class="r">${rpn(c.total)}</th></tr></table>
+  <div class="sec">${p.narasi?"D":"C"}. RENCANA PENARIKAN DANA PER BULAN (Rp)</div>
+  <table>${bulanRow}</table>
+  <table style="width:auto"><tr><th>Tahap</th><th>Dana</th><th>Rencana</th></tr>
+   <tr><td>Tahap I (Jan–Jun)</td><td class="r">${rpn(c.dana1)}</td><td class="r">${rpn(c.t1)}</td></tr>
+   <tr><td>Tahap II (Jul–Des)</td><td class="r">${rpn(c.dana2)}</td><td class="r">${rpn(c.t2)}</td></tr></table>
+  <div class="sec">${p.narasi?"E":"D"}. PEMENUHAN KETENTUAN JUKNIS BOSP</div>
+  <table style="width:auto"><tr><th>Ketentuan</th><th>Batas</th><th>Rencana</th><th>Status</th></tr>
+   <tr><td>Pembayaran honor (maks.)</td><td class="r">${p.honorMax}% = ${rpn(c.honorLim)}</td><td class="r">${rpn(c.honor)} (${pc(c.honor,c.pagu)})</td><td>${ok(c.honor,c.honorLim)}</td></tr>
+   <tr><td>Pengadaan buku (min.)</td><td class="r">${p.bukuMin}% = ${rpn(c.bukuMin)}</td><td class="r">${rpn(c.buku)} (${pc(c.buku,c.pagu)})</td><td>${ok(c.buku,c.bukuMin,true)}</td></tr>
+   <tr><td>Pemeliharaan sarpras (maks.)</td><td class="r">${p.pemeliharaanMax}% = ${rpn(c.pemLim)}</td><td class="r">${rpn(c.pemeliharaan)} (${pc(c.pemeliharaan,c.pagu)})</td><td>${ok(c.pemeliharaan,c.pemLim)}</td></tr></table>
+  <div style="text-align:right;margin-top:18px">${esc(p.tglSah||((p.kota||"").replace(/^(Kota|Kabupaten|Kab\.)\s*/i,"")+", ...................."))}</div>
+  <div class="ttd">
+   <div>Mengetahui,<br>Ketua Komite Sekolah<br><br><br><br><b><u>${esc(p.komite||"...........................")}</u></b></div>
+   <div>Menyetujui,<br>Kepala Sekolah<br><br><br><br><b><u>${esc(p.kepsek||"...........................")}</u></b><br>NIP. ${esc(p.nipKepsek)}</div>
+   <div><br>Bendahara BOS<br><br><br><br><b><u>${esc(p.bendahara||"...........................")}</u></b><br>NIP. ${esc(p.nipBendahara)}</div>
+  </div>`;
+}
+function renderDoc(){ $("#docPreview").innerHTML = docHTML(); }
+
+/* ---------- global refresh ---------- */
+let refreshTimer=null;
+function refresh(){ clearTimeout(refreshTimer); refreshTimer=setTimeout(()=>{
+  renderHeader(); renderKPIs();
+  if($("#tab-3").classList.contains("active")) renderRekap();
+  if($("#tab-4").classList.contains("active")) renderDoc();
+},120); }
+
+/* ---------- events: tabs, profile ---------- */
+$$(".tab").forEach(b=>b.onclick=()=>{
+  $$(".tab").forEach(x=>x.classList.toggle("active",x===b));
+  $$(".pane").forEach(x=>x.classList.toggle("active",x.id==="tab-"+b.dataset.tab));
+  if(b.dataset.tab==="2") renderTable();
+  if(b.dataset.tab==="3") renderRekap();
+  if(b.dataset.tab==="4") renderDoc();
+});
+document.addEventListener("input",e=>{
+  const el=e.target; if(!el.dataset || !el.dataset.p) return;
+  const f=el.dataset.p; state.profil[f]=el.value;
+  if(f==="status"){ state.profil.honorMax = el.value==="Swasta"?40:20; renderProfil(); }
+  save(); refresh();
+});
+document.addEventListener("change",e=>{ const el=e.target; if(el.dataset && el.dataset.p==="status"){ state.profil.honorMax = el.value==="Swasta"?40:20; renderProfil(); save(); refresh(); } });
+KOMPONEN.forEach(x=>$("#fKomp").insertAdjacentHTML("beforeend",`<option value="${x.k}">${x.k}. ${esc(x.s)}</option>`));
+$("#fKomp").onchange=()=>renderTable();
+$("#fCari").oninput=()=>renderTable();
+
+/* ---------- events: table ---------- */
+$("#tbody").addEventListener("input",e=>{
+  const el=e.target, tr=el.closest("tr[data-id]"); if(!tr||!el.dataset.f) return;
+  const r=state.rows.find(x=>x.id===tr.dataset.id); if(!r) return;
+  const f=el.dataset.f;
+  if(f==="buku") r.buku=el.checked;
+  else if(f==="vol"||f==="harga") r[f]=nIn(el.value);
+  else if(f==="komponen"||f==="bulan") r[f]=parseInt(el.value,10)||0;
+  else r[f]=el.value;
+  if(f==="komponen" && r.komponen===2 && /buku/i.test(r.uraian+r.kegiatan) && !r.buku){ r.buku=true; const cb=$("input[data-f=buku]",tr); if(cb) cb.checked=true; }
+  if(f==="uraian" && /\bbuku\b/i.test(r.uraian) && (r.komponen===2||r.komponen===3) && !r.buku){ r.buku=true; const cb=$("input[data-f=buku]",tr); if(cb) cb.checked=true; }
+  $(".c-jml",tr).textContent=rp(rowTotal(r));
+  updateFoot(); save(); refresh();
+});
+$("#tbody").addEventListener("change",e=>{
+  const el=e.target, tr=el.closest("tr[data-id]"); if(!tr||!el.dataset.f) return;
+  if(!el.matches("select,input[type=checkbox]")) return;
+  const r=state.rows.find(x=>x.id===tr.dataset.id); if(!r) return;
+  if(el.dataset.f==="buku") r.buku=el.checked; else r[el.dataset.f]=parseInt(el.value,10)||0;
+  $(".c-jml",tr).textContent=rp(rowTotal(r)); updateFoot(); save(); refresh();
+});
+$("#tbody").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-act]"); if(!b) return;
+  const id=b.closest("tr").dataset.id, i=state.rows.findIndex(x=>x.id===id); if(i<0) return;
+  if(b.dataset.act==="del"){ state.rows.splice(i,1); }
+  else { const c=sanitizeRow({...state.rows[i]}); state.rows.splice(i+1,0,c); }
+  save(); renderTable(); refresh();
+});
+$("#btnAddRow").onclick=()=>{
+  const fk=parseInt($("#fKomp").value,10)||5;
+  const r=sanitizeRow({komponen:fk,bulan:1,vol:1}); state.rows.push(r);
+  $("#fCari").value=""; save(); renderTable(new Set([r.id])); refresh();
+  const tr=$(`tr[data-id="${r.id}"]`); if(tr){ tr.scrollIntoView({block:"center"}); $("input[data-f=kegiatan]",tr).focus(); }
+};
+$("#btnClearRows").onclick=()=>{ if(!state.rows.length) return; if(confirm(`Hapus semua ${state.rows.length} baris rincian? (Simpan cadangan dulu bila perlu)`)){ undoStack.push(JSON.stringify(state.rows)); state.rows=[]; save(); renderTable(); refresh(); toast("Tabel dikosongkan"); } };
+
+/* ---------- import / template ---------- */
+const HEAD = ["No","Komponen","Kegiatan","Uraian","Volume","Satuan","Harga Satuan","Jumlah","Bulan","Buku","Kode Rekening","Keterangan"];
+$("#btnTemplate").onclick=()=>{
+  if(!window.XLSX){ download("Template_RKAS.csv", HEAD.join(";")+"\n1;5;Rapat koordinasi;Konsumsi rapat;40;kotak;25000;;Januari;;;\n","text/csv"); return; }
+  const ws=XLSX.utils.aoa_to_sheet([HEAD,[1,"5. Administrasi","Rapat koordinasi","Konsumsi rapat",40,"kotak",25000,null,"Januari","","","Contoh – hapus baris ini"]]);
+  ws["H2"]={t:"n",f:"E2*G2"}; ws["!cols"]=[5,22,28,34,8,10,14,14,12,6,22,24].map(w=>({wch:w}));
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Rincian");
+  const ref=XLSX.utils.aoa_to_sheet([["No","Komponen BOS Reguler"],...KOMPONEN.map(x=>[x.k,x.n])]); ref["!cols"]=[{wch:5},{wch:80}];
+  XLSX.utils.book_append_sheet(wb,ref,"Daftar Komponen");
+  XLSX.writeFile(wb,"Template_RKAS_Pintar.xlsx");
+};
+$("#btnImport").onclick=()=>$("#fileImport").click();
+$("#fileImport").onchange=async e=>{
+  const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  if(!window.XLSX){ toast("Pustaka Excel belum termuat. Periksa koneksi internet."); return; }
+  try{
+    const wb=XLSX.read(await f.arrayBuffer(),{type:"array"});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const aoa=XLSX.utils.sheet_to_json(ws,{header:1,defval:"",raw:true});
+    const hi=aoa.findIndex(r=>r.some(c=>/uraian|barang\/jasa|rincian/i.test(String(c))));
+    if(hi<0) throw new Error("Kolom 'Uraian' tidak ditemukan");
+    const H=aoa[hi].map(c=>String(c).toLowerCase());
+    const col=(re,not)=>H.findIndex(h=>re.test(h)&&!(not&&not.test(h)));
+    const ix={komponen:col(/komponen/),kegiatan:col(/kegiatan/),uraian:col(/uraian|barang|rincian/),vol:col(/vol/),
+      satuan:col(/satuan/,/harga/),harga:col(/harga/),bulan:col(/bulan/),buku:col(/^buku/),rek:col(/rek/),ket:col(/ket/)};
+    const out=[];
+    for(const r of aoa.slice(hi+1)){
+      const g=k=>ix[k]>=0?r[ix[k]]:"";
+      if(!String(g("uraian")).trim() && !String(g("kegiatan")).trim()) continue;
+      if(/^(total|jumlah)$/i.test(String(g("uraian")).trim())) continue;
+      out.push(sanitizeRow({komponen:g("komponen"),kegiatan:g("kegiatan"),uraian:g("uraian"),vol:g("vol"),satuan:g("satuan"),harga:g("harga"),bulan:g("bulan")===""?1:g("bulan"),buku:g("buku"),rek:g("rek"),ket:g("ket")}));
+    }
+    if(!out.length) throw new Error("Tidak ada baris yang terbaca");
+    const replace = state.rows.length ? confirm(`${out.length} baris terbaca.\nOK = ganti seluruh tabel\nBatal = tambahkan ke tabel yang ada`) : true;
+    undoStack.push(JSON.stringify(state.rows));
+    state.rows = replace ? out : state.rows.concat(out);
+    save(); renderTable(new Set(out.map(r=>r.id))); refresh(); toast(`${out.length} baris diimpor`);
+  }catch(err){ alert("Impor gagal: "+err.message+"\n\nTips: gunakan tombol 'Template', atau lampirkan file ke Agen (📎) dan minta: 'ubah file ini menjadi tabel RKAS'."); }
+};
+
+/* ---------- export ---------- */
+function exportXlsx(){
+  const p=state.profil, c=calc();
+  if(!window.XLSX){ // CSV fallback
+    const lines=[HEAD.join(";")].concat(state.rows.map((r,i)=>[i+1,r.komponen,r.kegiatan,r.uraian,r.vol,r.satuan,r.harga,rowTotal(r),r.bulan?BLN_FULL[r.bulan-1]:"Rutin",r.buku?"Ya":"",r.rek,r.ket].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(";")));
+    download(`RKAS_${safeName(p.sekolah)}_${p.tahun}.csv`,"﻿"+lines.join("\n"),"text/csv"); return;
+  }
+  const wb=XLSX.utils.book_new();
+  const info=[["RENCANA KEGIATAN DAN ANGGARAN SEKOLAH (RKAS) – DANA BOS REGULER TA "+p.tahun],["Sekolah",p.sekolah],["NPSN",p.npsn],["Pagu",c.pagu],["SiLPA",c.silpa],["Dana tersedia",c.dana],[]];
+  const aoa=info.concat([HEAD]);
+  state.rows.forEach((r,i)=>aoa.push([i+1,r.komponen+". "+KOMPONEN[r.komponen-1].s,r.kegiatan,r.uraian,+r.vol||0,r.satuan,+r.harga||0,rowTotal(r),r.bulan?BLN_FULL[r.bulan-1]:"Rutin",r.buku?"Ya":"",r.rek,r.ket]));
+  const ws=XLSX.utils.aoa_to_sheet(aoa);
+  const h0=info.length+1; // header row (1-based)
+  state.rows.forEach((r,i)=>{ const rr=h0+1+i; ws["H"+rr]={t:"n",v:rowTotal(r),f:`E${rr}*G${rr}`,z:"#,##0"}; ws["G"+rr].z="#,##0"; });
+  const last=h0+state.rows.length;
+  XLSX.utils.sheet_add_aoa(ws,[["","","","TOTAL","","","",{t:"n",f:`SUM(H${h0+1}:H${Math.max(h0+1,last)})`,z:"#,##0"}]],{origin:"A"+(last+1)});
+  ws["!cols"]=[5,24,30,40,8,10,14,16,12,6,24,28].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb,ws,"Rincian RKAS");
+  const rk=[["No","Komponen","Jumlah","% Pagu"],...KOMPONEN.map(x=>[x.k,x.n,Math.round(c.byK[x.k]),c.pagu?c.byK[x.k]/c.pagu:0]),["","TOTAL",Math.round(c.total),c.pagu?c.total/c.pagu:0],["","Sisa belum dianggarkan",Math.round(c.sisa),""]];
+  const ws2=XLSX.utils.aoa_to_sheet(rk); ws2["!cols"]=[{wch:5},{wch:75},{wch:16},{wch:10}];
+  for(let i=2;i<=rk.length;i++){ if(ws2["C"+i]) ws2["C"+i].z="#,##0"; if(ws2["D"+i]&&ws2["D"+i].t==="n") ws2["D"+i].z="0.0%"; }
+  XLSX.utils.book_append_sheet(wb,ws2,"Rekap Komponen");
+  const bl=[["Bulan","Rencana","Tahap"],...BLN_FULL.map((b,i)=>[b,Math.round(c.byM[i+1]),i<6?"I":"II"]),["Total",Math.round(c.total),""]];
+  const ws3=XLSX.utils.aoa_to_sheet(bl); ws3["!cols"]=[{wch:12},{wch:16},{wch:7}];
+  for(let i=2;i<=bl.length;i++) if(ws3["B"+i]) ws3["B"+i].z="#,##0";
+  XLSX.utils.book_append_sheet(wb,ws3,"Rencana per Bulan");
+  const ws4=XLSX.utils.aoa_to_sheet([["Status","Hasil validasi"],...checks(c).map(x=>[{ok:"OK",warn:"Perhatian",err:"Masalah",info:"Info"}[x.lv],x.txt])]); ws4["!cols"]=[{wch:10},{wch:120}];
+  XLSX.utils.book_append_sheet(wb,ws4,"Validasi");
+  XLSX.writeFile(wb,`RKAS_${safeName(p.sekolah)}_${p.tahun}.xlsx`);
+}
+$("#btnXlsx").onclick=exportXlsx;
+$("#btnDoc").onclick=()=>{
+  const p=state.profil;
+  const css=`body{font-family:'Times New Roman';font-size:11pt}h1{text-align:center;font-size:14pt;margin:0}.sub{text-align:center;font-weight:bold;margin:2px 0 12px}table{border-collapse:collapse;width:100%;margin:6px 0 12px;font-size:10pt}th,td{border:1px solid #000;padding:3px 5px;vertical-align:top}th{background:#e9eef4}td.r{text-align:right}.noborder td{border:none}.grp td{background:#f1f5f9;font-weight:bold}.sec{font-weight:bold;margin:12px 0 4px}.ttd{width:100%}.narasi{white-space:pre-wrap;text-align:justify}`;
+  let body=docHTML().replace(/<div class="ttd">([\s\S]*)<\/div>\s*$/,(m,inner)=>{ const cells=[...inner.matchAll(/<div>([\s\S]*?)<\/div>/g)].map(x=>`<td style="border:none;text-align:center;width:33%">${x[1]}</td>`).join(""); return `<table class="ttd"><tr>${cells}</tr></table>`; });
+  const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>RKAS</title><style>@page{size:21cm 29.7cm;margin:1.5cm}${css}</style></head><body>${body}</body></html>`;
+  download(`RKAS_${safeName(p.sekolah)}_${p.tahun}.doc`,"﻿"+html,"application/msword");
+};
+$("#btnPrint").onclick=()=>{
+  $("#printArea").innerHTML=`<div class="doc">${docHTML()}</div>`;
+  try{ window.print(); }catch(e){ toast("Cetak diblokir oleh halaman. Gunakan 'Unduh Word' lalu cetak dari Word."); }
+};
+$("#btnBackup").onclick=()=>{ const p=state.profil; download(`Cadangan_RKAS_${safeName(p.sekolah)}_${p.tahun}.json`,JSON.stringify(state,null,1),"application/json"); };
+$("#btnRestore").onclick=()=>$("#fileRestore").click();
+$("#fileRestore").onchange=async e=>{
+  const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  try{ const s=JSON.parse(await f.text()); if(!s.profil||!Array.isArray(s.rows)) throw new Error("format tidak dikenali");
+    if(!confirm("Ganti data saat ini dengan isi cadangan?")) return;
+    const d=defaultState(); state={...d,...s,profil:{...d.profil,...s.profil}}; save(); renderAll(); toast("Cadangan dibuka");
+  }catch(err){ alert("Gagal membuka cadangan: "+err.message); }
+};
+
+/* ============================================================
+   AGEN AI (Gemini)
+   ============================================================ */
+const SYSTEM_PROMPT = `Anda adalah "Agen RKAS", asisten AI untuk bendahara dan tim BOS sekolah di Indonesia dalam menyusun RKAS (Rencana Kegiatan dan Anggaran Sekolah) Dana BOS Reguler.
+
+ACUAN UTAMA: Permendikdasmen Nomor 8 Tahun 2026 tentang Petunjuk Teknis Pengelolaan Dana BOSP (mencabut Permendikdasmen 8/2025). Pokok aturan:
+1. 12 komponen penggunaan Dana BOS Reguler: (1) Penerimaan Peserta Didik Baru; (2) Pengembangan Perpustakaan; (3) Pelaksanaan Kegiatan Pembelajaran dan Ekstrakurikuler; (4) Pelaksanaan Kegiatan Asesmen/Evaluasi Pembelajaran; (5) Pelaksanaan Administrasi Kegiatan Sekolah; (6) Pengembangan Profesi Pendidik dan Tenaga Kependidikan; (7) Pembiayaan Langganan Daya dan Jasa; (8) Pemeliharaan Sarana dan Prasarana Sekolah; (9) Penyediaan Alat Multimedia Pembelajaran; (10) Penyelenggaraan Kegiatan Peningkatan Kompetensi Keahlian (khusus SMK/SMALB); (11) Penyelenggaraan Kegiatan dalam Mendukung Keterserapan Lulusan (khusus SMK/SMALB); (12) Pembayaran Honor.
+2. Batas, dihitung dari total alokasi Dana BOS Reguler: honor paling banyak 20% (sekolah negeri) / 40% (swasta) — pakai angka batas pada DATA SEKOLAH, karena sekolah bisa memakai relaksasi SE Mendikdasmen No. 6 Tahun 2026; buku paling sedikit 10%; pemeliharaan sarpras paling banyak 20%.
+3. Larangan: memindahkan dana ke rekening pribadi atau untuk kepentingan pribadi; meminjamkan dana; memungut biaya dari peserta didik untuk kegiatan yang sudah dibiayai BOSP; membeli instrumen investasi; memperbaiki kerusakan sedang/berat atau membangun ruang baru; membiayai kegiatan yang sudah dibiayai sumber lain (dobel anggaran); bertindak sebagai distributor/pengecer; pengadaan bahan pangan untuk program Makan Bergizi Gratis.
+4. Sisa dana tahun sebelumnya (SiLPA) dicatat dalam RKAS. Penyaluran tahap II mensyaratkan realisasi tahap I minimal 50%.
+5. RKAS disusun berdasarkan evaluasi diri / Perencanaan Berbasis Data (Rapor Pendidikan) dan prioritas kebutuhan sekolah.
+6. Honor: penerima harus memenuhi syarat juknis (terdata di Dapodik/Info GTK sesuai ketentuan).
+Jika ragu tentang suatu ketentuan, katakan terus terang dan sarankan konfirmasi ke dinas pendidikan atau naskah juknis. Jangan mengarang nomor pasal atau angka aturan.
+
+CARA KERJA:
+- Bahasa Indonesia yang jelas, sopan, ringkas, praktis untuk bendahara.
+- Harga satuan wajar untuk wilayah sekolah, angka bulat. Ingatkan untuk menyesuaikan dengan Standar Harga Satuan (SSH) daerah dan harga riil.
+- Kode rekening belanja: isi hanya bila yakin (format SIPD, mis. 5.1.02.01.01.0024). Bila tidak yakin, kosongkan dan tulis ket "cek kode rekening".
+- Kolom bulan: 1–12 = bulan pelaksanaan; 0 = rutin bulanan (dibagi rata Jan–Des) untuk listrik, air, internet, honor bulanan. Untuk baris bulan 0, volume = total setahun (mis. 12 bulan, atau 3 orang × 12 bulan = 36 OB).
+- Jadwal realistis: SPMB/PPDB Mei–Juli, MPLS Juli, asesmen sumatif akhir semester (Mei–Juni dan November–Desember), pemeliharaan saat libur, pengembangan GTK tersebar.
+- buku=true untuk baris pengadaan buku (buku teks, buku nonteks/bacaan, buku referensi) agar terhitung dalam batas minimal buku.
+- Total belanja tidak boleh melebihi total dana tersedia; usahakan sisa di bawah 2%.
+- Draf lengkap: rinci (umumnya 40–90 baris), mencakup komponen yang relevan dengan jenjang, dan menjawab prioritas PBD. Satu baris = satu jenis barang/jasa.
+- Periksa juga HASIL VALIDASI OTOMATIS yang dikirim aplikasi.
+
+FORMAT JAWABAN: selalu SATU objek JSON valid, tanpa teks lain:
+{"reply":"<penjelasan untuk pengguna; boleh markdown sederhana: **tebal**, daftar '- ', judul '### '>","actions":[ ... ]}
+Jenis actions (boleh []):
+- {"type":"replace_all","rows":[ROW,...]}  → mengganti seluruh tabel (hanya untuk draf baru atau bila diminta menyusun ulang)
+- {"type":"add_rows","rows":[ROW,...]}
+- {"type":"update_rows","rows":[{"id":"R12", ...hanya kolom yang diubah}]}
+- {"type":"delete_rows","ids":["R3","R7"]}
+ROW = {"komponen":1-12,"kegiatan":"...","uraian":"...","volume":angka,"satuan":"...","harga":angka rupiah tanpa titik,"bulan":0-12,"buku":true/false,"rek":"...","ket":"..."}
+Isi actions hanya bila pengguna meminta menyusun/mengubah tabel, atau bila perbaikan memang perlu dan dijelaskan di reply. Perubahan tidak langsung berlaku: pengguna akan menekan "Terapkan". Untuk pertanyaan biasa, actions = [].
+Bila pengguna melampirkan dokumen (RKAS lama, DPPA, nota, Rapor Pendidikan), baca isinya dan manfaatkan; bila diminta, ubah menjadi baris tabel.`;
+
+const QUICK = {
+  draf:{label:"Susun draf RKAS",text:"Susun draf RKAS Dana BOS Reguler lengkap untuk satu tahun anggaran bagi sekolah ini. Gunakan seluruh dana tersedia (sisa < 2%), patuhi semua batas juknis, dan kaitkan kegiatan dengan prioritas PBD serta kebutuhan rutin. Jika tabel masih kosong gunakan replace_all; jika sudah berisi, pertahankan baris yang ada dan tambahkan kekurangannya dengan add_rows. Di reply, jelaskan singkat logika alokasi per komponen dan hal yang perlu dicek bendahara."},
+  periksa:{label:"Periksa RKAS",text:"Periksa RKAS saat ini terhadap Juknis BOSP 2026: batas honor/buku/pemeliharaan, larangan, ketepatan komponen, kewajaran harga, kelengkapan, penjadwalan tahap, dan keterkaitan dengan prioritas PBD. Beri temuan berurutan dari yang paling serius, lalu usulan perbaikan. Sertakan actions perbaikan bila jelas."},
+  seimbang:{label:"Pas-kan ke pagu",text:"Sesuaikan RKAS agar total pas dengan dana tersedia (sisa 0–1%) tanpa melanggar batas juknis. Ubah volume/harga pada baris yang paling masuk akal, atau tambah/hapus baris bila perlu. Jelaskan perubahannya."},
+  tahap:{label:"Atur tahap",text:"Atur bulan pelaksanaan agar belanja tahap I (Jan–Jun) tidak melebihi dana tahap I, realisasi tahap I dapat mencapai minimal 50%, dan jadwal tetap realistis. Gunakan update_rows."},
+  harga:{label:"Cek harga",text:"Cek kewajaran harga satuan seluruh baris untuk wilayah sekolah ini. Tandai yang terlalu tinggi/rendah dan usulkan harga wajar (update_rows bila perlu). Ingatkan untuk mencocokkan dengan SSH daerah."},
+  narasi:{label:"Buat narasi",text:"Buat narasi RKAS siap pakai: latar belakang, dasar hukum, tujuan, prioritas berbasis data, ringkasan alokasi per komponen (dengan angka), dan penutup. Tulis sebagai teks biasa yang rapi (tanpa tabel). actions = []."}
+};
+
+let busy=false, pendingFile=null;
+const undoStack=[];
+
+function buildContext(){
+  const p=state.profil, c=calc();
+  const L=checks(c).map(x=>`- [${x.lv.toUpperCase()}] ${x.txt}`).join("\n");
+  const rows=state.rows.map(r=>[r.id,r.komponen,r.bulan,r.buku?1:0,r.kegiatan,r.uraian,r.vol,r.satuan,r.harga,Math.round(rowTotal(r)),r.rek,r.ket].map(v=>String(v??"").replace(/\|/g,"/")).join("|")).join("\n");
+  return `DATA SEKOLAH:
+- Sekolah: ${p.sekolah||"(belum diisi)"} | NPSN ${p.npsn||"-"} | ${p.jenjang} ${p.status} | ${p.kota||"-"}
+- Tahun anggaran: ${p.tahun}
+- Jumlah peserta didik: ${nIn(p.siswa)} | satuan biaya: ${rp(nIn(p.satuan))}
+- Pagu BOS Reguler: ${rp(c.pagu)} | SiLPA: ${rp(c.silpa)} | Total dana tersedia: ${rp(c.dana)}
+- Porsi tahap I: ${p.tahap1}% → dana tahap I (termasuk SiLPA) ${rp(c.dana1)}, tahap II ${rp(c.dana2)}
+- Batas: honor maks ${p.honorMax}% (${rp(c.honorLim)}), buku min ${p.bukuMin}% (${rp(c.bukuMin)}), pemeliharaan maks ${p.pemeliharaanMax}% (${rp(c.pemLim)})
+PRIORITAS PBD / RAPOR PENDIDIKAN:
+${p.prioritas||"(belum diisi)"}
+KEBUTUHAN RUTIN & CATATAN:
+${p.kebutuhan||"(belum diisi)"}
+RINGKASAN SAAT INI: total ${rp(c.total)} | sisa ${rp(c.sisa)} | honor ${rp(c.honor)} | buku ${rp(c.buku)} | pemeliharaan ${rp(c.pemeliharaan)} | tahap I ${rp(c.t1)} | tahap II ${rp(c.t2)}
+HASIL VALIDASI OTOMATIS:
+${L||"-"}
+TABEL RKAS SAAT INI (${state.rows.length} baris; kolom: id|komponen|bulan|buku|kegiatan|uraian|volume|satuan|harga|jumlah|rek|ket):
+${rows||"(kosong)"}`;
+}
+
+async function callGemini(contents){
+  const key=apiKey(); if(!key) throw new Error("NO_KEY");
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model())}:generateContent`;
+  const body={systemInstruction:{parts:[{text:SYSTEM_PROMPT}]},contents,generationConfig:{temperature:0.4,responseMimeType:"application/json"}};
+  const res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify(body)});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok){
+    const m=(data.error&&data.error.message)||res.statusText;
+    if(res.status===400 && /api key/i.test(m)) throw new Error("API key tidak valid. Periksa kembali di ⚙ Pengaturan.");
+    if(res.status===404) throw new Error(`Model "${model()}" tidak ditemukan. Buka ⚙ Pengaturan → "Muat daftar", lalu pilih model yang tersedia.`);
+    if(res.status===429) throw new Error("Kuota Gemini habis atau terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.");
+    if(res.status===403) throw new Error("Akses ditolak (403): "+m);
+    throw new Error(`Galat ${res.status}: ${m}`);
+  }
+  const cand=data.candidates&&data.candidates[0];
+  const txt=((cand&&cand.content&&cand.content.parts)||[]).filter(p=>!p.thought).map(p=>p.text||"").join("");
+  if(!txt){ const why=(cand&&cand.finishReason)||(data.promptFeedback&&data.promptFeedback.blockReason)||"kosong"; throw new Error("Jawaban AI kosong ("+why+"). Coba ulangi atau persingkat permintaan."); }
+  return {text:txt,finish:cand.finishReason};
+}
+function parseAgent(txt){
+  let t=txt.trim().replace(/^```(?:json)?\s*/i,"").replace(/```\s*$/,"");
+  try{ const o=JSON.parse(t); return {reply:String(o.reply||""),actions:Array.isArray(o.actions)?o.actions:[]}; }catch(e){}
+  const a=t.indexOf("{"), b=t.lastIndexOf("}");
+  if(a>=0&&b>a){ try{ const o=JSON.parse(t.slice(a,b+1)); return {reply:String(o.reply||""),actions:Array.isArray(o.actions)?o.actions:[]}; }catch(e){} }
+  return {reply:t,actions:[]};
+}
+
+/* ---------- chat UI ---------- */
+function md(s){
+  const lines=esc(s).split(/\r?\n/); let out="", list=null;
+  const inline=t=>t.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/(^|[^*])\*(?!\s)([^*]+?)\*(?!\*)/g,"$1<i>$2</i>").replace(/`([^`]+)`/g,"<code>$1</code>");
+  const close=()=>{ if(list){ out+=`</${list}>`; list=null; } };
+  for(const ln of lines){
+    let m;
+    if((m=ln.match(/^\s*#{1,4}\s+(.*)/))){ close(); out+=`<h4>${inline(m[1])}</h4>`; }
+    else if((m=ln.match(/^\s*[-*•]\s+(.*)/))){ if(list!=="ul"){ close(); out+="<ul>"; list="ul"; } out+=`<li>${inline(m[1])}</li>`; }
+    else if((m=ln.match(/^\s*\d+[.)]\s+(.*)/))){ if(list!=="ol"){ close(); out+="<ol>"; list="ol"; } out+=`<li>${inline(m[1])}</li>`; }
+    else if(!ln.trim()){ close(); }
+    else { close(); out+=`<p>${inline(ln)}</p>`; }
+  }
+  close(); return out;
+}
+function summarizeActions(acts){
+  const items=[]; let add=0,addN=0;
+  for(const a of acts){
+    if(a.type==="replace_all"){ const rs=(a.rows||[]); const t=rs.reduce((s,r)=>s+parseAngka(r.volume??r.vol)*parseAngka(r.harga),0); items.push(`Ganti seluruh tabel dengan ${rs.length} baris (${rp(t)})`); }
+    else if(a.type==="add_rows"){ const rs=(a.rows||[]); addN+=rs.length; add+=rs.reduce((s,r)=>s+parseAngka(r.volume??r.vol)*parseAngka(r.harga),0); }
+    else if(a.type==="update_rows"){ items.push(`Ubah ${(a.rows||[]).length} baris: ${(a.rows||[]).slice(0,8).map(r=>r.id).join(", ")}${(a.rows||[]).length>8?"…":""}`); }
+    else if(a.type==="delete_rows"){ items.push(`Hapus ${(a.ids||[]).length} baris: ${(a.ids||[]).slice(0,8).join(", ")}${(a.ids||[]).length>8?"…":""}`); }
+  }
+  if(addN) items.unshift(`Tambah ${addN} baris (${rp(add)})`);
+  return items;
+}
+function applyActions(acts){
+  undoStack.push(JSON.stringify(state.rows));
+  const touched=new Set();
+  for(const a of acts){
+    if(a.type==="replace_all"){ state.rows=(a.rows||[]).map(r=>sanitizeRow(r)); state.rows.forEach(r=>touched.add(r.id)); }
+    else if(a.type==="add_rows"){ for(const r of (a.rows||[])){ const o=sanitizeRow(r); state.rows.push(o); touched.add(o.id); } }
+    else if(a.type==="update_rows"){
+      for(const u of (a.rows||[])){
+        const r=state.rows.find(x=>x.id===String(u.id)); if(!r) continue;
+        const merged=sanitizeRow({...r,...u,volume:(u.volume??u.vol??r.vol),id:r.id},true);
+        Object.assign(r,merged); touched.add(r.id);
+      }
+    }
+    else if(a.type==="delete_rows"){ const ids=new Set((a.ids||[]).map(String)); state.rows=state.rows.filter(r=>!ids.has(r.id)); }
+  }
+  save(); renderTable(touched); refresh();
+  return touched.size;
+}
+function renderChat(){
+  const box=$("#msgs");
+  if(!state.chat.length){
+    box.innerHTML=`<div class="msg bot">${md(`### Halo, saya Agen RKAS 👋
+Saya membantu bendahara menyusun RKAS Dana BOS Reguler sesuai **Permendikdasmen 8/2026**.
+
+**Yang bisa saya kerjakan:**
+- Menyusun draf RKAS lengkap dari pagu dan prioritas Rapor Pendidikan
+- Menambah, mengubah, atau menghapus baris sesuai perintah Anda
+- Memeriksa batas honor, buku, pemeliharaan, larangan, dan tahap
+- Membaca RKAS lama, DPPA, atau Rapor (📎 PDF/gambar/Excel) lalu mengubahnya menjadi tabel
+- Membuat narasi RKAS
+
+**Mulai:** lengkapi tab *Profil & Pagu*, lalu tekan **✨ Susun draf RKAS**. Setiap perubahan dari saya baru berlaku setelah Anda menekan **Terapkan**.`)}</div>`;
+    return;
+  }
+  box.innerHTML = state.chat.map((m,i)=>{
+    if(m.role==="user") return `<div class="msg user">${esc(m.text)}${m.att?`<div class="att">📎 ${esc(m.att)}</div>`:""}</div>`;
+    let h=`<div class="msg bot" data-i="${i}">${m.error?`<p style="color:var(--err)"><b>⚠ ${esc(m.text)}</b></p>`:md(m.text)}`;
+    if(m.actions && m.actions.length){
+      const items=summarizeActions(m.actions);
+      if(m.applied===true) h+=`<div class="actcard done">✓ Perubahan sudah diterapkan. <button class="btn sm" data-undo="${i}">↶ Batalkan</button></div>`;
+      else if(m.applied===false) h+=`<div class="actcard done">Usulan perubahan diabaikan.</div>`;
+      else if(m.applied==="undone") h+=`<div class="actcard done">Perubahan dibatalkan.</div>`;
+      else h+=`<div class="actcard"><b>Usulan perubahan tabel:</b><ul>${items.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><div class="row"><button class="btn sm acc" data-apply="${i}">✓ Terapkan</button><button class="btn sm" data-skip="${i}">Abaikan</button></div></div>`;
+    }
+    if(!m.error) h+=`<div class="tools"><button data-copy="${i}">Salin</button><button data-narasi="${i}">📄 Pakai sebagai narasi</button></div>`;
+    return h+`</div>`;
+  }).join("");
+  box.scrollTop=box.scrollHeight;
+}
+$("#msgs").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  const get=k=>state.chat[+b.dataset[k]];
+  if(b.dataset.apply!==undefined){ const m=get("apply"); const n=applyActions(m.actions); m.applied=true; m.undoIndex=undoStack.length-1; save(); renderChat(); toast(`Perubahan diterapkan (${n} baris terdampak)`);
+    if(!$("#tab-2").classList.contains("active")) $('.tab[data-tab="2"]').click(); }
+  else if(b.dataset.skip!==undefined){ get("skip").applied=false; save(); renderChat(); }
+  else if(b.dataset.undo!==undefined){ const m=get("undo"); const snap=undoStack[m.undoIndex];
+    if(snap){ state.rows=JSON.parse(snap); m.applied="undone"; save(); renderTable(); refresh(); renderChat(); toast("Perubahan dibatalkan"); } else toast("Riwayat pembatalan tidak tersedia (halaman sudah dimuat ulang)."); }
+  else if(b.dataset.copy!==undefined){ copyText(get("copy").text); }
+  else if(b.dataset.narasi!==undefined){ state.profil.narasi=get("narasi").text.replace(/\*\*(.+?)\*\*/g,"$1").replace(/^#{1,4}\s+/gm,""); save(); renderProfil(); toast("Narasi dipasang di tab Cetak & Ekspor"); }
+});
+function setBusy(v){
+  busy=v; $("#btnSend").disabled=v; $$(".chip").forEach(c=>c.disabled=v);
+  const ex=$("#typing"); if(ex) ex.remove();
+  if(v){ $("#msgs").insertAdjacentHTML("beforeend",`<div class="typing" id="typing"><span class="dots"><i></i><i></i><i></i></span> Agen sedang bekerja… (menyusun draf bisa 30–90 detik)</div>`); $("#msgs").scrollTop=1e9; }
+}
+async function send(text, label){
+  text=(text||"").trim(); if(!text||busy) return;
+  if(!apiKey()){ openSettings(); toast("Isi API key Gemini terlebih dahulu"); return; }
+  const att=pendingFile; pendingFile=null; renderAtt();
+  state.chat.push({role:"user",text:label||text,att:att?att.name:""});
+  renderChat(); setBusy(true);
+  try{
+    // riwayat (tanpa konteks besar) – 10 pesan terakhir
+    const hist=[]; const prev=state.chat.slice(0,-1).filter(m=>!m.error).slice(-10);
+    for(const m of prev){ hist.push({role:m.role==="user"?"user":"model",parts:[{text:m.role==="user"?m.text:JSON.stringify({reply:m.text,actions:[]})}]}); }
+    while(hist.length && hist[0].role!=="user") hist.shift();
+    const parts=[{text:buildContext()+"\n\nPERMINTAAN PENGGUNA:\n"+text}];
+    if(att){ if(att.inline) parts.push({inlineData:{mimeType:att.mime,data:att.data}}); else parts.push({text:`\n\nISI LAMPIRAN "${att.name}":\n${att.text}`}); }
+    // gabungkan bila ada dua pesan user berurutan
+    const contents=hist.concat([{role:"user",parts}]);
+    for(let i=contents.length-1;i>0;i--){ if(contents[i].role===contents[i-1].role){ contents[i-1].parts=contents[i-1].parts.concat(contents[i].parts); contents.splice(i,1); } }
+    const {text:out,finish}=await callGemini(contents);
+    const r=parseAgent(out);
+    let reply=r.reply||"(Agen tidak memberi penjelasan.)";
+    if(finish==="MAX_TOKENS") reply+="\n\n⚠ Jawaban terpotong karena terlalu panjang. Minta per bagian, mis. 'susun komponen 1–6 dulu'.";
+    state.chat.push({role:"bot",text:reply,actions:r.actions.filter(a=>a&&a.type)});
+  }catch(err){
+    state.chat.push({role:"bot",error:true,text:err.message==="NO_KEY"?"API key belum diisi.":err.message});
+  }
+  if(state.chat.length>60) state.chat=state.chat.slice(-60);
+  setBusy(false); save(); renderChat();
+}
+$("#btnSend").onclick=()=>{ const t=$("#chatIn").value; $("#chatIn").value=""; autoGrow(); send(t); };
+$("#chatIn").addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); $("#btnSend").click(); } });
+function autoGrow(){ const t=$("#chatIn"); t.style.height="auto"; t.style.height=Math.min(140,t.scrollHeight)+"px"; }
+$("#chatIn").addEventListener("input",autoGrow);
+$$(".chip").forEach(c=>c.onclick=()=>{ const q=QUICK[c.dataset.q]; send(q.text, c.textContent.trim()); });
+$("#btnClearChat").onclick=()=>{ if(!state.chat.length) return; if(confirm("Hapus seluruh percakapan dengan Agen? (Tabel RKAS tidak terhapus)")){ state.chat=[]; save(); renderChat(); } };
+
+/* ---------- attachments ---------- */
+$("#btnAttach").onclick=()=>$("#fileAttach").click();
+$("#fileAttach").onchange=async e=>{
+  const f=e.target.files[0]; e.target.value=""; if(!f) return;
+  try{
+    if(/\.(xlsx|xls|csv)$/i.test(f.name)){
+      if(!window.XLSX && !/\.csv$/i.test(f.name)) throw new Error("Pustaka Excel belum termuat");
+      let text;
+      if(window.XLSX){ const wb=XLSX.read(await f.arrayBuffer(),{type:"array"}); text=wb.SheetNames.slice(0,4).map(n=>`--- Sheet: ${n} ---\n`+XLSX.utils.sheet_to_csv(wb.Sheets[n],{FS:";",blankrows:false})).join("\n"); }
+      else text=await f.text();
+      if(text.length>120000) text=text.slice(0,120000)+"\n…(dipotong)";
+      pendingFile={name:f.name,inline:false,text};
+    } else if(/\.txt$/i.test(f.name)){ pendingFile={name:f.name,inline:false,text:(await f.text()).slice(0,120000)}; }
+    else {
+      if(f.size>18*1024*1024) throw new Error("Ukuran file maksimal 18 MB");
+      const mime=f.type || (/\.pdf$/i.test(f.name)?"application/pdf":"image/jpeg");
+      const data=await new Promise((ok,no)=>{ const r=new FileReader(); r.onload=()=>ok(String(r.result).split(",")[1]); r.onerror=no; r.readAsDataURL(f); });
+      pendingFile={name:f.name,inline:true,mime,data};
+    }
+    renderAtt(); $("#chatIn").focus();
+    if(!$("#chatIn").value) $("#chatIn").value="Baca lampiran ini dan ubah menjadi baris tabel RKAS (sesuaikan komponen juknis 2026).";
+    autoGrow();
+  }catch(err){ toast("Lampiran gagal: "+err.message); }
+};
+function renderAtt(){ const p=$("#attPrev"); if(pendingFile){ $("#attName").textContent="📎 "+pendingFile.name; p.style.display="flex"; } else p.style.display="none"; }
+$("#attDel").onclick=()=>{ pendingFile=null; renderAtt(); };
+
+/* ---------- settings ---------- */
+function openSettings(){ $("#sKey").value=settings.apiKey||""; $("#sModel").value=settings.model||DEFAULT_MODEL; $("#sMsg").textContent=""; $("#mSettings").classList.add("open"); }
+function closeSettings(){ $("#mSettings").classList.remove("open"); }
+$("#btnSettings").onclick=openSettings;
+$("#sCancel").onclick=closeSettings;
+$("#mSettings").addEventListener("click",e=>{ if(e.target.id==="mSettings") closeSettings(); });
+$("#sShow").onclick=()=>{ const i=$("#sKey"); i.type=i.type==="password"?"text":"password"; };
+$("#sSave").onclick=()=>{ settings.apiKey=$("#sKey").value.trim(); settings.model=($("#sModel").value.trim()||DEFAULT_MODEL).replace(/^models\//,""); lsSet(LS_SET,settings); renderHeader(); closeSettings(); toast("Pengaturan disimpan"); };
+$("#sLoad").onclick=async()=>{
+  const key=$("#sKey").value.trim()||apiKey(); if(!key){ $("#sMsg").innerHTML='<span style="color:var(--err)">Isi API key dulu.</span>'; return; }
+  $("#sMsg").textContent="Memuat daftar model…";
+  try{
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models?pageSize=200`,{headers:{"x-goog-api-key":key}}); const d=await res.json();
+    if(!res.ok) throw new Error((d.error&&d.error.message)||res.status);
+    const ms=(d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent") && /gemini/i.test(m.name) && !/tts|image|embedding|audio|live/i.test(m.name)).map(m=>m.name.replace(/^models\//,""));
+    $("#modelList").innerHTML=ms.map(m=>`<option value="${esc(m)}">`).join("");
+    $("#sMsg").innerHTML=`<span style="color:var(--ok)">${ms.length} model tersedia. Klik kolom Model untuk memilih.</span><br><span style="color:#64748b">${esc(ms.slice(0,12).join(", "))}${ms.length>12?"…":""}</span>`;
+  }catch(err){ $("#sMsg").innerHTML=`<span style="color:var(--err)">Gagal: ${esc(err.message)}</span>`; }
+};
+$("#sTest").onclick=async()=>{
+  const old={...settings}; settings.apiKey=$("#sKey").value.trim(); settings.model=($("#sModel").value.trim()||DEFAULT_MODEL).replace(/^models\//,"");
+  $("#sMsg").textContent="Menguji koneksi…";
+  try{ const r=await callGemini([{role:"user",parts:[{text:'Balas JSON {"reply":"Koneksi OK","actions":[]}'}]}]); const o=parseAgent(r.text);
+    $("#sMsg").innerHTML=`<span style="color:var(--ok)">✓ Terhubung ke ${esc(model())}: ${esc(o.reply)}</span>`; }
+  catch(err){ $("#sMsg").innerHTML=`<span style="color:var(--err)">✕ ${esc(err.message)}</span>`; }
+  settings=old;
+};
+$("#sReset").onclick=()=>{ if(confirm("Hapus SEMUA data RKAS dan percakapan di browser ini? Tindakan ini tidak bisa dibatalkan.")){ state=defaultState(); save(); renderAll(); closeSettings(); toast("Semua data dihapus"); } };
+
+/* ---------- mobile agent drawer ---------- */
+$("#btnAgentToggle").onclick=()=>$("#agent").classList.toggle("open");
+$("#btnAgentClose").onclick=()=>$("#agent").classList.remove("open");
+
+/* ---------- init ---------- */
+function renderAll(){ renderProfil(); renderHeader(); renderKPIs(); renderTable(); renderChat(); renderAtt();
+  if($("#tab-3").classList.contains("active")) renderRekap(); if($("#tab-4").classList.contains("active")) renderDoc(); }
+renderAll();
+window.addEventListener("beforeunload",()=>{ lsSet(LS_DATA,state); });
+</script>
+</body>
+</html>

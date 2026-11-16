@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Infak Siswa</title>
+<style>
+:root{
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f3f7f4;--card:#ffffff;--ink:#16251c;--muted:#5d6f64;--line:#d8e3dc;
+  --green:#14633a;--green-soft:#dff0e5;--out:#a4372b;--out-soft:#f8e3df;--gold:#b8860b;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1a13;--card:#16241b;--ink:#e6f0e9;--muted:#93a89b;--line:#2a3d31;
+  --green:#5fcf8c;--green-soft:#1c3a28;--out:#f08a7c;--out-soft:#3b1f1b;--gold:#e0b64a;color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0f1a13;--card:#16241b;--ink:#e6f0e9;--muted:#93a89b;--line:#2a3d31;
+  --green:#5fcf8c;--green-soft:#1c3a28;--out:#f08a7c;--out-soft:#3b1f1b;--gold:#e0b64a;color-scheme:dark;}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;line-height:1.5}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:1.6rem;margin:0 0 2px;letter-spacing:-.01em}
+.sub{margin:0 0 18px;color:var(--muted);font-size:.92rem}
+.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:5px;margin-bottom:16px}
+.tabs button{flex:1;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;padding:10px 6px;border-radius:10px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--green);color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tabs button[aria-selected="true"]{color:#0f1a13}}
+:root[data-theme="dark"] .tabs button[aria-selected="true"]{color:#0f1a13}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stat small{color:var(--muted);display:block;font-size:.8rem}
+.stat b{font-size:1.15rem;display:block;margin-top:2px;overflow-wrap:anywhere}
+.stat.saldo{background:var(--green);border-color:var(--green)}
+.stat.saldo small,.stat.saldo b{color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stat.saldo small,:root:not([data-theme="light"]) .stat.saldo b{color:#0f1a13}}
+:root[data-theme="dark"] .stat.saldo small,:root[data-theme="dark"] .stat.saldo b{color:#0f1a13}
+.in b{color:var(--green)}.out b{color:var(--out)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+.panel h2{font-size:1.02rem;margin:0 0 12px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:.82rem;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%}
+.full{grid-column:1/-1}
+.row{display:flex;gap:8px;grid-column:1/-1}
+.btn{flex:1;border:0;border-radius:10px;padding:11px;font:inherit;font-weight:700;cursor:pointer;color:#fff}
+.btn.in{background:var(--green)}.btn.out{background:var(--out)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#0f1a13}}
+:root[data-theme="dark"] .btn{color:#0f1a13}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:600;font-size:.8rem}
+td.n,th.n{text-align:right}
+td.keterangan{white-space:normal;min-width:120px}
+.pos{color:var(--green);font-weight:600}.neg{color:var(--out);font-weight:600}
+.del{border:0;background:var(--out-soft);color:var(--out);border-radius:8px;padding:4px 9px;font:inherit;cursor:pointer}
+.empty{color:var(--muted);padding:12px 0;margin:0}
+tfoot td{font-weight:700;border-bottom:0}
+.note{color:var(--muted);font-size:.8rem;margin-top:14px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tools button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+@media (max-width:520px){.stats{grid-template-columns:1fr}form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Infak Siswa</h1>
+  <p class="sub">Catat pemasukan harian dan pengeluaran infak kelas 7, 8, dan 9.</p>
+
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div class="stats" id="stats"></div>
+
+  <div class="panel" id="formPanel">
+    <h2>Catat transaksi</h2>
+    <form id="f" autocomplete="off">
+      <label>Tanggal<input type="date" id="tgl" required></label>
+      <label>Nominal (Rp)<input type="number" id="jml" min="1" step="100" inputmode="numeric" placeholder="mis. 50000" required></label>
+      <label class="full">Keterangan<input type="text" id="ket" maxlength="80" placeholder="mis. Infak Jumat, atau santunan siswa"></label>
+      <div class="row">
+        <button type="button" class="btn in" id="bIn">Simpan pemasukan</button>
+        <button type="button" class="btn out" id="bOut">Simpan pengeluaran</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel" id="harian"></div>
+  <div class="panel" id="riwayat"></div>
+
+  <div class="tools">
+    <button type="button" id="salin">Salin rekap</button>
+    <button type="button" id="reset">Hapus semua data</button>
+  </div>
+  <p class="note" id="note"></p>
+</div>
+
+<script>
+(function(){
+  var KEY='infak-siswa-v1', KELAS=['7','8','9'];
+  var tx=[], view='7', storageOk=true;
+
+  function load(){
+    try{var r=localStorage.getItem(KEY);if(r)tx=JSON.parse(r)||[];}catch(e){storageOk=false;tx=[];}
+  }
+  function save(){
+    try{localStorage.setItem(KEY,JSON.stringify(tx));}catch(e){storageOk=false;}
+    note();
+  }
+  function note(){
+    document.getElementById('note').textContent=storageOk
+      ?'Data tersimpan di peramban perangkat ini. Perangkat atau peramban lain tidak melihat data yang sama.'
+      :'Penyimpanan peramban tidak tersedia, sehingga data hilang saat halaman ditutup.';
+  }
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function rp(n){return 'Rp'+Number(n).toLocaleString('id-ID');}
+  function tgl(s){var p=s.split('-');var b=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];return p[2]+' '+b[+p[1]-1]+' '+p[0];}
+  function sel(){return view==='all'?tx:tx.filter(function(t){return t.kelas===view;});}
+  function sum(list,type){return list.filter(function(t){return t.type===type;}).reduce(function(a,t){return a+t.jml;},0);}
+
+  function render(){
+    // tabs
+    var tabs=document.getElementById('tabs');
+    tabs.innerHTML=KELAS.map(function(k){return '<button role="tab" data-v="'+k+'" aria-selected="'+(view===k)+'">Kelas '+k+'</button>';}).join('')
+      +'<button role="tab" data-v="all" aria-selected="'+(view==='all')+'">Semua</button>';
+    document.getElementById('formPanel').style.display=view==='all'?'none':'block';
+
+    var list=sel(), masuk=sum(list,'in'), keluar=sum(list,'out');
+    document.getElementById('stats').innerHTML=
+      '<div class="stat in"><small>Total pemasukan</small><b>'+rp(masuk)+'</b></div>'+
+      '<div class="stat out"><small>Total pengeluaran</small><b>'+rp(keluar)+'</b></div>'+
+      '<div class="stat saldo"><small>Saldo</small><b>'+rp(masuk-keluar)+'</b></div>';
+
+    var h=document.getElementById('harian'), r=document.getElementById('riwayat');
+    if(view==='all'){
+      var rows=KELAS.map(function(k){var l=tx.filter(function(t){return t.kelas===k;});var a=sum(l,'in'),b=sum(l,'out');
+        return '<tr><td>Kelas '+k+'</td><td class="n pos">'+rp(a)+'</td><td class="n neg">'+rp(b)+'</td><td class="n">'+rp(a-b)+'</td></tr>';}).join('');
+      h.innerHTML='<h2>Rekap per kelas</h2><div class="scroll"><table><thead><tr><th>Kelas</th><th class="n">Pemasukan</th><th class="n">Pengeluaran</th><th class="n">Saldo</th></tr></thead><tbody>'+rows+
+        '</tbody><tfoot><tr><td>Total</td><td class="n pos">'+rp(masuk)+'</td><td class="n neg">'+rp(keluar)+'</td><td class="n">'+rp(masuk-keluar)+'</td></tr></tfoot></table></div>';
+    }else{
+      var days={};
+      list.forEach(function(t){var d=days[t.tgl]||(days[t.tgl]={i:0,o:0});if(t.type==='in')d.i+=t.jml;else d.o+=t.jml;});
+      var keys=Object.keys(days).sort().reverse();
+      h.innerHTML='<h2>Pemasukan harian, kelas '+view+'</h2>'+(keys.length?
+        '<div class="scroll"><table><thead><tr><th>Tanggal</th><th class="n">Masuk</th><th class="n">Keluar</th></tr></thead><tbody>'+
+        keys.map(function(k){return '<tr><td>'+tgl(k)+'</td><td class="n pos">'+rp(days[k].i)+'</td><td class="n neg">'+(days[k].o?rp(days[k].o):'–')+'</td></tr>';}).join('')+'</tbody></table></div>'
+        :'<p class="empty">Belum ada transaksi. Isi formulir di atas untuk mulai mencatat.</p>');
+    }
+
+    var sorted=list.slice().sort(function(a,b){return a.tgl<b.tgl?1:a.tgl>b.tgl?-1:b.id-a.id;});
+    r.innerHTML='<h2>Riwayat transaksi</h2>'+(sorted.length?
+      '<div class="scroll"><table><thead><tr><th>Tanggal</th>'+(view==='all'?'<th>Kelas</th>':'')+'<th>Keterangan</th><th class="n">Nominal</th><th></th></tr></thead><tbody>'+
+      sorted.map(function(t){return '<tr><td>'+tgl(t.tgl)+'</td>'+(view==='all'?'<td>'+t.kelas+'</td>':'')+
+        '<td class="keterangan">'+(t.type==='in'?'Masuk':'Keluar')+(t.ket?': '+esc(t.ket):'')+'</td><td class="n '+(t.type==='in'?'pos':'neg')+'">'+(t.type==='in'?'+':'−')+rp(t.jml)+
+        '</td><td><button class="del" data-id="'+t.id+'" aria-label="Hapus transaksi">Hapus</button></td></tr>';}).join('')+'</tbody></table></div>'
+      :'<p class="empty">Riwayat masih kosong.</p>');
+  }
+
+  function add(type){
+    var d=document.getElementById('tgl').value, j=parseInt(document.getElementById('jml').value,10), k=document.getElementById('ket').value.trim();
+    if(!d||!j||j<1){alert('Isi tanggal dan nominal dengan benar.');return;}
+    tx.push({id:Date.now(),kelas:view,type:type,tgl:d,jml:j,ket:k});
+    save();
+    document.getElementById('jml').value='';document.getElementById('ket').value='';
+    render();
+  }
+
+  document.getElementById('tabs').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;view=b.getAttribute('data-v');render();
+  });
+  document.getElementById('bIn').addEventListener('click',function(){add('in');});
+  document.getElementById('bOut').addEventListener('click',function(){add('out');});
+  document.getElementById('riwayat').addEventListener('click',function(e){
+    var b=e.target.closest('.del');if(!b)return;
+    if(!confirm('Hapus transaksi ini?'))return;
+    var id=+b.getAttribute('data-id');tx=tx.filter(function(t){return t.id!==id;});save();render();
+  });
+  document.getElementById('reset').addEventListener('click',function(){
+    if(!confirm('Hapus semua data infak di perangkat ini? Tindakan ini tidak bisa dibatalkan.'))return;
+    tx=[];save();render();
+  });
+  document.getElementById('salin').addEventListener('click',function(){
+    var t='REKAP INFAK SISWA\n';
+    KELAS.forEach(function(k){var l=tx.filter(function(x){return x.kelas===k;});var a=sum(l,'in'),b=sum(l,'out');
+      t+='Kelas '+k+': masuk '+rp(a)+', keluar '+rp(b)+', saldo '+rp(a-b)+'\n';});
+    t+='Total: masuk '+rp(sum(tx,'in'))+', keluar '+rp(sum(tx,'out'))+', saldo '+rp(sum(tx,'in')-sum(tx,'out'));
+    var btn=this;
+    function done(m){btn.textContent=m;setTimeout(function(){btn.textContent='Salin rekap';},1500);}
+    try{navigator.clipboard.writeText(t).then(function(){done('Tersalin');},function(){done('Gagal menyalin');});}
+    catch(e){done('Gagal menyalin');}
+  });
+
+  var now=new Date(), m=('0'+(now.getMonth()+1)).slice(-2), dd=('0'+now.getDate()).slice(-2);
+  document.getElementById('tgl').value=now.getFullYear()+'-'+m+'-'+dd;
+  load();note();render();
+})();
+</script>
+</body>
+</html>

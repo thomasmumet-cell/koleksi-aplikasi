@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aset Pintar – Mesin Analisis Aset Sekolah</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<style>
+:root{--pri:#14532d;--pri2:#166534;--acc:#0e7490;--bg:#f3f6f4;--card:#fff;--line:#dde7e1;--txt:#1b2620;--mut:#5f6f66;
+--ok:#15803d;--okb:#e7f6ec;--warnb:#fff6e5;--err:#c62828;--errb:#fdecec;--infob:#eaf3fb;--rad:12px;
+--c1:#166534;--c2:#0e7490;--c3:#b45309;--c4:#7c3aed;--c5:#be123c;--c6:#4d7c0f;--cB:#16a34a;--cRR:#f59e0b;--cRB:#dc2626}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;line-height:1.45}
+button{font:inherit;cursor:pointer}input,select,textarea{font:inherit;color:inherit}#printArea{display:none}
+.topbar{position:sticky;top:0;z-index:30;background:linear-gradient(90deg,var(--pri),var(--pri2));color:#fff;display:flex;align-items:center;gap:12px;padding:10px 16px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.logo{width:38px;height:38px;border-radius:10px;background:#fff;color:var(--pri);display:grid;place-items:center;font-weight:800;font-size:18px;flex:none}
+.brand h1{font-size:17px;margin:0}.brand small{opacity:.85;font-size:12px}.topbar .sp{flex:1}
+.topbar .school{font-size:12.5px;text-align:right;max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbtn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:9px;padding:7px 11px;font-size:13px}.tbtn:hover{background:rgba(255,255,255,.25)}
+#btnAgentToggle{display:none}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:14px;padding:14px;align-items:start}.work{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:16px;margin-bottom:14px}
+.card h2{font-size:15.5px;margin:0 0 4px;color:var(--pri)}.card h3{font-size:14px;margin:14px 0 8px;color:var(--pri)}
+p.hint{margin:0 0 12px;color:var(--mut);font-size:12.5px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 11px;border-left:4px solid var(--pri)}
+.kpi .l{font-size:11.5px;color:var(--mut)}.kpi .v{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kpi .s{font-size:11px;color:var(--mut)}
+.kpi.ok{border-left-color:var(--cB)}.kpi.warn{border-left-color:var(--cRR)}.kpi.err{border-left-color:var(--cRB)}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tab{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px;color:var(--mut);font-weight:600;font-size:13px}.tab.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.pane{display:none}.pane.active{display:block}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 12px;font-size:13px;font-weight:600;color:var(--txt)}.btn:hover{background:#f1f6f3}
+.btn.pri{background:var(--pri);color:#fff;border-color:var(--pri)}.btn.acc{background:var(--acc);color:#fff;border-color:var(--acc)}.btn.sm{padding:3px 9px;font-size:12px}.btn.danger{color:var(--err);border-color:#f3c2c2}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}.toolbar .sp{flex:1}
+.toolbar input,.toolbar select{border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:#fff;max-width:100%}
+.hb{display:grid;grid-template-columns:minmax(120px,36%) 1fr auto;gap:6px 10px;align-items:center;font-size:12.5px}
+.hb .lb{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hb .tr{height:14px;background:#eef3f0;border-radius:4px;overflow:hidden}.hb .tr i{display:block;height:100%;border-radius:4px}
+.hb .vv{text-align:right;white-space:nowrap;color:var(--mut);font-variant-numeric:tabular-nums}.hb .row{display:contents;cursor:pointer}.hb .row:hover .lb{color:var(--acc);text-decoration:underline}
+.cols{display:flex;align-items:flex-end;gap:3px;height:170px;padding-top:6px;border-bottom:1px solid var(--line)}
+.cols .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:6px;height:100%;cursor:pointer}
+.cols .c i{display:block;width:100%;background:var(--c2);border-radius:3px 3px 0 0}.cols .c:hover i{background:var(--pri)}
+.colsx{display:flex;gap:3px;font-size:10px;color:var(--mut)}.colsx span{flex:1;text-align:center;min-width:6px;overflow:hidden}
+.stack{display:flex;height:22px;border-radius:6px;overflow:hidden;margin:6px 0}.stack i{display:block;height:100%}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mut)}.legend b{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.tblwrap{overflow:auto;border:1px solid var(--line);border-radius:10px;max-height:64vh;background:#fff}
+table.tbl{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}
+.tbl th{position:sticky;top:0;background:#eef5f0;color:#2f4a3a;text-align:left;font-weight:700;padding:8px 7px;border-bottom:1px solid var(--line);white-space:nowrap;z-index:2}
+.tbl th.s{cursor:pointer}.tbl th.s:hover{color:var(--acc)}
+.tbl td{padding:6px 7px;border-bottom:1px solid #eef3f0;vertical-align:top}.tbl tr:hover td{background:#f7fbf8}.tbl td.r,.tbl th.r{text-align:right;white-space:nowrap}
+.tbl tr.click{cursor:pointer}.tbl tfoot td{position:sticky;bottom:0;background:#eef5f0;font-weight:700}
+.badge{display:inline-block;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.k-B{background:#e3f5e8;color:#166534}.k-RR{background:#fff3dc;color:#92400e}.k-RB{background:#fde4e4;color:#991b1b}.k-x{background:#eef0f2;color:#555}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.checks li{padding:9px 12px;border-radius:9px;font-size:13px;display:flex;gap:9px;align-items:flex-start}.checks li .ic{font-weight:800;flex:none;width:18px;text-align:center}.checks li .gt{margin-left:auto;flex:none}
+.checks li.ok{background:var(--okb);color:#14532d}.checks li.warn{background:var(--warnb);color:#7c2d12}.checks li.err{background:var(--errb);color:#7f1d1d}.checks li.info{background:var(--infob);color:#1e3a8a}
+.pager{display:flex;gap:6px;align-items:center;justify-content:flex-end;margin-top:8px;font-size:12.5px;color:var(--mut)}
+.drop{border:2px dashed #9cc7ae;border-radius:14px;padding:34px;text-align:center;background:#f6fbf8;color:var(--mut)}.drop.over{background:#e6f5ec;border-color:var(--pri)}
+.drop b{color:var(--pri);font-size:15px}
+.insight{background:#f6fbf8;border:1px solid #cfe5d7;border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:8px}
+.insight b{color:var(--pri)}
+.fld label{display:block;font-size:12px;color:var(--mut);font-weight:600;margin-bottom:3px}.fld input{border:1px solid var(--line);border-radius:8px;padding:7px 9px;width:100%}
+/* agent */
+.agent{position:sticky;top:72px;height:calc(100vh - 86px);display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:var(--rad);overflow:hidden}
+.agent-h{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;background:linear-gradient(180deg,#f5fbf7,#fff)}
+.agent-h .av{width:32px;height:32px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-size:16px;flex:none}
+.agent-h b{font-size:14px;color:var(--pri)}.agent-h small{display:block;color:var(--mut);font-size:11.5px}.agent-h .sp{flex:1}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:9px 12px;border-bottom:1px solid var(--line)}
+.chip{border:1px solid #b6dde6;background:#eef8fb;color:#0b5566;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600}.chip:hover{background:#dff1f6}
+.msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#fbfdfc}
+.msg{max-width:94%;padding:9px 12px;border-radius:12px;font-size:13px;word-wrap:break-word}
+.msg.user{align-self:flex-end;background:var(--pri);color:#fff;border-bottom-right-radius:4px;white-space:pre-wrap}
+.msg.bot{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.bot h4{margin:8px 0 4px;font-size:13.5px;color:var(--pri)}.msg.bot ul,.msg.bot ol{margin:4px 0;padding-left:20px}.msg.bot p{margin:4px 0}
+.msg.bot table{border-collapse:collapse;font-size:12px;margin:6px 0}.msg.bot td,.msg.bot th{border:1px solid var(--line);padding:3px 6px}
+.msg .tools{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}.msg .tools button{border:1px solid var(--line);background:#f7faf8;border-radius:7px;font-size:11.5px;padding:3px 8px;color:var(--mut)}
+.msg .tools button.go{background:#e8f5ee;color:var(--pri);border-color:#bfe0cc;font-weight:600}
+.msg .q{font-size:11.5px;color:var(--mut);margin-top:6px}
+.typing{align-self:flex-start;color:var(--mut);font-size:12.5px;display:flex;gap:8px;align-items:center}
+.dots i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--acc);margin-right:3px;animation:bl 1s infinite}.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,100%{opacity:.2}50%{opacity:1}}
+.composer{border-top:1px solid var(--line);padding:9px;display:flex;gap:6px;align-items:flex-end;background:#fff}
+.composer textarea{flex:1;border:1px solid var(--line);border-radius:10px;padding:8px 10px;resize:none;min-height:40px;max-height:140px}
+.sendbtn{background:var(--acc);color:#fff;border:none;border-radius:10px;height:40px;padding:0 14px;font-weight:700}.sendbtn:disabled{opacity:.5}
+.modal{position:fixed;inset:0;background:rgba(10,25,15,.45);display:none;align-items:flex-start;justify-content:center;z-index:100;padding:24px 16px;overflow:auto}
+.modal.open{display:flex}.modal .box{background:#fff;border-radius:14px;max-width:720px;width:100%;padding:18px}.modal h2{margin:0 0 8px;color:var(--pri);font-size:17px}
+.dl{display:grid;grid-template-columns:180px 1fr;gap:4px 12px;font-size:13px}.dl dt{color:var(--mut)}.dl dd{margin:0;word-break:break-word}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#0f1d15;color:#fff;padding:9px 16px;border-radius:9px;font-size:13px;z-index:200;opacity:0;transition:opacity .25s;pointer-events:none}.toast.show{opacity:1}
+.doc{font-family:"Times New Roman",Times,serif;font-size:11pt;color:#000}.doc h1{text-align:center;font-size:14pt;margin:0}.doc .sub{text-align:center;margin:2px 0 12px;font-weight:bold}
+.doc table{border-collapse:collapse;width:100%;margin:6px 0 12px;font-size:9.5pt}.doc th,.doc td{border:1px solid #000;padding:2px 5px;vertical-align:top}.doc th{background:#e6efe9}.doc td.r{text-align:right;white-space:nowrap}
+.doc .sec{font-weight:bold;margin:12px 0 4px}
+@media (max-width:1150px){.layout{grid-template-columns:1fr}.agent{position:fixed;right:0;top:0;height:100vh;width:min(420px,100vw);border-radius:0;z-index:60;transform:translateX(105%);transition:transform .25s;box-shadow:-6px 0 24px rgba(0,0,0,.2)}
+ .agent.open{transform:none}#btnAgentToggle{display:inline-block}#btnAgentClose{display:inline-block!important}.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.two,.three{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.topbar .school{display:none}.dl{grid-template-columns:1fr}}
+@media print{body{background:#fff}#app,.modal,.toast{display:none!important}#printArea{display:block!important}.doc tr{page-break-inside:avoid}@page{size:A4;margin:12mm}}
+</style>
+</head>
+<body>
+<div id="app">
+<header class="topbar">
+  <div class="logo">🏫</div>
+  <div class="brand"><h1>Aset Pintar</h1><small>Mesin Analisis Aset Sekolah · Buku Inventaris (KIB)</small></div>
+  <div class="sp"></div><div class="school" id="hdr">–</div>
+  <button class="tbtn" id="btnReport">🖨 Laporan</button>
+  <button class="tbtn" id="btnSettings">⚙</button>
+  <button class="tbtn" id="btnAgentToggle">🤖 Agen</button>
+</header>
+<div class="layout">
+<main class="work">
+  <div class="kpis" id="kpis"></div>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="sum">Ringkasan</button>
+    <button class="tab" data-tab="kat">Kategori</button>
+    <button class="tab" data-tab="kond">Kondisi</button>
+    <button class="tab" data-tab="umur">Umur &amp; TIK</button>
+    <button class="tab" data-tab="buku">Buku</button>
+    <button class="tab" data-tab="ged">Gedung</button>
+    <button class="tab" data-tab="list">Daftar Aset</button>
+    <button class="tab" data-tab="qc">Kualitas Data</button>
+    <button class="tab" data-tab="data">Data</button>
+  </nav>
+
+  <section class="pane active" id="tab-sum">
+    <div class="card"><h2>Temuan Utama</h2><div id="insights"></div></div>
+    <div class="two">
+      <div class="card"><h2>Nilai per KIB</h2><p class="hint">Klik baris untuk melihat daftarnya.</p><div id="chKib"></div></div>
+      <div class="card"><h2>Kondisi Barang</h2><div id="chKond"></div></div>
+    </div>
+    <div class="card"><h2>Tahun Perolehan</h2><div class="toolbar"><select id="thMetric"><option value="n">Jumlah barang</option><option value="v">Nilai (Rp)</option></select><select id="thKib"><option value="">Semua KIB</option></select></div><div id="chTahun"></div></div>
+    <div class="two">
+      <div class="card"><h2>Asal/Cara Perolehan</h2><div id="chAsal"></div></div>
+      <div class="card"><h2>Indikasi Sumber Dana</h2><p class="hint">Dibaca dari kolom Bahan, Merk, dan Keterangan, sehingga hanya indikasi.</p><div id="chSumber"></div></div>
+    </div>
+  </section>
+
+  <section class="pane" id="tab-kat">
+    <div class="card"><h2>Rekap per Kategori (Kode Barang)</h2><p class="hint">Klik nama kategori untuk melihat rincian jenis barangnya.</p>
+      <div class="tblwrap" style="max-height:none"><table class="tbl" id="tbKat"></table></div></div>
+    <div class="card" id="katDetailCard" style="display:none"><h2 id="katDetailTitle">Rincian</h2><div class="tblwrap"><table class="tbl" id="tbKatDetail"></table></div></div>
+  </section>
+
+  <section class="pane" id="tab-kond">
+    <div class="three" id="kondKpi"></div>
+    <div class="card"><h2>Rusak Berat – kandidat usulan penghapusan</h2><p class="hint">Dikelompokkan per jenis barang. Barang rusak berat yang sudah dipindah ke kode 1.5.04 (Aset Lain-lain) ditandai.</p><div class="tblwrap"><table class="tbl" id="tbRB"></table></div></div>
+    <div class="card"><h2>Rusak Ringan – prioritas pemeliharaan</h2><div class="tblwrap"><table class="tbl" id="tbRR"></table></div></div>
+    <div class="card"><h2>Kondisi per Kategori</h2><div class="tblwrap" style="max-height:none"><table class="tbl" id="tbKondKat"></table></div></div>
+  </section>
+
+  <section class="pane" id="tab-umur">
+    <div class="card"><h2>Umur Peralatan &amp; Mesin (KIB B)</h2><p class="hint">Umur dihitung dari tahun perolehan sampai tahun ini.</p><div id="chUmur"></div></div>
+    <div class="card"><h2>Peralatan TIK (komputer, laptop, proyektor, printer, jaringan)</h2>
+      <div class="toolbar"><label style="font-size:13px">Batas umur peremajaan: <input id="tikAge" type="number" min="1" value="5" style="width:60px"> tahun</label></div>
+      <div id="tikSum"></div><div class="tblwrap"><table class="tbl" id="tbTik"></table></div></div>
+  </section>
+
+  <section class="pane" id="tab-buku">
+    <div class="three" id="bukuKpi"></div>
+    <div class="two">
+      <div class="card"><h2>Per Mata Pelajaran/Jenis</h2><div id="chMapel"></div></div>
+      <div class="card"><h2>Per Peruntukan (Keterangan)</h2><div id="chKetBuku"></div></div>
+    </div>
+    <div class="two">
+      <div class="card"><h2>Per Tahun Pengadaan</h2><div id="chBukuTahun"></div></div>
+      <div class="card"><h2>Rasio Buku per Peserta Didik</h2><div class="toolbar"><label style="font-size:13px">Jumlah peserta didik: <input id="jmlSiswa" type="number" min="0" style="width:90px"></label></div><div id="rasio"></div></div>
+    </div>
+  </section>
+
+  <section class="pane" id="tab-ged">
+    <div class="three" id="gedKpi"></div>
+    <div class="card"><h2>Gedung, Bangunan &amp; Jaringan (KIB C/D)</h2><div class="tblwrap" style="max-height:none"><table class="tbl" id="tbGed"></table></div></div>
+  </section>
+
+  <section class="pane" id="tab-list">
+    <div class="card">
+      <div class="toolbar">
+        <input id="fQ" type="search" placeholder="Cari nama, merk, deskripsi, keterangan, kode, ID…" style="flex:1;min-width:220px">
+        <select id="fKib"><option value="">Semua KIB</option></select>
+        <select id="fKat" style="max-width:220px"><option value="">Semua kategori</option></select>
+        <select id="fKond"><option value="">Semua kondisi</option><option value="B">Baik</option><option value="RR">Rusak Ringan</option><option value="RB">Rusak Berat</option></select>
+      </div>
+      <div class="toolbar">
+        <select id="fAsal"><option value="">Semua asal</option></select>
+        <select id="fSumber"><option value="">Semua sumber dana</option></select>
+        <input id="fT1" type="number" placeholder="Tahun dari" style="width:105px"><input id="fT2" type="number" placeholder="s.d." style="width:80px">
+        <input id="fH1" type="number" placeholder="Harga ≥" style="width:110px">
+        <select id="fQc" style="max-width:240px"><option value="">— filter kualitas data —</option></select>
+        <button class="btn sm" id="fReset">Reset</button>
+        <div class="sp"></div>
+        <button class="btn acc" id="btnExport">⬇ Excel (hasil filter)</button>
+        <button class="btn" id="btnPrintList">🖨 Cetak</button>
+      </div>
+      <div id="listSum" style="font-size:13px;margin-bottom:8px;color:var(--mut)"></div>
+      <div class="tblwrap"><table class="tbl" id="tbList"></table></div>
+      <div class="pager" id="pager"></div>
+    </div>
+  </section>
+
+  <section class="pane" id="tab-qc">
+    <div class="card"><h2>Pemeriksaan Kualitas Data Inventaris</h2><p class="hint">Klik "Lihat" untuk membuka barang yang terkait di Daftar Aset.</p><ul class="checks" id="qcList"></ul></div>
+    <div class="card"><h2>Kecocokan dengan Rekap Buku Inventaris</h2><div id="rekapCmp"></div></div>
+  </section>
+
+  <section class="pane" id="tab-data">
+    <div class="card"><h2>Muat Data Aset</h2>
+      <p class="hint">Unggah file <b>Buku Inventaris / Data KIB</b> (.xlsx). Bila ada, unggah juga <b>Rekap Buku Inventaris</b>, karena dipakai untuk mencocokkan total. Kedua file boleh dipilih sekaligus. Data diolah dan disimpan di browser ini saja, tidak dikirim ke server mana pun. Agen AI hanya menerima ringkasan statistiknya.</p>
+      <div class="drop" id="drop"><b>⬆ Seret file Excel ke sini</b><br>atau <button class="btn pri" id="btnPick" style="margin-top:8px">Pilih file</button><input type="file" id="fileIn" accept=".xlsx,.xls" multiple hidden></div>
+      <div id="dataInfo" style="margin-top:12px;font-size:13px"></div>
+      <div class="toolbar" style="margin-top:10px"><button class="btn danger" id="btnClearData">Hapus data tersimpan</button></div>
+    </div>
+  </section>
+</main>
+
+<aside class="agent" id="agent">
+  <div class="agent-h"><div class="av">🤖</div><div><b>Agen Analis Aset</b><small id="agentModel">–</small></div><div class="sp"></div><button class="btn sm" id="btnClearChat">Bersihkan</button><button class="btn sm" id="btnAgentClose" style="display:none">✕</button></div>
+  <div class="chips">
+    <button class="chip" data-q="ringkas">📊 Ringkasan aset</button>
+    <button class="chip" data-q="hapus">🗑 Usulan penghapusan</button>
+    <button class="chip" data-q="pelihara">🔧 Prioritas pemeliharaan</button>
+    <button class="chip" data-q="tik">💻 Peremajaan TIK</button>
+    <button class="chip" data-q="buku">📚 Analisis buku</button>
+    <button class="chip" data-q="qc">🧹 Perbaikan data</button>
+    <button class="chip" data-q="kepsek">📝 Laporan untuk kepala sekolah</button>
+  </div>
+  <div class="msgs" id="msgs"></div>
+  <div class="composer"><textarea id="chatIn" rows="1" placeholder="Tanya apa saja… mis. 'Berapa laptop yang rusak ringan dan berapa nilainya?'"></textarea><button class="sendbtn" id="btnSend">Kirim</button></div>
+</aside>
+</div>
+</div>
+
+<div class="modal" id="mDetail"><div class="box"><h2 id="dTitle">Detail</h2><dl class="dl" id="dBody"></dl><div class="toolbar" style="margin-top:14px"><div class="sp"></div><button class="btn" data-close>Tutup</button></div></div></div>
+<div class="modal" id="mSettings"><div class="box" style="max-width:540px"><h2>⚙ Pengaturan Agen AI</h2>
+  <p class="hint">API key Gemini sudah terpasang. Isi di sini hanya bila ingin menggantinya.</p>
+  <div class="fld" style="margin-bottom:10px"><label>Gemini API key (kosongkan = bawaan)</label><input id="sKey" type="password" autocomplete="off"></div>
+  <div class="fld"><label>Model</label><div style="display:flex;gap:6px"><input id="sModel" list="modelList"><button class="btn" id="sLoad">Muat daftar</button></div><datalist id="modelList"></datalist></div>
+  <div id="sMsg" style="font-size:12.5px;margin:8px 0;min-height:18px"></div>
+  <div class="toolbar"><button class="btn" id="sTest">Tes koneksi</button><div class="sp"></div><button class="btn" data-close>Tutup</button><button class="btn pri" id="sSave">Simpan</button></div></div></div>
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>window.PRELOAD=null;/*__PRELOAD__*/</script>
+<script>
+/* =================== KONFIGURASI =================== */
+const DEFAULT_API_KEY=""; // kunci sengaja dikosongkan di versi publik; isi kunci sendiri di Pengaturan
+const DEFAULT_MODEL="gemini-3.8-flash";
+const LS_SET="asetPintar.settings.v1", LS_CHAT="asetPintar.chat.v1", LS_UI="asetPintar.ui.v1";
+const KIB_N={A:"KIB A – Tanah",B:"KIB B – Peralatan & Mesin",C:"KIB C – Gedung & Bangunan",D:"KIB D – Jalan, Irigasi & Jaringan",E:"KIB E – Aset Tetap Lainnya",F:"KIB F – Konstruksi dlm Pengerjaan",ATB:"Aset Tak Berwujud"};
+const KOND_N={B:"Baik",RR:"Rusak Ringan",RB:"Rusak Berat","-":"Tidak diisi"};
+const KOND_C={B:"var(--cB)",RR:"var(--cRR)",RB:"var(--cRB)","-":"#9ca3af"};
+const PAL=["#166534","#0e7490","#b45309","#7c3aed","#be123c","#4d7c0f","#1d4ed8","#a16207","#0f766e","#9d174d"];
+const DEFAULT_KODE={"1.3.01":"TANAH","1.3.02":"PERALATAN DAN MESIN","1.3.02.01":"ALAT BESAR","1.3.02.02":"ALAT ANGKUTAN","1.3.02.03":"ALAT BENGKEL DAN ALAT UKUR","1.3.02.04":"ALAT PERTANIAN","1.3.02.05":"ALAT KANTOR DAN RUMAH TANGGA","1.3.02.06":"ALAT STUDIO, KOMUNIKASI DAN PEMANCAR","1.3.02.07":"ALAT KEDOKTERAN DAN KESEHATAN","1.3.02.08":"ALAT LABORATORIUM","1.3.02.09":"ALAT PERSENJATAAN","1.3.02.10":"KOMPUTER","1.3.02.11":"ALAT EKSPLORASI","1.3.02.12":"ALAT PENGEBORAN","1.3.02.13":"ALAT PRODUKSI, PENGOLAHAN DAN PEMURNIAN","1.3.02.14":"ALAT BANTU EKSPLORASI","1.3.02.15":"ALAT KESELAMATAN KERJA","1.3.02.16":"ALAT PERAGA","1.3.02.17":"PERALATAN PROSES/PRODUKSI","1.3.02.18":"RAMBU-RAMBU","1.3.02.19":"PERALATAN OLAH RAGA","1.3.03":"GEDUNG DAN BANGUNAN","1.3.03.01":"BANGUNAN GEDUNG","1.3.03.02":"MONUMEN","1.3.03.03":"BANGUNAN MENARA","1.3.03.04":"TUGU TITIK KONTROL/PASTI","1.3.04":"JALAN, JARINGAN DAN IRIGASI","1.3.04.01":"JALAN DAN JEMBATAN","1.3.04.02":"BANGUNAN AIR","1.3.04.03":"INSTALASI","1.3.04.04":"JARINGAN","1.3.05":"ASET TETAP LAINNYA","1.3.05.01":"BAHAN PERPUSTAKAAN","1.3.05.02":"BARANG BERCORAK KESENIAN/KEBUDAYAAN/OLAHRAGA","1.3.05.03":"HEWAN","1.3.05.04":"BIOTA PERAIRAN","1.3.05.05":"TANAMAN","1.3.05.06":"BARANG KOLEKSI NON BUDAYA","1.3.05.07":"ASET TETAP DALAM RENOVASI","1.3.06":"KONSTRUKSI DALAM PENGERJAAN","1.5.02":"KEMITRAAN DENGAN PIHAK KETIGA","1.5.03":"ASET TIDAK BERWUJUD","1.5.03.01":"ASET TIDAK BERWUJUD","1.5.04":"ASET LAIN-LAIN","1.5.04.01":"ASET LAIN-LAIN"};
+const THIS_YEAR=new Date().getFullYear();
+
+/* =================== HELPERS =================== */
+const $=(s,el=document)=>el.querySelector(s),$$=(s,el=document)=>[...el.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nIn=v=>{const n=parseFloat(v);return isFinite(n)?n:0;};
+const rp=n=>"Rp "+Math.round(n||0).toLocaleString("id-ID"), rpn=n=>Math.round(n||0).toLocaleString("id-ID"), nf=n=>Math.round(n||0).toLocaleString("id-ID");
+function rpS(n){ n=n||0; const a=Math.abs(n); if(a>=1e12) return "Rp "+(n/1e12).toLocaleString("id-ID",{maximumFractionDigits:2})+" T"; if(a>=1e9) return "Rp "+(n/1e9).toLocaleString("id-ID",{maximumFractionDigits:2})+" M"; if(a>=1e6) return "Rp "+(n/1e6).toLocaleString("id-ID",{maximumFractionDigits:1})+" jt"; return rp(n); }
+const pc=(a,b)=>b>0?(a/b*100).toLocaleString("id-ID",{maximumFractionDigits:1})+"%":"–";
+const clean=v=>v==null?"":String(v).replace(/_x000D_/g,"").replace(/\s+/g," ").trim();
+function toast(m,ms=2600){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),ms);}
+function lsGet(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}} function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){return false;}}
+function download(name,content,mime){const b=content instanceof Blob?content:new Blob([content],{type:mime||"text/plain"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);}
+function copyText(t){const fb=()=>{const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Disalin");}catch(e){}ta.remove();};if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>toast("Disalin"),fb);else fb();}
+/* IndexedDB */
+const IDB={db:null,open(){return new Promise(res=>{try{const r=indexedDB.open("asetPintar",1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>{this.db=r.result;res(true);};r.onerror=()=>res(false);}catch(e){res(false);}});},
+  get(k){return new Promise(res=>{if(!this.db)return res(null);try{const q=this.db.transaction("kv").objectStore("kv").get(k);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null);}catch(e){res(null);}});},
+  set(k,v){return new Promise(res=>{if(!this.db)return res(false);try{const t=this.db.transaction("kv","readwrite");t.objectStore("kv").put(v,k);t.oncomplete=()=>res(true);t.onerror=()=>res(false);}catch(e){res(false);}});},
+  del(k){return new Promise(res=>{if(!this.db)return res(false);try{const t=this.db.transaction("kv","readwrite");t.objectStore("kv").delete(k);t.oncomplete=()=>res(true);}catch(e){res(false);}});}};
+
+/* =================== DATA MODEL =================== */
+let RAW=null;          // {rows:[...], meta, rekap, sumber, loadedAt}
+let A=[];              // normalized assets
+let KODE={...DEFAULT_KODE};
+function normAsal(s){ const t=clean(s).toLowerCase(); if(!t||t==="-") return "Tidak diisi"; if(/silah?kan\s*pilih|pilih/.test(t)) return "Belum dipilih"; if(/belanja\s*modal/.test(t)) return "Belanja Modal"; if(/pembelian|beli/.test(t)) return "Pembelian"; if(/hibah/.test(t)) return "Hibah"; if(/lain/.test(t)) return "Lain-lain"; return t.replace(/\b\w/g,c=>c.toUpperCase()); }
+function normKond(s){ const t=clean(s).toLowerCase(); if(/rusak\s*berat|^rb$/.test(t)) return "RB"; if(/rusak\s*ringan|kurang\s*baik|^rr$/.test(t)) return "RR"; if(/baik|^b$/.test(t)) return "B"; return "-"; }
+function sumberDana(r){ const t=(r.bahan+" "+r.ket+" "+r.merk).toLowerCase();
+  if(/bosda/.test(t)) return "BOSDA"; if(/\bbos ?p\b|\bbosn\b|\bbos\b|bos nasional|bos reguler/.test(t)) return "BOSP/BOS Nasional"; if(/\bdak\b/.test(t)) return "DAK";
+  if(/komite/.test(t)) return "Komite"; if(/pemprov|pem ?prov|provinsi|\bbkk\b/.test(t)) return "Pemprov DIY"; if(/debt ?swap|dept ?swe?ap/.test(t)) return "Debt swap";
+  if(/apbd|pemkot|dindik|dinas pendidikan|dpupkp|dbgad|otonomi|bm pengadaan/.test(t)) return "APBD/Pemkot"; if(r.asalN==="Hibah") return "Hibah"; return "Tidak tercatat"; }
+const TIK_RE=/komputer|laptop|notebook|note book|\bpc\b|personal computer|cpu|monitor|lcd|proyektor|projector|printer|scanner|server|router|switch|access point|wifi|modem|ups|chromebook|tablet|smart ?tv|interaktif|televisi|tv\b/i;
+function fromRaw(x,i){
+  const r={i,kode:x[0],reg:x[1],nama:x[2],desk:x[3],merk:x[4],nos:x[5],bahan:x[6],asal:x[7],tahun:typeof x[8]==="number"?x[8]:parseInt(x[8],10)||0,ukuran:x[9],sat:x[10],kondRaw:x[11],jml:nIn(x[12])||1,harga:nIn(x[13]),ket:x[14],id:String(x[15]??""),kib:x[16]||kibFromKode(x[0])};
+  r.gol=r.kode.slice(0,6); r.kat=r.kode.slice(0,9); r.asalN=normAsal(r.asal); r.kond=normKond(r.kondRaw); r.sumber=sumberDana(r);
+  r.umur=r.tahun?Math.max(0,THIS_YEAR-r.tahun):null; r.tik=r.kib==="B"&&(r.kat==="1.3.02.10"||TIK_RE.test(r.nama+" "+r.desk)); r.lain=r.gol==="1.5.04";
+  r.luas=parseFloat(String(r.ukuran).replace(",","."))||0; r.txt=(r.kode+" "+r.reg+" "+r.nama+" "+r.desk+" "+r.merk+" "+r.ket+" "+r.id+" "+r.bahan).toLowerCase();
+  return r; }
+function kibFromKode(k){ if(k.startsWith("1.3.01")) return "A"; if(k.startsWith("1.3.02")) return "B"; if(k.startsWith("1.3.03")) return "C"; if(k.startsWith("1.3.04")) return "D"; if(k.startsWith("1.3.05")) return "E"; if(k.startsWith("1.3.06")) return "F"; if(k.startsWith("1.5.03")) return "ATB"; return "B"; }
+const katName=k=>KODE[k]||KODE[k.slice(0,6)]||k;
+
+/* =================== PARSING EXCEL =================== */
+function parseKIB(aoa){
+  const rows=[],meta={}; let pend=[];
+  for(const r of aoa){
+    const v=r.map(clean).filter(Boolean);
+    if(v[0]==="SKPD") meta.skpd=(v[1]||"").replace(/^:\s*/,""); if(v[0]==="KABUPATEN/KOTA"){ meta.kota=(v[1]||"").replace(/^:\s*/,""); meta.lokasi=(v[3]||"").replace(/^:\s*/,""); }
+    if(v[0]==="PROVINSI"){ meta.prov=(v[1]||"").replace(/^:\s*/,""); meta.kondisi=(v[3]||"").replace(/^:\s*/,""); }
+    const c0=r[0], c1=clean(r[1]);
+    if(typeof c0==="string" && /^jumlah\s+kib/i.test(c0.trim())){ const k=c0.trim().replace(/^jumlah\s+kib\s*/i,"").trim(); pend.forEach(x=>x.push(k)); rows.push(...pend); pend=[]; continue; }
+    if(typeof c0!=="number" || !/^\d+\.\d+/.test(c1)) continue;
+    const num=(x,d)=>typeof x==="number"?x:(d===undefined?clean(x):d);
+    pend.push([c1,clean(r[2]),clean(r[3]),clean(r[4]).slice(0,160),clean(r[5]),clean(r[6]),clean(r[7]),clean(r[8]),num(r[9]),clean(r[10]),clean(r[11]),clean(r[12]),num(r[13],1),num(r[14],0),clean(r[15]),num(r[16])]);
+  }
+  pend.forEach(x=>x.push("")); rows.push(...pend);
+  return {rows,meta};
+}
+function parseRekap(aoa){ const out=[]; let total=null;
+  for(const r of aoa){ const v=r.filter(c=>c!==null&&c!==undefined&&String(c).trim()!=="");
+    const ki=v.findIndex(c=>typeof c==="string"&&/^\d\.\d\.\d\d(\.\d\d)?$/.test(c.trim()));
+    if(ki>=0){ const kode=v[ki].trim(), ur=v.slice(ki+1).find(c=>typeof c==="string"), nums=v.slice(ki+1).filter(c=>typeof c==="number"); if(ur&&nums.length>=2) out.push([kode,clean(ur),nums[0],nums[1]]); }
+    else if(v.some(c=>/jumlah aset/i.test(String(c)))){ const nums=v.filter(c=>typeof c==="number"); if(nums.length>=2) total=[nums[0],nums[1]]; } }
+  return {rows:out,total}; }
+async function handleFiles(files){
+  if(!window.XLSX){ toast("Pustaka Excel belum termuat. Periksa koneksi internet."); return; }
+  let kib=null,rek=null,names=[];
+  for(const f of files){ try{ const wb=XLSX.read(await f.arrayBuffer(),{type:"array"}); const ws=wb.Sheets[wb.SheetNames[0]]; const aoa=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+      const flat=aoa.slice(0,15).map(r=>r.map(clean).join(" ")).join(" ").toUpperCase();
+      if(/REKAPITULASI/.test(flat)){ rek=parseRekap(aoa); names.push(f.name+" (rekap)"); } else { const p=parseKIB(aoa); if(p.rows.length){ kib=p; names.push(f.name+` (${p.rows.length} barang)`); } else toast(`File ${f.name} tidak dikenali sebagai Buku Inventaris`); } }
+    catch(e){ toast("Gagal membaca "+f.name+": "+e.message); } }
+  if(!kib && !rek) return;
+  if(!kib && RAW){ RAW.rekap=rek.rows; RAW.rekapTotal=rek.total; }
+  else if(kib){ RAW={rows:kib.rows,meta:kib.meta,rekap:rek?rek.rows:(RAW&&RAW.rekap)||[],rekapTotal:rek?rek.total:null,sumber:names.join(", "),loadedAt:new Date().toISOString()}; }
+  await IDB.set("data",RAW); build(); toast("Data dimuat: "+names.join(", ")); $('.tab[data-tab="sum"]').click();
+}
+$("#btnPick").onclick=()=>$("#fileIn").click(); $("#fileIn").onchange=e=>{ handleFiles([...e.target.files]); e.target.value=""; };
+const dz=$("#drop"); ["dragenter","dragover"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add("over");})); ["dragleave","drop"].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove("over");}));
+dz.addEventListener("drop",e=>handleFiles([...e.dataTransfer.files]));
+$("#btnClearData").onclick=async()=>{ if(!confirm("Hapus data aset yang tersimpan di browser ini?")) return; await IDB.del("data"); RAW=window.PRELOAD||null; build(); toast(window.PRELOAD?"Kembali ke data bawaan":"Data dihapus"); };
+
+/* =================== AGGREGATION =================== */
+function group(rows,keyFn){ const m=new Map(); for(const r of rows){ const k=keyFn(r); let g=m.get(k); if(!g){ g={k,n:0,v:0,B:0,RR:0,RB:0,"-":0,rows:[]}; m.set(k,g); } g.n+=r.jml; g.v+=r.harga; g[r.kond]+=r.jml; g.rows.push(r); } return [...m.values()]; }
+let S={};
+function computeStats(){
+  const tot={n:0,v:0}; A.forEach(r=>{tot.n+=r.jml;tot.v+=r.harga;});
+  S.tot=tot; S.kond=Object.fromEntries(["B","RR","RB","-"].map(k=>[k,{n:0,v:0}])); A.forEach(r=>{S.kond[r.kond].n+=r.jml;S.kond[r.kond].v+=r.harga;});
+  S.kib=group(A,r=>r.kib).sort((a,b)=>b.v-a.v); S.kat=group(A,r=>r.kat).sort((a,b)=>a.k.localeCompare(b.k));
+  S.asal=group(A,r=>r.asalN).sort((a,b)=>b.n-a.n); S.sumber=group(A,r=>r.sumber).sort((a,b)=>b.v-a.v);
+  S.tahun=group(A.filter(r=>r.tahun),r=>r.tahun).sort((a,b)=>a.k-b.k);
+  S.lain=A.filter(r=>r.lain); S.tik=A.filter(r=>r.tik); S.buku=A.filter(r=>r.kat==="1.3.05.01"||(r.kib==="E"&&/exemplar|eks/i.test(r.sat)));
+  S.ged=A.filter(r=>r.kib==="C"||r.kib==="D");
+  S.qc=qcChecks();
+}
+const QC=[
+  {id:"asal",lv:"warn",t:"Penulisan asal/cara perolehan tidak seragam (spasi berlebih/huruf besar-kecil)",f:r=>r.asal&&r.asal!==r.asal.trim()||(r.asal&&r.asalN!==r.asal&&r.asalN.toLowerCase()===r.asal.toLowerCase().trim())},
+  {id:"asalPilih",lv:"err",t:"Asal/cara perolehan masih \"Silahkan Pilih\" (belum dipilih saat input)",f:r=>r.asalN==="Belum dipilih"},
+  {id:"bahanDana",lv:"info",t:"Kolom Bahan berisi sumber dana (mis. \"Kertas - BOSN\"); sebaiknya Bahan diisi bahan saja, sumber dana di Keterangan",f:r=>/bos|dak|apbd/i.test(r.bahan)},
+  {id:"merk",lv:"warn",t:"Peralatan (KIB B) tanpa merk/tipe",f:r=>r.kib==="B"&&!r.lain&&(!r.merk||r.merk==="-")},
+  {id:"ket",lv:"info",t:"Keterangan kosong atau hanya \"-\"",f:r=>!r.ket||r.ket==="-"},
+  {id:"harga",lv:"err",t:"Harga 0 atau kosong",f:r=>!(r.harga>0)},
+  {id:"tahun",lv:"err",t:`Tahun perolehan kosong atau tidak wajar (< 1950 atau > ${THIS_YEAR})`,f:r=>!(r.tahun>=1950&&r.tahun<=THIS_YEAR)},
+  {id:"kond",lv:"warn",t:"Kondisi barang tidak diisi",f:r=>r.kond==="-"&&r.kib!=="ATB"},
+  {id:"lain",lv:"info",t:"Barang di kode 1.5.04 Aset Lain-lain (umumnya rusak berat yang sudah direklasifikasi) – siap diproses usulan penghapusan",f:r=>r.lain},
+  {id:"sd",lv:"warn",t:"Nama/deskripsi menyebut sekolah lain (SD) – periksa status kepemilikan atau hibah",f:r=>/\bsd ?n?\b|sdn\b|sd mendungan/i.test(r.nama+" "+r.desk+" "+r.ket)&&!/smp/i.test(r.desk.slice(0,25))},
+  {id:"ged1970",lv:"warn",t:"Gedung/bangunan dengan tahun perolehan ≤ 1970 – periksa apakah tahun sesuai dokumen perolehan",f:r=>(r.kib==="C"||r.kib==="D")&&r.tahun&&r.tahun<=1970},
+  {id:"luas",lv:"warn",t:"Gedung/bangunan tanpa luas (kolom Ukuran kosong)",f:r=>r.kib==="C"&&!(r.luas>0)},
+  {id:"dup",lv:"err",t:"ID KIB ganda",f:null}
+];
+function qcChecks(){ const ids=new Map(); A.forEach(r=>{ if(r.id) ids.set(r.id,(ids.get(r.id)||0)+1); });
+  return QC.map(q=>{ const rows=q.id==="dup"?A.filter(r=>r.id&&ids.get(r.id)>1):A.filter(q.f); return {...q,rows,n:rows.length,v:rows.reduce((a,r)=>a+r.harga,0)}; }); }
+
+/* =================== CHART HELPERS =================== */
+function hbars(items,{val="v",fmt=rpS,color,onclick,max,sub}={}){ const mx=max||Math.max(1,...items.map(x=>x[val]));
+  return `<div class="hb">${items.map((x,i)=>`<div class="row" ${onclick?`data-go='${esc(JSON.stringify(onclick(x)))}'`:""}><div class="lb" title="${esc(x.label)}">${esc(x.label)}</div><div class="tr"><i style="width:${(x[val]/mx*100).toFixed(1)}%;background:${color?color(x,i):PAL[i%PAL.length]}"></i></div><div class="vv">${fmt(x[val])}${sub?` <small>${sub(x)}</small>`:""}</div></div>`).join("")}</div>`; }
+function colChart(items,{val="n",fmt=nf,onclick}={}){ const mx=Math.max(1,...items.map(x=>x[val]));
+  return `<div class="cols">${items.map(x=>`<div class="c" title="${esc(x.label)}: ${fmt(x[val])}" ${onclick?`data-go='${esc(JSON.stringify(onclick(x)))}'`:""}><i style="height:${Math.max(1,x[val]/mx*100)}%"></i></div>`).join("")}</div>
+  <div class="colsx">${items.map((x,i)=>`<span>${items.length>24&&i%Math.ceil(items.length/14)?"":esc(String(x.label).slice(-2))}</span>`).join("")}</div>`; }
+function kondStack(g){ const t=g.B+g.RR+g.RB+g["-"]||1; return `<div class="stack">${["B","RR","RB","-"].map(k=>g[k]?`<i title="${KOND_N[k]}: ${nf(g[k])}" style="width:${g[k]/t*100}%;background:${KOND_C[k]}"></i>`:"").join("")}</div>`; }
+document.addEventListener("click",e=>{ const el=e.target.closest("[data-go]"); if(!el) return; try{ goList(JSON.parse(el.dataset.go)); }catch(err){} });
+
+/* =================== RENDER =================== */
+function renderHeader(){ const m=(RAW&&RAW.meta)||{}; $("#hdr").textContent=RAW?`${m.skpd||"Sekolah"} · ${m.kota||""} · kondisi ${m.kondisi||""}`:"Belum ada data"; $("#agentModel").textContent="Gemini · "+model(); }
+function renderKPIs(){ if(!A.length){ $("#kpis").innerHTML=""; return; } const t=S.tot,k=S.kond;
+  const box=(cls,l,v,s)=>`<div class="kpi ${cls}"><div class="l">${l}</div><div class="v" title="${esc(v)}">${v}</div><div class="s">${s}</div></div>`;
+  $("#kpis").innerHTML=box("","Jumlah barang",nf(t.n),`${S.kat.length} kategori`)+box("","Nilai perolehan",rpS(t.v),rp(t.v))+
+    box("ok","Kondisi baik",pc(k.B.n,t.n),nf(k.B.n)+" barang")+box("warn","Rusak ringan",nf(k.RR.n),rpS(k.RR.v))+box("err","Rusak berat",nf(k.RB.n),rpS(k.RB.v))+
+    box(S.tik.filter(r=>r.umur>=5&&!r.lain).length?"warn":"ok","TIK berumur ≥ 5 th",nf(S.tik.filter(r=>r.umur>=5&&!r.lain).length),`dari ${nf(S.tik.filter(r=>!r.lain).length)} unit TIK`); }
+function insights(){ const L=[],t=S.tot,k=S.kond;
+  const kb=S.kib[0]; if(kb) L.push(`<b>${esc(KIB_N[kb.k]||kb.k)}</b> mendominasi nilai aset: ${rpS(kb.v)} (${pc(kb.v,t.v)} dari total ${rpS(t.v)}).`);
+  const e=S.kib.find(x=>x.k==="E"); if(e) L.push(`Dari sisi jumlah, <b>${pc(e.n,t.n)}</b> barang adalah KIB E (didominasi buku): ${nf(e.n)} dari ${nf(t.n)} barang.`);
+  L.push(`Kondisi: <b>${pc(k.B.n,t.n)}</b> baik, ${nf(k.RR.n)} rusak ringan (${rpS(k.RR.v)}), ${nf(k.RB.n)} rusak berat (${rpS(k.RB.v)}).`);
+  if(S.lain.length){ const rb=S.lain.filter(r=>r.kond==="RB").length; L.push(`<b>${nf(S.lain.length)} barang (${rpS(S.lain.reduce((a,r)=>a+r.harga,0))})</b> sudah tercatat di Aset Lain-lain (1.5.04)${rb===S.lain.length?", seluruhnya rusak berat":""} → kandidat usulan penghapusan.`); }
+  const tikOld=S.tik.filter(r=>r.umur>=5&&!r.lain&&r.kond!=="RB"); if(tikOld.length) L.push(`<b>${nf(tikOld.length)} unit TIK</b> berumur ≥ 5 tahun dan belum rusak berat (${rpS(tikOld.reduce((a,r)=>a+r.harga,0))}). Pertimbangkan dalam rencana peremajaan.`);
+  const rrG=S.ged.filter(r=>r.kond==="RR"); if(rrG.length) L.push(`<b>${rrG.length} gedung/bangunan</b> berstatus rusak ringan senilai ${rpS(rrG.reduce((a,r)=>a+r.harga,0))}, termasuk ${esc(rrG.sort((a,b)=>b.harga-a.harga)[0].desk.slice(0,60))}.`);
+  const yr=S.tahun.slice().sort((a,b)=>b.v-a.v)[0]; if(yr) L.push(`Tahun perolehan dengan nilai terbesar: <b>${yr.k}</b> (${rpS(yr.v)}, ${nf(yr.n)} barang).`);
+  const qcBad=S.qc.filter(q=>q.n&&(q.lv==="err"||q.lv==="warn")); if(qcBad.length) L.push(`Ada <b>${qcBad.length} catatan kualitas data</b> yang perlu dirapikan pengurus barang (lihat tab Kualitas Data).`);
+  const rc=rekapCompare(); if(rc&&rc.diff.length) L.push(`<b>${rc.diff.length} kategori</b> berbeda antara rincian KIB dan Rekap Buku Inventaris.`); else if(rc) L.push(`Total rincian KIB <b>cocok</b> dengan Rekap Buku Inventaris.`);
+  return L; }
+function renderSum(){ if(!A.length){ $("#insights").innerHTML=`<div class="insight">Belum ada data. Buka tab <b>Data</b> untuk mengunggah file Buku Inventaris (KIB).</div>`; ["#chKib","#chKond","#chTahun","#chAsal","#chSumber"].forEach(s=>$(s).innerHTML=""); return; }
+  $("#insights").innerHTML=insights().map(x=>`<div class="insight">${x}</div>`).join("");
+  $("#chKib").innerHTML=hbars(S.kib.map(g=>({...g,label:KIB_N[g.k]||g.k})),{sub:x=>`· ${nf(x.n)}`,onclick:x=>({kib:x.k})});
+  const k=S.kond,t=S.tot.n; $("#chKond").innerHTML=kondStack({B:k.B.n,RR:k.RR.n,RB:k.RB.n,"-":k["-"].n})+`<div class="legend">${["B","RR","RB","-"].filter(x=>k[x].n).map(x=>`<span><b style="background:${KOND_C[x]}"></b>${KOND_N[x]}: ${nf(k[x].n)} (${pc(k[x].n,t)}) · ${rpS(k[x].v)}</span>`).join("")}</div>`+
+    `<h3>Kondisi per KIB</h3>`+S.kib.map(g=>`<div style="font-size:12px;margin-top:6px">${esc(KIB_N[g.k]||g.k)} <span style="color:var(--mut)">(${nf(g.n)})</span>${kondStack(g)}</div>`).join("");
+  renderTahun();
+  $("#chAsal").innerHTML=hbars(S.asal.map(g=>({...g,label:g.k})),{val:"n",fmt:nf,sub:x=>"· "+rpS(x.v),onclick:x=>({asal:x.k})});
+  $("#chSumber").innerHTML=hbars(S.sumber.map(g=>({...g,label:g.k})),{sub:x=>"· "+nf(x.n),onclick:x=>({sumber:x.k})}); }
+function renderTahun(){ const m=$("#thMetric").value, kb=$("#thKib").value; const rows=kb?A.filter(r=>r.kib===kb):A; const g=group(rows.filter(r=>r.tahun),r=>r.tahun).sort((a,b)=>a.k-b.k);
+  if(!g.length){ $("#chTahun").innerHTML=""; return; } const all=[]; for(let y=g[0].k;y<=g[g.length-1].k;y++){ const x=g.find(z=>z.k===y)||{k:y,n:0,v:0}; all.push({...x,label:String(y)}); }
+  $("#chTahun").innerHTML=colChart(all,{val:m,fmt:m==="v"?rpS:nf,onclick:x=>({t1:x.k,t2:x.k,kib:kb||""})})+`<p class="hint" style="margin-top:6px">Rentang ${g[0].k}–${g[g.length-1].k}. Arahkan kursor ke batang untuk melihat angka; klik untuk membuka daftar.</p>`; }
+$("#thMetric").onchange=renderTahun; $("#thKib").onchange=renderTahun;
+
+function renderKat(){ const T=S.tot; const gl=group(A,r=>r.gol).sort((a,b)=>a.k.localeCompare(b.k));
+  let h=`<thead><tr><th>Kode</th><th>Kategori</th><th class="r">Jumlah</th><th class="r">Nilai (Rp)</th><th class="r">% nilai</th><th class="r">Baik</th><th class="r">RR</th><th class="r">RB</th><th style="width:16%">Kondisi</th></tr></thead><tbody>`;
+  for(const g of gl){ h+=`<tr style="background:#f3f8f5;font-weight:700"><td>${g.k}</td><td>${esc(katName(g.k))}</td><td class="r">${nf(g.n)}</td><td class="r">${rpn(g.v)}</td><td class="r">${pc(g.v,T.v)}</td><td class="r">${nf(g.B)}</td><td class="r">${nf(g.RR)}</td><td class="r">${nf(g.RB)}</td><td>${kondStack(g)}</td></tr>`;
+    for(const c of S.kat.filter(x=>x.k.startsWith(g.k))) h+=`<tr class="click" data-kat="${c.k}"><td style="padding-left:18px">${c.k}</td><td><a href="#" onclick="return false" style="color:var(--acc)">${esc(katName(c.k))}</a></td><td class="r">${nf(c.n)}</td><td class="r">${rpn(c.v)}</td><td class="r">${pc(c.v,T.v)}</td><td class="r">${nf(c.B)}</td><td class="r">${nf(c.RR)}</td><td class="r">${nf(c.RB)}</td><td>${kondStack(c)}</td></tr>`; }
+  $("#tbKat").innerHTML=h+`</tbody><tfoot><tr><td></td><td>JUMLAH</td><td class="r">${nf(T.n)}</td><td class="r">${rpn(T.v)}</td><td class="r">100%</td><td class="r">${nf(S.kond.B.n)}</td><td class="r">${nf(S.kond.RR.n)}</td><td class="r">${nf(S.kond.RB.n)}</td><td></td></tr></tfoot>`; }
+$("#tbKat").addEventListener("click",e=>{ const tr=e.target.closest("tr[data-kat]"); if(!tr) return; const k=tr.dataset.kat;
+  const g=group(A.filter(r=>r.kat===k),r=>r.nama).sort((a,b)=>b.v-a.v);
+  $("#katDetailCard").style.display=""; $("#katDetailTitle").textContent=`Rincian ${k} ${katName(k)} – ${g.length} jenis barang`;
+  $("#tbKatDetail").innerHTML=`<thead><tr><th>Jenis barang</th><th class="r">Jumlah</th><th class="r">Nilai (Rp)</th><th class="r">Baik</th><th class="r">RR</th><th class="r">RB</th><th>Tahun</th><th></th></tr></thead><tbody>`+
+    g.map(x=>{ const ys=x.rows.map(r=>r.tahun).filter(Boolean); return `<tr><td>${esc(x.k)}</td><td class="r">${nf(x.n)}</td><td class="r">${rpn(x.v)}</td><td class="r">${nf(x.B)}</td><td class="r">${nf(x.RR)}</td><td class="r">${nf(x.RB)}</td><td>${ys.length?Math.min(...ys)+(Math.max(...ys)!==Math.min(...ys)?"–"+Math.max(...ys):""):""}</td><td><button class="btn sm" data-go='${esc(JSON.stringify({kat:k,q:x.k}))}'>Lihat</button></td></tr>`; }).join("")+"</tbody>";
+  $("#katDetailCard").scrollIntoView({behavior:"smooth",block:"start"}); });
+
+function groupTable(rows,label){ const g=group(rows,r=>r.nama+"|"+r.kat).sort((a,b)=>b.v-a.v);
+  if(!g.length) return `<tbody><tr><td class="empty" style="padding:20px;color:var(--mut)">Tidak ada barang ${label}.</td></tr></tbody>`;
+  return `<thead><tr><th>Jenis barang</th><th>Kategori</th><th class="r">Jumlah</th><th class="r">Nilai (Rp)</th><th>Tahun</th><th>Kode 1.5.04</th><th></th></tr></thead><tbody>`+g.map(x=>{ const [nama,kat]=x.k.split("|"); const ys=x.rows.map(r=>r.tahun).filter(Boolean); const lain=x.rows.filter(r=>r.lain).length;
+    return `<tr><td>${esc(nama)}</td><td>${esc(katName(kat))}</td><td class="r">${nf(x.n)}</td><td class="r">${rpn(x.v)}</td><td>${ys.length?Math.min(...ys)+(Math.max(...ys)>Math.min(...ys)?"–"+Math.max(...ys):""):""}</td><td>${lain?`<span class="badge k-x">${lain} sudah</span>`:""}</td><td><button class="btn sm" data-go='${esc(JSON.stringify({kond:x.rows[0].kond,q:nama,kat}))}'>Lihat</button></td></tr>`; }).join("")+
+    `</tbody><tfoot><tr><td colspan="2">Jumlah</td><td class="r">${nf(rows.reduce((a,r)=>a+r.jml,0))}</td><td class="r">${rpn(rows.reduce((a,r)=>a+r.harga,0))}</td><td colspan="3"></td></tr></tfoot>`; }
+function renderKond(){ const k=S.kond,t=S.tot;
+  $("#kondKpi").innerHTML=["B","RR","RB"].map(x=>`<div class="card" style="border-left:5px solid ${KOND_C[x]}"><h2>${KOND_N[x]}</h2><div style="font-size:22px;font-weight:700">${nf(k[x].n)} <small style="font-size:13px;color:var(--mut)">barang (${pc(k[x].n,t.n)})</small></div><div style="color:var(--mut)">${rp(k[x].v)}</div></div>`).join("");
+  $("#tbRB").innerHTML=groupTable(A.filter(r=>r.kond==="RB"),"rusak berat"); $("#tbRR").innerHTML=groupTable(A.filter(r=>r.kond==="RR"),"rusak ringan");
+  $("#tbKondKat").innerHTML=`<thead><tr><th>Kategori</th><th class="r">Baik</th><th class="r">RR</th><th class="r">RB</th><th class="r">% rusak</th><th class="r">Nilai rusak (Rp)</th><th style="width:20%"></th></tr></thead><tbody>`+
+    S.kat.filter(c=>c.n).map(c=>{ const rus=c.RR+c.RB, nv=c.rows.filter(r=>r.kond==="RR"||r.kond==="RB").reduce((a,r)=>a+r.harga,0); return `<tr><td>${c.k} ${esc(katName(c.k))}</td><td class="r">${nf(c.B)}</td><td class="r">${nf(c.RR)}</td><td class="r">${nf(c.RB)}</td><td class="r">${pc(rus,c.n)}</td><td class="r">${rpn(nv)}</td><td>${kondStack(c)}</td></tr>`; }).join("")+"</tbody>"; }
+
+function renderUmur(){ const B=A.filter(r=>r.kib==="B"&&!r.lain&&r.umur!==null);
+  const bk=[["0–2 th",0,2],["3–5 th",3,5],["6–10 th",6,10],["11–20 th",11,20],["> 20 th",21,999]].map(([l,a,b])=>{ const rs=B.filter(r=>r.umur>=a&&r.umur<=b); return {label:l,n:rs.length,v:rs.reduce((s,r)=>s+r.harga,0),a,b}; });
+  $("#chUmur").innerHTML=hbars(bk,{val:"n",fmt:nf,sub:x=>"· "+rpS(x.v),onclick:x=>({kib:"B",t1:THIS_YEAR-x.b,t2:THIS_YEAR-x.a})});
+  const age=nIn($("#tikAge").value)||5; const T=S.tik.filter(r=>!r.lain); const old=T.filter(r=>r.umur>=age);
+  const g=group(T,r=>r.nama).sort((a,b)=>b.n-a.n);
+  $("#tikSum").innerHTML=`<div class="insight">${nf(T.length)} unit TIK aktif senilai ${rpS(T.reduce((a,r)=>a+r.harga,0))}; <b>${nf(old.length)} unit berumur ≥ ${age} tahun</b> (${rpS(old.reduce((a,r)=>a+r.harga,0))}), ${nf(T.filter(r=>r.kond==="RR").length)} rusak ringan. <button class="btn sm" data-go='${esc(JSON.stringify({tik:1,t2:THIS_YEAR-age}))}'>Lihat yang tua</button></div>`;
+  $("#tbTik").innerHTML=`<thead><tr><th>Jenis</th><th class="r">Unit</th><th class="r">≥ ${age} th</th><th class="r">Baik</th><th class="r">RR</th><th class="r">Nilai (Rp)</th><th>Tahun</th><th></th></tr></thead><tbody>`+
+    g.map(x=>{ const ys=x.rows.map(r=>r.tahun).filter(Boolean); return `<tr><td>${esc(x.k)}</td><td class="r">${nf(x.n)}</td><td class="r">${nf(x.rows.filter(r=>r.umur>=age).length)}</td><td class="r">${nf(x.B)}</td><td class="r">${nf(x.RR)}</td><td class="r">${rpn(x.v)}</td><td>${ys.length?Math.min(...ys)+"–"+Math.max(...ys):""}</td><td><button class="btn sm" data-go='${esc(JSON.stringify({tik:1,q:x.k}))}'>Lihat</button></td></tr>`; }).join("")+"</tbody>"; }
+$("#tikAge").oninput=()=>{ renderUmur(); renderKPIs(); };
+
+function renderBuku(){ const B=S.buku; const n=B.reduce((a,r)=>a+r.jml,0), v=B.reduce((a,r)=>a+r.harga,0);
+  $("#bukuKpi").innerHTML=`<div class="card"><h2>Jumlah eksemplar</h2><div style="font-size:22px;font-weight:700">${nf(n)}</div><div style="color:var(--mut)">${rp(v)}</div></div>
+   <div class="card"><h2>Judul/jenis berbeda</h2><div style="font-size:22px;font-weight:700">${nf(new Set(B.map(r=>r.nama+"|"+r.desk)).size)}</div><div style="color:var(--mut)">${nf(new Set(B.map(r=>r.nama)).size)} kelompok mapel/jenis</div></div>
+   <div class="card"><h2>Kondisi buku</h2>${kondStack({B:B.filter(r=>r.kond==="B").length,RR:B.filter(r=>r.kond==="RR").length,RB:B.filter(r=>r.kond==="RB").length,"-":0})}<div style="color:var(--mut);font-size:12.5px">RB ${nf(B.filter(r=>r.kond==="RB").length)} · RR ${nf(B.filter(r=>r.kond==="RR").length)}</div></div>`;
+  const gm=group(B,r=>r.nama).sort((a,b)=>b.n-a.n).slice(0,18); $("#chMapel").innerHTML=hbars(gm.map(g=>({...g,label:g.k})),{val:"n",fmt:nf,sub:x=>"· "+rpS(x.v),onclick:x=>({kat:"1.3.05.01",q:x.k})});
+  const gk=group(B,r=>r.ket&&r.ket!=="-"?r.ket:"(tanpa keterangan)").sort((a,b)=>b.n-a.n).slice(0,14); $("#chKetBuku").innerHTML=hbars(gk.map(g=>({...g,label:g.k})),{val:"n",fmt:nf,onclick:x=>({kat:"1.3.05.01",q:x.k==="(tanpa keterangan)"?"":x.k})});
+  const gy=group(B.filter(r=>r.tahun),r=>r.tahun).sort((a,b)=>b.k-a.k).slice(0,14); $("#chBukuTahun").innerHTML=hbars(gy.map(g=>({...g,label:String(g.k)})),{val:"n",fmt:nf,sub:x=>"· "+rpS(x.v),onclick:x=>({kat:"1.3.05.01",t1:x.k,t2:x.k})});
+  const js=nIn($("#jmlSiswa").value); const kls=["7","8","9"].map(k=>({k,n:B.filter(r=>new RegExp("kelas\\s*"+k+"\\b|kelas\\s*"+["VII","VIII","IX"][+k-7]+"\\b","i").test(r.ket+" "+r.desk)).length}));
+  $("#rasio").innerHTML=(js?`<div class="insight">Rasio seluruh buku: <b>${(n/js).toLocaleString("id-ID",{maximumFractionDigits:1})} eksemplar per peserta didik</b> (${nf(n)} ÷ ${nf(js)}).</div>`:`<p class="hint">Isi jumlah peserta didik untuk menghitung rasio.</p>`)+
+    `<table class="tbl"><tr><th>Buku siswa (dari keterangan)</th><th class="r">Eksemplar</th>${js?`<th class="r">per siswa*</th>`:""}</tr>${kls.map(x=>`<tr><td>Kelas ${x.k}</td><td class="r">${nf(x.n)}</td>${js?`<td class="r">${(x.n/(js/3)).toLocaleString("id-ID",{maximumFractionDigits:1})}</td>`:""}</tr>`).join("")}</table>${js?`<p class="hint">*Perkiraan: jumlah siswa dianggap terbagi rata di tiga jenjang kelas.</p>`:""}`; }
+$("#jmlSiswa").oninput=()=>{ lsSet(LS_UI,{...(lsGet(LS_UI)||{}),siswa:$("#jmlSiswa").value}); renderBuku(); };
+
+function renderGed(){ const G=S.ged.slice().sort((a,b)=>b.harga-a.harga), C=G.filter(r=>r.kib==="C");
+  $("#gedKpi").innerHTML=`<div class="card"><h2>Gedung & bangunan</h2><div style="font-size:22px;font-weight:700">${nf(C.length)} unit</div><div style="color:var(--mut)">${rp(C.reduce((a,r)=>a+r.harga,0))}</div></div>
+   <div class="card"><h2>Total luas tercatat</h2><div style="font-size:22px;font-weight:700">${nf(C.reduce((a,r)=>a+r.luas,0))} m²</div><div style="color:var(--mut)">${nf(C.filter(r=>!(r.luas>0)).length)} unit tanpa luas</div></div>
+   <div class="card"><h2>Rusak ringan</h2><div style="font-size:22px;font-weight:700">${nf(G.filter(r=>r.kond==="RR").length)} unit</div><div style="color:var(--mut)">${rp(G.filter(r=>r.kond==="RR").reduce((a,r)=>a+r.harga,0))}</div></div>`;
+  $("#tbGed").innerHTML=`<thead><tr><th>No</th><th>Jenis</th><th style="min-width:240px">Uraian</th><th class="r">Tahun</th><th class="r">Luas (m²)</th><th>Kondisi</th><th class="r">Nilai (Rp)</th><th class="r">Rp/m²</th><th>Keterangan</th></tr></thead><tbody>`+
+    G.map((r,i)=>`<tr class="click" data-i="${r.i}"><td>${i+1}</td><td>${esc(r.nama)}</td><td>${esc(r.desk)}</td><td class="r">${r.tahun||""}</td><td class="r">${r.luas?nf(r.luas):""}</td><td>${kb(r.kond)}</td><td class="r">${rpn(r.harga)}</td><td class="r">${r.luas?rpn(r.harga/r.luas):""}</td><td>${esc(r.ket)}</td></tr>`).join("")+
+    `</tbody><tfoot><tr><td colspan="4">Jumlah</td><td class="r">${nf(G.reduce((a,r)=>a+r.luas,0))}</td><td></td><td class="r">${rpn(G.reduce((a,r)=>a+r.harga,0))}</td><td colspan="2"></td></tr></tfoot>`; }
+$("#tbGed").addEventListener("click",e=>{ const tr=e.target.closest("tr[data-i]"); if(tr) showDetail(A[+tr.dataset.i]); });
+const kb=k=>`<span class="badge k-${k==="-"?"x":k}">${KOND_N[k]}</span>`;
+
+/* =================== DAFTAR ASET =================== */
+let F={}, sortK="kode", sortD=1, page=0; const PER=100;
+function applyFilter(f){ const q=(f.q||"").toLowerCase().trim(), words=q?q.split(/\s+/):[]; const qc=f.qc?new Set((S.qc.find(x=>x.id===f.qc)||{rows:[]}).rows.map(r=>r.i)):null;
+  return A.filter(r=>(!f.kib||r.kib===f.kib)&&(!f.kat||r.kode.startsWith(f.kat))&&(!f.kond||r.kond===f.kond)&&(!f.asal||r.asalN===f.asal)&&(!f.sumber||r.sumber===f.sumber)
+    &&(!f.t1||r.tahun>=+f.t1)&&(!f.t2||(r.tahun&&r.tahun<=+f.t2))&&(!f.h1||r.harga>=+f.h1)&&(!f.h2||r.harga<=+f.h2)&&(!f.tik||(r.tik&&!r.lain))&&(!f.lain||r.lain)&&(!qc||qc.has(r.i))&&words.every(w=>r.txt.includes(w))); }
+function readF(){ return {q:$("#fQ").value,kib:$("#fKib").value,kat:$("#fKat").value,kond:$("#fKond").value,asal:$("#fAsal").value,sumber:$("#fSumber").value,t1:$("#fT1").value,t2:$("#fT2").value,h1:$("#fH1").value,qc:$("#fQc").value,tik:F.tik||"",lain:F.lain||""}; }
+function writeF(f){ $("#fQ").value=f.q||""; $("#fKib").value=f.kib||""; $("#fKat").value=f.kat&&[...$("#fKat").options].some(o=>o.value===f.kat)?f.kat:""; $("#fKond").value=f.kond||""; $("#fAsal").value=f.asal||""; $("#fSumber").value=f.sumber||"";
+  $("#fT1").value=f.t1||""; $("#fT2").value=f.t2||""; $("#fH1").value=f.h1||""; $("#fQc").value=f.qc||""; }
+function goList(f){ F={...f}; if(f.kat && ![...$("#fKat").options].some(o=>o.value===f.kat)){ const o=document.createElement("option"); o.value=f.kat; o.textContent=f.kat+" "+katName(f.kat); $("#fKat").appendChild(o); } writeF(F); page=0; $('.tab[data-tab="list"]').click(); }
+function renderList(){ F={...readF(),tik:F.tik,lain:F.lain,h2:F.h2}; const rows=applyFilter(F);
+  const key={kode:r=>r.kode+r.reg,nama:r=>r.nama.toLowerCase(),tahun:r=>r.tahun,harga:r=>r.harga,kond:r=>r.kond,kib:r=>r.kib}[sortK]||(r=>r.kode);
+  rows.sort((a,b)=>{ const x=key(a),y=key(b); return (x>y?1:x<y?-1:0)*sortD; });
+  const n=rows.reduce((a,r)=>a+r.jml,0), v=rows.reduce((a,r)=>a+r.harga,0);
+  $("#listSum").innerHTML=`<b>${nf(n)}</b> barang · <b>${rp(v)}</b> · Baik ${nf(rows.filter(r=>r.kond==="B").length)} · RR ${nf(rows.filter(r=>r.kond==="RR").length)} · RB ${nf(rows.filter(r=>r.kond==="RB").length)}${F.tik?` · <span class="badge k-x">filter: TIK aktif <a href="#" id="clrTik">✕</a></span>`:""}${F.lain?` · <span class="badge k-x">filter: Aset Lain-lain <a href="#" id="clrLain">✕</a></span>`:""}`;
+  const pages=Math.max(1,Math.ceil(rows.length/PER)); page=Math.min(page,pages-1); const sl=rows.slice(page*PER,page*PER+PER);
+  const th=(k,l,cls="")=>`<th class="s ${cls}" data-sort="${k}">${l}${sortK===k?(sortD>0?" ▲":" ▼"):""}</th>`;
+  $("#tbList").innerHTML=`<thead><tr><th>No</th>${th("kode","Kode / Register")}${th("nama","Nama barang")}<th style="min-width:200px">Deskripsi / Merk</th>${th("kib","KIB")}${th("tahun","Tahun","r")}<th>Asal</th>${th("kond","Kondisi")}${th("harga","Harga (Rp)","r")}<th>Keterangan</th></tr></thead><tbody>`+
+    (sl.length?sl.map((r,i)=>`<tr class="click" data-i="${r.i}"><td>${page*PER+i+1}</td><td style="white-space:nowrap">${esc(r.kode)}<br><small style="color:var(--mut)">${esc(r.reg)}</small></td><td>${esc(r.nama)}</td><td>${esc(r.desk.slice(0,90))}${r.merk&&r.merk!=="-"?`<br><small style="color:var(--mut)">${esc(r.merk)}</small>`:""}</td><td>${r.kib}</td><td class="r">${r.tahun||""}</td><td>${esc(r.asalN)}</td><td>${kb(r.kond)}</td><td class="r">${rpn(r.harga)}</td><td>${esc(r.ket.slice(0,60))}</td></tr>`).join("")
+     :`<tr><td colspan="10" style="padding:24px;text-align:center;color:var(--mut)">Tidak ada barang yang cocok.</td></tr>`)+"</tbody>";
+  $("#pager").innerHTML=`Halaman ${page+1} / ${pages} <button class="btn sm" id="pgPrev" ${page?"":"disabled"}>‹</button><button class="btn sm" id="pgNext" ${page<pages-1?"":"disabled"}>›</button>`;
+  $("#pgPrev").onclick=()=>{page--;renderList();}; $("#pgNext").onclick=()=>{page++;renderList();};
+  const ct=$("#clrTik"); if(ct) ct.onclick=e=>{e.preventDefault();F.tik="";renderList();}; const cl=$("#clrLain"); if(cl) cl.onclick=e=>{e.preventDefault();F.lain="";renderList();};
+  return rows; }
+$("#tbList").addEventListener("click",e=>{ const s=e.target.closest("th[data-sort]"); if(s){ const k=s.dataset.sort; if(sortK===k) sortD=-sortD; else { sortK=k; sortD=k==="harga"||k==="tahun"?-1:1; } renderList(); return; }
+  const tr=e.target.closest("tr[data-i]"); if(tr) showDetail(A[+tr.dataset.i]); });
+let fT=null; ["fQ","fT1","fT2","fH1"].forEach(id=>$("#"+id).addEventListener("input",()=>{clearTimeout(fT);fT=setTimeout(()=>{page=0;renderList();},250);}));
+["fKib","fKat","fKond","fAsal","fSumber","fQc"].forEach(id=>$("#"+id).addEventListener("change",()=>{page=0;renderList();}));
+$("#fReset").onclick=()=>{ F={}; writeF({}); page=0; renderList(); };
+function showDetail(r){ $("#dTitle").textContent=r.nama; const f=[["Kode barang",r.kode],["Register",r.reg],["Kategori",r.kat+" "+katName(r.kat)],["KIB",KIB_N[r.kib]||r.kib],["Deskripsi",r.desk],["Merk/Tipe",r.merk],["No. sertifikat/pabrik/rangka/mesin",r.nos],["Bahan",r.bahan],["Asal perolehan",r.asal],["Indikasi sumber dana",r.sumber],["Tahun perolehan",r.tahun+(r.umur!==null?` (umur ${r.umur} th)`:"")],["Ukuran",r.ukuran],["Satuan",r.sat],["Kondisi",KOND_N[r.kond]],["Jumlah",r.jml],["Harga",rp(r.harga)],["Keterangan",r.ket],["ID KIB",r.id]];
+  $("#dBody").innerHTML=f.map(([a,b])=>`<dt>${a}</dt><dd>${esc(b)||"–"}</dd>`).join(""); const q=S.qc.filter(x=>x.rows.includes(r)&&x.lv!=="info"); if(q.length) $("#dBody").innerHTML+=`<dt>Catatan data</dt><dd style="color:#92400e">${q.map(x=>esc(x.t)).join("<br>")}</dd>`; $("#mDetail").classList.add("open"); }
+function exportRows(rows,name){ const H=["No","Kode Barang","Register","Nama Barang","Deskripsi","Merk/Tipe","Bahan","Asal Perolehan","Tahun","Umur (th)","Ukuran","Satuan","Kondisi","Jumlah","Harga","KIB","Kategori","Indikasi Sumber Dana","Keterangan","ID KIB"];
+  const aoa=[H,...rows.map((r,i)=>[i+1,r.kode,r.reg,r.nama,r.desk,r.merk,r.bahan,r.asalN,r.tahun||"",r.umur??"",r.ukuran,r.sat,KOND_N[r.kond],r.jml,r.harga,r.kib,katName(r.kat),r.sumber,r.ket,r.id])];
+  if(!window.XLSX){ download(name+".csv","﻿"+aoa.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(";")).join("\n"),"text/csv"); return; }
+  const ws=XLSX.utils.aoa_to_sheet(aoa); ws["!cols"]=[5,22,8,26,40,16,14,14,7,7,10,9,12,7,15,5,30,18,30,9].map(w=>({wch:w})); for(let i=2;i<=aoa.length;i++){ if(ws["O"+i]) ws["O"+i].z="#,##0"; }
+  ws["!autofilter"]={ref:"A1:T1"}; const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Aset"); XLSX.writeFile(wb,name+".xlsx"); }
+$("#btnExport").onclick=()=>{ const rows=renderList(); exportRows(rows,"Aset_terfilter_"+new Date().toISOString().slice(0,10)); };
+$("#btnPrintList").onclick=()=>{ const rows=renderList(); if(rows.length>3000&&!confirm(`Akan mencetak ${rows.length} baris. Lanjutkan?`)) return;
+  printHTML(`<h1>DAFTAR ASET</h1><div class="sub">${esc((RAW.meta||{}).skpd||"")} – ${filterLabel(F)}</div><table><tr><th>No</th><th>Kode/Reg</th><th>Nama</th><th>Deskripsi</th><th>Tahun</th><th>Kondisi</th><th>Harga</th></tr>${rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.kode)}/${esc(r.reg)}</td><td>${esc(r.nama)}</td><td>${esc(r.desk.slice(0,80))}</td><td>${r.tahun||""}</td><td>${KOND_N[r.kond]}</td><td class="r">${rpn(r.harga)}</td></tr>`).join("")}<tr><td colspan="6"><b>Jumlah ${nf(rows.length)} barang</b></td><td class="r"><b>${rpn(rows.reduce((a,r)=>a+r.harga,0))}</b></td></tr></table>`); };
+function filterLabel(f){ const p=[]; if(f.kib) p.push(KIB_N[f.kib]); if(f.kat) p.push(f.kat+" "+katName(f.kat)); if(f.kond) p.push(KOND_N[f.kond]); if(f.asal) p.push("asal "+f.asal); if(f.sumber) p.push("sumber "+f.sumber); if(f.t1||f.t2) p.push("tahun "+(f.t1||"…")+"–"+(f.t2||"…")); if(f.h1) p.push("harga ≥ "+rp(f.h1)); if(f.q) p.push(`"${f.q}"`); if(f.tik) p.push("TIK"); if(f.lain) p.push("Aset Lain-lain"); if(f.qc) p.push((S.qc.find(x=>x.id===f.qc)||{}).t); return p.join(", ")||"seluruh aset"; }
+
+/* =================== KUALITAS DATA =================== */
+function rekapCompare(){ if(!RAW||!RAW.rekap||!RAW.rekap.length) return null; const diff=[],rows=[];
+  for(const [kode,ur,jn,hv] of RAW.rekap){ if(kode.split(".").length!==4) continue; const rs=A.filter(r=>r.kode.startsWith(kode)); const n=rs.reduce((a,r)=>a+r.jml,0), v=rs.reduce((a,r)=>a+r.harga,0);
+    const row={kode,ur,jn,hv,n,v,ok:n===jn&&Math.abs(v-hv)<1}; rows.push(row); if(!row.ok&&(jn||n)) diff.push(row); } return {rows,diff}; }
+function renderQC(){ const icon={ok:"✓",warn:"!",err:"✕",info:"i"};
+  $("#qcList").innerHTML=S.qc.map(q=>q.n?`<li class="${q.lv}"><span class="ic">${icon[q.lv]}</span><span>${esc(q.t)}: <b>${nf(q.n)} barang</b> (${rpS(q.v)})</span><span class="gt"><button class="btn sm" data-go='${esc(JSON.stringify({qc:q.id}))}'>Lihat</button></span></li>`:`<li class="ok"><span class="ic">✓</span><span>${esc(q.t)}: tidak ada.</span></li>`).join("");
+  const rc=rekapCompare(); if(!rc){ $("#rekapCmp").innerHTML=`<p class="hint">Unggah file Rekap Buku Inventaris di tab Data untuk mencocokkan total.</p>`; return; }
+  const shown=rc.rows.filter(r=>r.jn||r.n);
+  $("#rekapCmp").innerHTML=(rc.diff.length?`<div class="insight" style="background:var(--warnb);border-color:#f3d9a8">${rc.diff.length} kategori berbeda antara rincian KIB dan rekap. Perbedaan pada 1.3.02/1.3.05 biasanya terjadi karena barang rusak berat sudah dipindah ke 1.5.04 Aset Lain-lain.</div>`:`<div class="insight">Semua kategori cocok antara rincian KIB dan rekap.</div>`)+
+    `<div class="tblwrap" style="max-height:none"><table class="tbl"><thead><tr><th>Kode</th><th>Uraian</th><th class="r">Rekap: jumlah</th><th class="r">KIB: jumlah</th><th class="r">Rekap: nilai</th><th class="r">KIB: nilai</th><th>Status</th></tr></thead><tbody>${shown.map(r=>`<tr><td>${r.kode}</td><td>${esc(r.ur)}</td><td class="r">${nf(r.jn)}</td><td class="r">${nf(r.n)}</td><td class="r">${rpn(r.hv)}</td><td class="r">${rpn(r.v)}</td><td>${r.ok?'<span class="badge k-B">cocok</span>':'<span class="badge k-RR">beda</span>'}</td></tr>`).join("")}</tbody></table></div>`; }
+
+/* =================== DATA TAB =================== */
+function renderData(){ if(!RAW){ $("#dataInfo").innerHTML=`<div class="insight">Belum ada data.</div>`; return; } const m=RAW.meta||{};
+  $("#dataInfo").innerHTML=`<div class="insight"><b>Data aktif:</b> ${esc(RAW.sumber||"")}<br>${esc(m.skpd||"")} · ${esc(m.kota||"")} · ${esc(m.prov||"")} · kode lokasi ${esc(m.lokasi||"")} · kondisi ${esc(m.kondisi||"")}<br>${nf(A.length)} baris barang${RAW.rekap&&RAW.rekap.length?` · rekap ${RAW.rekap.length} kode`:""}${RAW.loadedAt?` · dimuat ${new Date(RAW.loadedAt).toLocaleString("id-ID")}`:" · data bawaan file"}</div>`; }
+
+/* =================== REPORT =================== */
+function printHTML(html){ $("#printArea").innerHTML=`<div class="doc">${html}</div>`; try{window.print();}catch(e){toast("Cetak diblokir. Buka halaman di tab baru lalu cetak.");} }
+function reportHTML(){ const m=RAW.meta||{},t=S.tot,k=S.kond;
+  const kibT=S.kib.map(g=>`<tr><td>${esc(KIB_N[g.k]||g.k)}</td><td class="r">${nf(g.n)}</td><td class="r">${rpn(g.v)}</td><td class="r">${pc(g.v,t.v)}</td><td class="r">${nf(g.B)}</td><td class="r">${nf(g.RR)}</td><td class="r">${nf(g.RB)}</td></tr>`).join("");
+  const katT=S.kat.filter(c=>c.n).map(c=>`<tr><td>${c.k}</td><td>${esc(katName(c.k))}</td><td class="r">${nf(c.n)}</td><td class="r">${rpn(c.v)}</td><td class="r">${nf(c.B)}</td><td class="r">${nf(c.RR)}</td><td class="r">${nf(c.RB)}</td></tr>`).join("");
+  const rbT=group(A.filter(r=>r.kond==="RB"),r=>r.nama).sort((a,b)=>b.v-a.v).slice(0,25).map(g=>`<tr><td>${esc(g.k)}</td><td class="r">${nf(g.n)}</td><td class="r">${rpn(g.v)}</td></tr>`).join("");
+  const rrT=group(A.filter(r=>r.kond==="RR"),r=>r.nama).sort((a,b)=>b.v-a.v).slice(0,25).map(g=>`<tr><td>${esc(g.k)}</td><td class="r">${nf(g.n)}</td><td class="r">${rpn(g.v)}</td></tr>`).join("");
+  const qcT=S.qc.filter(q=>q.n).map(q=>`<tr><td>${esc(q.t)}</td><td class="r">${nf(q.n)}</td></tr>`).join("");
+  return `<h1>LAPORAN ANALISIS ASET</h1><div class="sub">${esc(m.skpd||"")} – ${esc(m.kota||"")}<br>Kondisi ${esc(m.kondisi||"")}</div>
+  <div class="sec">A. Temuan utama</div><ol>${insights().map(x=>`<li>${x}</li>`).join("")}</ol>
+  <div class="sec">B. Rekap per KIB</div><table><tr><th>KIB</th><th>Jumlah</th><th>Nilai (Rp)</th><th>%</th><th>Baik</th><th>RR</th><th>RB</th></tr>${kibT}<tr><td><b>Jumlah</b></td><td class="r"><b>${nf(t.n)}</b></td><td class="r"><b>${rpn(t.v)}</b></td><td class="r">100%</td><td class="r">${nf(k.B.n)}</td><td class="r">${nf(k.RR.n)}</td><td class="r">${nf(k.RB.n)}</td></tr></table>
+  <div class="sec">C. Rekap per kategori</div><table><tr><th>Kode</th><th>Kategori</th><th>Jumlah</th><th>Nilai (Rp)</th><th>Baik</th><th>RR</th><th>RB</th></tr>${katT}</table>
+  <div class="sec">D. Barang rusak berat (25 jenis bernilai terbesar)</div><table><tr><th>Jenis</th><th>Jumlah</th><th>Nilai (Rp)</th></tr>${rbT||"<tr><td colspan=3>-</td></tr>"}</table>
+  <div class="sec">E. Barang rusak ringan (25 jenis bernilai terbesar)</div><table><tr><th>Jenis</th><th>Jumlah</th><th>Nilai (Rp)</th></tr>${rrT||"<tr><td colspan=3>-</td></tr>"}</table>
+  <div class="sec">F. Catatan kualitas data</div><table><tr><th>Catatan</th><th>Jumlah barang</th></tr>${qcT}</table>
+  <p style="font-size:9pt">Dihasilkan Aset Pintar dari ${esc(RAW.sumber||"data KIB")} pada ${new Date().toLocaleDateString("id-ID")}.</p>`; }
+$("#btnReport").onclick=()=>{ if(!A.length){ toast("Belum ada data"); return; } printHTML(reportHTML()); };
+
+/* =================== AGEN AI =================== */
+let settings={apiKey:"",model:DEFAULT_MODEL,...(lsGet(LS_SET)||{})}; const apiKey=()=>(settings.apiKey||DEFAULT_API_KEY||"").trim(), model=()=>(settings.model||DEFAULT_MODEL).trim().replace(/^models\//,"");
+let chat=lsGet(LS_CHAT)||[]; const saveChat=()=>{ if(chat.length>50) chat=chat.slice(-50); lsSet(LS_CHAT,chat); };
+const SYSTEM=`Anda adalah "Agen Analis Aset", asisten AI untuk kepala sekolah dan pengurus barang dalam menganalisis Buku Inventaris (Kartu Inventaris Barang/KIB) barang milik daerah di sekolah negeri Indonesia.
+Konteks KIB: A Tanah; B Peralatan & Mesin; C Gedung & Bangunan; D Jalan, Irigasi & Jaringan; E Aset Tetap Lainnya (buku perpustakaan, barang kesenian/olahraga); F Konstruksi dalam Pengerjaan; ATB Aset Tak Berwujud (software). Kode 1.5.04 Aset Lain-lain umumnya berisi barang rusak berat yang sudah direklasifikasi dari aset tetap dan menunggu proses penghapusan. Kondisi: B baik, RR rusak ringan, RB rusak berat. Nilai yang ada adalah harga perolehan, bukan nilai buku setelah penyusutan.
+Acuan umum pengelolaan barang milik daerah adalah Permendagri Nomor 19 Tahun 2016. Untuk prosedur teknis (penghapusan, pemindahtanganan, inventarisasi), sarankan konfirmasi ke pengurus barang dan BPKAD/perangkat daerah setempat. Jangan mengarang pasal atau angka aturan.
+Gunakan HANYA data yang diberikan atau hasil query. Jangan menebak angka. Bila data tidak cukup, minta query.
+
+ALAT (actions):
+- {"type":"query","filter":FILTER,"groupBy":"nama|kategori|kib|kondisi|tahun|asal|sumber|merk|keterangan|umur","top":30,"label":"..."} → aplikasi menghitung jumlah & nilai per kelompok lalu mengirim hasilnya kembali kepada Anda. Gunakan bila perlu angka rinci yang tidak ada di ringkasan. Saat meminta query, reply boleh singkat ("Menghitung…").
+- {"type":"show","filter":FILTER,"label":"teks tombol"} → menampilkan tombol bagi pengguna untuk membuka Daftar Aset dengan filter tersebut.
+FILTER = {"q":"kata kunci (cari di nama/deskripsi/merk/keterangan)","kib":"A|B|C|D|E|ATB","kat":"awalan kode, mis. 1.3.02.10","kond":"B|RR|RB","asal":"Belanja Modal|Pembelian|Hibah|Lain-lain","sumber":"BOSP/BOS Nasional|BOSDA|DAK|APBD/Pemkot|Pemprov DIY|Komite|Hibah|Tidak tercatat","t1":tahun_min,"t2":tahun_maks,"h1":harga_min,"h2":harga_maks,"tik":1,"lain":1} (semua opsional).
+
+FORMAT: selalu SATU objek JSON valid: {"reply":"<jawaban; markdown sederhana: **tebal**, daftar '- ', judul '### ', tabel boleh dengan format | a | b |>","actions":[...]}
+Gaya: Bahasa Indonesia, ringkas, angka diformat rupiah Indonesia (Rp1.234.567 atau Rp1,2 M), langsung ke temuan dan rekomendasi yang bisa ditindaklanjuti kepala sekolah/pengurus barang. Sertakan tombol "show" yang relevan agar pengguna bisa melihat daftar barangnya.`;
+const QUICK={ringkas:"Buat ringkasan kondisi aset sekolah: komposisi per KIB, kondisi, tahun perolehan dominan, dan 5 temuan terpenting beserta rekomendasi.",
+  hapus:"Susun daftar kandidat usulan penghapusan barang (rusak berat, termasuk yang sudah di 1.5.04 Aset Lain-lain): kelompokkan per jenis dengan jumlah dan nilai, lalu jelaskan langkah administrasi yang perlu disiapkan pengurus barang secara umum.",
+  pelihara:"Tentukan prioritas pemeliharaan untuk barang rusak ringan dan gedung rusak ringan: urutkan berdasarkan dampak ke pembelajaran dan nilai, beri rekomendasi tindakan.",
+  tik:"Analisis peralatan TIK (komputer, laptop, proyektor, printer, jaringan): jumlah, umur, kondisi. Usulkan rencana peremajaan bertahap 3 tahun dengan prioritas.",
+  buku:"Analisis koleksi buku: komposisi per mata pelajaran/jenis, peruntukan kelas, tahun pengadaan, kondisi. Beri rekomendasi pengadaan dan penyiangan.",
+  qc:"Tinjau catatan kualitas data inventaris dan perbedaan dengan rekap. Buat daftar perbaikan yang perlu dilakukan pengurus barang, urut dari yang paling penting.",
+  kepsek:"Buat laporan singkat analisis aset untuk kepala sekolah (siap disampaikan di rapat): gambaran umum, kondisi, risiko, dan 5 rekomendasi prioritas beserta perkiraan barang/nilai yang terkait."};
+function statsContext(){ const t=S.tot,k=S.kond,m=RAW.meta||{};
+  const top=(rows,n,by=r=>r.nama)=>group(rows,by).sort((a,b)=>b.v-a.v).slice(0,n).map(g=>`${g.k}: ${g.n} brg, Rp${rpn(g.v)} (B${g.B}/RR${g.RR}/RB${g.RB})`).join("\n");
+  const rc=rekapCompare();
+  return `SEKOLAH: ${m.skpd||"-"}, ${m.kota||""}, ${m.prov||""}; kondisi data: ${m.kondisi||""}; tahun berjalan ${THIS_YEAR}
+TOTAL: ${t.n} barang, Rp${rpn(t.v)}; Baik ${k.B.n} (Rp${rpn(k.B.v)}), RR ${k.RR.n} (Rp${rpn(k.RR.v)}), RB ${k.RB.n} (Rp${rpn(k.RB.v)}), tidak diisi ${k["-"].n}
+PER KIB: ${S.kib.map(g=>`${g.k}=${g.n} brg/Rp${rpn(g.v)} (B${g.B}/RR${g.RR}/RB${g.RB})`).join("; ")}
+PER KATEGORI: ${S.kat.map(g=>`${g.k} ${katName(g.k)}=${g.n}/Rp${rpn(g.v)} (RR${g.RR}/RB${g.RB})`).join("; ")}
+ASAL: ${S.asal.map(g=>`${g.k}=${g.n}`).join("; ")} | INDIKASI SUMBER DANA: ${S.sumber.map(g=>`${g.k}=${g.n}/Rp${rpn(g.v)}`).join("; ")}
+TAHUN (jumlah/nilai): ${S.tahun.map(g=>`${g.k}:${g.n}/${rpS(g.v)}`).join(", ")}
+ASET LAIN-LAIN 1.5.04: ${S.lain.length} brg, Rp${rpn(S.lain.reduce((a,r)=>a+r.harga,0))}
+TIK aktif: ${S.tik.filter(r=>!r.lain).length} unit; umur≥5th: ${S.tik.filter(r=>!r.lain&&r.umur>=5).length}; RR: ${S.tik.filter(r=>!r.lain&&r.kond==="RR").length}
+TOP 25 JENIS BERNILAI TERBESAR:
+${top(A,25)}
+TOP 20 RUSAK BERAT:
+${top(A.filter(r=>r.kond==="RB"),20)}
+TOP 20 RUSAK RINGAN:
+${top(A.filter(r=>r.kond==="RR"),20)}
+GEDUNG/BANGUNAN (KIB C/D): ${S.ged.map(r=>`${r.desk.slice(0,50)}|${r.tahun}|${r.luas||"-"}m2|${KOND_N[r.kond]}|Rp${rpn(r.harga)}`).join("; ")}
+KUALITAS DATA: ${S.qc.filter(q=>q.n).map(q=>`${q.t}: ${q.n}`).join("; ")}
+REKAP vs KIB: ${rc?(rc.diff.length?rc.diff.map(d=>`${d.kode} rekap ${d.jn}/Rp${rpn(d.hv)} vs KIB ${d.n}/Rp${rpn(d.v)}`).join("; "):"cocok"):"rekap tidak tersedia"}`; }
+function runQuery(a){ const rows=applyFilter(a.filter||{}); const by=a.groupBy||"nama";
+  const fn={nama:r=>r.nama,kategori:r=>r.kat+" "+katName(r.kat),kib:r=>r.kib,kondisi:r=>KOND_N[r.kond],tahun:r=>r.tahun,asal:r=>r.asalN,sumber:r=>r.sumber,merk:r=>r.merk||"-",keterangan:r=>r.ket||"-",umur:r=>r.umur===null?"?":r.umur<=2?"0-2":r.umur<=5?"3-5":r.umur<=10?"6-10":r.umur<=20?"11-20":">20"}[by]||(r=>r.nama);
+  const g=group(rows,fn).sort((x,y)=>y.v-x.v).slice(0,Math.min(60,a.top||30));
+  return `HASIL QUERY "${a.label||by}" filter=${JSON.stringify(a.filter||{})} → total ${rows.length} brg, Rp${rpn(rows.reduce((s,r)=>s+r.harga,0))}; per ${by}:\n`+g.map(x=>`${x.k}: ${x.n} brg, Rp${rpn(x.v)} (B${x.B}/RR${x.RR}/RB${x.RB})`).join("\n"); }
+async function callGemini(contents){ const key=apiKey(); if(!key) throw new Error("API key belum diisi.");
+  const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model())}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify({systemInstruction:{parts:[{text:SYSTEM}]},contents,generationConfig:{temperature:0.3,responseMimeType:"application/json"}})});
+  const d=await res.json().catch(()=>({})); if(!res.ok){ const m=(d.error&&d.error.message)||res.statusText; if(res.status===400&&/api key/i.test(m)) throw new Error("API key tidak valid."); if(res.status===404) throw new Error(`Model "${model()}" tidak ditemukan. Buka ⚙ → Muat daftar.`); if(res.status===429) throw new Error("Kuota Gemini habis/terlalu banyak permintaan. Coba lagi sebentar."); throw new Error(`Galat ${res.status}: ${m}`); }
+  const c=d.candidates&&d.candidates[0], txt=((c&&c.content&&c.content.parts)||[]).filter(p=>!p.thought).map(p=>p.text||"").join(""); if(!txt) throw new Error("Jawaban AI kosong. Coba ulangi."); return txt; }
+function parseAgent(t){ t=t.trim().replace(/^```(?:json)?\s*/i,"").replace(/```\s*$/,""); const tp=s=>{try{const o=JSON.parse(s);return {reply:String(o.reply||""),actions:Array.isArray(o.actions)?o.actions:[]};}catch(e){return null;}};
+  return tp(t)||(()=>{const a=t.indexOf("{"),b=t.lastIndexOf("}");return a>=0&&b>a?tp(t.slice(a,b+1)):null;})()||{reply:t,actions:[]}; }
+function md(s){ const L=esc(s).split(/\r?\n/); let o="",list=null,tbl=null; const inl=t=>t.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>"); const close=()=>{ if(list){o+=`</${list}>`;list=null;} if(tbl){o+="</table>";tbl=null;} };
+  for(const ln of L){ let m; if(/^\s*\|.*\|\s*$/.test(ln)){ if(/^\s*\|[\s:-]+\|/.test(ln)&&!/[a-z0-9]/i.test(ln)) continue; if(!tbl){ if(list){o+=`</${list}>`;list=null;} o+="<table>"; tbl=1; } o+="<tr>"+ln.trim().slice(1,-1).split("|").map(c=>`<td>${inl(c.trim())}</td>`).join("")+"</tr>"; continue; }
+    if((m=ln.match(/^\s*#{1,4}\s+(.*)/))){close();o+=`<h4>${inl(m[1])}</h4>`;} else if((m=ln.match(/^\s*[-*•]\s+(.*)/))){ if(tbl){o+="</table>";tbl=null;} if(list!=="ul"){ if(list) o+=`</${list}>`; o+="<ul>";list="ul";} o+=`<li>${inl(m[1])}</li>`;}
+    else if((m=ln.match(/^\s*\d+[.)]\s+(.*)/))){ if(tbl){o+="</table>";tbl=null;} if(list!=="ol"){ if(list) o+=`</${list}>`; o+="<ol>";list="ol";} o+=`<li>${inl(m[1])}</li>`;} else if(!ln.trim()) close(); else {close();o+=`<p>${inl(ln)}</p>`;} }
+  close(); return o; }
+function renderChat(){ const box=$("#msgs"); if(!chat.length){ box.innerHTML=`<div class="msg bot">${md(`### Halo, saya Agen Analis Aset 👋
+Saya membaca ringkasan Buku Inventaris sekolah dan bisa menghitung data rinci bila diperlukan.
+
+**Contoh pertanyaan:**
+- Berapa laptop yang rusak ringan dan berapa nilainya?
+- Barang apa saja yang dibeli dari BOSDA tahun 2023?
+- Gedung mana yang perlu diprioritaskan perbaikannya?
+- Buatkan usulan penghapusan barang rusak berat.
+
+Data barang tidak dikirim utuh; saya hanya menerima ringkasan dan hasil hitungan.`)}</div>`; return; }
+  box.innerHTML=chat.map((m,i)=>m.role==="user"?`<div class="msg user">${esc(m.text)}</div>`:`<div class="msg bot">${m.error?`<p style="color:var(--err)"><b>⚠ ${esc(m.text)}</b></p>`:md(m.text)}${m.queries?`<div class="q">🔎 ${m.queries} kali menghitung data</div>`:""}<div class="tools">${(m.shows||[]).map((s,j)=>`<button class="go" data-show="${i}:${j}">📋 ${esc(s.label||"Lihat daftar")}</button>`).join("")}${m.error?"":`<button data-copy="${i}">Salin</button>`}</div></div>`).join(""); box.scrollTop=box.scrollHeight; }
+$("#msgs").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b) return; if(b.dataset.show){ const [i,j]=b.dataset.show.split(":").map(Number); goList(chat[i].shows[j].filter||{}); $("#agent").classList.remove("open"); } else if(b.dataset.copy) copyText(chat[+b.dataset.copy].text); });
+let busy=false;
+async function send(text,label){ text=(text||"").trim(); if(!text||busy) return; if(!A.length){ toast("Muat data aset dulu di tab Data"); return; }
+  chat.push({role:"user",text:label||text}); renderChat(); busy=true; $("#btnSend").disabled=true; $("#msgs").insertAdjacentHTML("beforeend",`<div class="typing" id="typing"><span class="dots"><i></i><i></i><i></i></span> Agen sedang menganalisis…</div>`); $("#msgs").scrollTop=1e9;
+  try{ const hist=[]; for(const m of chat.slice(0,-1).filter(m=>!m.error).slice(-8)) hist.push({role:m.role==="user"?"user":"model",parts:[{text:m.role==="user"?m.text:JSON.stringify({reply:m.text,actions:[]})}]}); while(hist.length&&hist[0].role!=="user") hist.shift();
+    const contents=hist.concat([{role:"user",parts:[{text:"RINGKASAN DATA ASET:\n"+statsContext()+"\n\nPERTANYAAN/PERINTAH:\n"+text}]}]);
+    for(let i=contents.length-1;i>0;i--) if(contents[i].role===contents[i-1].role){ contents[i-1].parts=contents[i-1].parts.concat(contents[i].parts); contents.splice(i,1); }
+    let r, q=0, shows=[];
+    for(let round=0;round<4;round++){ const out=await callGemini(contents); r=parseAgent(out); shows=shows.concat(r.actions.filter(a=>a.type==="show"));
+      const qs=r.actions.filter(a=>a.type==="query"); if(!qs.length||round===3) break; q+=qs.length;
+      contents.push({role:"model",parts:[{text:out}]}); contents.push({role:"user",parts:[{text:qs.map(runQuery).join("\n\n")+"\n\nLanjutkan jawaban berdasarkan hasil di atas (boleh query lagi bila perlu)."}]}); }
+    chat.push({role:"bot",text:r.reply||"(tidak ada jawaban)",shows,queries:q}); }
+  catch(err){ chat.push({role:"bot",error:true,text:err.message}); }
+  const ty=$("#typing"); if(ty) ty.remove(); busy=false; $("#btnSend").disabled=false; saveChat(); renderChat(); }
+$("#btnSend").onclick=()=>{ const t=$("#chatIn").value; $("#chatIn").value=""; send(t); };
+$("#chatIn").addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); $("#btnSend").click(); } });
+$("#chatIn").addEventListener("input",function(){ this.style.height="auto"; this.style.height=Math.min(140,this.scrollHeight)+"px"; });
+$$(".chip").forEach(c=>c.onclick=()=>send(QUICK[c.dataset.q],c.textContent.trim()));
+$("#btnClearChat").onclick=()=>{ if(chat.length&&confirm("Hapus percakapan?")){ chat=[]; saveChat(); renderChat(); } };
+/* settings */
+$("#btnSettings").onclick=()=>{ $("#sKey").value=settings.apiKey||""; $("#sModel").value=settings.model||DEFAULT_MODEL; $("#sMsg").textContent=""; $("#mSettings").classList.add("open"); };
+$("#sSave").onclick=()=>{ settings.apiKey=$("#sKey").value.trim(); settings.model=($("#sModel").value.trim()||DEFAULT_MODEL).replace(/^models\//,""); lsSet(LS_SET,settings); renderHeader(); $("#mSettings").classList.remove("open"); toast("Disimpan"); };
+$("#sLoad").onclick=async()=>{ $("#sMsg").textContent="Memuat…"; try{ const res=await fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=200",{headers:{"x-goog-api-key":$("#sKey").value.trim()||apiKey()}}),d=await res.json(); if(!res.ok) throw new Error((d.error&&d.error.message)||res.status);
+  const ms=(d.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes("generateContent")&&/gemini/i.test(m.name)&&!/tts|image|embedding|audio|live/i.test(m.name)).map(m=>m.name.replace(/^models\//,"")); $("#modelList").innerHTML=ms.map(m=>`<option value="${esc(m)}">`).join(""); $("#sMsg").innerHTML=`<span style="color:var(--ok)">${ms.length} model: ${esc(ms.slice(0,10).join(", "))}</span>`; }
+  catch(err){ $("#sMsg").innerHTML=`<span style="color:var(--err)">Gagal: ${esc(err.message)}</span>`; } };
+$("#sTest").onclick=async()=>{ const old={...settings}; settings.apiKey=$("#sKey").value.trim(); settings.model=($("#sModel").value.trim()||DEFAULT_MODEL); $("#sMsg").textContent="Menguji…";
+  try{ const o=parseAgent(await callGemini([{role:"user",parts:[{text:'Balas JSON {"reply":"Koneksi OK","actions":[]}'}]}])); $("#sMsg").innerHTML=`<span style="color:var(--ok)">✓ ${esc(o.reply)} (${esc(model())})</span>`; }catch(err){ $("#sMsg").innerHTML=`<span style="color:var(--err)">✕ ${esc(err.message)}</span>`; } settings=old; };
+$$("[data-close]").forEach(b=>b.onclick=()=>b.closest(".modal").classList.remove("open")); $$(".modal").forEach(m=>m.addEventListener("mousedown",e=>{ if(e.target===m) m.classList.remove("open"); }));
+$("#btnAgentToggle").onclick=()=>$("#agent").classList.toggle("open"); $("#btnAgentClose").onclick=()=>$("#agent").classList.remove("open");
+
+/* =================== TABS & BUILD =================== */
+let cur="sum"; $$(".tab").forEach(b=>b.onclick=()=>{ cur=b.dataset.tab; $$(".tab").forEach(x=>x.classList.toggle("active",x===b)); $$(".pane").forEach(p=>p.classList.toggle("active",p.id==="tab-"+cur)); renderCur(); });
+function renderCur(){ if(!A.length&&cur!=="data"){ if(cur==="sum") renderSum(); return; } ({sum:renderSum,kat:renderKat,kond:renderKond,umur:renderUmur,buku:renderBuku,ged:renderGed,list:renderList,qc:renderQC,data:renderData})[cur](); }
+function fillSelects(){ const opt=(sel,items,first)=>{ $(sel).innerHTML=`<option value="">${first}</option>`+items.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join(""); };
+  const kibs=S.kib.map(g=>[g.k,KIB_N[g.k]||g.k]); opt("#fKib",kibs,"Semua KIB"); opt("#thKib",kibs,"Semua KIB");
+  opt("#fKat",S.kat.map(g=>[g.k,g.k+" "+katName(g.k)]),"Semua kategori"); opt("#fAsal",S.asal.map(g=>[g.k,g.k]),"Semua asal"); opt("#fSumber",S.sumber.map(g=>[g.k,g.k]),"Semua sumber dana");
+  opt("#fQc",S.qc.filter(q=>q.n).map(q=>[q.id,q.t.slice(0,60)+` (${q.n})`]),"— filter kualitas data —"); }
+function build(){ KODE={...DEFAULT_KODE}; if(RAW&&RAW.rekap) RAW.rekap.forEach(([k,u])=>{ KODE[k]=u; });
+  A=RAW?RAW.rows.map(fromRaw):[]; if(A.length){ computeStats(); fillSelects(); } else S={tot:{n:0,v:0}};
+  renderHeader(); renderKPIs(); renderData(); renderChat(); if(!A.length){ $('.tab[data-tab="data"]').click(); } else renderCur(); }
+(async()=>{ const ui=lsGet(LS_UI)||{}; if(ui.siswa) $("#jmlSiswa").value=ui.siswa; await IDB.open(); const saved=await IDB.get("data"); RAW=saved||window.PRELOAD||null; build(); })();
+</script>
+</body>
+</html>

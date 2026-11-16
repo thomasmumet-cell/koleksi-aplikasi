@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kamus Tiga Bahasa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: header + mode tabs; search & chips; list of rows with four aligned language columns; quiz panel */
+:root{
+  --bg:#f3f4f8; --surface:#ffffff; --ink:#1b1d2e; --muted:#5d6177; --line:#dcdfea;
+  --accent:#2d3a8c; --accent-soft:#e4e7f7; --soga:#8a4b1f; --soga-soft:#f6ebe1;
+  --ok:#1f7a4a; --ok-soft:#e1f3e8; --bad:#b3261e; --bad-soft:#fbe6e4;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Source Sans 3",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#13141d; --surface:#1c1e2b; --ink:#eceef6; --muted:#a3a7bd; --line:#2f3245;
+    --accent:#a9b4ff; --accent-soft:#272c4d; --soga:#e3a978; --soga-soft:#35271d;
+    --ok:#7fd3a3; --ok-soft:#1d3327; --bad:#ff9d94; --bad-soft:#3d2221;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#13141d; --surface:#1c1e2b; --ink:#eceef6; --muted:#a3a7bd; --line:#2f3245;
+  --accent:#a9b4ff; --accent-soft:#272c4d; --soga:#e3a978; --soga-soft:#35271d;
+  --ok:#7fd3a3; --ok-soft:#1d3327; --bad:#ff9d94; --bad-soft:#3d2221;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.5 var(--body);}
+.wrap{max-width:1040px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+h1{font:800 clamp(28px,4.4vw,40px)/1.05 var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 span{color:var(--accent)}
+.sub{margin:6px 0 0;color:var(--muted)}
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px}
+.tabs button{border:0;background:transparent;color:var(--muted);font:600 15px var(--body);padding:8px 16px;border-radius:7px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--surface)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;font-size:14.5px;color:var(--muted)}
+.legend div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.legend b{color:var(--ink)}
+
+.search{display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.searchrow{display:flex;gap:10px;flex-wrap:wrap}
+.searchrow input{flex:1 1 280px;font:400 18px var(--body);padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.searchrow select{font:600 15px var(--body);padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);font:600 14px var(--body);padding:5px 11px;border-radius:999px;cursor:pointer}
+.chip small{color:var(--muted);font-weight:400;margin-left:4px;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.count{font-size:14.5px;color:var(--muted)}
+
+.list{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.seg{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg)}
+.seg button{border:0;background:transparent;color:var(--muted);font:600 15px var(--body);padding:10px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.pic{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:12px;background:var(--accent-soft);font-size:30px;line-height:1;flex:none;overflow:hidden}
+.pic.txt{font:800 20px var(--display);color:var(--accent)}
+.pic.cal{font-size:15px;background:var(--soga-soft);color:var(--soga);padding:0 4px;text-align:center}
+.pic .sw{width:64%;height:64%;border-radius:50%;border:2px solid var(--line)}
+.pic.lg{width:100%;height:108px;font-size:64px;border-radius:12px}
+.pic.lg.txt{font-size:44px}
+.pic.lg.cal{font-size:24px}
+.pic.xl{width:120px;height:120px;font-size:72px;border-radius:20px}
+.pic.xl.txt{font-size:48px}
+.pic.xl.cal{font-size:24px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.card .pic{margin-bottom:6px}
+.c-id{font:700 19px/1.25 var(--body);display:flex;align-items:center;gap:6px;overflow-wrap:anywhere}
+.c-en{color:var(--muted);display:flex;align-items:center;gap:6px;font-size:15.5px;overflow-wrap:anywhere}
+.card dl{margin:6px 0 0;display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:15px;border-top:1px solid var(--line);padding-top:8px}
+.card dt{color:var(--muted);font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding-top:2px}
+.card dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.card .k{color:var(--soga)}
+.card dt.k{grid-column:1/-1;padding-top:4px}
+.card dd.k{grid-column:1/-1;margin-top:-2px}
+.qword{text-align:center}
+.quiz .qask{text-align:center}
+.cards .empty{grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.qpic{display:flex;justify-content:center;margin:4px 0 8px}
+.pron{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:14px;margin-top:2px}
+.ipa{font-family:"Doulos SIL","Charis SIL","Lucida Sans Unicode","Segoe UI",ui-sans-serif,sans-serif;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:0 6px}
+.baca{color:var(--muted)}
+.baca b{color:var(--ink);letter-spacing:.02em}
+.silent{flex-basis:100%;font-size:12.5px;color:var(--soga)}
+.say.slow{gap:3px;align-items:center;font:600 12.5px var(--body);color:var(--accent);border:1px solid var(--line);padding:1px 7px 1px 5px;border-radius:99px}
+.say.slow svg{width:15px;height:15px}
+.card dd{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.ki .say{vertical-align:middle;padding:0 2px}
+.howto{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14.5px;color:var(--muted)}
+.howto summary{cursor:pointer;font-weight:700;color:var(--ink)}
+.howgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 16px;margin-top:10px}
+.howgrid b{color:var(--ink)}
+.qsay{display:flex;justify-content:center;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.qsay .say{border:1px solid var(--line);padding:6px 10px;gap:6px;font:600 14px var(--body);color:var(--accent)}
+.hdr-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.aibtn{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--soga);background:var(--soga-soft);color:var(--soga);font:700 15px var(--body);padding:10px 14px;border-radius:10px;cursor:pointer}
+.aibtn svg{width:18px;height:18px}
+.aipanel{background:var(--surface);border:1.5px solid var(--soga);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.aipanel[hidden]{display:none}
+.aihead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.aipanel h2{font:800 21px var(--display);margin:0}
+.pill{font:700 13px var(--body);padding:3px 10px;border-radius:99px;background:var(--bad-soft);color:var(--bad)}
+.pill.on{background:var(--ok-soft);color:var(--ok)}
+.note{margin:0;color:var(--muted);font-size:15px;max-width:72ch}
+.note a,.aimsg a{color:var(--accent)}
+.aigrid{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.aigrid label{display:flex;flex-direction:column;gap:4px;font:700 13px var(--body);color:var(--muted)}
+.aigrid input{font:400 16px var(--body);padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.airow{display:flex;gap:8px;flex-wrap:wrap}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--line)}
+.aibox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:10px;font-size:15.5px}
+.aimsg{font-size:15px;color:var(--muted);min-height:1.4em}
+.aimsg.err{color:var(--bad)}
+.pic.photo{background:#fff}
+.pic img{width:100%;height:100%;object-fit:contain;display:block}
+.pic.busy{position:relative}
+.pic.busy::after{content:"";position:absolute;width:34px;height:34px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--soga);animation:spin .8s linear infinite}
+.pic.busy > *{opacity:.25}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gen{align-self:flex-start;margin-top:8px;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--bg);color:var(--soga);font:700 13px var(--body);padding:5px 10px;border-radius:8px;cursor:pointer}
+.gen:disabled{opacity:.5;cursor:default}
+.gen svg{width:14px;height:14px}
+.cardmsg{font-size:13px;color:var(--bad)}
+.row{display:grid;grid-template-columns:52px 1fr 1fr 1fr 1.25fr;gap:14px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)}
+.row.head{border-top:0;background:var(--accent-soft);font:700 12.5px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);position:sticky;top:0}
+.cell{display:flex;flex-direction:column;gap:2px;min-width:0}
+.lbl{display:none;font:700 11px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.w{font-weight:600;overflow-wrap:anywhere;display:flex;align-items:center;gap:6px}
+.id .w{font-weight:700}
+.ki{display:inline-block;margin-top:3px;font-size:13.5px;color:var(--soga);background:var(--soga-soft);border-radius:6px;padding:1px 7px;width:fit-content}
+.ki b{font-weight:700}
+.cat{font-size:12.5px;color:var(--muted)}
+.say{border:0;background:transparent;color:var(--muted);cursor:pointer;padding:2px;border-radius:5px;display:inline-flex}
+.say:hover{color:var(--accent)}
+.say svg{width:16px;height:16px}
+mark{background:var(--soga-soft);color:inherit;border-radius:3px;padding:0 1px}
+.empty{padding:28px 16px;color:var(--muted);text-align:center}
+.more{display:block;margin:0 auto;border:1px solid var(--line);background:var(--surface);color:var(--accent);font:600 15px var(--body);padding:10px 18px;border-radius:10px;cursor:pointer}
+
+/* quiz */
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:16px;max-width:680px;width:100%;margin:0 auto}
+.qtop{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.qtop select{font:600 15px var(--body);padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.progress{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.qask{font-size:15px;color:var(--muted)}
+.qword{font:800 clamp(28px,6vw,40px)/1.1 var(--display);margin:2px 0 0;overflow-wrap:anywhere}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:600 17px var(--body);padding:13px 14px;border-radius:10px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.right{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.opt:disabled{cursor:default}
+.qfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.score{font-variant-numeric:tabular-nums;color:var(--muted)}
+.score b{color:var(--ink)}
+.btn{border:0;background:var(--accent);color:var(--surface);font:700 15px var(--body);padding:11px 18px;border-radius:10px;cursor:pointer}
+.btn[hidden]{display:none}
+.feedback{font-size:15.5px;min-height:1.5em}
+.result{text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center}
+.big{font:800 56px/1 var(--display);color:var(--accent);font-variant-numeric:tabular-nums}
+footer{font-size:13.5px;color:var(--muted)}
+
+@media (max-width:720px){
+  .row.head{display:none}
+  .row{grid-template-columns:1fr 1fr;gap:10px 14px}
+  .row .picc{grid-column:1/-1}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pic.lg{height:88px;font-size:52px}
+  .lbl{display:block}
+  .opts{grid-template-columns:1fr}
+  .aigrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Kamus <span>Inggris · Indonesia · Jawa</span></h1>
+      <p class="sub">Cari dari bahasa mana saja. Bahasa Jawa ditulis dalam ragam ngoko, krama, dan krama inggil.</p>
+    </div>
+    <div class="hdr-r">
+      <button class="aibtn" id="aitoggle" aria-expanded="false" aria-controls="aipanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>Gambar AI</button>
+      <div class="tabs" role="tablist" aria-label="Mode">
+        <button id="tab-kamus" role="tab" aria-selected="true" data-view="kamus">Kamus</button>
+        <button id="tab-latihan" role="tab" aria-selected="false" data-view="latihan">Latihan</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="aipanel" id="aipanel" hidden>
+    <div class="aihead">
+      <h2>Gambar dari AI (Gemini)</h2>
+      <span class="pill" id="keystate">Kunci belum diisi</span>
+    </div>
+    <p class="note">Tempel kunci API Gemini Anda. Ambil kuncinya di <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>. Kunci hanya disimpan di browser ini dan tidak ikut masuk ke file yang diunduh.</p>
+    <div class="aigrid">
+      <label for="apikey">Kunci API<input id="apikey" type="password" placeholder="Tempel kunci API di sini (AIza... atau AQ....)" autocomplete="off" spellcheck="false"></label>
+      <label for="model">Model gambar<input id="model" type="text" spellcheck="false"></label>
+    </div>
+    <div class="airow">
+      <button class="btn" id="savekey">Simpan kunci</button>
+      <button class="btn ghost" id="delkey">Hapus kunci</button>
+    </div>
+    <div class="aibox">
+      <div><b>Buat gambar sekaligus</b> untuk kategori yang sedang dipilih di bawah: <span id="batchinfo"></span></div>
+      <div class="airow">
+        <button class="btn" id="batchgo">Mulai buat gambar</button>
+        <button class="btn ghost" id="batchstop" hidden>Berhenti</button>
+      </div>
+      <div class="progress" id="bprog" hidden><i id="bbar" style="width:0%"></i></div>
+      <div class="aimsg" id="aimsg" role="status"></div>
+    </div>
+    <div class="aibox">
+      <div><b>Bagikan ke siswa.</b> Unduh kamus yang gambarnya sudah tertanam. File ini bisa dipasang di Google Sites, dan siswa tidak perlu kunci API.</div>
+      <div class="airow">
+        <button class="btn" id="dlbaked">Unduh kamus bergambar (.html)</button>
+        <button class="btn ghost" id="clearimg">Hapus semua gambar AI</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-kamus" style="display:flex;flex-direction:column;gap:18px">
+    <div class="legend">
+      <div><b>Ngoko</b> untuk teman sebaya atau orang yang lebih muda.</div>
+      <div><b>Krama</b> untuk orang yang lebih tua atau yang dihormati.</div>
+      <div><b>Krama inggil</b> (label cokelat) untuk menyebut diri atau tindakan orang yang dihormati, bukan diri sendiri.</div>
+    </div>
+    <details class="howto">
+      <summary>Cara membaca panduan pengucapan bahasa Inggris</summary>
+      <div class="howgrid">
+        <div><b>/kæt/</b> lambang fonetik internasional (IPA), seperti di kamus Oxford. Logatnya Amerika, sama dengan suaranya.</div>
+        <div><b>dibaca ket</b> tulisan cara baca memakai ejaan Indonesia.</div>
+        <div><b>HURUF BESAR</b> suku kata yang ditekan, misalnya BA-ter-flai.</div>
+        <div><b>th</b> lidah di antara gigi, lalu hembuskan udara (three, thank).</div>
+        <div><b>sy</b> seperti "sy" pada syukur (she, fish).</div>
+        <div><b>ii, uu</b> bunyi panjang (see, food). <b>e</b> dibaca seperti e pada "enak" atau "emas".</div>
+        <div><b>Tombol pelan</b> memutar suara lebih lambat supaya mudah ditirukan.</div>
+        <div id="jvnote"><b>Suara bahasa Jawa</b> dibacakan dengan suara bahasa Indonesia bila perangkat tidak punya suara Jawa.</div>
+      </div>
+    </details>
+
+    <div class="search">
+      <div class="searchrow">
+        <input id="q" type="search" placeholder="Ketik kata, misalnya: makan, eat, mangan, dhahar" autocomplete="off" aria-label="Cari kata">
+        <select id="lang" aria-label="Cari dalam bahasa">
+          <option value="all">Semua bahasa</option>
+          <option value="en">Bahasa Inggris</option>
+          <option value="id">Bahasa Indonesia</option>
+          <option value="jv">Bahasa Jawa</option>
+        </select>
+        <div class="seg" id="viewsw" role="group" aria-label="Tampilan">
+          <button id="v-kartu" data-v="kartu" aria-pressed="true">Kartu bergambar</button>
+          <button id="v-daftar" data-v="daftar" aria-pressed="false">Daftar</button>
+        </div>
+      </div>
+      <div class="chips" id="cats"></div>
+      <div class="count" id="count"></div>
+    </div>
+
+    <div class="list" id="list"></div>
+    <button class="more" id="more" hidden>Tampilkan lebih banyak</button>
+  </section>
+
+  <section id="view-latihan" hidden>
+    <div class="quiz" id="quiz">
+      <div class="qtop">
+        <select id="qmode" aria-label="Jenis latihan">
+          <option value="id-kr">Indonesia → Jawa Krama</option>
+          <option value="ng-kr">Jawa Ngoko → Jawa Krama</option>
+          <option value="id-en">Indonesia → Inggris</option>
+          <option value="en-id">Inggris → Indonesia</option>
+          <option value="en-ng">Inggris → Jawa Ngoko</option>
+        </select>
+        <select id="qcat" aria-label="Kategori latihan"></select>
+      </div>
+      <div class="progress"><i id="bar" style="width:0%"></i></div>
+      <div id="qbody"></div>
+    </div>
+  </section>
+
+  <footer>Ejaan Jawa mengikuti ejaan Latin baku (dh, th). Saat mencari, "dewe" dan "dhewe" dianggap sama. Kata yang ragam krama-nya sama dengan ngoko ditulis ulang apa adanya.</footer>
+</div>
+
+<script id="baked" type="application/json">{}</script>
+<script>
+// Gambar AI: yang tertanam di file (baked) + yang dibuat di browser ini (IndexedDB)
+let AIIMG = {};
+try { AIIMG = JSON.parse(document.getElementById("baked").textContent || "{}"); } catch (e) { AIIMG = {}; }
+const BUSY = new Set();
+const ERRS = {};
+// Format: English | Indonesia | Jawa Ngoko | Jawa Krama | Krama Inggil (opsional)
+const RAW = {
+"Anggota Tubuh":`head|kepala|sirah|sirah|mustaka
+hair|rambut|rambut|rambut|rikma
+face|wajah|rai|rai|pasuryan
+eye|mata|mata|mripat|paningal
+nose|hidung|irung|irung|grana
+ear|telinga|kuping|kuping|talingan
+lips|bibir|lambe|lambe|lathi
+tooth|gigi|untu|waja|waos
+tongue|lidah|ilat|ilat|lidhah
+neck|leher|gulu|gulu|jangga
+chest|dada|dhadha|dhadha|jaja
+back|punggung|geger|geger|pengkeran
+stomach|perut|weteng|weteng|padharan
+hand|tangan|tangan|tangan|asta
+finger|jari|driji|driji|racikan
+nail|kuku|kuku|kuku|kanaka
+foot, leg|kaki|sikil|suku|ampeyan
+knee|lutut|dhengkul|dhengkul|jengku
+body|badan|awak|badan|salira
+blood|darah|getih|rah|ludira
+skin|kulit|kulit|kulit|
+shoulder|bahu|pundhak|pundhak|`,
+"Keluarga & Orang":`father|ayah, bapak|bapak|bapak|rama
+mother|ibu|simbok|ibu|ibu
+child|anak|anak|anak|putra
+grandchild|cucu|putu|wayah|wayah
+grandfather|kakek|mbah lanang|simbah kakung|eyang kakung
+grandmother|nenek|mbah wedok|simbah putri|eyang putri
+older brother|kakak laki-laki|kakang, mas|kangmas|
+older sister|kakak perempuan|mbakyu|mbakyu|
+younger sibling|adik|adhi|adhi|rayi
+husband|suami|bojo|semah|garwa
+wife|istri|bojo|semah|garwa
+person|orang|wong|tiyang|priyantun
+man, male|laki-laki|lanang|jaler|kakung
+woman, female|perempuan|wadon|estri|putri
+friend|teman|kanca|rencang|
+baby|bayi|bayi|bayi|
+name|nama|jeneng|nami|asma
+teacher|guru|guru|guru|
+student|murid, siswa|murid|murid|`,
+"Kata Ganti & Tanya":`I, me|saya, aku|aku|kula|
+you|kamu, Anda|kowe|sampeyan|panjenengan
+he, she|dia|dheweke|piyambakipun|panjenenganipun
+we|kami, kita|awake dhewe|kula sedaya|
+this|ini|iki|menika|
+that|itu|kuwi|punika|
+what|apa|apa|menapa|
+who|siapa|sapa|sinten|
+where|di mana|neng endi|wonten pundi|
+when|kapan|kapan|kapan|
+why|mengapa|ngapa|kenging menapa|
+how|bagaimana|piye|kados pundi|
+how much, how many|berapa|pira|pinten|
+here|di sini|neng kene|wonten ngriki|
+there|di sana|neng kana|wonten ngrika|`,
+"Angka":`one|satu|siji|setunggal|
+two|dua|loro|kalih|
+three|tiga|telu|tiga|
+four|empat|papat|sekawan|
+five|lima|lima|gangsal|
+six|enam|enem|enem|
+seven|tujuh|pitu|pitu|
+eight|delapan|wolu|wolu|
+nine|sembilan|sanga|sanga|
+ten|sepuluh|sepuluh|sedasa|
+eleven|sebelas|sewelas|setunggal welas|
+twenty|dua puluh|rong puluh|kalih dasa|
+twenty-five|dua puluh lima|selawe|selawe|
+fifty|lima puluh|seket|seket|
+one hundred|seratus|satus|setunggal atus|
+one thousand|seribu|sewu|setunggal ewu|
+half|setengah|separo|sepalih|`,
+"Warna":`colour|warna|werna|werni|
+red|merah|abang|abrit|
+white|putih|putih|pethak|
+black|hitam|ireng|cemeng|
+green|hijau|ijo|ijem|
+yellow|kuning|kuning|jene|
+blue|biru|biru|biru|
+grey|abu-abu|klawu|klawu|
+brown|cokelat|coklat|coklat|`,
+"Hewan":`animal|binatang, hewan|kewan|kewan|
+cat|kucing|kucing|kucing|
+dog|anjing|asu|segawon|
+horse|kuda|jaran|kapal|
+cow|sapi|sapi|lembu|
+buffalo|kerbau|kebo|maesa|
+goat|kambing|wedhus|menda|
+chicken|ayam|pitik|ayam|
+bird|burung|manuk|peksi|
+fish|ikan|iwak|ulam|
+snake|ular|ula|sawer|
+tiger|harimau|macan|sima|
+monkey|monyet|kethek|kethek|
+frog|katak|kodhok|kodhok|
+crocodile|buaya|baya|baya|
+mouse, rat|tikus|tikus|tikus|
+ant|semut|semut|semut|
+butterfly|kupu-kupu|kupu|kupu|
+elephant|gajah|gajah|gajah|`,
+"Tumbuhan & Buah":`tree|pohon|wit|wit|
+leaf|daun|godhong|ron|
+flower|bunga|kembang|sekar|
+root|akar|oyot|oyod|
+seed|biji|wiji|wiji|
+grass|rumput|suket|suket|
+rice plant|padi|pari|pantun|
+fruit|buah|woh|woh|
+banana|pisang|gedhang|pisang|
+mango|mangga|pelem|pelem|
+orange|jeruk|jeruk|jeram|
+papaya|pepaya|kates|kates|
+jackfruit|nangka|nangka|nangka|
+coconut|kelapa|klapa|klapa|
+corn|jagung|jagung|jagung|
+cassava|singkong|tela pohung|tela pohung|`,
+"Makanan & Rasa":`food|makanan|panganan|tetedhan|
+cooked rice|nasi|sega|sekul|
+water|air|banyu|toya|
+egg|telur|endhog|tigan|
+salt|garam|uyah|sarem|
+sugar|gula|gula|gendhis|
+chili|cabai|lombok|lombok|
+shallot|bawang merah|brambang|brambang|
+garlic|bawang putih|bawang|bawang|
+vegetable dish|sayur|jangan|jangan|
+coffee|kopi|kopi|kopi|
+tea|teh|teh|teh|
+sweet|manis|legi|legi|
+sour|asam|kecut|kecut|
+salty|asin|asin|asin|
+spicy|pedas|pedhes|pedhes|
+bitter|pahit|pait|pait|
+delicious|enak|enak|eca|
+hungry|lapar|luwe|luwe|
+full (after eating)|kenyang|wareg|tuwuk|
+thirsty|haus|ngelak|ngorong|`,
+"Kata Kerja":`eat|makan|mangan|nedha|dhahar
+drink|minum|ngombe|ngunjuk|ngunjuk
+sleep|tidur|turu|tilem|sare
+sit|duduk|lungguh|linggih|lenggah
+stand|berdiri|ngadeg|ngadeg|jumeneng
+walk|berjalan|mlaku|mlampah|tindak
+go|pergi|lunga|kesah|tindak
+come|datang|teka|dhateng|rawuh
+go home|pulang|mulih|wangsul|kondur
+take a bath|mandi|adus|adus|siram
+see|melihat|ndeleng|ningali|mirsani
+hear|mendengar|krungu|mireng|midhanget
+speak, say|berbicara, berkata|ngomong|wicanten|ngendika
+ask|bertanya|takon|taken|ndangu
+give|memberi|menehi|nyukani|maringi
+take|mengambil|njupuk|mendhet|mundhut
+buy|membeli|tuku|tumbas|mundhut
+sell|menjual|adol|sade|
+bring|membawa|nggawa|mbekta|ngasta
+use, wear|memakai|nganggo|ngangge|ngagem
+read|membaca|maca|maos|maos
+write|menulis|nulis|nyerat|nyerat
+study, learn|belajar|sinau|sinau|
+think|berpikir|mikir|mikir|menggalih
+forget|lupa|lali|supe|kesupen
+remember|ingat|eling|emut|
+wait|menunggu|ngenteni|nengga|
+wake up|bangun|tangi|tangi|wungu
+work|bekerja|nyambut gawe|nyambut damel|
+play|bermain|dolanan|dolanan|
+run|berlari|mlayu|mlajeng|
+cry|menangis|nangis|nangis|muwun
+laugh|tertawa|ngguyu|gujeng|
+help|membantu|ngewangi|mbiyantu|
+open|membuka|mbukak|mbikak|
+die|meninggal|mati|pejah|seda
+want to, will|akan, mau|arep|badhe|kersa`,
+"Kata Sifat":`big|besar|gedhe|ageng|
+small|kecil|cilik|alit|
+long|panjang|dawa|panjang|
+short (length)|pendek|cendhak|cendhak|
+tall, high|tinggi|dhuwur|inggil|
+low|rendah|endhek|andhap|
+new|baru|anyar|enggal|
+old (thing)|lama|lawas|lami|
+old (person)|tua|tuwa|sepuh|
+young|muda|enom|enem|
+beautiful|cantik|ayu|ayu|
+handsome|tampan|bagus|bagus|
+good|baik, bagus|apik|sae|
+bad, ugly|jelek|elek|awon|
+hot|panas|panas|benter|
+cold|dingin|adhem|asrep|
+far|jauh|adoh|tebih|
+near|dekat|cedhak|celak|
+fast|cepat|cepet|enggal|
+slow|lambat|alon|alon|
+many, a lot|banyak|akeh|kathah|
+a little|sedikit|sithik|sekedhik|
+heavy|berat|abot|awrat|
+light (weight)|ringan|entheng|entheng|
+clean|bersih|resik|resik|
+dirty|kotor|reged|reged|
+wet|basah|teles|teles|
+dry|kering|garing|garing|
+correct|benar|bener|leres|
+wrong|salah|salah|lepat|
+expensive|mahal|larang|awis|
+cheap|murah|murah|mirah|
+easy|mudah|gampang|gampil|
+brave|berani|wani|wantun|
+afraid|takut|wedi|ajrih|
+diligent|rajin|sregep|sregep|
+clever|pandai|pinter|pinter|
+rich|kaya|sugih|sugih|
+happy|senang|seneng|remen|
+angry|marah|nesu|nepsu|duka
+sick|sakit|lara|sakit|gerah
+healthy|sehat|waras|saras|
+tired|capek, lelah|kesel|sayah|
+quiet|sepi|sepi|sepen|`,
+"Waktu":`today|hari ini|dina iki|dinten menika|
+tomorrow|besok|sesuk|benjing|
+yesterday|kemarin|wingi|wingi|
+now|sekarang|saiki|sakmenika|
+later|nanti|mengko|mangke|
+already|sudah|wis|sampun|
+not yet|belum|durung|dereng|
+morning|pagi|esuk|enjing|
+midday|siang|awan|siyang|
+late afternoon|sore|sore|sonten|
+night|malam|bengi|dalu|
+day|hari|dina|dinten|
+month|bulan|sasi|wulan|
+year|tahun|taun|taun|
+Monday|Senin|Senen|Senen|
+Tuesday|Selasa|Selasa|Selasa|
+Wednesday|Rabu|Rebo|Rebo|
+Thursday|Kamis|Kemis|Kemis|
+Friday|Jumat|Jemuwah|Jemuwah|
+Saturday|Sabtu|Setu|Setu|
+Sunday|Minggu|Minggu|Ngahad|
+market day 1 (pasaran)|Legi|Legi|Legi|
+market day 2 (pasaran)|Pahing|Pahing|Pahing|
+market day 3 (pasaran)|Pon|Pon|Pon|
+market day 4 (pasaran)|Wage|Wage|Wage|
+market day 5 (pasaran)|Kliwon|Kliwon|Kliwon|`,
+"Tempat & Alam":`house|rumah|omah|griya|dalem
+door|pintu|lawang|konten|
+window|jendela|cendhela|cendhela|
+kitchen|dapur|pawon|pawon|
+place|tempat|panggonan|panggenan|
+road|jalan|dalan|margi|
+market|pasar|pasar|peken|
+village|desa|desa|dhusun|
+city|kota|kutha|kitha|
+school|sekolah|sekolah|sekolah|
+rice field|sawah|sawah|sabin|
+river|sungai|kali|lepen|
+mountain|gunung|gunung|redi|
+sea|laut|segara|seganten|
+sun|matahari|srengenge|srengenge|
+moon|bulan|rembulan|rembulan|
+star|bintang|lintang|lintang|
+cloud|awan|mega|mega|
+rain|hujan|udan|jawah|
+wind|angin|angin|angin|
+fire|api|geni|latu|
+stone|batu|watu|sela|
+soil, ground|tanah|lemah|siti|
+wood|kayu|kayu|kajeng|`,
+"Benda":`book|buku|buku|buku|
+pencil|pensil|potlot|potlot|
+letter|surat|layang|serat|
+lesson|pelajaran|piwulang|piwulang|
+money|uang|dhuwit|arta|
+clothes|baju|klambi|rasukan|ageman
+umbrella|payung|payung|payung|songsong
+knife|pisau|peso|lading|
+mat|tikar|klasa|klasa|
+table|meja|meja|meja|
+bicycle|sepeda|pit|pit|`,
+"Ungkapan Sehari-hari":`yes|ya|iya|inggih|
+no, not|tidak|ora|mboten|
+there is|ada|ana|wonten|
+there isn't|tidak ada|ora ana|mboten wonten|
+thank you|terima kasih|suwun|matur nuwun|
+you're welcome|sama-sama|padha-padha|sami-sami|
+excuse me|permisi|amit|nuwun sewu|
+sorry|maaf|ngapura|nyuwun pangapunten|
+please help|tolong|tulung|nyuwun tulung|
+please come in|silakan masuk|mangga mlebu|mangga mlebet|
+good morning|selamat pagi|slamet esuk|sugeng enjing|
+good night|selamat malam|slamet bengi|sugeng dalu|
+welcome|selamat datang|slamet teka|sugeng rawuh|
+how are you?|apa kabar?|piye kabare?|kados pundi kabaripun?|
+what is your name?|siapa namamu?|sapa jenengmu?|sinten nami sampeyan?|sinten asmanipun panjenengan?
+where are you going?|mau ke mana?|arep menyang ngendi?|badhe kesah dhateng pundi?|badhe tindak pundi?
+I'll take my leave|saya pamit|aku pamit|kula nyuwun pamit|
+and|dan|lan|kaliyan|
+with|dengan|karo|kaliyan|
+for|untuk|kanggo|kangge|
+from|dari|saka|saking|
+to (a place)|ke|menyang|dhateng|
+very|sangat|banget|sanget|
+also|juga|uga|ugi|
+only|hanya|mung|namung|
+if|kalau|yen|menawi|
+because|karena|amarga|amargi|
+but|tetapi|nanging|nanging|`
+};
+
+// Gambar tiap kata (emoji). Kata tanpa gambar memakai huruf awalnya; angka memakai digit; warna memakai contoh warna.
+const PIC = Object.fromEntries(`head=👤|hair=💇|face=😊|eye=👁️|nose=👃|ear=👂|lips=👄|tooth=🦷|tongue=👅|neck=🧣|hand=✋|finger=👆|nail=💅|foot, leg=🦵|body=🧍|blood=🩸|knee=🦵|skin=🖐️|stomach=🍽️
+father=👨|mother=👩|child=🧒|grandchild=👧|grandfather=👴|grandmother=👵|older brother=👦|older sister=👧|younger sibling=🧒|husband=🤵|wife=👰|person=🧑|man, male=🙋‍♂️|woman, female=🙋‍♀️|friend=🤝|baby=👶|name=📛|teacher=🧑‍🏫|student=🧑‍🎓
+I, me=🙋|you=👉|he, she=🧑|we=👥|this=👇|that=👉|what=❓|who=❔|where=📍|when=🕒|why=🤨|how=🛠️|how much, how many=🔢|here=👇|there=👉
+colour=🎨|half=½
+animal=🐾|cat=🐈|dog=🐕|horse=🐎|cow=🐄|buffalo=🐃|goat=🐐|chicken=🐔|bird=🐦|fish=🐟|snake=🐍|tiger=🐅|monkey=🐒|frog=🐸|crocodile=🐊|mouse, rat=🐁|ant=🐜|butterfly=🦋|elephant=🐘
+tree=🌳|leaf=🍃|flower=🌺|root=🌱|seed=🌰|grass=🌿|rice plant=🌾|fruit=🍇|banana=🍌|mango=🥭|orange=🍊|coconut=🥥|corn=🌽|cassava=🍠
+food=🍱|cooked rice=🍚|water=💧|egg=🥚|salt=🧂|sugar=🍬|chili=🌶️|shallot=🧅|garlic=🧄|vegetable dish=🥬|coffee=☕|tea=🍵|sweet=🍭|sour=🍋|salty=🧂|spicy=🌶️|bitter=😖|delicious=😋|hungry=🤤|full (after eating)=😌|thirsty=🥤
+eat=🍽️|drink=🥛|sleep=😴|sit=🪑|stand=🧍|walk=🚶|go=🛣️|come=🤗|go home=🏠|take a bath=🛁|see=👀|hear=👂|speak, say=🗣️|ask=🙋|give=🎁|take=🤲|buy=🛒|sell=🏪|bring=🎒|use, wear=🧥|read=📖|write=✍️|study, learn=📚|think=🤔|forget=🤷|remember=💭|wait=⏳|wake up=⏰|work=💼|play=⚽|run=🏃|cry=😢|laugh=😂|help=🫱|open=🔓|die=🕊️|want to, will=🎯
+big=🐘|small=🐜|long=📏|short (length)=🩳|tall, high=🦒|low=⬇️|new=✨|old (thing)=🏚️|old (person)=👴|young=🧒|beautiful=🌸|handsome=😎|good=👍|bad, ugly=👎|hot=🔥|cold=🥶|far=🔭|near=👣|fast=⚡|slow=🐢|many, a lot=🧺|a little=🤏|heavy=🏋️|light (weight)=🪶|clean=🧼|dirty=🐷|wet=💦|dry=🏜️|correct=✅|wrong=❌|expensive=💎|cheap=🏷️|easy=👌|brave=🦁|afraid=😨|diligent=📝|clever=🧠|rich=💰|happy=😄|angry=😠|sick=🤒|healthy=💪|tired=😫|quiet=🤫
+today=📅|tomorrow=⏭️|yesterday=⏮️|now=⏱️|later=🔜|already=✔️|not yet=⌛|morning=🌄|midday=☀️|late afternoon=🌇|night=🌃|day=🌞|month=📆|year=🗓️
+house=🏠|door=🚪|window=🪟|kitchen=🍳|place=📍|road=🛣️|market=🛍️|village=🏘️|city=🏙️|school=🏫|rice field=🌾|river=🏞️|mountain=⛰️|sea=🌊|sun=☀️|moon=🌕|star=⭐|cloud=☁️|rain=🌧️|wind=🌬️|fire=🔥|stone=🪨|soil, ground=🟫|wood=🪵
+book=📕|pencil=✏️|letter=✉️|lesson=📘|money=💵|clothes=👕|umbrella=☂️|knife=🔪|mat=🧶|table=🛋️|bicycle=🚲
+yes=🙆|no, not=🙅|there is=👌|there isn't=🫙|thank you=🙏|you're welcome=😊|excuse me=🙇|sorry=😔|please help=🆘|please come in=🤗|good morning=🌅|good night=🌙|welcome=👋|how are you?=🙂|what is your name?=📛|where are you going?=🧭|I'll take my leave=🚶‍♀️|and=➕|with=🤝|for=🎁|from=📤|to (a place)=📥|very=💯|also=➕|only=☝️|if=🔀|because=💡|but=↔️`
+  .split(/[|\n]/).map(p => { const i = p.indexOf("="); return [p.slice(0, i).trim(), p.slice(i + 1).trim()]; }));
+// Pengucapan bahasa Inggris (Amerika): kata = IPA = cara baca ejaan Indonesia (HURUF BESAR = suku kata bertekanan)
+const PRON = Object.fromEntries(`head=/hɛd/=hed
+hair=/hɛr/=her
+face=/feɪs/=feis
+eye=/aɪ/=ai
+nose=/noʊz/=nouz
+ear=/ɪr/=ir
+lips=/lɪps/=lips
+tooth=/tuːθ/=tuuth
+tongue=/tʌŋ/=tang
+neck=/nɛk/=nek
+chest=/tʃɛst/=cest
+back=/bæk/=bek
+stomach=/ˈstʌmək/=STA-mek
+hand=/hænd/=hend
+finger=/ˈfɪŋɡər/=FING-ger
+nail=/neɪl/=neil
+foot, leg=/fʊt/, /lɛɡ/=fut, leg
+knee=/niː/=nii
+body=/ˈbɑːdi/=BA-di
+blood=/blʌd/=blad
+skin=/skɪn/=skin
+shoulder=/ˈʃoʊldər/=SYOUL-der
+father=/ˈfɑːðər/=FA-der
+mother=/ˈmʌðər/=MA-der
+child=/tʃaɪld/=caild
+grandchild=/ˈɡræntʃaɪld/=GREN-caild
+grandfather=/ˈɡrænfɑːðər/=GREN-fa-der
+grandmother=/ˈɡrænmʌðər/=GREN-ma-der
+older brother=/ˈoʊldər ˈbrʌðər/=OUL-der BRA-der
+older sister=/ˈoʊldər ˈsɪstər/=OUL-der SIS-ter
+younger sibling=/ˈjʌŋɡər ˈsɪblɪŋ/=YANG-ger SIB-ling
+husband=/ˈhʌzbənd/=HAZ-bend
+wife=/waɪf/=waif
+person=/ˈpɜːrsən/=PER-sen
+man, male=/mæn/, /meɪl/=men, meil
+woman, female=/ˈwʊmən/, /ˈfiːmeɪl/=WU-men, FII-meil
+friend=/frɛnd/=frend
+baby=/ˈbeɪbi/=BEI-bi
+name=/neɪm/=neim
+teacher=/ˈtiːtʃər/=TII-cer
+student=/ˈstuːdənt/=STUU-dent
+I, me=/aɪ/, /miː/=ai, mii
+you=/juː/=yuu
+he, she=/hiː/, /ʃiː/=hii, syii
+we=/wiː/=wii
+this=/ðɪs/=dis
+that=/ðæt/=det
+what=/wʌt/=wat
+who=/huː/=huu
+where=/wɛr/=wer
+when=/wɛn/=wen
+why=/waɪ/=wai
+how=/haʊ/=hau
+how much, how many=/haʊ mʌtʃ/, /haʊ ˈmɛni/=hau mac, hau ME-ni
+here=/hɪr/=hir
+there=/ðɛr/=der
+one=/wʌn/=wan
+two=/tuː/=tuu
+three=/θriː/=thrii
+four=/fɔːr/=for
+five=/faɪv/=faiv
+six=/sɪks/=siks
+seven=/ˈsɛvən/=SE-ven
+eight=/eɪt/=eit
+nine=/naɪn/=nain
+ten=/tɛn/=ten
+eleven=/ɪˈlɛvən/=i-LE-ven
+twenty=/ˈtwɛnti/=TWEN-ti
+twenty-five=/ˌtwɛntiˈfaɪv/=twen-ti-FAIV
+fifty=/ˈfɪfti/=FIF-ti
+one hundred=/wʌn ˈhʌndrəd/=wan HAN-dred
+one thousand=/wʌn ˈθaʊzənd/=wan THAU-zend
+half=/hæf/=hef
+colour=/ˈkʌlər/=KA-ler
+red=/rɛd/=red
+white=/waɪt/=wait
+black=/blæk/=blek
+green=/ɡriːn/=griin
+yellow=/ˈjɛloʊ/=YE-lou
+blue=/bluː/=bluu
+grey=/ɡreɪ/=grei
+brown=/braʊn/=braun
+animal=/ˈænɪməl/=E-ni-mel
+cat=/kæt/=ket
+dog=/dɔːɡ/=dog
+horse=/hɔːrs/=hors
+cow=/kaʊ/=kau
+buffalo=/ˈbʌfəloʊ/=BA-fe-lou
+goat=/ɡoʊt/=gout
+chicken=/ˈtʃɪkɪn/=CI-kin
+bird=/bɜːrd/=berd
+fish=/fɪʃ/=fisy
+snake=/sneɪk/=sneik
+tiger=/ˈtaɪɡər/=TAI-ger
+monkey=/ˈmʌŋki/=MANG-ki
+frog=/frɔːɡ/=frog
+crocodile=/ˈkrɑːkədaɪl/=KRA-ke-dail
+mouse, rat=/maʊs/, /ræt/=maus, ret
+ant=/ænt/=ent
+butterfly=/ˈbʌtərflaɪ/=BA-ter-flai
+elephant=/ˈɛlɪfənt/=E-li-fent
+tree=/triː/=trii
+leaf=/liːf/=liif
+flower=/ˈflaʊər/=FLAU-er
+root=/ruːt/=ruut
+seed=/siːd/=siid
+grass=/ɡræs/=gres
+rice plant=/raɪs plænt/=rais plent
+fruit=/fruːt/=fruut
+banana=/bəˈnænə/=be-NE-ne
+mango=/ˈmæŋɡoʊ/=MENG-gou
+orange=/ˈɔːrɪndʒ/=O-rinj
+papaya=/pəˈpaɪə/=pe-PAI-ye
+jackfruit=/ˈdʒækfruːt/=JEK-fruut
+coconut=/ˈkoʊkənʌt/=KOU-ke-nat
+corn=/kɔːrn/=korn
+cassava=/kəˈsɑːvə/=ke-SA-ve
+food=/fuːd/=fuud
+cooked rice=/kʊkt raɪs/=kukt rais
+water=/ˈwɔːtər/=WO-ter
+egg=/ɛɡ/=eg
+salt=/sɔːlt/=solt
+sugar=/ˈʃʊɡər/=SYU-ger
+chili=/ˈtʃɪli/=CI-li
+shallot=/ʃəˈlɑːt/=sye-LAT
+garlic=/ˈɡɑːrlɪk/=GAR-lik
+vegetable dish=/ˈvɛdʒtəbəl dɪʃ/=VEJ-te-bel disy
+coffee=/ˈkɔːfi/=KO-fi
+tea=/tiː/=tii
+sweet=/swiːt/=swiit
+sour=/ˈsaʊər/=SAU-er
+salty=/ˈsɔːlti/=SOL-ti
+spicy=/ˈspaɪsi/=SPAI-si
+bitter=/ˈbɪtər/=BI-ter
+delicious=/dɪˈlɪʃəs/=di-LI-syes
+hungry=/ˈhʌŋɡri/=HANG-gri
+full (after eating)=/fʊl/=ful
+thirsty=/ˈθɜːrsti/=THERS-ti
+eat=/iːt/=iit
+drink=/drɪŋk/=dringk
+sleep=/sliːp/=sliip
+sit=/sɪt/=sit
+stand=/stænd/=stend
+walk=/wɔːk/=wok
+go=/ɡoʊ/=gou
+come=/kʌm/=kam
+go home=/ɡoʊ hoʊm/=gou houm
+take a bath=/teɪk ə bæθ/=teik e beth
+see=/siː/=sii
+hear=/hɪr/=hir
+speak, say=/spiːk/, /seɪ/=spiik, sei
+ask=/æsk/=esk
+give=/ɡɪv/=giv
+take=/teɪk/=teik
+buy=/baɪ/=bai
+sell=/sɛl/=sel
+bring=/brɪŋ/=bring
+use, wear=/juːz/, /wɛr/=yuuz, wer
+read=/riːd/=riid
+write=/raɪt/=rait
+study, learn=/ˈstʌdi/, /lɜːrn/=STA-di, lern
+think=/θɪŋk/=thingk
+forget=/fərˈɡɛt/=fer-GET
+remember=/rɪˈmɛmbər/=ri-MEM-ber
+wait=/weɪt/=weit
+wake up=/weɪk ʌp/=weik ap
+work=/wɜːrk/=werk
+play=/pleɪ/=plei
+run=/rʌn/=ran
+cry=/kraɪ/=krai
+laugh=/læf/=lef
+help=/hɛlp/=help
+open=/ˈoʊpən/=OU-pen
+die=/daɪ/=dai
+want to, will=/wɑːnt tuː/, /wɪl/=wont tu, wil
+big=/bɪɡ/=big
+small=/smɔːl/=smol
+long=/lɔːŋ/=long
+short (length)=/ʃɔːrt/=syort
+tall, high=/tɔːl/, /haɪ/=tol, hai
+low=/loʊ/=lou
+new=/nuː/=nuu
+old (thing)=/oʊld/=ould
+old (person)=/oʊld/=ould
+young=/jʌŋ/=yang
+beautiful=/ˈbjuːtɪfəl/=BYUU-ti-fel
+handsome=/ˈhænsəm/=HEN-sem
+good=/ɡʊd/=gud
+bad, ugly=/bæd/, /ˈʌɡli/=bed, AG-li
+hot=/hɑːt/=hat
+cold=/koʊld/=kould
+far=/fɑːr/=far
+near=/nɪr/=nir
+fast=/fæst/=fest
+slow=/sloʊ/=slou
+many, a lot=/ˈmɛni/, /ə lɑːt/=ME-ni, e lat
+a little=/ə ˈlɪtəl/=e LI-tel
+heavy=/ˈhɛvi/=HE-vi
+light (weight)=/laɪt/=lait
+clean=/kliːn/=kliin
+dirty=/ˈdɜːrti/=DER-ti
+wet=/wɛt/=wet
+dry=/draɪ/=drai
+correct=/kəˈrɛkt/=ke-REKT
+wrong=/rɔːŋ/=rong
+expensive=/ɪkˈspɛnsɪv/=ik-SPEN-siv
+cheap=/tʃiːp/=ciip
+easy=/ˈiːzi/=II-zi
+brave=/breɪv/=breiv
+afraid=/əˈfreɪd/=e-FREID
+diligent=/ˈdɪlɪdʒənt/=DI-li-jent
+clever=/ˈklɛvər/=KLE-ver
+rich=/rɪtʃ/=ric
+happy=/ˈhæpi/=HE-pi
+angry=/ˈæŋɡri/=ENG-gri
+sick=/sɪk/=sik
+healthy=/ˈhɛlθi/=HEL-thi
+tired=/ˈtaɪərd/=TAI-erd
+quiet=/ˈkwaɪət/=KWAI-et
+today=/təˈdeɪ/=te-DEI
+tomorrow=/təˈmɑːroʊ/=te-MA-rou
+yesterday=/ˈjɛstərdeɪ/=YES-ter-dei
+now=/naʊ/=nau
+later=/ˈleɪtər/=LEI-ter
+already=/ɔːlˈrɛdi/=ol-RE-di
+not yet=/nɑːt jɛt/=nat yet
+morning=/ˈmɔːrnɪŋ/=MOR-ning
+midday=/ˈmɪdˌdeɪ/=MID-dei
+late afternoon=/leɪt ˌæftərˈnuːn/=leit ef-ter-NUUN
+night=/naɪt/=nait
+day=/deɪ/=dei
+month=/mʌnθ/=manth
+year=/jɪr/=yir
+Monday=/ˈmʌndeɪ/=MAN-dei
+Tuesday=/ˈtuːzdeɪ/=TUUZ-dei
+Wednesday=/ˈwɛnzdeɪ/=WENZ-dei
+Thursday=/ˈθɜːrzdeɪ/=THERZ-dei
+Friday=/ˈfraɪdeɪ/=FRAI-dei
+Saturday=/ˈsætərdeɪ/=SE-ter-dei
+Sunday=/ˈsʌndeɪ/=SAN-dei
+house=/haʊs/=haus
+door=/dɔːr/=dor
+window=/ˈwɪndoʊ/=WIN-dou
+kitchen=/ˈkɪtʃɪn/=KI-cin
+place=/pleɪs/=pleis
+road=/roʊd/=roud
+market=/ˈmɑːrkɪt/=MAR-kit
+village=/ˈvɪlɪdʒ/=VI-lij
+city=/ˈsɪti/=SI-ti
+school=/skuːl/=skuul
+rice field=/raɪs fiːld/=rais fiild
+river=/ˈrɪvər/=RI-ver
+mountain=/ˈmaʊntən/=MAUN-ten
+sea=/siː/=sii
+sun=/sʌn/=san
+moon=/muːn/=muun
+star=/stɑːr/=star
+cloud=/klaʊd/=klaud
+rain=/reɪn/=rein
+wind=/wɪnd/=wind
+fire=/ˈfaɪər/=FAI-er
+stone=/stoʊn/=stoun
+soil, ground=/sɔɪl/, /ɡraʊnd/=soil, graund
+wood=/wʊd/=wud
+book=/bʊk/=buk
+pencil=/ˈpɛnsəl/=PEN-sel
+letter=/ˈlɛtər/=LE-ter
+lesson=/ˈlɛsən/=LE-sen
+money=/ˈmʌni/=MA-ni
+clothes=/kloʊðz/=kloudz
+umbrella=/ʌmˈbrɛlə/=am-BRE-le
+knife=/naɪf/=naif
+mat=/mæt/=met
+table=/ˈteɪbəl/=TEI-bel
+bicycle=/ˈbaɪsɪkəl/=BAI-si-kel
+yes=/jɛs/=yes
+no, not=/noʊ/, /nɑːt/=nou, nat
+there is=/ðɛr ɪz/=der iz
+there isn't=/ðɛr ˈɪzənt/=der I-zent
+thank you=/ˈθæŋk juː/=THENGK yuu
+you're welcome=/jʊr ˈwɛlkəm/=yur WEL-kem
+excuse me=/ɪkˈskjuːz miː/=ik-SKYUUZ mii
+sorry=/ˈsɑːri/=SA-ri
+please help=/pliːz hɛlp/=pliiz help
+please come in=/pliːz kʌm ɪn/=pliiz kam in
+good morning=/ɡʊd ˈmɔːrnɪŋ/=gud MOR-ning
+good night=/ɡʊd naɪt/=gud nait
+welcome=/ˈwɛlkəm/=WEL-kem
+how are you?=/haʊ ɑːr juː/=hau ar yuu
+what is your name?=/wʌt ɪz jʊr neɪm/=wat iz yur neim
+where are you going?=/wɛr ɑːr juː ˈɡoʊɪŋ/=wer ar yuu GOU-ing
+I'll take my leave=/aɪl teɪk maɪ liːv/=ail teik mai liiv
+and=/ænd/=end
+with=/wɪð/=wid
+for=/fɔːr/=for
+from=/frʌm/=fram
+to (a place)=/tuː/=tuu
+very=/ˈvɛri/=VE-ri
+also=/ˈɔːlsoʊ/=OL-sou
+only=/ˈoʊnli/=OUN-li
+if=/ɪf/=if
+because=/bɪˈkɔːz/=bi-KOZ
+but=/bʌt/=bat`.split("\n").map(l => { const [k, ipa, baca] = l.split("="); return [k.trim(), { ipa: ipa.trim(), baca: baca.trim() }]; }));
+// Huruf yang tidak dibaca, untuk catatan kecil
+const SILENT = { knee: "k tidak dibaca", knife: "k tidak dibaca", write: "w tidak dibaca", walk: "l tidak dibaca", half: "l tidak dibaca", laugh: "gh dibaca f", night: "gh tidak dibaca", Wednesday: "d pertama tidak dibaca", "light (weight)": "gh tidak dibaca", "tall, high": "gh tidak dibaca", "eight": "gh tidak dibaca", "two": "w tidak dibaca", sword: "w tidak dibaca" };
+function pronOf(d) {
+  if (PRON[d.en]) return PRON[d.en];
+  if (/^market day/.test(d.en)) return { ipa: "/ˈmɑːrkɪt deɪ/", baca: "MAR-kit dei" };
+  return null;
+}
+const SWATCH = { red: "#d7263d", white: "#ffffff", black: "#111111", green: "#2e9e4f", yellow: "#f5c518", blue: "#2563eb", grey: "#9aa0a6", brown: "#7a4a24" };
+const NUM = { one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10", eleven: "11", twenty: "20", "twenty-five": "25", fifty: "50", "one hundred": "100", "one thousand": "1000" };
+const DAYS = { Monday: "Sen", Tuesday: "Sel", Wednesday: "Rab", Thursday: "Kam", Friday: "Jum", Saturday: "Sab", Sunday: "Min" };
+const isSpecial = d => !!(SWATCH[d.en] || NUM[d.en] || DAYS[d.en] || /^market day/.test(d.en));
+function pic(d, size) {
+  const cls = "pic" + (size ? " " + size : "") + (BUSY.has(d.k) ? " busy" : "");
+  if (AIIMG[d.k]) return `<span class="${cls} photo"><img src="${AIIMG[d.k]}" alt="${size === "xl" ? "" : "Gambar " + esc(d.id)}"></span>`;
+  if (SWATCH[d.en]) return `<span class="${cls}" aria-hidden="true"><i class="sw" style="background:${SWATCH[d.en]}"></i></span>`;
+  if (NUM[d.en]) return `<span class="${cls} txt" aria-hidden="true">${NUM[d.en]}</span>`;
+  if (DAYS[d.en]) return `<span class="${cls} txt cal" aria-hidden="true">${DAYS[d.en]}</span>`;
+  if (/^market day/.test(d.en)) return `<span class="${cls} txt cal" aria-hidden="true">${esc(d.id)}</span>`;
+  if (PIC[d.en]) return `<span class="${cls} emo" ${size === "xl" ? "aria-hidden=\"true\"" : `role="img" aria-label="Gambar ${esc(d.id)}"`}>${PIC[d.en]}</span>`;
+  return `<span class="${cls} txt" aria-hidden="true">${esc(d.id.charAt(0).toUpperCase())}</span>`;
+}
+
+const DATA = [];
+for (const [cat, block] of Object.entries(RAW)) {
+  block.trim().split("\n").forEach(line => {
+    const [en, id, ng, kr, ki] = line.split("|").map(s => (s || "").trim());
+    DATA.push({ en, id, ng, kr, ki, cat, k: en + "|" + id });
+  });
+}
+const CATS = Object.keys(RAW);
+
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+  .replace(/dh/g, "d").replace(/th/g, "t").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+DATA.forEach(d => {
+  d._en = norm(d.en); d._id = norm(d.id); d._jv = norm([d.ng, d.kr, d.ki].join(" "));
+});
+
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+let state = { q: "", lang: "all", cat: "Semua", limit: 80, view: "kartu" };
+try {
+  const c = localStorage.getItem("kamus3-cat"); if (c && (c === "Semua" || CATS.includes(c))) state.cat = c;
+  const v = localStorage.getItem("kamus3-view"); if (v === "daftar" || v === "kartu") state.view = v;
+} catch (e) {}
+
+const hasTTS = "speechSynthesis" in window;
+const TURTLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15c0-4 3.6-7 8-7s8 3 8 7z"/><path d="M20 13h1.5a1.5 1.5 0 0 0 0-3H20"/><path d="M7 15v3M17 15v3"/><path d="M9 8.5l2 6.5M15 8.5l-2 6.5"/></svg>';
+const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>';
+let VOICES = [];
+function loadVoices() { try { VOICES = speechSynthesis.getVoices(); } catch (e) { VOICES = []; } }
+function jvNote() { const el = document.getElementById("jvnote"); if (!el) return;
+  const has = VOICES.some(v => /^jv/i.test(v.lang));
+  el.innerHTML = has ? "<b>Suara bahasa Jawa</b> memakai suara Jawa yang ada di perangkat ini." : "<b>Suara bahasa Jawa</b> dibacakan dengan suara bahasa Indonesia, karena perangkat ini belum punya suara Jawa. Bunyinya mendekati, tetapi logatnya Indonesia.";
+  if (!hasTTS) el.innerHTML = "<b>Suara</b> tidak tersedia di browser ini. Coba buka di Chrome."; }
+if (hasTTS) { loadVoices(); try { speechSynthesis.addEventListener("voiceschanged", () => { loadVoices(); jvNote(); }); } catch (e) {} }
+function pickVoice(lang) {
+  const norm2 = v => v.lang.replace("_", "-").toLowerCase();
+  const want = lang.toLowerCase();
+  const pref = v => /google|natural|online/i.test(v.name) ? 1 : 0;
+  const by = test => VOICES.filter(test).sort((a, b) => pref(b) - pref(a))[0];
+  return by(v => norm2(v) === want) || by(v => norm2(v).startsWith(want.slice(0, 2)) && !/jv/.test(want))
+    || (want.startsWith("jv") ? (by(v => norm2(v) === "id-id") || by(v => norm2(v).startsWith("id")) || by(v => norm2(v).startsWith("ms"))) : null);
+}
+function speak(text, lang, rate) {
+  try {
+    speechSynthesis.cancel();
+    const clean = text.replace(/\(.*?\)/g, "").replace(/,/g, ", ");
+    const u = new SpeechSynthesisUtterance(clean);
+    const v = pickVoice(lang);
+    u.lang = v ? v.lang : (lang.startsWith("jv") ? "id-ID" : lang);
+    if (v) u.voice = v;
+    u.rate = (rate || 0.9);
+    speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+function hl(text, q) {
+  if (!q) return esc(text);
+  // highlight by normalized match on whole words containing the query
+  return text.split(/(\s+|,\s*)/).map(part => {
+    const n = norm(part);
+    return n && n.includes(q) ? "<mark>" + esc(part) + "</mark>" : esc(part);
+  }).join("");
+}
+
+function search() {
+  const q = norm(state.q);
+  let rows = DATA.filter(d => state.cat === "Semua" || d.cat === state.cat);
+  if (q) {
+    const fields = state.lang === "all" ? ["_en", "_id", "_jv"] : ["_" + state.lang];
+    const scored = [];
+    rows.forEach(d => {
+      let best = 0;
+      fields.forEach(f => {
+        const v = d[f];
+        if (!v.includes(q)) return;
+        const words = v.split(" ");
+        let s = 1;
+        if (v === q || words.includes(q)) s = 3;
+        else if (words.some(w => w.startsWith(q))) s = 2;
+        best = Math.max(best, s);
+      });
+      if (best) scored.push([best, d]);
+    });
+    scored.sort((a, b) => b[0] - a[0]);
+    rows = scored.map(x => x[1]);
+  }
+  return { rows, q };
+}
+
+function renderCats() {
+  const counts = { Semua: DATA.length };
+  DATA.forEach(d => counts[d.cat] = (counts[d.cat] || 0) + 1);
+  $("#cats").innerHTML = ["Semua", ...CATS].map(c =>
+    `<button class="chip" data-cat="${esc(c)}" aria-pressed="${c === state.cat}">${esc(c)}<small>${counts[c]}</small></button>`
+  ).join("");
+}
+
+function render() {
+  const { rows, q } = search();
+  const shown = rows.slice(0, state.limit);
+  const sayBtn = (t, l, label) => hasTTS ? `<button class="say" data-say="${esc(t)}" data-lang="${l}" aria-label="Dengarkan ${label ? label + " " : ""}${esc(t)}" title="Dengarkan">${SPK}</button>` : "";
+  const slowBtn = t => hasTTS ? `<button class="say slow" data-say="${esc(t)}" data-lang="en-US" data-rate="0.55" aria-label="Dengarkan pelan ${esc(t)}" title="Dengarkan pelan">${TURTLE}<span>pelan</span></button>` : "";
+  const pronBox = d => { const p = pronOf(d); if (!p) return ""; const s = SILENT[d.en];
+    return `<div class="pron"><span class="ipa" title="Lambang fonetik (IPA)">${esc(p.ipa)}</span><span class="baca">dibaca <b>${esc(p.baca)}</b></span>${slowBtn(d.en)}${s ? `<span class="silent">${esc(s)}</span>` : ""}</div>`; };
+  const jv = (t, label) => sayBtn(t, "jv-ID", label);
+  const head = `<div class="row head"><div></div><div>English</div><div>Indonesia</div><div>Jawa Ngoko</div><div>Jawa Krama</div></div>`;
+  if (state.view === "kartu" && rows.length) {
+    $("#list").className = "cards";
+    $("#list").innerHTML = shown.map(d => `
+      <article class="card">
+        ${pic(d, "lg")}
+        <div class="c-id">${hl(d.id, q)}${sayBtn(d.id, "id-ID")}</div>
+        <div class="c-en">${hl(d.en, q)}${sayBtn(d.en, "en-US")}</div>
+        ${pronBox(d)}
+        <dl>
+          <dt>Ngoko</dt><dd>${hl(d.ng, q)}${jv(d.ng, "ngoko")}</dd>
+          <dt>Krama</dt><dd>${hl(d.kr, q)}${jv(d.kr, "krama")}</dd>
+          ${d.ki ? `<dt class="k">Krama inggil</dt><dd class="k">${hl(d.ki, q)}${jv(d.ki, "krama inggil")}</dd>` : ""}
+        </dl>
+        ${AI.key && !isSpecial(d) ? `<button class="gen" data-gen="${esc(d.k)}" ${BUSY.has(d.k) ? "disabled" : ""}>${SPARK}${BUSY.has(d.k) ? "Membuat…" : AIIMG[d.k] ? "Buat ulang gambar" : "Buat gambar AI"}</button>` : ""}
+        ${ERRS[d.k] ? `<div class="cardmsg">${esc(ERRS[d.k])}</div>` : ""}
+      </article>`).join("");
+    finish(rows, q);
+    return;
+  }
+  $("#list").className = "list";
+  const body = shown.map(d => `
+    <div class="row">
+      <div class="cell picc">${pic(d)}</div>
+      <div class="cell en"><span class="lbl">English</span><span class="w">${hl(d.en, q)}${sayBtn(d.en, "en-US")}</span>${pronBox(d)}<span class="cat">${esc(d.cat)}</span></div>
+      <div class="cell id"><span class="lbl">Indonesia</span><span class="w">${hl(d.id, q)}${sayBtn(d.id, "id-ID")}</span></div>
+      <div class="cell"><span class="lbl">Jawa Ngoko</span><span class="w">${hl(d.ng, q)}${jv(d.ng, "ngoko")}</span></div>
+      <div class="cell"><span class="lbl">Jawa Krama</span><span class="w">${hl(d.kr, q)}${jv(d.kr, "krama")}</span>${d.ki ? `<span class="ki">Krama inggil: <b>${hl(d.ki, q)}</b>${jv(d.ki, "krama inggil")}</span>` : ""}</div>
+    </div>`).join("");
+  $("#list").innerHTML = rows.length ? head + body
+    : `<div class="empty">Kata "${esc(state.q)}" belum ada di kamus ini. Coba kata dasarnya, misalnya "makan" untuk "dimakan", atau pilih "Semua bahasa".</div>`;
+  finish(rows, q);
+}
+function finish(rows, q) {
+  $("#count").textContent = q
+    ? `${rows.length} hasil untuk "${state.q}"` + (state.cat !== "Semua" ? ` di kategori ${state.cat}` : "")
+    : `${rows.length} kata` + (state.cat !== "Semua" ? ` di kategori ${state.cat}` : ` dalam ${CATS.length} kategori`);
+  $("#more").hidden = rows.length <= state.limit;
+}
+
+$("#q").addEventListener("input", e => { state.q = e.target.value; state.limit = 80; render(); });
+$("#lang").addEventListener("change", e => { state.lang = e.target.value; render(); });
+$("#cats").addEventListener("click", e => {
+  const b = e.target.closest("[data-cat]"); if (!b) return;
+  state.cat = b.dataset.cat; state.limit = 80;
+  try { localStorage.setItem("kamus3-cat", state.cat); } catch (err) {}
+  renderCats(); render(); updateInfo();
+});
+$("#list").addEventListener("click", e => {
+  const b = e.target.closest("[data-say]"); if (b) speak(b.dataset.say, b.dataset.lang, b.dataset.rate ? +b.dataset.rate : 0);
+  const g = e.target.closest("[data-gen]");
+  if (g) { const d = DATA.find(x => x.k === g.dataset.gen); if (d) makeOne(d).catch(() => {}); }
+});
+
+/* ---------- Gambar AI (Gemini) ---------- */
+const DEFAULT_MODEL = "gemini-3.1-flash-image";
+const SPARK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/></svg>';
+const EMBED_KEY = ""; // kunci tertanam (hanya untuk versi pribadi)
+const AI = { key: EMBED_KEY, model: DEFAULT_MODEL };
+try { AI.key = localStorage.getItem("kamus3-key") || EMBED_KEY; AI.model = localStorage.getItem("kamus3-model") || DEFAULT_MODEL; } catch (e) {}
+
+const IDB = (() => {
+  let dbp = null;
+  const open = () => dbp || (dbp = new Promise((res, rej) => {
+    const r = indexedDB.open("kamus3", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("img");
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  }));
+  const run = (mode, fn) => open().then(db => new Promise((res, rej) => {
+    const t = db.transaction("img", mode); fn(t.objectStore("img"));
+    t.oncomplete = () => res(); t.onerror = () => rej(t.error);
+  }));
+  return {
+    all: () => open().then(db => new Promise((res, rej) => {
+      const out = {}; const c = db.transaction("img").objectStore("img").openCursor();
+      c.onsuccess = () => { const cur = c.result; if (cur) { out[cur.key] = cur.value; cur.continue(); } else res(out); };
+      c.onerror = () => rej(c.error);
+    })),
+    set: (k, v) => run("readwrite", s => s.put(v, k)),
+    clear: () => run("readwrite", s => s.clear())
+  };
+})();
+
+function promptFor(d) {
+  const people = /Keluarga|Kata Ganti|Ungkapan|Kata Kerja/.test(d.cat) ? " If people appear, show friendly Indonesian people in everyday Indonesian clothing." : "";
+  return `Create a simple, friendly flat illustration for a children's picture dictionary. Subject: "${d.en}" (Indonesian: "${d.id}", Javanese: "${d.ng}"), category: ${d.cat}. ` +
+    `One clear subject centered, bright soft colors, thick clean outlines, plain white background, square composition.${people} ` +
+    `Do not draw any text, letters, words or numbers.`;
+}
+
+function shrink(dataUrl) {
+  return new Promise((res, rej) => {
+    const im = new Image();
+    im.onload = () => {
+      const S = 224, c = document.createElement("canvas"); c.width = S; c.height = S;
+      const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, S, S);
+      const r = Math.min(S / im.width, S / im.height), w = im.width * r, h = im.height * r;
+      x.drawImage(im, (S - w) / 2, (S - h) / 2, w, h);
+      res(c.toDataURL("image/jpeg", 0.78));
+    };
+    im.onerror = () => rej(new Error("Gambar dari Gemini tidak bisa dibaca."));
+    im.src = dataUrl;
+  });
+}
+
+function explain(err) {
+  if (err.net) return "Tidak bisa terhubung ke Gemini. Di pratinjau Claude sambungan ke luar memang diblokir. Pasang file HTML ini di Google Sites atau buka langsung di Chrome.";
+  const m = (err.message || "").toLowerCase();
+  if ((err.status === 400 || err.status === 401) && (m.includes("api key") || m.includes("authentication") || m.includes("credentials"))) return isVertex(AI.key) ? "Kunci Vertex AI ditolak. Pastikan Vertex AI API aktif di Google Cloud dan kunci ini tidak dibatasi untuk layanan lain." : "Kunci API tidak valid. Periksa lagi kuncinya.";
+  if (err.status === 400 && (m.includes("billing") || m.includes("paid") || m.includes("free tier"))) return "Model gambar ini memerlukan akun Gemini dengan penagihan aktif.";
+  if (err.status === 403) return isVertex(AI.key) ? "Kunci Vertex AI tidak punya izin. Aktifkan Vertex AI API dan penagihan (billing) di Google Cloud, lalu coba lagi." : "Kunci API tidak punya izin untuk model ini.";
+  if (err.status === 404) return "Tidak ada model gambar Gemini yang tersedia untuk kunci ini. Coba isi nama model lain di pengaturan.";
+  if (err.status === 429) return "Kuota Gemini habis atau permintaan terlalu cepat. Tunggu sebentar, lalu coba lagi.";
+  return err.message || "Gagal membuat gambar.";
+}
+
+// Kunci berawalan "AQ." = Vertex AI express mode; kunci "AIza..." = Gemini API (AI Studio)
+const isVertex = k => /^AQ\./.test(k);
+const FALLBACK_MODELS = ["gemini-3.1-flash-image", "gemini-3.1-flash-image-preview", "gemini-3-pro-image-preview", "gemini-2.5-flash-image"];
+let WORKING_MODEL = "";
+async function requestImage(d, model) {
+  const url = isVertex(AI.key)
+    ? `https://aiplatform.googleapis.com/v1/publishers/google/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(AI.key)}`
+    : `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(AI.key)}`;
+  let res;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: promptFor(d) }] }], generationConfig: { responseModalities: ["IMAGE"] } })
+    });
+  } catch (e) { const er = new Error("net"); er.net = true; throw er; }
+  const j = await res.json().catch(() => ({}));
+  const body = Array.isArray(j) ? j[0] || {} : j;
+  if (!res.ok) { const er = new Error((body.error && body.error.message) || res.statusText); er.status = res.status; throw er; }
+  const parts = (((body.candidates || [])[0] || {}).content || {}).parts || [];
+  const p = parts.find(x => x.inlineData || x.inline_data);
+  if (!p) { const er = new Error("Gemini tidak mengirim gambar untuk kata ini. Coba sekali lagi."); er.noimg = true; throw er; }
+  const inl = p.inlineData || p.inline_data;
+  return shrink(`data:${inl.mimeType || inl.mime_type || "image/png"};base64,${inl.data}`);
+}
+async function callGemini(d) {
+  if (WORKING_MODEL) return requestImage(d, WORKING_MODEL);
+  const list = [AI.model, ...FALLBACK_MODELS.filter(m => m !== AI.model)];
+  let last;
+  for (const m of list) {
+    try { const img = await requestImage(d, m); WORKING_MODEL = m; return img; }
+    catch (err) {
+      last = err;
+      // coba model berikutnya hanya kalau model ini tidak dikenal / tidak tersedia
+      if (!(err.status === 404 || (err.status === 400 && /model|not supported|not found/i.test(err.message) && !/api key/i.test(err.message)))) throw err;
+    }
+  }
+  throw last;
+}
+
+async function makeOne(d) {
+  if (!AI.key) { openPanel(); setMsg("Isi kunci API dulu.", true); return; }
+  BUSY.add(d.k); delete ERRS[d.k]; render();
+  try {
+    const img = await callGemini(d);
+    AIIMG[d.k] = img;
+    try { await IDB.set(d.k, img); } catch (e) {}
+  } catch (err) {
+    ERRS[d.k] = explain(err); throw err;
+  } finally { BUSY.delete(d.k); render(); updateInfo(); }
+}
+
+/* panel */
+function openPanel() { $("#aipanel").hidden = false; $("#aitoggle").setAttribute("aria-expanded", "true"); }
+$("#aitoggle").addEventListener("click", () => {
+  const open = $("#aipanel").hidden; $("#aipanel").hidden = !open; $("#aitoggle").setAttribute("aria-expanded", String(open));
+});
+function setMsg(t, err) { $("#aimsg").innerHTML = t; $("#aimsg").classList.toggle("err", !!err); }
+function syncKey() {
+  $("#keystate").textContent = AI.key ? (AI.key === EMBED_KEY ? "Kunci tertanam" : "Kunci tersimpan") + (isVertex(AI.key) ? " · Vertex AI" : " · Gemini API") : "Kunci belum diisi";
+  $("#keystate").classList.toggle("on", !!AI.key);
+  $("#model").value = AI.model;
+}
+$("#savekey").addEventListener("click", () => {
+  const k = $("#apikey").value.trim(); const m = $("#model").value.trim() || DEFAULT_MODEL;
+  if (!k && !AI.key) { setMsg("Tempel kunci API terlebih dahulu.", true); return; }
+  if (k) AI.key = k; AI.model = m; WORKING_MODEL = "";
+  try { localStorage.setItem("kamus3-key", AI.key); localStorage.setItem("kamus3-model", AI.model); } catch (e) {}
+  $("#apikey").value = ""; syncKey(); render();
+  setMsg("Kunci disimpan. Tombol \"Buat gambar AI\" sekarang muncul di setiap kartu.");
+});
+$("#delkey").addEventListener("click", () => {
+  AI.key = ""; WORKING_MODEL = ""; try { localStorage.removeItem("kamus3-key"); } catch (e) {}
+  syncKey(); render(); setMsg("Kunci dihapus dari browser ini.");
+});
+
+function pending() { return DATA.filter(d => (state.cat === "Semua" || d.cat === state.cat) && !isSpecial(d) && !AIIMG[d.k]); }
+function updateInfo() {
+  const n = pending().length;
+  $("#batchinfo").textContent = `${state.cat === "Semua" ? "semua kategori" : state.cat}, ${n} kata belum bergambar AI.`;
+}
+let stopFlag = false;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+$("#batchgo").addEventListener("click", async () => {
+  if (!AI.key) { setMsg("Isi dan simpan kunci API dulu.", true); return; }
+  const todo = pending();
+  if (!todo.length) { setMsg("Semua kata di kategori ini sudah punya gambar AI."); return; }
+  stopFlag = false; $("#batchgo").hidden = true; $("#batchstop").hidden = false; $("#bprog").hidden = false;
+  let done = 0, fail = 0;
+  for (const d of todo) {
+    if (stopFlag) break;
+    setMsg(`Membuat gambar "${esc(d.id)}" (${done + fail + 1} dari ${todo.length})…`);
+    try { await makeOne(d); done++; }
+    catch (err) {
+      if (err.status === 429) { setMsg("Kuota sedang penuh, menunggu 30 detik…"); await sleep(30000); try { await makeOne(d); done++; continue; } catch (e2) {} }
+      fail++;
+      if (err.net || err.status === 400 || err.status === 403 || err.status === 404) { setMsg(explain(err), true); break; }
+    }
+    $("#bbar").style.width = ((done + fail) / todo.length * 100) + "%";
+    await sleep(1200);
+  }
+  $("#batchgo").hidden = false; $("#batchstop").hidden = true;
+  if (!$("#aimsg").classList.contains("err")) setMsg(`Selesai: ${done} gambar dibuat${fail ? `, ${fail} gagal` : ""}${stopFlag ? " (dihentikan)" : ""}.`);
+});
+$("#batchstop").addEventListener("click", () => { stopFlag = true; setMsg("Menghentikan setelah gambar ini selesai…"); });
+
+$("#clearimg").addEventListener("click", async () => {
+  const btn = $("#clearimg");
+  if (btn.dataset.sure !== "1") { btn.dataset.sure = "1"; btn.textContent = "Yakin? Klik lagi untuk menghapus"; setTimeout(() => { btn.dataset.sure = ""; btn.textContent = "Hapus semua gambar AI"; }, 4000); return; }
+  btn.dataset.sure = ""; btn.textContent = "Hapus semua gambar AI";
+  AIIMG = {}; try { await IDB.clear(); } catch (e) {}
+  render(); updateInfo(); setMsg("Semua gambar AI dihapus dari browser ini. Gambar kembali ke emoji.");
+});
+
+$("#dlbaked").addEventListener("click", () => {
+  const n = Object.keys(AIIMG).length;
+  if (!n) { setMsg("Belum ada gambar AI untuk ditanam. Buat gambarnya dulu.", true); return; }
+  const clone = document.documentElement.cloneNode(true);
+  ["#list", "#qbody", "#cats"].forEach(s => { const el = clone.querySelector(s); if (el) el.innerHTML = ""; });
+  clone.querySelector("#aipanel").hidden = true;
+  clone.querySelector("#baked").textContent = JSON.stringify(AIIMG);
+  let html = "<!DOCTYPE html>\n" + clone.outerHTML;
+  if (EMBED_KEY) html = html.split(EMBED_KEY).join("");
+  try {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([html], { type: "text/html" }));
+    a.download = "kamus-tiga-bahasa-bergambar.html";
+    document.body.appendChild(a); a.click(); a.remove();
+    setMsg(`File diunduh dengan ${n} gambar tertanam (sekitar ${(html.length / 1048576).toFixed(1)} MB). Jika unduhan tidak muncul, buka file HTML ini langsung di Chrome lalu klik lagi.`);
+  } catch (e) { setMsg("Browser memblokir unduhan dari halaman ini. Buka file HTML ini langsung di Chrome lalu klik lagi.", true); }
+});
+
+syncKey(); updateInfo(); jvNote();
+IDB.all().then(saved => { if (Object.keys(saved).length) { Object.assign(AIIMG, saved); render(); updateInfo(); } }).catch(() => {});
+$("#more").addEventListener("click", () => { state.limit += 120; render(); });
+function syncView() { document.querySelectorAll("#viewsw button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === state.view)); }
+$("#viewsw").addEventListener("click", e => {
+  const b = e.target.closest("[data-v]"); if (!b) return;
+  state.view = b.dataset.v;
+  try { localStorage.setItem("kamus3-view", state.view); } catch (err) {}
+  syncView(); render();
+});
+syncView();
+
+/* ---------- Tabs ---------- */
+function show(view) {
+  const v = view === "latihan" ? "latihan" : "kamus";
+  document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.view === v));
+  $("#view-kamus").hidden = v !== "kamus";
+  $("#view-kamus").style.display = v === "kamus" ? "flex" : "none";
+  $("#view-latihan").hidden = v !== "latihan";
+  if (v === "latihan" && !quiz) newRound();
+}
+document.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => {
+  try { history.replaceState(null, "", "#" + b.dataset.view); } catch (e) { location.hash = b.dataset.view; }
+  show(b.dataset.view);
+}));
+window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+/* ---------- Quiz ---------- */
+const MODES = {
+  "id-kr": { from: "id", to: "kr", ask: "Apa bahasa Jawa krama-nya?" },
+  "ng-kr": { from: "ng", to: "kr", ask: "Ubah ke bahasa Jawa krama:", filter: d => norm(d.ng) !== norm(d.kr) },
+  "id-en": { from: "id", to: "en", ask: "What is it in English?" },
+  "en-id": { from: "en", to: "id", ask: "Apa artinya dalam bahasa Indonesia?" },
+  "en-ng": { from: "en", to: "ng", ask: "Apa bahasa Jawa ngoko-nya?" }
+};
+$("#qcat").innerHTML = ["Semua kategori", ...CATS].map(c => `<option>${esc(c)}</option>`).join("");
+let quiz = null;
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+function newRound() {
+  const m = MODES[$("#qmode").value];
+  const cat = $("#qcat").value;
+  let pool = DATA.filter(d => (cat === "Semua kategori" || d.cat === cat) && (!m.filter || m.filter(d)) && !/^market day/.test(d.en));
+  if (pool.length < 4) pool = DATA.filter(d => !m.filter || m.filter(d));
+  const items = shuffle(pool.slice()).slice(0, Math.min(10, pool.length));
+  quiz = { m, pool, items, i: 0, score: 0, answered: false };
+  renderQ();
+}
+
+function renderQ() {
+  const { m, items, i, score } = quiz;
+  $("#bar").style.width = (i / items.length * 100) + "%";
+  if (i >= items.length) {
+    const pct = Math.round(score / items.length * 100);
+    const msg = pct >= 90 ? "Apik banget! Sampun pinter sanget." : pct >= 70 ? "Sae! Tinggal sedikit lagi." : pct >= 50 ? "Lumayan. Ayo coba sekali lagi." : "Terus berlatih, pasti bisa.";
+    $("#qbody").innerHTML = `<div class="result"><div class="qask">Skor kamu</div><div class="big">${score}/${items.length}</div><p>${msg}</p><button class="btn" id="again">Main lagi</button></div>`;
+    $("#again").onclick = newRound;
+    return;
+  }
+  const d = items[i];
+  const right = d[m.to];
+  const others = shuffle(quiz.pool.filter(x => norm(x[m.to]) !== norm(right)).map(x => x[m.to]));
+  const uniq = [...new Set(others)].slice(0, 3);
+  const opts = shuffle([right, ...uniq]);
+  $("#qbody").innerHTML = `
+    <div class="qask">Soal ${i + 1} dari ${items.length} · ${esc(m.ask)}</div>
+    <div class="qpic">${pic(d, "xl")}</div>
+    <div class="qword">${esc(d[m.from])}</div>
+    ${hasTTS ? `<div class="qsay"><button class="say" id="qspeak" aria-label="Dengarkan soal">${SPK}Dengarkan</button>${m.from === "en" && pronOf(d) ? `<span class="baca">dibaca <b>${esc(pronOf(d).baca)}</b></span>` : ""}</div>` : ""}
+    <div class="opts" style="margin-top:14px">${opts.map((o, k) => `<button class="opt" id="opt${k}" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>
+    <div class="feedback" id="fb" style="margin-top:12px"></div>
+    <div class="qfoot"><span class="score">Benar: <b>${score}</b></span><button class="btn" id="next" hidden>${i + 1 === items.length ? "Lihat skor" : "Soal berikutnya"}</button></div>`;
+  quiz.answered = false;
+  document.querySelectorAll(".opt").forEach(b => b.onclick = () => answer(b, right, d));
+  const qs = document.getElementById("qspeak");
+  if (qs) qs.onclick = () => speak(d[m.from], m.from === "en" ? "en-US" : m.from === "id" ? "id-ID" : "jv-ID");
+  $("#next").onclick = () => { quiz.i++; renderQ(); };
+}
+
+function answer(btn, right, d) {
+  if (quiz.answered) return;
+  quiz.answered = true;
+  const ok = norm(btn.dataset.v) === norm(right);
+  if (ok) quiz.score++;
+  document.querySelectorAll(".opt").forEach(b => {
+    b.disabled = true;
+    if (norm(b.dataset.v) === norm(right)) b.classList.add("right");
+    else if (b === btn) b.classList.add("wrong");
+  });
+  const extra = d.ki ? ` Krama inggil: <b>${esc(d.ki)}</b>.` : "";
+  $("#fb").innerHTML = (ok ? "Benar! " : `Jawaban yang tepat: <b>${esc(right)}</b>. `) +
+    `${esc(d.id)} = ${esc(d.en)} · ngoko <b>${esc(d.ng)}</b> · krama <b>${esc(d.kr)}</b>.${extra}`;
+  $("#next").hidden = false;
+  $("#next").focus();
+  if (hasTTS) speak(right, quiz.m.to === "en" ? "en-US" : quiz.m.to === "id" ? "id-ID" : "jv-ID");
+  document.querySelector(".score b").textContent = quiz.score;
+}
+$("#qmode").addEventListener("change", newRound);
+$("#qcat").addEventListener("change", newRound);
+
+renderCats(); render();
+show(location.hash.slice(1));
+</script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Asisten Kepala Sekolah: chatbot dan prompt siap pakai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2F4F9;--surface:#FFFFFF;--ink:#16224A;--mute:#5A6483;--line:#D9DEEB;--gold:#F0B429;--teal:#14766B;--on-ink:#F2F4F9;--hero:#16224A;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1530;--surface:#19214A;--ink:#E8ECF8;--mute:#9AA4C6;--line:#2C3668;--teal:#4FC3B4;--hero:#0A0F26}}
+:root[data-theme="dark"]{--bg:#0F1530;--surface:#19214A;--ink:#E8ECF8;--mute:#9AA4C6;--line:#2C3668;--teal:#4FC3B4;--hero:#0A0F26}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "Public Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Public Sans",system-ui,sans-serif;line-height:1.1;margin:0}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.hero{background:var(--hero);color:var(--on-ink);padding:48px 0 56px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;background:repeating-conic-gradient(from 0deg,rgba(240,180,41,.16) 0 10deg,transparent 10deg 20deg);border-radius:50%;pointer-events:none}
+.grid{display:grid;grid-template-columns:1fr 1.05fr;gap:40px;align-items:start;position:relative;z-index:1}
+h1{font-size:clamp(2.1rem,5vw,3.6rem);font-weight:800;letter-spacing:-.02em}
+.lead{max-width:46ch;color:#C5CCE6;margin:18px 0 22px}
+.facts{display:flex;flex-wrap:wrap;gap:10px}
+.facts span{border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 14px;font-size:.9rem}
+.note{margin-top:22px;font-size:.88rem;color:#AEB7D8;max-width:46ch}
+.chat{background:var(--surface);color:var(--ink);border-radius:18px;display:flex;flex-direction:column;height:560px;box-shadow:0 18px 50px rgba(0,0,0,.35);overflow:hidden}
+.chat-top{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.chat-top b{font-family:"Bricolage Grotesque",sans-serif;font-size:1.05rem}
+.modes{display:flex;gap:6px;flex-wrap:wrap}
+.modes button{font:500 .85rem "Public Sans",sans-serif;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:5px 12px;cursor:pointer}
+.modes button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.m{max-width:88%;padding:10px 14px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.96rem}
+.m.u{align-self:flex-end;background:var(--ink);color:var(--surface);border-bottom-right-radius:4px}
+.m.a{align-self:flex-start;background:var(--bg);border-bottom-left-radius:4px}
+.m.err{border:1px solid #C0392B;color:#C0392B}
+.hint{color:var(--mute);font-size:.9rem}
+.chat form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+.chat textarea{flex:1;resize:none;height:56px;font:inherit;font-size:.95rem;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg);color:var(--ink)}
+.btn{font:600 .92rem "Public Sans",sans-serif;border:0;border-radius:10px;padding:0 18px;background:var(--gold);color:#16224A;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:default}
+section.lib{padding:56px 0 72px}
+.lib h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:800}
+.lib .sub{color:var(--mute);max-width:62ch;margin:10px 0 26px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.tabs button{font:600 .95rem "Public Sans",sans-serif;padding:9px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.master{background:var(--surface);border-left:6px solid var(--gold);border-radius:6px 14px 14px 6px;padding:20px 22px;margin-bottom:26px}
+.master h3{font-size:1.25rem;margin-bottom:8px}
+.master p{margin:0 0 14px;color:var(--mute);font-size:.95rem;max-width:90ch}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.ghost{font:600 .85rem "Public Sans",sans-serif;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:7px 14px;cursor:pointer}
+.ghost.pri{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.search{width:100%;max-width:420px;font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);margin-bottom:18px}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:1.02rem}
+.card p{margin:0;color:var(--mute);font-size:.9rem;flex:1}
+.empty{color:var(--mute)}
+footer{padding:26px 0 40px;border-top:1px solid var(--line);color:var(--mute);font-size:.88rem}
+@media (max-width:900px){.grid{grid-template-columns:1fr}.chat{height:520px}.hero::after{display:none}}
+@media (prefers-reduced-motion:no-preference){.hero h1{animation:rise .7s ease both}@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap grid">
+<div>
+<h1>Asisten kerja untuk kepala SMP</h1>
+<p class="lead">Ajukan masalah sekolah Anda ke chatbot, atau ambil prompt siap pakai untuk tiga tugas pokok: manajerial, kewirausahaan, dan supervisi. Keputusan akhir tetap di tangan kepala sekolah.</p>
+<div class="facts"><span>3 prompt utama</span><span>24 prompt pilihan</span><span>Salin atau kirim ke chat</span></div>
+<p class="note">Rujukan tugas pokok: Permendikdasmen No. 7 dan No. 11 Tahun 2025. Susunan prompt oleh Joko Irawan Mumpuni.</p>
+</div>
+<div class="chat" role="region" aria-label="Chatbot asisten kepala sekolah">
+<div class="chat-top"><b>Tanya asisten</b><div class="modes" id="modes"></div></div>
+<div class="msgs" id="msgs" aria-live="polite"></div>
+<form id="f"><textarea id="q" placeholder="Tulis masalah atau data sekolah Anda…" aria-label="Pesan"></textarea><button class="btn" id="send">Kirim</button></form>
+</div>
+</div></header>
+
+<main><section class="lib"><div class="wrap">
+<h2>Perpustakaan prompt</h2>
+<p class="sub">Ganti bagian [dalam kurung siku] dengan data sekolah Anda. Jangan memasukkan data pribadi siswa atau guru yang tidak perlu.</p>
+<div class="tabs" role="tablist" id="tabs"></div>
+<div class="master" id="master"></div>
+<input class="search" id="s" type="search" placeholder="Cari prompt, mis. anggaran, observasi" aria-label="Cari prompt">
+<div class="list" id="list"></div>
+</div></section></main>
+<footer><div class="wrap">Prompt hanya alat bantu. Periksa kembali setiap hasil AI sebelum dipakai sebagai dasar keputusan.</div></footer>
+
+<script>
+const T={
+m:{n:"Manajerial",mode:"Asisten Manajemen",master:"Bertindaklah sebagai Asisten Manajemen Kepala SMP. Bantu saya menganalisis masalah dan mengambil keputusan berbasis data. Jangan mengarang data. Jika data belum tersedia, nyatakan data yang dibutuhkan. Untuk setiap masalah: (1) identifikasi masalah, (2) analisis akar masalah, (3) tampilkan alternatif solusi, (4) analisis risiko dan konsekuensi, (5) rekomendasikan pilihan terbaik, (6) buat rencana aksi, (7) tentukan indikator keberhasilan, dan (8) buat instrumen monitoring. Bedakan fakta, asumsi, analisis, dan rekomendasi. Pastikan setiap keputusan tetap menjadi tanggung jawab Kepala Sekolah.",
+d:"Memimpin dan mengelola seluruh sumber daya sekolah.",
+p:[["Analisis kondisi sekolah","Bertindaklah sebagai konsultan manajemen SMP. Analisis kondisi sekolah berdasarkan data berikut: [masukkan data]. Identifikasi 10 masalah utama, akar masalah, dampak, dan prioritas penanganannya. Gunakan pendekatan berbasis data dan jangan membuat data yang tidak tersedia."],
+["Analisis SWOT","Buat analisis SWOT untuk SMP berikut berdasarkan data yang saya berikan: [data]. Pisahkan faktor internal dan eksternal, kemudian buat strategi SO, WO, ST, dan WT."],
+["Menentukan prioritas program","Dari daftar masalah berikut, tentukan 5 prioritas utama sekolah menggunakan kriteria urgensi, dampak terhadap murid, sumber daya yang diperlukan, dan tingkat keterlaksanaan: [daftar masalah]."],
+["Menyusun Rencana Kerja Sekolah","Bertindak sebagai perencana sekolah. Susun rancangan RKS berdasarkan visi, misi, masalah prioritas, dan data sekolah berikut: [data]. Buat dalam tabel: program, tujuan, indikator keberhasilan, kegiatan, penanggung jawab, waktu, sumber dana, dan bukti keberhasilan."],
+["Analisis hasil belajar","Analisis data hasil belajar berikut: [data]. Kelompokkan masalah berdasarkan mata pelajaran, kelas, dan indikator kompetensi. Berikan kemungkinan penyebab dan rekomendasi tindakan."],
+["Program literasi dan numerasi","Susun program peningkatan literasi dan numerasi SMP selama satu tahun berdasarkan kondisi berikut: [data]. Buat target, kegiatan, PIC, jadwal, indikator keberhasilan, dan instrumen monitoring."],
+["Pencegahan putus sekolah","Identifikasi indikator risiko peserta didik yang berpotensi tidak melanjutkan sekolah berdasarkan data berikut: [data]. Buat sistem peringatan dini dan langkah intervensinya."],
+["Prioritas penggunaan anggaran","Analisis rancangan anggaran sekolah berikut: [anggaran]. Kelompokkan berdasarkan program prioritas, kewajiban, pengembangan, dan kegiatan yang dapat ditunda. Berikan rekomendasi efisiensi tanpa mengurangi mutu layanan pendidikan."],
+["Menangani konflik","Bertindak sebagai konsultan manajemen sekolah. Analisis kasus konflik berikut secara objektif: [kasus]. Identifikasi pihak terkait, akar masalah, risiko, pilihan penyelesaian, dan langkah tindak lanjut. Jangan langsung menyalahkan pihak tertentu."],
+["Menangani keluhan orang tua","Buat prosedur penanganan keluhan orang tua yang objektif, cepat, terdokumentasi, dan berorientasi pada penyelesaian masalah."],
+["Evaluasi program","Evaluasi program sekolah berikut: [program]. Gunakan kriteria efektivitas, efisiensi, relevansi, dampak, dan keberlanjutan. Berikan rekomendasi: lanjutkan, perbaiki, kembangkan, atau hentikan."],
+["Dashboard Kepala Sekolah","Buat rancangan dashboard manajemen SMP yang dapat digunakan Kepala Sekolah untuk memantau pembelajaran, siswa, guru, kehadiran, sarana, keuangan, program sekolah, dan tindak lanjut masalah."]]},
+k:{n:"Kewirausahaan",mode:"Konsultan Kewirausahaan",master:"Bertindak sebagai konsultan pengembangan kewirausahaan SMP. Bantu saya mengembangkan budaya inovasi, kreativitas, kemandirian, pemecahan masalah, kemitraan, dan penciptaan nilai di sekolah. Gunakan data yang saya berikan dan jangan mengarang data. Untuk setiap ide atau program, analisis: masalah yang ingin diselesaikan, peluang, tujuan, manfaat bagi peserta didik, sumber daya yang diperlukan, langkah pelaksanaan, pihak yang terlibat, estimasi biaya, risiko, indikator keberhasilan, keberlanjutan, dan cara evaluasi. Prioritaskan program yang realistis, berdampak, inklusif, aman bagi peserta didik, dan sesuai dengan fungsi pendidikan. Bedakan fakta, asumsi, analisis, dan rekomendasi.",
+d:"Mengembangkan inovasi, kemandirian, dan potensi sekolah.",
+p:[["Identifikasi potensi sekolah","Bertindak sebagai konsultan kewirausahaan sekolah. Analisis potensi SMP berikut dari sisi SDM, peserta didik, fasilitas, lingkungan, alumni, orang tua, komunitas, dan kemitraan: [data]. Identifikasi minimal 10 peluang pengembangan yang realistis."],
+["Menentukan keunggulan sekolah","Dari data sekolah berikut: [data], identifikasi 5 keunggulan yang dapat dikembangkan menjadi program unggulan. Jelaskan alasan, potensi dampak, sumber daya yang dibutuhkan, dan risikonya."],
+["Satu Guru Satu Inovasi","Buat rancangan program Satu Guru Satu Inovasi untuk SMP selama satu tahun. Sertakan tahapan, pendampingan, indikator keberhasilan, dokumentasi, dan cara mengevaluasinya."],
+["Sepuluh ide program unggulan","Berdasarkan karakteristik SMP berikut: [karakteristik], buat 10 ide program unggulan yang memiliki unsur inovasi, manfaat nyata bagi siswa, dapat menjadi ciri khas sekolah, dan realistis dilaksanakan."],
+["Menilai kelayakan program","Nilai 5 ide program berikut: [ide] berdasarkan dampak terhadap siswa, biaya, kemudahan pelaksanaan, potensi keberlanjutan, keunikan, dan potensi menjadi keunggulan sekolah. Berikan skor 1 sampai 5 dan rekomendasi prioritas."],
+["Proyek kewirausahaan siswa","Buat 10 ide proyek kewirausahaan untuk siswa SMP yang aman, edukatif, sesuai usia, murah, dan dapat dilaksanakan dalam pembelajaran berbasis proyek."],
+["Rancangan Market Day","Buat rancangan kegiatan Market Day SMP sebagai media pembelajaran kewirausahaan. Sertakan tujuan pembelajaran, pembagian tugas, jadwal, aturan, aspek keselamatan, penilaian, dan refleksi siswa."],
+["Pemanfaatan AI yang etis","Identifikasi kegiatan kewirausahaan sekolah yang dapat dibantu AI secara aman dan etis. Pisahkan aktivitas yang boleh dibantu AI dengan aktivitas yang harus tetap dikerjakan siswa."],
+["Proposal kerja sama mitra","Buat kerangka proposal kerja sama antara SMP dan [nama atau jenis mitra] untuk mengembangkan program kewirausahaan sekolah. Sertakan tujuan, manfaat bagi kedua pihak, kegiatan, kontribusi masing-masing, jadwal, dan indikator keberhasilan."],
+["Program anggaran terbatas","Buat 10 program kewirausahaan sekolah yang dapat dilakukan dengan anggaran sangat terbatas. Prioritaskan kreativitas, pemanfaatan aset yang sudah tersedia, kolaborasi, dan keberlanjutan."],
+["Indikator keberhasilan","Buat indikator keberhasilan pengembangan kewirausahaan SMP yang tidak hanya mengukur pendapatan, tetapi juga inovasi, partisipasi siswa, kreativitas, pemecahan masalah, kemitraan, keberlanjutan, dan dampak sosial."],
+["Unique Value Proposition","Berdasarkan karakteristik sekolah berikut: [data], rumuskan Unique Value Proposition yang membedakan sekolah ini dari sekolah lain, tetapi tetap berdasarkan keunggulan yang benar-benar dimiliki."]]},
+s:{n:"Supervisi",mode:"Asisten Supervisi",master:"Bertindaklah sebagai Asisten Supervisi Kepala SMP. Bantu saya melaksanakan supervisi guru dan tenaga kependidikan dengan pendekatan pembinaan dan peningkatan mutu, bukan sekadar pemeriksaan. Gunakan data dan bukti yang saya berikan. Jangan mengarang fakta. Dalam setiap analisis, pisahkan fakta hasil observasi, interpretasi, akar masalah, kekuatan, area pengembangan, dan rekomendasi. Gunakan pendekatan coaching, komunikasi konstruktif, dan penghargaan terhadap profesionalisme guru. Untuk setiap temuan, buat rekomendasi yang realistis, indikator keberhasilan, dukungan yang diperlukan, jadwal tindak lanjut, serta cara mengukur perubahan. Pastikan keputusan akhir tetap berada pada Kepala Sekolah.",
+d:"Membina, memantau, dan meningkatkan profesionalisme guru dan tenaga kependidikan.",
+p:[["Program supervisi tahunan","Bertindak sebagai pengawas sekolah atau konsultan supervisi pendidikan. Bantu saya menyusun program supervisi Kepala SMP selama satu tahun. Buat jadwal, sasaran, fokus supervisi, metode, instrumen, tindak lanjut, dan indikator keberhasilan."],
+["Jadwal supervisi akademik","Buat jadwal supervisi akademik satu tahun untuk [jumlah] guru. Atur secara realistis agar tidak mengganggu kegiatan pembelajaran dan tugas Kepala Sekolah."],
+["Instrumen observasi pembelajaran","Buat instrumen observasi pembelajaran guru SMP yang sederhana tetapi komprehensif. Aspek yang dinilai: perencanaan, pembukaan, penguasaan materi, strategi pembelajaran, keterlibatan siswa, asesmen, penggunaan teknologi, pengelolaan kelas, dan refleksi."],
+["Rubrik skala 1 sampai 4","Buat rubrik supervisi pembelajaran dengan skala 1 sampai 4. Untuk setiap indikator berikan deskripsi perilaku yang dapat diamati sehingga penilaian tidak subjektif."],
+["Pertanyaan pra-observasi","Buat 10 pertanyaan reflektif yang dapat digunakan Kepala Sekolah sebelum mengobservasi pembelajaran guru tanpa membuat guru merasa sedang diadili."],
+["Catatan observasi objektif","Ubah catatan observasi berikut menjadi catatan supervisi yang objektif: [catatan]. Pisahkan antara fakta yang terlihat, interpretasi, dan rekomendasi."],
+["Umpan balik untuk guru","Buat umpan balik kepada guru berdasarkan hasil observasi berikut: [hasil]. Gunakan bahasa profesional, konstruktif, spesifik, dan tidak menghakimi. Mulai dengan kekuatan guru sebelum membahas area perbaikan."],
+["Percakapan pascaobservasi","Buat panduan percakapan Kepala Sekolah dengan guru setelah observasi. Gunakan pendekatan coaching agar guru melakukan refleksi dan menemukan sendiri langkah perbaikannya."],
+["Rencana pengembangan individu","Berdasarkan hasil supervisi guru berikut: [hasil], buat Individual Professional Development Plan selama satu semester. Sertakan kompetensi yang dikembangkan, aktivitas belajar, target, indikator keberhasilan, dan waktu."],
+["Peer coaching","Rancang program peer coaching antarguru SMP. Jelaskan mekanisme pasangan guru, observasi, feedback, refleksi, dokumentasi, dan evaluasinya."],
+["Tema pelatihan dari data supervisi","Berdasarkan data supervisi guru berikut: [data], tentukan 5 tema pelatihan yang paling dibutuhkan. Jelaskan bukti yang mendasari setiap rekomendasi."],
+["Laporan supervisi akademik","Buat laporan pelaksanaan supervisi akademik SMP selama satu semester berdasarkan data berikut: [data]. Sajikan capaian, temuan utama, masalah, tindak lanjut, dan rekomendasi."]]}
+};
+const $=id=>document.getElementById(id);
+let cur="m",mode="m",hist=[],busy=false;
+const msgs=$("msgs"),q=$("q");
+function add(t,c){const d=document.createElement("div");d.className="m "+c;d.textContent=t;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d}
+function intro(){msgs.textContent="";hist=[];add("Halo, saya "+T[mode].mode+". Ceritakan masalah atau tempel data sekolah Anda. Saya akan memisahkan fakta, asumsi, analisis, dan rekomendasi. Keputusan akhir tetap pada Bapak/Ibu.","a hint")}
+function drawModes(){const el=$("modes");el.textContent="";for(const k in T){const b=document.createElement("button");b.type="button";b.textContent=T[k].n;b.setAttribute("aria-pressed",k===mode);b.onclick=()=>{mode=k;drawModes();intro()};el.appendChild(b)}}
+function toChat(t){q.value=t;document.querySelector(".chat").scrollIntoView({behavior:"smooth",block:"center"});q.focus()}
+async function copy(t,b){try{await navigator.clipboard.writeText(t);const o=b.textContent;b.textContent="Tersalin";setTimeout(()=>b.textContent=o,1400)}catch(e){b.textContent="Gagal menyalin"}}
+function btn(txt,cls,fn){const b=document.createElement("button");b.type="button";b.className="ghost "+(cls||"");b.textContent=txt;b.onclick=()=>fn(b);return b}
+function drawTabs(){const el=$("tabs");el.textContent="";for(const k in T){const b=document.createElement("button");b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-selected",k===cur);b.textContent=T[k].n;b.onclick=()=>{cur=k;drawTabs();drawLib()};el.appendChild(b)}}
+function drawLib(){
+const t=T[cur],m=$("master");m.textContent="";
+const h=document.createElement("h3");h.textContent="Prompt utama: "+t.mode;
+const p=document.createElement("p");p.textContent=t.d+" "+t.master;
+const a=document.createElement("div");a.className="acts";
+a.append(btn("Salin prompt utama","",b=>copy(t.master,b)),btn("Pakai sebagai mode chat","pri",()=>{mode=cur;drawModes();intro();q.focus();document.querySelector(".chat").scrollIntoView({behavior:"smooth",block:"center"})}));
+m.append(h,p,a);
+const f=$("s").value.trim().toLowerCase(),L=$("list");L.textContent="";
+const rows=t.p.filter(x=>(x[0]+" "+x[1]).toLowerCase().includes(f));
+if(!rows.length){const e=document.createElement("p");e.className="empty";e.textContent="Tidak ada prompt yang cocok. Coba kata kunci lain atau pilih tugas pokok lain.";L.appendChild(e);return}
+rows.forEach(x=>{const c=document.createElement("article");c.className="card";const h3=document.createElement("h3");h3.textContent=x[0];const pp=document.createElement("p");pp.textContent=x[1];const ac=document.createElement("div");ac.className="acts";ac.append(btn("Salin","",b=>copy(x[1],b)),btn("Kirim ke chat","pri",()=>toChat(x[1])));c.append(h3,pp,ac);L.appendChild(c)})}
+$("s").oninput=drawLib;
+$("f").onsubmit=async e=>{e.preventDefault();const v=q.value.trim();if(!v||busy)return;
+busy=true;$("send").disabled=true;add(v,"u");q.value="";
+const out=add("Menyiapkan jawaban…","a hint");
+try{
+const sample=await claude.use("sample");
+if(!sample){out.className="m a err";out.textContent="Chatbot hanya aktif saat halaman dibuka di Claude. Anda tetap bisa menyalin prompt dari perpustakaan di bawah.";return}
+hist.push({role:"user",content:v});
+const input=hist.map((h,i)=>i===0?{role:"user",content:"Instruksi peran (ikuti selama percakapan, jawab dalam bahasa Indonesia, ringkas dan terstruktur):\n"+T[mode].master+"\n\nPesan pertama saya:\n"+h.content}:h);
+const r=await sample(input,{cache:false,onText:({text})=>{out.className="m a";out.textContent=text;msgs.scrollTop=msgs.scrollHeight}});
+out.className="m a";out.textContent=r.text;hist.push({role:"assistant",content:r.text});
+}catch(err){hist.pop();out.className="m a err";out.textContent=err&&err.code==="rate_limited"?"Terlalu banyak permintaan. Tunggu sebentar lalu kirim lagi.":err&&err.code==="not_granted"?"Izin chatbot belum diberikan. Kirim ulang pesan dan setujui permintaan izin.":"Jawaban gagal dibuat. Kirim ulang pesan Anda."}
+finally{busy=false;$("send").disabled=false}};
+q.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("f").requestSubmit()}};
+drawModes();intro();drawTabs();drawLib();
+</script>
+</body>
+</html>

@@ -10,6 +10,166 @@
 
 const APLIKASI = [
   {
+    nama: "Dompetku – Keuangan Pribadi",
+    kategori: "Keuangan",
+    jenis: "HTML",
+    deskripsi: "Catat pemasukan dan pengeluaran, anggaran per kategori, batas aman belanja per hari, grafik harian, dan perkiraan akhir bulan. Versi ini menyimpan data di perangkat; versi Google Sheets ada di repo kode-apps-script.",
+    tanggal: "2026-11-17",
+    tautan: "dompetku/",
+    status: "aktif"
+  },
+  {
+    nama: "E-Course Pendidikan Karakter di Sekolah",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Lima modul untuk guru dan kepala sekolah: konsep karakter, kebijakan Kemendikdasmen 2026, empat jalur penerapan, langkah kepala sekolah, dan lembar kerja program, dengan kuis dan tanda selesai.",
+    tanggal: "2026-11-16",
+    tautan: "ecourse-pendidikan-karakter/",
+    status: "aktif"
+  },
+  {
+    nama: "Jurnal Harian Kepala Sekolah",
+    kategori: "Sekolah",
+    jenis: "HTML",
+    deskripsi: "Catat kegiatan harian kepala sekolah lengkap dengan kategori, tempat, hasil, tindak lanjut, dan foto; bisa dicetak, diunduh, dan diimpor.",
+    tanggal: "2026-11-16",
+    tautan: "jurnal-harian-ks/",
+    status: "aktif"
+  },
+  {
+    nama: "PRANATA – Administrasi Kepala Sekolah",
+    kategori: "Sekolah",
+    jenis: "HTML",
+    deskripsi: "Sistem administrasi kepala sekolah yang disusun menurut tugas pokok: perencanaan, supervisi, manajerial, kewirausahaan, dan dokumen.",
+    tanggal: "2026-11-15",
+    tautan: "pranata/",
+    status: "aktif"
+  },
+  {
+    nama: "Kamus Tiga Bahasa",
+    kategori: "Pembelajaran",
+    jenis: "AI Tool",
+    deskripsi: "Kamus Inggris, Indonesia, dan Jawa (ngoko, krama, krama inggil) dengan latihan dan gambar AI (isi kunci API Gemini).",
+    tanggal: "2026-11-14",
+    tautan: "kamus-tiga-bahasa/",
+    status: "aktif"
+  },
+  {
+    nama: "Aset Pintar",
+    kategori: "AI Tool",
+    jenis: "AI Tool",
+    deskripsi: "Mesin analisis aset sekolah dari Buku Inventaris/KIB dan rekap aset: ringkasan kondisi, temuan, dan rekomendasi. Data sekolah diimpor sendiri.",
+    tanggal: "2026-11-11",
+    tautan: "aset-pintar/",
+    status: "aktif"
+  },
+  {
+    nama: "RKAS Pintar",
+    kategori: "AI Tool",
+    jenis: "AI Tool",
+    deskripsi: "Agen AI untuk bendahara sekolah menyusun RKAS Dana BOS sesuai juknis.",
+    tanggal: "2026-11-11",
+    tautan: "rkas-pintar/",
+    status: "aktif"
+  },
+  {
+    nama: "Bendahara Revit Pintar",
+    kategori: "Sekolah",
+    jenis: "AI Tool",
+    deskripsi: "Agen AI bendahara P2SP revitalisasi SMP 2026: transaksi, upah tenaga kerja, buku kas, laporan, dan pemeriksaan otomatis.",
+    tanggal: "2026-11-11",
+    tautan: "bendahara-revit-pintar/",
+    status: "aktif"
+  },
+  {
+    nama: "Rapor Pintar",
+    kategori: "AI Tool",
+    jenis: "AI Tool",
+    deskripsi: "Analisis hasil Rapor Pendidikan dan rencana tindak lanjut sekolah. Impor file Rapor Pendidikan sekolah Anda.",
+    tanggal: "2026-11-11",
+    tautan: "rapor-pintar/",
+    status: "aktif"
+  },
+  {
+    nama: "Kas Sekawan Touring Club",
+    kategori: "Keuangan",
+    jenis: "HTML",
+    deskripsi: "Kas kelompok 5 anggota: iuran per orang, pengeluaran, saldo, dan riwayat.",
+    tanggal: "2026-11-05",
+    tautan: "kas-sekawan/",
+    status: "aktif"
+  },
+  {
+    nama: "Latihan TKAD Bahasa Inggris – Paket A",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Latihan soal TKAD Bahasa Inggris Paket A Tahap 1 dengan tampilan seperti aplikasi TKA.",
+    tanggal: "2026-11-04",
+    tautan: "latihan-tkad-inggris/",
+    status: "aktif"
+  },
+  {
+    nama: "7 Gerakan Indonesia Hebat",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Ceklis kebiasaan harian 7 Kebiasaan Anak Indonesia Hebat dengan rekap 7 hari dan cetak.",
+    tanggal: "2026-11-02",
+    tautan: "7-gerakan/",
+    status: "aktif"
+  },
+  {
+    nama: "Infak Siswa",
+    kategori: "Keuangan",
+    jenis: "HTML",
+    deskripsi: "Pencatatan infak harian kelas 7, 8, dan 9: pemasukan, total, pengeluaran, dan salin rekap.",
+    tanggal: "2026-10-30",
+    tautan: "infak-siswa/",
+    status: "aktif"
+  },
+  {
+    nama: "Sahabat Kepsek",
+    kategori: "AI Tool",
+    jenis: "AI Tool",
+    deskripsi: "Asisten tanya jawab kepala sekolah SMP/MTs: regulasi, BOS/BOSP, dokumen sekolah, dan surat dinas.",
+    tanggal: "2026-10-21",
+    tautan: "sahabat-kepsek/",
+    status: "aktif"
+  },
+  {
+    nama: "Asisten Kepala Sekolah",
+    kategori: "AI Tool",
+    jenis: "AI Tool",
+    deskripsi: "Chatbot dan prompt siap pakai untuk tugas manajerial, kewirausahaan, dan supervisi kepala sekolah.",
+    tanggal: "2026-10-21",
+    tautan: "asisten-kepala-sekolah/",
+    status: "aktif"
+  },
+  {
+    nama: "Asisten MKKS SMP",
+    kategori: "Organisasi",
+    jenis: "AI Tool",
+    deskripsi: "Asisten untuk kepala sekolah anggota MKKS: regulasi, juknis BOS/BOSP, dokumen sekolah, dan draf surat.",
+    tanggal: "2026-10-10",
+    tautan: "asisten-mkks/",
+    status: "aktif"
+  },
+  {
+    nama: "ATUR PRIKSA",
+    kategori: "Sekolah",
+    jenis: "Apps Script",
+    deskripsi: "Layanan izin siswa: orang tua atau siswa melaporkan siswa yang tidak masuk atau tidak ikut kegiatan sekolah. Kode tersimpan di repo privat kode-apps-script.",
+    tanggal: "2026-11-14",
+    status: "kode"
+  },
+  {
+    nama: "JAGA KELAS",
+    kategori: "Sekolah",
+    jenis: "Apps Script",
+    deskripsi: "Lapor kelas kosong oleh ketua kelas dengan dasbor guru piket (bit.ly/jaga_kelas). Kode tersimpan di repo privat kode-apps-script.",
+    tanggal: "2026-11-14",
+    status: "kode"
+  },
+  {
     nama: "Belajar Mengaji untuk Pemula",
     kategori: "Pembelajaran",
     jenis: "HTML",
@@ -85,24 +245,10 @@ const APLIKASI = [
     status: "segera"
   },
   {
-    nama: "Kas 5 Sekawan Tour",
-    kategori: "Keuangan",
-    jenis: "HTML",
-    deskripsi: "Kas kelompok: iuran per orang, total, pengeluaran, dan saldo.",
-    status: "segera"
-  },
-  {
     nama: "SIMPATI",
     kategori: "Sekolah",
     jenis: "Apps Script",
     deskripsi: "Sistem Informasi Monitoring Presensi dan Tata Tertib untuk guru piket.",
-    status: "segera"
-  },
-  {
-    nama: "Infak Siswa",
-    kategori: "Keuangan",
-    jenis: "HTML",
-    deskripsi: "Pencatatan infak harian kelas 7, 8, dan 9: pemasukan, total, dan pengeluaran.",
     status: "segera"
   },
   {

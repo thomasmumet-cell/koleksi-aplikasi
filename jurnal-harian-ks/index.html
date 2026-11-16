@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jurnal Harian Kepala Sekolah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Tata letak: buku agenda. Kolom tanggal di kiri seperti tepi buku, kegiatan berjajar di kanan menurut jam. */
+:root{
+  --kertas:#f4f6f9;
+  --lembar:#ffffff;
+  --tinta:#16233a;
+  --redup:#5b6880;
+  --garis:#d6dce6;
+  --nila:#24457a;
+  --nila-lembut:#e6ecf6;
+  --stabilo:#b9770e;
+  --bahaya:#a8322a;
+  --f-judul:"Bitter", Georgia, "Times New Roman", serif;
+  --f-isi:"Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --kertas:#10161f; --lembar:#18212e; --tinta:#e7ecf4; --redup:#9aa7bb; --garis:#2c3849;
+    --nila:#8fb1ea; --nila-lembut:#1f2c42; --stabilo:#e0a542; --bahaya:#ef8b82;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --kertas:#10161f; --lembar:#18212e; --tinta:#e7ecf4; --redup:#9aa7bb; --garis:#2c3849;
+  --nila:#8fb1ea; --nila-lembut:#1f2c42; --stabilo:#e0a542; --bahaya:#ef8b82;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--kertas);color:var(--tinta);font-family:var(--f-isi);font-size:16px;line-height:1.5}
+img{max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--stabilo);outline-offset:2px}
+.wadah{max-width:980px;margin:0 auto;padding:20px 16px 64px;display:flex;flex-direction:column;gap:18px}
+
+header.kop{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;border-bottom:3px double var(--nila);padding-bottom:14px}
+.kop h1{font-family:var(--f-judul);font-weight:700;font-size:1.7rem;line-height:1.15;margin:0;text-wrap:balance}
+.kop .ident{color:var(--redup);font-size:.95rem;margin-top:4px}
+.kop .ident button{background:none;border:0;padding:0;color:var(--nila);text-decoration:underline;cursor:pointer}
+
+.aksi{display:flex;flex-wrap:wrap;gap:8px}
+.tb{border:1px solid var(--garis);background:var(--lembar);border-radius:8px;padding:9px 14px;cursor:pointer;font-weight:600;font-size:.95rem}
+.tb:hover{border-color:var(--nila)}
+.tb.utama{background:var(--nila);border-color:var(--nila);color:var(--lembar)}
+.tb.bahaya{color:var(--bahaya);border-color:var(--bahaya)}
+.tb[disabled]{opacity:.55;cursor:default}
+.tb.kecil{padding:6px 10px;font-size:.85rem}
+
+.pita{border:1px solid var(--garis);border-left:4px solid var(--stabilo);background:var(--lembar);border-radius:6px;padding:10px 14px;font-size:.93rem;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.pita[hidden]{display:none}
+
+.saring{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bulan{display:flex;align-items:center;gap:4px}
+.bulan strong{font-family:var(--f-judul);font-size:1.15rem;min-width:11ch;text-align:center}
+.bulan button{width:36px;height:36px;border-radius:8px;border:1px solid var(--garis);background:var(--lembar);cursor:pointer;font-size:1.1rem;line-height:1}
+.saring input[type=search],.saring select{border:1px solid var(--garis);background:var(--lembar);border-radius:8px;padding:8px 10px;min-width:0}
+.saring input[type=search]{flex:1 1 160px}
+.saring label.cek{display:flex;gap:6px;align-items:center;font-size:.93rem;color:var(--redup)}
+
+.ringkas{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:baseline;font-size:.95rem;color:var(--redup)}
+.ringkas b{font-family:var(--f-judul);font-size:1.25rem;color:var(--tinta);font-variant-numeric:tabular-nums;margin-right:4px}
+.kat-baris{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--nila-lembut);color:var(--nila);border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:600;white-space:nowrap}
+
+#daftar{display:flex;flex-direction:column;gap:14px}
+.hari{display:grid;grid-template-columns:92px 1fr;background:var(--lembar);border:1px solid var(--garis);border-radius:10px;overflow:hidden}
+.tgl{background:var(--nila-lembut);padding:14px 8px;text-align:center;display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--garis)}
+.tgl-n{font-family:var(--f-judul);font-weight:700;font-size:2rem;line-height:1;color:var(--nila);font-variant-numeric:tabular-nums}
+.tgl-h{font-weight:700;font-size:.9rem}
+.tgl-b{font-size:.78rem;color:var(--redup)}
+.tgl.kini .tgl-h::after{content:" · hari ini";color:var(--stabilo);font-weight:600}
+.acara{list-style:none;margin:0;padding:0}
+.acara li+li{border-top:1px dashed var(--garis)}
+.entri{display:grid;grid-template-columns:104px 1fr;gap:12px;width:100%;text-align:left;background:none;border:0;padding:12px 14px;cursor:pointer}
+.entri:hover{background:var(--kertas)}
+.jam{font-variant-numeric:tabular-nums;font-weight:600;color:var(--nila);font-size:.92rem;padding-top:2px}
+.isi{display:flex;flex-direction:column;gap:4px;min-width:0}
+.isi strong{font-size:1.02rem;overflow-wrap:anywhere}
+.meta{font-size:.82rem;color:var(--redup);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.ur{font-size:.92rem;color:var(--redup);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.thumbs{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.thumbs img{width:56px;height:56px;object-fit:cover;border-radius:6px;border:1px solid var(--garis)}
+.kosong{background:var(--lembar);border:1px dashed var(--garis);border-radius:10px;padding:32px 20px;text-align:center;color:var(--redup);display:flex;flex-direction:column;gap:12px;align-items:center}
+
+dialog{border:1px solid var(--garis);border-radius:12px;background:var(--lembar);color:var(--tinta);padding:0;width:min(680px,calc(100vw - 24px));max-height:calc(100% - 24px)}
+dialog::backdrop{background:rgba(10,16,26,.55)}
+.dlg{display:flex;flex-direction:column;gap:14px;padding:20px}
+.dlg h2{font-family:var(--f-judul);font-size:1.25rem;margin:0;text-wrap:balance}
+.dlg p{margin:0;color:var(--redup);font-size:.93rem}
+.kisi{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.kisi>div{display:flex;flex-direction:column;gap:4px;grid-column:span 6;min-width:0}
+.kisi .s2{grid-column:span 2}.kisi .s3{grid-column:span 3}.kisi .s4{grid-column:span 4}
+label{font-size:.85rem;font-weight:600}
+.dlg input[type=text],.dlg input[type=date],.dlg input[type=time],.dlg select,.dlg textarea{border:1px solid var(--garis);background:var(--kertas);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
+.dlg textarea{min-height:76px;resize:vertical}
+.kaki{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.kaki .kiri{margin-right:auto}
+.galat{color:var(--bahaya);font-size:.9rem;font-weight:600}
+.galat:empty{display:none}
+.foto-kisi{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.foto-item{display:flex;flex-direction:column;gap:4px;border:1px solid var(--garis);border-radius:8px;padding:6px;background:var(--kertas)}
+.foto-item img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:5px}
+.foto-item input{font-size:.82rem;padding:5px 6px !important}
+.unggah{display:inline-flex;align-items:center;gap:8px;border:1px dashed var(--nila);color:var(--nila);border-radius:8px;padding:9px 14px;font-weight:600;cursor:pointer;width:fit-content}
+.unggah input{position:absolute;width:1px;height:1px;opacity:0}
+.unggah:focus-within{outline:3px solid var(--stabilo);outline-offset:2px}
+.rinci dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;margin:0}
+.rinci dt{color:var(--redup);font-size:.85rem;font-weight:600}
+.rinci dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.rinci figure{margin:0;display:flex;flex-direction:column;gap:4px}
+.rinci figure img{border-radius:8px;border:1px solid var(--garis);width:100%}
+.rinci figcaption{font-size:.82rem;color:var(--redup)}
+.pilihan{display:flex;flex-direction:column;gap:10px}
+.pilihan .tb{text-align:left;display:flex;flex-direction:column;gap:2px;font-weight:700}
+.pilihan .tb small{font-weight:400;color:var(--redup)}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--tinta);color:var(--kertas);padding:10px 16px;border-radius:8px;font-size:.92rem;max-width:calc(100vw - 32px);z-index:99}
+#toast[hidden]{display:none}
+
+@media (max-width:560px){
+  .hari{grid-template-columns:1fr}
+  .tgl{flex-direction:row;align-items:baseline;justify-content:flex-start;gap:8px;padding:8px 14px;border-right:0;border-bottom:1px solid var(--garis)}
+  .tgl-n{font-size:1.4rem}
+  .entri{grid-template-columns:1fr;gap:2px}
+  .kisi .s2,.kisi .s3,.kisi .s4{grid-column:span 6}
+  .kisi .w2{grid-column:span 3}
+  .rinci dl{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){.tb,.entri{transition:background .12s,border-color .12s}}
+</style>
+</head>
+<body>
+<div class="wadah">
+  <header class="kop">
+    <div>
+      <h1>Jurnal Harian Kepala Sekolah</h1>
+      <div class="ident" id="identTeks">Memuat…</div>
+    </div>
+    <div class="aksi">
+      <button class="tb utama" id="bTambah" type="button">+ Catat kegiatan</button>
+      <button class="tb" id="bCetak" type="button">Cetak</button>
+      <button class="tb" id="bUnduh" type="button">Unduh</button>
+      <button class="tb" id="bImpor" type="button">Impor</button>
+    </div>
+  </header>
+
+  <div class="pita" id="pita" hidden><span id="pitaTeks"></span><button class="tb kecil" id="pitaAksi" type="button" hidden></button></div>
+
+  <div class="saring">
+    <div class="bulan">
+      <button type="button" id="blnSeb" aria-label="Bulan sebelumnya">‹</button>
+      <strong id="blnTeks"></strong>
+      <button type="button" id="blnSes" aria-label="Bulan berikutnya">›</button>
+    </div>
+    <label class="cek"><input type="checkbox" id="semua"> Semua bulan</label>
+    <select id="fKat" aria-label="Saring kategori"><option value="">Semua kategori</option></select>
+    <input type="search" id="fCari" placeholder="Cari kegiatan, tempat, uraian" aria-label="Cari">
+  </div>
+
+  <div class="ringkas" id="ringkas"></div>
+  <main id="daftar" aria-live="polite"></main>
+</div>
+
+<!-- Formulir kegiatan -->
+<dialog id="dForm">
+  <form class="dlg" id="form" novalidate>
+    <h2 id="formJudul">Catat kegiatan</h2>
+    <div class="kisi">
+      <div class="s2 w2"><label for="iTanggal">Tanggal</label><input type="date" id="iTanggal" required></div>
+      <div class="s2 w2"><label for="iMulai">Mulai</label><input type="time" id="iMulai"></div>
+      <div class="s2 w2"><label for="iSelesai">Selesai</label><input type="time" id="iSelesai"></div>
+      <div class="s4"><label for="iKegiatan">Kegiatan</label><input type="text" id="iKegiatan" maxlength="200" placeholder="Contoh: Supervisi akademik kelas 8B" required></div>
+      <div class="s2"><label for="iKategori">Kategori</label><select id="iKategori"></select></div>
+      <div><label for="iTempat">Tempat</label><input type="text" id="iTempat" maxlength="150" placeholder="Contoh: Ruang kepala sekolah"></div>
+      <div><label for="iUraian">Uraian kegiatan</label><textarea id="iUraian" maxlength="4000"></textarea></div>
+      <div class="s3"><label for="iHasil">Hasil</label><textarea id="iHasil" maxlength="3000"></textarea></div>
+      <div class="s3"><label for="iTindak">Tindak lanjut</label><textarea id="iTindak" maxlength="3000"></textarea></div>
+      <div>
+        <label>Foto kegiatan (paling banyak 6)</label>
+        <div class="foto-kisi" id="fotoKisi"></div>
+        <label class="unggah"><input type="file" id="iFoto" accept="image/*" multiple>Tambah foto</label>
+      </div>
+    </div>
+    <div class="galat" id="formGalat" role="alert"></div>
+    <div class="kaki">
+      <button class="tb" type="button" data-tutup>Batal</button>
+      <button class="tb utama" type="submit" id="formSimpan">Simpan</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Rincian -->
+<dialog id="dRinci">
+  <div class="dlg rinci">
+    <h2 id="rJudul"></h2>
+    <dl id="rIsi"></dl>
+    <div class="foto-kisi" id="rFoto" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))"></div>
+    <div class="galat" id="rGalat" role="alert"></div>
+    <div class="kaki">
+      <button class="tb bahaya kiri" type="button" id="rHapus">Hapus</button>
+      <button class="tb" type="button" data-tutup>Tutup</button>
+      <button class="tb utama" type="button" id="rUbah">Ubah</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Identitas -->
+<dialog id="dIdent">
+  <form class="dlg" id="identForm" novalidate>
+    <h2>Identitas sekolah</h2>
+    <p>Dipakai pada kop dan tanda tangan di cetakan.</p>
+    <div class="kisi">
+      <div><label for="dSekolah">Nama sekolah</label><input type="text" id="dSekolah" maxlength="150"></div>
+      <div><label for="dAlamat">Alamat sekolah</label><input type="text" id="dAlamat" maxlength="250"></div>
+      <div class="s3"><label for="dKepala">Nama kepala sekolah (dengan gelar)</label><input type="text" id="dKepala" maxlength="150"></div>
+      <div class="s3"><label for="dNip">NIP</label><input type="text" id="dNip" maxlength="40"></div>
+      <div class="s3"><label for="dKota">Kota tempat tanda tangan</label><input type="text" id="dKota" maxlength="80"></div>
+    </div>
+    <div class="galat" id="identGalat" role="alert"></div>
+    <div class="kaki">
+      <button class="tb" type="button" data-tutup>Batal</button>
+      <button class="tb utama" type="submit">Simpan</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Cetak -->
+<dialog id="dCetak">
+  <form class="dlg" id="cetakForm" novalidate>
+    <h2>Cetak jurnal</h2>
+    <p>Jurnal disusun menjadi berkas PDF ukuran A4 mendatar, lengkap dengan kop, tabel kegiatan, tanda tangan, dan lampiran foto. Buka berkasnya lalu cetak.</p>
+    <div class="kisi">
+      <div class="s3 w2"><label for="cDari">Dari tanggal</label><input type="date" id="cDari" required></div>
+      <div class="s3 w2"><label for="cSampai">Sampai tanggal</label><input type="date" id="cSampai" required></div>
+      <div class="s3"><label for="cTtd">Tanggal tanda tangan</label><input type="date" id="cTtd"></div>
+      <div class="s3" style="justify-content:flex-end"><label class="cek" style="display:flex;gap:8px;font-weight:500"><input type="checkbox" id="cFoto" checked> Sertakan lampiran foto</label></div>
+    </div>
+    <div class="galat" id="cetakGalat" role="alert"></div>
+    <div class="kaki">
+      <button class="tb" type="button" data-tutup>Batal</button>
+      <button class="tb utama" type="submit" id="cetakBuat">Buat PDF</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Unduh -->
+<dialog id="dUnduh">
+  <div class="dlg">
+    <h2>Unduh data</h2>
+    <div class="pilihan">
+      <button class="tb" type="button" id="uExcel">Excel (.xlsx)<small id="uExcelKet"></small></button>
+      <button class="tb" type="button" id="uCadang">Cadangan lengkap (.json)<small>Semua kegiatan, identitas, dan foto. Dapat diimpor kembali di sini.</small></button>
+    </div>
+    <div class="galat" id="unduhGalat" role="alert"></div>
+    <div class="kaki"><button class="tb" type="button" data-tutup>Tutup</button></div>
+  </div>
+</dialog>
+
+<!-- Impor -->
+<dialog id="dImpor">
+  <div class="dlg">
+    <h2>Impor kegiatan</h2>
+    <p>Pilih berkas Excel atau CSV dengan kolom Tanggal, Mulai, Selesai, Kategori, Kegiatan, Tempat, Uraian, Hasil, Tindak Lanjut. Berkas cadangan (.json) dari aplikasi ini juga diterima, termasuk fotonya.</p>
+    <label class="unggah"><input type="file" id="iBerkas" accept=".xlsx,.xls,.csv,.json">Pilih berkas</label>
+    <div id="imporInfo" style="font-size:.95rem"></div>
+    <div class="galat" id="imporGalat" role="alert"></div>
+    <div class="kaki">
+      <button class="tb kiri" type="button" id="imporFormat">Unduh format Excel</button>
+      <button class="tb" type="button" data-tutup>Tutup</button>
+      <button class="tb utama" type="button" id="imporJalan" disabled>Impor</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="toast" role="status" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const HARI = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const KATEGORI = ['Manajerial','Supervisi','Kewirausahaan','Rapat dan koordinasi','Dinas luar','Layanan murid dan orang tua','Lainnya'];
+const MAKS_FOTO = 6, BATAS_DATA = 235000;
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const p2 = n => String(n).padStart(2, '0');
+const isoHariIni = () => { const d = new Date(); return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()); };
+const idBaru = h => (h || 'e') + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const bagi = iso => { const a = iso.split('-').map(Number); return new Date(a[0], a[1] - 1, a[2]); };
+const tglPanjang = iso => { const d = bagi(iso); return HARI[d.getDay()] + ', ' + d.getDate() + ' ' + BULAN[d.getMonth()] + ' ' + d.getFullYear(); };
+const tglSedang = iso => { const d = bagi(iso); return d.getDate() + ' ' + BULAN[d.getMonth()] + ' ' + d.getFullYear(); };
+const jam = e => { const a = (e.mulai || '').replace(':', '.'), b = (e.selesai || '').replace(':', '.'); return a && b ? a + '–' + b : (a || b || ''); };
+const gambarSah = s => typeof s === 'string' && /^data:image\/(jpeg|png|webp);base64,/.test(s);
+
+const st = { entri: [], ident: { sekolah: '', alamat: '', kepala: '', nip: '', kota: '' }, bulan: isoHariIni().slice(0, 7), semua: false, q: '', kat: '', siap: false };
+const fotoCache = new Map();
+let toko = null, unduhan = null;
+
+/* ---------- Penyimpanan ---------- */
+function tokoAwan(db, uid) {
+  const akar = db.doc('data/users/' + uid + '/jurnal');
+  const kol = akar.collection('entri');
+  return {
+    jenis: 'awan',
+    async muat() {
+      const [a, q] = await Promise.all([akar.get(), kol.limit(1000).get()]);
+      const ident = a.exists && a.data().identitas ? a.data().identitas : null;
+      return { ident, entri: q.docs.map(d => Object.assign({}, d.data(), { id: d.id })) };
+    },
+    simpanIdent: ident => akar.set({ identitas: ident }),
+    async simpanEntri(e, fotos) {
+      const badan = Object.assign({}, e); delete badan.id;
+      const ref = kol.doc(e.id);
+      await ref.set(badan);
+      if (fotos) {
+        const lama = fotoCache.get(e.id) || [];
+        for (const l of lama) if (!fotos.some(f => f.id === l.id)) await ref.collection('foto').doc(l.id).delete();
+        for (let i = 0; i < fotos.length; i++) {
+          const f = fotos[i];
+          if (f.kotor || f.urut !== i) await ref.collection('foto').doc(f.id).set({ data: f.data, thumb: f.thumb, ket: f.ket || '', urut: i });
+        }
+      }
+    },
+    async muatFoto(id) {
+      const q = await kol.doc(id).collection('foto').get();
+      return q.docs.map(d => Object.assign({}, d.data(), { id: d.id })).sort((a, b) => (a.urut || 0) - (b.urut || 0));
+    },
+    async hapusEntri(id, fotos) {
+      const ref = kol.doc(id);
+      for (const f of fotos) await ref.collection('foto').doc(f.id).delete();
+      await ref.delete();
+    }
+  };
+}
+function tokoLokal() {
+  const K = 'jurnal-ks-v1';
+  const baca = k => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } };
+  const tulis = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const hapus = k => { try { localStorage.removeItem(k); } catch (e) {} };
+  let ident = null, entri = [];
+  const rekam = () => tulis(K, { ident, entri });
+  return {
+    jenis: 'lokal',
+    async muat() { const d = baca(K) || {}; ident = d.ident || null; entri = d.entri || []; return { ident, entri: entri.slice() }; },
+    async simpanIdent(i) { ident = i; rekam(); },
+    async simpanEntri(e, fotos) {
+      entri = entri.filter(x => x.id !== e.id); entri.push(e); rekam();
+      if (fotos) tulis(K + '-f-' + e.id, fotos.map(f => ({ id: f.id, data: f.data, thumb: f.thumb, ket: f.ket || '' })));
+    },
+    async muatFoto(id) { return fotoCache.get(id) || baca(K + '-f-' + id) || []; },
+    async hapusEntri(id) { entri = entri.filter(x => x.id !== id); rekam(); hapus(K + '-f-' + id); }
+  };
+}
+const batasWaktu = (janji, ms) => Promise.race([janji, new Promise((_, tolak) => setTimeout(() => tolak({ code: 'waktu_habis' }), ms))]);
+function pesanGalat(e) {
+  const c = e && e.code;
+  if (c === 'quota_exceeded') return 'Ruang penyimpanan penuh. Unduh cadangan, lalu hapus catatan atau foto lama.';
+  if (c === 'waktu_habis' || c === 'unavailable') return 'Penyimpanan belum dapat dihubungi. Periksa sambungan internet lalu coba lagi.';
+  if (c === 'invalid_argument') return 'Data ditolak penyimpanan. Akun ini mungkin hanya boleh melihat, atau foto terlalu besar.';
+  if (c === 'declined') return 'Unduhan dibatalkan.';
+  if (c === 'rate_limited') return 'Terlalu banyak permintaan unduhan. Tunggu sebentar lalu coba lagi.';
+  return 'Terjadi kendala' + (e && e.message ? ': ' + e.message : '.') ;
+}
+async function fotoEntri(id) {
+  if (fotoCache.has(id)) return fotoCache.get(id);
+  const f = (await toko.muatFoto(id)).filter(x => gambarSah(x.data));
+  fotoCache.set(id, f);
+  return f;
+}
+
+/* ---------- Mulai ---------- */
+async function mulai() {
+  render();
+  let db = null, uid = null;
+  try {
+    if (window.claude && typeof window.claude.use === 'function') {
+      const hasil = await Promise.all([window.claude.use('db'), window.claude.use('user'), window.claude.use('downloads')]);
+      db = hasil[0]; unduhan = hasil[2];
+      uid = hasil[1] ? await hasil[1].id() : null;
+    }
+  } catch (e) {}
+  toko = db && uid ? tokoAwan(db, uid) : tokoLokal();
+  await muatData();
+}
+async function muatData() {
+  pita('');
+  try {
+    const d = await batasWaktu(toko.muat(), 10000);
+    if (d.ident) st.ident = Object.assign(st.ident, d.ident);
+    st.entri = d.entri;
+    st.siap = true;
+    if (toko.jenis === 'lokal') pita('Tampilan ini tidak tersambung ke penyimpanan akun. Catatan hanya tersimpan di peramban ini. Unduh cadangan agar aman.');
+    else if (!st.ident.sekolah) pita('Lengkapi identitas sekolah agar muncul pada kop cetakan.', 'Isi identitas', bukaIdent);
+  } catch (e) {
+    pita(pesanGalat(e), 'Coba lagi', muatData);
+  }
+  render();
+}
+function pita(teks, aksi, fn) {
+  $('#pita').hidden = !teks; $('#pitaTeks').textContent = teks || '';
+  const b = $('#pitaAksi'); b.hidden = !aksi; b.textContent = aksi || ''; b.onclick = fn || null;
+}
+let tTimer = 0;
+function toast(t, lama) {
+  const el = $('#toast'); el.textContent = t; el.hidden = false;
+  clearTimeout(tTimer); if (lama !== 0) tTimer = setTimeout(() => { el.hidden = true; }, lama || 3500);
+}
+
+/* ---------- Tampilan ---------- */
+function terpilih() {
+  const q = st.q.trim().toLowerCase();
+  return st.entri.filter(e =>
+    (st.semua || (e.tanggal || '').slice(0, 7) === st.bulan) &&
+    (!st.kat || e.kategori === st.kat) &&
+    (!q || [e.kegiatan, e.tempat, e.uraian, e.hasil, e.tindak, e.kategori].join(' ').toLowerCase().includes(q))
+  ).sort((a, b) => a.tanggal === b.tanggal ? (a.mulai || '').localeCompare(b.mulai || '') : (a.tanggal < b.tanggal ? 1 : -1));
+}
+function render() {
+  const i = st.ident;
+  const it = $('#identTeks');
+  it.innerHTML = (i.sekolah ? esc(i.sekolah) + (i.kepala ? ' · ' + esc(i.kepala) : '') + ' · ' : '') + '<button type="button" id="bIdent">' + (i.sekolah ? 'Ubah identitas' : 'Isi identitas sekolah') + '</button>';
+  $('#bIdent').onclick = bukaIdent;
+  const bl = st.bulan.split('-');
+  $('#blnTeks').textContent = st.semua ? 'Semua bulan' : BULAN[+bl[1] - 1] + ' ' + bl[0];
+  $('#blnSeb').disabled = $('#blnSes').disabled = st.semua;
+
+  const data = terpilih();
+  const hari = new Set(data.map(e => e.tanggal)).size;
+  const nFoto = data.reduce((n, e) => n + (e.nFoto || 0), 0);
+  const perKat = {};
+  data.forEach(e => { const k = e.kategori || 'Lainnya'; perKat[k] = (perKat[k] || 0) + 1; });
+  $('#ringkas').innerHTML = !st.siap ? '' :
+    '<span><b>' + data.length + '</b>kegiatan</span><span><b>' + hari + '</b>hari terisi</span><span><b>' + nFoto + '</b>foto</span>' +
+    '<span class="kat-baris">' + Object.keys(perKat).sort((a, b) => perKat[b] - perKat[a]).map(k => '<span class="chip">' + esc(k) + ' ' + perKat[k] + '</span>').join('') + '</span>';
+
+  const wadah = $('#daftar');
+  if (!st.siap) { wadah.innerHTML = '<div class="kosong">Memuat catatan…</div>'; return; }
+  if (!data.length) {
+    const ada = st.entri.length > 0;
+    wadah.innerHTML = '<div class="kosong"><div>' + (st.q || st.kat ? 'Tidak ada kegiatan yang cocok dengan saringan.' : ada ? 'Belum ada catatan pada ' + esc($('#blnTeks').textContent) + '.' : 'Jurnal masih kosong. Catat kegiatan pertama hari ini, atau impor dari Excel.') + '</div><button class="tb utama" type="button" id="kosongTambah">+ Catat kegiatan</button></div>';
+    $('#kosongTambah').onclick = () => bukaForm(null);
+    return;
+  }
+  const kini = isoHariIni();
+  const grup = [];
+  data.forEach(e => { const g = grup[grup.length - 1]; if (g && g.t === e.tanggal) g.a.push(e); else grup.push({ t: e.tanggal, a: [e] }); });
+  wadah.innerHTML = grup.map(g => {
+    const d = bagi(g.t);
+    return '<section class="hari"><div class="tgl' + (g.t === kini ? ' kini' : '') + '"><span class="tgl-n">' + d.getDate() + '</span><span class="tgl-h">' + HARI[d.getDay()] + '</span><span class="tgl-b">' + BULAN[d.getMonth()].slice(0, 3) + ' ' + d.getFullYear() + '</span></div><ol class="acara">' +
+      g.a.map(e => '<li><button class="entri" type="button" data-id="' + esc(e.id) + '"><span class="jam">' + esc(jam(e) || 'Tanpa jam') + '</span><span class="isi"><strong>' + esc(e.kegiatan) + '</strong><span class="meta"><span class="chip">' + esc(e.kategori || 'Lainnya') + '</span>' + (e.tempat ? '<span>' + esc(e.tempat) + '</span>' : '') + '</span>' +
+        (e.uraian ? '<span class="ur">' + esc(e.uraian) + '</span>' : '') +
+        ((e.thumbs || []).filter(gambarSah).length ? '<span class="thumbs">' + e.thumbs.filter(gambarSah).map(t => '<img alt="Foto kegiatan" src="' + esc(t) + '">').join('') + '</span>' : '') +
+        '</span></button></li>').join('') + '</ol></section>';
+  }).join('');
+}
+$('#daftar').addEventListener('click', ev => { const b = ev.target.closest('.entri'); if (b) bukaRinci(b.dataset.id); });
+function geserBulan(n) { const a = st.bulan.split('-').map(Number); const d = new Date(a[0], a[1] - 1 + n, 1); st.bulan = d.getFullYear() + '-' + p2(d.getMonth() + 1); render(); }
+$('#blnSeb').onclick = () => geserBulan(-1);
+$('#blnSes').onclick = () => geserBulan(1);
+$('#semua').onchange = e => { st.semua = e.target.checked; render(); };
+$('#fCari').oninput = e => { st.q = e.target.value; render(); };
+$('#fKat').onchange = e => { st.kat = e.target.value; render(); };
+KATEGORI.forEach(k => { $('#fKat').add(new Option(k, k)); $('#iKategori').add(new Option(k, k)); });
+document.querySelectorAll('[data-tutup]').forEach(b => b.onclick = () => b.closest('dialog').close());
+function buka(d) { if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', ''); }
+function harusSiap() { if (!st.siap) { toast('Catatan belum selesai dimuat.'); return false; } return true; }
+
+/* ---------- Identitas ---------- */
+function bukaIdent() {
+  if (!harusSiap()) return;
+  const i = st.ident;
+  $('#dSekolah').value = i.sekolah; $('#dAlamat').value = i.alamat; $('#dKepala').value = i.kepala; $('#dNip').value = i.nip; $('#dKota').value = i.kota;
+  $('#identGalat').textContent = ''; buka($('#dIdent'));
+}
+$('#identForm').onsubmit = async ev => {
+  ev.preventDefault();
+  const baru = { sekolah: $('#dSekolah').value.trim(), alamat: $('#dAlamat').value.trim(), kepala: $('#dKepala').value.trim(), nip: $('#dNip').value.trim(), kota: $('#dKota').value.trim() };
+  try { await toko.simpanIdent(baru); st.ident = baru; $('#dIdent').close(); if (toko.jenis === 'awan') pita(''); render(); toast('Identitas disimpan.'); }
+  catch (e) { $('#identGalat').textContent = pesanGalat(e); }
+};
+
+/* ---------- Foto ---------- */
+function muatGambar(src) { return new Promise((ok, gagal) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => gagal(new Error('gambar')); im.src = src; }); }
+function kecilkan(im, sisi, mutu) {
+  const r = Math.min(1, sisi / Math.max(im.naturalWidth, im.naturalHeight));
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(im.naturalWidth * r)); c.height = Math.max(1, Math.round(im.naturalHeight * r));
+  const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height);
+  return c.toDataURL('image/jpeg', mutu);
+}
+async function olahFoto(berkas) {
+  const url = URL.createObjectURL(berkas);
+  try {
+    const im = await muatGambar(url);
+    let sisi = 1280, mutu = 0.78, data = kecilkan(im, sisi, mutu);
+    while (data.length > BATAS_DATA && sisi > 480) { sisi = Math.round(sisi * 0.85); mutu = Math.max(0.5, mutu - 0.06); data = kecilkan(im, sisi, mutu); }
+    return { id: idBaru('f'), data, thumb: kecilkan(im, 160, 0.6), ket: '', kotor: true };
+  } finally { URL.revokeObjectURL(url); }
+}
+async function thumbDari(data) { return kecilkan(await muatGambar(data), 160, 0.6); }
+
+/* ---------- Formulir ---------- */
+let formId = null, formFoto = [];
+function renderFormFoto() {
+  $('#fotoKisi').innerHTML = formFoto.map((f, i) => '<div class="foto-item"><img alt="Foto ' + (i + 1) + '" src="' + esc(f.thumb || f.data) + '"><input type="text" id="ket' + i + '" data-i="' + i + '" maxlength="120" placeholder="Keterangan" aria-label="Keterangan foto ' + (i + 1) + '" value="' + esc(f.ket || '') + '"><button class="tb kecil" type="button" data-hapus="' + i + '">Buang foto</button></div>').join('');
+}
+$('#fotoKisi').addEventListener('input', ev => { const i = ev.target.dataset.i; if (i != null) { formFoto[+i].ket = ev.target.value; formFoto[+i].kotor = true; } });
+$('#fotoKisi').addEventListener('click', ev => { const i = ev.target.dataset.hapus; if (i != null) { formFoto.splice(+i, 1); renderFormFoto(); } });
+$('#iFoto').onchange = async ev => {
+  const berkas = Array.from(ev.target.files || []); ev.target.value = '';
+  $('#formGalat').textContent = '';
+  for (const b of berkas) {
+    if (formFoto.length >= MAKS_FOTO) { $('#formGalat').textContent = 'Paling banyak ' + MAKS_FOTO + ' foto untuk satu kegiatan.'; break; }
+    try { formFoto.push(await olahFoto(b)); renderFormFoto(); }
+    catch (e) { $('#formGalat').textContent = 'Berkas "' + b.name + '" tidak dapat dibaca sebagai foto. Gunakan JPG atau PNG.'; }
+  }
+};
+async function bukaForm(e) {
+  if (!harusSiap()) return;
+  formId = e ? e.id : null; formFoto = [];
+  $('#formJudul').textContent = e ? 'Ubah kegiatan' : 'Catat kegiatan';
+  $('#iTanggal').value = e ? e.tanggal : (st.semua || st.bulan === isoHariIni().slice(0, 7) ? isoHariIni() : st.bulan + '-01');
+  $('#iMulai').value = e ? e.mulai || '' : ''; $('#iSelesai').value = e ? e.selesai || '' : '';
+  $('#iKegiatan').value = e ? e.kegiatan : ''; $('#iKategori').value = e && KATEGORI.includes(e.kategori) ? e.kategori : KATEGORI[0];
+  $('#iTempat').value = e ? e.tempat || '' : ''; $('#iUraian').value = e ? e.uraian || '' : '';
+  $('#iHasil').value = e ? e.hasil || '' : ''; $('#iTindak').value = e ? e.tindak || '' : '';
+  $('#formGalat').textContent = ''; renderFormFoto(); buka($('#dForm'));
+  if (e && e.nFoto) {
+    $('#formSimpan').disabled = true;
+    try { formFoto = (await fotoEntri(e.id)).map((f, i) => Object.assign({}, f, { urut: i, kotor: false })); renderFormFoto(); }
+    catch (g) { $('#formGalat').textContent = 'Foto belum dapat dimuat. ' + pesanGalat(g); }
+    $('#formSimpan').disabled = false;
+  }
+}
+$('#bTambah').onclick = () => bukaForm(null);
+$('#form').onsubmit = async ev => {
+  ev.preventDefault();
+  const lama = formId ? st.entri.find(x => x.id === formId) : null;
+  const e = {
+    id: formId || idBaru(), tanggal: $('#iTanggal').value, mulai: $('#iMulai').value, selesai: $('#iSelesai').value,
+    kegiatan: $('#iKegiatan').value.trim(), kategori: $('#iKategori').value, tempat: $('#iTempat').value.trim(),
+    uraian: $('#iUraian').value.trim(), hasil: $('#iHasil').value.trim(), tindak: $('#iTindak').value.trim(),
+    thumbs: formFoto.map(f => f.thumb), nFoto: formFoto.length,
+    dibuat: lama && lama.dibuat ? lama.dibuat : new Date().toISOString(), diubah: new Date().toISOString()
+  };
+  const g = $('#formGalat');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(e.tanggal)) { g.textContent = 'Isi tanggal kegiatan.'; $('#iTanggal').focus(); return; }
+  if (!e.kegiatan) { g.textContent = 'Isi nama kegiatan.'; $('#iKegiatan').focus(); return; }
+  if (e.mulai && e.selesai && e.selesai < e.mulai) { g.textContent = 'Jam selesai lebih awal daripada jam mulai.'; return; }
+  const b = $('#formSimpan'); b.disabled = true; b.textContent = 'Menyimpan…'; g.textContent = '';
+  try {
+    await toko.simpanEntri(e, formFoto);
+    fotoCache.set(e.id, formFoto.map((f, i) => ({ id: f.id, data: f.data, thumb: f.thumb, ket: f.ket || '', urut: i })));
+    st.entri = st.entri.filter(x => x.id !== e.id).concat(e);
+    if (!st.semua) st.bulan = e.tanggal.slice(0, 7);
+    $('#dForm').close(); render(); toast('Kegiatan disimpan.');
+  } catch (x) { g.textContent = pesanGalat(x); }
+  b.disabled = false; b.textContent = 'Simpan';
+};
+
+/* ---------- Rincian ---------- */
+let rinciId = null, hapusYakin = false;
+async function bukaRinci(id) {
+  const e = st.entri.find(x => x.id === id); if (!e) return;
+  rinciId = id; hapusYakin = false; $('#rHapus').textContent = 'Hapus'; $('#rGalat').textContent = '';
+  $('#rJudul').textContent = e.kegiatan;
+  const baris = [['Hari, tanggal', tglPanjang(e.tanggal)], ['Waktu', jam(e)], ['Kategori', e.kategori], ['Tempat', e.tempat], ['Uraian', e.uraian], ['Hasil', e.hasil], ['Tindak lanjut', e.tindak]];
+  $('#rIsi').innerHTML = baris.filter(b => b[1]).map(b => '<dt>' + b[0] + '</dt><dd>' + esc(b[1]) + '</dd>').join('');
+  $('#rFoto').innerHTML = e.nFoto ? '<span style="color:var(--redup)">Memuat foto…</span>' : '';
+  buka($('#dRinci'));
+  if (e.nFoto) {
+    try {
+      const f = await fotoEntri(id); if (rinciId !== id) return;
+      $('#rFoto').innerHTML = f.map(x => '<figure><img alt="' + esc(x.ket || 'Foto kegiatan') + '" src="' + esc(x.data) + '">' + (x.ket ? '<figcaption>' + esc(x.ket) + '</figcaption>' : '') + '</figure>').join('');
+    } catch (g) { $('#rFoto').textContent = 'Foto belum dapat dimuat.'; }
+  }
+}
+$('#rUbah').onclick = () => { const e = st.entri.find(x => x.id === rinciId); $('#dRinci').close(); if (e) bukaForm(e); };
+$('#rHapus').onclick = async () => {
+  if (!hapusYakin) { hapusYakin = true; $('#rHapus').textContent = 'Ya, hapus kegiatan ini'; return; }
+  const e = st.entri.find(x => x.id === rinciId); if (!e) return;
+  $('#rHapus').disabled = true;
+  try {
+    const f = e.nFoto ? await fotoEntri(e.id) : [];
+    await toko.hapusEntri(e.id, f);
+    fotoCache.delete(e.id); st.entri = st.entri.filter(x => x.id !== e.id);
+    $('#dRinci').close(); render(); toast('Kegiatan dihapus.');
+  } catch (g) { $('#rGalat').textContent = pesanGalat(g); }
+  $('#rHapus').disabled = false;
+};
+
+/* ---------- Simpan berkas ---------- */
+async function simpanBerkas(nama, data) {
+  if (unduhan) { await unduhan.save({ filename: nama, data }); return; }
+  const blob = data instanceof Blob ? data : new Blob([data]);
+  const url = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = url; a.download = nama; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  toast('Jika berkas tidak terunduh, buka halaman ini langsung di claude.ai lalu ulangi.', 6000);
+}
+
+/* ---------- Unduh ---------- */
+const KOLOM = ['No', 'Tanggal', 'Hari', 'Mulai', 'Selesai', 'Kategori', 'Kegiatan', 'Tempat', 'Uraian', 'Hasil', 'Tindak Lanjut', 'Jumlah Foto'];
+function urutNaik(a) { return a.slice().sort((x, y) => x.tanggal === y.tanggal ? (x.mulai || '').localeCompare(y.mulai || '') : (x.tanggal < y.tanggal ? -1 : 1)); }
+$('#bUnduh').onclick = () => {
+  if (!harusSiap()) return;
+  $('#uExcelKet').textContent = terpilih().length + ' kegiatan sesuai saringan saat ini (' + $('#blnTeks').textContent + '). Tanpa foto.';
+  $('#unduhGalat').textContent = ''; buka($('#dUnduh'));
+};
+function bukuExcel(baris, lebar) {
+  const ws = XLSX.utils.aoa_to_sheet(baris); ws['!cols'] = lebar.map(w => ({ wch: w }));
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Jurnal');
+  return new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'array' })]);
+}
+$('#uExcel').onclick = async () => {
+  const g = $('#unduhGalat'); g.textContent = '';
+  if (!window.XLSX) { g.textContent = 'Pustaka Excel gagal dimuat. Periksa sambungan internet lalu muat ulang halaman.'; return; }
+  const data = urutNaik(terpilih());
+  if (!data.length) { g.textContent = 'Tidak ada kegiatan pada saringan saat ini.'; return; }
+  const baris = [KOLOM].concat(data.map((e, i) => [i + 1, e.tanggal, HARI[bagi(e.tanggal).getDay()], e.mulai || '', e.selesai || '', e.kategori || '', e.kegiatan, e.tempat || '', e.uraian || '', e.hasil || '', e.tindak || '', e.nFoto || 0]));
+  try { await simpanBerkas('Jurnal-Harian-KS-' + (st.semua ? 'semua' : st.bulan) + '.xlsx', bukuExcel(baris, [5, 12, 9, 8, 8, 22, 36, 22, 50, 36, 36, 8])); $('#dUnduh').close(); }
+  catch (e) { g.textContent = pesanGalat(e); }
+};
+$('#uCadang').onclick = async () => {
+  const g = $('#unduhGalat'); g.textContent = '';
+  const b = $('#uCadang'); b.disabled = true;
+  try {
+    const keluar = [];
+    const semua = urutNaik(st.entri);
+    for (let i = 0; i < semua.length; i++) {
+      const e = semua[i];
+      if (e.nFoto) toast('Menyiapkan foto ' + (i + 1) + ' dari ' + semua.length + ' kegiatan…', 0);
+      const f = e.nFoto ? await fotoEntri(e.id) : [];
+      const s = Object.assign({}, e); delete s.thumbs; delete s.nFoto;
+      s.foto = f.map(x => ({ data: x.data, ket: x.ket || '' }));
+      keluar.push(s);
+    }
+    $('#toast').hidden = true;
+    await simpanBerkas('Cadangan-Jurnal-KS-' + isoHariIni() + '.json', new Blob([JSON.stringify({ aplikasi: 'jurnal-harian-ks', versi: 1, dibuat: new Date().toISOString(), identitas: st.ident, entri: keluar })]));
+    $('#dUnduh').close();
+  } catch (e) { $('#toast').hidden = true; g.textContent = pesanGalat(e); }
+  b.disabled = false;
+};
+
+/* ---------- Impor ---------- */
+let antre = null;
+const KUNCI = { tanggal: 'tanggal', haritanggal: 'tanggal', tgl: 'tanggal', mulai: 'mulai', waktumulai: 'mulai', jammulai: 'mulai', waktu: 'mulai', jam: 'mulai', pukul: 'mulai', selesai: 'selesai', waktuselesai: 'selesai', jamselesai: 'selesai', kategori: 'kategori', kegiatan: 'kegiatan', namakegiatan: 'kegiatan', judul: 'kegiatan', tempat: 'tempat', lokasi: 'tempat', uraian: 'uraian', uraiankegiatan: 'uraian', deskripsi: 'uraian', hasil: 'hasil', hasilkegiatan: 'hasil', tindaklanjut: 'tindak', rtl: 'tindak', rencanatindaklanjut: 'tindak' };
+function keTanggal(v) {
+  if (v == null || v === '') return '';
+  if (typeof v === 'number' && window.XLSX) { const d = XLSX.SSF.parse_date_code(v); return d && d.y ? d.y + '-' + p2(d.m) + '-' + p2(d.d) : ''; }
+  const s = String(v).trim().replace(/^[A-Za-z']+,\s*/, '');
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if (m) return sah(+m[1], +m[2], +m[3]);
+  m = s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})$/); if (m) return sah(+m[3] < 100 ? 2000 + +m[3] : +m[3], +m[2], +m[1]);
+  m = s.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+  if (m) { const b = BULAN.findIndex(x => x.toLowerCase().slice(0, 3) === m[2].toLowerCase().slice(0, 3)); if (b >= 0) return sah(+m[3], b + 1, +m[1]); }
+  return '';
+}
+function sah(y, m, d) { const t = new Date(y, m - 1, d); return t.getFullYear() === y && t.getMonth() === m - 1 && t.getDate() === d ? y + '-' + p2(m) + '-' + p2(d) : ''; }
+function keJam(v) {
+  if (v == null || v === '') return '';
+  if (typeof v === 'number') { const mnt = Math.round((v % 1) * 1440); return p2(Math.floor(mnt / 60) % 24) + ':' + p2(mnt % 60); }
+  const m = String(v).trim().match(/^(\d{1,2})[:.](\d{2})/); return m && +m[1] < 24 && +m[2] < 60 ? p2(+m[1]) + ':' + m[2] : '';
+}
+const teks = (v, n) => String(v == null ? '' : v).trim().slice(0, n);
+function rapikan(r) {
+  const tanggal = keTanggal(r.tanggal), kegiatan = teks(r.kegiatan, 200);
+  if (!tanggal || !kegiatan) return null;
+  const kat = teks(r.kategori, 60);
+  return { tanggal, kegiatan, mulai: keJam(r.mulai), selesai: keJam(r.selesai), kategori: KATEGORI.find(k => k.toLowerCase() === kat.toLowerCase()) || 'Lainnya', tempat: teks(r.tempat, 150), uraian: teks(r.uraian, 4000), hasil: teks(r.hasil, 3000), tindak: teks(r.tindak, 3000) };
+}
+const sidik = e => [e.tanggal, e.mulai || '', (e.kegiatan || '').toLowerCase()].join('|');
+$('#bImpor').onclick = () => { if (!harusSiap()) return; antre = null; $('#imporInfo').textContent = ''; $('#imporGalat').textContent = ''; $('#imporJalan').disabled = true; buka($('#dImpor')); };
+$('#iBerkas').onchange = async ev => {
+  const b = ev.target.files && ev.target.files[0]; ev.target.value = ''; if (!b) return;
+  const g = $('#imporGalat'), info = $('#imporInfo'); g.textContent = ''; info.textContent = ''; antre = null; $('#imporJalan').disabled = true;
+  try {
+    let masuk = [], lewati = 0, ident = null;
+    if (/\.json$/i.test(b.name)) {
+      const j = JSON.parse(await b.text());
+      if (!j || !Array.isArray(j.entri)) throw new Error('bentuk');
+      ident = j.identitas && typeof j.identitas === 'object' ? j.identitas : null;
+      j.entri.forEach(r => {
+        const e = rapikan(r || {}); if (!e) { lewati++; return; }
+        e.id = typeof r.id === 'string' && /^[A-Za-z0-9_-]{4,40}$/.test(r.id) ? r.id : idBaru();
+        e.foto = (Array.isArray(r.foto) ? r.foto : []).filter(f => f && gambarSah(f.data) && f.data.length <= 250000).slice(0, MAKS_FOTO).map(f => ({ data: f.data, ket: teks(f.ket, 120) }));
+        masuk.push(e);
+      });
+    } else {
+      if (!window.XLSX) throw new Error('pustaka');
+      const wb = XLSX.read(await b.arrayBuffer(), { type: 'array' });
+      const baris = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '', raw: true });
+      const ada = new Set(st.entri.map(sidik));
+      baris.forEach(r => {
+        const n = {}; Object.keys(r).forEach(k => { const kk = KUNCI[k.toLowerCase().replace(/[^a-z]/g, '')]; if (kk && (n[kk] == null || n[kk] === '')) n[kk] = r[k]; });
+        const e = rapikan(n); if (!e || ada.has(sidik(e))) { lewati++; return; }
+        ada.add(sidik(e)); e.id = idBaru(); e.foto = null; masuk.push(e);
+      });
+    }
+    if (!masuk.length) { g.textContent = 'Tidak ada kegiatan baru yang dapat diimpor dari berkas ini. Pastikan ada kolom Tanggal dan Kegiatan.'; return; }
+    antre = { masuk, ident };
+    const nf = masuk.reduce((n, e) => n + (e.foto ? e.foto.length : 0), 0);
+    info.textContent = b.name + ': ' + masuk.length + ' kegiatan siap diimpor' + (nf ? ', ' + nf + ' foto' : '') + (lewati ? '. ' + lewati + ' baris dilewati (sudah ada atau tanpa tanggal dan kegiatan)' : '') + '.';
+    $('#imporJalan').disabled = false;
+  } catch (e) {
+    g.textContent = e.message === 'pustaka' ? 'Pustaka Excel gagal dimuat. Periksa sambungan internet lalu muat ulang halaman.' : 'Berkas tidak dapat dibaca. Gunakan format Excel dari tombol di bawah, atau berkas cadangan dari aplikasi ini.';
+  }
+};
+$('#imporJalan').onclick = async () => {
+  if (!antre) return;
+  const b = $('#imporJalan'), g = $('#imporGalat'), info = $('#imporInfo'); b.disabled = true; g.textContent = '';
+  const masuk = antre.masuk; let jadi = 0;
+  try {
+    if (antre.ident && !st.ident.sekolah) {
+      const i = antre.ident, baru = { sekolah: teks(i.sekolah, 150), alamat: teks(i.alamat, 250), kepala: teks(i.kepala, 150), nip: teks(i.nip, 40), kota: teks(i.kota, 80) };
+      await toko.simpanIdent(baru); st.ident = baru;
+    }
+    for (const m of masuk) {
+      info.textContent = 'Mengimpor ' + (jadi + 1) + ' dari ' + masuk.length + '…';
+      let fotos = null;
+      const lama = st.entri.find(x => x.id === m.id);
+      if (m.foto) {
+        if (lama && lama.nFoto) await fotoEntri(m.id);
+        fotos = [];
+        for (const f of m.foto) fotos.push({ id: idBaru('f'), data: f.data, thumb: await thumbDari(f.data), ket: f.ket, kotor: true });
+      }
+      const e = Object.assign({}, m, { thumbs: fotos ? fotos.map(f => f.thumb) : [], nFoto: fotos ? fotos.length : 0, dibuat: lama && lama.dibuat ? lama.dibuat : new Date().toISOString(), diubah: new Date().toISOString() });
+      delete e.foto;
+      await toko.simpanEntri(e, fotos || []);
+      fotoCache.set(e.id, (fotos || []).map((f, i) => ({ id: f.id, data: f.data, thumb: f.thumb, ket: f.ket, urut: i })));
+      st.entri = st.entri.filter(x => x.id !== e.id).concat(e); jadi++;
+    }
+    antre = null; $('#dImpor').close(); st.semua = true; $('#semua').checked = true; render(); toast(jadi + ' kegiatan diimpor.');
+  } catch (e) {
+    info.textContent = jadi + ' dari ' + masuk.length + ' kegiatan sudah masuk.'; g.textContent = pesanGalat(e); antre = null; render();
+  }
+};
+$('#imporFormat').onclick = async () => {
+  const g = $('#imporGalat'); g.textContent = '';
+  if (!window.XLSX) { g.textContent = 'Pustaka Excel gagal dimuat. Periksa sambungan internet lalu muat ulang halaman.'; return; }
+  const baris = [['Tanggal', 'Mulai', 'Selesai', 'Kategori', 'Kegiatan', 'Tempat', 'Uraian', 'Hasil', 'Tindak Lanjut'],
+    ['16/11/2026', '07:00', '07:30', 'Manajerial', 'CONTOH: Briefing pagi guru dan karyawan (hapus baris ini)', 'Ruang guru', 'Penyampaian agenda pekan ini', 'Agenda dipahami semua guru', 'Pantau pelaksanaan hari Jumat'],
+    ['Kategori yang dikenali: ' + KATEGORI.join(', ') + '. Tanggal boleh 16/11/2026 atau 2026-11-16.']];
+  try { await simpanBerkas('Format-Impor-Jurnal-KS.xlsx', bukuExcel(baris, [12, 8, 8, 22, 40, 22, 40, 30, 30])); }
+  catch (e) { g.textContent = pesanGalat(e); }
+};
+
+/* ---------- Cetak PDF ---------- */
+$('#bCetak').onclick = () => {
+  if (!harusSiap()) return;
+  const data = terpilih();
+  let dari, sampai;
+  if (st.semua && data.length) { const u = urutNaik(data); dari = u[0].tanggal; sampai = u[u.length - 1].tanggal; }
+  else { const a = st.bulan.split('-').map(Number); dari = st.bulan + '-01'; sampai = st.bulan + '-' + p2(new Date(a[0], a[1], 0).getDate()); }
+  $('#cDari').value = dari; $('#cSampai').value = sampai; $('#cTtd').value = isoHariIni() < sampai ? isoHariIni() : sampai;
+  $('#cetakGalat').textContent = ''; buka($('#dCetak'));
+};
+$('#cetakForm').onsubmit = async ev => {
+  ev.preventDefault();
+  const g = $('#cetakGalat'); g.textContent = '';
+  const dari = $('#cDari').value, sampai = $('#cSampai').value, ttd = $('#cTtd').value || isoHariIni();
+  if (!dari || !sampai || sampai < dari) { g.textContent = 'Periksa rentang tanggal.'; return; }
+  if (!window.jspdf || !window.jspdf.jsPDF || typeof window.jspdf.jsPDF.API.autoTable !== 'function') { g.textContent = 'Pustaka PDF gagal dimuat. Periksa sambungan internet lalu muat ulang halaman.'; return; }
+  const data = urutNaik(st.entri.filter(e => e.tanggal >= dari && e.tanggal <= sampai));
+  if (!data.length) { g.textContent = 'Tidak ada kegiatan pada rentang tanggal ini.'; return; }
+  const b = $('#cetakBuat'); b.disabled = true; b.textContent = 'Menyusun…';
+  try {
+    const lampiran = [];
+    if ($('#cFoto').checked) for (const e of data) if (e.nFoto) { const f = await fotoEntri(e.id); if (f.length) lampiran.push({ e, f }); }
+    await simpanBerkas('Jurnal-Harian-KS-' + dari + '-sd-' + sampai + '.pdf', susunPdf(data, lampiran, dari, sampai, ttd));
+    $('#dCetak').close();
+  } catch (e) { g.textContent = pesanGalat(e); }
+  b.disabled = false; b.textContent = 'Buat PDF';
+};
+function susunPdf(data, lampiran, dari, sampai, ttd) {
+  const doc = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const L = 297, T = 210, tepi = 14, i = st.ident, tengah = L / 2;
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.text('JURNAL HARIAN KEPALA SEKOLAH', tengah, 16, { align: 'center' });
+  let y = 22;
+  if (i.sekolah) { doc.setFontSize(12); doc.text(i.sekolah.toUpperCase(), tengah, y, { align: 'center' }); y += 5; }
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+  if (i.alamat) { doc.text(i.alamat, tengah, y, { align: 'center' }); y += 4; }
+  doc.setLineWidth(0.6); doc.line(tepi, y, L - tepi, y); doc.setLineWidth(0.2); doc.line(tepi, y + 1, L - tepi, y + 1); y += 7;
+  doc.setFontSize(10);
+  doc.text('Nama kepala sekolah', tepi, y); doc.text(': ' + (i.kepala || '-'), tepi + 40, y);
+  doc.text('Periode', L - tepi - 95, y); doc.text(': ' + (dari === sampai ? tglSedang(dari) : tglSedang(dari) + ' s.d. ' + tglSedang(sampai)), L - tepi - 78, y); y += 5;
+  doc.text('NIP', tepi, y); doc.text(': ' + (i.nip || '-'), tepi + 40, y);
+  doc.text('Jumlah', L - tepi - 95, y); doc.text(': ' + data.length + ' kegiatan', L - tepi - 78, y); y += 4;
+  doc.autoTable({
+    startY: y, margin: { left: tepi, right: tepi, bottom: 16 },
+    head: [['No', 'Hari, tanggal', 'Waktu', 'Kegiatan', 'Uraian', 'Hasil', 'Tindak lanjut']],
+    body: data.map((e, n) => [n + 1, tglPanjang(e.tanggal), jam(e).replace('–', ' - ') || '-', e.kegiatan + '\n(' + (e.kategori || 'Lainnya') + (e.tempat ? ', ' + e.tempat : '') + ')' + (e.nFoto ? '\nFoto: ' + e.nFoto : ''), e.uraian || '-', e.hasil || '-', e.tindak || '-']),
+    styles: { font: 'helvetica', fontSize: 8.5, cellPadding: 1.8, overflow: 'linebreak', valign: 'top', lineColor: [90, 100, 115], lineWidth: 0.15, textColor: [20, 28, 40] },
+    headStyles: { fillColor: [36, 69, 122], textColor: 255, fontStyle: 'bold', halign: 'center' },
+    columnStyles: { 0: { cellWidth: 9, halign: 'center' }, 1: { cellWidth: 30 }, 2: { cellWidth: 22 }, 3: { cellWidth: 48 }, 4: { cellWidth: 70 }, 5: { cellWidth: 48 }, 6: { cellWidth: 42 } },
+    theme: 'grid'
+  });
+  y = doc.lastAutoTable.finalY + 10;
+  if (y + 42 > T - 16) { doc.addPage(); y = 22; }
+  const xt = L - tepi - 80;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+  doc.text((i.kota ? i.kota + ', ' : '') + tglSedang(ttd), xt, y); doc.text('Kepala Sekolah,', xt, y + 5);
+  doc.setFont('helvetica', 'bold'); const nama = i.kepala || '..............................................'; doc.text(nama, xt, y + 30);
+  doc.setLineWidth(0.2); doc.line(xt, y + 31, xt + doc.getTextWidth(nama), y + 31);
+  doc.setFont('helvetica', 'normal'); doc.text('NIP. ' + (i.nip || ''), xt, y + 35.5);
+
+  if (lampiran.length) {
+    const kol = 3, sela = 6, lb = (L - 2 * tepi - sela * (kol - 1)) / kol, tb = 58;
+    doc.addPage(); y = 18;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.text('LAMPIRAN DOKUMENTASI KEGIATAN', tengah, y, { align: 'center' }); y += 9;
+    lampiran.forEach(l => {
+      if (y + 8 + tb + 10 > T - 16) { doc.addPage(); y = 18; }
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5);
+      const judul = doc.splitTextToSize(tglPanjang(l.e.tanggal) + ' | ' + l.e.kegiatan, L - 2 * tepi);
+      doc.text(judul, tepi, y); y += judul.length * 4.2 + 1.5;
+      for (let k = 0; k < l.f.length; k += kol) {
+        if (y + tb + 10 > T - 16) { doc.addPage(); y = 18; }
+        l.f.slice(k, k + kol).forEach((f, j) => {
+          const x = tepi + j * (lb + sela);
+          doc.setDrawColor(150); doc.setLineWidth(0.15); doc.rect(x, y, lb, tb);
+          try {
+            const p = doc.getImageProperties(f.data), r = Math.min((lb - 2) / p.width, (tb - 2) / p.height), w = p.width * r, h = p.height * r;
+            doc.addImage(f.data, 'JPEG', x + (lb - w) / 2, y + (tb - h) / 2, w, h);
+          } catch (e) {}
+          if (f.ket) { doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.text(doc.splitTextToSize(f.ket, lb).slice(0, 2), x, y + tb + 3.5); }
+        });
+        y += tb + 11;
+      }
+      y += 2;
+    });
+  }
+  const n = doc.getNumberOfPages();
+  for (let h = 1; h <= n; h++) { doc.setPage(h); doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(110); doc.text('Halaman ' + h + ' dari ' + n, L - tepi, T - 8, { align: 'right' }); doc.text('Jurnal Harian Kepala Sekolah' + (i.sekolah ? ' | ' + i.sekolah : ''), tepi, T - 8); doc.setTextColor(0); }
+  return doc.output('blob');
+}
+
+mulai();
+</script>
+</body>
+</html>

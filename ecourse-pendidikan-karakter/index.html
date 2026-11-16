@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E-Course Pendidikan Karakter di Sekolah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* Arah: kelas daring bernuansa batik Yogyakarta. Nila (indigo) sebagai warna utama, kunyit sebagai aksen; motif kawung samar di kepala halaman. Navigasi modul di kiri, materi di kanan. */
+:root{
+  --bg:#f4f5fa;
+  --surface:#ffffff;
+  --ink:#1a2140;
+  --muted:#596182;
+  --line:#dce0ee;
+  --nila:#26337d;
+  --nila-soft:#e8ebf8;
+  --kunyit:#d99a00;
+  --ok:#1d8556;
+  --ok-soft:#e3f4ec;
+  --bad:#b8430f;
+  --bad-soft:#fbeae2;
+  --font-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1227; --surface:#161b37; --ink:#e7eaf7; --muted:#a2a8c6; --line:#29305c;
+    --nila:#93a2ff; --nila-soft:#1f2650; --kunyit:#f0bb3a; --ok:#4cc48c; --ok-soft:#14322a;
+    --bad:#f08a5d; --bad-soft:#3a2018; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1227; --surface:#161b37; --ink:#e7eaf7; --muted:#a2a8c6; --line:#29305c;
+  --nila:#93a2ff; --nila-soft:#1f2650; --kunyit:#f0bb3a; --ok:#4cc48c; --ok-soft:#14322a;
+  --bad:#f08a5d; --bad-soft:#3a2018; color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6}
+h1,h2,h3{font-family:var(--font-display);line-height:1.2;text-wrap:balance;margin:0}
+a{color:var(--nila)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--kunyit);outline-offset:2px}
+
+/* Kepala halaman */
+.hero{background:#1e2866;color:#f3f4fb;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;opacity:.13;
+  background-image:
+    radial-gradient(ellipse 14px 22px at 50% 0, #e9b632 98%, transparent 100%),
+    radial-gradient(ellipse 14px 22px at 50% 100%, #e9b632 98%, transparent 100%),
+    radial-gradient(ellipse 22px 14px at 0 50%, #e9b632 98%, transparent 100%),
+    radial-gradient(ellipse 22px 14px at 100% 50%, #e9b632 98%, transparent 100%);
+  background-size:56px 56px;}
+.hero-inner{position:relative;max-width:1180px;margin:0 auto;padding:36px 20px 28px;display:grid;gap:18px}
+.eyebrow{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#f0c24f;font-weight:700}
+.hero h1{font-size:clamp(30px,4.6vw,48px);font-weight:800;max-width:22ch}
+.hero p{margin:0;max-width:62ch;color:#d6daf0}
+.meta{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:4px 12px;font-size:14px;color:#eef0fb}
+.progress-wrap{display:grid;gap:6px;max-width:520px}
+.progress-label{display:flex;justify-content:space-between;font-size:14px;color:#d6daf0;font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:#f0c24f;border-radius:999px;transition:width .4s}
+
+/* Tata letak */
+.layout{max-width:1180px;margin:0 auto;padding:24px 20px 60px;display:grid;grid-template-columns:270px 1fr;gap:28px;align-items:start}
+nav.modules{position:sticky;top:16px;display:grid;gap:8px}
+.nav-title{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 2px 4px}
+.nav-btn{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;text-align:left;background:var(--surface);
+  border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--ink)}
+.nav-btn:hover{border-color:var(--nila)}
+.nav-btn[aria-current="true"]{border-color:var(--nila);box-shadow:inset 4px 0 0 var(--nila)}
+.num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-family:var(--font-display);
+  background:var(--nila-soft);color:var(--nila);font-size:15px}
+.nav-btn.done .num{background:var(--ok);color:#fff}
+.nav-btn small{display:block;color:var(--muted);font-size:13px;line-height:1.3}
+.nav-btn strong{display:block;font-size:15px;line-height:1.3}
+
+main{min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px clamp(18px,3vw,36px)}
+.mod-head{display:grid;gap:8px;margin-bottom:18px}
+.mod-head .kicker{color:var(--kunyit);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.mod-head h2{font-size:clamp(24px,3vw,34px)}
+.mod-head .dur{color:var(--muted);font-size:15px}
+.goal{background:var(--nila-soft);border-radius:12px;padding:14px 18px;margin:0 0 22px}
+.goal h3{font-size:16px;margin-bottom:6px;color:var(--nila)}
+.goal ul{margin:0;padding-left:20px}
+.prose{max-width:68ch}
+.prose h3{font-size:21px;margin:28px 0 10px}
+.prose p{margin:0 0 14px}
+.prose ul,.prose ol{margin:0 0 14px;padding-left:22px}
+.prose li{margin-bottom:6px}
+blockquote{margin:18px 0;padding:14px 18px;border-left:4px solid var(--kunyit);background:var(--bg);border-radius:0 10px 10px 0}
+blockquote p{margin:0}
+blockquote cite{display:block;margin-top:6px;color:var(--muted);font-style:normal;font-size:15px}
+
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:12px 0 18px}
+.mini{border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:6px;align-content:start;background:var(--surface)}
+.mini h4{margin:0;font-family:var(--font-display);font-size:17px;color:var(--nila)}
+.mini p{margin:0;font-size:15.5px}
+.mini .eg{font-size:14.5px;color:var(--muted)}
+.mini .tag{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--kunyit)}
+
+.table-wrap{overflow-x:auto;margin:12px 0 18px;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:15.5px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--nila-soft);color:var(--ink);font-weight:700}
+tr:last-child td{border-bottom:0}
+
+.steps{counter-reset:s;list-style:none;padding:0!important;display:grid;gap:12px;max-width:none!important}
+.steps li{counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:12px;border:1px solid var(--line);border-radius:12px;padding:14px;margin:0!important}
+.steps li::before{content:counter(s);width:40px;height:40px;border-radius:10px;background:var(--nila);color:#fff;display:grid;place-items:center;
+  font-family:var(--font-display);font-weight:800;font-size:18px}
+:root[data-theme="dark"] .steps li::before{color:#0e1227}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .steps li::before{color:#0e1227}}
+.steps strong{display:block}
+
+/* Aktivitas */
+.activity{margin-top:28px;border-top:1px dashed var(--line);padding-top:24px;display:grid;gap:14px}
+.activity h3{font-size:20px}
+.activity .hint{color:var(--muted);font-size:15px;margin:0}
+textarea,input[type=text],select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{min-height:96px;resize:vertical}
+label.lbl{font-weight:600;display:block;margin-bottom:6px}
+.saved{font-size:13px;color:var(--ok);min-height:18px}
+
+.q{border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:10px}
+.q p.stem{margin:0;font-weight:600}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--ink)}
+.opt:hover{border-color:var(--nila)}
+.opt .letter{font-weight:700;color:var(--nila);min-width:18px}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.fb{font-size:15px;margin:0;padding:10px 12px;border-radius:10px}
+.fb.right{background:var(--ok-soft);color:var(--ok)}
+.fb.wrong{background:var(--bad-soft);color:var(--bad)}
+.fb span{color:var(--ink)}
+
+.case{border:1px solid var(--kunyit);border-radius:12px;padding:16px;display:grid;gap:10px;background:var(--bg)}
+.case .tag{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--kunyit)}
+
+.status{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:24px;padding:14px 16px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.pill{border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700}
+.pill.todo{background:var(--nila-soft);color:var(--nila)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.btn{border:0;border-radius:10px;padding:10px 18px;font-weight:700;background:var(--nila);color:#fff}
+:root[data-theme="dark"] .btn{color:#0e1227}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#0e1227}}
+.btn.ghost{background:transparent;color:var(--nila);border:1px solid var(--nila)}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px}
+
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.checks{display:flex;flex-wrap:wrap;gap:8px}
+.checks label{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:15px;background:var(--surface);cursor:pointer}
+.checks input{accent-color:var(--nila)}
+.output{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:15.5px;max-height:none}
+
+/* Tanda selesai */
+.cert{border:2px solid var(--kunyit);border-radius:16px;padding:32px 24px;text-align:center;display:grid;gap:10px;background:
+  linear-gradient(var(--surface),var(--surface)) padding-box;position:relative}
+.cert .eyebrow{color:var(--kunyit)}
+.cert h3{font-size:clamp(24px,3.4vw,34px);color:var(--nila)}
+.cert .name{font-family:var(--font-display);font-size:clamp(26px,4vw,40px);font-weight:800;border-bottom:2px solid var(--line);padding-bottom:6px;margin:6px auto;max-width:90%}
+.cert p{margin:0;color:var(--muted)}
+.locked{color:var(--muted)}
+
+footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;color:var(--muted);font-size:14px}
+footer ul{padding-left:18px;margin:6px 0 0}
+
+@media (max-width: 860px){
+  .layout{grid-template-columns:1fr}
+  nav.modules{position:static;grid-auto-flow:column;grid-auto-columns:minmax(200px,1fr);overflow-x:auto;padding-bottom:6px}
+  .nav-title{display:none}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">E-Course untuk Guru dan Kepala Sekolah</div>
+    <h1>Pendidikan Karakter di Sekolah</h1>
+    <p>Lima modul singkat untuk memahami, merancang, dan menjalankan pendidikan karakter yang menyatu dalam kehidupan sekolah, sesuai kebijakan Kemendikdasmen 2026.</p>
+    <div class="meta">
+      <span class="chip">5 modul</span>
+      <span class="chip">± 100 menit</span>
+      <span class="chip">Kuis tiap modul</span>
+      <span class="chip">Lembar kerja program sekolah</span>
+    </div>
+    <div class="progress-wrap" aria-live="polite">
+      <div class="progress-label"><span>Kemajuan belajar</span><span id="progText">0 dari 5 modul</span></div>
+      <div class="bar"><span id="progBar"></span></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="modules" id="nav" aria-label="Daftar modul"></nav>
+  <main id="main"></main>
+</div>
+
+<footer>
+  <strong>Rujukan kebijakan</strong>
+  <ul>
+    <li><a href="https://journal.unpas.ac.id/index.php/pendas/article/download/54542/32720">Jurnal Pendas Unpas: Permendikbudristek 46/2023 dan Permendikdasmen 6/2026</a></li>
+    <li><a href="https://infopendidikan.bic.id/?p=1111">7 Kebiasaan Anak Indonesia Hebat</a></li>
+    <li><a href="https://rri.co.id/nasional/2132621/kemendikdasmen-terbitkan-edaran-upacara-bendera-sekolah-secara-nasional">RRI: SE Mendikdasmen No. 4 Tahun 2026 tentang upacara bendera</a></li>
+    <li><a href="https://kabar24.bisnis.com/read/20260714/15/1987828/kemendikdasmen-terbitkan-se-pembatasan-pakai-gadget-di-sekolah">Bisnis.com: SE Mendikdasmen No. 18 Tahun 2026 tentang pembatasan gawai</a></li>
+    <li><a href="https://www.antaranews.com/berita/5765101/kemendikdasmen-perkuat-pendidikan-pancasila-lewat-deep-learning">Antara: Pendidikan Pancasila lewat pembelajaran mendalam</a></li>
+  </ul>
+  <p>Kemajuan, catatan refleksi, dan lembar kerja tersimpan di peramban perangkat ini saja.</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var KEY = "ecourse-karakter-v1";
+  var state = { done:{}, quiz:{}, notes:{}, plan:{}, name:"" };
+  try { var raw = localStorage.getItem(KEY); if(raw){ var s = JSON.parse(raw); for (var k in s) state[k] = s[k]; } } catch(e){}
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
+
+  var MODULES = [
+    {
+      id:"modul-1", short:"Memahami karakter", title:"Memahami Pendidikan Karakter", dur:"± 20 menit",
+      goals:["Menjelaskan mengapa karakter perlu menyatu dalam seluruh kehidupan sekolah","Mengenali tiga komponen karakter: pengetahuan, perasaan, dan tindakan moral","Menghubungkan peran teladan guru dengan ajaran Ki Hajar Dewantara"],
+      body:
+        '<p>Pendidikan karakter paling efektif bila tidak menjadi mata pelajaran tambahan. Karakter tumbuh dari cara guru mengajar, aturan yang ditegakkan, kebiasaan harian, dan teladan orang dewasa yang dilihat murid setiap hari.</p>'+
+        '<h3>Karakter dialami, bukan dihafal</h3>'+
+        '<p>Murid yang hafal definisi jujur belum tentu berlaku jujur. Thomas Lickona menyebut karakter yang utuh punya tiga komponen yang saling menguatkan:</p>'+
+        '<div class="grid-cards">'+
+          '<div class="mini"><span class="tag">Kepala</span><h4>Pengetahuan moral</h4><p>Murid tahu dan paham mengapa suatu nilai penting.</p><p class="eg">Contoh: memahami dampak menyontek bagi diri dan teman.</p></div>'+
+          '<div class="mini"><span class="tag">Hati</span><h4>Perasaan moral</h4><p>Murid peduli, merasa malu bila melanggar, dan berempati.</p><p class="eg">Contoh: merasa tidak nyaman ketika melihat teman dirundung.</p></div>'+
+          '<div class="mini"><span class="tag">Tangan</span><h4>Tindakan moral</h4><p>Murid terbiasa berbuat baik walau tidak diawasi.</p><p class="eg">Contoh: mengembalikan uang kembalian lebih di kantin kejujuran.</p></div>'+
+        '</div>'+
+        '<p>Sekolah sering berhenti di komponen pertama. Program yang berhasil memberi ruang bagi ketiganya: penjelasan, pengalaman yang menyentuh perasaan, dan kesempatan berlatih berulang kali.</p>'+
+        '<h3>Teladan lebih dulu daripada aturan</h3>'+
+        '<blockquote><p>Ing ngarsa sung tuladha, ing madya mangun karsa, tut wuri handayani.</p><cite>Ki Hajar Dewantara</cite></blockquote>'+
+        '<p>Di depan memberi teladan, di tengah membangun semangat, di belakang memberi dorongan. Urutan ini relevan untuk sekolah hari ini: keteladanan guru dan tenaga kependidikan adalah kurikulum yang paling sering dilihat murid.</p>'+
+        '<h3>Sekolah tidak bekerja sendiri</h3>'+
+        '<p>Mendikdasmen mengingatkan bahwa kejujuran yang diajarkan di sekolah bisa runtuh bila murid melihat ketidakjujuran di rumah. Karena itu keluarga dan masyarakat perlu dilibatkan sejak awal, bukan setelah masalah muncul.</p>',
+      reflect:"Nilai karakter apa yang paling sering Anda ajarkan lewat kata-kata, tetapi jarang Anda contohkan atau latihkan? Apa satu hal yang bisa Anda ubah minggu ini?",
+      quiz:[
+        {q:"Menurut pendekatan dalam modul ini, pendidikan karakter paling efektif bila…", o:["Dijadikan mata pelajaran tersendiri dengan jam khusus","Menyatu dalam seluruh kehidupan sekolah","Disampaikan terutama lewat amanat upacara","Diserahkan sepenuhnya kepada guru BK"], a:1, e:"Karakter tumbuh dari kebiasaan, aturan, cara mengajar, dan teladan sehari-hari, bukan dari satu jam pelajaran."},
+        {q:"Tiga komponen karakter menurut Thomas Lickona adalah…", o:["Disiplin, jujur, dan tanggung jawab","Sikap, pengetahuan, dan keterampilan","Pengetahuan moral, perasaan moral, dan tindakan moral","Olah hati, olah pikir, dan olah raga"], a:2, e:"Lickona membagi karakter menjadi moral knowing, moral feeling, dan moral action."},
+        {q:"Makna “ing ngarsa sung tuladha” adalah…", o:["Di depan memberi teladan","Di tengah membangun semangat","Di belakang memberi dorongan","Bersama-sama saling mengingatkan"], a:0, e:"Ing ngarsa sung tuladha berarti orang yang di depan memberi contoh."}
+      ]
+    },
+    {
+      id:"modul-2", short:"Kebijakan 2026", title:"Pijakan Kebijakan Terbaru (2026)", dur:"± 15 menit",
+      goals:["Mengenali lima kebijakan Kemendikdasmen 2026 yang terkait penguatan karakter","Menerjemahkan isi kebijakan menjadi tindakan di sekolah"],
+      body:
+        '<p>Lima kebijakan berikut menjadi dasar penguatan karakter di sekolah pada 2026. Pahami isinya, lalu fokus pada kolom implikasi: itulah yang perlu muncul dalam program sekolah.</p>'+
+        '<div class="table-wrap"><table><thead><tr><th>Kebijakan</th><th>Isi pokok</th><th>Implikasi bagi sekolah</th></tr></thead><tbody>'+
+        '<tr><td><strong>Permendikdasmen No. 6 Tahun 2026</strong></td><td>Budaya sekolah aman dan nyaman sebagai bagian ekosistem pendidikan; menggantikan Permendikbudristek 46/2023</td><td>Pencegahan perundungan dan kekerasan menjadi bagian program karakter</td></tr>'+
+        '<tr><td><strong>7 Kebiasaan Anak Indonesia Hebat</strong></td><td>Karakter sebagai fondasi seluruh proses pembelajaran</td><td>Kerangka pembiasaan harian di sekolah dan rumah</td></tr>'+
+        '<tr><td><strong>SE Mendikdasmen No. 4 Tahun 2026</strong></td><td>Upacara bendera setiap Senin pagi, dengan fokus nasionalisme, patriotisme, dan kedisiplinan</td><td>Upacara dijadikan sarana pendidikan karakter, bukan sekadar seremoni</td></tr>'+
+        '<tr><td><strong>SE Mendikdasmen No. 18 Tahun 2026</strong></td><td>Pembatasan penggunaan gawai di satuan pendidikan</td><td>Tata tertib gawai disesuaikan dengan kondisi sekolah</td></tr>'+
+        '<tr><td><strong>Pembelajaran mendalam</strong></td><td>Pendidikan Pancasila diperkuat sebagai pilar karakter lewat pendekatan deep learning</td><td>Nilai karakter dialami murid di kelas, bukan diceramahkan</td></tr>'+
+        '</tbody></table></div>'+
+        '<h3>7 Kebiasaan Anak Indonesia Hebat</h3>'+
+        '<div class="grid-cards">'+
+          '<div class="mini"><h4>1. Bangun pagi</h4></div><div class="mini"><h4>2. Beribadah</h4></div><div class="mini"><h4>3. Berolahraga</h4></div>'+
+          '<div class="mini"><h4>4. Makan sehat dan bergizi</h4></div><div class="mini"><h4>5. Gemar belajar</h4></div><div class="mini"><h4>6. Bermasyarakat</h4></div><div class="mini"><h4>7. Tidur cepat</h4></div>'+
+        '</div>'+
+        '<p>Kebiasaan nomor 1 dan 7 terjadi di rumah. Sekolah hanya bisa memantaunya lewat kerja sama dengan orang tua, misalnya melalui buku penghubung atau jurnal kebiasaan.</p>'+
+        '<h3>Membaca kebijakan dengan cerdas</h3>'+
+        '<p>Kebijakan memberi arah, sekolah menentukan caranya. SE tentang gawai misalnya tidak menetapkan satu aturan untuk semua sekolah. Kepala sekolah didorong menyesuaikan tata tertib dengan karakteristik dan kebutuhan sekolahnya.</p>',
+      reflect:"Dari lima kebijakan di atas, mana yang sudah berjalan baik di sekolah Anda, dan mana yang masih sebatas formalitas?",
+      quiz:[
+        {q:"Permendikdasmen No. 6 Tahun 2026 menggantikan peraturan…", o:["Perpres 87/2017 tentang PPK","Permendikbudristek 46/2023","Permendikbud 23/2015 tentang PBP","UU 20/2003 tentang Sisdiknas"], a:1, e:"Permendikdasmen 6/2026 menggantikan Permendikbudristek 46/2023 dan menekankan budaya sekolah aman dan nyaman."},
+        {q:"SE Mendikdasmen No. 4 Tahun 2026 mengatur tentang…", o:["Pembatasan gawai","MPLS ramah","Upacara bendera setiap Senin","Kantin sehat"], a:2, e:"SE 4/2026 menginstruksikan upacara bendera setiap Senin pagi sebagai sarana pendidikan karakter."},
+        {q:"Menurut SE No. 18 Tahun 2026, aturan gawai di sekolah…", o:["Sama untuk semua sekolah di Indonesia","Melarang total gawai di sekolah","Disesuaikan kepala sekolah dengan kondisi sekolahnya","Diatur oleh dinas kabupaten/kota"], a:2, e:"Kepala sekolah didorong menyesuaikan tata tertib gawai dengan karakteristik, kebutuhan, dan kondisi sekolah."}
+      ]
+    },
+    {
+      id:"modul-3", short:"Empat jalur", title:"Empat Jalur Penerapan", dur:"± 20 menit",
+      goals:["Membedakan empat jalur penerapan pendidikan karakter","Merancang contoh kegiatan untuk tiap jalur"],
+      body:
+        '<p>Karakter ditanamkan lewat empat jalur sekaligus. Satu jalur saja tidak cukup; budaya sekolah adalah jalur yang paling menentukan karena dialami murid setiap hari.</p>'+
+        '<div class="grid-cards">'+
+          '<div class="mini"><span class="tag">Jalur 1</span><h4>Intrakurikuler</h4><p>Nilai karakter dialami lewat pembelajaran: jujur saat asesmen, kerja sama dalam proyek kelompok, tanggung jawab atas tugas.</p><p class="eg">Contoh IPS kelas 8: materi keragaman budaya untuk melatih toleransi; materi kegiatan ekonomi untuk kejujuran dalam jual beli.</p></div>'+
+          '<div class="mini"><span class="tag">Jalur 2</span><h4>Kokurikuler</h4><p>Setiap kegiatan punya target karakter yang jelas, sehingga tidak berhenti sebagai acara seremonial.</p><p class="eg">Contoh: manasik haji, lomba STEAM mitigasi bencana, proyek lingkungan (peduli, gotong royong, tangguh).</p></div>'+
+          '<div class="mini"><span class="tag">Jalur 3</span><h4>Ekstrakurikuler</h4><p>Murid diberi peran dan wewenang nyata, bukan sekadar menjadi peserta.</p><p class="eg">Contoh: Pramuka, OSIS, kegiatan keagamaan sebagai latihan kepemimpinan dan tanggung jawab.</p></div>'+
+          '<div class="mini"><span class="tag">Jalur 4</span><h4>Budaya sekolah</h4><p>Kebiasaan harian yang konsisten dan dipantau dengan data.</p><p class="eg">Contoh: 3S di gerbang (senyum, salam, sapa), literasi pagi, ibadah bersama, Jumat bersih, kantin kejujuran, aturan gawai.</p></div>'+
+        '</div>'+
+        '<h3>Menulis nilai sasaran di modul ajar</h3>'+
+        '<p>Cara paling sederhana untuk jalur intrakurikuler: setiap guru menuliskan satu nilai sasaran di modul ajar, lalu mengamatinya selama pembelajaran. Contoh:</p>'+
+        '<ul><li><strong>Nilai sasaran:</strong> kerja sama</li><li><strong>Perilaku yang diamati:</strong> setiap anggota kelompok mendapat giliran berbicara; tidak ada anggota yang hanya menonton</li><li><strong>Cara mengamati:</strong> daftar cek guru saat diskusi kelompok</li></ul>'+
+        '<h3>Data sebagai cermin budaya sekolah</h3>'+
+        '<p>Aplikasi yang sudah dipakai sekolah juga alat pendidikan karakter. Data keterlambatan, presensi, tata tertib, dan laporan kelas kosong menunjukkan apakah kedisiplinan murid dan guru membaik dari bulan ke bulan.</p>',
+      reflect:"Pilih satu kegiatan kokurikuler atau ekstrakurikuler di sekolah Anda. Nilai karakter apa yang seharusnya menjadi targetnya, dan bagaimana Anda tahu nilai itu tercapai?",
+      quiz:[
+        {q:"Jalur yang paling menentukan karena dialami murid setiap hari adalah…", o:["Intrakurikuler","Kokurikuler","Ekstrakurikuler","Budaya sekolah dan pembiasaan"], a:3, e:"Budaya sekolah membentuk kebiasaan harian yang dialami semua murid, setiap hari."},
+        {q:"Kegiatan manasik haji untuk murid termasuk jalur…", o:["Intrakurikuler","Kokurikuler","Ekstrakurikuler","Bukan pendidikan karakter"], a:1, e:"Manasik haji adalah kegiatan kokurikuler yang dapat diberi target karakter yang jelas."},
+        {q:"Agar ekstrakurikuler benar-benar membentuk karakter, murid perlu…", o:["Mengikuti sebanyak mungkin kegiatan","Diberi peran dan wewenang nyata","Dinilai dengan angka di rapor","Dibimbing ketat tanpa ruang keputusan"], a:1, e:"Kepemimpinan dan tanggung jawab tumbuh ketika murid benar-benar memegang peran."}
+      ]
+    },
+    {
+      id:"modul-4", short:"Langkah kepala sekolah", title:"Enam Langkah Praktis Kepala Sekolah", dur:"± 25 menit",
+      goals:["Mengurutkan langkah membangun program karakter sekolah","Mengubah nilai abstrak menjadi perilaku yang bisa diamati","Menerapkan disiplin positif pada kasus nyata"],
+      body:
+        '<p>Enam langkah berikut mengubah nilai karakter dari slogan menjadi perilaku yang terukur.</p>'+
+        '<ol class="steps">'+
+          '<li><div><strong>Pilih 3–5 nilai prioritas berdasarkan data</strong>Sumbernya indikator iklim keamanan dan kebinekaan di Rapor Pendidikan, data keterlambatan, atau kasus perundungan. Daftar nilai yang panjang membuat program tidak fokus.</div></li>'+
+          '<li><div><strong>Terjemahkan nilai menjadi perilaku yang bisa diamati</strong>“Disiplin” terlalu abstrak. “Tiba sebelum 06.45 dan mengumpulkan tugas tepat waktu” bisa diukur.</div></li>'+
+          '<li><div><strong>Mulai dari keteladanan guru dan tenaga kependidikan</strong>Murid meniru yang mereka lihat. Guru yang terlambat tidak akan berhasil menegakkan aturan keterlambatan.</div></li>'+
+          '<li><div><strong>Tegakkan disiplin positif</strong>Konsekuensi bersifat mendidik dan memulihkan, bukan mempermalukan, sejalan dengan semangat sekolah aman dan nyaman.</div></li>'+
+          '<li><div><strong>Libatkan orang tua</strong>Program parenting dan buku penghubung kebiasaan di rumah menyambungkan pembiasaan 7 Kebiasaan antara sekolah dan rumah.</div></li>'+
+          '<li><div><strong>Pantau dan rayakan kemajuan</strong>Refleksi bulanan dengan data sederhana. Apresiasi kelas atau murid yang menunjukkan perubahan, tidak hanya yang berprestasi akademik.</div></li>'+
+        '</ol>'+
+        '<h3>Studi kasus</h3>'+
+        '<div class="case" id="case"><span class="tag">Kasus</span>'+
+          '<p style="margin:0">Data bulan ini menunjukkan keterlambatan murid kelas 8 naik dari 40 menjadi 75 kejadian. Beberapa guru mengusulkan murid yang terlambat dijemur di lapangan dan namanya diumumkan saat upacara. Apa respons yang paling sesuai dengan disiplin positif?</p>'+
+          '<div class="opts" id="caseOpts"></div><p class="fb" id="caseFb" hidden></p>'+
+        '</div>',
+      reflect:"Tuliskan satu nilai yang menjadi prioritas sekolah Anda, lalu ubah menjadi dua atau tiga perilaku yang bisa diamati guru setiap hari.",
+      quiz:[
+        {q:"Manakah rumusan yang termasuk perilaku yang bisa diamati?", o:["Murid memiliki sikap disiplin yang tinggi","Murid tiba sebelum 06.45 dan mengumpulkan tugas tepat waktu","Murid menghayati nilai kedisiplinan","Murid menjadi pribadi yang bertanggung jawab"], a:1, e:"Perilaku teramati punya ukuran yang jelas, sehingga guru dapat mencatat dan membandingkannya dari waktu ke waktu."},
+        {q:"Disiplin positif berarti konsekuensi yang diberikan…", o:["Membuat murid jera lewat rasa malu","Mendidik dan memulihkan","Selalu berupa hukuman fisik ringan","Ditiadakan agar murid nyaman"], a:1, e:"Disiplin positif tetap memberi konsekuensi, tetapi tujuannya mendidik dan memulihkan hubungan."},
+        {q:"Langkah pertama yang dianjurkan bagi kepala sekolah adalah…", o:["Menyusun daftar 18 nilai karakter","Memilih 3–5 nilai prioritas berdasarkan data","Membuat spanduk slogan karakter","Mengadakan lomba antarkelas"], a:1, e:"Nilai prioritas yang sedikit dan berbasis data membuat program fokus dan dapat dipantau."}
+      ]
+    },
+    {
+      id:"modul-5", short:"Lembar kerja", title:"Merancang Program Karakter Sekolah", dur:"± 20 menit",
+      goals:["Menyusun rancangan ringkas program karakter sekolah Anda sendiri","Menyiapkan bahan untuk rapat dewan guru"],
+      body:
+        '<p>Gunakan lembar kerja di bawah untuk menyusun rancangan program karakter sekolah. Hasilnya bisa disalin dan dibawa ke rapat dewan guru sebagai bahan diskusi.</p>'+
+        '<p>Isi semua bagian, lalu tekan <strong>Susun rancangan</strong>. Modul ini selesai setelah rancangan tersusun.</p>',
+      reflect:null,
+      quiz:null
+    }
+  ];
+
+  var CASE = {
+    o:["Setuju dengan usulan guru, karena efek jera akan cepat menurunkan angka keterlambatan","Mengabaikan data karena keterlambatan hal biasa di usia remaja","Mencari tahu penyebab bersama wali kelas dan BK, berbicara dengan murid dan orang tua, lalu menetapkan konsekuensi yang mendidik seperti mengganti waktu belajar yang hilang"],
+    a:2,
+    e:["Menjemur dan mengumumkan nama mempermalukan murid. Cara ini bertentangan dengan semangat sekolah aman dan nyaman, dan sering hanya menekan gejala.","Lonjakan hampir dua kali lipat adalah sinyal yang perlu ditindaklanjuti, bukan diabaikan.","Tepat. Penyebab keterlambatan bisa beragam, misalnya jarak rumah, kebiasaan tidur, atau masalah keluarga. Konsekuensi yang mendidik dan kerja sama dengan orang tua menyelesaikan akar masalah."]
+  };
+
+  var VALUES = ["Disiplin","Jujur","Tanggung jawab","Peduli","Toleransi","Gotong royong","Religius","Santun","Mandiri","Cinta lingkungan"];
+
+  var nav = document.getElementById("nav");
+  var main = document.getElementById("main");
+
+  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];}); }
+  function doneCount(){ var n=0; MODULES.forEach(function(m){ if(state.done[m.id]) n++; }); return n; }
+
+  function renderProgress(){
+    var n = doneCount();
+    document.getElementById("progText").textContent = n + " dari " + MODULES.length + " modul";
+    document.getElementById("progBar").style.width = (n/MODULES.length*100) + "%";
+  }
+
+  function renderNav(current){
+    var html = '<p class="nav-title">Modul</p>';
+    MODULES.forEach(function(m,i){
+      html += '<button class="nav-btn'+(state.done[m.id]?' done':'')+'" data-go="'+m.id+'" aria-current="'+(current===m.id)+'">'+
+        '<span class="num">'+(state.done[m.id]?'✓':(i+1))+'</span><span><strong>'+esc(m.title)+'</strong><small>'+m.dur+(state.done[m.id]?' · selesai':'')+'</small></span></button>';
+    });
+    html += '<button class="nav-btn'+(doneCount()===MODULES.length?' done':'')+'" data-go="selesai" aria-current="'+(current==="selesai")+'">'+
+      '<span class="num">★</span><span><strong>Tanda selesai belajar</strong><small>Terbuka setelah 5 modul selesai</small></span></button>';
+    nav.innerHTML = html;
+  }
+
+  function quizHTML(m){
+    if(!m.quiz) return "";
+    var html = '<section class="activity" aria-labelledby="qz-'+m.id+'"><h3 id="qz-'+m.id+'">Kuis singkat</h3><p class="hint">Jawab ketiga soal. Modul dinyatakan selesai jika minimal 2 jawaban benar.</p>';
+    m.quiz.forEach(function(q,qi){
+      html += '<div class="q" data-q="'+qi+'"><p class="stem">'+(qi+1)+'. '+esc(q.q)+'</p><div class="opts">';
+      q.o.forEach(function(o,oi){ html += '<button class="opt" data-qi="'+qi+'" data-oi="'+oi+'"><span class="letter">'+"ABCD"[oi]+'</span><span>'+esc(o)+'</span></button>'; });
+      html += '</div><p class="fb" hidden></p></div>';
+    });
+    html += '<button class="btn ghost" id="resetQuiz" type="button">Ulangi kuis</button></section>';
+    return html;
+  }
+
+  function planHTML(){
+    var p = state.plan || {};
+    var chosen = p.values || [];
+    var checks = VALUES.map(function(v,i){
+      return '<label><input type="checkbox" name="val" value="'+esc(v)+'"'+(chosen.indexOf(v)>-1?' checked':'')+'> '+esc(v)+'</label>';
+    }).join("");
+    return '<section class="activity">'+
+      '<h3>Lembar kerja program karakter</h3>'+
+      '<div><label class="lbl" for="pSchool">Nama sekolah</label><input type="text" id="pSchool" value="'+esc(p.school||"")+'" placeholder="Contoh: SMP Negeri 10 Yogyakarta"></div>'+
+      '<div><label class="lbl" for="pData">Data atau masalah yang menjadi dasar</label><textarea id="pData" placeholder="Contoh: keterlambatan kelas 8 naik dari 40 ke 75 kejadian; skor iklim kebinekaan di Rapor Pendidikan turun">'+esc(p.data||"")+'</textarea></div>'+
+      '<div><span class="lbl" id="valLbl">Nilai prioritas (pilih 3–5)</span><div class="checks" role="group" aria-labelledby="valLbl" id="pVals">'+checks+'</div></div>'+
+      '<div><label class="lbl" for="pBehav">Perilaku yang bisa diamati untuk tiap nilai</label><textarea id="pBehav" placeholder="Contoh: Disiplin: tiba sebelum 06.45; Jujur: mengerjakan asesmen tanpa menyontek">'+esc(p.behav||"")+'</textarea></div>'+
+      '<div class="plan-grid">'+
+        '<div><label class="lbl" for="pIntra">Intrakurikuler</label><textarea id="pIntra" placeholder="Nilai sasaran di modul ajar setiap guru">'+esc(p.intra||"")+'</textarea></div>'+
+        '<div><label class="lbl" for="pKoko">Kokurikuler</label><textarea id="pKoko" placeholder="Kegiatan dan target karakternya">'+esc(p.koko||"")+'</textarea></div>'+
+        '<div><label class="lbl" for="pEkstra">Ekstrakurikuler</label><textarea id="pEkstra" placeholder="Peran yang diberikan kepada murid">'+esc(p.ekstra||"")+'</textarea></div>'+
+        '<div><label class="lbl" for="pBudaya">Budaya sekolah</label><textarea id="pBudaya" placeholder="Pembiasaan harian dan mingguan">'+esc(p.budaya||"")+'</textarea></div>'+
+      '</div>'+
+      '<div class="plan-grid">'+
+        '<div><label class="lbl" for="pOrtu">Keterlibatan orang tua</label><textarea id="pOrtu" placeholder="Contoh: buku penghubung 7 Kebiasaan, parenting tiap semester">'+esc(p.ortu||"")+'</textarea></div>'+
+        '<div><label class="lbl" for="pMonev">Cara memantau</label><textarea id="pMonev" placeholder="Contoh: rekap data keterlambatan bulanan, refleksi rapat dewan guru">'+esc(p.monev||"")+'</textarea></div>'+
+      '</div>'+
+      '<p class="fb wrong" id="planErr" hidden></p>'+
+      '<div class="btn-row"><button class="btn" type="button" id="buildPlan">Susun rancangan</button></div>'+
+      '<div id="planOut"></div>'+
+    '</section>';
+  }
+
+  function readPlan(){
+    var g = function(id){ return document.getElementById(id).value.trim(); };
+    var vals = Array.prototype.slice.call(document.querySelectorAll('#pVals input:checked')).map(function(x){return x.value;});
+    return { school:g("pSchool"), data:g("pData"), values:vals, behav:g("pBehav"), intra:g("pIntra"), koko:g("pKoko"), ekstra:g("pEkstra"), budaya:g("pBudaya"), ortu:g("pOrtu"), monev:g("pMonev") };
+  }
+
+  function planText(p){
+    return "RANCANGAN PROGRAM PENDIDIKAN KARAKTER\n"+(p.school||"")+"\n\n"+
+      "1. Dasar data\n"+p.data+"\n\n"+
+      "2. Nilai prioritas\n"+p.values.join(", ")+"\n\n"+
+      "3. Perilaku yang diamati\n"+p.behav+"\n\n"+
+      "4. Empat jalur penerapan\n- Intrakurikuler: "+p.intra+"\n- Kokurikuler: "+p.koko+"\n- Ekstrakurikuler: "+p.ekstra+"\n- Budaya sekolah: "+p.budaya+"\n\n"+
+      "5. Keterlibatan orang tua\n"+p.ortu+"\n\n"+
+      "6. Pemantauan\n"+p.monev+"\n\n"+
+      "Catatan: keteladanan guru dan tenaga kependidikan menjadi syarat utama; konsekuensi pelanggaran mengikuti prinsip disiplin positif.";
+  }
+
+  function showPlanOut(p){
+    var out = document.getElementById("planOut");
+    out.innerHTML = '<p class="saved">Rancangan tersusun. Salin untuk dibawa ke rapat dewan guru.</p><div class="output" id="planTxt"></div><div class="btn-row" style="margin-top:10px"><button class="btn ghost" type="button" id="copyPlan">Salin rancangan</button><span class="saved" id="copyMsg"></span></div>';
+    document.getElementById("planTxt").textContent = planText(p);
+    document.getElementById("copyPlan").addEventListener("click", function(){
+      var msg = document.getElementById("copyMsg");
+      try {
+        navigator.clipboard.writeText(planText(p)).then(function(){ msg.textContent="Tersalin."; }, function(){ msg.textContent="Gagal menyalin. Blok teks di atas lalu salin manual."; });
+      } catch(e){ msg.textContent="Gagal menyalin. Blok teks di atas lalu salin manual."; }
+    });
+  }
+
+  function renderModule(id){
+    var idx = -1; MODULES.forEach(function(m,i){ if(m.id===id) idx=i; });
+    if(idx<0){ renderFinish(); return; }
+    var m = MODULES[idx];
+    var html = '<article class="card">'+
+      '<header class="mod-head"><span class="kicker">Modul '+(idx+1)+' dari '+MODULES.length+'</span><h2>'+esc(m.title)+'</h2><span class="dur">'+m.dur+'</span></header>'+
+      '<div class="goal"><h3>Tujuan belajar</h3><ul>'+m.goals.map(function(g){return '<li>'+esc(g)+'</li>';}).join("")+'</ul></div>'+
+      '<div class="prose">'+m.body+'</div>';
+    if(m.reflect){
+      html += '<section class="activity"><h3>Refleksi</h3><label class="lbl" for="note-'+m.id+'">'+esc(m.reflect)+'</label>'+
+        '<textarea id="note-'+m.id+'" placeholder="Tulis catatan Anda di sini">'+esc(state.notes[m.id]||"")+'</textarea><span class="saved" id="noteMsg"></span></section>';
+    }
+    html += m.quiz ? quizHTML(m) : planHTML();
+    html += '<div class="status"><span class="pill '+(state.done[m.id]?'ok':'todo')+'" id="pill">'+(state.done[m.id]?'Modul selesai':'Belum selesai')+'</span><div class="btn-row">'+
+      (idx>0?'<button class="btn ghost" data-go="'+MODULES[idx-1].id+'">Modul sebelumnya</button>':'')+
+      (idx<MODULES.length-1?'<button class="btn" data-go="'+MODULES[idx+1].id+'">Modul berikutnya</button>':'<button class="btn" data-go="selesai">Lihat tanda selesai</button>')+
+      '</div></div></article>';
+    main.innerHTML = html;
+
+    if(m.reflect){
+      var ta = document.getElementById("note-"+m.id), t;
+      ta.addEventListener("input", function(){ state.notes[m.id]=ta.value; clearTimeout(t); t=setTimeout(function(){ save(); document.getElementById("noteMsg").textContent="Catatan tersimpan di perangkat ini."; },400); });
+    }
+    if(m.quiz){ restoreQuiz(m); }
+    if(m.id==="modul-4"){ renderCase(); }
+    if(!m.quiz){
+      if(state.done[m.id] && state.plan && state.plan.values){ showPlanOut(state.plan); }
+      document.getElementById("buildPlan").addEventListener("click", function(){
+        var p = readPlan(), err = document.getElementById("planErr");
+        var missing = [];
+        if(!p.data) missing.push("dasar data");
+        if(p.values.length<3||p.values.length>5) missing.push("3–5 nilai prioritas");
+        if(!p.behav) missing.push("perilaku yang diamati");
+        if(!(p.intra&&p.koko&&p.ekstra&&p.budaya)) missing.push("keempat jalur");
+        if(!p.ortu) missing.push("keterlibatan orang tua");
+        if(!p.monev) missing.push("cara memantau");
+        state.plan = p; save();
+        if(missing.length){ err.hidden=false; err.textContent="Lengkapi dulu: "+missing.join(", ")+"."; return; }
+        err.hidden=true; markDone(m.id); showPlanOut(p);
+      });
+    }
+  }
+
+  function restoreQuiz(m){
+    var ans = state.quiz[m.id] || {};
+    Object.keys(ans).forEach(function(qi){ applyAnswer(m, +qi, ans[qi]); });
+    main.querySelectorAll(".opt").forEach(function(b){
+      b.addEventListener("click", function(){
+        var qi=+b.dataset.qi, oi=+b.dataset.oi;
+        state.quiz[m.id] = state.quiz[m.id] || {};
+        if(state.quiz[m.id][qi]!==undefined) return;
+        state.quiz[m.id][qi]=oi; save(); applyAnswer(m,qi,oi); checkQuiz(m);
+      });
+    });
+    document.getElementById("resetQuiz").addEventListener("click", function(){ state.quiz[m.id]={}; save(); renderModule(m.id); });
+  }
+
+  function applyAnswer(m,qi,oi){
+    var q = m.quiz[qi], box = main.querySelector('.q[data-q="'+qi+'"]');
+    box.querySelectorAll(".opt").forEach(function(b){
+      var bi=+b.dataset.oi; b.disabled=true;
+      if(bi===q.a) b.classList.add("right"); else if(bi===oi) b.classList.add("wrong");
+    });
+    var fb = box.querySelector(".fb"); fb.hidden=false;
+    fb.className = "fb " + (oi===q.a?"right":"wrong");
+    fb.innerHTML = '<strong>'+(oi===q.a?'Benar.':'Belum tepat.')+'</strong> <span>'+esc(q.e)+'</span>';
+  }
+
+  function checkQuiz(m){
+    var ans = state.quiz[m.id]||{}, keys=Object.keys(ans);
+    if(keys.length<m.quiz.length) return;
+    var score=0; keys.forEach(function(k){ if(ans[k]===m.quiz[k].a) score++; });
+    if(score>=2){ markDone(m.id); }
+    else {
+      var pill=document.getElementById("pill"); pill.textContent="Skor "+score+"/3. Ulangi kuis untuk menyelesaikan modul";
+    }
+  }
+
+  function renderCase(){
+    var box = document.getElementById("caseOpts"), fb=document.getElementById("caseFb");
+    box.innerHTML = CASE.o.map(function(o,i){ return '<button class="opt" data-ci="'+i+'"><span class="letter">'+"ABC"[i]+'</span><span>'+esc(o)+'</span></button>'; }).join("");
+    box.querySelectorAll(".opt").forEach(function(b){
+      b.addEventListener("click", function(){
+        var ci=+b.dataset.ci;
+        box.querySelectorAll(".opt").forEach(function(x){ x.classList.remove("right","wrong"); });
+        b.classList.add(ci===CASE.a?"right":"wrong");
+        fb.hidden=false; fb.className="fb "+(ci===CASE.a?"right":"wrong");
+        fb.innerHTML='<strong>'+(ci===CASE.a?'Tepat.':'Pertimbangkan lagi.')+'</strong> <span>'+esc(CASE.e[ci])+'</span>';
+      });
+    });
+  }
+
+  function markDone(id){
+    state.done[id]=true; save(); renderProgress(); renderNav(id);
+    var pill=document.getElementById("pill"); if(pill){ pill.className="pill ok"; pill.textContent="Modul selesai"; }
+  }
+
+  function renderFinish(){
+    var all = doneCount()===MODULES.length;
+    var d = new Date(), bulan=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    var tgl = d.getDate()+" "+bulan[d.getMonth()]+" "+d.getFullYear();
+    var html = '<article class="card"><header class="mod-head"><span class="kicker">Penutup</span><h2>Tanda Selesai Belajar</h2></header>';
+    if(!all){
+      var sisa = MODULES.filter(function(m){return !state.done[m.id];}).map(function(m){return m.title;});
+      html += '<p class="locked">Tanda selesai terbuka setelah semua modul selesai. Modul yang belum selesai:</p><ul>'+sisa.map(function(s){return '<li>'+esc(s)+'</li>';}).join("")+'</ul>';
+    } else {
+      html += '<div style="display:grid;gap:14px;max-width:460px;margin-bottom:20px"><div><label class="lbl" for="certName">Nama lengkap dan gelar</label><input type="text" id="certName" value="'+esc(state.name||"")+'" placeholder="Tulis nama Anda"></div></div>'+
+        '<div class="cert"><span class="eyebrow">Tanda Selesai Belajar</span><h3>E-Course Pendidikan Karakter di Sekolah</h3><p>diberikan kepada</p>'+
+        '<div class="name" id="certShow">'+esc(state.name||"Nama Peserta")+'</div>'+
+        '<p>yang telah menyelesaikan 5 modul: Memahami Pendidikan Karakter, Pijakan Kebijakan 2026, Empat Jalur Penerapan, Enam Langkah Praktis Kepala Sekolah, dan Merancang Program Karakter Sekolah.</p>'+
+        '<p style="font-variant-numeric:tabular-nums">'+tgl+'</p></div>'+
+        '<p class="hint" style="margin-top:12px;color:var(--muted);font-size:15px">Tanda ini bukti belajar mandiri, bukan sertifikat resmi berjam pelajaran. Simpan dengan tangkapan layar.</p>';
+    }
+    html += '</article>';
+    main.innerHTML = html;
+    var inp = document.getElementById("certName");
+    if(inp){ inp.addEventListener("input", function(){ state.name=inp.value; save(); document.getElementById("certShow").textContent = inp.value || "Nama Peserta"; }); }
+  }
+
+  function route(){
+    var h = (location.hash||"").replace("#","");
+    var valid = MODULES.some(function(m){return m.id===h;}) || h==="selesai";
+    var id = valid ? h : "modul-1";
+    renderNav(id);
+    if(id==="selesai") renderFinish(); else renderModule(id);
+  }
+
+  document.addEventListener("click", function(e){
+    var t = e.target.closest("[data-go]");
+    if(!t) return;
+    var id = t.getAttribute("data-go");
+    if(location.hash.replace("#","")===id){ route(); } else { location.hash = id; }
+    window.scrollTo({top: document.querySelector(".layout").offsetTop - 8, behavior: "smooth"});
+  });
+  window.addEventListener("hashchange", route);
+  renderProgress();
+  route();
+})();
+</script>
+</body>
+</html>

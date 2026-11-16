@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rapor Pintar – Analisis Rapor Pendidikan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --ink:#16202c;--ink2:#46546a;--muted:#7a8699;--line:#e2e7ee;--bg:#f4f6f9;--card:#fff;
+  --navy:#12355b;--navy2:#1d4f86;--teal:#0f766e;--teal-bg:#e3f3f1;
+  --good:#1f7a4d;--good-bg:#e2f3e9;--warn:#8a5a00;--warn-bg:#fdf0d5;--bad:#b42318;--bad-bg:#fde3df;--na:#5f6b7a;--na-bg:#edf0f4;
+  --up:#2f6db5;--down:#d0621f;--bar:#3b6fb6;
+  --r:12px;--sh:0 1px 2px rgba(16,32,54,.06),0 4px 14px rgba(16,32,54,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--navy2)}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px 60px}
+header.top{background:linear-gradient(120deg,#0f2c4c 0%,#16466f 60%,#11635e 100%);color:#fff;padding:22px 0 0}
+header.top .wrap{padding-bottom:0}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.14);display:grid;place-items:center;flex:none}
+.brand h1{font-size:22px;margin:0;font-weight:800;letter-spacing:-.01em}
+.brand p{margin:2px 0 0;opacity:.82;font-size:13.5px}
+.brand .sp{flex:1}
+.brand>div:nth-child(2){min-width:0;flex:1 1 320px}
+.schoolchip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:8px 12px;font-size:13px;line-height:1.35}
+.schoolchip b{display:block;font-size:14.5px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:8px 14px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{border-color:#c5cfdb;background:#fafbfd}
+.btn.pri{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.pri:hover{background:var(--navy2)}
+.btn.teal{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.ghostw{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+nav.tabs{display:flex;gap:4px;margin-top:18px;overflow-x:auto;scrollbar-width:none}
+nav.tabs button{background:transparent;border:0;color:rgba(255,255,255,.78);padding:11px 14px;border-radius:10px 10px 0 0;font-weight:600;font-size:14px;white-space:nowrap}
+nav.tabs button.on{background:var(--bg);color:var(--navy)}
+nav.tabs button .n{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.18);font-size:11.5px;margin-right:6px}
+nav.tabs button.on .n{background:var(--navy);color:#fff}
+section.view{display:none;padding-top:22px}
+section.view.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px;margin-bottom:16px}
+.card h2{font-size:17px;margin:0 0 4px;font-weight:700}
+.card h3{font-size:15px;margin:14px 0 6px}
+.sub{color:var(--ink2);font-size:13.5px;margin:0 0 12px}
+.grid{display:grid;gap:12px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi .l{font-size:12.5px;color:var(--ink2);font-weight:600}
+.kpi .v{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-top:2px}
+.kpi .h{font-size:12px;color:var(--muted)}
+.two{grid-template-columns:1fr 1fr}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;white-space:nowrap}
+.chip.Baik{background:var(--good-bg);color:var(--good)}
+.chip.Sedang{background:var(--warn-bg);color:var(--warn)}
+.chip.Kurang{background:var(--bad-bg);color:var(--bad)}
+.chip.NA,.chip.none{background:var(--na-bg);color:var(--na)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.tag{display:inline-block;background:#eef2f7;color:#334155;border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600;margin:2px 4px 2px 0}
+.tag.ofc{background:#e8eefb;color:#1d4f86}
+.tag.kb{background:var(--teal-bg);color:var(--teal)}
+.delta{font-weight:700;white-space:nowrap}
+.delta.up{color:var(--up)}.delta.down{color:var(--down)}.delta.flat{color:var(--muted)}
+.prose p{margin:0 0 10px}
+.prose ul{margin:0 0 10px;padding-left:20px}
+.prose li{margin:3px 0}
+.callout{border-left:4px solid var(--navy2);background:#f2f6fb;border-radius:8px;padding:10px 14px;font-size:14px;margin:10px 0}
+.callout.warn{border-color:#d08a00;background:#fff8e8}
+.callout.bad{border-color:var(--bad);background:#fff3f1}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t th{background:#f3f6fa;text-align:left;font-weight:700;color:#334155;padding:8px 9px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:1}
+table.t td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+table.t tr.l2 td:nth-child(2){padding-left:26px;color:var(--ink2)}
+table.t tr.l1 td{font-weight:600}
+table.t tr.l1{background:#fcfdff}
+.tscroll{overflow:auto;max-height:640px;border:1px solid var(--line);border-radius:10px}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+select,input[type=text],input[type=password],textarea{font:inherit;border:1px solid #cfd7e2;border-radius:9px;padding:7px 10px;background:#fff;color:var(--ink)}
+textarea{width:100%;min-height:84px;resize:vertical}
+label.ck{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;color:var(--ink2)}
+/* charts */
+.chart{position:relative}
+.crow{display:grid;grid-template-columns:minmax(150px,230px) 1fr 58px;align-items:center;gap:10px;padding:5px 0;border-radius:6px}
+.crow:hover{background:#f5f8fc}
+.crow .lab{font-size:13px;line-height:1.25;color:var(--ink)}
+.crow .lab small{color:var(--muted);font-weight:600;margin-right:4px}
+.track{position:relative;height:16px;background:#eef2f7;border-radius:4px}
+.fill{position:absolute;left:0;top:0;bottom:0;background:var(--bar);border-radius:0 4px 4px 0}
+.tick{position:absolute;top:-4px;bottom:-4px;width:2px;background:#16202c;border-radius:1px}
+.crow .val{font-size:13px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.drow{display:grid;grid-template-columns:minmax(150px,230px) 1fr;align-items:center;gap:10px;padding:5px 0;border-radius:6px}
+.drow:hover{background:#f5f8fc}
+.dtrack{position:relative;height:18px}
+.dtrack .mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#9aa6b6}
+.dbar{position:absolute;top:2px;height:14px}
+.dbar.up{background:var(--up);border-radius:0 4px 4px 0}
+.dbar.down{background:var(--down);border-radius:4px 0 0 4px}
+.dlab{position:absolute;top:0;font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--ink2);margin:4px 0 10px;flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.legend i.tk{width:3px;height:14px;border-radius:1px;background:#16202c}
+#tip{position:fixed;pointer-events:none;background:#16202c;color:#fff;font-size:12.5px;padding:8px 10px;border-radius:8px;max-width:300px;z-index:50;display:none;line-height:1.4;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+/* priority */
+.pcard{border:1px solid var(--line);border-radius:12px;background:#fff;margin-bottom:12px;overflow:hidden}
+.phead{display:flex;gap:12px;align-items:flex-start;padding:14px 16px}
+.prank{width:34px;height:34px;border-radius:10px;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.pcard.off .prank{background:#c5cfdb}
+.ptitle{flex:1;min-width:0}
+.ptitle b{font-size:15.5px}
+.pmeta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px;font-size:13px;color:var(--ink2)}
+.score{min-width:150px;text-align:right}
+.score .s{font-size:22px;font-weight:800;color:var(--navy)}
+.sbar{height:6px;background:#eef2f7;border-radius:4px;margin-top:4px;overflow:hidden}
+.sbar span{display:block;height:100%;background:var(--navy2)}
+.pbody{border-top:1px dashed var(--line);padding:12px 16px;background:#fbfcfe}
+.why{font-size:13px;color:var(--ink2)}
+.roots td{font-size:13px}
+.flag{font-size:11.5px;font-weight:700;color:#fff;background:var(--bad);border-radius:5px;padding:1px 6px;margin-left:4px}
+.flag.alt{background:#d08a00}
+/* actions */
+.act{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;background:#fff;display:flex;gap:10px}
+.act input{margin-top:4px;width:17px;height:17px;flex:none;accent-color:var(--teal)}
+.act .k{font-weight:700;font-size:14px}
+.act .i{font-size:13px;color:var(--ink2);margin-top:3px}
+.act details{font-size:12.8px;color:var(--ink2);margin-top:6px}
+.act details summary{cursor:pointer;color:var(--navy2);font-weight:600}
+.act details div{white-space:pre-line;margin-top:6px}
+.ed{outline:none;border-radius:4px;min-width:40px}
+.ed:focus{background:#fffbe6;box-shadow:0 0 0 2px #f2d47a}
+.empty{color:var(--muted);font-size:14px;padding:16px;text-align:center}
+/* AI */
+.aiout{min-height:120px;border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:#fff}
+.aiout h1,.aiout h2{font-size:17px;margin:16px 0 6px}
+.aiout h3{font-size:15px;margin:14px 0 6px}
+.aiout table{border-collapse:collapse;width:100%;font-size:13px;margin:8px 0}
+.aiout th,.aiout td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.aiout th{background:#f3f6fa}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+.status{font-size:13px;padding:8px 12px;border-radius:9px;background:#f2f6fb;color:var(--ink2)}
+.status.ok{background:var(--good-bg);color:var(--good)}
+.drop{border:2px dashed #b9c6d6;border-radius:14px;padding:26px;text-align:center;background:#fafcff;color:var(--ink2)}
+.drop.over{border-color:var(--teal);background:var(--teal-bg)}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#16202c;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;z-index:60;display:none;max-width:90vw}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding:4px 0 10px 40px}
+.steps li:before{content:counter(s);position:absolute;left:0;top:2px;width:28px;height:28px;border-radius:8px;background:var(--teal-bg);color:var(--teal);font-weight:800;display:grid;place-items:center}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.gset{grid-template-columns:1fr 220px auto}
+@media (max-width:640px){.gset{grid-template-columns:1fr}.crow{grid-template-columns:120px 1fr 44px}.drow{grid-template-columns:120px 1fr}.score{min-width:90px}}
+.seg{display:inline-flex;border:1px solid #cfd7e2;border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:7px 14px;font-weight:700;font-size:13.5px;color:var(--ink2)}
+.seg button+button{border-left:1px solid #cfd7e2}
+.seg button.on{background:var(--navy);color:#fff}
+.cov{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
+.cov span{border:1px solid var(--line);border-radius:9px;padding:6px 10px;font-size:13px;background:#fff}
+.cov span b{font-size:14px}
+.cov span.no{background:#fff8e8;border-color:#f0d9a8}
+.srcl{font-size:13px;color:var(--ink2);margin:8px 0 0;padding-left:18px}
+.srcl li{margin:2px 0}
+.sparks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.spk{border:1px solid var(--line);border-radius:10px;padding:10px 12px 6px;background:#fff}
+.spk .tt{font-size:13px;font-weight:700;line-height:1.3;min-height:34px}
+.spk .tt small{color:var(--muted);margin-right:4px}
+.spk .mt{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-top:2px}
+.pt{font-size:11.5px;font-weight:700;border-radius:6px;padding:1px 7px;background:#eef2f7;color:#334155;white-space:nowrap}
+.pt.up{background:#e6eefa;color:var(--up)}.pt.down{background:#fbeadf;color:#a64a12}.pt.fl{background:#efeaf7;color:#5b4a86}
+input.tin{width:72px;padding:4px 6px;border:1px solid #d7dee8;border-radius:7px;text-align:right;font:inherit;font-size:13px;font-variant-numeric:tabular-nums}
+input.tin.prev{font-style:italic;color:#46546a}
+input.tin.manual{background:#fff7d6;border-color:#e8c860}
+input.tin:focus{outline:2px solid #f2d47a}
+.recg{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:#fff}
+.recg h3{margin:0 0 4px;font-size:14.5px}
+.recg p{margin:4px 0;font-size:13.5px;color:var(--ink2)}
+.foot{color:var(--muted);font-size:12.5px;text-align:center;margin-top:24px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><rect x="7" y="11" width="3" height="5" rx="1"/><rect x="12" y="7" width="3" height="9" rx="1"/><path d="M18 6l1.2 2.4L22 9l-2 2 .5 2.8L18 12.5"/></svg>
+      </div>
+      <div>
+        <h1>Rapor Pintar</h1>
+        <p>AI tool analisis Rapor Pendidikan &amp; rencana tindak lanjut sekolah (Identifikasi – Refleksi – Benahi)</p>
+      </div>
+      <div class="sp"></div>
+      <div class="row" style="flex-wrap:nowrap"><div class="schoolchip" id="schoolChip"><b>Belum ada data</b>Impor file Rapor PBD (.xlsx)</div>
+      <button class="btn ghostw" id="btnImport" title="Impor satu atau banyak file Excel Rapor PBD sekaligus">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>Impor Rapor
+      </button></div>
+      <input type="file" id="file" accept=".xlsx,.xls" multiple hidden>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button data-v="ringkasan" class="on"><span class="n">1</span>Identifikasi</button>
+      <button data-v="tren"><span class="n">2</span>Tren 2–4 Tahun</button>
+      <button data-v="indikator"><span class="n">3</span>Semua Indikator</button>
+      <button data-v="prioritas"><span class="n">4</span>Prioritas &amp; Akar Masalah</button>
+      <button data-v="benahi"><span class="n">5</span>Rencana Benahi</button>
+      <button data-v="ai"><span class="n">6</span>Asisten AI</button>
+      <button data-v="panduan"><span class="n">?</span>Panduan &amp; Impor</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 1 RINGKASAN -->
+  <section class="view on" id="v-ringkasan">
+    <div id="ringkasanBody"></div>
+  </section>
+
+  <!-- TREN -->
+  <section class="view" id="v-tren">
+    <div id="trenBody"></div>
+    <input type="file" id="fileTrend" accept=".xlsx,.xls" multiple hidden>
+  </section>
+
+  <!-- 2 INDIKATOR -->
+  <section class="view" id="v-indikator">
+    <div class="card">
+      <h2>Semua indikator Rapor Pendidikan</h2>
+      <p class="sub">Arahkan kursor (atau ketuk) pada nama indikator untuk melihat definisi capaian dari rapor.</p>
+      <div class="filters">
+        <select id="fDim"><option value="">Semua dimensi</option><option value="A">A · Mutu &amp; relevansi hasil belajar</option><option value="C">C · Kompetensi &amp; kinerja GTK</option><option value="D">D · Mutu &amp; relevansi pembelajaran</option><option value="E">E · Pengelolaan sekolah</option></select>
+        <select id="fCat"><option value="">Semua capaian</option><option>Baik</option><option>Sedang</option><option>Kurang</option><option value="NA">Tidak tersedia</option></select>
+        <label class="ck"><input type="checkbox" id="fTurun"> Hanya yang turun</label>
+        <label class="ck"><input type="checkbox" id="fSub" checked> Tampilkan sub-indikator</label>
+        <input type="text" id="fQ" placeholder="Cari indikator…" style="flex:1;min-width:160px">
+      </div>
+      <div class="tscroll"><table class="t" id="tblInd"></table></div>
+    </div>
+  </section>
+
+  <!-- 3 PRIORITAS -->
+  <section class="view" id="v-prioritas">
+    <div class="card">
+      <h2>Prioritas perbaikan &amp; akar masalah (Refleksi)</h2>
+      <p class="sub">Indikator diurutkan dengan <b>skor prioritas</b> (0–100): capaian Kurang/Sedang, besarnya penurunan, peringkat di kab/kota, jumlah sub-indikator lemah, indikator prioritas nasional, dan rekomendasi resmi platform. Skor ini alat bantu; keputusan akhir tetap disepakati tim PBD sekolah. Centang untuk memilih indikator yang masuk Rencana Benahi.</p>
+      <div class="row" style="margin-bottom:8px">
+        <label class="ck">Jumlah prioritas otomatis:
+          <select id="topN"><option>3</option><option>4</option><option selected>5</option><option>6</option><option>8</option></select></label>
+        <button class="btn sm" id="btnResetPrio">Pilih ulang otomatis</button>
+      </div>
+      <div id="prioList"></div>
+    </div>
+  </section>
+
+  <!-- 4 BENAHI -->
+  <section class="view" id="v-benahi">
+    <div id="benahiBody"></div>
+  </section>
+
+  <!-- 5 AI -->
+  <section class="view" id="v-ai">
+    <div class="card">
+      <h2>Asisten AI Rapor Pendidikan</h2>
+      <p class="sub">AI membaca seluruh data rapor dan hasil analisis di atas, lalu menyusun analisis mendalam, narasi laporan, atau program. Hasil AI adalah draf: periksa kembali sebelum dipakai.</p>
+      <div id="aiStatus" class="status">Memeriksa layanan AI…</div>
+      <details id="aiSettings" style="margin-top:10px">
+        <summary style="cursor:pointer;font-weight:600;color:var(--navy2)">Pengaturan Gemini API (untuk dipakai mandiri / di Google Sites)</summary>
+        <div class="grid gset" style="margin-top:10px;align-items:end">
+          <label style="font-size:13px;color:var(--ink2)">API key Gemini (Google AI Studio)<br><input type="password" id="gKey" placeholder="AIza…" style="width:100%"></label>
+          <label style="font-size:13px;color:var(--ink2)">Model<br><input type="text" id="gModel" value="gemini-3.8-flash" style="width:100%"></label>
+          <button class="btn" id="gSave">Simpan</button>
+        </div>
+        <div class="row" style="margin-top:8px"><button class="btn sm" id="gTest">Tes koneksi Gemini</button><span id="gTestOut" style="font-size:13px"></span></div>
+        <p class="sub" style="margin-top:8px">Kunci disimpan hanya di peramban ini. Bila kunci ditulis langsung di kode (konstanta <code>GEMINI_API_KEY</code>), siapa pun yang membuka halaman dapat melihatnya. Batasi kunci di Google AI Studio.</p>
+      </details>
+      <div class="row" style="margin-top:12px">
+        <label class="ck">Penyedia AI: <select id="aiProv"></select></label>
+      </div>
+      <div class="presets" id="presets"></div>
+      <textarea id="aiQ" placeholder="Atau tulis pertanyaan sendiri, misalnya: Mengapa numerasi turun padahal kualitas pembelajaran Baik? Apa yang harus dilakukan dalam 3 bulan ke depan?"></textarea>
+      <div class="row" style="margin:10px 0 14px">
+        <button class="btn pri" id="aiAsk">Tanyakan ke AI</button>
+        <button class="btn" id="aiStop" style="display:none">Hentikan</button>
+        <button class="btn" id="aiCopy">Salin hasil</button>
+        <span id="aiInfo" style="font-size:13px;color:var(--muted)"></span>
+      </div>
+      <div class="aiout prose" id="aiOut"><div class="empty">Hasil AI akan tampil di sini. Pilih salah satu tombol tugas di atas.</div></div>
+    </div>
+  </section>
+
+  <!-- 6 PANDUAN -->
+  <section class="view" id="v-panduan">
+    <div class="card">
+      <h2>Impor data Rapor Pendidikan</h2>
+      <p class="sub">Gunakan file Excel <b>Rapor PBD</b> yang diunduh dari platform Rapor Pendidikan (berisi lembar "2. LAPORAN RAPOR", "2.1 REKOM. KESELURUHAN", "2.2 REKOM. PRIORITAS"). Data diproses di peramban Anda; tidak dikirim ke mana pun kecuali saat Anda memakai Asisten AI.</p>
+      <div class="drop" id="drop">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13l2 2 4-4"/></svg>
+        <p style="margin:8px 0 4px"><b>Seret satu atau banyak file .xlsx ke sini</b> (tidak dibatasi, misalnya Rapor 2022–2026 sekaligus) atau</p>
+        <p style="margin:0 0 12px;font-size:13px">File dengan tahun terbaru otomatis menjadi data utama; file lain mengisi analisis tren. Templat input tren juga boleh ikut dipilih.</p>
+        <button class="btn pri" id="btnImport2">Pilih file Rapor PBD (boleh banyak)</button>
+        <p id="importMsg" style="margin:12px 0 0;font-size:13.5px"></p>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn sm" id="btnSample">Muat data bawaan</button>
+        <span style="font-size:13px;color:var(--muted)" id="sampleNote"></span>
+      </div>
+    </div>
+    <div class="card prose">
+      <h2>Cara memakai</h2>
+      <ol class="steps">
+        <li><b>Unduh</b> file Excel Rapor/PBD sekolah dari platform Rapor Pendidikan (raporpendidikan.kemendikdasmen.go.id), lalu impor di sini. Beberapa file dari tahun berbeda boleh dipilih sekaligus (lebih dari 5 pun bisa).</li>
+        <li><b>Identifikasi</b> (tab 1): baca ringkasan otomatis, capaian per indikator, penurunan, dan alarm dini sub-indikator.</li>
+        <li><b>Tren 2–4 tahun</b> (tab 2): lihat pola naik/turun antar tahun. Impor file Rapor PBD tahun-tahun sebelumnya atau isi nilai secara manual.</li>
+        <li><b>Refleksi</b> (tab 4): lihat indikator prioritas beserta akar masalahnya. Diskusikan dengan tim PBD (kepala sekolah, wakasek, guru, komite) dan pilih prioritas yang disepakati.</li>
+        <li><b>Benahi</b> (tab 5): pilih kegiatan, edit penanggung jawab, waktu, dan indikator keberhasilan, lalu unduh Excel RKJP + rancangan ARKAS atau laporan.</li>
+        <li><b>Asisten AI</b> (tab 6): minta analisis mendalam, narasi laporan rapat, program 1 tahun, atau ajukan pertanyaan sendiri.</li>
+      </ol>
+      <div class="callout"><b>Catatan:</b> Akar masalah yang ditampilkan adalah hipotesis berbasis data, bukan kesimpulan pasti. Konfirmasi dengan data sekolah lain (supervisi kelas, angket murid, catatan BK, nilai harian). Penganggaran kegiatan mengikuti juknis BOSP tahun berjalan dan ketentuan pengadaan (SIPLah).</div>
+      <h3>Memasang di Google Sites</h3>
+      <p>Di Google Sites pilih <b>Sisipkan → Sematkan → Sematkan kode</b>, lalu tempel seluruh isi file HTML ini. Untuk Asisten AI di luar claude.ai, isi API key Gemini di tab 6.</p>
+    </div>
+  </section>
+  <div class="foot">Rapor Pintar · alat bantu Perencanaan Berbasis Data. Angka berasal dari file Rapor Pendidikan yang diimpor.</div>
+</main>
+<div id="tip"></div>
+<div id="toast"></div>
+
+<script>
+/* =========================================================
+   KONFIGURASI
+   ========================================================= */
+const GEMINI_API_KEY = "";            // opsional: isi API key Gemini untuk pemakaian mandiri
+const GEMINI_MODEL   = "gemini-3.8-flash";
+const GEMINI_FALLBACK = ["gemini-3.8-flash","gemini-3.7-flash","gemini-3.6-flash"]; // dicoba berurutan bila model ditolak
+const AMBANG_TURUN   = 5;             // penurunan ≥ 5 poin dianggap signifikan
+const PRIORITAS_NASIONAL = ["A.1","A.2","A.3","D.1","D.4","D.8"];
+const SULIT_DIKENDALIKAN = ["E.6","E.7","E.8"]; // bobot 0,8 (banyak bergantung pada pihak luar)
+const DATA_BAWAAN = null; // data sekolah sengaja dikosongkan di versi publik
+
+/* =========================================================
+   UTIL
+   ========================================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = (n, d=2) => n==null||isNaN(n) ? "–" : Number(n).toLocaleString("id-ID",{maximumFractionDigits:d});
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+function toast(m, ms=2600){const t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",ms)}
+function num(v){
+  if(v==null) return null;
+  if(typeof v==="number") return v;
+  const s=String(v).trim();
+  if(!s||/tidak tersedia/i.test(s)) return null;
+  const m=s.match(/-?\d+(?:[.,]\d+)?/); if(!m) return null;
+  return parseFloat(m[0].replace(",","."));
+}
+function parseDelta(t){
+  const s=String(t??"").trim();
+  if(/tidak berubah/i.test(s)) return 0;
+  if(/tidak tersedia/i.test(s)||!s) return null;
+  const n=num(s); if(n==null) return null;
+  if(/turun/i.test(s)) return -Math.abs(n);
+  if(/naik/i.test(s)) return Math.abs(n);
+  return n;
+}
+function parseCat(t){
+  const s=String(t??"").trim();
+  const m=s.match(/^(Baik|Sedang|Kurang)/i);
+  if(m) return m[1][0].toUpperCase()+m[1].slice(1).toLowerCase();
+  if(/tidak tersedia/i.test(s)) return "NA";
+  return "";
+}
+function rankLv(t){
+  const s=String(t??"").toLowerCase();
+  if(s.includes("menengah atas")) return 2;
+  if(s.includes("menengah bawah")) return 4;
+  if(s.includes("menengah")) return 3;
+  if(s.includes("bawah")) return 5;
+  if(s.includes("atas")) return 1;
+  return null;
+}
+const rankShort = t => { const l=rankLv(t); return l?["","Atas","Menengah atas","Menengah","Menengah bawah","Bawah"][l]:"–"; };
+const catChip = c => c ? `<span class="chip ${c==="NA"?"NA":c}"><span class="dot"></span>${c==="NA"?"Tidak tersedia":c}</span>` : `<span class="chip none">–</span>`;
+const deltaHTML = (d, extra="") => d==null ? `<span class="delta flat">${extra||"–"}</span>` : d>0 ? `<span class="delta up">▲ ${fmt(d)}</span>` : d<0 ? `<span class="delta down">▼ ${fmt(Math.abs(d))}</span>` : `<span class="delta flat">● 0</span>`;
+const codeKey = c => String(c).split(".").map(p=>isNaN(+p)?p:String(+p).padStart(3,"0")).join(".");
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let D = null;          // data terparsing
+let A = null;          // hasil analisis
+let selected = new Set();   // indikator prioritas terpilih
+let picked = new Set();     // id kegiatan terpilih
+let edits = {};             // suntingan tabel RKJP
+let aiLast = "";
+
+/* =========================================================
+   PARSER FILE RAPOR PBD
+   ========================================================= */
+function parseWorkbook(sheets){ // sheets: {name: rows[][]}
+  const names=Object.keys(sheets);
+  const lapName=names.find(n=>/LAPORAN\s*RAPOR/i.test(n));
+  if(!lapName) throw new Error('Lembar "LAPORAN RAPOR" tidak ditemukan. Pastikan file adalah Rapor PBD dari platform Rapor Pendidikan.');
+  const rows=sheets[lapName];
+  let school="Satuan Pendidikan", year="", updated="";
+  for(const r of rows.slice(0,8)){
+    for(const c of r){
+      const s=String(c||"");
+      const m=s.match(/LAPORAN RAPOR PENDIDIKAN\s+(.+?)\s+TAHUN\s+(\d{4})/i);
+      if(m){school=m[1].trim();year=m[2];}
+      const u=s.match(/diperbarui\s+(.+)/i); if(u) updated=u[1].trim();
+    }
+  }
+  const hi=rows.findIndex(r=>String(r[0]).trim()==="No" && /indikator/i.test(String(r[1])));
+  if(hi<0) throw new Error("Baris judul tabel indikator tidak ditemukan.");
+  const H=rows[hi].map(x=>String(x||""));
+  const yNow=(H[3].match(/\d{4}/)||[year])[0], yPrev=(H[6].match(/\d{4}/)||[""])[0];
+  const list=[], map={};
+  let last=null;
+  for(const r of rows.slice(hi+1)){
+    const code=String(r[0]??"").trim();
+    if(!code){
+      const lbl=String(r[2]??"").trim();
+      if(last && /^(Di atas|Mencapai|Di bawah|Jauh di bawah)$/i.test(lbl)){
+        last.dist.push({label:lbl, val:num(r[3]), delta:parseDelta(r[5]), prev:num(r[6]), desc:String(r[1]||"")});
+      }
+      continue;
+    }
+    if(!/^[A-Z]\.\d+/.test(code)) continue;
+    const full=String(r[1]??"");
+    const [name,...rest]=full.split("\n");
+    if(/\.skor$/i.test(code)){
+      const p=map[code.replace(/\.skor$/i,"")];
+      if(p) p.skor={val:num(r[3]),prev:num(r[6]),delta:parseDelta(r[5]),deltaText:String(r[5]||""),rankKab:String(r[7]||""),rankNas:String(r[8]||"")};
+      continue;
+    }
+    const parts=code.split(".");
+    const it={
+      code, name:name.trim(), desc:rest.join(" ").trim(), dim:code[0],
+      level: parts.length===2?1:2, parent: parts.length===2?null:parts.slice(0,2).join("."),
+      catText:String(r[2]||""), cat:parseCat(r[2]),
+      valText:String(r[3]??""), val:num(r[3]), pct:/%/.test(String(r[3]??"")),
+      def:String(r[4]||""), deltaText:String(r[5]||""), delta:parseDelta(r[5]),
+      prevText:String(r[6]??""), prev:num(r[6]),
+      rankKab:String(r[7]||""), rankNas:String(r[8]||""), source:String(r[9]||""),
+      dist:[], subs:[]
+    };
+    if(it.val==null && it.cat!=="NA" && /tidak tersedia/i.test(it.valText)) it.cat="NA";
+    if(!it.cat && it.val==null && /tidak tersedia/i.test(it.catText+it.valText)) it.cat="NA";
+    list.push(it); map[code]=it;
+    if(it.level===1) last=it; else if(map[it.parent]) map[it.parent].subs.push(it);
+  }
+  // rekomendasi
+  const recs=[];
+  for(const n of names.filter(n=>/REKOM/i.test(n))){
+    const kind=/PRIORITAS/i.test(n)?"prioritas":"keseluruhan";
+    const rr=sheets[n];
+    const h=rr.findIndex(r=>String(r[0]).trim()==="No");
+    if(h<0) continue;
+    for(const r of rr.slice(h+1)){
+      const ident=String(r[1]||"").trim(); if(!ident||!/^[A-Z]\.\d/.test(ident)) continue;
+      const l1=String(r[4]||"").trim(), l2=String(r[5]||"").trim();
+      recs.push({kind, ind:ident.split(" ")[0], indName:ident.replace(/^\S+\s*/,""),
+        l1:l1.split(" ")[0], l1Name:l1.replace(/^\S+\s*/,""), l2:l2.split(" ")[0], l2Name:l2.replace(/^\S+\s*/,""),
+        kegiatan:String(r[6]||"").trim(), inspirasi:String(r[7]||"").trim(), tautan:String(r[8]||"").trim().replace(/[\\\s]+$/,""),
+        arkas:String(r[9]||"").split("\n").map(s=>s.replace(/^\s*-\s*/,"").trim()).filter(s=>s && !/^Kegiatan BOS/i.test(s))});
+    }
+  }
+  if(!list.length) throw new Error("Tidak ada baris indikator yang terbaca.");
+  return {school, year:yNow||year, yPrev, updated, list, map, recs};
+}
+
+/* =========================================================
+   BASIS PENGETAHUAN: KETERKAITAN & KEGIATAN BENAHI
+   ========================================================= */
+const LINKS = {
+  "A.1":["D.1.3","D.1.6","D.1.1","D.2.1","D.3.2"],
+  "A.2":["D.1.3","D.1.6","D.1.1","D.2.3","D.3.2"],
+  "A.3":["D.19","D.1.1","D.1.2","E.1.2","D.4.1"],
+  "D.1":["D.2","D.3","E.2.1"],
+  "D.2":["D.3.3","E.2.1"],
+  "D.3":["E.5","E.1"],
+  "D.4":["D.1.2","E.5.1","D.3","E.1"],
+  "D.6":["E.5.5","D.3"],
+  "D.8":["D.3","E.5","D.6"],
+  "D.10":["E.5","D.1.2","D.3","E.2"],
+  "D.19":["E.1.1","E.1.2","A.3","E.5"],
+  "E.1":["D.3","E.5"],
+  "E.2":["D.3","E.3"],
+  "E.3":["D.3"],
+  "E.5":["D.3"],
+  "E.7":["E.2"],
+  "E.8":[]
+};
+// [kegiatan, implementasi, PJ, waktu, indikator keberhasilan, butuh biaya, padanan ARKAS]
+const KB = {
+ "A.1":[
+  ["Literasi lintas mata pelajaran","Setiap mapel memberi 1 tugas membaca-menulis bermakna per minggu (teks informasi dan sastra) dengan pertanyaan level L1–L3 seperti AKM.","Waka Kurikulum; semua guru","Sepanjang semester","≥80% guru menerapkan; skor A.1.1–A.1.5 naik","Tidak","Pengembangan Kegiatan Literasi dan Numerasi"],
+  ["Asesmen diagnostik literasi & pembelajaran sesuai level","Tes diagnostik awal semester; murid dikelompokkan sesuai tingkat kemampuan dan diberi pendampingan terarah.","Guru Bahasa Indonesia; Waka Kurikulum","Awal semester + evaluasi tiap 6 minggu","Proporsi murid di atas kompetensi minimum naik","Tidak","Penyiapan dan Pelaksanaan Asesmen di Awal Pembelajaran"],
+  ["Gerakan literasi sekolah & pojok baca","15 menit membaca sebelum pelajaran, jurnal baca, pojok baca kelas, penambahan buku nonteks.","Kepala perpustakaan; wali kelas","Harian","Rata-rata buku dibaca per murid per bulan","Ya","Pengadaan buku/koleksi perpustakaan (selain buku teks, pengayaan, dan referensi)"],
+ ],
+ "A.2":[
+  ["Asesmen diagnostik numerasi per domain","Tes awal semester per domain (bilangan, aljabar, geometri, data) dan level (mengetahui, menerapkan, menalar); hasilnya dipakai menyusun kelompok belajar.","Guru Matematika; Waka Kurikulum","Awal semester","Peta kemampuan numerasi tiap rombel tersedia","Tidak","Penyiapan dan Pelaksanaan Asesmen di Awal Pembelajaran"],
+  ["Numerasi lintas mata pelajaran","Setiap mapel memuat 1 aktivitas numerasi kontekstual per pekan (membaca grafik/tabel di IPS, pengukuran di IPA, statistik di PJOK).","Semua guru; koordinator literasi-numerasi","Sepanjang tahun","≥80% guru menerapkan; skor domain data & geometri naik","Tidak","Pengembangan Kegiatan Literasi dan Numerasi"],
+  ["Klinik numerasi & tutor sebaya","Pendampingan terjadwal untuk murid di bawah kompetensi minimum, dibantu tutor sebaya.","Guru Matematika","2x per minggu","Proporsi murid di bawah kompetensi minimum turun","Ya","Penyelenggaraan Perbaikan/Pengayaan (Remedial)"],
+  ["Kombel guru: soal penalaran numerasi","Guru menyusun dan saling menelaah soal level L1–L3 serta strategi mengajarkan konsep dasar.","Ketua kombel; Guru Matematika","Bulanan","Bank soal numerasi per domain tersusun","Ya","Peningkatan kompetensi pendidik untuk memperkuat numerasi"],
+ ],
+ "A.3":[
+  ["Kokurikuler penguatan karakter terjadwal","Kegiatan kokurikuler/proyek yang menumbuhkan kemandirian, penalaran kritis, kolaborasi, dan komunikasi, diakhiri refleksi murid.","Waka Kurikulum; tim kokurikuler","Per semester","Rubrik karakter murid naik; A.3.x naik","Ya","Penguatan pendidikan karakter dan penumbuhan budi pekerti"],
+  ["Gerakan 7 Kebiasaan Anak Indonesia Hebat","Jurnal kebiasaan harian murid (bangun pagi, beribadah, berolahraga, makan sehat, gemar belajar, bermasyarakat, tidur cepat) dipantau wali kelas dan dikomunikasikan ke orang tua.","Waka Kesiswaan; wali kelas","Harian, rekap bulanan","≥80% murid mengisi jurnal; skor D.19 naik","Tidak","Pengembangan kegiatan pelibatan orang tua/wali/keluarga di pembelajaran"],
+  ["Kepemimpinan dan suara murid","OSIS dan perwakilan kelas ikut merancang kegiatan sekolah; murid diberi peran tanggung jawab bergilir.","Pembina OSIS","Sepanjang tahun","Jumlah kegiatan yang dirancang murid","Tidak","Program pembinaan kemuridan dan kepemimpinan murid"],
+  ["Pelatihan guru: disiplin positif & coaching","Guru berlatih memberi pilihan, umpan balik, dan pertanyaan pemantik yang melatih kemandirian dan penalaran kritis.","Kepala sekolah; Guru BK","Semester ini","Observasi kelas menunjukkan praktik disiplin positif","Ya","Peningkatan kompetensi pendidik untuk memahami tentang disiplin positif (dan menghindari hukuman fisik)"],
+ ],
+ "D.1":[
+  ["Supervisi akademik berbasis observasi kelas","Observasi fokus pada manajemen kelas, dukungan psikologis, dan metode; diikuti percakapan coaching dan rencana perbaikan.","Kepala sekolah; Waka Kurikulum","Per semester","100% guru disupervisi dan memiliki RTL","Tidak","Pelaksanaan supervisi pembelajaran semua mapel/guru di sekolah"],
+  ["Kesepakatan kelas di setiap rombel","Wali kelas dan murid menyusun kesepakatan kelas dan rutinitas, ditinjau tiap bulan.","Wali kelas","Awal semester","Seluruh rombel memiliki kesepakatan kelas","Tidak","Penyusunan perencanaan, pelaksanaan pengawasan, pelaksanaan evaluasi, dan penyusunan tata tertib Satuan Pendidikan"],
+  ["Pelatihan pembelajaran mendalam & asesmen formatif","Guru mempraktikkan pembelajaran yang berkesadaran, bermakna, menggembirakan serta asesmen formatif untuk umpan balik.","Waka Kurikulum","Semester ini","Modul ajar memuat asesmen formatif","Ya","Pelatihan pembelajaran mendalam"],
+ ],
+ "D.2":[
+  ["Komunitas belajar rutin","Kombel guru membahas data belajar murid dan praktik mengajar; satu topik per bulan.","Ketua kombel","Bulanan","Notula dan tindak lanjut kombel","Tidak","Pelaksanaan kegiatan komunitas belajar di satuan pendidikan"],
+  ["Jurnal refleksi & berbagi praktik baik","Guru mencatat refleksi mengajar dan membagikan satu praktik baik per semester.","Semua guru","Mingguan","Jumlah praktik baik terdokumentasi","Tidak","Pelaksanaan refleksi pembelajaran"],
+ ],
+ "D.3":[
+  ["Visi-misi diterjemahkan ke praktik kelas","Visi-misi diturunkan menjadi target pembelajaran dan budaya kelas yang diketahui guru dan murid.","Kepala sekolah","Awal tahun ajaran","Guru dapat menjelaskan kaitan visi-misi dengan pembelajaran","Tidak","Penyusunan perencanaan program satuan pendidikan (visi misi sekolah, RKJM, RKT, RKAS)"],
+  ["Kalender kepemimpinan pembelajaran","Jadwal tetap supervisi, umpan balik, dan dukungan refleksi guru oleh kepala sekolah.","Kepala sekolah","Sepanjang tahun","Jadwal terlaksana ≥90%","Tidak","Pengembangan dan pelaksanaan program kerja kepala sekolah"],
+ ],
+ "D.4":[
+  ["Optimalisasi TPPK dan kanal pelaporan aman","Sosialisasi TPPK ke murid dan orang tua, kanal lapor yang aman/anonim, SOP penanganan kasus.","Kepala sekolah; TPPK","Bulan pertama, lalu berkelanjutan","Kanal pelaporan diketahui ≥90% murid","Tidak","Pengembangan program pencegahan dan penanganan kekerasan dan kekerasan seksual di satuan pendidikan (termasuk Program Roots)"],
+  ["Program anti perundungan berbasis murid","Agen perubahan (Program Roots atau sejenis) mengampanyekan sekolah aman dan ramah.","Guru BK; Pembina OSIS","Per semester","Persentase murid aman dari perundungan naik","Ya","Penerapan program pencegahan perundungan"],
+  ["Edukasi pencegahan kekerasan seksual, rokok, dan narkoba","Edukasi bersama puskesmas, BNN, atau mitra; sesuai usia dan melibatkan orang tua.","Guru BK; Waka Kesiswaan","Per semester","Skor D.4.8 dan D.4.10 kembali naik","Ya","Penyelenggaraan: pencegahan penyalahgunaan narkotika, psikotropika, zat adiktif (narkoba), minuman keras, merokok, dan HIV AIDS"],
+  ["Layanan kesejahteraan psikologis murid","Skrining kesejahteraan murid, konseling kelompok, dan wali kelas sebagai pendamping.","Guru BK; wali kelas","Per semester","Skor wellbeing murid (D.4.1) naik","Tidak","Penyelenggaraan program konseling untuk keberlanjutan pendidikan"],
+ ],
+ "D.6":[
+  ["Pembagian peran setara dalam kelas dan OSIS","Peran memimpin, presentasi, dan tugas kelas dibagi setara antara murid laki-laki dan perempuan.","Wali kelas; Pembina OSIS","Sepanjang tahun","Komposisi peran seimbang","Tidak","Peningkatan kompetensi pendidik untuk memahami sikap inklusif, toleran, dan kesetaraan gender (termasuk pendidikan inklusif/disabilitas)"],
+ ],
+ "D.8":[
+  ["Kegiatan lintas budaya dan agama","Kegiatan kolaborasi antarmurid berbeda latar belakang; perayaan keragaman dalam kokurikuler.","Waka Kesiswaan","Per semester","Partisipasi murid lintas latar belakang","Ya","Peningkatan kompetensi pendidik untuk memahami toleransi/kesetaraan/moderasi beragama dan budaya"],
+ ],
+ "D.10":[
+  ["Penguatan layanan murid berkebutuhan khusus","Identifikasi dan asesmen, PPI, akomodasi pembelajaran, peran GPK, dan pelatihan guru mapel.","Koordinator inklusi; GPK","Sepanjang tahun","Seluruh MBK memiliki PPI yang dijalankan","Ya","Pengembangan/peningkatan kompetensi pendidik dan tenaga kependidikan yang menangani Murid berkebutuhan khusus"],
+  ["Sensitisasi warga sekolah tentang disabilitas","Kegiatan pengenalan dan empati terhadap disabilitas untuk murid dan guru.","Guru BK; koordinator inklusi","Per semester","Skor sikap terhadap disabilitas (D.10.3) naik","Tidak","Pengembangan sekolah sehat, sekolah aman, sekolah ramah anak, sekolah inklusi, sekolah adiwiyata dan sejenisnya"],
+ ],
+ "D.19":[
+  ["Pembiasaan pagi dan kampanye 7 kebiasaan","Senam/olahraga pagi, ibadah bersama, kampanye bangun pagi dan tidur cepat, kantin sehat.","Waka Kesiswaan; Guru PJOK","Harian/mingguan","Skor D.19.1–D.19.7 naik","Ya","Penguatan pendidikan karakter dan penumbuhan budi pekerti"],
+  ["Kemitraan orang tua untuk kebiasaan di rumah","Kesepakatan jam belajar dan tidur di rumah; laporan jurnal kebiasaan ke orang tua lewat grup kelas.","Wali kelas; paguyuban kelas","Bulanan","≥70% orang tua aktif memantau jurnal","Tidak","Pengembangan kegiatan pelibatan orang tua/wali/keluarga di pembelajaran"],
+ ],
+ "E.1":[
+  ["Forum suara murid","Survei kepuasan dan usulan murid tiap semester; perwakilan murid ikut rapat perencanaan kegiatan.","Pembina OSIS; Waka Kesiswaan","Per semester","Skor partisipasi murid (E.1.2) naik","Tidak","Program pembinaan kemuridan dan kepemimpinan murid"],
+  ["Pelibatan orang tua dalam pembelajaran","Kelas orang tua, paguyuban kelas aktif, laporan perkembangan yang mudah dipahami.","Kepala sekolah; komite","Per semester","Kehadiran orang tua dalam kegiatan","Ya","Pengembangan kegiatan pelibatan orang tua/wali/keluarga di pembelajaran"],
+ ],
+ "E.2":[
+  ["Selaraskan RKAS dengan hasil PBD","Alokasikan anggaran untuk kegiatan benahi prioritas, termasuk peningkatan mutu guru (E.2.1), sesuai juknis BOSP tahun berjalan.","Kepala sekolah; bendahara; tim RKAS","Saat penyusunan/perubahan RKAS","Proporsi belanja peningkatan mutu naik","Tidak","Penyusunan perencanaan program satuan pendidikan (visi misi sekolah, RKJM, RKT, RKAS)"],
+  ["Pengembangan kompetensi guru terencana","Program pelatihan, kombel, dan MGMP berbasis kebutuhan guru hasil supervisi.","Waka Kurikulum","Sepanjang tahun","Setiap guru mengikuti ≥1 pengembangan per semester","Ya","Kegiatan kelompok belajar antar sekolah (termasuk KKG, MGMP, MGMPS, MGMPK, KKKS, atau MKKS)"],
+ ],
+ "E.3":[
+  ["Belanja daring melalui SIPLah","Belanja barang/jasa yang memenuhi ketentuan dilakukan melalui SIPLah dan dicatat tepat waktu di ARKAS.","Bendahara BOS","Sepanjang tahun","Proporsi belanja daring (E.3.1) naik","Tidak","Penyelenggaraan sosialisasi dan pelaporan program, kegiatan hasil-hasil, dan pengelolaan keuangan sekolah"],
+ ],
+ "E.5":[
+  ["Penyusunan/peninjauan kebijakan sekolah","Tinjau kebijakan anti kekerasan, inklusi, kesetaraan gender, kebinekaan, dan kebencanaan; sosialisasikan ke warga sekolah.","Kepala sekolah; tim kebijakan","Semester ini","Dokumen kebijakan ditetapkan dan disosialisasikan","Tidak","Penyusunan perencanaan, pelaksanaan pengawasan, pelaksanaan evaluasi, dan penyusunan tata tertib Satuan Pendidikan"],
+ ],
+ "E.7":[
+  ["Inventarisasi kelayakan ruang","Data kondisi ruang (rusak ringan/sedang/berat) diperbarui di Dapodik; pemeliharaan ringan dan usulan rehabilitasi ke dinas.","Waka Sarpras","Semester ini","Data sarpras mutakhir; usulan rehab terkirim","Ya","Pemeliharaan sarana prasarana (sesuaikan nama kegiatan di ARKAS)"],
+ ],
+ "E.8":[
+  ["Penataan rombongan belajar","Koordinasi dengan dinas dalam penerimaan murid baru agar rasio murid per rombel sesuai standar; data rombel di Dapodik diperbarui.","Kepala sekolah; operator","Menjelang penerimaan murid baru","Rasio murid per rombel sesuai","Tidak","—"],
+ ],
+ "_":[
+  ["Analisis lanjutan dan rencana perbaikan","Tim PBD menelaah sub-indikator dan data pendukung, lalu menetapkan 1–2 kegiatan perbaikan yang terukur.","Tim PBD sekolah","Bulan ini","Rencana perbaikan disepakati","Tidak","—"]
+ ]
+};
+
+/* =========================================================
+   ANALISIS
+   ========================================================= */
+function weakness(it){ // seberapa lemah satu indikator (untuk akar masalah)
+  if(!it) return 0;
+  let w=0;
+  if(it.cat==="Kurang") w+=3; else if(it.cat==="Sedang") w+=2;
+  if(it.delta!=null && it.delta<0) w+=Math.min(3,Math.abs(it.delta)/AMBANG_TURUN*1.5);
+  const rl=rankLv(it.rankKab); if(rl>=4) w+=rl===5?1.5:0.8;
+  return w;
+}
+function isWeak(it){ return it && (it.cat==="Kurang"||it.cat==="Sedang"||(it.delta!=null&&it.delta<=-AMBANG_TURUN)); }
+
+function analyze(d){
+  const L1=d.list.filter(i=>i.level===1 && (i.cat && i.cat!=="NA" || i.val!=null));
+  const all=d.list.filter(i=>i.cat!=="NA" && (i.val!=null||i.cat));
+  const count={Baik:0,Sedang:0,Kurang:0};
+  L1.forEach(i=>{if(count[i.cat]!=null)count[i.cat]++});
+  const naList=d.list.filter(i=>i.level===1&&i.cat==="NA");
+  const declines=all.filter(i=>i.delta!=null&&i.delta<0).sort((a,b)=>a.delta-b.delta);
+  const sig=declines.filter(i=>i.delta<=-AMBANG_TURUN);
+  const rises=all.filter(i=>i.delta!=null&&i.delta>0).sort((a,b)=>b.delta-a.delta);
+  const lowRank=L1.filter(i=>rankLv(i.rankKab)===5);
+  const ofc=new Set(d.recs.filter(r=>r.kind==="prioritas").map(r=>r.ind));
+  if(!ofc.size) d.recs.forEach(r=>ofc.add(r.ind));
+  // alarm dini: induk Baik tapi sub lemah, atau penurunan tajam
+  const alarms=[];
+  d.list.filter(i=>i.level===2 && i.cat!=="NA").forEach(i=>{
+    const p=d.map[i.parent];
+    const reasons=[];
+    if(i.cat==="Kurang") reasons.push("capaian Kurang");
+    else if(i.cat==="Sedang" && p && p.cat==="Baik") reasons.push("Sedang padahal induknya Baik");
+    if(i.delta!=null && i.delta<=-10) reasons.push(`turun ${fmt(Math.abs(i.delta))} poin`);
+    if(reasons.length) alarms.push({it:i,reasons,sev:(i.cat==="Kurang"?3:i.cat==="Sedang"?1.5:0)+Math.abs(Math.min(0,i.delta||0))/10});
+  });
+  alarms.sort((a,b)=>b.sev-a.sev);
+  // distribusi kompetensi minimum
+  const belowMin={};
+  ["A.1","A.2"].forEach(c=>{const it=d.map[c]; if(it&&it.dist.length){
+    const b=it.dist.filter(x=>/bawah/i.test(x.label)).reduce((s,x)=>s+(x.val||0),0); belowMin[c]=b; }});
+  // catatan kualitas data
+  const notes=[];
+  const instr=L1.filter(i=>/instrumen/i.test(i.deltaText));
+  if(instr.length) notes.push(`Perubahan skor tidak dapat dibandingkan karena instrumen tahun ini berbeda: ${instr.map(i=>i.code+" "+i.name).join(", ")}.`);
+  if(naList.length) notes.push(`${naList.length} indikator utama tidak tersedia nilainya (umumnya khusus SMK, tidak diisi satuan pendidikan, atau belum diukur): ${naList.map(i=>i.code).join(", ")}.`);
+  const small=L1.filter(i=>i.val!=null&&i.val<=10&&(i.prev==null||i.prev<=10));
+  if(small.length) notes.push(`${small.map(i=>i.code+" "+i.name).join(", ")} memakai skala nilai kecil (bukan 0–100), jadi tidak dibandingkan langsung dengan indikator lain.`);
+  notes.push("Skor dalam persen (%) dan skor rerata dari indikator berbeda tidak dijumlahkan atau dirata-rata bersama.");
+
+  // skor prioritas
+  const prio=L1.map(i=>{
+    const parts=[];
+    const add=(lbl,v)=>{ if(v>0) parts.push([lbl,Math.round(v*10)/10]); };
+    add(`Capaian ${i.cat||"-"}`, i.cat==="Kurang"?40:i.cat==="Sedang"?25:i.cat==="Baik"?5:0);
+    const dl=Math.min(i.delta??0, i.skor?.delta??0);
+    if(dl<0) add(`Turun ${fmt(Math.abs(dl))}`, Math.min(20,Math.abs(dl)*1.5));
+    const rl=rankLv(i.rankKab);
+    add(`Peringkat kab/kota ${rankShort(i.rankKab).toLowerCase()}`, rl===5?15:rl===4?8:rl===3?3:0);
+    const ws=i.subs.filter(isWeak).length;
+    add(`${ws} sub-indikator lemah`, Math.min(15,ws*3));
+    if(PRIORITAS_NASIONAL.includes(i.code)) add("Indikator prioritas nasional",8);
+    if(ofc.has(i.code)) add("Direkomendasikan platform",10);
+    if(typeof tstats==="function"){ const tr=tstats(i.code); if(tr.consecDown>=2) add(`Turun ${tr.consecDown} tahun berturut-turut`, 6+2*(tr.consecDown-2)); }
+    if(belowMin[i.code]>0) add(`${fmt(belowMin[i.code])}% murid di bawah kompetensi minimum`, Math.min(10,belowMin[i.code]));
+    let total=parts.reduce((s,p)=>s+p[1],0);
+    if(SULIT_DIKENDALIKAN.includes(i.code)){ total*=0.8; parts.push(["Banyak bergantung pihak luar (×0,8)",0]); }
+    total=Math.min(100,Math.round(total));
+    return {it:i,score:total,parts};
+  }).sort((a,b)=>b.score-a.score);
+
+  // akar masalah per indikator
+  prio.forEach(p=>{
+    const i=p.it, roots=[], seen=new Set();
+    const pushRoot=(code,src)=>{
+      if(!code||seen.has(code)||code===i.code) return; seen.add(code);
+      const it=d.map[code]; roots.push({code,it,src,name:it?it.name:code,w:weakness(it)});
+    };
+    i.subs.slice().sort((a,b)=>weakness(b)-weakness(a)).forEach(s=>{ if(isWeak(s)) pushRoot(s.code,"Sub-indikator"); });
+    d.recs.filter(r=>r.ind===i.code).forEach(r=>pushRoot(r.l2||r.l1,"Rapor (resmi)"));
+    (LINKS[i.code]||[]).forEach(c=>pushRoot(c,"Keterkaitan"));
+    roots.sort((a,b)=>b.w-a.w || (a.src==="Rapor (resmi)"?-1:1));
+    p.roots=roots;
+    p.main=roots.filter(r=>r.w>=2 || (r.it&&isWeak(r.it))).slice(0,3);
+    if(!p.main.length) p.main=roots.slice(0,2);
+  });
+  return {L1,count,naList,declines,sig,rises,lowRank,alarms,belowMin,notes,prio,ofc};
+}
+
+/* =========================================================
+   RENDER: RINGKASAN
+   ========================================================= */
+function summaryText(){
+  const c=A.count, d=D;
+  const best=A.L1.filter(i=>i.cat==="Baik"&&rankLv(i.rankKab)===1).map(i=>`${i.name} (${i.valText})`);
+  const weak=A.L1.filter(i=>i.cat==="Kurang"||i.cat==="Sedang");
+  const bigDrop=A.L1.filter(i=>i.delta!=null&&i.delta<=-AMBANG_TURUN).sort((a,b)=>a.delta-b.delta);
+  let s=`<p>Dari <b>${A.L1.length}</b> indikator utama yang memiliki nilai pada Rapor Pendidikan ${esc(d.year)}, <b>${c.Baik}</b> berkategori Baik, <b>${c.Sedang}</b> Sedang, dan <b>${c.Kurang}</b> Kurang.`;
+  if(best.length) s+=` Kekuatan sekolah tampak pada ${esc(best.slice(0,4).join(", "))}, yang berada di peringkat atas kab/kota.`;
+  s+=`</p>`;
+  if(weak.length) s+=`<p>Perlu perhatian: ${weak.map(i=>`<b>${esc(i.code)} ${esc(i.name)}</b> (${i.cat}${rankLv(i.rankKab)>=4?", peringkat "+rankShort(i.rankKab).toLowerCase()+" di kab/kota":""})`).join("; ")}.</p>`;
+  if(bigDrop.length) s+=`<p>Penurunan terbesar indikator utama: ${bigDrop.slice(0,4).map(i=>`${esc(i.name)} (${fmt(i.prev)} → ${fmt(i.val)})`).join("; ")}. Meski sebagian masih berkategori Baik, tren turun ini perlu dicegah sebelum berubah menjadi Sedang.</p>`;
+  const bm=Object.entries(A.belowMin).filter(([k,v])=>v>0);
+  if(bm.length) s+=`<p>Masih ada murid di bawah kompetensi minimum: ${bm.map(([k,v])=>`${k==="A.1"?"literasi":"numerasi"} ${fmt(v)}%`).join(", ")}.</p>`;
+  const top=A.prio.filter(p=>selected.has(p.it.code)).map(p=>p.it.name);
+  if(top.length) s+=`<p><b>Usulan fokus perbaikan:</b> ${esc(top.join(", "))}. Lihat tab 4 untuk akar masalah dan tab 5 untuk rencana kegiatan.</p>`;
+  return s;
+}
+function renderRingkasan(){
+  const el=$("#ringkasanBody");
+  if(!D){ el.innerHTML=`<div class="card"><h2>Mulai dengan mengimpor Rapor Pendidikan</h2><p class="sub">Belum ada data. Buka tab <b>Panduan &amp; Impor</b> untuk mengunggah file Excel Rapor PBD sekolah Anda.</p><button class="btn pri" onclick="go('panduan')">Buka Panduan &amp; Impor</button></div>`; return; }
+  const c=A.count;
+  const k=(l,v,h,cls="")=>`<div class="kpi"><div class="l">${l}</div><div class="v" ${cls}>${v}</div><div class="h">${h}</div></div>`;
+  let h=`<div class="grid kpis" style="margin-bottom:16px">
+    ${k("Indikator utama dinilai",A.L1.length,`${A.naList.length} tidak tersedia`)}
+    ${k(`${catChip("Baik")}`,c.Baik,"indikator utama")}
+    ${k(`${catChip("Sedang")}`,c.Sedang,"indikator utama")}
+    ${k(`${catChip("Kurang")}`,c.Kurang,"indikator utama")}
+    ${k("Turun ≥ "+AMBANG_TURUN+" poin",A.sig.length,"indikator & sub-indikator")}
+    ${k("Peringkat bawah kab/kota",A.lowRank.length,"indikator utama (81–100%)")}
+  </div>`;
+  h+=`<div class="card"><h2>Ringkasan untuk kepala sekolah</h2><div class="prose" style="margin-top:8px">${summaryText()}</div></div>`;
+  h+=`<div class="grid two">
+    <div class="card"><h2>Skor indikator utama ${esc(D.year)}</h2><p class="sub">Batang = skor ${esc(D.year)}, garis tegak = skor ${esc(D.yPrev||"tahun lalu")}. Hanya indikator berskala 0–100.</p>
+      <div class="legend"><span><i style="background:var(--bar)"></i>${esc(D.year)}</span><span><i class="tk"></i>${esc(D.yPrev||"Tahun lalu")}</span></div>
+      <div class="chart" id="chScore"></div></div>
+    <div class="card"><h2>Perubahan dari ${esc(D.yPrev||"tahun lalu")}</h2><p class="sub">Selisih skor indikator utama yang dapat dibandingkan (poin).</p>
+      <div class="legend"><span><i style="background:var(--up)"></i>Naik</span><span><i style="background:var(--down)"></i>Turun</span></div>
+      <div class="chart" id="chDelta"></div></div>
+  </div>`;
+  h+=`<div class="card"><h2>Alarm dini sub-indikator</h2><p class="sub">Sub-indikator yang Kurang, Sedang padahal induknya Baik, atau turun ≥ 10 poin. Inilah yang paling cepat menurunkan indikator utama tahun depan.</p>`;
+  if(A.alarms.length){
+    h+=`<div class="tscroll" style="max-height:420px"><table class="t"><thead><tr><th>Kode</th><th>Sub-indikator</th><th>Capaian</th><th class="num">${esc(D.yPrev)}</th><th class="num">${esc(D.year)}</th><th>Perubahan</th><th>Alasan</th></tr></thead><tbody>`;
+    A.alarms.slice(0,16).forEach(a=>{const i=a.it;h+=`<tr><td>${esc(i.code)}</td><td>${esc(i.name)}</td><td>${catChip(i.cat)}</td><td class="num">${esc(i.prevText||"–")}</td><td class="num">${esc(i.valText)}</td><td>${deltaHTML(i.delta)}</td><td style="font-size:12.5px">${esc(a.reasons.join("; "))}</td></tr>`});
+    h+=`</tbody></table></div>`;
+  } else h+=`<div class="empty">Tidak ada sub-indikator yang memicu alarm.</div>`;
+  h+=`</div>`;
+  h+=`<div class="card"><h2>Catatan kualitas data</h2><ul class="prose" style="margin:6px 0 0">${A.notes.map(n=>`<li>${esc(n)}</li>`).join("")}</ul></div>`;
+  el.innerHTML=h;
+  drawScore(); drawDelta();
+}
+function drawScore(){
+  const rows=A.L1.filter(i=>i.val!=null && !(i.val<=10&&(i.prev==null||i.prev<=10))).sort((a,b)=>codeKey(a.code)<codeKey(b.code)?-1:1);
+  $("#chScore").innerHTML=rows.map(i=>{
+    const v=Math.max(0,Math.min(100,i.val)), p=i.prev!=null?Math.max(0,Math.min(100,i.prev)):null;
+    const tip=`<b>${esc(i.code)} ${esc(i.name)}</b><br>Capaian: ${esc(i.cat||"-")}<br>${esc(D.year)}: ${esc(i.valText)} · ${esc(D.yPrev)}: ${esc(i.prevText||"–")}<br>Perubahan: ${esc(i.deltaText||"–")}<br>Peringkat kab/kota: ${esc(rankShort(i.rankKab))}`;
+    return `<div class="crow" data-tip="${esc(tip)}"><div class="lab"><small>${esc(i.code)}</small>${esc(i.name)}</div>
+      <div class="track"><div class="fill" style="width:${v}%"></div>${p!=null?`<div class="tick" style="left:calc(${p}% - 1px)"></div>`:""}</div>
+      <div class="val">${fmt(i.val,1)}</div></div>`;
+  }).join("") || `<div class="empty">Tidak ada data.</div>`;
+}
+function drawDelta(){
+  const rows=A.L1.filter(i=>i.delta!=null).sort((a,b)=>a.delta-b.delta);
+  const mx=Math.max(5,...rows.map(i=>Math.abs(i.delta)));
+  $("#chDelta").innerHTML=rows.map(i=>{
+    const w=Math.abs(i.delta)/mx*46;
+    const tip=`<b>${esc(i.code)} ${esc(i.name)}</b><br>${esc(D.yPrev)}: ${esc(i.prevText)} → ${esc(D.year)}: ${esc(i.valText)}<br>${esc(i.deltaText)}`;
+    const bar=i.delta>=0?`<div class="dbar up" style="left:50%;width:${w}%"></div><div class="dlab" style="left:calc(50% + ${w}% + 4px)">+${fmt(i.delta,1)}</div>`
+      :`<div class="dbar down" style="right:50%;width:${w}%"></div><div class="dlab" style="right:calc(50% + ${w}% + 4px)">−${fmt(Math.abs(i.delta),1)}</div>`;
+    return `<div class="drow" data-tip="${esc(tip)}"><div class="lab" style="font-size:13px"><small style="color:var(--muted);font-weight:600;margin-right:4px">${esc(i.code)}</small>${esc(i.name)}</div><div class="dtrack"><div class="mid"></div>${bar}</div></div>`;
+  }).join("") || `<div class="empty">Tidak ada perubahan yang dapat dibandingkan.</div>`;
+}
+
+/* =========================================================
+   RENDER: SEMUA INDIKATOR
+   ========================================================= */
+function renderIndikator(){
+  const t=$("#tblInd");
+  if(!D){t.innerHTML=`<tr><td class="empty">Belum ada data.</td></tr>`;return;}
+  const dim=$("#fDim").value, cat=$("#fCat").value, turun=$("#fTurun").checked, sub=$("#fSub").checked, q=$("#fQ").value.trim().toLowerCase();
+  let h=`<thead><tr><th>Kode</th><th>Indikator</th><th>Capaian</th><th class="num">${esc(D.yPrev)}</th><th class="num">${esc(D.year)}</th><th>Perubahan</th><th>Peringkat kab/kota</th><th>Peringkat nasional</th></tr></thead><tbody>`;
+  let n=0;
+  D.list.forEach(i=>{
+    if(i.level===2 && !sub) return;
+    if(dim && i.dim!==dim) return;
+    if(cat && i.cat!==cat) return;
+    if(turun && !(i.delta!=null&&i.delta<0)) return;
+    if(q && !(i.code.toLowerCase().includes(q)||i.name.toLowerCase().includes(q))) return;
+    n++;
+    const tip=`<b>${esc(i.code)} ${esc(i.name)}</b><br>${esc(i.desc)}${i.def?`<br><br><i>${esc(i.def)}</i>`:""}`;
+    const na=i.cat==="NA";
+    h+=`<tr class="l${i.level}"><td>${esc(i.code)}</td><td data-tip="${esc(tip)}" style="cursor:help">${esc(i.name)}${i.dist.length?`<div style="font-weight:500;font-size:12px;color:var(--muted);margin-top:3px">${i.dist.map(x=>`${esc(x.label)} ${fmt(x.val)}%`).join(" · ")}</div>`:""}${i.skor?`<div style="font-weight:500;font-size:12px;color:var(--muted)">Skor rerata ${fmt(i.skor.val)} (${esc(i.skor.deltaText)})</div>`:""}</td>
+      <td>${catChip(i.cat)}</td><td class="num">${na?"–":esc(i.prevText||"–")}</td><td class="num">${na?"–":esc(i.valText||"–")}</td>
+      <td>${na?'<span class="delta flat">–</span>':deltaHTML(i.delta,/instrumen/i.test(i.deltaText)?"instrumen beda":"–")}</td>
+      <td style="font-size:12.5px">${na?"–":esc(rankShort(i.rankKab))}</td><td style="font-size:12.5px">${na?"–":esc(rankShort(i.rankNas))}</td></tr>`;
+  });
+  if(!n) h+=`<tr><td colspan="8" class="empty">Tidak ada indikator yang cocok dengan filter.</td></tr>`;
+  t.innerHTML=h+"</tbody>";
+}
+
+/* =========================================================
+   RENDER: PRIORITAS
+   ========================================================= */
+function autoSelect(){
+  const n=+$("#topN").value;
+  selected=new Set(A.prio.slice(0,n).map(p=>p.it.code));
+}
+function renderPrioritas(){
+  const el=$("#prioList");
+  if(!D){el.innerHTML=`<div class="empty">Belum ada data.</div>`;return;}
+  el.innerHTML=A.prio.map((p,ix)=>{
+    const i=p.it, on=selected.has(i.code);
+    const rootRows=p.roots.slice(0,8).map(r=>{
+      const it=r.it, main=p.main.includes(r);
+      return `<tr><td>${esc(r.code)}</td><td>${esc(r.name)}${main?'<span class="flag">akar utama</span>':""}</td><td><span class="tag ${r.src==="Rapor (resmi)"?"ofc":r.src==="Keterkaitan"?"kb":""}">${esc(r.src)}</span></td><td>${it?catChip(it.cat):"–"}</td><td class="num">${it?esc(it.valText||"–"):"–"}</td><td>${it?deltaHTML(it.delta,/instrumen/i.test(it.deltaText)?"instrumen beda":"–"):"–"}</td></tr>`;
+    }).join("");
+    return `<div class="pcard ${on?"":"off"}">
+      <div class="phead">
+        <div class="prank">${ix+1}</div>
+        <div class="ptitle"><label class="ck" style="float:right;margin-left:10px"><input type="checkbox" data-sel="${esc(i.code)}" ${on?"checked":""}> Prioritaskan</label>
+          <b>${esc(i.code)} ${esc(i.name)}</b>
+          <div class="pmeta">${catChip(i.cat)} <span>Skor ${esc(i.valText)}</span> ${deltaHTML(i.delta,/instrumen/i.test(i.deltaText)?"instrumen beda":"")} <span>Kab/kota: ${esc(rankShort(i.rankKab))}</span>${A.ofc.has(i.code)?'<span class="tag ofc">Prioritas platform</span>':""}${PRIORITAS_NASIONAL.includes(i.code)?'<span class="tag">Prioritas nasional</span>':""}</div>
+          <div class="why" style="margin-top:6px">${p.parts.map(x=>`<span class="tag">${esc(x[0])}${x[1]?` +${fmt(x[1],1)}`:""}</span>`).join("")}</div>
+        </div>
+        <div class="score"><div style="font-size:12px;color:var(--muted)">Skor prioritas</div><div class="s">${p.score}</div><div class="sbar"><span style="width:${p.score}%"></span></div></div>
+      </div>
+      ${p.roots.length?`<details class="pbody" ${on&&ix<3?"open":""}><summary style="cursor:pointer;font-weight:700;font-size:14px">Refleksi: kemungkinan akar masalah (${p.roots.length})</summary>
+        <p class="why" style="margin:8px 0">Akar utama dipilih dari indikator terkait yang paling lemah (capaian, penurunan, peringkat). Ini hipotesis; konfirmasi dengan supervisi kelas, angket murid, dan data BK.</p>
+        <div class="tscroll" style="max-height:340px"><table class="t roots"><thead><tr><th>Kode</th><th>Akar masalah</th><th>Sumber</th><th>Capaian</th><th class="num">${esc(D.year)}</th><th>Perubahan</th></tr></thead><tbody>${rootRows}</tbody></table></div>
+      </details>`:""}
+    </div>`;
+  }).join("");
+  $$("[data-sel]").forEach(cb=>cb.onchange=()=>{ cb.checked?selected.add(cb.dataset.sel):selected.delete(cb.dataset.sel); defaultPicks(); renderPrioritas(); renderBenahi(); renderRingkasanText(); });
+}
+function renderRingkasanText(){ const p=$("#ringkasanBody .prose"); if(p) p.innerHTML=summaryText(); }
+
+/* =========================================================
+   RENDER: RENCANA BENAHI
+   ========================================================= */
+function actionsFor(p){
+  const i=p.it, acts=[];
+  // dari rekomendasi resmi untuk akar utama
+  const mainCodes=new Set(p.main.map(r=>r.code));
+  const recs=D.recs.filter(r=>r.ind===i.code);
+  const seenL2=new Set();
+  const relevant=r=>mainCodes.has(r.l2)||mainCodes.has(r.l1)||isWeak(D.map[r.l2]);
+  recs.filter(r=>mainCodes.has(r.l2)||mainCodes.has(r.l1)).concat(recs.filter(relevant)).slice(0,12).forEach(r=>{
+    if(seenL2.has(r.l2)||seenL2.size>=6) return; seenL2.add(r.l2);
+    acts.push({id:`ofc|${i.code}|${r.l2}`,src:"ofc",ind:i,akar:`${r.l2} ${r.l2Name}`,main:mainCodes.has(r.l2)||mainCodes.has(r.l1),
+      k:clip(r.kegiatan.split(/(?<=\.)\s/)[0],260), i:r.kegiatan, insp:r.inspirasi, link:r.tautan,
+      pj:"Kepala sekolah; tim terkait", w:"Tahun ajaran berjalan", ind2:`Skor ${r.l2} naik pada rapor berikutnya`, b:r.arkas.length?"Ya":"Tidak", a:r.arkas[0]||"—", arkasAll:r.arkas});
+  });
+  (KB[i.code]||KB["_"]).forEach((x,ix)=>{
+    const akar=p.main.length?p.main.map(r=>`${r.code} ${r.name}`).join("; "):`${i.code} ${i.name}`;
+    acts.push({id:`kb|${i.code}|${ix}`,src:"kb",ind:i,akar,main:true,k:x[0],i:x[1],pj:x[2],w:x[3],ind2:x[4],b:x[5],a:x[6],arkasAll:[x[6]]});
+  });
+  return acts;
+}
+function allActions(){ return A.prio.filter(p=>selected.has(p.it.code)).flatMap(p=>actionsFor(p)); }
+function defaultPicks(){
+  const keep=new Set([...picked]);
+  A.prio.filter(p=>selected.has(p.it.code)).forEach(p=>{
+    const acts=actionsFor(p);
+    if(acts.some(a=>keep.has(a.id))) return;
+    acts.filter(a=>a.src==="ofc"&&a.main).slice(0,2).forEach(a=>picked.add(a.id));
+    acts.filter(a=>a.src==="kb").slice(0,2).forEach(a=>picked.add(a.id));
+  });
+}
+function planRows(){
+  return allActions().filter(a=>picked.has(a.id)).map(a=>{
+    const e=edits[a.id]||{};
+    return {id:a.id, indikator:`${a.ind.code} ${a.ind.name}`, akar:e.akar??a.akar, kegiatan:e.kegiatan??a.k, impl:e.impl??(a.src==="ofc"?shortInsp(a.insp):a.i),
+      pj:e.pj??a.pj, waktu:e.waktu??a.w, ukur:e.ukur??a.ind2, biaya:e.biaya??a.b, arkas:e.arkas??a.a};
+  });
+}
+function clip(s,n){ s=String(s||"").trim(); if(s.length<=n) return s; const c=s.slice(0,n); return c.slice(0,Math.max(c.lastIndexOf(" "),n*0.6)).replace(/[,;:\s]+$/,"")+"…"; }
+function shortInsp(t){ const m=String(t||"").split(/\n\s*\n|\n(?=\d+\.)/).map(s=>s.trim()).filter(Boolean); return clip((m[0]||"").replace(/^\d+\.\s*/,""),420); }
+function rootLabel(r){ const it=r.it; if(!it) return `<b>${esc(r.code)}</b> ${esc(r.name)}`; const bits=[]; if(it.cat&&it.cat!=="NA") bits.push(it.cat); if(it.valText) bits.push(it.valText); if(it.delta!=null&&it.delta!==0) bits.push(it.delta<0?`turun ${fmt(-it.delta)}`:`naik ${fmt(it.delta)}`); return `<b>${esc(r.code)}</b> ${esc(r.name)}${bits.length?` (${esc(bits.join(", "))})`:""}`; }
+function renderBenahi(){
+  const el=$("#benahiBody");
+  if(!D){el.innerHTML=`<div class="card"><div class="empty">Belum ada data.</div></div>`;return;}
+  const P=A.prio.filter(p=>selected.has(p.it.code));
+  if(!P.length){el.innerHTML=`<div class="card"><h2>Rencana Benahi</h2><div class="empty">Belum ada indikator prioritas yang dipilih. Pilih di tab 4.</div></div>`;return;}
+  let h=`<div class="card"><h2>Apa yang harus dilakukan sekolah</h2><p class="sub">Untuk setiap prioritas, pilih kegiatan benahi. Kegiatan bertanda <span class="tag ofc">Rapor (resmi)</span> berasal dari rekomendasi platform Rapor Pendidikan; <span class="tag kb">Rapor Pintar</span> adalah usulan tambahan yang praktis. Kegiatan terpilih otomatis masuk tabel RKJP dan rancangan ARKAS di bawah.</p></div>`;
+  P.forEach(p=>{
+    const acts=actionsFor(p);
+    h+=`<div class="card"><h2>${esc(p.it.code)} ${esc(p.it.name)} ${catChip(p.it.cat)}</h2>
+      <p class="sub">Akar utama: ${p.main.map(rootLabel).join("; ")||"–"}</p>`;
+    acts.forEach(a=>{
+      h+=`<div class="act"><input type="checkbox" data-pick="${esc(a.id)}" ${picked.has(a.id)?"checked":""}><div style="flex:1;min-width:0">
+        <div><span class="tag ${a.src}">${a.src==="ofc"?"Rapor (resmi)":"Rapor Pintar"}</span><span class="tag">Akar: ${esc(a.src==="ofc"?a.akar:a.akar.split("; ").map(x=>x.split(" ")[0]).join(", "))}</span>${a.main&&a.src==="ofc"?'<span class="flag alt">akar utama</span>':""}</div>
+        <div class="k" style="margin-top:4px">${esc(a.k)}</div>
+        ${a.src==="kb"?`<div class="i">${esc(a.i)}<br><b>PJ:</b> ${esc(a.pj)} · <b>Waktu:</b> ${esc(a.w)} · <b>Ukuran berhasil:</b> ${esc(a.ind2)}</div>`:""}
+        ${a.src==="ofc"?`<details><summary>Inspirasi kegiatan &amp; padanan ARKAS</summary><div>${esc(a.insp)}</div>${a.arkasAll.length?`<div><b>Padanan kegiatan ARKAS:</b>\n• ${a.arkasAll.map(esc).join("\n• ")}</div>`:""}${a.link?`<div><a href="${esc(a.link)}" target="_blank" rel="noopener">Materi referensi Benahi ↗</a></div>`:""}</details>`
+          :`<div class="i"><b>Padanan ARKAS:</b> ${esc(a.a)} · <b>Butuh biaya:</b> ${esc(a.b)}</div>`}
+      </div></div>`;
+    });
+    h+=`</div>`;
+  });
+  const rows=planRows();
+  h+=`<div class="card"><h2>Lembar RKJP (Rencana Kerja Jangka Pendek)</h2><p class="sub">Klik sel untuk menyunting. Kolom mengikuti lembar "3. Lembar Kerja RKJP" pada file PBD, ditambah penanggung jawab, waktu, dan ukuran keberhasilan.</p>
+    <div class="row" style="margin-bottom:10px"><button class="btn teal" id="dlXlsx">Unduh Excel RKJP + ARKAS</button><button class="btn" id="dlHtml">Unduh laporan (.html)</button><button class="btn" id="cpPlan">Salin tabel</button></div>
+    <div class="tscroll"><table class="t" id="tblPlan"><thead><tr><th>No</th><th>Identifikasi</th><th>Akar masalah</th><th>Kegiatan benahi</th><th>Penjelasan implementasi</th><th>PJ</th><th>Waktu</th><th>Ukuran keberhasilan</th><th>Biaya?</th></tr></thead><tbody>
+    ${rows.length?rows.map((r,ix)=>`<tr data-id="${esc(r.id)}"><td>${ix+1}</td><td>${esc(r.indikator)}</td>${["akar","kegiatan","impl","pj","waktu","ukur","biaya"].map(f=>`<td><div class="ed" contenteditable="true" data-f="${f}">${esc(r[f])}</div></td>`).join("")}</tr>`).join(""):`<tr><td colspan="9" class="empty">Belum ada kegiatan dipilih.</td></tr>`}
+    </tbody></table></div></div>`;
+  const cost=rows.filter(r=>/^ya/i.test(r.biaya));
+  h+=`<div class="card"><h2>Rancangan ARKAS (kegiatan yang butuh biaya)</h2><p class="sub">Isi uraian barang/jasa, volume, dan harga satuan di Excel yang diunduh. Penganggaran wajib mengikuti juknis BOSP tahun berjalan dan ketentuan SIPLah.</p>
+    <div class="tscroll"><table class="t"><thead><tr><th>No</th><th>Kegiatan benahi</th><th>Kegiatan ARKAS (padanan)</th><th>Uraian</th><th>Bulan</th><th class="num">Jumlah</th><th>Satuan</th><th class="num">Harga satuan</th><th class="num">Total</th></tr></thead><tbody>
+    ${cost.length?cost.map((r,ix)=>`<tr><td>${ix+1}</td><td>${esc(r.kegiatan)}</td><td>${esc(r.arkas)}</td><td style="color:var(--muted)">[diisi]</td><td style="color:var(--muted)">[bulan]</td><td class="num">–</td><td>–</td><td class="num">–</td><td class="num">–</td></tr>`).join(""):`<tr><td colspan="9" class="empty">Tidak ada kegiatan berbiaya.</td></tr>`}
+    </tbody></table></div></div>`;
+  el.innerHTML=h;
+  $$("[data-pick]").forEach(cb=>cb.onchange=()=>{cb.checked?picked.add(cb.dataset.pick):picked.delete(cb.dataset.pick); const y=window.scrollY; renderBenahi(); window.scrollTo(0,y);});
+  $$("#tblPlan .ed").forEach(c=>c.oninput=()=>{const id=c.closest("tr").dataset.id;(edits[id]=edits[id]||{})[c.dataset.f]=c.innerText.trim();});
+  $("#dlXlsx").onclick=exportXlsx; $("#dlHtml").onclick=exportHtml; $("#cpPlan").onclick=copyPlan;
+}
+
+/* =========================================================
+   EKSPOR
+   ========================================================= */
+async function saveFile(name,data,mime){
+  try{
+    if(window.claude && typeof window.claude.use==="function"){
+      const dl=await window.claude.use("downloads");
+      if(dl){ await dl.save({filename:name,data:data instanceof Blob?data:new Blob([data],{type:mime})}); toast("File disimpan: "+name); return; }
+    }
+  }catch(e){ if(e&&e.code==="declined"){toast("Unduhan dibatalkan.");return;} if(e&&e.code==="rate_limited"){toast("Tunggu sebentar lalu coba lagi.");return;} }
+  try{
+    const blob=data instanceof Blob?data:new Blob([data],{type:mime});
+    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500); toast("Mengunduh "+name);
+  }catch(e){ toast("Unduhan tidak didukung di tampilan ini. Gunakan tombol Salin."); }
+}
+const fileBase=()=>`Rapor-Pintar_${(D.school||"Sekolah").replace(/[^\w]+/g,"-")}_${D.year}`;
+function exportXlsx(){
+  if(typeof XLSX==="undefined"){toast("Pustaka Excel belum termuat (periksa koneksi internet).");return;}
+  const wb=XLSX.utils.book_new(), rows=planRows();
+  const s1=[["LEMBAR RENCANA KERJA JANGKA PENDEK (RKJP)"],["Nama Satuan",D.school],["Tahun Rapor",D.year],[],
+    ["No","Identifikasi","Akar Masalah","Kegiatan Benahi","Penjelasan Implementasi Kegiatan","Apakah Kegiatan Membutuhkan Biaya?","Penanggung Jawab","Waktu","Ukuran Keberhasilan"],
+    ...rows.map((r,ix)=>[ix+1,r.indikator,r.akar,r.kegiatan,r.impl,r.biaya,r.pj,r.waktu,r.ukur])];
+  const ws1=XLSX.utils.aoa_to_sheet(s1); ws1["!cols"]=[{wch:5},{wch:28},{wch:30},{wch:40},{wch:60},{wch:12},{wch:24},{wch:20},{wch:30}];
+  XLSX.utils.book_append_sheet(wb,ws1,"RKJP");
+  const cost=rows.filter(r=>/^ya/i.test(r.biaya));
+  const s2=[["LEMBAR KERJA RANCANGAN ARKAS"],[],["No","Kegiatan Benahi","Penjelasan Implementasi Kegiatan","Kegiatan ARKAS","Uraian Kegiatan ARKAS","Bulan Dianggarkan","Jumlah","Satuan","Harga Satuan","Total"],
+    ...cost.map((r,ix)=>[ix+1,r.kegiatan,r.impl,r.arkas,"","","","","",""])];
+  const ws2=XLSX.utils.aoa_to_sheet(s2);
+  cost.forEach((r,ix)=>{const R=4+ix; ws2["J"+R]={t:"n",f:`IFERROR(G${R}*I${R},0)`};});
+  ws2["!cols"]=[{wch:5},{wch:40},{wch:50},{wch:45},{wch:30},{wch:14},{wch:9},{wch:10},{wch:14},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,ws2,"ARKAS");
+  const s3=[["Peringkat","Kode","Indikator","Capaian","Skor "+D.year,"Skor "+D.yPrev,"Perubahan","Peringkat kab/kota","Skor prioritas","Dipilih","Akar masalah utama"],
+    ...A.prio.map((p,ix)=>[ix+1,p.it.code,p.it.name,p.it.cat,p.it.valText,p.it.prevText,p.it.deltaText,rankShort(p.it.rankKab),p.score,selected.has(p.it.code)?"Ya":"",p.main.map(r=>`${r.code} ${r.name}`).join("; ")])];
+  const ws3=XLSX.utils.aoa_to_sheet(s3); ws3["!cols"]=[{wch:9},{wch:7},{wch:40},{wch:10},{wch:10},{wch:10},{wch:22},{wch:16},{wch:12},{wch:8},{wch:60}];
+  XLSX.utils.book_append_sheet(wb,ws3,"Prioritas");
+  const s4=[["Kode","Indikator","Level","Capaian","Skor "+D.year,"Skor "+D.yPrev,"Perubahan","Peringkat kab/kota","Peringkat nasional"],
+    ...D.list.map(i=>[i.code,i.name,i.level,i.cat==="NA"?"Tidak tersedia":i.cat,i.valText,i.prevText,i.deltaText,i.rankKab,i.rankNas])];
+  const ws4=XLSX.utils.aoa_to_sheet(s4); ws4["!cols"]=[{wch:8},{wch:50},{wch:6},{wch:12},{wch:10},{wch:10},{wch:24},{wch:26},{wch:26}];
+  XLSX.utils.book_append_sheet(wb,ws4,"Data Indikator");
+  const ty=trendYears();
+  const s5=[["Kode","Indikator",...ty,"Perubahan","Rata-rata/tahun","Pola","Proyeksi "+(ty[ty.length-1]+1),"Catatan"],
+    ...D.list.filter(i=>i.level===1&&i.cat!=="NA").map(i=>{const r=tstats(i.code,ty);return [i.code,i.name,...ty.map(y=>{const c=cell(i.code,y);return c?+c.val.toFixed(2):"";}),r.n>=2?+r.delta.toFixed(2):"",r.n>=2?+r.slope.toFixed(2):"",r.pattern,r.proj!=null?+r.proj.toFixed(2):"",r.note||""];})];
+  const ws5=XLSX.utils.aoa_to_sheet(s5); ws5["!cols"]=[{wch:7},{wch:45},...ty.map(()=>({wch:9})),{wch:11},{wch:14},{wch:16},{wch:12},{wch:40}];
+  XLSX.utils.book_append_sheet(wb,ws5,"Tren");
+  const out=XLSX.write(wb,{bookType:"xlsx",type:"array"});
+  saveFile(fileBase()+"_RKJP-ARKAS.xlsx",new Blob([out],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));
+}
+function reportHTML(){
+  const rows=planRows();
+  const tr=(cells,th)=>`<tr>${cells.map(c=>`<${th?"th":"td"}>${esc(c)}</${th?"th":"td"}>`).join("")}</tr>`;
+  return `<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>Analisis Rapor Pendidikan ${esc(D.school)} ${esc(D.year)}</title>
+<style>body{font-family:Arial,sans-serif;font-size:11pt;color:#111;max-width:900px;margin:24px auto;padding:0 16px;line-height:1.5}h1{font-size:16pt;text-align:center;margin-bottom:2px}h2{font-size:13pt;margin-top:22px;border-bottom:1px solid #999}table{border-collapse:collapse;width:100%;font-size:9.5pt;margin:8px 0}th,td{border:1px solid #888;padding:4px 6px;vertical-align:top;text-align:left}th{background:#e8edf3}.c{text-align:center}</style></head><body>
+<h1>ANALISIS RAPOR PENDIDIKAN DAN RENCANA TINDAK LANJUT</h1><p class="c"><b>${esc(D.school)}</b><br>Rapor Pendidikan Tahun ${esc(D.year)}${D.updated?` (diperbarui ${esc(D.updated)})`:""}</p>
+<h2>A. Ringkasan (Identifikasi)</h2>${summaryText().replace(/<b>/g,"<b>")}
+<h2>B. Capaian Indikator Utama</h2><table>${tr(["Kode","Indikator","Capaian","Skor "+D.year,"Skor "+D.yPrev,"Perubahan","Peringkat kab/kota"],1)}${A.L1.map(i=>tr([i.code,i.name,i.cat,i.valText,i.prevText,i.deltaText,rankShort(i.rankKab)])).join("")}</table>
+<h2>B2. Tren ${trendYears().length} Tahun (${trendYears()[0]}–${trendYears()[trendYears().length-1]})</h2><table>${tr(["Kode","Indikator",...trendYears().map(String),"Perubahan","Pola"],1)}${A.L1.map(i=>{const r=tstats(i.code);return tr([i.code,i.name,...trendYears().map(y=>{const c=cell(i.code,y);return c?fmt(c.val):"–";}),r.n>=2?fmt(r.delta):"–",r.pattern]);}).join("")}</table>
+<h2>C. Alarm Dini Sub-indikator</h2><table>${tr(["Kode","Sub-indikator","Capaian","Skor","Perubahan","Alasan"],1)}${A.alarms.slice(0,16).map(a=>tr([a.it.code,a.it.name,a.it.cat,a.it.valText,a.it.deltaText,a.reasons.join("; ")])).join("")}</table>
+<h2>D. Prioritas dan Akar Masalah (Refleksi)</h2><table>${tr(["No","Indikator prioritas","Capaian","Skor prioritas","Akar masalah utama (hipotesis)"],1)}${A.prio.filter(p=>selected.has(p.it.code)).map((p,ix)=>tr([ix+1,p.it.code+" "+p.it.name,p.it.cat+" ("+p.it.valText+")",p.score,p.main.map(r=>`${r.code} ${r.name}${r.it?` (${r.it.cat||"-"}, ${r.it.valText})`:""}`).join("; ")])).join("")}</table>
+<h2>E. Rencana Kerja Jangka Pendek (Benahi)</h2><table>${tr(["No","Identifikasi","Akar masalah","Kegiatan benahi","Penjelasan implementasi","PJ","Waktu","Ukuran keberhasilan","Biaya?"],1)}${rows.map((r,ix)=>tr([ix+1,r.indikator,r.akar,r.kegiatan,r.impl,r.pj,r.waktu,r.ukur,r.biaya])).join("")}</table>
+${aiLast?`<h2>F. Analisis Asisten AI</h2>${mdToHtml(aiLast)}`:""}
+<h2>${aiLast?"G":"F"}. Catatan</h2><ul>${A.notes.map(n=>`<li>${esc(n)}</li>`).join("")}<li>Akar masalah merupakan hipotesis berbasis data; perlu dikonfirmasi bersama tim PBD. Penganggaran mengikuti juknis BOSP tahun berjalan.</li></ul>
+<p style="margin-top:36px">Yogyakarta, ......................<br>Kepala Sekolah,<br><br><br><br>.........................................<br>NIP. ..............................</p></body></html>`;
+}
+function exportHtml(){ saveFile(fileBase()+"_Laporan.html",reportHTML(),"text/html"); }
+async function copyText(t){ try{ await navigator.clipboard.writeText(t); toast("Tersalin ke papan klip."); }catch(e){ toast("Tidak dapat menyalin otomatis di tampilan ini."); } }
+function copyPlan(){
+  const rows=planRows();
+  copyText(["No\tIdentifikasi\tAkar masalah\tKegiatan benahi\tPenjelasan implementasi\tPJ\tWaktu\tUkuran keberhasilan\tBiaya?",
+    ...rows.map((r,ix)=>[ix+1,r.indikator,r.akar,r.kegiatan,r.impl,r.pj,r.waktu,r.ukur,r.biaya].join("\t"))].join("\n"));
+}
+
+/* =========================================================
+   ASISTEN AI
+   ========================================================= */
+let sampleFn=null, aiAbort=null;
+const PRESETS=[
+  ["Analisis menyeluruh (Identifikasi–Refleksi–Benahi)","Lakukan analisis menyeluruh dengan alur PBD: (1) Identifikasi – kekuatan, kelemahan, tren penting; (2) Refleksi – hipotesis akar masalah untuk tiap prioritas, kaitkan indikator hasil (A) dengan proses (D) dan pengelolaan (E); (3) Benahi – program dan kegiatan konkret, dibedakan yang tanpa biaya (quick win) dan yang berbiaya. Akhiri dengan Rekomendasi Tindak Lanjut maksimal 5 langkah."],
+  ["Laporan untuk Dinas Pendidikan","Susun laporan resmi hasil analisis Rapor Pendidikan untuk Dinas Pendidikan (±900–1.200 kata) dengan struktur: ## Pendahuluan (dasar dan tujuan), ## Profil Capaian (tabel indikator utama: capaian, skor, perubahan), ## Analisis Tren (bila data multi-tahun tersedia), ## Identifikasi Masalah Prioritas dan Akar Masalah, ## Rencana Tindak Lanjut (tabel: program, sasaran, waktu, penanggung jawab, sumber dana), ## Dukungan yang Diharapkan dari Dinas, ## Penutup. Bahasa formal kedinasan, gunakan hanya angka dari data."],
+  ["Analisis tren 2–4 tahun","Analisis tren capaian Rapor Pendidikan selama rentang tahun yang tersedia (2, 3, dan 4 tahun bila datanya ada). Bedakan indikator yang turun konsisten, fluktuatif, stagnan rendah, dan naik. Jelaskan kemungkinan penyebab (hipotesis), lalu apa yang harus dilakukan sekolah untuk masing-masing kelompok dalam RKJM 4 tahun dan RKT tahun depan. Sebutkan juga tahun yang datanya belum lengkap."],
+  ["Apa yang harus dilakukan sekolah 3 bulan ke depan","Susun rencana aksi 3 bulan (per bulan, per minggu bila perlu) untuk indikator prioritas. Tabel: Bulan | Kegiatan | Sasaran | PJ | Bukti/indikator keberhasilan. Utamakan yang tanpa biaya dan dapat langsung dimulai."],
+  ["Program tindak lanjut 1 tahun (RKT)","Susun program tindak lanjut satu tahun ajaran per indikator prioritas: tujuan, sasaran terukur untuk Rapor Pendidikan berikutnya, kegiatan per semester, PJ, kebutuhan anggaran (tanpa angka rupiah, sebut komponen ARKAS yang relevan), dan cara monitoring-evaluasi."],
+  ["Narasi laporan untuk rapat dewan guru","Tulis naskah paparan kepala sekolah (±600 kata) untuk rapat dewan guru: apresiasi capaian, temuan utama dengan angka dari data, ajakan refleksi, dan pembagian peran guru. Bahasa santun, memotivasi, tidak menyalahkan."],
+  ["Ringkasan untuk komite & orang tua","Tulis ringkasan hasil Rapor Pendidikan yang mudah dipahami orang tua dan komite (±350 kata), termasuk bagaimana orang tua dapat membantu (terutama kebiasaan anak di rumah dan karakter)."],
+  ["Instrumen konfirmasi akar masalah","Buat instrumen sederhana untuk mengonfirmasi akar masalah prioritas: daftar pertanyaan angket murid (skala 1–4), pedoman observasi kelas, dan pertanyaan diskusi kelompok guru. Kelompokkan per akar masalah."]
+];
+function dataContext(){
+  const L=x=>x?`${x.code} ${x.name}: ${x.cat==="NA"?"tidak tersedia":`${x.cat||"-"}, skor ${x.valText}${x.prevText?` (tahun lalu ${x.prevText})`:""}, ${x.deltaText||"-"}, peringkat kab/kota ${rankShort(x.rankKab)}`}`:"";
+  let s=`SEKOLAH: ${D.school}\nRAPOR PENDIDIKAN TAHUN: ${D.year} (pembanding ${D.yPrev})\n\nINDIKATOR UTAMA:\n`;
+  D.list.filter(i=>i.level===1&&i.cat!=="NA").forEach(i=>{ s+=`- ${L(i)}${i.dist.length?` | distribusi: ${i.dist.map(x=>`${x.label} ${fmt(x.val)}%`).join(", ")}`:""}${i.skor?` | skor rerata ${fmt(i.skor.val)} (${i.skor.deltaText})`:""}\n`;
+    i.subs.filter(x=>x.cat!=="NA").forEach(x=>{ s+=`   · ${L(x)}\n`; }); });
+  s+=`\nINDIKATOR TIDAK TERSEDIA: ${A.naList.map(i=>i.code).join(", ")||"-"}\n`;
+  s+=`\nHASIL ANALISIS OTOMATIS (skor prioritas 0-100):\n`;
+  A.prio.slice(0,8).forEach((p,ix)=>{ s+=`${ix+1}. ${p.it.code} ${p.it.name} – skor ${p.score}${selected.has(p.it.code)?" [DIPILIH SEKOLAH]":""}; akar utama: ${p.main.map(r=>`${r.code} ${r.name}`).join("; ")}\n`; });
+  s+=`\nALARM DINI: ${A.alarms.slice(0,10).map(a=>`${a.it.code} ${a.it.name} (${a.reasons.join(", ")})`).join("; ")}\n`;
+  const rows=planRows();
+  if(rows.length) s+=`\nKEGIATAN BENAHI YANG SUDAH DIPILIH:\n${rows.map(r=>`- [${r.indikator}] ${r.kegiatan}`).join("\n")}\n`;
+  const ty=trendYears();
+  s+=`\nTREN ${ty.length} TAHUN (${ty[0]}-${ty[ty.length-1]}; "-" = belum ada data):\n`;
+  D.list.filter(i=>i.level===1&&i.cat!=="NA").forEach(i=>{ const r=tstats(i.code,ty);
+    s+=`- ${i.code} ${i.name}: ${ty.map(y=>{const c=cell(i.code,y);return `${y}=${c?fmt(c.val):"-"}`;}).join(", ")} | pola: ${r.pattern}${r.n>=2?`, perubahan ${fmt(r.delta)}, rata-rata ${fmt(r.slope)}/tahun`:""}${r.note?` (${r.note})`:""}\n`; });
+  s+=`\nCATATAN DATA: ${A.notes.join(" ")}\n`;
+  return s;
+}
+function buildPrompt(task){
+  return `Anda adalah konsultan mutu pendidikan dan pendamping Perencanaan Berbasis Data (PBD) untuk kepala sekolah di Indonesia.
+Aturan:
+- Gunakan Bahasa Indonesia yang profesional, jelas, dan praktis.
+- Gunakan HANYA angka dari data di bawah. Jangan mengarang angka, nomor regulasi, atau data lain. Bila menyebut regulasi yang tidak pasti, tulis [verifikasi].
+- Sebut akar masalah sebagai hipotesis yang perlu dikonfirmasi.
+- Indikator dengan instrumen berbeda tidak boleh disimpulkan naik/turun.
+- Kegiatan berbiaya disesuaikan dengan juknis BOSP tahun berjalan; padankan dengan komponen kegiatan ARKAS bila relevan.
+- Format Markdown: judul ##, tabel bila perlu, poin singkat.
+- Jawab ringkas dan padat (umumnya tidak lebih dari ±1.000 kata) kecuali tugas meminta lain.
+
+DATA RAPOR PENDIDIKAN:
+${dataContext()}
+
+TUGAS:
+${task}`;
+}
+function mdToHtml(md){
+  const lines=String(md).replace(/\r/g,"").split("\n"); let out="", inList=null, tbl=[];
+  const inline=s=>esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/(^|[^*])\*(?!\s)(.+?)\*(?!\*)/g,"$1<i>$2</i>").replace(/`(.+?)`/g,"<code>$1</code>");
+  const flushL=()=>{ if(inList){out+=`</${inList}>`;inList=null;} };
+  const flushT=()=>{ if(tbl.length){ const r=tbl.filter(l=>!/^\s*\|?\s*:?-{2,}/.test(l)).map(l=>l.trim().replace(/^\||\|$/g,"").split("|").map(c=>c.trim()));
+      out+=`<table>${r.map((c,ix)=>`<tr>${c.map(x=>ix?`<td>${inline(x)}</td>`:`<th>${inline(x)}</th>`).join("")}</tr>`).join("")}</table>`; tbl=[]; } };
+  for(const l of lines){
+    if(/^\s*\|.*\|\s*$/.test(l)){ flushL(); tbl.push(l); continue; } else flushT();
+    let m;
+    if(m=l.match(/^(#{1,4})\s+(.*)/)){ flushL(); const n=Math.min(3,m[1].length+1); out+=`<h${n}>${inline(m[2])}</h${n}>`; }
+    else if(m=l.match(/^\s*[-*•]\s+(.*)/)){ if(inList!=="ul"){flushL();out+="<ul>";inList="ul";} out+=`<li>${inline(m[1])}</li>`; }
+    else if(m=l.match(/^\s*\d+[.)]\s+(.*)/)){ if(inList!=="ol"){flushL();out+="<ol>";inList="ol";} out+=`<li>${inline(m[1])}</li>`; }
+    else if(/^\s*(---|\*\*\*)\s*$/.test(l)){ flushL(); out+="<hr>"; }
+    else if(!l.trim()){ flushL(); }
+    else { flushL(); out+=`<p>${inline(l)}</p>`; }
+  }
+  flushL(); flushT(); return out;
+}
+function geminiKey(){ return store.get("rp_gkey") || GEMINI_API_KEY; }
+function geminiModel(){ const m=(store.get("rp_gmodel")||"").trim(); return (!m||/gemini-(1\.|2\.)/i.test(m))?GEMINI_MODEL:m; }
+function refreshProviders(){
+  const sel=$("#aiProv"), cur=sel.value, opts=[];
+  if(sampleFn) opts.push(["claude","Claude (di claude.ai)"]);
+  opts.push(["gemini",geminiKey()?"Gemini (API key tersimpan)":"Gemini (isi API key dulu)"]);
+  sel.innerHTML=opts.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join("");
+  if(opts.some(o=>o[0]===cur)) sel.value=cur;
+  const st=$("#aiStatus");
+  if(sampleFn){ st.className="status ok"; st.textContent="AI siap: Claude tersedia langsung di halaman ini. Gemini dapat dipakai saat alat dibuka mandiri atau di Google Sites."; }
+  else if(geminiKey()){ st.className="status ok"; st.textContent="AI siap: memakai Gemini API."; }
+  else { st.className="status"; st.textContent="Untuk memakai AI di luar claude.ai, isi API key Gemini pada Pengaturan di bawah. Analisis di tab 1–5 tetap berjalan tanpa AI."; $("#aiSettings").open=true; }
+}
+let aiBusy=false;
+async function geminiStream(model,key,prompt,signal,onText,useThinking,onStat,stream=true){
+  const body={contents:[{role:"user",parts:[{text:prompt}]}]};
+  if(useThinking) body.generationConfig={thinkingConfig:{thinkingLevel:"low",includeThoughts:true}};
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:${stream?"streamGenerateContent?alt=sse":"generateContent"}`;
+  onStat&&onStat({phase:"connecting"});
+  const res=await fetch(url,{method:"POST",signal,headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify(body)});
+  if(!res.ok){ const j=await res.json().catch(()=>({})); const err=new Error(j?.error?.message||("HTTP "+res.status)); err.status=res.status; throw err; }
+  onStat&&onStat({phase:"connected"});
+  let text="", thought="", finish="", buf="", bytes=0;
+  const take=j=>{
+    if(j.error) throw new Error(j.error.message||"Kesalahan dari Gemini");
+    const c=j.candidates&&j.candidates[0];
+    if(c){ (c.content&&c.content.parts||[]).forEach(p=>{ if(!p.text) return; if(p.thought) thought+=p.text; else text+=p.text; }); if(c.finishReason) finish=c.finishReason; }
+    if(j.promptFeedback&&j.promptFeedback.blockReason) finish="BLOCKED: "+j.promptFeedback.blockReason;
+    onText(text); onStat&&onStat({phase:"data",bytes,thought});
+  };
+  if(!stream){ const j=await res.json(); take(j); return {text,finish}; }
+  const handle=line=>{
+    line=line.trim(); if(!line.startsWith("data:")) return;
+    const data=line.slice(5).trim(); if(!data||data==="[DONE]") return;
+    let j; try{ j=JSON.parse(data); }catch(_){ return; }
+    take(j);
+  };
+  if(res.body&&res.body.getReader){
+    const reader=res.body.getReader(), dec=new TextDecoder();
+    for(;;){ const {done,value}=await reader.read(); if(done) break; bytes+=value.length; onStat&&onStat({phase:"bytes",bytes}); buf+=dec.decode(value,{stream:true});
+      let i; while((i=buf.indexOf("\n"))>=0){ handle(buf.slice(0,i)); buf=buf.slice(i+1); } }
+    if(buf) handle(buf);
+  } else { (await res.text()).split("\n").forEach(handle); }
+  return {text,finish};
+}
+async function askAI(task){
+  if(!D){toast("Impor data rapor terlebih dahulu.");return;}
+  if(aiBusy){toast("AI masih bekerja. Tunggu atau tekan Hentikan.");return;}
+  const prov=$("#aiProv").value, prompt=buildPrompt(task), out=$("#aiOut"), info=$("#aiInfo");
+  aiBusy=true; let text="", why="", model="";
+  const t0=Date.now(); let last=Date.now(), phase="connecting", bytes=0, thought="";
+  const sec=()=>Math.round((Date.now()-t0)/1000);
+  const phaseTxt=()=>phase==="connecting"?"Menghubungi Gemini…":phase==="connected"?"Terhubung. Gemini sedang berpikir…":`Menerima data (${(bytes/1024).toFixed(1)} KB)…`;
+  const wait=()=>`<p><span class="spin"></span> ${prov==="claude"&&sampleFn?"Claude sedang menyusun jawaban…":phaseTxt()} <b>${sec()} detik</b><br><small style="color:var(--muted)">Biasanya 10–90 detik. Jawaban akan muncul bertahap.</small></p>${thought?`<div style="font-size:12.5px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px;max-height:120px;overflow:auto;white-space:pre-wrap">${esc(thought.slice(-600))}</div>`:""}`;
+  out.innerHTML=wait();
+  const stat=s=>{ last=Date.now(); if(s.phase==="bytes"){bytes=s.bytes; phase="data";} else if(s.phase==="data"){ if(s.thought) thought=s.thought; phase="data"; } else phase=s.phase; };
+  aiAbort=new AbortController(); const ac=aiAbort;
+  const tick=setInterval(()=>{
+    if(!text) out.innerHTML=wait(); info.textContent=`${sec()} detik`;
+    const idle=(Date.now()-last)/1000;
+    if(phase==="connecting"&&idle>60){ why="connect"; ac.abort(); }
+    else if(idle>150){ why="idle"; ac.abort(); }
+    else if(sec()>480){ why="total"; ac.abort(); }
+  },1000);
+  $("#aiAsk").disabled=true; $$("#presets button").forEach(b=>b.disabled=true); info.textContent="";
+  $("#aiStop").style.display="";
+  const show=t=>{ text=t; if(t) out.innerHTML=mdToHtml(t); };
+  let note="";
+  try{
+    if(prov==="claude" && sampleFn){
+      const r=await sampleFn(prompt,{modelTier:"default",signal:ac.signal,onText:({text:t})=>{ last=Date.now(); show(t); }});
+      show(r.text||text); model="Claude"; if(r.truncated) note="Jawaban terpotong karena terlalu panjang.";
+    } else {
+      const key=geminiKey(); if(!key){ throw new Error("API key Gemini belum diisi (lihat Pengaturan Gemini API)."); }
+      const pref=geminiModel();
+      const models=[pref,...GEMINI_FALLBACK.filter(m=>m!==pref)];
+      let lastErr=null;
+      for(const m of models){
+        try{
+          let r;
+          try{ r=await geminiStream(m,key,prompt,ac.signal,show,true,stat); }
+          catch(err){ if(err.name!=="AbortError" && /thinking|include_thoughts|includeThoughts/i.test(err.message||"")) r=await geminiStream(m,key,prompt,ac.signal,show,false,stat); else throw err; }
+          if(!r.text){ phase="connecting"; r=await geminiStream(m,key,prompt,ac.signal,show,false,stat,false); } // cadangan: tanpa streaming
+          if(!r.text) throw new Error("Gemini tidak mengembalikan jawaban"+(r.finish?` (${r.finish})`:"")+".");
+          if(r.finish==="MAX_TOKENS") note="Jawaban terpotong karena batas panjang.";
+          model=m; if(m!==pref){ store.set("rp_gmodel",m); $("#gModel").value=m; }
+          lastErr=null; break;
+        }catch(err){
+          if(err.name==="AbortError") throw err;
+          lastErr=err;
+          if(err.status===404||/no longer available|not found|is not supported|does not exist|unknown model/i.test(err.message||"")) continue;
+          throw err;
+        }
+      }
+      if(lastErr) throw lastErr;
+    }
+    aiLast=text; out.innerHTML=mdToHtml(text);
+    info.textContent=`${model?("Model: "+model+" · "):""}${sec()} detik${note?" · "+note:""}`;
+  }catch(e){
+    info.textContent="";
+    if(e?.name==="AbortError"||e?.code==="aborted"){
+      const m={connect:"Tidak dapat terhubung ke server Gemini dalam 60 detik. Kemungkinan jaringan (Wi-Fi sekolah, antivirus, atau firewall) memblokir generativelanguage.googleapis.com. Coba dari jaringan lain, misalnya data seluler, lalu tekan Tes koneksi di Pengaturan Gemini API.",
+        idle:`Terhubung ke Gemini, tetapi tidak ada data selama 2,5 menit${bytes?` (sudah menerima ${(bytes/1024).toFixed(1)} KB)`:" (belum ada data sama sekali)"}. Bila sering terjadi, jaringan kemungkinan menahan aliran data. Tekan Tes koneksi di Pengaturan Gemini API, atau coba lagi dengan tugas yang lebih singkat.`,
+        total:"Jawaban belum selesai setelah 8 menit sehingga dihentikan. Coba tugas yang lebih singkat."}[why];
+      if(m) out.insertAdjacentHTML(text?"beforeend":"afterbegin",`<div class="callout warn">${esc(m)}</div>`);
+      else out.insertAdjacentHTML("beforeend",`<p style="color:var(--muted)">(dihentikan)</p>`);
+      out.querySelectorAll("p").forEach(p=>{ if(p.querySelector(".spin")) p.remove(); });
+      if(text) aiLast=text;
+    }
+    else if(e?.code==="not_granted"){ out.innerHTML=`<div class="callout warn">Izin AI belum diberikan. Coba lagi dan setujui permintaan izin.</div>`; }
+    else if(e?.code==="rate_limited"){ out.innerHTML=`<div class="callout warn">Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.</div>`; }
+    else { const msg=String(e?.message||e); out.innerHTML=`<div class="callout bad"><b>AI tidak dapat dihubungi.</b><br>${esc(msg)}${/fetch|network|Failed/i.test(msg)?"<br>Periksa koneksi internet, atau jaringan sekolah mungkin memblokir Gemini. Bila halaman dibuka di claude.ai, pilih penyedia Claude.":""}${/quota|exhausted|429/i.test(msg)?"<br>Kuota API key habis atau dibatasi. Periksa kuota di Google AI Studio.":""}${/api key|API_KEY|permission|unauth/i.test(msg)?"<br>Periksa API key di Pengaturan Gemini API.":""}</div>`; }
+  }finally{
+    clearInterval(tick); aiBusy=false;
+    $("#aiAsk").disabled=false; $$("#presets button").forEach(b=>b.disabled=false); $("#aiStop").style.display="none"; aiAbort=null;
+  }
+}
+async function testGemini(){
+  const o=$("#gTestOut"), key=geminiKey(); if(!key){ o.textContent="Isi API key terlebih dahulu."; return; }
+  const m=geminiModel(); o.innerHTML=`<span class="spin"></span> Menguji ${esc(m)}…`;
+  const ac=new AbortController(); const to=setTimeout(()=>ac.abort(),60000);
+  const t0=Date.now(); let first=null;
+  const lines=[];
+  try{
+    const r=await geminiStream(m,key,"Jawab dengan satu kalimat pendek: koneksi berhasil.",ac.signal,t=>{ if(t&&first==null) first=Date.now()-t0; },true,s=>{ if(s.phase==="connected") lines.push(`terhubung ${((Date.now()-t0)/1000).toFixed(1)} dtk`); });
+    lines.push(`teks pertama ${first!=null?(first/1000).toFixed(1)+" dtk":"-"}`, `selesai ${((Date.now()-t0)/1000).toFixed(1)} dtk`);
+    o.innerHTML=`<span style="color:var(--good);font-weight:700">✓ Berhasil (${esc(m)}, streaming)</span> · ${esc(lines.join(" · "))}<br>Jawaban: ${esc(r.text.slice(0,120))}`;
+  }catch(e){
+    o.innerHTML=`<span style="color:var(--bad);font-weight:700">✗ Gagal</span> · ${esc(lines.join(" · "))} · ${esc(e.name==="AbortError"?"tidak ada jawaban dalam 60 detik (kemungkinan jaringan memblokir atau menahan data)":e.message)}`;
+  }finally{ clearTimeout(to); }
+}
+
+/* =========================================================
+   TREN MULTI-TAHUN (2–4 TAHUN) + FASILITAS INPUT
+   ========================================================= */
+let TF=[], TM={}, TS={last:null,n:4,subs:false}, IMPORT_LOG="";
+const TOL=0.5; // perubahan ≤ 0,5 poin dianggap stabil
+function fileVals(d,label){
+  const vals={};
+  d.list.forEach(i=>{ if(i.cat==="NA") return;
+    vals[i.code]={now:i.val,nowCat:i.cat,nowText:i.valText,prev:i.prev,prevText:i.prevText,instr:/instrumen/i.test(i.deltaText)}; });
+  return {label:label||("Rapor "+d.year), school:d.school, year:+d.year, yPrev:+d.yPrev||(+d.year-1), vals};
+}
+function trendSources(){ return D?[fileVals(D,"File utama (Rapor "+D.year+")"),...TF]:TF.slice(); }
+function trendYears(n){ n=n||TS.n; const last=TS.last||(D?+D.year:new Date().getFullYear()); return Array.from({length:n},(_,k)=>last-n+1+k); }
+function cell(code,y){
+  const m=TM[code]&&TM[code][y]; if(m!=null&&m!=="") return {val:+m,src:"manual",text:fmt(+m)};
+  const S=trendSources();
+  for(const f of S) if(f.year===y&&f.vals[code]&&f.vals[code].now!=null) return {val:f.vals[code].now,cat:f.vals[code].nowCat,text:f.vals[code].nowText,src:"file",file:f.label};
+  for(const f of S) if(f.yPrev===y&&f.vals[code]&&f.vals[code].prev!=null) return {val:f.vals[code].prev,text:f.vals[code].prevText,src:"prev",file:f.label};
+  return null;
+}
+function breakYear(code){ let b=null; trendSources().forEach(f=>{ if(f.vals[code]&&f.vals[code].instr) b=Math.max(b||0,f.year); }); return b; }
+function tstats(code,years){
+  years=years||trendYears();
+  const b=breakYear(code);
+  const all=years.map(y=>({y,c:cell(code,y)})).filter(p=>p.c&&p.c.val!=null);
+  let pts=all, note="";
+  if(b&&all.some(p=>p.y<b)){ pts=all.filter(p=>p.y>=b); note=`Instrumen berubah tahun ${b}; nilai sebelum ${b} tidak dibandingkan.`; }
+  const r={all,pts,b,note,n:pts.length,consecDown:0,years};
+  if(pts.length<2){ r.pattern=all.length<2?"Data kurang":"Tidak sebanding"; return r; }
+  const v=pts.map(p=>p.c.val), ys=pts.map(p=>p.y);
+  r.first=v[0]; r.last=v[v.length-1]; r.delta=r.last-r.first; r.y0=ys[0]; r.y1=ys[ys.length-1];
+  const mx=ys.reduce((a,c)=>a+c,0)/ys.length, mv=v.reduce((a,c)=>a+c,0)/v.length;
+  let sxy=0,sxx=0; ys.forEach((y,k)=>{sxy+=(y-mx)*(v[k]-mv); sxx+=(y-mx)**2;}); r.slope=sxx?sxy/sxx:0;
+  const diffs=v.slice(1).map((x,k)=>x-v[k]); r.diffs=diffs;
+  const up=diffs.some(d=>d>TOL), down=diffs.some(d=>d<-TOL);
+  if(diffs.length===1) r.pattern=up?"Naik":down?"Turun":"Stabil";
+  else { const allUp=diffs.every(d=>d>TOL), allDown=diffs.every(d=>d<-TOL);
+    r.pattern=!up&&!down?"Stabil":allUp?"Naik konsisten":allDown?"Turun konsisten":up&&!down?"Cenderung naik":down&&!up?"Cenderung turun":"Fluktuatif"; }
+  let cd=0; for(let k=diffs.length-1;k>=0&&diffs[k]<-TOL;k--) cd++; r.consecDown=cd;
+  r.min=Math.min(...v); r.max=Math.max(...v);
+  const cats=pts.map(p=>p.c.cat).filter(Boolean);
+  r.lowAll=cats.length>=2&&cats.every(c=>c==="Sedang"||c==="Kurang");
+  r.proj=pts.length>=3?Math.max(0,r.max<=10?r.last+r.slope:Math.min(100,r.last+r.slope)):null;
+  return r;
+}
+function spanDelta(code,k){
+  const ys=trendYears(k), r=tstats(code,ys);
+  if(r.n>=2&&r.y0===ys[0]&&r.y1===ys[ys.length-1]) return r;
+  return null;
+}
+const patCls=p=>/naik/i.test(p)?"up":/turun/i.test(p)?"down":/fluktu/i.test(p)?"fl":"";
+const patIco=p=>/naik/i.test(p)?"▲ ":/turun/i.test(p)?"▼ ":/fluktu/i.test(p)?"↕ ":/stabil/i.test(p)?"→ ":"";
+const patChip=p=>`<span class="pt ${patCls(p)}">${patIco(p)}${esc(p)}</span>`;
+function trendItems(){ return D?D.list.filter(i=>(i.level===1||TS.subs)&&(i.cat!=="NA"||trendYears().some(y=>cell(i.code,y)))):[]; }
+function saveTrend(){ if(!D) return; store.set("rp_trend_"+D.school, JSON.stringify({TF,TM,n:TS.n})); }
+function restoreTrend(){
+  TF=[]; TM={}; TS={last:+D.year,n:4,subs:false};
+  try{ const s=JSON.parse(store.get("rp_trend_"+D.school)||"null"); if(s){ TF=(s.TF||[]).filter(f=>f.year!==+D.year); TM=s.TM||{}; TS.n=s.n||4; } }catch(e){}
+}
+function trendChanged(){ saveTrend(); A=analyze(D); renderTren(); renderPrioritas(); renderRingkasanText(); }
+
+function trendSummary(years){
+  const L=D.list.filter(i=>i.level===1&&i.cat!=="NA");
+  const st=L.map(i=>({i,r:tstats(i.code,years)}));
+  const ok=st.filter(x=>x.r.n>=2);
+  const c={naik:0,turun:0,fl:0,stb:0};
+  ok.forEach(x=>{const p=x.r.pattern; if(/naik/i.test(p))c.naik++; else if(/turun/i.test(p))c.turun++; else if(/fluktu/i.test(p))c.fl++; else c.stb++;});
+  return {st,ok,c};
+}
+function renderTren(){
+  const el=$("#trenBody"); if(!el) return;
+  if(!D){ el.innerHTML=`<div class="card"><h2>Tren 2–4 tahun</h2><div class="empty">Impor file Rapor PBD terlebih dahulu (tab Panduan &amp; Impor).</div></div>`; return; }
+  const years=trendYears(), L1=D.list.filter(i=>i.level===1&&i.cat!=="NA");
+  const avail=new Set(); trendSources().forEach(f=>{avail.add(f.year);avail.add(f.yPrev)}); Object.values(TM).forEach(o=>Object.keys(o).forEach(y=>avail.add(+y)));
+  const lastOpts=[...new Set([...avail,+D.year])].filter(y=>y>=+D.year-6&&y<=+D.year+1).sort((a,b)=>b-a);
+  const cov=years.map(y=>({y,n:L1.filter(i=>cell(i.code,y)).length}));
+  const missing=cov.filter(c=>!c.n).map(c=>c.y);
+  const S=trendSummary(years);
+  const k=(l,v,h)=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="h">${h}</div></div>`;
+  let h=`<div class="card"><h2>Analisis tren Rapor Pendidikan ${years.length} tahun (${years[0]}–${years[years.length-1]})</h2>
+    <p class="sub">Pilih rentang 2, 3, atau 4 tahun. Data diambil otomatis dari file Rapor PBD (setiap file memuat tahun berjalan dan tahun sebelumnya); tahun lain dapat dilengkapi dengan mengimpor file tahun sebelumnya, templat Excel, tempel dari Excel, atau mengetik langsung di tabel.</p>
+    <div class="row"><span style="font-weight:700;font-size:14px">Rentang:</span>
+      <div class="seg" id="tSeg">${[2,3,4].map(n=>`<button data-n="${n}" class="${TS.n===n?"on":""}">${n} tahun</button>`).join("")}</div>
+      <label class="ck">Tahun terakhir <select id="tLast">${lastOpts.map(y=>`<option ${y===(TS.last||+D.year)?"selected":""}>${y}</option>`).join("")}</select></label>
+      <label class="ck"><input type="checkbox" id="tSubs" ${TS.subs?"checked":""}> Sertakan sub-indikator</label>
+    </div>
+    <div class="cov">${cov.map(c=>`<span class="${c.n?"":"no"}"><b>${c.y}</b> · ${c.n?c.n+" indikator utama":"belum ada data"}</span>`).join("")}</div>
+    <h3>Fasilitas input data</h3>
+    <div class="row">
+      <button class="btn teal sm" id="tAddFile">+ Impor file Rapor PBD tahun lain (boleh banyak sekaligus)</button>
+      <button class="btn sm" id="tTpl">Unduh templat input (.xlsx)</button>
+      <button class="btn sm" id="tPasteBtn">Tempel dari Excel</button>
+      <button class="btn sm" id="tClear">Hapus input manual</button>
+    </div>
+    <div id="tPaste" style="display:none;margin-top:10px">
+      <p class="sub" style="margin-bottom:6px">Salin dari Excel: baris pertama berisi judul tahun, contoh <code>Kode | Indikator | ${years.join(" | ")}</code>, lalu satu indikator per baris (kode di kolom pertama). Tanpa baris judul, nilai diisikan berurutan mulai ${years[0]}.</p>
+      <textarea id="tPasteTxt" placeholder="Kode&#9;Indikator&#9;${years.join("&#9;")}&#10;A.1&#9;Kemampuan Literasi&#9;…"></textarea>
+      <div class="row" style="margin-top:8px"><button class="btn pri sm" id="tPasteGo">Proses tempelan</button><span id="tPasteMsg" style="font-size:13px"></span></div>
+    </div>
+    <div id="trenImportLog">${IMPORT_LOG?`<details style="margin-top:10px"><summary style="cursor:pointer;font-weight:600;color:var(--navy2);font-size:13.5px">Hasil impor terakhir</summary>${IMPORT_LOG}</details>`:""}</div>
+    <ul class="srcl">${trendSources().map((f,ix)=>`<li><b>${esc(f.label)}</b>: memuat ${f.yPrev} dan ${f.year}${ix?` · <a href="#" data-rmf="${ix-1}">hapus</a>`:""}</li>`).join("")}
+      <li>Input manual: ${Object.values(TM).reduce((s,o)=>s+Object.keys(o).length,0)} nilai (sel berlatar kuning)</li></ul>
+    ${missing.length?`<div class="callout warn">Belum ada data untuk tahun <b>${missing.join(", ")}</b>. Untuk melengkapi, impor file Rapor PBD tahun ${missing.map(y=>y+1).filter(y=>y<+D.year).join(" / ")||"sebelumnya"} (setiap file juga memuat nilai tahun sebelumnya), atau isi manual di tabel di bawah.</div>`:""}
+  </div>`;
+  // ringkasan
+  const sorted=S.ok.slice().sort((a,b)=>a.r.delta-b.r.delta);
+  const worst=sorted.filter(x=>x.r.delta<-TOL).slice(0,3), best=sorted.slice().reverse().filter(x=>x.r.delta>TOL).slice(0,3);
+  const cons=S.ok.filter(x=>x.r.consecDown>=2);
+  const noCmp=S.st.filter(x=>x.r.pattern==="Tidak sebanding");
+  h+=`<div class="grid kpis" style="margin-bottom:16px">
+    ${k("Indikator utama dengan data sebanding",S.ok.length,`dari ${S.st.length} indikator`)}
+    ${k(patChip("Naik"),S.c.naik,"naik / cenderung naik")}
+    ${k(patChip("Turun"),S.c.turun,"turun / cenderung turun")}
+    ${k(patChip("Fluktuatif"),S.c.fl,"naik-turun")}
+    ${k(patChip("Stabil"),S.c.stb,`perubahan ≤ ${fmt(TOL,1)} poin per tahun`)}
+  </div>`;
+  let nar=`<p>Rentang <b>${years[0]}–${years[years.length-1]}</b>: ${S.ok.length} indikator utama memiliki data sebanding minimal dua tahun. ${S.c.naik} cenderung naik, ${S.c.turun} cenderung turun${years.length>2?`, ${S.c.fl} naik-turun`:""}, dan ${S.c.stb} stabil.</p>`;
+  if(worst.length) nar+=`<p>Penurunan terbesar: ${worst.map(x=>`<b>${esc(x.i.name)}</b> (${x.r.y0}: ${fmt(x.r.first)} → ${x.r.y1}: ${fmt(x.r.last)})`).join("; ")}.</p>`;
+  if(best.length) nar+=`<p>Kenaikan terbesar: ${best.map(x=>`<b>${esc(x.i.name)}</b> (${fmt(x.r.first)} → ${fmt(x.r.last)})`).join("; ")}.</p>`;
+  if(cons.length) nar+=`<p><b>Turun berturut-turut ≥ 2 tahun:</b> ${cons.map(x=>esc(x.i.name)+` (${x.r.consecDown} tahun)`).join("; ")}. Pola ini menandakan masalah yang menetap, bukan kebetulan.</p>`;
+  if(noCmp.length) nar+=`<p style="color:var(--ink2)">Tidak dibandingkan karena instrumen berubah: ${noCmp.map(x=>esc(x.i.code+" "+x.i.name)).join(", ")}.</p>`;
+  if(missing.length) nar+=`<p style="color:var(--ink2)">Analisis ${years.length} tahun belum utuh karena data ${missing.join(", ")} belum diisi.</p>`;
+  h+=`<div class="card"><h2>Ringkasan tren</h2><div class="prose" style="margin-top:8px">${nar}</div></div>`;
+  // sparklines
+  h+=`<div class="card"><h2>Grafik tren indikator utama</h2><p class="sub">Titik = nilai per tahun; garis putus-putus abu-abu = instrumen berubah (tidak sebanding). Arahkan kursor pada titik untuk melihat sumber nilainya.</p>
+    <div class="sparks">${L1.map(i=>spark(i,years)).join("")}</div></div>`;
+  // tabel input & tren
+  const items=trendItems();
+  h+=`<div class="card"><h2>Tabel nilai &amp; input manual</h2><p class="sub">Ketik nilai untuk tahun yang kosong atau koreksi nilai. Huruf miring = nilai tahun sebelumnya yang diambil dari file; latar kuning = input manual. Kosongkan sel untuk kembali ke nilai file.</p>
+    <div class="tscroll"><table class="t"><thead><tr><th>Kode</th><th>Indikator</th>${years.map(y=>`<th class="num">${y}</th>`).join("")}<th class="num">Perubahan</th><th class="num">Rata-rata/th</th><th>Pola</th><th class="num" title="Perkiraan kasar garis lurus, hanya bila ≥3 tahun data">Proyeksi ${years[years.length-1]+1}</th></tr></thead><tbody>
+    ${items.map(i=>{ const r=tstats(i.code,years);
+      return `<tr class="l${i.level}"><td>${esc(i.code)}</td><td>${esc(i.name)}${r.note?`<div style="font-size:11.5px;color:var(--muted);font-weight:500">${esc(r.note)}</div>`:""}</td>
+      ${years.map(y=>{const c=cell(i.code,y); return `<td class="num"><input class="tin ${c?c.src:""}" data-c="${esc(i.code)}" data-y="${y}" value="${c?esc(String(+c.val.toFixed(2)).replace(".",",")):""}" placeholder="–" inputmode="decimal" title="${c?esc((c.src==="manual"?"Input manual":c.file)+(c.cat?" · "+c.cat:"")):"Kosong: ketik nilai"}"></td>`;}).join("")}
+      <td class="num">${r.n>=2?deltaHTML(+r.delta.toFixed(2)):"–"}</td><td class="num">${r.n>=2?(r.slope>0?"+":"")+fmt(r.slope):"–"}</td><td>${patChip(r.pattern)}</td><td class="num">${r.proj!=null?fmt(r.proj):"–"}</td></tr>`; }).join("")}
+    </tbody></table></div></div>`;
+  // perbandingan rentang
+  h+=`<div class="card"><h2>Perbandingan rentang 2, 3, dan 4 tahun</h2><p class="sub">Perubahan skor dari awal ke akhir setiap rentang (berakhir ${years[years.length-1]}). "–" berarti data awal rentang belum ada atau tidak sebanding.</p>
+    <div class="tscroll"><table class="t"><thead><tr><th>Kode</th><th>Indikator</th><th class="num">2 tahun<br><small>${trendYears(2)[0]}–${trendYears(2)[1]}</small></th><th class="num">3 tahun<br><small>${trendYears(3)[0]}–${trendYears(3)[2]}</small></th><th class="num">4 tahun<br><small>${trendYears(4)[0]}–${trendYears(4)[3]}</small></th><th>Pola 4 tahun</th></tr></thead><tbody>
+    ${L1.map(i=>{ const d=[2,3,4].map(n=>spanDelta(i.code,n)); const r4=tstats(i.code,trendYears(4));
+      return `<tr><td>${esc(i.code)}</td><td>${esc(i.name)}</td>${d.map(r=>`<td class="num">${r?deltaHTML(+r.delta.toFixed(2)):"–"}</td>`).join("")}<td>${patChip(r4.pattern)}</td></tr>`; }).join("")}
+    </tbody></table></div></div>`;
+  // rekomendasi
+  h+=`<div class="card"><h2>Apa yang harus dilakukan sekolah berdasarkan tren</h2>${trendRecs(years)}</div>`;
+  el.innerHTML=h;
+  // events
+  $$("#tSeg button").forEach(b=>b.onclick=()=>{TS.n=+b.dataset.n; trendChanged();});
+  $("#tLast").onchange=e=>{TS.last=+e.target.value; trendChanged();};
+  $("#tSubs").onchange=e=>{TS.subs=e.target.checked; renderTren();};
+  $("#tAddFile").onclick=()=>$("#fileTrend").click();
+  $("#tTpl").onclick=exportTrendTemplate;
+  $("#tPasteBtn").onclick=()=>{const p=$("#tPaste"); p.style.display=p.style.display==="none"?"":"none";};
+  $("#tPasteGo").onclick=()=>{ const n=applyGrid(parseGridText($("#tPasteTxt").value)); $("#tPasteMsg").textContent=n?`✓ ${n} nilai dimasukkan.`:"Tidak ada nilai yang terbaca. Periksa format."; if(n){ trendChanged(); toast(n+" nilai ditambahkan."); } };
+  $("#tClear").onclick=()=>{ TM={}; trendChanged(); toast("Input manual dihapus."); };
+  $$("[data-rmf]").forEach(a=>a.onclick=e=>{e.preventDefault(); TF.splice(+a.dataset.rmf,1); trendChanged();});
+  $$("input.tin").forEach(inp=>inp.onchange=()=>{
+    const c=inp.dataset.c, y=+inp.dataset.y, v=num(inp.value);
+    TM[c]=TM[c]||{};
+    if(v==null){ delete TM[c][y]; if(!Object.keys(TM[c]).length) delete TM[c]; }
+    else { const base=(()=>{const keep=TM[c][y]; delete TM[c][y]; const b=cell(c,y); if(keep!=null) TM[c][y]=keep; return b;})();
+      if(base&&Math.abs(base.val-v)<1e-9) delete TM[c][y]; else TM[c][y]=v; }
+    const y0=window.scrollY; trendChanged(); window.scrollTo(0,y0);
+  });
+}
+function spark(i,years){
+  const r=tstats(i.code,years), all=r.all;
+  const W=250,H=86,pl=12,pr=12,pt=16,pb=20;
+  const vals=all.map(p=>p.c.val);
+  const small=vals.length&&Math.max(...vals)<=10;
+  let lo=0,hi=100; if(small){ lo=Math.min(...vals); hi=Math.max(...vals); const pad=(hi-lo)||1; lo-=pad*.3; hi+=pad*.3; }
+  const X=y=>pl+(years.length===1?0:years.indexOf(y)*(W-pl-pr)/(years.length-1));
+  const Y=v=>pt+(1-(v-lo)/(hi-lo))*(H-pt-pb);
+  let g=`<line x1="${pl}" x2="${W-pr}" y1="${H-pb}" y2="${H-pb}" stroke="#d5dce6"/>`;
+  years.forEach(y=>{ g+=`<text x="${X(y)}" y="${H-5}" text-anchor="middle" font-size="10.5" fill="#7a8699">${y}</text>`; });
+  for(let k=1;k<all.length;k++){ const a=all[k-1],b=all[k]; const brk=r.b&&a.y<r.b&&b.y>=r.b;
+    g+=`<line x1="${X(a.y)}" y1="${Y(a.c.val)}" x2="${X(b.y)}" y2="${Y(b.c.val)}" stroke="${brk?"#aab4c2":"var(--bar)"}" stroke-width="2" ${brk?'stroke-dasharray="4 3"':""} stroke-linecap="round"/>`; }
+  all.forEach((p,ix)=>{ const tip=`<b>${esc(i.code)} · ${p.y}</b><br>Nilai: ${esc(p.c.text||fmt(p.c.val))}${p.c.cat?" ("+esc(p.c.cat)+")":""}<br>Sumber: ${esc(p.c.src==="manual"?"input manual":p.c.file)}`;
+    const old=r.b&&p.y<r.b;
+    g+=`<circle cx="${X(p.y)}" cy="${Y(p.c.val)}" r="4.5" fill="${old?"#aab4c2":"var(--bar)"}" stroke="#fff" stroke-width="2" data-tip="${esc(tip)}" style="cursor:help"/>`;
+    if(ix===0||ix===all.length-1) g+=`<text x="${X(p.y)}" y="${Y(p.c.val)-8}" text-anchor="${ix===0&&all.length>1?"start":all.length>1?"end":"middle"}" font-size="11" font-weight="700" fill="#16202c">${fmt(p.c.val,1)}</text>`; });
+  return `<div class="spk"><div class="tt"><small>${esc(i.code)}</small>${esc(i.name)}</div>
+    <svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Tren ${esc(i.name)}">${g}</svg>
+    <div class="mt">${patChip(r.pattern)}<span>${r.n>=2?`${r.y0}→${r.y1}: ${deltaHTML(+r.delta.toFixed(2))}`:'<span style="color:var(--muted)">butuh ≥2 tahun</span>'}</span></div></div>`;
+}
+function trendRecs(years){
+  const L=D.list.filter(i=>i.level===1&&i.cat!=="NA").map(i=>({i,r:tstats(i.code,years)}));
+  const nm=x=>`<span class="tag">${esc(x.i.code)} ${esc(x.i.name)}</span>`;
+  const G=[
+    ["Turun berturut-turut / cenderung turun", L.filter(x=>/turun/i.test(x.r.pattern)), "Jadikan prioritas jangka menengah (RKJM), bukan hanya kegiatan setahun. Telusuri apa yang berubah selama periode itu (guru pengampu, program yang berhenti, kebijakan, kohort murid). Tetapkan target pemulihan, misalnya kembali ke nilai awal rentang dalam 1–2 tahun, dan pantau tiap semester dengan asesmen sekolah sendiri."],
+    ["Naik-turun (fluktuatif)", L.filter(x=>/fluktu/i.test(x.r.pattern)), "Hasil belum stabil. Pastikan program inti berjalan konsisten setiap tahun, tidak bergantung pada satu atau dua guru, dan dokumentasikan langkahnya dalam SOP. Periksa juga apakah perbedaan kohort murid peserta Asesmen Nasional memengaruhi hasil."],
+    ["Bertahan di Sedang/Kurang", L.filter(x=>x.r.lowAll), "Program yang ada belum cukup mengangkat capaian. Ganti atau perdalam strategi (misalnya dari kegiatan seremonial ke perubahan praktik kelas), alokasikan anggaran di RKAS, dan libatkan orang tua serta murid."],
+    ["Naik atau stabil tinggi", L.filter(x=>/naik/i.test(x.r.pattern)||(x.r.pattern==="Stabil"&&x.r.last>=70)), "Pertahankan. Dokumentasikan praktik baik yang membuat capaian naik, bagikan di komunitas belajar/MKKS, dan jadikan contoh untuk indikator lain."],
+    ["Belum dapat dianalisis", L.filter(x=>x.r.n<2), "Lengkapi data tahun sebelumnya (impor file Rapor PBD lama atau isi manual). Indikator dengan instrumen baru baru bisa dianalisis trennya mulai tahun depan."]
+  ];
+  return G.filter(g=>g[1].length).map(g=>`<div class="recg"><h3>${esc(g[0])} (${g[1].length})</h3><div>${g[1].map(nm).join("")}</div><p>${esc(g[2])}</p></div>`).join("")||`<div class="empty">Belum ada data tren.</div>`;
+}
+function parseGridText(txt){
+  const lines=String(txt||"").replace(/\r/g,"").split("\n").filter(l=>l.trim());
+  const rows=lines.map(l=>l.includes("\t")?l.split("\t"):l.split(/;|\s{2,}/));
+  return rows;
+}
+function applyGrid(rows){
+  if(!rows||!rows.length) return 0;
+  let hdrYears=null, start=0;
+  const hy=rows[0].map(c=>{const m=String(c).match(/\b(20\d{2})\b/); return m?+m[1]:null;});
+  if(hy.some(Boolean)){ hdrYears=hy; start=1; }
+  let n=0;
+  rows.slice(start).forEach(r=>{
+    const code=String(r[0]||"").trim(); if(!/^[A-Z]\.\d+(\.\d+)?$/.test(code)) return;
+    let seq=0; const ys=trendYears();
+    r.forEach((c,ci)=>{ if(ci===0) return;
+      let y=null;
+      if(hdrYears){ y=hdrYears[ci]; if(!y) return; }
+      const v=num(c); if(v==null||(!hdrYears&&/[a-z]{3,}/i.test(String(c)))) return;
+      if(!hdrYears){ y=ys[seq++]; if(!y) return; }
+      const base=cell(code,y); if(base&&base.src!=="manual"&&Math.abs(base.val-v)<1e-9) return;
+      (TM[code]=TM[code]||{})[y]=v; n++;
+    });
+  });
+  return n;
+}
+function exportTrendTemplate(){
+  if(typeof XLSX==="undefined"){toast("Pustaka Excel belum termuat.");return;}
+  const ys=trendYears(4);
+  const rows=[["Kode","Indikator",...ys]];
+  D.list.filter(i=>i.cat!=="NA").forEach(i=>rows.push([i.code,(i.level===2?"   ":"")+i.name,...ys.map(y=>{const c=cell(i.code,y);return c?+c.val.toFixed(2):"";})]));
+  const wb=XLSX.utils.book_new(), ws=XLSX.utils.aoa_to_sheet(rows);
+  ws["!cols"]=[{wch:9},{wch:55},...ys.map(()=>({wch:10}))];
+  XLSX.utils.book_append_sheet(wb,ws,"Input Tren");
+  const pet=[["PETUNJUK"],["1. Isi nilai skor Rapor Pendidikan pada kolom tahun yang masih kosong (angka saja, tanpa %)."],["2. Jangan ubah kolom Kode dan baris judul tahun."],["3. Simpan, lalu impor kembali lewat tombol '+ Impor file Rapor PBD tahun lain' di tab Tren."],["4. Nilai yang sudah terisi berasal dari file Rapor PBD; boleh dikoreksi bila perlu."]];
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(pet),"Petunjuk");
+  saveFile(`Templat-Tren-Rapor_${D.school.replace(/[^\w]+/g,"-")}_${ys[0]}-${ys[3]}.xlsx`,new Blob([XLSX.write(wb,{bookType:"xlsx",type:"array"})]));
+}
+$("#fileTrend").onchange=e=>{ importFiles([...e.target.files],"tren"); e.target.value=""; };
+
+/* =========================================================
+   NAVIGASI, IMPOR, TOOLTIP
+   ========================================================= */
+function go(v){ $$("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v)); $$("section.view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v)); window.scrollTo({top:0}); }
+$$("#tabs button").forEach(b=>b.onclick=()=>go(b.dataset.v));
+function load(sheets, label){
+  D=parseWorkbook(sheets); restoreTrend(); A=analyze(D);
+  picked=new Set(); edits={}; aiLast=""; autoSelect(); defaultPicks();
+  $("#schoolChip").innerHTML=`<b>${esc(D.school)}</b>Rapor Pendidikan ${esc(D.year)}${D.updated?` · diperbarui ${esc(D.updated)}`:""}`;
+  renderRingkasan(); renderTren(); renderIndikator(); renderPrioritas(); renderBenahi();
+  if(!aiBusy) $("#aiOut").innerHTML=`<div class="empty">Hasil AI akan tampil di sini. Pilih salah satu tombol tugas di atas.</div>`;
+  if(label) toast(label);
+}
+/* Impor banyak file sekaligus (tanpa batas jumlah).
+   mode "main": file Rapor dengan tahun terbaru menjadi data utama, sisanya mengisi tren.
+   mode "tren": data utama tetap; semua file mengisi tren. */
+async function importFiles(files, mode){
+  files=[...(files||[])].filter(f=>/\.xlsx?$/i.test(f.name));
+  const msg=$("#importMsg");
+  if(!files.length){ toast("Pilih file Excel (.xlsx)."); return; }
+  if(typeof XLSX==="undefined"){ const m="Pustaka pembaca Excel belum termuat. Periksa koneksi internet lalu muat ulang halaman."; if(msg) msg.innerHTML=`<span style="color:var(--bad)">${m}</span>`; toast(m); return; }
+  const log=[], rapor=[], tpls=[];
+  const show=html=>{ if(msg) msg.innerHTML=html; };
+  for(let ix=0; ix<files.length; ix++){
+    const f=files[ix];
+    show(`<span class="spin"></span> Membaca file ${ix+1} dari ${files.length}: ${esc(f.name)}…`);
+    toast(`Membaca file ${ix+1}/${files.length}…`,1500);
+    try{
+      const wb=XLSX.read(new Uint8Array(await f.arrayBuffer()),{type:"array"});
+      const sheets={}; wb.SheetNames.forEach(n=>{ sheets[n]=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:"",raw:false}); });
+      const tpl=wb.SheetNames.find(n=>/input tren/i.test(n));
+      if(tpl){ tpls.push({f,rows:sheets[tpl]}); continue; }
+      const d=parseWorkbook(sheets);
+      rapor.push({f,sheets,d});
+    }catch(e){ log.push([f.name,"–","–","Gagal: "+e.message,"bad"]); }
+  }
+  const U=s=>String(s||"").toUpperCase();
+  rapor.sort((a,b)=>(+b.d.year)-(+a.d.year));
+  let mainChanged=false;
+  if(rapor.length){
+    const latest=rapor[0];
+    const replace = !D || (mode==="main" && (U(latest.d.school)!==U(D.school) || +latest.d.year>=+D.year));
+    if(replace){
+      const old=D && U(D.school)===U(latest.d.school) && +D.year!==+latest.d.year ? fileVals(D,`File utama sebelumnya (Rapor ${D.year})`) : null;
+      load(latest.sheets); mainChanged=true;
+      if(old){ TF=TF.filter(x=>x.year!==old.year); TF.push(old); }
+      log.push([latest.f.name,latest.d.school,latest.d.year,"Menjadi data utama","good"]);
+    }
+    rapor.forEach((r,ix)=>{
+      if(replace && ix===0) return;
+      const d=r.d;
+      if(U(d.school)!==U(D.school)){ log.push([r.f.name,d.school,d.year,"Dilewati: sekolah berbeda dari data utama","warn"]); return; }
+      if(+d.year===+D.year){ log.push([r.f.name,d.school,d.year,"Dilewati: tahunnya sama dengan data utama","warn"]); return; }
+      if(TF.some(x=>x.year===+d.year&&x._batch)){ log.push([r.f.name,d.school,d.year,"Dilewati: tahun ini sudah ada di impor yang sama","warn"]); return; }
+      TF=TF.filter(x=>x.year!==+d.year);
+      const fv=fileVals(d,`${r.f.name} (Rapor ${d.year})`); fv._batch=true; TF.push(fv);
+      log.push([r.f.name,d.school,d.year,`Data tren ${d.yPrev}–${d.year}`,"good"]);
+    });
+    TF.forEach(x=>delete x._batch); TF.sort((a,b)=>b.year-a.year);
+  }
+  if(tpls.length){
+    if(!D) tpls.forEach(x=>log.push([x.f.name,"–","–","Dilewati: impor file Rapor PBD terlebih dahulu","warn"]));
+    else tpls.forEach(x=>{ const n=applyGrid(x.rows); log.push([x.f.name,D.school,"templat",`${n} nilai tren dimasukkan`,"good"]); });
+  }
+  if(D){ trendChanged(); if(!mainChanged) renderRingkasanText(); }
+  const ok=log.filter(l=>l[4]==="good").length;
+  const ys=D?[...new Set([+D.year,+D.yPrev,...TF.flatMap(x=>[x.year,x.yPrev])])].filter(Boolean).sort():[];
+  const html=`<div style="text-align:left;margin-top:6px"><b>${ok} dari ${files.length} file berhasil diimpor.</b>${D?` Data tersedia untuk tahun: ${ys.join(", ")}.`:""}
+    <div class="tscroll" style="max-height:300px;margin-top:8px"><table class="t"><thead><tr><th>File</th><th>Sekolah</th><th>Tahun</th><th>Status</th></tr></thead><tbody>
+    ${log.map(l=>`<tr><td>${esc(l[0])}</td><td>${esc(l[1])}</td><td>${esc(l[2])}</td><td style="color:${l[4]==="good"?"var(--good)":l[4]==="bad"?"var(--bad)":"var(--warn)"};font-weight:600">${esc(l[3])}</td></tr>`).join("")}
+    </tbody></table></div></div>`;
+  show(html); IMPORT_LOG=html; if(D) renderTren();
+  toast(`${ok} dari ${files.length} file diimpor.`,3500);
+  if(ok){ if(rapor.length>1||tpls.length||mode==="tren"){ go("tren"); const d=$("#trenImportLog details"); if(d) d.open=true; } else go("ringkasan"); }
+}
+$("#btnImport").onclick=$("#btnImport2").onclick=()=>$("#file").click();
+$("#file").onchange=e=>{ importFiles([...e.target.files],"main"); e.target.value=""; };
+const dz=$("#drop");
+dz.ondragover=e=>{e.preventDefault();dz.classList.add("over")}; dz.ondragleave=()=>dz.classList.remove("over");
+dz.ondrop=e=>{e.preventDefault();dz.classList.remove("over");importFiles([...e.dataTransfer.files],"main");};
+$("#btnSample").onclick=()=>{ if(DATA_BAWAAN){ load(DATA_BAWAAN,"Data bawaan dimuat."); go("ringkasan"); } };
+["#fDim","#fCat","#fTurun","#fSub"].forEach(s=>$(s).onchange=renderIndikator); $("#fQ").oninput=renderIndikator;
+$("#topN").onchange=$("#btnResetPrio").onclick=()=>{ if(!D)return; autoSelect(); defaultPicks(); renderPrioritas(); renderBenahi(); renderRingkasanText(); };
+const tip=$("#tip");
+document.addEventListener("mouseover",e=>{const t=e.target.closest("[data-tip]"); if(!t){tip.style.display="none";return;} tip.innerHTML=t.dataset.tip; tip.style.display="block";});
+document.addEventListener("mousemove",e=>{ if(tip.style.display==="block"){ const x=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8), y=e.clientY+16+tip.offsetHeight>innerHeight?e.clientY-tip.offsetHeight-10:e.clientY+16; tip.style.left=x+"px"; tip.style.top=y+"px"; }});
+document.addEventListener("click",e=>{ const t=e.target.closest("[data-tip]"); if(t&&matchMedia("(hover:none)").matches){ tip.innerHTML=t.dataset.tip; tip.style.display="block"; tip.style.left="8px"; tip.style.top=(e.clientY+12)+"px"; } else if(!t) tip.style.display="none"; });
+// AI UI
+$("#presets").innerHTML=PRESETS.map((p,ix)=>`<button class="btn sm" data-p="${ix}">${esc(p[0])}</button>`).join("");
+$$("#presets button").forEach(b=>b.onclick=()=>askAI(PRESETS[+b.dataset.p][1]));
+$("#aiAsk").onclick=()=>{ const q=$("#aiQ").value.trim(); if(!q){toast("Tulis pertanyaan terlebih dahulu.");return;} askAI(q+"\n\nJawab berdasarkan data, beri langkah konkret yang dapat dilakukan sekolah."); };
+$("#aiStop").onclick=()=>aiAbort&&aiAbort.abort();
+$("#gTest").onclick=testGemini;
+$("#aiCopy").onclick=()=>aiLast?copyText(aiLast):toast("Belum ada hasil AI.");
+$("#gKey").value=store.get("rp_gkey")||""; $("#gModel").value=geminiModel();
+$("#gSave").onclick=()=>{ store.set("rp_gkey",$("#gKey").value.trim()); store.set("rp_gmodel",$("#gModel").value.trim()||GEMINI_MODEL); refreshProviders(); toast("Pengaturan Gemini disimpan di peramban ini."); };
+refreshProviders();
+(async()=>{ try{ if(window.claude && typeof window.claude.use==="function"){ const s=await window.claude.use("sample"); if(s){ sampleFn=s; refreshProviders(); } } }catch(e){} })();
+
+// mulai
+if(DATA_BAWAAN){
+  try{ load(DATA_BAWAAN); $("#sampleNote").textContent="Saat ini tampil data bawaan. Impor file lain untuk sekolah lain."; }catch(e){ renderRingkasan(); }
+} else { $("#btnSample").style.display="none"; renderRingkasan(); renderTren(); renderIndikator(); renderPrioritas(); renderBenahi(); go("panduan"); }
+</script>
+</body>
+</html>

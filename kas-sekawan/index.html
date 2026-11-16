@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KAS Sekawan Touring Club</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--tx:#1d1d1b;--mu:#6b6a65;--ac:#c2410c;--ok:#15803d;--no:#b91c1c;--bd:#e4e1d8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171614;--card:#222120;--tx:#f1efe9;--mu:#a09e96;--ac:#fb923c;--ok:#4ade80;--no:#f87171;--bd:#3a3835}}
+:root[data-theme="dark"]{--bg:#171614;--card:#222120;--tx:#f1efe9;--mu:#a09e96;--ac:#fb923c;--ok:#4ade80;--no:#f87171;--bd:#3a3835}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:760px;margin:0 auto;padding:18px 14px 40px}
+h1{font-size:1.4rem;margin:0}.sub{color:var(--mu);font-size:.9rem;margin:2px 0 14px}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px}
+.k{font-size:.75rem;color:var(--mu);text-transform:uppercase;letter-spacing:.04em}
+.v{font-size:1.15rem;font-weight:700;margin-top:2px}
+.in{color:var(--ok)}.out{color:var(--no)}
+h2{font-size:1.05rem;margin:18px 0 8px}
+.f{display:flex;flex-wrap:wrap;gap:8px}
+input,select,button{font:inherit;padding:9px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);min-width:0}
+input,select{flex:1 1 130px}
+button{background:var(--ac);color:#fff;border:0;font-weight:600;cursor:pointer}
+button.x{background:none;color:var(--no);padding:2px 8px;font-size:1.1rem}
+.t{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{color:var(--mu);font-weight:600;font-size:.78rem;text-transform:uppercase}
+td.r,th.r{text-align:right}
+.e{color:var(--mu);padding:12px 0}
+.n{color:var(--mu);font-size:.8rem;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>🏍️ KAS Sekawan Touring Club</h1>
+<div class="sub">Iuran, pengeluaran, dan saldo kas 5 anggota</div>
+
+<div class="g">
+<div class="c"><div class="k">Total masuk</div><div class="v in" id="tin">Rp0</div></div>
+<div class="c"><div class="k">Total keluar</div><div class="v out" id="tout">Rp0</div></div>
+<div class="c"><div class="k">Saldo kas</div><div class="v" id="sal">Rp0</div></div>
+</div>
+
+<h2>Iuran per anggota</h2>
+<div class="c t"><table><thead><tr><th>Anggota</th><th class="r">Total iuran</th><th class="r">Setoran</th></tr></thead><tbody id="mb"></tbody></table></div>
+
+<h2>Catat iuran</h2>
+<div class="f">
+<select id="pm"></select>
+<input id="pa" type="number" inputmode="numeric" min="0" placeholder="Jumlah (Rp)">
+<input id="pd" type="date">
+<input id="pn" placeholder="Catatan (opsional)">
+<button id="bp">Tambah iuran</button>
+</div>
+
+<h2>Catat pengeluaran</h2>
+<div class="f">
+<input id="ed" placeholder="Keperluan (mis. bensin, konsumsi)">
+<input id="ea" type="number" inputmode="numeric" min="0" placeholder="Jumlah (Rp)">
+<input id="et" type="date">
+<button id="be">Tambah pengeluaran</button>
+</div>
+
+<h2>Riwayat iuran</h2>
+<div class="c t"><table><thead><tr><th>Tanggal</th><th>Anggota</th><th class="r">Jumlah</th><th>Catatan</th><th></th></tr></thead><tbody id="hp"></tbody></table></div>
+
+<h2>Riwayat pengeluaran</h2>
+<div class="c t"><table><thead><tr><th>Tanggal</th><th>Keperluan</th><th class="r">Jumlah</th><th></th></tr></thead><tbody id="he"></tbody></table></div>
+
+<div class="n">Data tersimpan di browser perangkat ini saja (tidak dibagikan ke anggota lain).</div>
+</div>
+<script>
+var MEMBERS=["Hirno","Mukclis","Amy","Budi","Thomas"];
+var KEY="kas-sekawan-touring-club";
+var S={p:[],e:[]};
+try{var raw=localStorage.getItem(KEY);if(raw){var j=JSON.parse(raw);if(j&&j.p&&j.e)S=j}}catch(x){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(x){}}
+function $(i){return document.getElementById(i)}
+function rp(n){return "Rp"+Math.round(n).toLocaleString("id-ID")}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function today(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function fd(s){if(!s)return "-";var a=s.split("-");return a[2]+"/"+a[1]+"/"+a[0]}
+$("pm").innerHTML=MEMBERS.map(function(m){return "<option>"+m+"</option>"}).join("");
+$("pd").value=today();$("et").value=today();
+function render(){
+var ti=S.p.reduce(function(a,b){return a+b.a},0),to=S.e.reduce(function(a,b){return a+b.a},0),sl=ti-to;
+$("tin").textContent=rp(ti);$("tout").textContent=rp(to);
+var s=$("sal");s.textContent=rp(sl);s.className="v "+(sl<0?"out":"in");
+$("mb").innerHTML=MEMBERS.map(function(m){
+var l=S.p.filter(function(x){return x.m===m});
+return "<tr><td>"+m+"</td><td class='r'>"+rp(l.reduce(function(a,b){return a+b.a},0))+"</td><td class='r'>"+l.length+"x</td></tr>"}).join("");
+var P=S.p.slice().sort(function(a,b){return b.d<a.d?-1:b.d>a.d?1:b.id-a.id});
+$("hp").innerHTML=P.length?P.map(function(x){return "<tr><td>"+fd(x.d)+"</td><td>"+esc(x.m)+"</td><td class='r in'>"+rp(x.a)+"</td><td>"+esc(x.n||"")+"</td><td><button class='x' data-t='p' data-i='"+x.id+"' title='Hapus'>×</button></td></tr>"}).join(""):"<tr><td colspan='5' class='e'>Belum ada iuran.</td></tr>";
+var E=S.e.slice().sort(function(a,b){return b.d<a.d?-1:b.d>a.d?1:b.id-a.id});
+$("he").innerHTML=E.length?E.map(function(x){return "<tr><td>"+fd(x.d)+"</td><td>"+esc(x.k)+"</td><td class='r out'>"+rp(x.a)+"</td><td><button class='x' data-t='e' data-i='"+x.id+"' title='Hapus'>×</button></td></tr>"}).join(""):"<tr><td colspan='4' class='e'>Belum ada pengeluaran.</td></tr>";
+}
+$("bp").onclick=function(){
+var a=parseFloat($("pa").value);if(!(a>0)){alert("Isi jumlah iuran.");return}
+S.p.push({id:Date.now(),m:$("pm").value,a:a,d:$("pd").value||today(),n:$("pn").value.trim()});
+$("pa").value="";$("pn").value="";save();render()};
+$("be").onclick=function(){
+var a=parseFloat($("ea").value),k=$("ed").value.trim();
+if(!k||!(a>0)){alert("Isi keperluan dan jumlah.");return}
+S.e.push({id:Date.now(),k:k,a:a,d:$("et").value||today()});
+$("ea").value="";$("ed").value="";save();render()};
+document.addEventListener("click",function(ev){
+var b=ev.target.closest("button.x");if(!b)return;
+if(!confirm("Hapus catatan ini?"))return;
+var t=b.getAttribute("data-t"),id=+b.getAttribute("data-i");
+S[t]=S[t].filter(function(x){return x.id!==id});save();render()});
+render();
+</script>
+</body>
+</html>
