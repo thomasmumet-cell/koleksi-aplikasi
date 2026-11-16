@@ -1,0 +1,19 @@
+{
+  "name": "Meja Host Podcast PGRI DIY",
+  "short_name": "Meja Host",
+  "description": "Pemandu host podcast satu tema dengan 2 atau 3 narasumber: rundown otomatis, naskah host, bank pertanyaan, dan Mode Siaran.",
+  "id": "./",
+  "start_url": "./#aplikasi",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f3323",
+  "theme_color": "#0f3323",
+  "lang": "id",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
