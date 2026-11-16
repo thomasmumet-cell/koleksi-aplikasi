@@ -4,156 +4,331 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Koleksi Aplikasi Thomas</title>
+<meta name="description" content="Inventaris aplikasi buatan Thomas untuk sekolah, pembelajaran, organisasi, dan keuangan. Buka langsung di browser, tanpa instal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --latar:#f5f3ee; --kartu:#ffffff; --teks:#1f2a2e; --redup:#6b7378;
-    --utama:#1d4e5f; --aksen:#d98a2b; --garis:#e3dfd6;
-  }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family: "Segoe UI", Roboto, Arial, sans-serif; background:var(--latar); color:var(--teks); line-height:1.5; }
-  header { background:var(--utama); color:#fff; padding:40px 20px 72px; }
-  .wadah { max-width:1080px; margin:0 auto; }
-  header h1 { font-size:2rem; font-weight:700; }
-  header p { opacity:.85; margin-top:4px; }
-  .statistik { display:flex; gap:28px; margin-top:20px; flex-wrap:wrap; }
-  .statistik b { font-size:1.6rem; display:block; }
-  .statistik span { font-size:.85rem; opacity:.8; }
+/* Arah: rak alat kerja seorang guru. Hijau tinta sebagai dasar, kuning safron sebagai aksen tunggal,
+   tiap kategori punya warna penanda sendiri. Pembuka dengan pencarian besar, lalu aplikasi terbaru,
+   kategori, dan katalog lengkap. */
+:root{
+  --bg:#f3f5f2; --surface:#ffffff; --ink:#132a2f; --muted:#56656a; --line:#dde3df;
+  --deep:#12343b; --deep-2:#1b4a52; --accent:#f2a541; --accent-ink:#7a4a05;
+  --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --font:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#0c1719;--surface:#13242a;--ink:#e6efee;--muted:#a3b4b5;--line:#25393f;--accent-ink:#f2a541;color-scheme:dark;}
+}
+:root[data-theme="dark"]{--bg:#0c1719;--surface:#13242a;--ink:#e6efee;--muted:#a3b4b5;--line:#25393f;--accent-ink:#f2a541;color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{margin:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.55;font-size:16px}
+h1,h2,h3{font-family:var(--font-display);margin:0;line-height:1.12;text-wrap:balance}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.num{font-variant-numeric:tabular-nums}
 
-  .panel { background:var(--kartu); border-radius:14px; padding:18px; margin:-48px auto 24px; box-shadow:0 6px 20px rgba(0,0,0,.08); }
-  #cari { width:100%; font-size:1.05rem; padding:14px 16px; border:2px solid var(--garis); border-radius:10px; outline:none; }
-  #cari:focus { border-color:var(--utama); }
-  .chip-baris { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; align-items:center; }
-  .chip { border:1px solid var(--garis); background:#fff; color:var(--teks); padding:6px 14px; border-radius:20px; cursor:pointer; font-size:.9rem; }
-  .chip.aktif { background:var(--utama); color:#fff; border-color:var(--utama); }
-  .opsi { margin-left:auto; font-size:.9rem; color:var(--redup); display:flex; gap:6px; align-items:center; cursor:pointer; }
+/* Navigasi */
+.nav{background:var(--deep);color:#fff;position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(255,255,255,.08)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:38px;height:38px;border-radius:11px;background:var(--accent);display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:7px}
+.logo-mark i{background:var(--deep);border-radius:3px;display:block}
+.logo-mark i:nth-child(2){background:#fff}
+.logo b{font-family:var(--font-display);font-size:19px}
+.nav-links{display:flex;gap:6px 22px;flex-wrap:wrap;align-items:center}
+.nav-links a{color:#c9dcdc;text-decoration:none;font-weight:600;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 18px;border-radius:12px;background:var(--accent);color:#2b1a00!important;font-weight:700;text-decoration:none;border:0;cursor:pointer}
+.btn:hover{filter:brightness(1.05)}
+.btn.line{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff!important}
 
-  main { padding:0 20px 40px; }
-  #info { color:var(--redup); font-size:.9rem; margin-bottom:12px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; }
-  .kartu { background:var(--kartu); border-radius:12px; padding:18px; border:1px solid var(--garis); display:flex; flex-direction:column; }
-  .kartu.segera { opacity:.6; }
-  .label { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
-  .label span { font-size:.72rem; padding:2px 8px; border-radius:6px; background:#eef3f5; color:var(--utama); font-weight:600; }
-  .label .jenis { background:#fbf1e4; color:#9a5b12; }
-  .kartu h3 { font-size:1.08rem; margin-bottom:4px; }
-  .kartu p { font-size:.9rem; color:var(--redup); flex:1; }
-  .bawah { display:flex; justify-content:space-between; align-items:center; margin-top:14px; font-size:.82rem; color:var(--redup); }
-  .tombol { background:var(--aksen); color:#fff; text-decoration:none; padding:7px 16px; border-radius:8px; font-weight:600; font-size:.88rem; }
-  .tombol:hover { filter:brightness(.92); }
-  .belum { font-style:italic; }
-  .kode { color:var(--utama); font-weight:600; }
-  .kosong { text-align:center; padding:40px; color:var(--redup); }
-  mark { background:#ffe7a8; padding:0 1px; }
-  footer { text-align:center; font-size:.82rem; color:var(--redup); padding:20px; }
+/* Pembuka */
+.hero{background:radial-gradient(1200px 500px at 85% -10%,#24616b 0%,transparent 60%),var(--deep);color:#fff;padding:64px 0 84px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:center}
+.eyebrow{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-size:clamp(36px,5.2vw,62px);font-weight:800;margin:14px 0 16px;letter-spacing:-.015em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lead{font-size:18.5px;color:#cfe0df;margin:0 0 26px;max-width:34em}
+.search{display:flex;gap:8px;background:#fff;border-radius:16px;padding:7px;max-width:560px;box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.search input{flex:1;border:0;outline:0;background:transparent;padding:10px 12px;font-size:17px;color:#132a2f;min-width:0}
+.search input::placeholder{color:#7a8a8d}
+.hint{margin:12px 0 0;font-size:14px;color:#a9c4c3}
+.hint button{background:rgba(255,255,255,.1);border:0;color:#e6f0ef;border-radius:999px;padding:3px 10px;margin:2px 2px 0 0;cursor:pointer;font-size:13.5px}
+.hint button:hover{background:rgba(255,255,255,.2)}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:30px}
+.stats div{display:grid}
+.stats b{font-family:var(--font-display);font-size:34px;font-weight:800;line-height:1}
+.stats span{font-size:14px;color:#a9c4c3;margin-top:4px}
+.stack{position:relative;height:420px}
+.float{position:absolute;width:260px;background:#fff;color:#132a2f;border-radius:18px;padding:16px;box-shadow:0 24px 50px rgba(0,0,0,.35);display:grid;gap:8px;border-top:6px solid var(--c)}
+.float .ic{width:40px;height:40px;border-radius:11px;background:color-mix(in srgb,var(--c) 18%,#fff);color:var(--c);display:grid;place-items:center}
+.float b{font-family:var(--font-display);font-size:18px;line-height:1.2}
+.float small{color:#56656a;font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.float:nth-child(1){top:0;left:8%;transform:rotate(-5deg)}
+.float:nth-child(2){top:70px;right:0;transform:rotate(4deg)}
+.float:nth-child(3){top:205px;left:0;transform:rotate(3deg)}
+.float:nth-child(4){top:250px;right:6%;transform:rotate(-3deg)}
+
+/* Bagian */
+section.sec{padding:72px 0 0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.sec-head h2{font-size:clamp(28px,3.4vw,40px);font-weight:800}
+.sec-head p{margin:6px 0 0;color:var(--muted);max-width:40em}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
+
+/* Terbaru */
+.latest{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.feat{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;display:grid;gap:10px;align-content:start;overflow:hidden;text-decoration:none;color:inherit;transition:transform .2s,box-shadow .2s}
+.feat:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(18,52,59,.12)}
+.feat::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--c)}
+.feat .row{display:flex;justify-content:space-between;align-items:center}
+.feat .ic{width:48px;height:48px;border-radius:13px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);display:grid;place-items:center}
+.feat h3{font-size:22px}
+.feat p{margin:0;color:var(--muted);font-size:15px}
+.new{font-size:12px;font-weight:800;background:var(--accent);color:#2b1a00;border-radius:999px;padding:3px 10px;letter-spacing:.04em}
+.go{font-weight:700;color:var(--c);font-size:15px;margin-top:4px}
+
+/* Kategori */
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.cat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:10px;text-align:left;cursor:pointer;transition:border-color .15s,transform .15s}
+.cat:hover{border-color:var(--c);transform:translateY(-2px)}
+.cat .ic{width:42px;height:42px;border-radius:12px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);display:grid;place-items:center}
+.cat b{font-family:var(--font-display);font-size:18px}
+.cat span{color:var(--muted);font-size:14px}
+
+/* Katalog */
+.tools{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;gap:12px;position:sticky;top:64px;z-index:5;box-shadow:0 10px 30px rgba(18,52,59,.06)}
+.tools-top{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center}
+.tools input[type=search]{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:11px;padding:11px 14px;font-size:16px}
+.tools select{border:1px solid var(--line);background:var(--bg);border-radius:11px;padding:10px 12px}
+.toggle{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted);white-space:nowrap;cursor:pointer}
+.toggle input{width:18px;height:18px;accent-color:var(--deep-2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;gap:7px;align-items:center}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--c,var(--muted));display:block}
+.chip[aria-pressed="true"]{background:var(--deep);border-color:var(--deep);color:#fff}
+.chip small{font-weight:700;opacity:.7}
+#info{color:var(--muted);font-size:14.5px;margin:16px 2px 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:var(--c)}
+.card.segera{opacity:.62}
+.card .top{display:flex;gap:10px;align-items:center}
+.card .ic{width:36px;height:36px;border-radius:10px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);display:grid;place-items:center;flex:none}
+.card h3{font-size:18px;font-family:var(--font-display)}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.badges span{font-size:12px;font-weight:700;border-radius:7px;padding:2px 8px;background:var(--bg);color:var(--muted)}
+.card p{margin:0;color:var(--muted);font-size:14.5px;flex:1;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.card .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;font-size:13.5px;color:var(--muted)}
+.open{background:var(--deep);color:#fff;text-decoration:none;border-radius:10px;padding:8px 14px;font-weight:700;font-size:14px;min-height:38px;display:inline-flex;align-items:center}
+:root[data-theme="dark"] .open{background:var(--accent);color:#2b1a00}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .open{background:var(--accent);color:#2b1a00}}
+.open:hover{filter:brightness(1.15)}
+.lock{font-weight:700;color:var(--ink)}
+mark{background:#ffe2a6;color:#2b1a00;border-radius:3px;padding:0 1px}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 10px;background:var(--surface);border:1px dashed var(--line);border-radius:16px}
+
+/* Tentang */
+.about{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.about div{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:8px;align-content:start}
+.about .ic{width:44px;height:44px;border-radius:12px;background:var(--deep);color:var(--accent);display:grid;place-items:center}
+.about h3{font-size:19px}
+.about p{margin:0;color:var(--muted);font-size:15px}
+.band{margin-top:80px;background:var(--deep);color:#fff}
+.band .wrap{padding-top:52px;padding-bottom:52px;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center}
+.band h2{font-size:clamp(26px,3vw,36px);font-weight:800}
+.band p{margin:6px 0 0;color:#cfe0df}
+footer{color:var(--muted);font-size:14px;padding:22px 0}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr}
+  .stack{display:none}
+  .tools{position:static}
+  .tools-top{grid-template-columns:1fr 1fr}
+  .tools-top input[type=search]{grid-column:1/-1}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wadah">
-    <h1>Koleksi Aplikasi</h1>
-    <p>Kumpulan aplikasi buatan Thomas untuk sekolah, pembelajaran, dan organisasi</p>
-    <div class="statistik">
-      <div><b id="jmlTotal">0</b><span>aplikasi tercatat</span></div>
-      <div><b id="jmlAktif">0</b><span>tersimpan</span></div>
-      <div><b id="jmlKategori">0</b><span>kategori</span></div>
-    </div>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#atas" aria-label="Koleksi Aplikasi, ke atas"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>Koleksi Aplikasi</b></a>
+    <nav class="nav-links" aria-label="Navigasi">
+      <a href="#terbaru">Terbaru</a>
+      <a href="#kategori">Kategori</a>
+      <a href="#katalog">Semua aplikasi</a>
+      <a href="#tentang">Cara pakai</a>
+      <a class="btn" href="#katalog" style="min-height:40px;padding:8px 16px">Jelajahi</a>
+    </nav>
   </div>
 </header>
 
-<div class="wadah" style="padding:0 20px">
-  <div class="panel">
-    <input id="cari" type="search" placeholder="🔍  Cari aplikasi… (contoh: infak, TKA, ABK)" autocomplete="off">
-    <div class="chip-baris" id="chips"></div>
+<section class="hero" id="atas">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Inventaris aplikasi · sekolah, pembelajaran, organisasi</span>
+      <h1>Aplikasi buatan guru, untuk kerja sekolah yang <em>lebih ringan.</em></h1>
+      <p class="lead">Satu tempat untuk semua aplikasi yang saya buat: administrasi kepala sekolah, analisis dana BOS, e-course, belajar mengaji, sampai catatan keuangan. Buka langsung di browser, tanpa instal.</p>
+      <form class="search" id="heroSearch" role="search">
+        <input id="heroQ" type="search" placeholder="Cari aplikasi, misalnya: BOS, podcast, mengaji" aria-label="Cari aplikasi">
+        <button class="btn" type="submit">Cari</button>
+      </form>
+      <p class="hint" id="hintTags">Coba: </p>
+      <div class="stats">
+        <div><b class="num" id="sAktif">0</b><span>aplikasi siap dibuka</span></div>
+        <div><b class="num" id="sAI">0</b><span>berbasis AI</span></div>
+        <div><b class="num" id="sKat">0</b><span>kategori</span></div>
+        <div><b class="num" id="sTotal">0</b><span>tercatat di inventaris</span></div>
+      </div>
+    </div>
+    <div class="stack" id="stack" aria-hidden="true"></div>
   </div>
-</div>
+</section>
 
-<main class="wadah">
-  <p id="info"></p>
-  <div class="grid" id="grid"></div>
+<main>
+  <section class="sec" id="terbaru">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="kicker">Baru ditambahkan</span><h2>Aplikasi terbaru</h2></div><a class="open" href="#katalog">Lihat semua</a></div>
+      <div class="latest" id="latest"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="kategori">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="kicker">Jelajahi menurut kebutuhan</span><h2>Kategori</h2><p>Pilih kategori untuk langsung melihat aplikasinya di katalog.</p></div></div>
+      <div class="cats" id="cats"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="katalog">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="kicker">Inventaris lengkap</span><h2>Semua aplikasi</h2></div></div>
+      <div class="tools">
+        <div class="tools-top">
+          <input id="q" type="search" placeholder="Cari nama, isi, atau kategori aplikasi" aria-label="Cari di katalog" autocomplete="off">
+          <select id="sort" aria-label="Urutkan"><option value="baru">Terbaru dulu</option><option value="az">Nama A–Z</option></select>
+          <label class="toggle"><input type="checkbox" id="showAll" checked> Tampilkan yang belum diunggah</label>
+        </div>
+        <div class="chips" id="chips" role="group" aria-label="Saring kategori"></div>
+      </div>
+      <p id="info" aria-live="polite"></p>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="tentang">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="kicker">Cara pakai</span><h2>Langsung jalan, aman untuk data</h2></div></div>
+      <div class="about">
+        <div><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span><h3>Buka di browser</h3><p>Klik <strong>Buka</strong> pada aplikasi mana pun. Bisa di laptop maupun HP, tanpa instal dan tanpa akun.</p></div>
+        <div><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><h3>Data tetap di tangan Anda</h3><p>Aplikasi HTML menyimpan data di perangkat masing-masing. Aplikasi berbasis Google Sheets menyimpan data di akun Google sekolah.</p></div>
+        <div><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15.5l-1.8-4.7L5.5 9l4.7-1.3z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span><h3>Fitur AI dengan kunci sendiri</h3><p>Aplikasi berlabel AI Tool memakai Gemini. Isi kunci API Anda sendiri di menu Pengaturan; kunci hanya tersimpan di perangkat.</p></div>
+        <div><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></span><h3>Kode Apps Script tersimpan</h3><p>Aplikasi bertanda <strong>Kode tersimpan</strong> berjalan di Google Apps Script sekolah; kodenya dicadangkan di repositori privat.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div><h2>Butuh aplikasi untuk sekolah Anda?</h2><p>Mulai dari katalog. Setiap aplikasi bisa disesuaikan dengan kebutuhan sekolah.</p></div>
+      <a class="btn" href="#katalog">Buka katalog</a>
+    </div>
+  </section>
 </main>
 
-<footer>Koleksi ini diperbarui setiap kali ada aplikasi baru.</footer>
+<footer><div class="wrap"><span>Koleksi Aplikasi · dibuat oleh Thomas</span><span id="updated"></span></div></footer>
 
 <script src="katalog.js"></script>
 <script>
-  let kategoriDipilih = "Semua";
-  let tampilkanSegera = true;
+(function(){
+"use strict";
+var A = (typeof APLIKASI !== "undefined") ? APLIKASI : [];
+var COLORS = {"Sekolah":"#1f7a8c","Pembelajaran":"#2f9e44","AI Tool":"#7048e8","Keuangan":"#e8590c","Organisasi":"#c2255c","Latihan":"#1971c2","ABK & Inklusi":"#d6336c"};
+var ICONS = {
+  "Sekolah":'<path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/>',
+  "Pembelajaran":'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M9 7h6"/>',
+  "AI Tool":'<path d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15.5l-1.8-4.7L5.5 9l4.7-1.3z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+  "Keuangan":'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 15h2"/>',
+  "Organisasi":'<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20a6 6 0 0 1 12 0M14 20a4.5 4.5 0 0 1 7 0"/>',
+  "Latihan":'<path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>',
+  "ABK & Inklusi":'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'
+};
+function col(k){return COLORS[k]||"#5f7a7f";}
+function icon(k,s){s=s||20;return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[k]||'<rect x="4" y="4" width="16" height="16" rx="3"/>')+'</svg>';}
+function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+function mark(t,q){var s=esc(t);if(!q)return s;var p=q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");return s.replace(new RegExp("("+esc(p)+")","gi"),"<mark>$1</mark>");}
+function tgl(t){if(!t)return "";var d=new Date(t+"T00:00:00");return d.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"});}
+function isNew(t){if(!t)return false;return (Date.now()-new Date(t+"T00:00:00").getTime())<8*864e5;}
+function href(a){return esc(a.tautan||"#");}
+var aktif=A.filter(function(a){return a.status==="aktif";});
+var kategori=[];A.forEach(function(a){if(kategori.indexOf(a.kategori)<0)kategori.push(a.kategori);});
+kategori.sort(function(x,y){return A.filter(function(a){return a.kategori===y;}).length-A.filter(function(a){return a.kategori===x;}).length;});
+var byNew=aktif.slice().sort(function(x,y){return (y.tanggal||"").localeCompare(x.tanggal||"");});
 
-  const elCari = document.getElementById("cari");
-  const elGrid = document.getElementById("grid");
-  const elChips = document.getElementById("chips");
-  const elInfo = document.getElementById("info");
+/* Statistik dengan animasi hitung */
+function countUp(id,n){var el=document.getElementById(id);var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;if(reduce||n<5){el.textContent=n;return;}var t0=null;function step(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/900);el.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step);}el.textContent="0";requestAnimationFrame(step);}
+countUp("sAktif",aktif.length);countUp("sAI",A.filter(function(a){return a.jenis==="AI Tool";}).length);
+document.getElementById("sKat").textContent=kategori.length;countUp("sTotal",A.length);
+var last=byNew[0];document.getElementById("updated").textContent=last?"Diperbarui "+tgl(last.tanggal):"";
 
-  const daftarKategori = ["Semua", ...[...new Set(APLIKASI.map(a => a.kategori))].sort()];
+/* Tumpukan kartu di pembuka */
+document.getElementById("stack").innerHTML=byNew.slice(0,4).map(function(a){return '<div class="float" style="--c:'+col(a.kategori)+'"><span class="ic">'+icon(a.kategori)+'</span><b>'+esc(a.nama)+'</b><small>'+esc(a.deskripsi)+'</small></div>';}).join("");
 
-  document.getElementById("jmlTotal").textContent = APLIKASI.length;
-  document.getElementById("jmlAktif").textContent = APLIKASI.filter(a => a.status !== "segera").length;
-  document.getElementById("jmlKategori").textContent = daftarKategori.length - 1;
+/* Kata kunci cepat */
+["BOS","Podcast","Mengaji","Kepala sekolah","Keuangan","TKA"].forEach(function(w){var b=document.createElement("button");b.type="button";b.textContent=w;b.onclick=function(){setQuery(w);};document.getElementById("hintTags").appendChild(b);});
 
-  function amankan(t) {
-    return String(t ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
-  }
-  function sorot(teks, kata) {
-    const aman = amankan(teks);
-    if (!kata) return aman;
-    const pola = kata.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    return aman.replace(new RegExp("(" + pola + ")", "gi"), "<mark>$1</mark>");
-  }
-  function formatTanggal(t) {
-    if (!t) return "";
-    const d = new Date(t + "T00:00:00");
-    return d.toLocaleDateString("id-ID", { day:"numeric", month:"short", year:"numeric" });
-  }
+/* Terbaru */
+document.getElementById("latest").innerHTML=byNew.slice(0,3).map(function(a){
+  return '<a class="feat" href="'+href(a)+'" target="_blank" rel="noopener" style="--c:'+col(a.kategori)+'"><div class="row"><span class="ic">'+icon(a.kategori,24)+'</span>'+(isNew(a.tanggal)?'<span class="new">BARU</span>':'')+'</div><h3>'+esc(a.nama)+'</h3><p>'+esc(a.deskripsi)+'</p><span class="go">Buka aplikasi ↗</span></a>';
+}).join("");
 
-  function gambarChips() {
-    elChips.innerHTML = daftarKategori.map(k =>
-      `<button class="chip ${k === kategoriDipilih ? "aktif" : ""}" data-k="${amankan(k)}">${amankan(k)}</button>`
-    ).join("") +
-    `<label class="opsi"><input type="checkbox" id="cekSegera" ${tampilkanSegera ? "checked" : ""}> Tampilkan yang belum diunggah</label>`;
+/* Kategori */
+document.getElementById("cats").innerHTML=kategori.map(function(k){
+  var n=A.filter(function(a){return a.kategori===k;}).length, na=aktif.filter(function(a){return a.kategori===k;}).length;
+  return '<button type="button" class="cat" data-k="'+esc(k)+'" style="--c:'+col(k)+'"><span class="ic">'+icon(k,22)+'</span><b>'+esc(k)+'</b><span>'+na+' siap dibuka'+(n>na?' · '+(n-na)+' lainnya':'')+'</span></button>';
+}).join("");
+document.getElementById("cats").addEventListener("click",function(e){var b=e.target.closest("[data-k]");if(!b)return;pilih=b.dataset.k;renderChips();render();document.getElementById("katalog").scrollIntoView();});
 
-    elChips.querySelectorAll(".chip").forEach(b => b.onclick = () => { kategoriDipilih = b.dataset.k; gambarChips(); tampilkan(); });
-    document.getElementById("cekSegera").onchange = e => { tampilkanSegera = e.target.checked; tampilkan(); };
-  }
-
-  function tampilkan() {
-    const kata = elCari.value.trim();
-    const kataKecil = kata.toLowerCase();
-
-    const hasil = APLIKASI.filter(a => {
-      if (kategoriDipilih !== "Semua" && a.kategori !== kategoriDipilih) return false;
-      if (!tampilkanSegera && a.status === "segera") return false;
-      if (!kataKecil) return true;
-      return [a.nama, a.deskripsi, a.kategori, a.jenis].join(" ").toLowerCase().includes(kataKecil);
-    }).sort((x, y) => (x.status === "segera" ? 1 : 0) - (y.status === "segera" ? 1 : 0)
-                    || (y.tanggal || "").localeCompare(x.tanggal || ""));
-
-    elInfo.textContent = `Menampilkan ${hasil.length} dari ${APLIKASI.length} aplikasi`;
-
-    if (!hasil.length) {
-      elGrid.innerHTML = `<div class="kosong">Tidak ada aplikasi yang cocok dengan "<b>${amankan(kata)}</b>".</div>`;
-      return;
-    }
-
-    elGrid.innerHTML = hasil.map(a => `
-      <div class="kartu ${a.status === "segera" ? "segera" : ""}">
-        <div class="label"><span>${amankan(a.kategori)}</span><span class="jenis">${amankan(a.jenis)}</span></div>
-        <h3>${sorot(a.nama, kata)}</h3>
-        <p>${sorot(a.deskripsi, kata)}</p>
-        <div class="bawah">
-          <span>${formatTanggal(a.tanggal)}</span>
-          ${a.status === "aktif"
-            ? `<a class="tombol" href="${amankan(a.tautan)}" target="_blank" rel="noopener">Buka ↗</a>`
-            : a.status === "kode"
-              ? `<span class="kode">🔒 Kode tersimpan</span>`
-              : `<span class="belum">Belum diunggah</span>`}
-        </div>
-      </div>`).join("");
-  }
-
-  elCari.addEventListener("input", tampilkan);
-  gambarChips();
-  tampilkan();
+/* Katalog */
+var pilih="Semua", qEl=document.getElementById("q"), showAll=document.getElementById("showAll"), sortEl=document.getElementById("sort");
+function renderChips(){
+  document.getElementById("chips").innerHTML=["Semua"].concat(kategori).map(function(k){
+    var n=k==="Semua"?A.length:A.filter(function(a){return a.kategori===k;}).length;
+    return '<button type="button" class="chip" data-k="'+esc(k)+'" aria-pressed="'+(k===pilih)+'" style="--c:'+col(k)+'">'+(k==="Semua"?'':'<i></i>')+esc(k)+' <small class="num">'+n+'</small></button>';
+  }).join("");
+}
+document.getElementById("chips").addEventListener("click",function(e){var b=e.target.closest("[data-k]");if(!b)return;pilih=b.dataset.k;renderChips();render();});
+function render(){
+  var q=qEl.value.trim(), ql=q.toLowerCase();
+  var list=A.filter(function(a){
+    if(pilih!=="Semua"&&a.kategori!==pilih)return false;
+    if(!showAll.checked&&a.status==="segera")return false;
+    return !ql||[a.nama,a.deskripsi,a.kategori,a.jenis].join(" ").toLowerCase().indexOf(ql)>-1;
+  });
+  var rank={aktif:0,kode:1,segera:2};
+  list.sort(function(x,y){return (rank[x.status]||0)-(rank[y.status]||0)||(sortEl.value==="az"?x.nama.localeCompare(y.nama,"id"):(y.tanggal||"").localeCompare(x.tanggal||""));});
+  document.getElementById("info").textContent="Menampilkan "+list.length+" dari "+A.length+" aplikasi"+(pilih!=="Semua"?" dalam kategori "+pilih:"")+(q?" untuk “"+q+"”":"");
+  if(!list.length){document.getElementById("grid").innerHTML='<div class="empty">Tidak ada aplikasi yang cocok'+(q?' dengan “<b>'+esc(q)+'</b>”':'')+'. Coba kata lain atau pilih kategori Semua.</div>';return;}
+  document.getElementById("grid").innerHTML=list.map(function(a){
+    var act=a.status==="aktif"?'<a class="open" href="'+href(a)+'" target="_blank" rel="noopener">Buka ↗</a>':(a.status==="kode"?'<span class="lock">Kode tersimpan</span>':'<span>Belum diunggah</span>');
+    return '<article class="card'+(a.status==="segera"?' segera':'')+'" style="--c:'+col(a.kategori)+'"><div class="top"><span class="ic">'+icon(a.kategori,18)+'</span><h3>'+mark(a.nama,q)+'</h3></div><div class="badges"><span>'+esc(a.kategori)+'</span><span>'+esc(a.jenis)+'</span>'+(isNew(a.tanggal)&&a.status==="aktif"?'<span style="background:var(--accent);color:#2b1a00">Baru</span>':'')+'</div><p>'+mark(a.deskripsi,q)+'</p><div class="foot"><span>'+tgl(a.tanggal)+'</span>'+act+'</div></article>';
+  }).join("");
+}
+qEl.addEventListener("input",render); showAll.addEventListener("change",render); sortEl.addEventListener("change",render);
+function setQuery(w){qEl.value=w;pilih="Semua";renderChips();render();document.getElementById("katalog").scrollIntoView();}
+document.getElementById("heroSearch").addEventListener("submit",function(e){e.preventDefault();setQuery(document.getElementById("heroQ").value.trim());});
+renderChips(); render();
+})();
 </script>
 </body>
 </html>
