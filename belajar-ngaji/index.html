@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belajar Mengaji untuk Pemula</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Arah: buku iqra yang hidup. Hijau tua sebagai warna utama, emas sebagai aksen, latar mint pucat.
+   Huruf Arab memakai Scheherazade New (tanda harakat jelas), teks Latin memakai Nunito yang ramah pemula.
+   Tata letak: daftar pelajaran di kiri, isi pelajaran di kanan. */
+:root{
+  --bg:#f1f6f3;
+  --surface:#ffffff;
+  --ink:#16302a;
+  --muted:#4f6660;
+  --line:#d6e3dd;
+  --green:#0f5a46;
+  --green-soft:#e2f0ea;
+  --gold:#b07d1e;
+  --gold-soft:#fbf1dc;
+  --ok:#1a7f4e;
+  --bad:#b4421c;
+  --bad-soft:#fbe7df;
+  --font-ar:"Scheherazade New","Amiri","Traditional Arabic",serif;
+  --font:"Nunito","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1714; --surface:#13221e; --ink:#e6f1ec; --muted:#a4bab3; --line:#24403a;
+    --green:#5fc9a3; --green-soft:#173a30; --gold:#e3b558; --gold-soft:#3a2e14;
+    --ok:#56cf8e; --bad:#f08a62; --bad-soft:#3d2219; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c1714; --surface:#13221e; --ink:#e6f1ec; --muted:#a4bab3; --line:#24403a;
+  --green:#5fc9a3; --green-soft:#173a30; --gold:#e3b558; --gold-soft:#3a2e14;
+  --ok:#56cf8e; --bad:#f08a62; --bad-soft:#3d2219; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.6}
+h1,h2,h3{margin:0;line-height:1.25;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.ar{font-family:var(--font-ar);direction:rtl;unicode-bidi:isolate}
+
+.top{background:#0f5a46;color:#fff}
+.top-inner{max-width:1200px;margin:0 auto;padding:14px 20px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:12px;align-items:center}
+.brand .mark{width:46px;height:46px;border-radius:12px;background:#e9c46a;color:#0f5a46;display:grid;place-items:center;font-family:var(--font-ar);font-size:30px;line-height:1;padding-bottom:6px}
+.brand h1{font-size:20px;font-weight:800}
+.brand p{margin:0;font-size:14px;color:#cfe7dd}
+.prog{display:flex;gap:12px;align-items:center;min-width:240px}
+.prog-bar{flex:1;height:10px;border-radius:999px;background:rgba(255,255,255,.2);overflow:hidden}
+.prog-bar span{display:block;height:100%;width:0;background:#e9c46a;transition:width .4s}
+.prog-txt{font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.voice-note{max-width:1200px;margin:12px auto 0;padding:0 20px}
+.voice-note p{margin:0;background:var(--gold-soft);border:1px solid var(--gold);border-radius:12px;padding:10px 14px;font-size:15px}
+
+.layout{max-width:1200px;margin:0 auto;padding:18px 20px 50px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;align-items:start}
+nav.les{position:sticky;top:12px;display:grid;gap:6px}
+.les-btn{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:15px;line-height:1.3}
+.les-btn:hover{border-color:var(--green)}
+.les-btn[aria-current="true"]{border-color:var(--green);box-shadow:inset 4px 0 0 var(--green)}
+.les-btn .n{width:34px;height:34px;border-radius:9px;background:var(--bg);display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--muted)}
+.les-btn.done .n{background:var(--ok);color:#fff}
+.les-btn small{display:block;color:var(--muted);font-size:13px}
+
+main.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px clamp(16px,3vw,32px);min-width:0}
+.kicker{color:var(--gold);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+main h2{font-size:clamp(24px,3vw,32px);margin:4px 0 10px}
+.intro{color:var(--muted);margin:0 0 16px;max-width:62ch}
+.box{background:var(--green-soft);border-radius:12px;padding:14px 18px;margin:14px 0}
+.box h3{font-size:17px;margin-bottom:6px;color:var(--green)}
+.box ul,.box ol{margin:0;padding-left:20px}
+.box li{margin-bottom:4px}
+.note{background:var(--gold-soft);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:10px 14px;margin:14px 0;font-size:15.5px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;direction:rtl}
+.tile{direction:ltr;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 6px 8px;display:grid;justify-items:center;gap:0;min-height:120px;transition:transform .15s,border-color .15s}
+.tile:hover{border-color:var(--green);transform:translateY(-2px)}
+.tile.on{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.tile .big{font-family:var(--font-ar);font-size:46px;line-height:1.5;color:var(--ink)}
+.tile .lat{font-weight:800;font-size:16px;color:var(--green)}
+.tile .sub{font-size:12.5px;color:var(--muted)}
+.tile.wide .big{font-size:38px}
+
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px}
+.seg button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:700;font-size:15px}
+.seg button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#0c1714}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#0c1714}}
+
+.detail{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:var(--green-soft);border-radius:14px;padding:16px 18px;margin:0 0 16px}
+.detail .big{font-family:var(--font-ar);font-size:78px;line-height:1.3;color:var(--green);min-width:90px;text-align:center}
+.detail h3{font-size:22px}
+.detail p{margin:2px 0}
+.forms{display:flex;gap:14px;flex-wrap:wrap;direction:rtl;margin-top:6px}
+.forms span{direction:ltr;display:grid;justify-items:center;font-size:13px;color:var(--muted)}
+.forms b{font-family:var(--font-ar);font-size:38px;font-weight:400;color:var(--ink);line-height:1.4}
+
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.word{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;justify-items:center;gap:2px}
+.word:hover{border-color:var(--green)}
+.word .big{font-family:var(--font-ar);font-size:40px;line-height:1.5}
+.word .lat{font-weight:800;color:var(--green)}
+.word .sub{font-size:13px;color:var(--muted);text-align:center}
+
+.rule-list{display:flex;flex-wrap:wrap;gap:8px;direction:rtl;margin:6px 0 10px}
+.rule-list span{font-family:var(--font-ar);font-size:30px;background:var(--surface);border:1px solid var(--line);border-radius:10px;min-width:52px;text-align:center;line-height:1.5}
+
+.surah-pick{margin-bottom:14px}
+.ayat{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.ayat li{border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:6px}
+.ayat .arab{font-family:var(--font-ar);font-size:clamp(28px,4vw,38px);line-height:2;direction:rtl;text-align:right}
+.ayat .no{font-family:var(--font-ar);color:var(--gold)}
+.ayat .lat{font-style:italic;color:var(--green);font-weight:600}
+.ayat .arti{color:var(--muted);font-size:15.5px}
+.basmalah{font-family:var(--font-ar);font-size:32px;text-align:center;direction:rtl;margin:0 0 12px;color:var(--green)}
+.toggle-row{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 12px}
+.toggle-row label{display:flex;gap:8px;align-items:center;font-weight:600;font-size:15px;cursor:pointer}
+.toggle-row input{width:18px;height:18px;accent-color:var(--green)}
+
+.quiz{display:grid;gap:14px;max-width:640px}
+.q-card{border:1px solid var(--line);border-radius:16px;padding:20px;display:grid;gap:14px;justify-items:center;text-align:center}
+.q-card .big{font-family:var(--font-ar);font-size:96px;line-height:1.3;color:var(--green)}
+.q-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.q-opt{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px;font-weight:800;font-size:18px;min-height:56px}
+.q-opt.ar-opt{font-family:var(--font-ar);font-size:38px;font-weight:400;line-height:1.3}
+.q-opt:hover{border-color:var(--green)}
+.q-opt.right{background:var(--green-soft);border-color:var(--ok);color:var(--ok)}
+.q-opt.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.q-meta{display:flex;justify-content:space-between;width:100%;font-weight:700;color:var(--muted);font-size:15px}
+.fb{font-weight:700;min-height:26px;margin:0}
+.fb.ok{color:var(--ok)} .fb.no{color:var(--bad)}
+
+.btn{border:0;border-radius:11px;padding:11px 18px;font-weight:800;background:var(--green);color:#fff;font-size:16px}
+:root[data-theme="dark"] .btn{color:#0c1714}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#0c1714}}
+.btn.ghost{background:transparent;color:var(--green);border:1px solid var(--green)}
+.btn.gold{background:var(--gold);color:#fff}
+.btn[disabled]{opacity:.5;cursor:default}
+.play{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px;display:inline-flex;gap:6px;align-items:center}
+.play svg{width:16px;height:16px}
+.foot-nav{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-top:24px;padding-top:16px;border-top:1px solid var(--line)}
+.done-pill{font-weight:800;font-size:14px;border-radius:999px;padding:5px 12px;background:var(--bg);color:var(--muted)}
+.done-pill.ok{background:var(--green-soft);color:var(--ok)}
+.voice-set{max-width:1200px;margin:12px auto 0;padding:0 20px}
+.voice-set details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.voice-set summary{cursor:pointer;font-weight:800;color:var(--green)}
+.vs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:10px;align-items:end}
+.vs-grid label{font-weight:700;font-size:14px;display:block;margin-bottom:4px}
+.vs-grid select,.vs-grid input[type=range]{width:100%}
+.vs-grid select{font:inherit;padding:8px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.vs-tip{font-size:14px;color:var(--muted);margin:10px 0 0}
+.listen-all{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.ayat li.playing{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold);background:var(--gold-soft)}
+.ayat .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.player{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;background:var(--green-soft);border-radius:12px;padding:12px 14px;margin:0 0 14px}
+.player label{display:flex;gap:6px;align-items:center;font-weight:700;font-size:15px}
+.player select{font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.credit{font-size:13px;color:var(--muted);margin:8px 0 0}
+.tile.speaking,.word.speaking{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:10px;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+
+@media (max-width:820px){
+  .layout{grid-template-columns:1fr}
+  nav.les{position:static;grid-auto-flow:column;grid-auto-columns:minmax(200px,1fr);overflow-x:auto;padding-bottom:6px}
+  .detail{grid-template-columns:1fr;text-align:center;justify-items:center}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">ب</span>
+      <div><h1>Belajar Mengaji untuk Pemula</h1><p>Dari huruf hijaiyah sampai membaca surat pendek</p></div>
+    </div>
+    <div class="prog" aria-live="polite">
+      <div class="prog-bar"><span id="progBar"></span></div>
+      <span class="prog-txt" id="progTxt">0 dari 11 pelajaran</span>
+    </div>
+  </div>
+</header>
+<div class="voice-set"><details id="vsBox"><summary>Pengaturan suara</summary>
+  <div class="vs-grid">
+    <div><label for="vsVoice">Suara bahasa Arab</label><select id="vsVoice"><option value="">Mencari suara…</option></select></div>
+    <div><label for="vsRate">Kecepatan suara huruf: <span id="vsRateTxt">0,7×</span></label><input type="range" id="vsRate" min="0.4" max="1.1" step="0.05" value="0.7"></div>
+    <div><button type="button" class="btn ghost" id="vsTest">Coba suara: بَ بِ بُ</button></div>
+  </div>
+  <p class="vs-tip">Suara huruf dan kata memakai suara bahasa Arab di perangkat Anda. Paling jernih: di laptop gunakan browser <strong>Microsoft Edge</strong> lalu pilih suara <em>Hamed</em> atau <em>Zariyah (Natural)</em>; di HP Android pasang bahasa Arab di <em>Setelan → Text-to-speech → Google</em>. Bacaan ayat memakai rekaman qari asli dan butuh internet.</p>
+</details></div>
+<div class="voice-note" id="voiceNote" hidden><p>Suara bahasa Arab untuk huruf belum tersedia di perangkat ini. Di Android: buka <strong>Setelan → Text-to-speech</strong> lalu pasang bahasa Arab di Google Speech Services. Materi dan kuis tetap bisa dipakai.</p></div>
+
+<div class="layout">
+  <nav class="les" id="nav" aria-label="Daftar pelajaran"></nav>
+  <main class="card" id="main"></main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+var KEY="belajar-mengaji-pemula-v1";
+
+/* ===================== DATA HURUF ===================== */
+// [huruf, nama Latin, translit konsonan, nama Arab untuk suara, kelompok makhraj, menyambung ke kiri?]
+var H=[
+ ["ا","Alif","a","أَلِف","jauf",false],
+ ["ب","Ba","b","بَاء","bibir",true],
+ ["ت","Ta","t","تَاء","lidah",true],
+ ["ث","Tsa","ts","ثَاء","lidah",true],
+ ["ج","Jim","j","جِيم","lidah",true],
+ ["ح","Ḥa","ḥ","حَاء","tenggorokan",true],
+ ["خ","Kha","kh","خَاء","tenggorokan",true],
+ ["د","Dal","d","دَال","lidah",false],
+ ["ذ","Dzal","dz","ذَال","lidah",false],
+ ["ر","Ra","r","رَاء","lidah",false],
+ ["ز","Zai","z","زَاي","lidah",false],
+ ["س","Sin","s","سِين","lidah",true],
+ ["ش","Syin","sy","شِين","lidah",true],
+ ["ص","Shad","sh","صَاد","lidah",true],
+ ["ض","Dhad","dh","ضَاد","lidah",true],
+ ["ط","Tha","th","طَاء","lidah",true],
+ ["ظ","Zha","zh","ظَاء","lidah",true],
+ ["ع","‘Ain","‘","عَيْن","tenggorokan",true],
+ ["غ","Ghain","gh","غَيْن","tenggorokan",true],
+ ["ف","Fa","f","فَاء","bibir",true],
+ ["ق","Qaf","q","قَاف","lidah",true],
+ ["ك","Kaf","k","كَاف","lidah",true],
+ ["ل","Lam","l","لَام","lidah",true],
+ ["م","Mim","m","مِيم","bibir",true],
+ ["ن","Nun","n","نُون","lidah",true],
+ ["و","Wau","w","وَاو","bibir",false],
+ ["ه","Ha","h","هَاء","tenggorokan",true],
+ ["ي","Ya","y","يَاء","lidah",true]
+];
+var MAKHRAJ={
+ jauf:"Rongga mulut (al-jauf). Alif tidak berbunyi sendiri; ia menjadi tempat harakat atau memanjangkan bacaan.",
+ tenggorokan:"Tenggorokan (al-ḥalq). Bunyinya keluar dari pangkal, tengah, atau ujung tenggorokan.",
+ lidah:"Lidah (al-lisān). Ujung, tengah, tepi, atau pangkal lidah menyentuh bagian mulut tertentu.",
+ bibir:"Dua bibir (asy-syafatain). Bibir dirapatkan atau gigi atas menyentuh bibir bawah."
+};
+var FATHAH="َ",KASRAH="ِ",DHAMMAH="ُ",SUKUN="ْ",SYADDAH="ّ",TF="ً",TK="ٍ",TD="ٌ",TAT="ـ";
+function carrier(h,v){ return h[0]==="ا" ? (v===KASRAH?"إ":"أ") : h[0]; }
+function lat(h,vowel){ return (h[0]==="ا"?"":h[2])+vowel; }
+
+/* ===================== KATA LATIHAN ===================== */
+var KATA={
+ sukun:[["قُلْ","qul","katakanlah"],["لَمْ","lam","tidak"],["مِنْ","min","dari"],["عَنْ","‘an","tentang"],["هَلْ","hal","apakah"],["بَلْ","bal","bahkan"],["قَدْ","qad","sungguh"],["كُنْ","kun","jadilah"]],
+ mad:[["بَا","bā","alif setelah fathah"],["بِي","bī","ya sukun setelah kasrah"],["بُو","bū","wau sukun setelah dhammah"],["قَالَ","qāla","dia berkata"],["قِيلَ","qīla","dikatakan"],["يَقُولُ","yaqūlu","dia berkata"],["نُورٌ","nūrun","cahaya"],["كِتَابٌ","kitābun","kitab"]],
+ tasydid:[["رَبَّ","rabba","dibaca dua b"],["رَبِّ","rabbi","Tuhanku"],["إِنَّ","inna","sesungguhnya"],["ثُمَّ","tsumma","kemudian"],["حَقٌّ","ḥaqqun","kebenaran"],["مُحَمَّدٌ","muḥammadun","Muhammad"]],
+ qamar:[["الْقَمَرُ","al-qamaru","bulan"],["الْكِتَابُ","al-kitābu","kitab"],["الْحَمْدُ","al-ḥamdu","pujian"],["الْبَيْتُ","al-baitu","rumah"]],
+ syams:[["الشَّمْسُ","asy-syamsu","matahari"],["النَّاسُ","an-nāsu","manusia"],["الرَّحْمٰنُ","ar-raḥmānu","Yang Maha Pengasih"],["الدِّينُ","ad-dīnu","agama, pembalasan"]]
+};
+var QAMARIYAH="ا ب ج ح خ ع غ ف ق ك م و ه ي".split(" ");
+var SYAMSIYAH="ت ث د ذ ر ز س ش ص ض ط ظ ل ن".split(" ");
+
+/* ===================== SURAT PENDEK ===================== */
+var SURAT=[
+ {id:"fatihah",nama:"Al-Fātiḥah",arti:"Pembukaan",basmalah:false,mulai:1,ayat:[
+  ["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ","Bismillāhir-raḥmānir-raḥīm","Dengan nama Allah Yang Maha Pengasih, Maha Penyayang."],
+  ["الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ","Al-ḥamdu lillāhi rabbil-‘ālamīn","Segala puji bagi Allah, Tuhan seluruh alam."],
+  ["الرَّحْمَٰنِ الرَّحِيمِ","Ar-raḥmānir-raḥīm","Yang Maha Pengasih, Maha Penyayang."],
+  ["مَالِكِ يَوْمِ الدِّينِ","Māliki yaumid-dīn","Pemilik hari pembalasan."],
+  ["إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ","Iyyāka na‘budu wa iyyāka nasta‘īn","Hanya kepada-Mu kami menyembah dan hanya kepada-Mu kami memohon pertolongan."],
+  ["اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ","Ihdinash-shirāthal-mustaqīm","Tunjukilah kami jalan yang lurus,"],
+  ["صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ","Shirāthal-ladzīna an‘amta ‘alaihim ghairil-maghdhūbi ‘alaihim wa ladh-dhāllīn","jalan orang-orang yang telah Engkau beri nikmat, bukan jalan mereka yang dimurkai dan bukan pula jalan mereka yang sesat."]
+ ]},
+ {id:"ikhlas",nama:"Al-Ikhlāsh",arti:"Ikhlas",basmalah:true,mulai:6222,ayat:[
+  ["قُلْ هُوَ اللَّهُ أَحَدٌ","Qul huwallāhu aḥad","Katakanlah: Dialah Allah, Yang Maha Esa."],
+  ["اللَّهُ الصَّمَدُ","Allāhush-shamad","Allah tempat meminta segala sesuatu."],
+  ["لَمْ يَلِدْ وَلَمْ يُولَدْ","Lam yalid wa lam yūlad","Dia tidak beranak dan tidak pula diperanakkan,"],
+  ["وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ","Wa lam yakul-lahū kufuwan aḥad","dan tidak ada sesuatu pun yang setara dengan Dia."]
+ ]},
+ {id:"nas",nama:"An-Nās",arti:"Manusia",basmalah:true,mulai:6231,ayat:[
+  ["قُلْ أَعُوذُ بِرَبِّ النَّاسِ","Qul a‘ūdzu birabbin-nās","Katakanlah: Aku berlindung kepada Tuhan manusia,"],
+  ["مَلِكِ النَّاسِ","Malikin-nās","Raja manusia,"],
+  ["إِلَٰهِ النَّاسِ","Ilāhin-nās","sembahan manusia,"],
+  ["مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ","Min syarril-waswāsil-khannās","dari kejahatan bisikan setan yang bersembunyi,"],
+  ["الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ","Alladzī yuwaswisu fī shudūrin-nās","yang membisikkan kejahatan ke dalam dada manusia,"],
+  ["مِنَ الْجِنَّةِ وَالنَّاسِ","Minal-jinnati wan-nās","dari golongan jin dan manusia."]
+ ]}
+];
+var NUM="٠١٢٣٤٥٦٧٨٩";
+function arNum(n){return String(n).split("").map(function(d){return NUM[+d];}).join("");}
+
+/* ===================== PELAJARAN ===================== */
+var L=[
+ {id:"pengantar",judul:"Pengantar dan adab",sub:"Sebelum mulai"},
+ {id:"hijaiyah",judul:"Huruf hijaiyah",sub:"28 huruf"},
+ {id:"sambung",judul:"Huruf bersambung",sub:"Bentuk awal, tengah, akhir"},
+ {id:"harakat",judul:"Fathah, kasrah, dhammah",sub:"Bunyi a, i, u"},
+ {id:"tanwin",judul:"Tanwin",sub:"Bunyi an, in, un"},
+ {id:"sukun",judul:"Sukun",sub:"Huruf mati"},
+ {id:"mad",judul:"Mad (bacaan panjang)",sub:"Dua harakat"},
+ {id:"tasydid",judul:"Tasydid",sub:"Huruf dobel"},
+ {id:"alif-lam",judul:"Alif lam qamariyah dan syamsiyah",sub:"Al- yang jelas dan yang lebur"},
+ {id:"surat",judul:"Membaca surat pendek",sub:"Al-Fātiḥah, Al-Ikhlāsh, An-Nās"},
+ {id:"kuis",judul:"Kuis",sub:"Lulus bila benar 8 dari 10"}
+];
+
+/* ===================== STATUS ===================== */
+var S={done:{},best:0,showLat:true,showArti:true};
+try{var r=localStorage.getItem(KEY);if(r){var p=JSON.parse(r);for(var k in p)S[k]=p[k];}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove("show");},2200);}
+
+/* ===================== SUARA ===================== */
+var voice=null, voices=[], hasSpeech=("speechSynthesis" in window);
+if(S.rate==null)S.rate=0.7;
+function rankVoice(v){var n=(v.name||"")+" "+(v.voiceURI||"");return (/natural|online|neural/i.test(n)?3:0)+(/google/i.test(n)?2:0)+(/sa|eg/i.test(v.lang)?1:0);}
+function pickVoice(){
+  if(!hasSpeech)return;
+  voices=(speechSynthesis.getVoices()||[]).filter(function(v){return /^ar/i.test(v.lang);}).sort(function(a,b){return rankVoice(b)-rankVoice(a);});
+  var sel=document.getElementById("vsVoice");
+  if(voices.length){
+    voice=voices.filter(function(v){return v.voiceURI===S.voiceURI;})[0]||voices[0];
+    sel.innerHTML=voices.map(function(v){return '<option value="'+esc(v.voiceURI)+'"'+(v===voice?' selected':'')+'>'+esc(v.name)+' ('+v.lang+')</option>';}).join("");
+    document.getElementById("voiceNote").hidden=true;
+  } else sel.innerHTML='<option value="">Belum ada suara bahasa Arab</option>';
+}
+if(hasSpeech){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; setTimeout(function(){pickVoice(); if(!voice)document.getElementById("voiceNote").hidden=false;},1500); }
+else document.getElementById("voiceNote").hidden=false;
+document.getElementById("vsVoice").addEventListener("change",function(e){S.voiceURI=e.target.value;save();voice=voices.filter(function(v){return v.voiceURI===S.voiceURI;})[0]||voice;});
+var rateIn=document.getElementById("vsRate"); rateIn.value=S.rate; document.getElementById("vsRateTxt").textContent=String(S.rate).replace(".",",")+"×";
+rateIn.addEventListener("input",function(){S.rate=+rateIn.value;save();document.getElementById("vsRateTxt").textContent=String(S.rate).replace(".",",")+"×";});
+document.getElementById("vsTest").addEventListener("click",function(){sayQueue(["بَ","بِ","بُ"]);});
+var qToken=0;
+function utter(text,onend){
+  var u=new SpeechSynthesisUtterance(text); u.voice=voice; u.lang=voice.lang; u.rate=S.rate||0.7;
+  u.onend=onend||null; u.onerror=onend||null; speechSynthesis.speak(u);
+}
+function say(text){
+  if(!hasSpeech||!voice){toast("Suara bahasa Arab belum tersedia. Buka Pengaturan suara di atas.");return;}
+  stopAll(); try{utter(text);}catch(e){}
+}
+function sayQueue(list,onEach,onDone){
+  if(!hasSpeech||!voice){toast("Suara bahasa Arab belum tersedia. Buka Pengaturan suara di atas.");return;}
+  stopAll(); var my=++qToken, i=0;
+  (function next(){ if(my!==qToken)return; if(i>=list.length){onDone&&onDone();return;} onEach&&onEach(i); var t=list[i++]; try{utter(t,function(){setTimeout(next,350);});}catch(e){} })();
+}
+function stopTTS(){qToken++; try{speechSynthesis.cancel();}catch(e){}}
+
+/* ---------- Rekaman qari (ayat) ---------- */
+var AUDIO=new Audio(), aQueue=[], aIdx=0, aRepeat=1, aRep=0, aOnStep=null;
+AUDIO.preload="auto";
+function ayahUrl(n){return "https://cdn.islamic.network/quran/audio/128/ar.alafasy/"+n+".mp3";}
+function stopAudio(){aQueue=[];try{AUDIO.pause();}catch(e){} aOnStep&&aOnStep(-1);}
+function stopAll(){stopAudio();stopTTS();}
+function playAyat(list,repeat,onStep){
+  stopTTS(); try{AUDIO.pause();}catch(e){}
+  aQueue=list; aIdx=0; aRepeat=repeat||1; aRep=0; aOnStep=onStep||null; playCur();
+}
+function playCur(){
+  if(aIdx>=aQueue.length){aOnStep&&aOnStep(-1);aQueue=[];return;}
+  var it=aQueue[aIdx]; aOnStep&&aOnStep(it.key);
+  AUDIO.src=ayahUrl(it.no); AUDIO.playbackRate=S.qRate||1;
+  var p=AUDIO.play(); if(p&&p.catch)p.catch(audioFail);
+}
+function audioFail(){aOnStep&&aOnStep(-1);aQueue=[];toast("Rekaman qari tidak bisa diputar. Pastikan internet tersambung; di pratinjau Claude rekaman memang diblokir, buka versi web (GitHub).");}
+AUDIO.addEventListener("ended",function(){ if(!aQueue.length)return; aRep++; if(aRep<aRepeat){playCur();return;} aRep=0; aIdx++; setTimeout(playCur,400); });
+AUDIO.addEventListener("error",function(){ if(aQueue.length)audioFail(); });
+var ICON_PLAY='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>';
+
+/* ===================== NAVIGASI ===================== */
+var cur="pengantar", nav=document.getElementById("nav"), main=document.getElementById("main");
+function renderNav(){
+  nav.innerHTML=L.map(function(l,i){
+    return '<button type="button" class="les-btn'+(S.done[l.id]?' done':'')+'" data-go="'+l.id+'" aria-current="'+(cur===l.id)+'"><span class="n">'+(S.done[l.id]?'✓':(i+1))+'</span><span>'+l.judul+'<small>'+l.sub+'</small></span></button>';
+  }).join("");
+  var n=L.filter(function(l){return S.done[l.id];}).length;
+  document.getElementById("progBar").style.width=(n/L.length*100)+"%";
+  document.getElementById("progTxt").textContent=n+" dari "+L.length+" pelajaran";
+}
+nav.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(b){stopAll();go(b.dataset.go);}});
+function go(id){ if(location.hash.slice(1)===id) render(id); else location.hash=id; }
+window.addEventListener("hashchange",function(){render(location.hash.slice(1));window.scrollTo({top:0,behavior:"smooth"});});
+
+function footer(id){
+  var i=L.findIndex(function(l){return l.id===id;}), next=L[i+1], prev=L[i-1];
+  var doneBtn = id==="kuis" ? '<span class="done-pill'+(S.done[id]?' ok':'')+'">'+(S.done[id]?'Lulus kuis':'Belum lulus kuis')+'</span>'
+    : '<button type="button" class="btn ghost" id="markDone">'+(S.done[id]?'✓ Sudah dipelajari':'Tandai sudah dipelajari')+'</button>';
+  return '<div class="foot-nav">'+(prev?'<button type="button" class="btn ghost" data-go="'+prev.id+'">← '+prev.judul+'</button>':'<span></span>')+doneBtn+
+    (next?'<button type="button" class="btn" data-go="'+next.id+'">'+next.judul+' →</button>':'<span></span>')+'</div>';
+}
+main.addEventListener("click",function(e){
+  var g=e.target.closest("[data-go]"); if(g){stopAll();go(g.dataset.go);return;}
+  if(e.target.closest("[data-stop]")){stopAll();main.querySelectorAll(".speaking").forEach(function(x){x.classList.remove("speaking");});return;}
+  if(e.target.closest("[data-listen]")){
+    var items=[].slice.call(main.querySelectorAll(".grid [data-say]"));
+    sayQueue(items.map(function(x){return x.dataset.say;}),function(i){items.forEach(function(x){x.classList.remove("speaking");});items[i].classList.add("speaking");items[i].scrollIntoView({block:"nearest",behavior:"smooth"});},function(){items.forEach(function(x){x.classList.remove("speaking");});});
+    return;
+  }
+  var s=e.target.closest("[data-say]"); if(s){say(s.dataset.say);
+    main.querySelectorAll(".tile.on,.word.on").forEach(function(x){x.classList.remove("on");}); if(s.classList.contains("tile")||s.classList.contains("word"))s.classList.add("on"); }
+  if(e.target.closest("#markDone")){ var id=cur; S.done[id]=!S.done[id]; save(); renderNav(); e.target.closest("#markDone").textContent=S.done[id]?'✓ Sudah dipelajari':'Tandai sudah dipelajari'; if(S.done[id])toast("Pelajaran ditandai selesai"); }
+});
+
+/* ===================== HALAMAN ===================== */
+function render(id){
+  if(!L.some(function(l){return l.id===id;})) id="pengantar";
+  cur=id; renderNav();
+  var f=PAGE[id]; main.innerHTML=f()+footer(id);
+  if(PAGE_AFTER[id]) PAGE_AFTER[id]();
+}
+var PAGE={}, PAGE_AFTER={};
+
+PAGE.pengantar=function(){
+  return '<span class="kicker">Pelajaran 1</span><h2>Pengantar dan adab membaca Al-Qur\'an</h2>'+
+  '<p class="intro">Aplikasi ini membantu Anda mengenal huruf dan cara membaca Al-Qur\'an tahap demi tahap, seperti buku iqra. Ketuk setiap huruf atau kata untuk mendengar contoh bunyinya.</p>'+
+  '<div class="box"><h3>Urutan belajar</h3><ol><li>Kenali 28 huruf hijaiyah dan bentuknya saat bersambung.</li><li>Baca huruf berharakat: fathah, kasrah, dhammah, lalu tanwin.</li><li>Pelajari sukun, mad (panjang), dan tasydid.</li><li>Bedakan alif lam qamariyah dan syamsiyah.</li><li>Latih membaca surat pendek, lalu uji diri dengan kuis.</li></ol></div>'+
+  '<div class="box"><h3>Adab sebelum membaca</h3><ul><li>Dalam keadaan suci (berwudu) saat memegang mushaf.</li><li>Membaca ta\'awudz: <span class="ar" style="font-size:24px">أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ</span></li><li>Membaca dengan tenang, perlahan, dan tidak tergesa-gesa (tartil).</li><li>Memperhatikan panjang pendek dan tempat keluarnya huruf.</li></ul></div>'+
+  '<div class="note"><strong>Penting:</strong> tulisan Latin dan suara di aplikasi ini hanya alat bantu. Bunyi Arab tidak bisa ditulis sempurna dengan huruf Latin, dan suara huruf di sini dibuat mesin. Hanya bacaan ayat yang memakai rekaman qari. Makhraj dan tajwid yang benar tetap perlu dipelajari langsung dari guru mengaji (talaqqi).</div>';
+};
+
+PAGE.hijaiyah=function(){
+  return '<span class="kicker">Pelajaran 2</span><h2>Huruf hijaiyah</h2><p class="intro">Huruf Arab dibaca dari <strong>kanan ke kiri</strong>. Ketuk sebuah huruf untuk melihat namanya, tempat keluar bunyinya, dan mendengar contohnya.</p>'+
+  '<div class="detail" id="hDetail"></div>'+'<div class="listen-all"><button type="button" class="btn ghost" data-listen="1">▶ Dengarkan semua berurutan</button><button type="button" class="btn ghost" data-stop="1">■ Berhenti</button></div>'+
+  '<div class="grid">'+H.map(function(h,i){return '<button type="button" class="tile" data-h="'+i+'" data-say="'+h[3]+'"><span class="big">'+h[0]+'</span><span class="lat">'+h[1]+'</span></button>';}).join("")+'</div>'+
+  '<div class="note">Selain 28 huruf ini ada <strong>hamzah</strong> (<span class="ar" style="font-size:22px">ء</span>), bunyi seperti "a" yang tegas di awal kata. Hamzah sering ditulis di atas alif: <span class="ar" style="font-size:22px">أ</span>.</div>';
+};
+function showH(i){
+  var h=H[i], el=document.getElementById("hDetail"); if(!el)return;
+  el.innerHTML='<span class="big">'+h[0]+'</span><div><h3>'+h[1]+' <span class="ar" style="font-size:26px;color:var(--muted)">'+h[3]+'</span></h3><p>Dibaca seperti: <strong>'+(h[0]==="ا"?"a / i / u (mengikuti harakat)":h[2]+"a")+'</strong></p><p style="color:var(--muted);font-size:15.5px">'+MAKHRAJ[h[4]]+'</p><p style="margin-top:8px"><button type="button" class="play" data-say="'+h[3]+'">'+ICON_PLAY+' Dengar nama huruf</button></p></div>';
+}
+PAGE_AFTER.hijaiyah=function(){ showH(1); main.querySelector(".grid").addEventListener("click",function(e){var t=e.target.closest("[data-h]");if(t)showH(+t.dataset.h);}); };
+
+PAGE.sambung=function(){
+  return '<span class="kicker">Pelajaran 3</span><h2>Huruf bersambung</h2><p class="intro">Dalam kata, huruf Arab saling bersambung sehingga bentuknya sedikit berubah. Ketuk huruf untuk melihat bentuk sendiri, awal, tengah, dan akhir.</p>'+
+  '<div class="detail" id="sDetail"></div>'+
+  '<div class="grid">'+H.map(function(h,i){return '<button type="button" class="tile" data-s="'+i+'" data-say="'+h[3]+'"><span class="big">'+h[0]+'</span><span class="lat">'+h[1]+'</span></button>';}).join("")+'</div>'+
+  '<div class="note">Enam huruf <strong>tidak bisa menyambung ke huruf sesudahnya</strong>: <span class="ar" style="font-size:24px">ا د ذ ر ز و</span>. Huruf sesudahnya ditulis terpisah, misalnya <span class="ar" style="font-size:24px">دَرَسَ</span>.</div>';
+};
+function showS(i){
+  var h=H[i], c=h[0], el=document.getElementById("sDetail"); if(!el)return;
+  var awal=h[5]?c+TAT:c, tengah=h[5]?TAT+c+TAT:TAT+c, akhir=TAT+c;
+  el.innerHTML='<span class="big">'+c+'</span><div><h3>Bentuk huruf '+h[1]+'</h3><div class="forms"><span><b>'+c+'</b>sendiri</span><span><b>'+awal+'</b>awal</span><span><b>'+tengah+'</b>tengah</span><span><b>'+akhir+'</b>akhir</span></div>'+(h[5]?'':'<p style="color:var(--muted);font-size:15px;margin-top:6px">Huruf ini tidak menyambung ke huruf sesudahnya.</p>')+'</div>';
+}
+PAGE_AFTER.sambung=function(){ showS(1); main.querySelector(".grid").addEventListener("click",function(e){var t=e.target.closest("[data-s]");if(t)showS(+t.dataset.s);}); };
+
+var vowelSel="a";
+PAGE.harakat=function(){
+  return '<span class="kicker">Pelajaran 4</span><h2>Fathah, kasrah, dhammah</h2><p class="intro">Harakat adalah tanda baca yang memberi bunyi pada huruf.</p>'+
+  '<div class="words" style="margin-bottom:16px">'+
+   '<div class="word"><span class="big">بَ</span><span class="lat">Fathah = a</span><span class="sub">garis miring di atas huruf</span></div>'+
+   '<div class="word"><span class="big">بِ</span><span class="lat">Kasrah = i</span><span class="sub">garis miring di bawah huruf</span></div>'+
+   '<div class="word"><span class="big">بُ</span><span class="lat">Dhammah = u</span><span class="sub">seperti wau kecil di atas huruf</span></div>'+
+  '</div>'+
+  '<div class="seg" role="group" aria-label="Pilih harakat"><button type="button" data-v="a" aria-pressed="'+(vowelSel==="a")+'">Fathah (a)</button><button type="button" data-v="i" aria-pressed="'+(vowelSel==="i")+'">Kasrah (i)</button><button type="button" data-v="u" aria-pressed="'+(vowelSel==="u")+'">Dhammah (u)</button></div>'+
+  '<div class="listen-all"><button type="button" class="btn ghost" data-listen="1">▶ Dengarkan semua berurutan</button><button type="button" class="btn ghost" data-stop="1">■ Berhenti</button></div><div class="grid" id="vGrid"></div><p class="intro" style="margin-top:12px">Latihan: baca berurutan dari kanan ke kiri dengan suara jelas, lalu ketuk untuk mencocokkan.</p>';
+};
+function vGrid(){
+  var mk={a:FATHAH,i:KASRAH,u:DHAMMAH}[vowelSel];
+  document.getElementById("vGrid").innerHTML=H.map(function(h){var t=carrier(h,mk)+mk;return '<button type="button" class="tile" data-say="'+t+'"><span class="big">'+t+'</span><span class="lat">'+lat(h,vowelSel)+'</span></button>';}).join("");
+}
+PAGE_AFTER.harakat=function(){ vGrid(); main.querySelector(".seg").addEventListener("click",function(e){var b=e.target.closest("[data-v]");if(!b)return;vowelSel=b.dataset.v;main.querySelectorAll(".seg button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});vGrid();}); };
+
+var tanSel="an";
+PAGE.tanwin=function(){
+  return '<span class="kicker">Pelajaran 5</span><h2>Tanwin</h2><p class="intro">Tanwin adalah harakat ganda yang menambah bunyi <strong>n</strong> di akhir: fathatain (an), kasratain (in), dhammatain (un). Fathatain biasanya ditulis bersama alif yang tidak dibaca panjang.</p>'+
+  '<div class="words" style="margin-bottom:16px">'+
+   '<div class="word"><span class="big">بًا</span><span class="lat">Fathatain = an</span><span class="sub">dua fathah</span></div>'+
+   '<div class="word"><span class="big">بٍ</span><span class="lat">Kasratain = in</span><span class="sub">dua kasrah</span></div>'+
+   '<div class="word"><span class="big">بٌ</span><span class="lat">Dhammatain = un</span><span class="sub">dua dhammah</span></div>'+
+  '</div>'+
+  '<div class="seg" role="group" aria-label="Pilih tanwin"><button type="button" data-t="an" aria-pressed="'+(tanSel==="an")+'">Fathatain (an)</button><button type="button" data-t="in" aria-pressed="'+(tanSel==="in")+'">Kasratain (in)</button><button type="button" data-t="un" aria-pressed="'+(tanSel==="un")+'">Dhammatain (un)</button></div>'+
+  '<div class="listen-all"><button type="button" class="btn ghost" data-listen="1">▶ Dengarkan semua berurutan</button><button type="button" class="btn ghost" data-stop="1">■ Berhenti</button></div><div class="grid" id="tGrid"></div>';
+};
+function tGrid(){
+  var mk={an:TF,in:TK,un:TD}[tanSel];
+  document.getElementById("tGrid").innerHTML=H.slice(1).map(function(h){var t=h[0]+mk+(tanSel==="an"?"ا":"");return '<button type="button" class="tile" data-say="'+t+'"><span class="big">'+t+'</span><span class="lat">'+h[2]+tanSel+'</span></button>';}).join("");
+}
+PAGE_AFTER.tanwin=function(){ tGrid(); main.querySelector(".seg").addEventListener("click",function(e){var b=e.target.closest("[data-t]");if(!b)return;tanSel=b.dataset.t;main.querySelectorAll(".seg button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});tGrid();}); };
+
+function wordsHTML(list){return '<div class="words">'+list.map(function(w){return '<button type="button" class="word" data-say="'+w[0]+'"><span class="big">'+w[0]+'</span><span class="lat">'+w[1]+'</span><span class="sub">'+w[2]+'</span></button>';}).join("")+'</div>';}
+
+PAGE.sukun=function(){
+  return '<span class="kicker">Pelajaran 6</span><h2>Sukun (huruf mati)</h2><p class="intro">Sukun berbentuk lingkaran kecil <span class="ar" style="font-size:26px">ـْ</span> di atas huruf. Huruf bersukun tidak berharakat, sehingga bunyinya "mati" dan menempel pada huruf sebelumnya.</p>'+
+  '<div class="box"><h3>Cara membaca</h3><p style="margin:0">Baca huruf pertama dengan harakatnya, lalu tutup dengan bunyi huruf bersukun. Contoh: <span class="ar" style="font-size:24px">قُ</span> (qu) + <span class="ar" style="font-size:24px">لْ</span> (l) = <span class="ar" style="font-size:24px">قُلْ</span> (qul).</p></div>'+
+  wordsHTML(KATA.sukun);
+};
+
+PAGE.mad=function(){
+  return '<span class="kicker">Pelajaran 7</span><h2>Mad (bacaan panjang)</h2><p class="intro">Mad berarti memanjangkan bacaan sekitar <strong>dua harakat</strong> (dua ketukan). Mad thabi\'i terjadi bila:</p>'+
+  '<div class="words" style="margin-bottom:16px">'+
+   '<div class="word"><span class="big">بَا</span><span class="lat">bā</span><span class="sub">fathah diikuti alif</span></div>'+
+   '<div class="word"><span class="big">بِي</span><span class="lat">bī</span><span class="sub">kasrah diikuti ya mati</span></div>'+
+   '<div class="word"><span class="big">بُو</span><span class="lat">bū</span><span class="sub">dhammah diikuti wau mati</span></div>'+
+  '</div>'+
+  '<div class="note">Tanda garis di atas huruf Latin (ā, ī, ū) menandakan bacaan panjang. Ketuk kata di bawah untuk berlatih.</div>'+
+  wordsHTML(KATA.mad.slice(3));
+};
+
+PAGE.tasydid=function(){
+  return '<span class="kicker">Pelajaran 8</span><h2>Tasydid (syaddah)</h2><p class="intro">Tasydid berbentuk seperti huruf w kecil <span class="ar" style="font-size:26px">ـّ</span>. Huruf bertasydid dibaca <strong>dua kali</strong>: sekali mati, sekali hidup, sehingga terdengar ditekan.</p>'+
+  '<div class="box"><h3>Contoh</h3><p style="margin:0"><span class="ar" style="font-size:26px">رَبَّ</span> dibaca <strong>rab-ba</strong>, bukan "raba".</p></div>'+
+  wordsHTML(KATA.tasydid)+
+  '<div class="note">Huruf <span class="ar" style="font-size:22px">نّ</span> dan <span class="ar" style="font-size:22px">مّ</span> bertasydid dibaca dengan dengung (ghunnah) sekitar dua harakat, seperti pada <span class="ar" style="font-size:22px">إِنَّ</span> dan <span class="ar" style="font-size:22px">ثُمَّ</span>.</div>';
+};
+
+PAGE["alif-lam"]=function(){
+  return '<span class="kicker">Pelajaran 9</span><h2>Alif lam qamariyah dan syamsiyah</h2><p class="intro">Kata yang diawali <span class="ar" style="font-size:24px">ال</span> (al-) dibaca dengan dua cara, tergantung huruf sesudahnya.</p>'+
+  '<div class="box"><h3>Qamariyah: lam dibaca jelas</h3><p style="margin:0 0 6px">Lam diberi sukun dan terdengar "al". Huruf qamariyah ada 14:</p><div class="rule-list">'+QAMARIYAH.map(function(c){return '<span>'+c+'</span>';}).join("")+'</div></div>'+
+  wordsHTML(KATA.qamar)+
+  '<div class="box" style="margin-top:18px"><h3>Syamsiyah: lam lebur, tidak dibaca</h3><p style="margin:0 0 6px">Lam tidak dibaca dan huruf sesudahnya ditasydid. Huruf syamsiyah ada 14:</p><div class="rule-list">'+SYAMSIYAH.map(function(c){return '<span>'+c+'</span>';}).join("")+'</div></div>'+
+  wordsHTML(KATA.syams);
+};
+
+var surSel="fatihah";
+PAGE.surat=function(){
+  return '<span class="kicker">Pelajaran 10</span><h2>Membaca surat pendek</h2><p class="intro">Saatnya menerapkan semua pelajaran. Baca perlahan ayat demi ayat. Sembunyikan tulisan Latin bila sudah lancar.</p>'+
+  '<div class="seg surah-pick" role="group" aria-label="Pilih surat">'+SURAT.map(function(s){return '<button type="button" data-sr="'+s.id+'" aria-pressed="'+(surSel===s.id)+'">'+s.nama+'</button>';}).join("")+'</div>'+
+  '<div class="toggle-row"><label><input type="checkbox" id="tLat"'+(S.showLat?' checked':'')+'> Tampilkan tulisan Latin</label><label><input type="checkbox" id="tArti"'+(S.showArti?' checked':'')+'> Tampilkan arti</label></div>'+
+  '<div class="player"><button type="button" class="btn" id="playAll">▶ Putar seluruh surat</button><button type="button" class="btn ghost" id="stopAll">■ Berhenti</button>'+
+  '<label><input type="checkbox" id="rep3"'+(S.rep3?' checked':'')+'> Ulangi tiap ayat 3×</label>'+
+  '<label>Kecepatan <select id="qRate"><option value="0.75"'+(S.qRate==0.75?' selected':'')+'>0,75×</option><option value="1"'+(!S.qRate||S.qRate==1?' selected':'')+'>1×</option></select></label></div>'+
+  '<div id="surBody"></div><p class="credit">Rekaman bacaan: Syekh Mishary Rasyid Alafasy, melalui CDN Al Quran Cloud (cdn.islamic.network). Butuh koneksi internet.</p>'+
+  '<div class="note">Teks ayat ditulis dengan cara tulis standar (imla\'i) dan dapat sedikit berbeda dari mushaf rasm utsmani. Cocokkan bacaan dengan mushaf, dan dengarkan bacaan qari melalui aplikasi Al-Qur\'an resmi, misalnya Qur\'an Kemenag. Rekaman qari dipakai untuk ayat, bukan suara mesin.</div>';
+};
+function surBody(){
+  var s=SURAT.filter(function(x){return x.id===surSel;})[0];
+  document.getElementById("surBody").innerHTML='<h3 style="margin:0 0 4px">'+s.nama+' <span style="color:var(--muted);font-weight:600;font-size:16px">('+s.arti+', '+s.ayat.length+' ayat)</span></h3>'+
+   (s.basmalah?'<p class="basmalah" id="ay-b">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>':'')+
+   '<ol class="ayat">'+s.ayat.map(function(a,i){return '<li id="ay-'+i+'"><div class="arab">'+a[0]+' <span class="no">﴿'+arNum(i+1)+'﴾</span></div><div class="row"><button type="button" class="play" data-ayat="'+i+'">'+ICON_PLAY+' Dengar ayat '+(i+1)+'</button></div>'+(S.showLat?'<div class="lat">'+(i+1)+'. '+a[1]+'</div>':'')+(S.showArti?'<div class="arti">'+a[2]+'</div>':'')+'</li>';}).join("")+'</ol>';
+}
+function curSurat(){return SURAT.filter(function(x){return x.id===surSel;})[0];}
+function markAyat(key){
+  main.querySelectorAll(".ayat li.playing,.basmalah.playing").forEach(function(x){x.classList.remove("playing");});
+  if(key===-1||key==null)return;
+  var el=document.getElementById("ay-"+key); if(el){el.classList.add("playing"); el.scrollIntoView({block:"center",behavior:"smooth"});}
+}
+PAGE_AFTER.surat=function(){
+  surBody();
+  document.getElementById("surBody").addEventListener("click",function(e){
+    var b=e.target.closest("[data-ayat]"); if(!b)return; var s=curSurat(), i=+b.dataset.ayat;
+    playAyat([{no:s.mulai+i,key:i}],S.rep3?3:1,markAyat);
+  });
+  document.getElementById("playAll").addEventListener("click",function(){
+    var s=curSurat(), list=[]; if(s.basmalah)list.push({no:1,key:"b"});
+    s.ayat.forEach(function(a,i){list.push({no:s.mulai+i,key:i});});
+    playAyat(list,S.rep3?3:1,markAyat);
+  });
+  document.getElementById("stopAll").addEventListener("click",stopAll);
+  document.getElementById("rep3").addEventListener("change",function(e){S.rep3=e.target.checked;save();});
+  document.getElementById("qRate").addEventListener("change",function(e){S.qRate=+e.target.value;save();AUDIO.playbackRate=S.qRate;});
+  main.querySelector(".surah-pick").addEventListener("click",function(e){var b=e.target.closest("[data-sr]");if(!b)return;stopAll();surSel=b.dataset.sr;main.querySelectorAll(".surah-pick button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});surBody();});
+  document.getElementById("tLat").addEventListener("change",function(e){S.showLat=e.target.checked;save();surBody();});
+  document.getElementById("tArti").addEventListener("change",function(e){S.showArti=e.target.checked;save();surBody();});
+};
+
+/* ===================== KUIS ===================== */
+var Q=null;
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function pickOthers(pool,ans,n){return shuffle(pool.filter(function(x){return x!==ans;})).slice(0,n);}
+function makeQuiz(){
+  var qs=[], VW=[["a",FATHAH],["i",KASRAH],["u",DHAMMAH]];
+  for(var k=0;k<10;k++){
+    var type=(k%3===0)?"nama":(k%3===1)?"harakat":"huruf";
+    var h=H[1+Math.floor(Math.random()*27)];
+    if(type==="nama"){
+      var opts=shuffle([h[1]].concat(pickOthers(H.map(function(x){return x[1];}),h[1],3)));
+      qs.push({tanya:"Apa nama huruf ini?",tampil:h[0],opts:opts,ans:h[1],ar:false,say:h[3]});
+    } else if(type==="harakat"){
+      var v=VW[Math.floor(Math.random()*3)], text=h[0]+v[1], ans=h[2]+v[0];
+      var cand=[h[2]+"a",h[2]+"i",h[2]+"u"]; var other=H[1+Math.floor(Math.random()*27)]; if(other[2]!==h[2])cand.push(other[2]+v[0]); else cand.push(h[2]+v[0]+"n");
+      qs.push({tanya:"Bagaimana cara membacanya?",tampil:text,opts:shuffle(cand),ans:ans,ar:false,say:text});
+    } else {
+      var opts2=shuffle([h[0]].concat(pickOthers(H.slice(1).map(function(x){return x[0];}),h[0],3)));
+      qs.push({tanya:"Mana huruf "+h[1]+"?",tampil:null,opts:opts2,ans:h[0],ar:true,say:h[3]});
+    }
+  }
+  return {list:qs,i:0,score:0,answered:false};
+}
+PAGE.kuis=function(){
+  return '<span class="kicker">Pelajaran 11</span><h2>Kuis</h2><p class="intro">10 soal acak tentang nama huruf dan harakat. Lulus bila benar minimal 8. Nilai terbaik Anda: <strong id="best">'+S.best+'/10</strong>.</p><div class="quiz" id="quiz"></div>';
+};
+function renderQ(){
+  var box=document.getElementById("quiz"); if(!box)return;
+  if(Q.i>=Q.list.length){
+    var pass=Q.score>=8;
+    if(Q.score>S.best){S.best=Q.score;}
+    if(pass)S.done.kuis=true; save(); renderNav();
+    box.innerHTML='<div class="q-card"><h3 style="font-size:24px">'+(pass?'Alhamdulillah, lulus!':'Belum lulus, ayo coba lagi')+'</h3><p style="font-size:44px;font-weight:800;margin:0;color:'+(pass?'var(--ok)':'var(--bad)')+'">'+Q.score+'/10</p><p style="margin:0;color:var(--muted)">'+(pass?'Semua pelajaran sudah Anda lalui. Terus latih bacaan bersama guru mengaji.':'Ulangi pelajaran huruf dan harakat, lalu kerjakan kuis lagi.')+'</p><button type="button" class="btn" id="again">Kerjakan lagi</button></div>';
+    document.getElementById("again").addEventListener("click",function(){Q=makeQuiz();renderQ();});
+    var b=document.getElementById("best"); if(b)b.textContent=S.best+"/10";
+    return;
+  }
+  var q=Q.list[Q.i]; Q.answered=false;
+  box.innerHTML='<div class="q-card"><div class="q-meta"><span>Soal '+(Q.i+1)+' dari 10</span><span>Benar: '+Q.score+'</span></div><p style="margin:0;font-weight:800;font-size:19px">'+esc(q.tanya)+'</p>'+
+    (q.tampil?'<div class="big ar">'+q.tampil+'</div>':'')+
+    '<button type="button" class="play" data-say="'+q.say+'">'+ICON_PLAY+' Dengar</button>'+
+    '<div class="q-opts">'+q.opts.map(function(o){return '<button type="button" class="q-opt'+(q.ar?' ar-opt':'')+'" data-o="'+esc(o)+'">'+esc(o)+'</button>';}).join("")+'</div>'+
+    '<p class="fb" id="fb" aria-live="polite"></p><button type="button" class="btn" id="nextQ" hidden>Soal berikutnya</button></div>';
+  box.querySelector(".q-opts").addEventListener("click",function(e){
+    var b=e.target.closest("[data-o]"); if(!b||Q.answered)return; Q.answered=true;
+    var ok=b.dataset.o===q.ans; if(ok)Q.score++;
+    box.querySelectorAll(".q-opt").forEach(function(x){x.disabled=true; if(x.dataset.o===q.ans)x.classList.add("right"); else if(x===b)x.classList.add("wrong");});
+    var fb=document.getElementById("fb"); fb.className="fb "+(ok?"ok":"no"); fb.textContent=ok?"Benar!":"Kurang tepat. Jawabannya: "+q.ans;
+    var n=document.getElementById("nextQ"); n.hidden=false; n.textContent=Q.i===9?"Lihat hasil":"Soal berikutnya"; n.focus();
+    n.addEventListener("click",function(){Q.i++;renderQ();});
+  });
+}
+PAGE_AFTER.kuis=function(){ Q=makeQuiz(); renderQ(); };
+
+/* ===================== MULAI ===================== */
+if(!Array.prototype.findIndex){Array.prototype.findIndex=function(f){for(var i=0;i<this.length;i++)if(f(this[i]))return i;return -1;};}
+render(location.hash.slice(1)||"pengantar");
+})();
+</script>
+</body>
+</html>

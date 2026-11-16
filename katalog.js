@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Belajar Mengaji untuk Pemula",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Belajar membaca Al-Qur'an bertahap seperti iqra: huruf hijaiyah, huruf bersambung, harakat, tanwin, sukun, mad, tasydid, alif lam, surat pendek dengan rekaman qari (Alafasy), dan kuis.",
+    tanggal: "2026-11-17",
+    tautan: "belajar-ngaji/",
+    status: "aktif"
+  },
+  {
     nama: "E-Course Belajar HTML dari Nol",
     kategori: "Pembelajaran",
     jenis: "HTML",
