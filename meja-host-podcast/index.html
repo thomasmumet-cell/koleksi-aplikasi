@@ -116,6 +116,13 @@ td input.min{width:74px;text-align:right;font-family:var(--font-mono)}
 .add-q{display:flex;gap:8px;margin-top:8px}
 .add-q input{flex:1}
 .ai-status{font-size:14px;color:var(--muted);min-height:20px}
+.gen-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.gen-form input{flex:1 1 200px}
+.gen-form .btn{background:var(--accent);color:#fff;white-space:nowrap}
+.gen-msg{flex-basis:100%;font-size:13px;color:var(--muted);min-height:0;margin:0}
+.ai-set{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:end}
+.engine{display:inline-flex;gap:6px;align-items:center;font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px;background:var(--bg);border:1px solid var(--line)}
+@media (max-width:600px){.ai-set{grid-template-columns:1fr}}
 
 /* Mode siaran */
 .live{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;align-items:start}
@@ -262,7 +269,7 @@ td input.min{width:74px;text-align:right;font-family:var(--font-mono)}
       <article style="background: #ffffff; border: 1px solid #e3e6ef; border-radius: 16px; padding: 26px; display: flex; flex-direction: column; gap: 10px">
         <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 14px; color: #5d6580; font-weight: 700">04</span>
         <h3 style="margin: 0; font-size: 21px; font-weight: 800">Bank pertanyaan</h3>
-        <p style="margin: 0; color: #4a5270">Lima pertanyaan per narasumber, pertanyaan diskusi silang, dan pesan kunci. Bisa disunting, ditambah, atau disusun ulang dengan bantuan AI.</p>
+        <p style="margin: 0; color: #4a5270">Lima pertanyaan per narasumber, pertanyaan diskusi silang, dan pesan kunci. Bisa disunting, ditambah, atau disusun ulang otomatis dengan satu klik.</p>
       </article>
       <article style="background: #0f3323; color: #ffffff; border-radius: 16px; padding: 26px; display: flex; flex-direction: column; gap: 10px">
         <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 14px; color: #f5d547; font-weight: 700">05</span>
@@ -478,10 +485,19 @@ td input.min{width:74px;text-align:right;font-family:var(--font-mono)}
     <div class="stack">
       <div class="card">
         <div class="sec-title" style="margin-bottom:6px"><h2>Bank pertanyaan</h2>
-          <div class="row"><button class="btn red sm" id="aiBtn" hidden>Buat pertanyaan dengan AI</button><button class="btn ghost sm" id="resetQ">Kembalikan ke templat</button></div>
+          <div class="row"><button class="btn red sm" id="aiBtn" hidden>Susun ulang semua dengan AI</button><button class="btn ghost sm" id="resetQ">Kembalikan ke templat</button></div>
         </div>
-        <p class="hint">Klik teks pertanyaan untuk mengubahnya. Centang yang sudah ditanyakan; centang juga bisa dilakukan di Mode Siaran.</p>
+        <p class="hint">Klik teks pertanyaan untuk mengubahnya. Centang yang sudah ditanyakan; centang juga bisa dilakukan di Mode Siaran. Tombol <strong>Buatkan 3 pertanyaan</strong> di tiap kartu menambah pertanyaan baru secara otomatis.</p>
         <p class="ai-status" id="aiStatus"></p>
+      </div>
+      <div class="card">
+        <div class="sec-title" style="margin-bottom:8px"><h2 style="font-size:17px">Mesin pembuat pertanyaan</h2><span class="engine" id="engineLbl">Bank pola pertanyaan</span></div>
+        <p class="hint" style="margin-bottom:10px">Tanpa pengaturan apa pun, pertanyaan disusun dari bank pola pertanyaan yang disesuaikan dengan tema dan narasumber. Agar disusun AI, isi kunci API Gemini (gratis di <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>). Kunci hanya tersimpan di perangkat ini.</p>
+        <form class="ai-set" id="keyForm">
+          <div><label for="gkey">Kunci API Gemini (opsional)</label><input id="gkey" type="password" autocomplete="off" placeholder="AIza…"></div>
+          <button class="btn sm" type="submit">Simpan kunci</button>
+          <button class="btn ghost sm" type="button" id="delKey">Hapus kunci</button>
+        </form>
       </div>
       <div class="grid2" id="qCards"></div>
     </div>
@@ -750,8 +766,11 @@ function qBlock(key,title,color,sub){
   list.forEach(function(q,i){
     h+='<li class="q-item'+(q.done?' done':'')+'"><input type="checkbox" data-qk="'+key+'" data-qi="'+i+'"'+(q.done?' checked':'')+' aria-label="Sudah ditanyakan"><span class="q-text" contenteditable="true" data-qe="'+key+'" data-qi="'+i+'">'+esc(q.t)+'</span><button class="q-del" data-qd="'+key+'" data-qi="'+i+'" aria-label="Hapus pertanyaan">×</button></li>';
   });
-  h+='</ul><form class="add-q" data-qa="'+key+'"><input placeholder="Tambah pertanyaan" aria-label="Tambah pertanyaan untuk '+esc(title)+'"><button class="btn sm" type="submit">Tambah</button></form></div>';
+  h+='</ul><form class="add-q" data-qa="'+key+'"><input placeholder="Tulis pertanyaan sendiri" aria-label="Tambah pertanyaan untuk '+esc(title)+'"><button class="btn sm" type="submit">Tambah</button></form>'+genForm(key)+'</div>';
   return h;
+}
+function genForm(key){
+  return '<form class="gen-form" data-gen="'+key+'"><input placeholder="Arah pertanyaan (opsional), misal: tindak lanjut soal sertifikasi" aria-label="Arah pertanyaan tambahan"><button class="btn sm" type="submit">Buatkan 3 pertanyaan</button><p class="gen-msg" aria-live="polite"></p></form>';
 }
 function renderQ(){
   var h="";
@@ -769,24 +788,155 @@ function bindQ(root,rerender){
   });
   root.querySelectorAll("[data-qd]").forEach(function(b){b.addEventListener("click",function(){S.q[b.dataset.qd].splice(+b.dataset.qi,1);save();rerender();});});
   root.querySelectorAll("[data-qa]").forEach(function(f){f.addEventListener("submit",function(ev){ev.preventDefault();var inp=f.querySelector("input"),v=inp.value.trim();if(!v)return;(S.q[f.dataset.qa]=S.q[f.dataset.qa]||[]).push({t:v,done:false});save();rerender();});});
+  root.querySelectorAll("[data-gen]").forEach(function(f){f.addEventListener("submit",function(ev){
+    ev.preventDefault();
+    var key=f.dataset.gen, btn=f.querySelector("button"), msg=f.querySelector(".gen-msg"), arah=f.querySelector("input").value.trim();
+    btn.disabled=true; btn.textContent="Menyusun…"; msg.textContent=engine()==="template"?"":"Sedang menyusun pertanyaan, biasanya 5–20 detik.";
+    genMore(key,arah).then(function(res){
+      var list=(S.q[key]=S.q[key]||[]); res.items.forEach(function(t){list.push({t:t,done:false});});
+      save(); rerender(); toast(res.items.length+" pertanyaan baru ditambahkan ("+res.src+")");
+    }).catch(function(err){
+      btn.disabled=false; btn.textContent="Buatkan 3 pertanyaan";
+      msg.textContent="Gagal: "+((err&&err.message)||"kesalahan")+". Coba lagi, atau hapus kunci API agar memakai bank pola pertanyaan.";
+    });
+  });});
 }
+
+/* ---------- Pembuat pertanyaan otomatis ---------- */
+var GKEY="meja-host-gemini-key", GMODEL="gemini-flash-latest";
+function gKey(){try{return localStorage.getItem(GKEY)||"";}catch(e){return "";}}
+function engine(){ if(sampleFn)return "claude"; if(gKey())return "gemini"; return "template"; }
+function engineLabel(){var e=engine();return e==="claude"?"AI Claude":(e==="gemini"?"AI Gemini":"Bank pola pertanyaan");}
+function refreshEngine(){
+  var l=document.getElementById("engineLbl"); if(l)l.textContent=engineLabel();
+  var b=document.getElementById("aiBtn"); if(b)b.hidden=(engine()==="template");
+  var k=document.getElementById("gkey"); if(k&&!k.value&&gKey())k.placeholder="Kunci tersimpan (•••• "+gKey().slice(-4)+")";
+}
+function geminiCall(model,prompt){
+  return fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":gKey()},
+    body:JSON.stringify({contents:[{role:"user",parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:4096,responseMimeType:"application/json"}})})
+  .then(function(r){return r.json().catch(function(){return {};}).then(function(j){
+    if(!r.ok)throw new Error((j.error&&j.error.message)||("HTTP "+r.status));
+    var c=(j.candidates||[])[0]||{}; var t=((c.content&&c.content.parts)||[]).filter(function(p){return !p.thought;}).map(function(p){return p.text||"";}).join("");
+    if(!t)throw new Error("Gemini tidak mengembalikan jawaban"); return t;});});
+}
+function geminiPickModel(current){
+  return fetch("https://generativelanguage.googleapis.com/v1beta/models?pageSize=200",{headers:{"x-goog-api-key":gKey()}}).then(function(r){return r.json();}).then(function(j){
+    var ver=function(n){return parseFloat((n.match(/gemini-(\d+(?:\.\d+)?)/)||[])[1]||0);};
+    var ok=(j.models||[]).filter(function(x){return (x.supportedGenerationMethods||[]).indexOf("generateContent")>-1;}).map(function(x){return x.name.replace("models/","");})
+      .filter(function(n){return /^gemini-[\d.]+-flash$/.test(n)||n==="gemini-flash-latest";});
+    ok.sort(function(a,b){return ver(b)-ver(a);}); return ok.filter(function(n){return n!==current;})[0]||null;
+  }).catch(function(){return null;});
+}
+function aiText(prompt){
+  var e=engine();
+  if(e==="claude") return sampleFn(prompt,{modelTier:"default",cache:false}).then(function(r){return r.text;});
+  return geminiCall(GMODEL,prompt).catch(function(err){
+    if(!/no longer available|not found|not supported|deprecated|404/i.test(err.message))throw err;
+    return geminiPickModel(GMODEL).then(function(alt){ if(!alt)throw err; GMODEL=alt; return geminiCall(alt,prompt); });
+  });
+}
+function parseJSON(t){
+  var a=t.indexOf("["),o=t.indexOf("{"),s=(a>-1&&(o<0||a<o))?a:o;
+  var e=Math.max(t.lastIndexOf("]"),t.lastIndexOf("}"));
+  return JSON.parse(s>-1?t.slice(s,e+1):t);
+}
+var BANK={
+  ns:[
+    "Bagaimana pengalaman pribadi Bapak/Ibu sebagai {P} membentuk cara pandang tentang {T}?",
+    "Apa satu hal tentang {S} yang menurut Bapak/Ibu paling sering disalahpahami?",
+    "Jika ada guru muda bertanya tentang {S}, saran pertama apa yang akan Bapak/Ibu berikan?",
+    "Apa perubahan paling nyata terkait {S} dalam lima tahun terakhir?",
+    "Hambatan apa yang paling sulit diatasi dalam {S}, dan bagaimana cara menghadapinya?",
+    "Bisakah Bapak/Ibu berbagi kisah keberhasilan kecil yang paling berkesan terkait {S}?",
+    "Apa peran PGRI yang paling dirasakan dalam {S}?",
+    "Kebijakan apa yang paling membantu, dan mana yang masih perlu dibenahi, terkait {S}?",
+    "Bagaimana teknologi, termasuk AI, mengubah cara kita menjalankan {S}?",
+    "Apa indikator sederhana untuk mengetahui bahwa {S} sudah berjalan baik?",
+    "Kalau diberi kesempatan mengubah satu hal tentang {T} besok pagi, apa yang Bapak/Ibu ubah?",
+    "Apa peran kepala sekolah, guru, dan orang tua masing-masing dalam {S}?",
+    "Kesalahan apa yang pernah Bapak/Ibu alami terkait {S}, dan apa pelajarannya?",
+    "Bagaimana menjaga semangat ketika upaya terkait {S} belum menunjukkan hasil?",
+    "Apa dukungan yang paling dibutuhkan guru saat ini terkait {S}?",
+    "Bagaimana {S} dapat berdampak langsung pada murid di kelas?",
+    "Sumber belajar atau komunitas apa yang Bapak/Ibu rekomendasikan untuk memperdalam {S}?",
+    "Menurut Bapak/Ibu, seperti apa wajah {T} yang ideal lima tahun lagi?",
+    "Bagaimana sekolah dengan sumber daya terbatas tetap bisa menjalankan {S}?",
+    "Apa pesan Bapak/Ibu bagi rekan-rekan {P} lain yang mendengarkan podcast ini?"
+  ],
+  arah:[
+    "Terkait {A}, bagaimana pengalaman Bapak/Ibu sebagai {P}?",
+    "Apa tantangan terbesar soal {A}, dan bagaimana menyikapinya?",
+    "Langkah konkret apa yang bisa dilakukan guru terkait {A}?"
+  ],
+  x:[
+    "{A1}, bagaimana tanggapan Bapak/Ibu terhadap pandangan {A2} tadi?",
+    "Di antara pandangan yang sudah disampaikan, bagian mana yang paling sulit diterapkan di sekolah?",
+    "{A2}, apakah ada hal dari pengalaman {A1} yang berbeda dengan kondisi di tempat Bapak/Ibu?",
+    "Apa satu kesepakatan bersama yang bisa kita tawarkan kepada pendengar tentang {T}?",
+    "Kalau PGRI bisa memfasilitasi satu program terkait {T}, program apa yang paling dibutuhkan?",
+    "Siapa yang seharusnya bergerak lebih dulu untuk {T}: pemerintah, sekolah, organisasi profesi, atau guru sendiri?",
+    "Apa risiko terbesar bila {T} tidak segera dibenahi?",
+    "Bagaimana kolaborasi antara organisasi profesi, sekolah, dan orang tua bisa diperkuat untuk {T}?"
+  ],
+  p:[
+    "Dalam satu kalimat, apa yang perlu diingat pendengar tentang {T}?",
+    "Apa satu tindakan kecil yang bisa dilakukan pendengar minggu ini?",
+    "Apa harapan Bapak/Ibu bagi guru Indonesia terkait {T}?",
+    "Jika episode ini didengar oleh guru muda, pesan apa yang ingin Bapak/Ibu titipkan?"
+  ]
+};
+function fill(t,i,arah){
+  var n=S.ns[i]||S.ns[0], k=N(), a1=S.ns[1].nama, a2=S.ns[0].nama;
+  if(k===3&&Math.random()<0.5){a1=S.ns[2].nama;a2=S.ns[1].nama;}
+  return t.replace(/\{T\}/g,S.ep.tema).replace(/\{P\}/g,n.peran||"").replace(/\{S\}/g,n.sudut).replace(/\{A\}/g,arah||S.ep.tema).replace(/\{A1\}/g,a1).replace(/\{A2\}/g,a2);
+}
+function templateMore(key,arah){
+  var have={}; (S.q[key]||[]).forEach(function(q){have[q.t.toLowerCase()]=1;});
+  var pool=[], i=/^[0-2]$/.test(key)?+key:0;
+  if(arah&&/^[0-2]$/.test(key)) pool=pool.concat(BANK.arah.map(function(t){return fill(t,i,arah);}));
+  var src=/^[0-2]$/.test(key)?BANK.ns:(BANK[key]||BANK.x);
+  var rest=src.map(function(t){return fill(t,i,arah);});
+  for(var j=rest.length-1;j>0;j--){var r=Math.floor(Math.random()*(j+1));var tmp=rest[j];rest[j]=rest[r];rest[r]=tmp;}
+  pool=pool.concat(rest);
+  var out=[]; pool.forEach(function(t){ if(out.length<3&&!have[t.toLowerCase()]){out.push(t);have[t.toLowerCase()]=1;} });
+  if(!out.length) throw new Error("bank pola pertanyaan untuk kartu ini sudah habis; tulis arah pertanyaan atau pakai AI");
+  return out;
+}
+function genMore(key,arah){
+  if(engine()==="template") return Promise.resolve({items:templateMore(key,arah),src:"bank pola"});
+  var who=/^[0-2]$/.test(key)?("narasumber "+S.ns[+key].nama+" ("+S.ns[+key].peran+", sudut bahasan: "+S.ns[+key].sudut+")"):(key==="x"?"diskusi silang antara "+listNames(false):"pesan kunci penutup dari "+listNames(false));
+  var ada=(S.q[key]||[]).map(function(q){return "- "+q.t;}).join("\n")||"(belum ada)";
+  var prompt="Anda membantu host podcast PGRI di Indonesia. Buat 3 pertanyaan BARU untuk "+who+".\nAcara: "+S.ep.judul+"\nTema: "+S.ep.tema+"\n"+(arah?"Arah yang diminta host: "+arah+"\n":"")+
+    "Pertanyaan yang sudah ada (jangan diulang atau diparafrasekan):\n"+ada+"\n\nSyarat: bahasa Indonesia santun dengan sapaan Bapak/Ibu, terbuka (bukan ya/tidak), mengundang cerita atau contoh nyata, maksimal 30 kata per pertanyaan.\nKembalikan HANYA JSON array berisi 3 string.";
+  return aiText(prompt).then(function(t){
+    var j=parseJSON(t); if(!Array.isArray(j)&&j)j=j.pertanyaan||j.questions||j.items||[];
+    var items=(j||[]).filter(function(x){return typeof x==="string"&&x.trim();}).map(function(x){return x.trim();}).slice(0,3);
+    if(!items.length)throw new Error("format jawaban AI tidak sesuai");
+    return {items:items,src:engineLabel()};
+  });
+}
+document.getElementById("keyForm").addEventListener("submit",function(e){
+  e.preventDefault(); var v=document.getElementById("gkey").value.trim(); if(!v)return;
+  try{localStorage.setItem(GKEY,v);}catch(err){} document.getElementById("gkey").value=""; refreshEngine(); toast("Kunci Gemini disimpan di perangkat ini");
+});
+document.getElementById("delKey").addEventListener("click",function(){try{localStorage.removeItem(GKEY);}catch(err){} var k=document.getElementById("gkey");k.value="";k.placeholder="AIza…"; refreshEngine(); toast("Kunci dihapus. Memakai bank pola pertanyaan.");});
 document.getElementById("resetQ").addEventListener("click",function(){S.q=templateQ();save();renderQ();toast("Pertanyaan dikembalikan ke templat");});
 
 /* AI */
 var sampleFn=null;
 if(window.claude&&typeof window.claude.use==="function"){
-  window.claude.use("sample").then(function(s){ if(s){sampleFn=s;document.getElementById("aiBtn").hidden=false;} }).catch(function(){});
+  window.claude.use("sample").then(function(s){ if(s){sampleFn=s;refreshEngine();} }).catch(function(){});
 }
 document.getElementById("aiBtn").addEventListener("click",function(){
-  if(!sampleFn)return;
+  if(engine()==="template")return;
   var btn=this, st=document.getElementById("aiStatus");
   btn.disabled=true; st.textContent="Menyusun pertanyaan… biasanya 10–30 detik.";
   var prompt="Anda membantu host podcast di Indonesia. Susun pertanyaan wawancara dalam bahasa Indonesia yang santun (sapaan Bapak/Ibu), tajam, dan mengundang cerita, bukan jawaban ya/tidak.\n\n"+
     "Acara: "+S.ep.judul+"\nTema: "+S.ep.tema+"\nDurasi: "+S.ep.durasi+" menit\n"+
     S.ns.slice(0,N()).map(function(n,i){return "Narasumber "+(i+1)+": "+n.nama+", "+n.peran+". Sudut bahasan: "+n.sudut+".";}).join("\n")+
     "\n\nKembalikan HANYA JSON dengan bentuk: {"+(N()===2?"\"n1\":[5 pertanyaan],\"n2\":[5 pertanyaan]":"\"n1\":[5 pertanyaan],\"n2\":[5 pertanyaan],\"n3\":[5 pertanyaan]")+",\"diskusi\":[4 pertanyaan silang yang menyebut nama narasumber],\"penutup\":[1 pertanyaan pesan kunci]}. Setiap pertanyaan maksimal 30 kata.";
-  var run = sampleFn.json ? sampleFn.json(prompt,{modelTier:"default"}) : sampleFn(prompt).then(function(r){var m=r.text.match(/\{[\s\S]*\}/);return JSON.parse(m?m[0]:r.text);});
-  Promise.resolve(run).then(function(j){
+  aiText(prompt).then(parseJSON).then(function(j){
     function mk(a){return (Array.isArray(a)?a:[]).filter(function(x){return typeof x==="string"&&x.trim();}).map(function(t){return {t:t.trim(),done:false};});}
     var n1=mk(j.n1),n2=mk(j.n2),n3=mk(j.n3);
     if(!n1.length||!n2.length||(N()===3&&!n3.length)) throw {message:"format jawaban tidak sesuai"};
@@ -860,7 +1010,7 @@ function renderCue(){
     var list=S.q[k]||[];
     return '<ul class="q-list" style="--c:'+color+'">'+list.map(function(q,i){
       return '<li class="q-item'+(q.done?' done':'')+'"><input type="checkbox" data-qk="'+k+'" data-qi="'+i+'"'+(q.done?' checked':'')+' aria-label="Sudah ditanyakan"><span class="q-text" contenteditable="true" data-qe="'+k+'" data-qi="'+i+'">'+esc(q.t)+'</span><button class="q-del" data-qd="'+k+'" data-qi="'+i+'" aria-label="Hapus pertanyaan">×</button></li>';
-    }).join("")+'</ul>';
+    }).join("")+'</ul>'+genForm(k);
   }).join("");
   bindQ(body,renderCue);
 }
@@ -903,7 +1053,7 @@ document.addEventListener("keydown",function(e){
 });
 
 /* ---------- Mulai ---------- */
-load(); ensureLive(); renderPrep();
+load(); ensureLive(); renderPrep(); refreshEngine();
 var TABS=["persiapan","rundown","naskah","pertanyaan","siaran"];
 function showView(v){
   document.getElementById("landing").hidden=(v!=="landing");
