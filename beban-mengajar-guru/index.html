@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peta Beban Mengajar Guru</title>
+<meta name="description" content="Susun pembagian jam mengajar per guru dan per kelas, hitung JP tatap muka dan ekuivalensi tugas tambahan, cek 24–40 JP, dan cetak lampiran SK pembagian tugas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f1e8; --card:#fffdf8; --ink:#14313a; --ink2:#46606a; --line:#d9d0bf;
+  --teal:#0f5c63; --teal-soft:#d6e9e7; --ochre:#c98a17; --ochre-soft:#f6e6c4;
+  --red:#b3261e; --red-soft:#f8dcd8; --green:#2e7d4f; --green-soft:#d9efe0;
+  --cl:91%; --cs:62%; --focus:#c98a17; --shadow:0 1px 0 rgba(20,49,58,.06),0 6px 20px -12px rgba(20,49,58,.35);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f1a1d; --card:#16252a; --ink:#e8efe9; --ink2:#a9bbb8; --line:#2b4047;
+    --teal:#6cc3bd; --teal-soft:#173a3c; --ochre:#f0b54a; --ochre-soft:#3d2f12;
+    --red:#ff8a80; --red-soft:#43201d; --green:#7fd19c; --green-soft:#183626;
+    --cl:26%; --cs:38%; --shadow:0 1px 0 rgba(0,0,0,.3),0 8px 24px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f1a1d; --card:#16252a; --ink:#e8efe9; --ink2:#a9bbb8; --line:#2b4047;
+  --teal:#6cc3bd; --teal-soft:#173a3c; --ochre:#f0b54a; --ochre-soft:#3d2f12;
+  --red:#ff8a80; --red-soft:#43201d; --green:#7fd19c; --green-soft:#183626;
+  --cl:26%; --cs:38%; --shadow:0 1px 0 rgba(0,0,0,.3),0 8px 24px -14px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% 28px;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;background:var(--paper);opacity:.93;z-index:-1}
+h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;line-height:1.15;margin:0}
+.num,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+a{color:var(--teal)}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.top{padding:22px 0 10px}
+.brand{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.stamp{width:52px;height:52px;border-radius:12px;background:var(--teal);color:var(--paper);display:grid;place-items:center;
+  font:800 20px "Bricolage Grotesque",sans-serif;transform:rotate(-4deg);box-shadow:3px 3px 0 var(--ochre)}
+.brand h1{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:-.02em}
+.brand p{margin:2px 0 0;color:var(--ink2);font-size:14px}
+.brand .sp{flex:1}
+.iconbtn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 12px;cursor:pointer}
+.banner{margin:12px 0 0;padding:10px 14px;border:1.5px dashed var(--ochre);background:var(--ochre-soft);border-radius:12px;
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px}
+.banner .grow{min-width:220px}
+.banner b{font-family:"Bricolage Grotesque",sans-serif;letter-spacing:.04em;text-transform:uppercase;font-size:12px;background:var(--ochre);color:#1d1400;padding:2px 8px;border-radius:99px}
+nav.tabs{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);margin-top:14px}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.tabs button{border:0;background:none;padding:12px 14px;cursor:pointer;font-weight:600;color:var(--ink2);border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ochre)}
+nav.tabs .cnt{font:600 11px "IBM Plex Mono",monospace;background:var(--red);color:#fff;border-radius:99px;padding:1px 6px;margin-left:4px;vertical-align:2px}
+main{padding:18px 0 40px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+.card h2{font-size:20px;margin-bottom:4px}
+.card .sub{color:var(--ink2);font-size:13.5px;margin:0 0 12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grow{flex:1}
+.btn{border:1.5px solid var(--ink);background:var(--card);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:600}
+.btn.pri{background:var(--teal);border-color:var(--teal);color:var(--paper)}
+.btn.warn{border-color:var(--red);color:var(--red)}
+.btn.sm{padding:4px 10px;font-size:13px;border-width:1px}
+.btn:hover{filter:brightness(.97)}
+.btn:focus-within{outline:3px solid var(--focus);outline-offset:2px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--ink2);font-weight:500}
+input[type=text],input[type=number],select,textarea{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0}
+input[type=number]{width:70px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow)}
+.kpi .v{font:600 28px "IBM Plex Mono",monospace;line-height:1.1}
+.kpi .l{font-size:12.5px;color:var(--ink2)}
+.kpi.bad .v{color:var(--red)} .kpi.ok .v{color:var(--green)} .kpi.mid .v{color:var(--ochre)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);background:var(--paper);font-weight:600}
+td.r,th.r{text-align:right}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.ok{background:var(--green-soft);color:var(--green)} .pill.bad{background:var(--red-soft);color:var(--red)}
+.pill.mid{background:var(--ochre-soft);color:var(--ochre)} .pill.info{background:var(--teal-soft);color:var(--teal)}
+/* matriks */
+.matrix{border-collapse:separate;border-spacing:0}
+.matrix th,.matrix td{vertical-align:middle;border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:3px}
+.matrix thead th{position:sticky;top:0;z-index:2;text-align:center;padding:6px 4px;min-width:92px}
+.matrix thead th small{display:block;font:500 11px "IBM Plex Mono",monospace;text-transform:none;letter-spacing:0;color:var(--ink2)}
+.matrix th.k{position:sticky;left:0;z-index:3;background:var(--card);min-width:70px;font:700 14px "Bricolage Grotesque",sans-serif;color:var(--ink);text-transform:none;letter-spacing:0}
+.matrix thead th.k{z-index:4;background:var(--paper)}
+.cell{width:100%;border:1px solid transparent;border-radius:7px;padding:6px 4px;font-size:12.5px;font-weight:600;cursor:pointer;
+  background:hsl(var(--h,0) var(--cs) var(--cl));appearance:none;-webkit-appearance:none;text-align:center;text-align-last:center}
+.cell.empty{background:var(--red-soft);border:1.5px dashed var(--red);color:var(--red)}
+.cell.off{outline:2px solid var(--ochre);outline-offset:-2px}
+.cell.dim{opacity:.25}
+.cell.na{background:transparent;color:var(--ink2);border:1px dotted var(--line);cursor:default}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2);margin-top:10px}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-2px;background:var(--c)}
+/* bar */
+.bar{position:relative;height:16px;background:var(--paper);border:1px solid var(--line);border-radius:6px;min-width:140px;overflow:hidden}
+.bar i{position:absolute;top:0;bottom:0;left:0}
+.bar i.tm{background:var(--teal)} .bar i.eq{background:var(--ochre)}
+.bar b{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink)}
+.bar b.mx{background:var(--red)}
+.issues{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.issues li{padding:10px 12px;border-radius:10px;border-left:4px solid var(--red);background:var(--red-soft);font-size:14px}
+.issues li.w{border-left-color:var(--ochre);background:var(--ochre-soft)}
+.issues li.i{border-left-color:var(--teal);background:var(--teal-soft)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;padding:2px 8px;border:1px solid var(--line);border-radius:99px;background:var(--paper)}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);padding:0;max-width:640px;width:calc(100% - 32px);box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(10,25,30,.5)}
+dialog form{padding:18px;display:grid;gap:12px}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px 10px;font-size:14px}
+.checks label{display:flex;gap:6px;align-items:center}
+.tt-row{display:grid;grid-template-columns:1fr 70px auto;gap:6px;align-items:center;margin-bottom:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:10px;font-size:14px;z-index:99;opacity:0;transition:.25s;pointer-events:none}
+.toast.on{opacity:1}
+.src{font-size:13.5px;color:var(--ink2)}
+.src li{margin-bottom:4px}
+footer{color:var(--ink2);font-size:12.5px;padding:10px 0 40px}
+.sk-head{text-align:center;margin-bottom:12px}
+.sk-head h3{font-size:17px;text-transform:uppercase}
+.muted{color:var(--ink2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:640px){
+  .brand .stamp{width:44px;height:44px;font-size:17px}
+  th,td{padding:6px}
+  .hide-sm{display:none}
+}
+@media print{
+  body{background:#fff;color:#000;font-size:11pt}
+  body::before,header.top,nav.tabs,.noprint,footer,.banner,.toast{display:none!important}
+  section.tab{display:none!important}
+  section.tab#t-sk{display:block!important}
+  .card{border:0;box-shadow:none;padding:0}
+  .scroll{border:0;overflow:visible}
+  th{background:#eee!important;color:#000}
+  th,td{border:1px solid #000!important}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="stamp" aria-hidden="true">JP</div>
+      <div>
+        <h1>Peta Beban Mengajar Guru</h1>
+        <p id="subjudul">Pembagian jam pelajaran, ekuivalensi tugas tambahan, dan lampiran SK pembagian tugas</p>
+      </div>
+      <div class="sp"></div>
+      <button class="iconbtn" id="btnTema" type="button" aria-label="Ganti tema terang/gelap">◐ Tema</button>
+    </div>
+    <div class="banner" id="bannerContoh" hidden>
+      <b>Contoh</b><span class="grow">Semua nama guru di bawah ini fiktif. Ganti dengan data sekolah Anda atau hapus data contoh.</span>
+      <button class="btn sm" type="button" data-act="hapusContoh">Hapus data contoh</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Menu utama">
+  <div class="wrap" role="tablist">
+    <button role="tab" data-tab="peta" aria-selected="true">Peta Kelas × Mapel</button>
+    <button role="tab" data-tab="rekap" aria-selected="false">Rekap Guru</button>
+    <button role="tab" data-tab="cek" aria-selected="false">Pemeriksaan<span class="cnt" id="cntCek" hidden>0</span></button>
+    <button role="tab" data-tab="guru" aria-selected="false">Guru</button>
+    <button role="tab" data-tab="struktur" aria-selected="false">Mapel & Kelas</button>
+    <button role="tab" data-tab="sk" aria-selected="false">Lampiran SK</button>
+    <button role="tab" data-tab="atur" aria-selected="false">Pengaturan</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="kpis" id="kpis"></div>
+
+  <!-- PETA -->
+  <section class="tab on" id="t-peta" role="tabpanel">
+    <div class="card">
+      <div class="row" style="margin-bottom:10px">
+        <div class="grow">
+          <h2>Peta kelas × mata pelajaran</h2>
+          <p class="sub" style="margin:0">Pilih guru pada setiap sel. Sel merah = belum ada pengampu. Garis jingga = guru mengajar di luar mapel ampunya.</p>
+        </div>
+      </div>
+      <div class="row noprint" style="margin-bottom:12px">
+        <label class="f">Jenjang
+          <select id="fJenjang"><option value="">Semua</option><option value="7">VII</option><option value="8">VIII</option><option value="9">IX</option></select>
+        </label>
+        <label class="f">Sorot guru
+          <select id="fSorot"><option value="">— tidak ada —</option></select>
+        </label>
+        <div class="grow"></div>
+        <button class="btn pri" type="button" data-act="isiOtomatis">Isi otomatis sel kosong</button>
+      </div>
+      <div class="scroll" id="petaWrap"></div>
+      <div class="legend"><span style="--c:var(--red-soft)">Belum terisi</span><span style="--c:var(--ochre)">Di luar mapel ampu</span><span style="--c:transparent;">“—” = mapel tidak diajarkan di jenjang itu</span></div>
+    </div>
+  </section>
+
+  <!-- REKAP -->
+  <section class="tab" id="t-rekap" role="tabpanel">
+    <div class="card">
+      <div class="row" style="margin-bottom:8px">
+        <div class="grow">
+          <h2>Rekap beban per guru</h2>
+          <p class="sub" style="margin:0">Total = JP tatap muka + ekuivalensi tugas tambahan. Garis hitam = batas minimum, garis merah = batas maksimum.</p>
+        </div>
+        <div class="row noprint">
+          <button class="btn sm" type="button" data-act="csvRekap">Unduh CSV</button>
+          <button class="btn sm" type="button" data-act="salinRingkas">Salin ringkasan</button>
+        </div>
+      </div>
+      <div class="legend" style="margin:0 0 10px"><span style="--c:var(--teal)">Tatap muka</span><span style="--c:var(--ochre)">Ekuivalensi tugas tambahan</span></div>
+      <div class="scroll"><table id="tblRekap"></table></div>
+    </div>
+    <div class="card">
+      <h2>Kebutuhan guru per mata pelajaran</h2>
+      <p class="sub">Perkiraan kebutuhan = total JP mapel seluruh rombel ÷ batas minimum JP. Bahan analisis kekurangan/kelebihan guru dan usulan ke dinas.</p>
+      <div class="scroll"><table id="tblKebutuhan"></table></div>
+    </div>
+  </section>
+
+  <!-- CEK -->
+  <section class="tab" id="t-cek" role="tabpanel">
+    <div class="card">
+      <h2>Pemeriksaan otomatis</h2>
+      <p class="sub">Daftar hal yang perlu dibereskan sebelum SK pembagian tugas ditandatangani.</p>
+      <ul class="issues" id="listCek"></ul>
+    </div>
+  </section>
+
+  <!-- GURU -->
+  <section class="tab" id="t-guru" role="tabpanel">
+    <div class="card">
+      <div class="row" style="margin-bottom:10px">
+        <div class="grow"><h2>Daftar guru</h2><p class="sub" style="margin:0">Kode guru dipakai di peta. Jangan memasukkan NIP atau data pribadi ke aplikasi publik bila perangkat dipakai bersama.</p></div>
+        <button class="btn pri" type="button" data-act="guruBaru">+ Tambah guru</button>
+      </div>
+      <div class="scroll"><table id="tblGuru"></table></div>
+    </div>
+  </section>
+
+  <!-- STRUKTUR -->
+  <section class="tab" id="t-struktur" role="tabpanel">
+    <div class="grid2">
+      <div class="card">
+        <div class="row" style="margin-bottom:8px">
+          <div class="grow"><h2>Mata pelajaran & JP/minggu</h2></div>
+          <button class="btn sm" type="button" data-act="mapelBaru">+ Mapel</button>
+        </div>
+        <p class="sub">Isi sesuai struktur kurikulum di KOSP sekolah (Permendikdasmen 13/2025). Isi 0 bila mapel tidak diajarkan di jenjang itu.</p>
+        <div class="scroll"><table id="tblMapel"></table></div>
+      </div>
+      <div class="card">
+        <div class="row" style="margin-bottom:8px">
+          <div class="grow"><h2>Rombel, wali kelas & guru BK</h2></div>
+          <button class="btn sm" type="button" data-act="kelasBaru">+ Rombel</button>
+        </div>
+        <p class="sub">Wali kelas otomatis dihitung sebagai tugas tambahan. Guru BK otomatis dihitung dari rombel layanan.</p>
+        <div class="scroll"><table id="tblKelas"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SK -->
+  <section class="tab" id="t-sk" role="tabpanel">
+    <div class="card">
+      <div class="row noprint" style="margin-bottom:12px">
+        <label class="f grow">Nomor SK<input type="text" id="skNomor" placeholder="mis. 800/___/2026"></label>
+        <label class="f">Tanggal penetapan<input type="text" id="skTanggal" placeholder="mis. 14 Juli 2026"></label>
+        <button class="btn pri" type="button" data-act="cetak">Cetak / Simpan PDF</button>
+        <button class="btn" type="button" data-act="csvSK">Unduh CSV</button>
+      </div>
+      <div class="sk-head">
+        <h3>Lampiran Keputusan Kepala <span class="skSekolah"></span></h3>
+        <div>Nomor: <span id="skNomorOut">…………</span></div>
+        <div>Tentang Pembagian Tugas Guru dalam Kegiatan Pembelajaran / Bimbingan</div>
+        <div>Semester <span class="skSem"></span> Tahun Pelajaran <span class="skTP"></span></div>
+      </div>
+      <div class="scroll"><table id="tblSK"></table></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:24px">
+        <div style="min-width:240px">
+          <div>Ditetapkan di: <span id="skKota"></span></div>
+          <div>Pada tanggal: <span id="skTanggalOut">…………</span></div>
+          <div style="margin-top:6px">Kepala Sekolah,</div>
+          <div style="height:64px"></div>
+          <div style="font-weight:600" id="skKS">……………………</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PENGATURAN -->
+  <section class="tab" id="t-atur" role="tabpanel">
+    <div class="grid2">
+      <div class="card">
+        <h2>Identitas & batas beban</h2>
+        <p class="sub">Tersimpan di perangkat ini saja (localStorage).</p>
+        <div style="display:grid;gap:10px">
+          <label class="f">Nama sekolah<input type="text" id="aSekolah"></label>
+          <label class="f">Kota penetapan SK<input type="text" id="aKota"></label>
+          <div class="row">
+            <label class="f grow">Tahun pelajaran<input type="text" id="aTP"></label>
+            <label class="f">Semester<select id="aSem"><option>Ganjil</option><option>Genap</option></select></label>
+          </div>
+          <div class="row">
+            <label class="f">Minimum JP/minggu<input type="number" id="aMin" min="1" max="60"></label>
+            <label class="f">Maksimum JP/minggu<input type="number" id="aMax" min="1" max="60"></label>
+            <label class="f">Min. rombel guru BK<input type="number" id="aBK" min="1" max="20"></label>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Cadangan data</h2>
+        <p class="sub">Ekspor JSON untuk memindahkan data ke laptop lain atau berbagi dengan wakasek kurikulum.</p>
+        <div class="row">
+          <button class="btn" type="button" data-act="eksporJSON">Unduh cadangan (JSON)</button>
+          <label class="btn" style="display:inline-block">Impor JSON<input type="file" id="fileImpor" accept=".json,application/json" class="sr"></label>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn warn" type="button" data-act="hapusContoh">Hapus data contoh</button>
+          <button class="btn" type="button" data-act="muatContoh">Muat ulang data contoh</button>
+          <button class="btn warn" type="button" data-act="kosongkan">Kosongkan semua</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="margin-bottom:8px">
+        <div class="grow"><h2>Ekuivalensi tugas tambahan</h2>
+        <p class="sub" style="margin:0">Nilai bawaan dari ringkasan Permendikdasmen 11/2025 dan Kepmendikdasmen 221/P/2025. Sesuaikan bila juknis daerah berbeda.</p></div>
+        <button class="btn sm" type="button" data-act="tugasBaru">+ Tugas</button>
+      </div>
+      <div class="scroll"><table id="tblTugas"></table></div>
+    </div>
+    <div class="card">
+      <h2>Dasar dan sumber</h2>
+      <ul class="src">
+        <li><a href="https://guruinovatif.id/artikel/jam-tatap-muka-dan-ekuivalensi-tugas-tambahan-guru-dalam-permendikdasmen-11-tahun-2025" target="_blank" rel="noopener">Guru Inovatif – Jam tatap muka dan ekuivalensi tugas tambahan guru dalam Permendikdasmen 11/2025</a> (minimum 24, maksimum 40 JP; daftar ekuivalensi; pengecualian Pasal 20)</li>
+        <li><a href="https://kepalasekolah.id/wajib-tahu-aturan-baru-beban-kerja-guru-tugas-tambahan-dan-ekuivalensi-jtm-penuh-kepmendikdasmen-221-p-2025/" target="_blank" rel="noopener">KepalaSekolah.id – Aturan baru beban kerja guru dan ekuivalensi JTM, Kepmendikdasmen 221/P/2025</a> (wakasek, kepala perpustakaan/laboratorium 12 JTM; wali kelas 2 JTM)</li>
+        <li><a href="https://kepalasekolah.id/struktur-jam-pelajaran-terbaru-2025-panduan-jadwal-belajar-sd-smp-dan-sma-sesuai-permendikdasmen-no-13-tahun-2025/" target="_blank" rel="noopener">KepalaSekolah.id – Struktur jam pelajaran sesuai Permendikdasmen 13/2025</a> (1 JP SMP = 40 menit; Koding & KA dan muatan lokal sebagai pilihan)</li>
+        <li><a href="https://peraturan.bpk.go.id/Details/322506/permendikdasmen-no-13-" target="_blank" rel="noopener">JDIH BPK – Permendikdasmen Nomor 13 Tahun 2025 tentang Kurikulum</a></li>
+      </ul>
+      <p class="src">Catatan: angka bawaan diambil dari ringkasan regulasi. Selalu cocokkan dengan salinan resmi peraturan dan juknis dinas sebelum menandatangani SK. Struktur JP mapel contoh perlu disesuaikan dengan KOSP sekolah.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">Data tersimpan di peramban perangkat ini. Bagian dari Koleksi Aplikasi Thomas · <a href="../">kembali ke katalog</a></footer>
+
+<dialog id="dlgGuru" aria-labelledby="dlgGuruJudul">
+  <form method="dialog" id="formGuru">
+    <h2 id="dlgGuruJudul">Data guru</h2>
+    <div class="row">
+      <label class="f" style="width:80px">Kode<input type="text" name="kode" maxlength="4" required></label>
+      <label class="f grow">Nama lengkap & gelar<input type="text" name="nama" required></label>
+    </div>
+    <label class="f">Jenis tugas pokok
+      <select name="jenis">
+        <option value="mapel">Guru mata pelajaran</option>
+        <option value="bk">Guru BK</option>
+        <option value="ks">Kepala sekolah</option>
+      </select>
+    </label>
+    <fieldset style="border:1px solid var(--line);border-radius:10px">
+      <legend class="muted" style="font-size:13px">Mapel yang diampu (sesuai sertifikat/kualifikasi)</legend>
+      <div class="checks" id="dlgMapel"></div>
+    </fieldset>
+    <fieldset style="border:1px solid var(--line);border-radius:10px">
+      <legend class="muted" style="font-size:13px">Tugas tambahan (selain wali kelas)</legend>
+      <div id="dlgTugas"></div>
+      <button class="btn sm" type="button" id="dlgTambahTugas">+ Tugas tambahan</button>
+    </fieldset>
+    <div class="row">
+      <button class="btn warn" type="button" id="dlgHapus">Hapus guru</button>
+      <div class="grow"></div>
+      <button class="btn" value="batal" formnovalidate>Batal</button>
+      <button class="btn pri" value="simpan">Simpan</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+var KEY="petaBebanGuru.v1";
+var $=function(s,el){return (el||document).querySelector(s)};
+var $$=function(s,el){return Array.prototype.slice.call((el||document).querySelectorAll(s))};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function uid(){return Math.random().toString(36).slice(2,9)}
+function toast(t){var el=$("#toast");el.textContent=t;el.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(function(){el.classList.remove("on")},2400)}
+var ROMAWI={7:"VII",8:"VIII",9:"IX"};
+function fmt(n){return (Math.round(n*10)/10).toString().replace(".",",")}
+
+/* ---------- data bawaan ---------- */
+function tugasBawaan(){
+  return [
+    ["wakasek","Wakil kepala sekolah",12],["kaperpus","Kepala perpustakaan",12],["kalab","Kepala laboratorium",12],
+    ["osis","Pembina OSIS",2],["ekskul","Pembina ekstrakurikuler",2],["korkom","Koordinator pengembangan kompetensi",2],
+    ["korpkg","Koordinator pengelolaan kinerja guru",2],["korpro","Koordinator pembelajaran berbasis projek/kokurikuler (per rombel)",2],
+    ["korinkl","Koordinator pembelajaran inklusi",2],["tppkk","Koordinator TPPK",2],["tppka","Anggota TPPK",1],
+    ["piket","Guru piket",1],["panitia","Pengurus kepanitiaan acara sekolah",1],
+    ["orgnas","Pengurus organisasi bidang pendidikan – nasional",3],["orgprov","Pengurus organisasi bidang pendidikan – provinsi",2],["orgkab","Pengurus organisasi bidang pendidikan – kab/kota",1],
+    ["mgmp","Koordinator KKG/MGMP",1],["instruktur","Instruktur/narasumber/fasilitator nasional (per program)",1],
+    ["peserta","Peserta program pengembangan kompetensi",1],["ormas","Pengurus ormas nonpolitik",1]
+  ].map(function(a){return {id:a[0],nama:a[1],jp:a[2]}});
+}
+var WALI_JP=2;
+function mapelBawaan(){
+  return [
+    ["pai","PAI","Pendidikan Agama Islam & Budi Pekerti",3,3,3],["ppkn","PPKn","Pendidikan Pancasila",3,3,3],
+    ["bin","B.IND","Bahasa Indonesia",5,5,5],["mat","MAT","Matematika",5,5,5],["ipa","IPA","Ilmu Pengetahuan Alam",5,5,5],
+    ["ips","IPS","Ilmu Pengetahuan Sosial",4,4,4],["big","B.ING","Bahasa Inggris",4,4,4],["pjok","PJOK","Pendidikan Jasmani, Olahraga & Kesehatan",3,3,3],
+    ["inf","INF","Informatika",3,3,3],["sbk","SENI","Seni Budaya / Prakarya",3,3,3],["bjw","B.JAWA","Bahasa Jawa (muatan lokal)",2,2,2],
+    ["kka","KKA","Koding & Kecerdasan Artifisial (pilihan)",2,2,2]
+  ].map(function(a){return {id:a[0],kode:a[1],nama:a[2],jp:{7:a[3],8:a[4],9:a[5]}}});
+}
+function kelasBawaan(){
+  var out=[];[7,8,9].forEach(function(j){"ABCDE".split("").forEach(function(h){out.push({id:"k"+j+h,nama:ROMAWI[j]+" "+h,jenjang:j,wali:"",bk:""})})});
+  return out;
+}
+function dataContoh(){
+  var s={meta:{sekolah:"SMP Negeri Contoh",kota:"Yogyakarta",tp:"2026/2027",sem:"Ganjil",min:24,max:40,bkMin:5,contoh:true,ks:"",skNomor:"",skTanggal:""},
+    mapel:mapelBawaan(),kelas:kelasBawaan(),tugas:tugasBawaan(),guru:[],peta:{}};
+  function G(kode,nama,jenis,mapel,tugas){s.guru.push({id:"g"+kode,kode:kode,nama:nama+" (contoh)",jenis:jenis,mapel:mapel,tugas:(tugas||[]).map(function(t){return {t:t[0],n:t[1]||1}})})}
+  G("01","Drs. Bambang Wicaksono, M.Pd.","ks",[]);
+  G("02","Ahmad Fauzi, S.Pd.I.","mapel",["pai"],[["piket"]]);
+  G("03","Siti Rohmah, S.Ag.","mapel",["pai"]);
+  G("04","Yohanes Kurniawan, S.Pd.","mapel",["ppkn"],[["tppkk"]]);
+  G("05","Dewi Lestari, S.Pd.","mapel",["ppkn"],[["osis"]]);
+  G("06","Rina Puspitasari, S.Pd.","mapel",["bin"]);
+  G("07","Agus Setiawan, M.Pd.","mapel",["bin"],[["wakasek"]]);
+  G("08","Maria Ulfa, S.Pd.","mapel",["bin"],[["kaperpus"]]);
+  G("09","Hendra Gunawan, S.Pd.","mapel",["mat"],[["wakasek"]]);
+  G("10","Lusi Anggraini, S.Pd.","mapel",["mat"]);
+  G("11","Teguh Prasetyo, S.Si.","mapel",["mat"],[["korpro",1]]);
+  G("12","Sri Wahyuni, S.Pd.","mapel",["ipa"]);
+  G("13","Bayu Nugroho, S.Pd.","mapel",["ipa"],[["kalab"]]);
+  G("14","Anisa Rahma, S.Pd.","mapel",["ipa"]);
+  G("15","Yulianto, S.Pd.","mapel",["ips"],[["wakasek"]]);
+  G("16","Wulan Sari, S.Pd.","mapel",["ips"]);
+  G("17","Fransiska Dian, S.Pd.","mapel",["big"]);
+  G("18","Rizky Ramadhan, S.Pd.","mapel",["big"],[["ekskul"]]);
+  G("19","Dimas Saputra, S.Pd.","mapel",["pjok"],[["ekskul"]]);
+  G("20","Galih Pratama, S.Or.","mapel",["pjok"],[["ekskul"]]);
+  G("21","Nanda Kusuma, S.Kom.","mapel",["inf","kka"]);
+  G("22","Larasati Putri, S.Sn.","mapel",["sbk"]);
+  G("23","Hari Santoso, S.Pd.","mapel",["sbk"],[["piket"]]);
+  G("24","Sumarni, S.Pd.","mapel",["bjw"],[["orgkab"]]);
+  G("25","Endang Kristiani, S.Pd.","bk",[]);
+  G("26","Taufik Hidayat, S.Psi.","bk",[]);
+  var urut=s.kelas.map(function(k){return k.id});
+  function bagi(m,blok){var i=0;blok.forEach(function(b){for(var x=0;x<b[1];x++){if(i<urut.length){s.peta[urut[i]+"|"+m]="g"+b[0]};i++}})}
+  bagi("pai",[["02",8],["03",7]]);bagi("ppkn",[["04",8],["05",7]]);
+  bagi("bin",[["06",5],["07",5],["08",5]]);bagi("mat",[["10",5],["09",5],["11",5]]);
+  bagi("ipa",[["12",5],["13",5],["14",5]]);bagi("ips",[["15",8],["16",7]]);
+  bagi("big",[["17",8],["18",7]]);bagi("pjok",[["19",8],["20",7]]);
+  bagi("inf",[["21",8]]);bagi("sbk",[["22",8],["23",7]]);bagi("bjw",[["24",15]]);
+  bagi("kka",[["21",5],["11",2]]);
+  var wali=["03","05","06","10","12","14","16","17","22","23","24","02","18","19",""];
+  var bk=["25","25","25","25","25","25","25","25","26","26","26","26","26","",""];
+  s.kelas.forEach(function(k,i){k.wali=wali[i]?"g"+wali[i]:"";k.bk=bk[i]?"g"+bk[i]:""});
+  return s;
+}
+
+/* ---------- penyimpanan ---------- */
+var S;
+function simpan(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function muat(){
+  try{var r=localStorage.getItem(KEY);if(r){var d=JSON.parse(r);if(d&&d.meta&&d.mapel&&d.kelas&&d.guru)return d}}catch(e){}
+  return dataContoh();
+}
+S=muat();
+
+/* ---------- perhitungan ---------- */
+function guruById(id){for(var i=0;i<S.guru.length;i++)if(S.guru[i].id===id)return S.guru[i];return null}
+function mapelById(id){for(var i=0;i<S.mapel.length;i++)if(S.mapel[i].id===id)return S.mapel[i];return null}
+function tugasById(id){for(var i=0;i<S.tugas.length;i++)if(S.tugas[i].id===id)return S.tugas[i];return null}
+function jpOf(m,k){var v=m.jp&&m.jp[k.jenjang];return +v||0}
+function hitung(){
+  var R={};
+  S.guru.forEach(function(g){R[g.id]={tm:0,eq:0,ajar:{},luar:[],tugas:[],wali:[],bk:[]}});
+  S.kelas.forEach(function(k){
+    S.mapel.forEach(function(m){
+      var gid=S.peta[k.id+"|"+m.id],jp=jpOf(m,k);
+      if(!gid||!R[gid]||!jp)return;
+      var r=R[gid],g=guruById(gid);r.tm+=jp;
+      (r.ajar[m.id]=r.ajar[m.id]||[]).push(k.nama);
+      if(g.mapel.indexOf(m.id)<0)r.luar.push(m.kode+" "+k.nama);
+    });
+    if(k.wali&&R[k.wali]){R[k.wali].wali.push(k.nama)}
+    if(k.bk&&R[k.bk]){R[k.bk].bk.push(k.nama)}
+  });
+  S.guru.forEach(function(g){
+    var r=R[g.id];
+    (g.tugas||[]).forEach(function(t){var d=tugasById(t.t);if(!d)return;var n=+t.n||1;r.eq+=d.jp*n;r.tugas.push({nama:d.nama,jp:d.jp*n,n:n})});
+    if(r.wali.length){var w=WALI_JP*r.wali.length;r.eq+=w;r.tugas.push({nama:"Wali kelas "+r.wali.join(", "),jp:w,n:r.wali.length})}
+    r.total=r.tm+r.eq;
+    r.status=statusGuru(g,r);
+  });
+  return R;
+}
+function statusGuru(g,r){
+  var mn=+S.meta.min||24,mx=+S.meta.max||40;
+  if(g.jenis==="ks")return {k:"info",t:"Kepala sekolah"};
+  if(g.jenis==="bk"){var n=r.bk.length,b=+S.meta.bkMin||5;return n>=b?{k:"ok",t:"Memenuhi ("+n+" rombel)"}:{k:"bad",t:"Kurang ("+n+"/"+b+" rombel)"}}
+  if(r.total<mn)return {k:"bad",t:"Kurang "+fmt(mn-r.total)+" JP"};
+  if(r.total>mx)return {k:"mid",t:"Lebih "+fmt(r.total-mx)+" JP"};
+  return {k:"ok",t:"Sesuai"};
+}
+function cekMasalah(R){
+  var out=[],kosong={},mn=+S.meta.min||24;
+  S.kelas.forEach(function(k){S.mapel.forEach(function(m){if(jpOf(m,k)&&!S.peta[k.id+"|"+m.id]){(kosong[m.id]=kosong[m.id]||[]).push(k.nama)}})});
+  Object.keys(kosong).forEach(function(mid){var m=mapelById(mid),jp=0;S.kelas.forEach(function(k){if(kosong[mid].indexOf(k.nama)>=0)jp+=jpOf(m,k)});
+    out.push({k:"e",t:"<b>"+esc(m.nama)+"</b> belum ada pengampu di "+kosong[mid].length+" rombel ("+esc(kosong[mid].join(", "))+") — "+jp+" JP/minggu belum terbagi."})});
+  S.guru.forEach(function(g){var r=R[g.id];
+    if(r.status.k==="bad")out.push({k:"e",t:"<b>"+esc(g.nama)+"</b>: "+esc(r.status.t)+(g.jenis==="mapel"?" (total "+fmt(r.total)+" JP). Tambah jam di mapel serumpun/tugas tambahan, atau ajukan pemenuhan di sekolah lain bila diizinkan.":".")});
+    if(r.status.k==="mid")out.push({k:"w",t:"<b>"+esc(g.nama)+"</b>: total "+fmt(r.total)+" JP melebihi batas maksimum "+S.meta.max+" JP. Pindahkan sebagian rombel ke guru lain."});
+    if(r.luar.length)out.push({k:"w",t:"<b>"+esc(g.nama)+"</b> mengajar di luar mapel ampu: "+esc(r.luar.join(", "))+". Pastikan linier/serumpun atau ubah mapel ampu di menu Guru."});
+    if(r.wali.length>1)out.push({k:"w",t:"<b>"+esc(g.nama)+"</b> menjadi wali kelas di "+r.wali.length+" rombel ("+esc(r.wali.join(", "))+")."});
+    if(g.jenis!=="mapel"&&r.tm>0&&g.jenis==="bk")out.push({k:"i",t:"<b>"+esc(g.nama)+"</b> (guru BK) juga mendapat "+r.tm+" JP tatap muka mapel."});
+  });
+  var tanpaWali=S.kelas.filter(function(k){return !k.wali}).map(function(k){return k.nama});
+  if(tanpaWali.length)out.push({k:"e",t:"Rombel tanpa wali kelas: "+esc(tanpaWali.join(", "))+"."});
+  var tanpaBK=S.kelas.filter(function(k){return !k.bk}).map(function(k){return k.nama});
+  if(tanpaBK.length)out.push({k:"w",t:"Rombel belum mendapat layanan guru BK: "+esc(tanpaBK.join(", "))+"."});
+  S.mapel.forEach(function(m){var tot=0;S.kelas.forEach(function(k){tot+=jpOf(m,k)});var ada=S.guru.filter(function(g){return g.mapel.indexOf(m.id)>=0}).length;
+    if(tot>0&&ada===0)out.push({k:"e",t:"Belum ada guru dengan mapel ampu <b>"+esc(m.nama)+"</b> (kebutuhan "+fmt(tot/mn)+" guru)."})});
+  return out;
+}
+
+/* ---------- render ---------- */
+function hue(g){var i=S.guru.indexOf(g);return (i*47+190)%360}
+function optGuru(sel,filterMapel){
+  var h='<option value="">— pilih —</option>';
+  var urut=S.guru.filter(function(g){return g.jenis!=="ks"||true});
+  if(filterMapel){
+    var a=urut.filter(function(g){return g.mapel.indexOf(filterMapel)>=0}),b=urut.filter(function(g){return g.mapel.indexOf(filterMapel)<0});
+    h+=a.map(function(g){return '<option value="'+g.id+'"'+(g.id===sel?" selected":"")+'>'+esc(g.kode+" "+pendek(g.nama))+'</option>'}).join("");
+    if(b.length)h+='<optgroup label="Di luar mapel ampu">'+b.map(function(g){return '<option value="'+g.id+'"'+(g.id===sel?" selected":"")+'>'+esc(g.kode+" "+pendek(g.nama))+'</option>'}).join("")+'</optgroup>';
+    return h;
+  }
+  return h+urut.map(function(g){return '<option value="'+g.id+'"'+(g.id===sel?" selected":"")+'>'+esc(g.kode+" · "+g.nama)+'</option>'}).join("");
+}
+function pendek(n){n=String(n).replace(/\s*\(contoh\)/,"").replace(/^(Drs?\.|Dra\.|Hj?\.)\s*/,"");return n.split(/[ ,]/)[0]}
+
+function renderKPI(R){
+  var mapelG=S.guru.filter(function(g){return g.jenis==="mapel"});
+  var kurang=mapelG.filter(function(g){return R[g.id].status.k==="bad"}).length;
+  var lebih=mapelG.filter(function(g){return R[g.id].status.k==="mid"}).length;
+  var sel=0,isi=0;S.kelas.forEach(function(k){S.mapel.forEach(function(m){if(jpOf(m,k)){sel++;if(S.peta[k.id+"|"+m.id])isi++}})});
+  var totJP=0,jpIsi=0;S.kelas.forEach(function(k){S.mapel.forEach(function(m){var j=jpOf(m,k);totJP+=j;if(S.peta[k.id+"|"+m.id])jpIsi+=j})});
+  $("#kpis").innerHTML=
+    kpi(S.guru.length,"guru terdaftar","")+
+    kpi((sel?Math.round(isi/sel*100):0)+"%","sel peta terisi ("+isi+"/"+sel+")",isi===sel?"ok":"mid")+
+    kpi(jpIsi+"/"+totJP,"JP/minggu sudah terbagi",jpIsi===totJP?"ok":"mid")+
+    kpi(kurang,"guru mapel < "+S.meta.min+" JP",kurang?"bad":"ok")+
+    kpi(lebih,"guru > "+S.meta.max+" JP",lebih?"mid":"ok");
+  function kpi(v,l,c){return '<div class="kpi '+c+'"><div class="v">'+v+'</div><div class="l">'+esc(l)+'</div></div>'}
+}
+
+function renderPeta(R){
+  var fj=$("#fJenjang").value,so=$("#fSorot").value;
+  var kel=S.kelas.filter(function(k){return !fj||String(k.jenjang)===fj});
+  if(!S.mapel.length||!kel.length){$("#petaWrap").innerHTML='<p style="padding:14px" class="muted">Tambahkan mapel dan rombel di menu “Mapel & Kelas”.</p>';return}
+  var h='<table class="matrix"><thead><tr><th class="k" scope="col">Rombel</th>';
+  S.mapel.forEach(function(m){h+='<th scope="col" title="'+esc(m.nama)+'">'+esc(m.kode)+'<small>'+[7,8,9].map(function(j){return m.jp[j]||0}).join("/")+' JP</small></th>'});
+  h+='<th scope="col">JP</th></tr></thead><tbody>';
+  kel.forEach(function(k){
+    var tot=0;
+    h+='<tr><th class="k" scope="row">'+esc(k.nama)+'</th>';
+    S.mapel.forEach(function(m){
+      var jp=jpOf(m,k);tot+=jp;
+      if(!jp){h+='<td><div class="cell na" aria-hidden="true">—</div></td>';return}
+      var gid=S.peta[k.id+"|"+m.id]||"",g=guruById(gid);
+      var cls="cell"+(g?"":" empty")+(g&&g.mapel.indexOf(m.id)<0?" off":"")+(so&&gid!==so?" dim":"");
+      h+='<td><select class="'+cls+'" data-k="'+k.id+'" data-m="'+m.id+'" style="--h:'+(g?hue(g):0)+'" aria-label="Guru '+esc(m.nama)+' kelas '+esc(k.nama)+'">'+optGuru(gid,m.id)+'</select></td>';
+    });
+    h+='<td class="r num">'+tot+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  $("#petaWrap").innerHTML=h;
+  var cur=$("#fSorot").value;$("#fSorot").innerHTML='<option value="">— tidak ada —</option>'+S.guru.filter(function(g){return g.jenis!=="ks"}).map(function(g){return '<option value="'+g.id+'"'+(g.id===cur?" selected":"")+'>'+esc(g.kode+" · "+g.nama)+' — '+fmt(R[g.id].total)+' JP</option>'}).join("");
+}
+
+function bar(r){
+  var mx=Math.max(+S.meta.max||40,r.total)+6,mn=+S.meta.min||24;
+  return '<div class="bar" role="img" aria-label="Tatap muka '+r.tm+', ekuivalensi '+r.eq+', total '+r.total+' JP"><i class="tm" style="width:'+(r.tm/mx*100)+'%"></i><i class="eq" style="left:'+(r.tm/mx*100)+'%;width:'+(r.eq/mx*100)+'%"></i><b style="left:'+(mn/mx*100)+'%"></b><b class="mx" style="left:'+((+S.meta.max||40)/mx*100)+'%"></b></div>';
+}
+function renderRekap(R){
+  var h='<thead><tr><th>Kode</th><th>Nama</th><th>Mengajar</th><th class="r">Tatap muka</th><th class="hide-sm">Tugas tambahan</th><th class="r">Ekuiv.</th><th class="r">Total</th><th style="min-width:150px">Grafik</th><th>Status</th></tr></thead><tbody>';
+  S.guru.forEach(function(g){
+    var r=R[g.id];
+    var ajar=Object.keys(r.ajar).map(function(mid){var m=mapelById(mid);return '<span class="chip">'+esc(m.kode)+': '+esc(r.ajar[mid].join(", "))+'</span>'}).join("");
+    if(g.jenis==="bk")ajar='<span class="chip">BK: '+esc(r.bk.join(", ")||"—")+'</span>'+ajar;
+    if(g.jenis==="ks")ajar=ajar||'<span class="muted">Tugas kepala sekolah</span>';
+    var tg=r.tugas.map(function(t){return esc(t.nama)+(t.n>1&&t.nama.indexOf("Wali")<0?" ×"+t.n:"")+' <span class="num muted">('+t.jp+')</span>'}).join("<br>")||'<span class="muted">—</span>';
+    h+='<tr><td class="num">'+esc(g.kode)+'</td><td>'+esc(g.nama)+'</td><td><div class="chips">'+(ajar||'<span class="muted">—</span>')+'</div></td><td class="r num">'+r.tm+'</td><td class="hide-sm" style="font-size:13px">'+tg+'</td><td class="r num">'+r.eq+'</td><td class="r num"><b>'+fmt(r.total)+'</b></td><td>'+(g.jenis==="mapel"?bar(r):'')+'</td><td><span class="pill '+r.status.k+'">'+esc(r.status.t)+'</span></td></tr>';
+  });
+  $("#tblRekap").innerHTML=h+'</tbody>';
+  var mn=+S.meta.min||24;
+  var k='<thead><tr><th>Mapel</th><th class="r">Total JP</th><th class="r">JP terbagi</th><th class="r">Kebutuhan guru</th><th class="r">Guru tersedia</th><th>Selisih</th></tr></thead><tbody>';
+  S.mapel.forEach(function(m){
+    var tot=0,isi=0;S.kelas.forEach(function(kl){var j=jpOf(m,kl);tot+=j;if(S.peta[kl.id+"|"+m.id])isi+=j});
+    var butuh=tot/mn,ada=S.guru.filter(function(g){return g.jenis==="mapel"&&g.mapel.indexOf(m.id)>=0}).length,sel=ada-Math.floor(butuh);
+    var p=Math.floor(butuh)>ada?'<span class="pill bad">Kurang '+(Math.floor(butuh)-ada)+' guru</span>':(ada>Math.max(1,Math.floor(butuh))?'<span class="pill mid">Lebih '+(ada-Math.max(1,Math.floor(butuh)))+' guru</span>':'<span class="pill ok">Seimbang</span>');
+    if(butuh-Math.floor(butuh)>0.01&&Math.floor(butuh)>=ada&&ada>0)p+=' <span class="pill info">sisa '+(tot-ada*mn)+' JP</span>';
+    k+='<tr><td>'+esc(m.nama)+'</td><td class="r num">'+tot+'</td><td class="r num">'+isi+'</td><td class="r num">'+fmt(butuh)+'</td><td class="r num">'+ada+'</td><td>'+p+'</td></tr>';
+  });
+  $("#tblKebutuhan").innerHTML=k+'</tbody>';
+}
+function renderCek(R){
+  var c=cekMasalah(R);
+  $("#listCek").innerHTML=c.length?c.map(function(x){return '<li class="'+(x.k==="e"?"":x.k)+'">'+x.t+'</li>'}).join(""):'<li class="i">Semua beres: setiap sel terisi, beban guru dalam batas, dan setiap rombel punya wali kelas serta guru BK.</li>';
+  var n=c.filter(function(x){return x.k==="e"}).length;$("#cntCek").hidden=!n;$("#cntCek").textContent=n;
+}
+function renderGuru(R){
+  var h='<thead><tr><th>Kode</th><th>Nama</th><th>Jenis</th><th>Mapel ampu</th><th>Tugas tambahan</th><th class="r">Total JP</th><th></th></tr></thead><tbody>';
+  S.guru.forEach(function(g){
+    var r=R[g.id];
+    h+='<tr><td class="num">'+esc(g.kode)+'</td><td>'+esc(g.nama)+'</td><td>'+({mapel:"Mapel",bk:"BK",ks:"Kepala sekolah"}[g.jenis]||"")+'</td><td>'+esc(g.mapel.map(function(id){var m=mapelById(id);return m?m.kode:""}).join(", ")||"—")+'</td><td style="font-size:13px">'+(r.tugas.map(function(t){return esc(t.nama)}).join("; ")||"—")+'</td><td class="r num">'+fmt(r.total)+'</td><td><button class="btn sm" type="button" data-edit="'+g.id+'">Ubah</button></td></tr>';
+  });
+  if(!S.guru.length)h+='<tr><td colspan="7" class="muted">Belum ada guru. Klik “Tambah guru”.</td></tr>';
+  $("#tblGuru").innerHTML=h+'</tbody>';
+}
+function renderStruktur(){
+  var h='<thead><tr><th>Kode</th><th>Nama mapel</th><th class="r">VII</th><th class="r">VIII</th><th class="r">IX</th><th></th></tr></thead><tbody>';
+  S.mapel.forEach(function(m){
+    h+='<tr><td><input type="text" style="width:74px" data-mp="'+m.id+'" data-f="kode" value="'+esc(m.kode)+'" aria-label="Kode mapel"></td><td><input type="text" style="width:100%" data-mp="'+m.id+'" data-f="nama" value="'+esc(m.nama)+'" aria-label="Nama mapel"></td>'+
+      [7,8,9].map(function(j){return '<td class="r"><input type="number" min="0" max="12" style="width:56px" data-mp="'+m.id+'" data-f="jp'+j+'" value="'+(m.jp[j]||0)+'" aria-label="JP kelas '+ROMAWI[j]+' '+esc(m.nama)+'"></td>'}).join("")+
+      '<td><button class="btn sm warn" type="button" data-delm="'+m.id+'" aria-label="Hapus '+esc(m.nama)+'">✕</button></td></tr>';
+  });
+  $("#tblMapel").innerHTML=h+'</tbody>';
+  var k='<thead><tr><th>Rombel</th><th>Jenjang</th><th>Wali kelas</th><th>Guru BK</th><th></th></tr></thead><tbody>';
+  var bkG=S.guru.filter(function(g){return g.jenis==="bk"});
+  S.kelas.forEach(function(kl){
+    k+='<tr><td><input type="text" style="width:80px" data-kl="'+kl.id+'" data-f="nama" value="'+esc(kl.nama)+'" aria-label="Nama rombel"></td><td><select data-kl="'+kl.id+'" data-f="jenjang" aria-label="Jenjang">'+[7,8,9].map(function(j){return '<option value="'+j+'"'+(kl.jenjang==j?" selected":"")+'>'+ROMAWI[j]+'</option>'}).join("")+'</select></td>'+
+      '<td><select data-kl="'+kl.id+'" data-f="wali" aria-label="Wali kelas '+esc(kl.nama)+'" style="max-width:190px">'+optGuru(kl.wali)+'</select></td>'+
+      '<td><select data-kl="'+kl.id+'" data-f="bk" aria-label="Guru BK '+esc(kl.nama)+'" style="max-width:170px"><option value="">— pilih —</option>'+bkG.map(function(g){return '<option value="'+g.id+'"'+(g.id===kl.bk?" selected":"")+'>'+esc(g.kode+" · "+pendek(g.nama))+'</option>'}).join("")+'</select></td>'+
+      '<td><button class="btn sm warn" type="button" data-delk="'+kl.id+'" aria-label="Hapus rombel '+esc(kl.nama)+'">✕</button></td></tr>';
+  });
+  $("#tblKelas").innerHTML=k+'</tbody>';
+  var t='<thead><tr><th>Tugas tambahan</th><th class="r">Ekuivalen JP</th><th></th></tr></thead><tbody><tr><td>Wali kelas (otomatis dari menu Mapel & Kelas)</td><td class="r num">'+WALI_JP+'</td><td></td></tr>';
+  S.tugas.forEach(function(x){t+='<tr><td><input type="text" style="width:100%" data-tg="'+x.id+'" data-f="nama" value="'+esc(x.nama)+'" aria-label="Nama tugas"></td><td class="r"><input type="number" min="0" max="24" step="0.5" data-tg="'+x.id+'" data-f="jp" value="'+x.jp+'" aria-label="Ekuivalen JP '+esc(x.nama)+'"></td><td><button class="btn sm warn" type="button" data-delt="'+x.id+'" aria-label="Hapus tugas">✕</button></td></tr>'});
+  $("#tblTugas").innerHTML=t+'</tbody>';
+}
+function barisSK(R){
+  return S.guru.map(function(g,i){var r=R[g.id];
+    var ajar=Object.keys(r.ajar).map(function(mid){var m=mapelById(mid);return m.nama+" ("+r.ajar[mid].join(", ")+")"});
+    if(g.jenis==="bk")ajar.unshift("Bimbingan dan Konseling ("+(r.bk.join(", ")||"-")+")");
+    if(g.jenis==="ks")ajar.unshift("Kepala Sekolah");
+    return {no:i+1,kode:g.kode,nama:g.nama,ajar:ajar.join("; "),tm:r.tm,tugas:r.tugas.map(function(t){return t.nama+" ("+t.jp+")"}).join("; "),eq:r.eq,total:r.total,ket:r.status.t};
+  });
+}
+function renderSK(R){
+  var m=S.meta;
+  $$(".skSekolah").forEach(function(e){e.textContent=m.sekolah});$$(".skSem").forEach(function(e){e.textContent=m.sem});$$(".skTP").forEach(function(e){e.textContent=m.tp});
+  $("#skNomor").value=m.skNomor||"";$("#skTanggal").value=m.skTanggal||"";
+  $("#skNomorOut").textContent=m.skNomor||"…………";$("#skTanggalOut").textContent=m.skTanggal||"…………";$("#skKota").textContent=m.kota||"…………";
+  var ks=S.guru.filter(function(g){return g.jenis==="ks"})[0];$("#skKS").textContent=ks?ks.nama:"……………………";
+  var h='<thead><tr><th>No</th><th>Kode</th><th>Nama guru</th><th>Mata pelajaran / tugas (rombel)</th><th class="r">JP tatap muka</th><th>Tugas tambahan (ekuivalen)</th><th class="r">JP ekuiv.</th><th class="r">Jumlah</th><th>Ket.</th></tr></thead><tbody>';
+  barisSK(R).forEach(function(b){h+='<tr><td class="num">'+b.no+'</td><td class="num">'+esc(b.kode)+'</td><td>'+esc(b.nama)+'</td><td style="font-size:13px">'+esc(b.ajar||"-")+'</td><td class="r num">'+b.tm+'</td><td style="font-size:13px">'+esc(b.tugas||"-")+'</td><td class="r num">'+b.eq+'</td><td class="r num"><b>'+fmt(b.total)+'</b></td><td style="font-size:12.5px">'+esc(b.ket)+'</td></tr>'});
+  $("#tblSK").innerHTML=h+'</tbody>';
+}
+function renderAtur(){
+  var m=S.meta;$("#aSekolah").value=m.sekolah||"";$("#aKota").value=m.kota||"";$("#aTP").value=m.tp||"";$("#aSem").value=m.sem||"Ganjil";
+  $("#aMin").value=m.min;$("#aMax").value=m.max;$("#aBK").value=m.bkMin;
+}
+function renderAll(){
+  var R=hitung();
+  $("#bannerContoh").hidden=!S.meta.contoh;
+  $("#subjudul").textContent=(S.meta.sekolah||"Sekolah")+" · Semester "+S.meta.sem+" "+S.meta.tp;
+  renderKPI(R);renderPeta(R);renderRekap(R);renderCek(R);renderGuru(R);renderStruktur();renderSK(R);renderAtur();
+}
+
+/* ---------- aksi ---------- */
+function ubah(){simpan();renderAll()}
+function unduh(nama,isi,tipe){
+  var b=new Blob([isi],{type:tipe}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=nama;document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+}
+function csv(rows){return "﻿"+rows.map(function(r){return r.map(function(c){c=String(c==null?"":c);return /[";\n,]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(";")}).join("\n")}
+function salin(t){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast("Disalin ke papan klip")},function(){fallback()})}else fallback();
+  function fallback(){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Disalin ke papan klip")}catch(e){toast("Gagal menyalin")}ta.remove()}
+}
+function isiOtomatis(){
+  var R=hitung(),mx=+S.meta.max||40,n=0,sisa=0;
+  S.kelas.forEach(function(k){S.mapel.forEach(function(m){
+    var key=k.id+"|"+m.id,jp=jpOf(m,k);if(!jp||S.peta[key])return;
+    var cand=S.guru.filter(function(g){return g.jenis==="mapel"&&g.mapel.indexOf(m.id)>=0&&R[g.id].total+jp<=mx});
+    if(!cand.length){sisa++;return}
+    cand.sort(function(a,b){
+      var sa=(R[a.id].ajar[m.id]||[]).some(function(x){return x.indexOf(ROMAWI[k.jenjang]+" ")===0})?-3:0;
+      var sb=(R[b.id].ajar[m.id]||[]).some(function(x){return x.indexOf(ROMAWI[k.jenjang]+" ")===0})?-3:0;
+      return (R[a.id].total+sa)-(R[b.id].total+sb)});
+    var g=cand[0];S.peta[key]=g.id;R[g.id].total+=jp;R[g.id].tm+=jp;(R[g.id].ajar[m.id]=R[g.id].ajar[m.id]||[]).push(k.nama);n++;
+  })});
+  ubah();toast(n+" sel diisi otomatis"+(sisa?"; "+sisa+" sel tetap kosong (tidak ada guru ampu yang masih di bawah batas maksimum)":""));
+}
+function ringkasan(){
+  var R=hitung(),c=cekMasalah(R),L=[];
+  L.push("*Rekap Beban Mengajar Guru*");L.push(S.meta.sekolah+" – Semester "+S.meta.sem+" "+S.meta.tp);L.push("");
+  S.guru.forEach(function(g){var r=R[g.id];L.push(g.kode+". "+g.nama+": "+fmt(r.total)+" JP (TM "+r.tm+" + ekuiv. "+r.eq+") – "+r.status.t)});
+  if(c.length){L.push("");L.push("*Perlu tindak lanjut:*");c.forEach(function(x){L.push("• "+x.t.replace(/<[^>]+>/g,""))})}
+  return L.join("\n");
+}
+
+/* dialog guru */
+var editId=null;
+function bukaGuru(id){
+  editId=id;var g=id?guruById(id):{kode:String(S.guru.length+1).padStart(2,"0"),nama:"",jenis:"mapel",mapel:[],tugas:[]};
+  var f=$("#formGuru");f.kode.value=g.kode;f.nama.value=g.nama;f.jenis.value=g.jenis;
+  $("#dlgMapel").innerHTML=S.mapel.map(function(m){return '<label><input type="checkbox" value="'+m.id+'"'+(g.mapel.indexOf(m.id)>=0?" checked":"")+'> '+esc(m.kode)+'</label>'}).join("");
+  $("#dlgTugas").innerHTML="";(g.tugas||[]).forEach(function(t){barisTugas(t.t,t.n)});
+  $("#dlgHapus").hidden=!id;
+  var d=$("#dlgGuru");if(d.showModal)d.showModal();else d.setAttribute("open","");
+  setTimeout(function(){f.nama.focus()},30);
+}
+function barisTugas(t,n){
+  var div=document.createElement("div");div.className="tt-row";
+  div.innerHTML='<select aria-label="Jenis tugas tambahan">'+S.tugas.map(function(x){return '<option value="'+x.id+'"'+(x.id===t?" selected":"")+'>'+esc(x.nama)+' ('+x.jp+' JP)</option>'}).join("")+'</select><input type="number" min="1" max="20" value="'+(n||1)+'" aria-label="Jumlah (mis. jumlah rombel/program)"><button class="btn sm warn" type="button" aria-label="Hapus tugas ini">✕</button>';
+  div.querySelector("button").onclick=function(){div.remove()};
+  $("#dlgTugas").appendChild(div);
+}
+$("#dlgTambahTugas").onclick=function(){barisTugas(S.tugas[0]&&S.tugas[0].id,1)};
+$("#formGuru").addEventListener("submit",function(e){
+  var f=e.target,btn=e.submitter;if(btn&&btn.value==="batal")return;
+  if(!f.nama.value.trim()){e.preventDefault();f.nama.focus();return}
+  var data={kode:f.kode.value.trim()||"??",nama:f.nama.value.trim(),jenis:f.jenis.value,
+    mapel:$$("#dlgMapel input:checked").map(function(i){return i.value}),
+    tugas:$$("#dlgTugas .tt-row").map(function(r){return {t:r.querySelector("select").value,n:+r.querySelector("input").value||1}})};
+  if(editId){Object.assign(guruById(editId),data)}else{data.id="g"+uid();S.guru.push(data)}
+  ubah();toast("Data guru disimpan");
+});
+$("#dlgHapus").onclick=function(){
+  var g=guruById(editId);if(!g||!confirm("Hapus "+g.nama+"? Semua sel peta, wali kelas, dan BK miliknya akan dikosongkan."))return;
+  S.guru=S.guru.filter(function(x){return x.id!==editId});
+  Object.keys(S.peta).forEach(function(k){if(S.peta[k]===editId)delete S.peta[k]});
+  S.kelas.forEach(function(k){if(k.wali===editId)k.wali="";if(k.bk===editId)k.bk=""});
+  $("#dlgGuru").close();ubah();toast("Guru dihapus");
+};
+
+/* event delegasi */
+document.addEventListener("change",function(e){
+  var t=e.target;
+  if(t.matches("select.cell")){var key=t.dataset.k+"|"+t.dataset.m;if(t.value)S.peta[key]=t.value;else delete S.peta[key];ubah();var nx=$('select.cell[data-k="'+t.dataset.k+'"][data-m="'+t.dataset.m+'"]');if(nx)nx.focus();return}
+  if(t.dataset.mp){var m=mapelById(t.dataset.mp),f=t.dataset.f;if(f.indexOf("jp")===0)m.jp[f.slice(2)]=Math.max(0,+t.value||0);else m[f]=t.value;ubah();return}
+  if(t.dataset.kl){var k=S.kelas.filter(function(x){return x.id===t.dataset.kl})[0];k[t.dataset.f]=t.dataset.f==="jenjang"?+t.value:t.value;ubah();return}
+  if(t.dataset.tg){var x=tugasById(t.dataset.tg);x[t.dataset.f]=t.dataset.f==="jp"?Math.max(0,+t.value||0):t.value;ubah();return}
+  if(t.id==="fJenjang"||t.id==="fSorot"){renderPeta(hitung());return}
+  var map={aSekolah:"sekolah",aKota:"kota",aTP:"tp",aSem:"sem",aMin:"min",aMax:"max",aBK:"bkMin",skNomor:"skNomor",skTanggal:"skTanggal"};
+  if(map[t.id]){S.meta[map[t.id]]=t.type==="number"?(+t.value||0):t.value;ubah();return}
+  if(t.id==="fileImpor"&&t.files[0]){
+    var rd=new FileReader();rd.onload=function(){try{var d=JSON.parse(rd.result);if(!d.meta||!d.mapel||!d.kelas||!d.guru)throw 0;d.peta=d.peta||{};d.tugas=d.tugas||tugasBawaan();S=d;ubah();toast("Data berhasil diimpor")}catch(err){toast("Berkas JSON tidak dikenali")}t.value=""};rd.readAsText(t.files[0]);
+  }
+});
+document.addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  if(b.dataset.tab){$$("nav.tabs button").forEach(function(x){x.setAttribute("aria-selected",x===b?"true":"false")});$$("section.tab").forEach(function(s){s.classList.toggle("on",s.id==="t-"+b.dataset.tab)});try{localStorage.setItem(KEY+".tab",b.dataset.tab)}catch(err){};return}
+  if(b.dataset.edit){bukaGuru(b.dataset.edit);return}
+  if(b.dataset.delm){var m=mapelById(b.dataset.delm);if(!confirm("Hapus mapel "+m.nama+"?"))return;S.mapel=S.mapel.filter(function(x){return x!==m});Object.keys(S.peta).forEach(function(k){if(k.split("|")[1]===m.id)delete S.peta[k]});S.guru.forEach(function(g){g.mapel=g.mapel.filter(function(i){return i!==m.id})});ubah();return}
+  if(b.dataset.delk){var kl=S.kelas.filter(function(x){return x.id===b.dataset.delk})[0];if(!confirm("Hapus rombel "+kl.nama+"?"))return;S.kelas=S.kelas.filter(function(x){return x!==kl});Object.keys(S.peta).forEach(function(k){if(k.split("|")[0]===kl.id)delete S.peta[k]});ubah();return}
+  if(b.dataset.delt){S.tugas=S.tugas.filter(function(x){return x.id!==b.dataset.delt});S.guru.forEach(function(g){g.tugas=(g.tugas||[]).filter(function(t){return t.t!==b.dataset.delt})});ubah();return}
+  var a=b.dataset.act;if(!a)return;
+  if(a==="isiOtomatis")isiOtomatis();
+  else if(a==="guruBaru")bukaGuru(null);
+  else if(a==="mapelBaru"){S.mapel.push({id:"m"+uid(),kode:"BARU",nama:"Mapel baru",jp:{7:2,8:2,9:2}});ubah()}
+  else if(a==="kelasBaru"){var j=7,ada=S.kelas.filter(function(k){return k.jenjang===j}).length;S.kelas.push({id:"k"+uid(),nama:ROMAWI[j]+" "+String.fromCharCode(65+ada),jenjang:j,wali:"",bk:""});ubah()}
+  else if(a==="tugasBaru"){S.tugas.push({id:"t"+uid(),nama:"Tugas tambahan baru",jp:1});ubah()}
+  else if(a==="hapusContoh"){if(!confirm("Hapus semua guru contoh dan pembagiannya? Struktur mapel, rombel, dan ekuivalensi tetap disimpan agar bisa langsung diisi."))return;S.guru=[];S.peta={};S.kelas.forEach(function(k){k.wali="";k.bk=""});S.meta.contoh=false;S.meta.sekolah="Nama sekolah";ubah();toast("Data contoh dihapus")}
+  else if(a==="muatContoh"){if(!confirm("Ganti data sekarang dengan data contoh?"))return;S=dataContoh();ubah();toast("Data contoh dimuat")}
+  else if(a==="kosongkan"){if(!confirm("Kosongkan SEMUA data (guru, mapel, rombel, pembagian)?"))return;var mt=S.meta;S={meta:mt,mapel:[],kelas:[],tugas:tugasBawaan(),guru:[],peta:{}};S.meta.contoh=false;ubah()}
+  else if(a==="eksporJSON"){unduh("beban-mengajar-"+(S.meta.tp||"").replace(/\W/g,"")+".json",JSON.stringify(S,null,1),"application/json")}
+  else if(a==="csvRekap"||a==="csvSK"){var R=hitung(),rows=[["No","Kode","Nama","Mapel/Tugas (Rombel)","JP Tatap Muka","Tugas Tambahan","JP Ekuivalen","Jumlah JP","Keterangan"]];barisSK(R).forEach(function(x){rows.push([x.no,x.kode,x.nama,x.ajar,x.tm,x.tugas,x.eq,x.total,x.ket])});unduh((a==="csvSK"?"lampiran-sk-":"rekap-beban-")+(S.meta.tp||"").replace(/\W/g,"")+".csv",csv(rows),"text/csv")}
+  else if(a==="salinRingkas")salin(ringkasan());
+  else if(a==="cetak")window.print();
+});
+
+/* tema */
+function terapkanTema(t){if(t)document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme")}
+try{terapkanTema(localStorage.getItem(KEY+".tema"))}catch(e){}
+$("#btnTema").onclick=function(){
+  var cur=document.documentElement.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+  var nx=cur==="dark"?"light":"dark";terapkanTema(nx);try{localStorage.setItem(KEY+".tema",nx)}catch(e){}
+};
+/* tab tersimpan */
+try{var tb=localStorage.getItem(KEY+".tab");if(tb){var bt=$('nav.tabs button[data-tab="'+tb+'"]');if(bt)bt.click()}}catch(e){}
+/* navigasi panah pada tab */
+$("nav.tabs .wrap").addEventListener("keydown",function(e){
+  if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;var bs=$$("nav.tabs button"),i=bs.indexOf(document.activeElement);if(i<0)return;
+  var n=bs[(i+(e.key==="ArrowRight"?1:-1)+bs.length)%bs.length];n.focus();n.click();e.preventDefault();
+});
+renderAll();
+})();
+</script>
+</body>
+</html>

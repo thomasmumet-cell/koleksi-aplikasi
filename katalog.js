@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Peta Beban Mengajar Guru",
+    kategori: "Sekolah",
+    jenis: "HTML",
+    deskripsi: "Susun pembagian jam pelajaran per guru dan per kelas, hitung JP tatap muka plus ekuivalensi tugas tambahan (Permendikdasmen 11/2025), tandai guru di bawah 24 atau di atas 40 JP, deteksi mapel/rombel yang belum terisi, dan cetak lampiran SK pembagian tugas.",
+    tanggal: "2026-11-18",
+    tautan: "beban-mengajar-guru/",
+    status: "aktif"
+  },
+  {
     nama: "SERAT STEM – Mesin Pembuat Buku Berbasis STEM",
     kategori: "Pembelajaran",
     jenis: "AI Tool",
