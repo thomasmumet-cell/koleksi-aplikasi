@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jurnal Layanan BK</title>
+<meta name="description" content="Jurnal harian layanan Bimbingan dan Konseling SMP: catat jenis layanan, bidang, topik, durasi, hasil, dan tindak lanjut; rekap bulanan/semester dan grafik sebaran layanan untuk laporan program BK. Data hanya tersimpan di perangkat, dikunci PIN.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,600;0,800;1,400&family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1fa;--paper:#fffdfb;--paper2:#f8f3fb;--ink:#24182e;--mut:#5e5468;--line:#e2d8ea;--rule:rgba(156,54,181,.09);
+  --acc:#862e9c;--acc-ink:#fff;--acc-soft:#f3e3f8;--ok:#2b8a3e;--ok-bg:#e8f6ec;--bad:#c2255c;--bad-bg:#fde8ef;--warn:#9a5b00;--warn-bg:#fff3d6;
+  --b-pribadi:#862e9c;--b-sosial:#1971c2;--b-belajar:#2b8a3e;--b-karier:#d9480f;
+  --shadow:0 1px 0 var(--line),0 8px 24px -14px rgba(60,20,80,.35);--r:14px;color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17121c;--paper:#211a28;--paper2:#2a2232;--ink:#f1eaf6;--mut:#b6aac0;--line:#3b3044;--rule:rgba(218,138,240,.07);
+  --acc:#d48ae8;--acc-ink:#1d0b24;--acc-soft:#3a2445;--ok:#69d488;--ok-bg:#16301f;--bad:#ff7aa6;--bad-bg:#3d1a28;--warn:#ffc65a;--warn-bg:#3a2e14;
+  --b-pribadi:#d48ae8;--b-sosial:#62aef5;--b-belajar:#69d488;--b-karier:#ff9a5c;--shadow:0 1px 0 #000,0 10px 26px -14px #000;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17121c;--paper:#211a28;--paper2:#2a2232;--ink:#f1eaf6;--mut:#b6aac0;--line:#3b3044;--rule:rgba(218,138,240,.07);
+  --acc:#d48ae8;--acc-ink:#1d0b24;--acc-soft:#3a2445;--ok:#69d488;--ok-bg:#16301f;--bad:#ff7aa6;--bad-bg:#3d1a28;--warn:#ffc65a;--warn-bg:#3a2e14;
+  --b-pribadi:#d48ae8;--b-sosial:#62aef5;--b-belajar:#69d488;--b-karier:#ff9a5c;--shadow:0 1px 0 #000,0 10px 26px -14px #000;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Figtree,system-ui,sans-serif;min-height:100vh;
+  background-image:repeating-linear-gradient(transparent 0 31px,var(--rule) 31px 32px)}
+h1,h2,h3,.disp{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0;font-weight:800}
+a{color:var(--acc)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+[hidden]{display:none!important}
+
+/* Header */
+header.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;gap:12px;padding:10px 0 4px}
+.logo{width:40px;height:40px;flex:none;border-radius:12px;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center}
+.hd h1{font-size:clamp(18px,4.4vw,24px)}
+.hd small{display:block;color:var(--mut);font-size:13px;line-height:1.3}
+.hd .sp{flex:1}
+.ib{border:1px solid var(--line);background:var(--paper);border-radius:10px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:none}
+.ib:hover{border-color:var(--acc)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:thin}
+nav.tabs button{border:0;background:none;padding:8px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;color:var(--mut);font-weight:600}
+nav.tabs button[aria-current="page"]{background:var(--acc);color:var(--acc-ink)}
+nav.tabs button:hover:not([aria-current="page"]){background:var(--acc-soft);color:var(--ink)}
+.badge-n{display:inline-block;min-width:20px;padding:0 6px;border-radius:999px;background:var(--bad);color:#fff;font-size:12px;margin-left:4px;line-height:20px;text-align:center}
+
+/* Kerahasiaan */
+.rahasia{display:flex;gap:10px;align-items:flex-start;background:var(--acc-soft);border:1px dashed var(--acc);border-radius:12px;padding:10px 14px;margin:14px 0 0;font-size:14px}
+.rahasia svg{flex:none;margin-top:2px;color:var(--acc)}
+.rahasia button{margin-left:auto;flex:none}
+
+main{padding:18px 0 60px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.card+.card{margin-top:16px}
+.card h2{font-size:22px;margin-bottom:6px}
+.card h3{font-size:17px;margin:0 0 8px}
+.lead{color:var(--mut);margin:0 0 14px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+.stat b{display:block;font:800 30px/1.1 Fraunces,serif;color:var(--acc)}
+.stat span{font-size:13px;color:var(--mut)}
+
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:9px 14px;cursor:pointer;font-weight:600;text-decoration:none;color:var(--ink);min-height:42px}
+.btn:hover{border-color:var(--acc)}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.bad{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.btn.sm{padding:5px 10px;min-height:34px;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* Form */
+form.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 16px}
+.fld{display:flex;flex-direction:column;gap:4px}
+.fld.full{grid-column:1/-1}
+.fld label,.fld .lb{font-weight:600;font-size:14px}
+.fld .hint{font-size:12.5px;color:var(--mut)}
+input[type=text],input[type=date],input[type=number],input[type=search],input[type=password],select,textarea{
+  width:100%;border:1px solid var(--line);background:var(--paper2);border-radius:10px;padding:9px 11px;min-height:42px}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--acc);outline:2px solid color-mix(in srgb,var(--acc) 35%,transparent);outline-offset:0}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;background:var(--paper2);font-weight:600;font-size:14px}
+.seg input{accent-color:var(--acc)}
+.seg label:has(input:checked){border-color:var(--acc);background:var(--acc-soft)}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:14px}
+.chk input{accent-color:var(--acc);width:18px;height:18px;margin-top:2px}
+.note{font-size:13.5px;border-radius:10px;padding:9px 12px;background:var(--warn-bg);color:var(--ink);border-left:4px solid var(--warn)}
+.note.ok{background:var(--ok-bg);border-left-color:var(--ok)}
+.note.bad{background:var(--bad-bg);border-left-color:var(--bad)}
+
+/* Daftar jurnal */
+.filters{display:grid;grid-template-columns:2fr repeat(4,minmax(120px,1fr));gap:8px;margin-bottom:12px}
+@media (max-width:760px){.filters{grid-template-columns:1fr 1fr}.filters .q{grid-column:1/-1}}
+.ent{border:1px solid var(--line);border-left:5px solid var(--bc,var(--acc));border-radius:12px;padding:12px 14px;background:var(--paper)}
+.ent+.ent{margin-top:10px}
+.ent .h{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.ent .h b{font-size:16px}
+.ent .meta{color:var(--mut);font-size:13.5px}
+.ent p{margin:6px 0 0;font-size:14.5px}
+.ent .act{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--line);background:var(--paper2);white-space:nowrap}
+.pill.contoh{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+.pill.open{background:var(--bad-bg);color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
+.pill.done{background:var(--ok-bg);color:var(--ok);border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
+.pill.ruj{background:var(--bad);color:#fff;border-color:var(--bad)}
+.empty{padding:26px;text-align:center;color:var(--mut);border:1px dashed var(--line);border-radius:12px}
+
+/* Tabel */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:14px;background:var(--paper)}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--paper2);font-weight:700;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.tot td{font-weight:800;background:var(--paper2)}
+
+/* Grafik */
+.chart svg{width:100%;max-width:620px;height:auto;display:block}
+.chart text{fill:var(--ink);font-family:Figtree,sans-serif}
+.chart .ax{stroke:var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;margin-top:6px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* Kunci */
+#lock{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;padding:16px;
+  background-image:radial-gradient(circle at 20% 10%,var(--acc-soft),transparent 45%),repeating-linear-gradient(transparent 0 31px,var(--rule) 31px 32px)}
+.lockbox{width:min(420px,100%);background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+.lockbox h1{font-size:26px;margin:10px 0 4px}
+.lockbox p{color:var(--mut);margin:0 0 14px;font-size:14.5px}
+.pin{font-size:24px!important;letter-spacing:.35em;text-align:center}
+.lockbox .fld{margin-bottom:10px}
+
+/* Dialog */
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--paper);color:var(--ink);padding:0;width:min(720px,calc(100% - 24px));max-height:calc(100vh - 32px)}
+dialog::backdrop{background:rgba(20,10,30,.55)}
+dialog .dh{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:2}
+dialog .dh h2{font-size:20px;flex:1}
+dialog .db{padding:16px 18px}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:200;font-weight:600;max-width:calc(100% - 32px)}
+.src li{margin:4px 0}
+footer{color:var(--mut);font-size:13px;text-align:center;padding:20px 0 40px}
+#printArea{display:none}
+@media print{
+  @page{size:A4;margin:16mm 14mm}
+  body{background:#fff!important;color:#000}
+  header.top,main,footer,#lock,.toast,dialog{display:none!important}
+  #printArea{display:block!important;font:11pt/1.45 Figtree,Arial,sans-serif;color:#000}
+  #printArea h1{font:800 16pt Fraunces,Georgia,serif;text-align:center;margin:0}
+  #printArea h2{font:800 12.5pt Fraunces,Georgia,serif;margin:14px 0 6px}
+  #printArea .sub{text-align:center;margin:2px 0 12px}
+  #printArea table{font-size:9.5pt;background:#fff}
+  #printArea th{background:#eee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #printArea th,#printArea td{border:1px solid #999;padding:4px 6px}
+  #printArea .ttd{display:flex;justify-content:space-between;margin-top:28px;page-break-inside:avoid}
+  #printArea .ttd div{width:45%;text-align:center}
+  #printArea .ttd .nm{margin-top:64px;font-weight:700;text-decoration:underline}
+  #printArea svg text{fill:#000}
+  #printArea .rhs{font-size:9pt;border:1px solid #999;padding:5px 8px;margin-top:10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ============ KUNCI LAYAR ============ -->
+<div id="lock" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+  <div class="lockbox">
+    <div class="logo" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+    <div id="lockSetup" hidden>
+      <h1 id="lockTitle">Buat PIN Jurnal BK</h1>
+      <p>Catatan layanan BK bersifat <b>rahasia</b>. Buat PIN 4–8 angka untuk mengunci tampilan aplikasi di perangkat ini. PIN hanya disimpan dalam bentuk hash di perangkat ini.</p>
+      <div class="fld"><label for="pin1">PIN baru</label><input id="pin1" class="pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8"></div>
+      <div class="fld"><label for="pin2">Ulangi PIN</label><input id="pin2" class="pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8"></div>
+      <p class="note" style="margin:6px 0 12px">Ini <b>kunci tampilan</b>, bukan enkripsi: orang yang paham teknis dan memegang perangkat ini masih bisa membaca data di penyimpanan browser. Jangan meminjamkan akun/perangkat, dan jangan lupa PIN — PIN yang lupa hanya bisa diatasi dengan menghapus semua data.</p>
+      <button class="btn pri" id="btnSetPin" style="width:100%;justify-content:center">Simpan PIN dan buka</button>
+    </div>
+    <div id="lockEnter" hidden>
+      <h1>Jurnal Layanan BK terkunci</h1>
+      <p>Masukkan PIN Anda untuk membuka catatan layanan.</p>
+      <div class="fld"><label for="pinIn">PIN</label><input id="pinIn" class="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="8"></div>
+      <p id="pinMsg" class="note bad" hidden></p>
+      <button class="btn pri" id="btnUnlock" style="width:100%;justify-content:center">Buka</button>
+      <p style="margin:14px 0 0;font-size:13px"><button class="btn sm bad" id="btnForgot" type="button">Lupa PIN? Hapus semua data</button></p>
+    </div>
+    <p id="noStore" class="note bad" hidden style="margin-top:12px">Penyimpanan browser tidak tersedia (mode privat atau diblokir). Data hanya bertahan selama tab ini terbuka.</p>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="hd">
+      <div class="logo" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg></div>
+      <div><h1>Jurnal Layanan BK</h1><small id="hdSub">Catatan harian layanan bimbingan dan konseling</small></div>
+      <div class="sp"></div>
+      <button class="ib" id="btnTheme" type="button" aria-label="Ganti mode terang/gelap" title="Mode terang/gelap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></button>
+      <button class="ib" id="btnLock" type="button" aria-label="Kunci sekarang" title="Kunci sekarang"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
+    </div>
+    <nav class="tabs" aria-label="Menu utama">
+      <button type="button" data-tab="beranda">Beranda</button>
+      <button type="button" data-tab="catat">+ Catat layanan</button>
+      <button type="button" data-tab="jurnal">Jurnal</button>
+      <button type="button" data-tab="tl">Tindak lanjut <span id="tlBadge" class="badge-n" hidden></span></button>
+      <button type="button" data-tab="rekap">Rekap &amp; grafik</button>
+      <button type="button" data-tab="atur">Pengaturan</button>
+      <button type="button" data-tab="dasar">Dasar &amp; sumber</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="rahasia" id="rahasiaBar" role="note">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+    <div><b>Asas kerahasiaan.</b> Isi jurnal ini rahasia konseli. Data hanya tersimpan di perangkat ini, tidak dikirim ke mana pun. Gunakan inisial atau kode siswa bila memungkinkan, kunci layar saat meninggalkan perangkat, dan jangan membagikan ekspor data. Aplikasi ini <b>tidak</b> menyusun diagnosis; kasus berat dirujuk ke psikolog atau layanan profesional.</div>
+  </div>
+</div>
+
+<main class="wrap" id="main" aria-live="polite"></main>
+
+<footer class="wrap">Jurnal Layanan BK · data tersimpan hanya di perangkat ini · bagian dari Koleksi Aplikasi Thomas</footer>
+
+<div id="printArea"></div>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <div class="dh"><h2 id="dlgTitle">Detail</h2><button class="ib" type="button" id="dlgClose" aria-label="Tutup">✕</button></div>
+  <div class="db" id="dlgBody"></div>
+</dialog>
+
+<script>
+"use strict";
+/* =====================================================================
+   Jurnal Layanan BK — semua data di localStorage perangkat ini.
+   Tidak ada kunci API, PIN, atau data pribadi yang ditanam di kode.
+   ===================================================================== */
+var KEY = "bkJurnalLayanan.v1", KEY_PIN = "bkJurnalLayanan.pin", KEY_THEME = "bkJurnalLayanan.tema";
+var memStore = {}, storeOK = true;
+function lsGet(k){try{var v=localStorage.getItem(k);return v===null&&memStore[k]!==undefined?memStore[k]:v;}catch(e){storeOK=false;return memStore[k]===undefined?null:memStore[k];}}
+function lsSet(k,v){memStore[k]=v;try{localStorage.setItem(k,v);return true;}catch(e){storeOK=false;return false;}}
+function lsDel(k){delete memStore[k];try{localStorage.removeItem(k);}catch(e){}}
+try{localStorage.setItem("__t","1");localStorage.removeItem("__t");}catch(e){storeOK=false;}
+
+/* ---------- SHA-256 kecil (untuk hash PIN, tanpa ketergantungan) ---------- */
+function sha256(ascii){
+  function rr(v,a){return (v>>>a)|(v<<(32-a));}
+  var mp=Math.pow,maxWord=mp(2,32),result="",words=[],asciiBitLength=ascii.length*8,i,j;
+  var hash=[],k=[],primeCounter=0,isComposite={};
+  for(var c=2;primeCounter<64;c++){if(!isComposite[c]){for(i=0;i<313;i+=c)isComposite[i]=c;hash[primeCounter]=(mp(c,.5)*maxWord)|0;k[primeCounter++]=(mp(c,1/3)*maxWord)|0;}}
+  hash=hash.slice(0,8);
+  ascii+="\x80";while(ascii.length%64-56)ascii+="\x00";
+  for(i=0;i<ascii.length;i++){j=ascii.charCodeAt(i);if(j>>8)return "";words[i>>2]|=j<<((3-i)%4)*8;}
+  words[words.length]=((asciiBitLength/maxWord)|0);words[words.length]=(asciiBitLength);
+  for(j=0;j<words.length;){
+    var w=words.slice(j,j+=16),oldHash=hash;hash=hash.slice(0,8);
+    for(i=0;i<64;i++){
+      var w15=w[i-15],w2=w[i-2],a=hash[0],e=hash[4];
+      var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+      var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+      hash=[(temp1+temp2)|0].concat(hash);hash[4]=(hash[4]+temp1)|0;
+    }
+    for(i=0;i<8;i++)hash[i]=(hash[i]+oldHash[i])|0;
+  }
+  for(i=0;i<8;i++)for(j=3;j+1;j--){var b=(hash[i]>>(j*8))&255;result+=((b<16)?0:"")+b.toString(16);}
+  return result;
+}
+function hashPin(pin,salt){var h=salt+":"+pin;for(var i=0;i<1500;i++)h=sha256(h+salt);return h;}
+function randHex(n){var a=new Uint8Array(n);try{crypto.getRandomValues(a);}catch(e){for(var i=0;i<n;i++)a[i]=Math.floor(Math.random()*256);}return Array.prototype.map.call(a,function(x){return("0"+x.toString(16)).slice(-2);}).join("");}
+
+/* ---------- Referensi layanan ---------- */
+var BIDANG = ["Pribadi","Sosial","Belajar","Karier"];
+var BCOL = {Pribadi:"var(--b-pribadi)",Sosial:"var(--b-sosial)",Belajar:"var(--b-belajar)",Karier:"var(--b-karier)"};
+var KOMPONEN = ["Layanan dasar","Peminatan & perencanaan individual","Layanan responsif","Dukungan sistem"];
+var JENIS = [
+  {n:"Konseling individual",k:"Layanan responsif",s:"ind"},
+  {n:"Konseling kelompok",k:"Layanan responsif",s:"kel"},
+  {n:"Bimbingan kelompok",k:"Layanan dasar",s:"kel"},
+  {n:"Bimbingan klasikal",k:"Layanan dasar",s:"kls"},
+  {n:"Bimbingan kelas besar/lintas kelas",k:"Layanan dasar",s:"kls"},
+  {n:"Layanan informasi & media",k:"Layanan dasar",s:"kls"},
+  {n:"Perencanaan individual/peminatan",k:"Peminatan & perencanaan individual",s:"ind"},
+  {n:"Konsultasi (orang tua/guru)",k:"Layanan responsif",s:"pih"},
+  {n:"Mediasi",k:"Layanan responsif",s:"kel"},
+  {n:"Kunjungan rumah",k:"Layanan responsif",s:"ind"},
+  {n:"Konferensi kasus",k:"Layanan responsif",s:"pih"},
+  {n:"Rujukan (alih tangan kasus)",k:"Layanan responsif",s:"ind"},
+  {n:"Kolaborasi/koordinasi",k:"Dukungan sistem",s:"pih"},
+  {n:"Advokasi",k:"Layanan responsif",s:"ind"}
+];
+function jenisOf(n){for(var i=0;i<JENIS.length;i++)if(JENIS[i].n===n)return JENIS[i];return {n:n,k:"Layanan responsif",s:"ind"};}
+var TL_JENIS = ["Tidak perlu tindak lanjut","Sesi lanjutan","Konsultasi dengan orang tua","Koordinasi wali kelas/guru","Kunjungan rumah","Konferensi kasus","Rujukan ke psikolog/layanan profesional","Rujukan ke puskesmas/layanan kesehatan","Lapor tim pencegahan & penanganan kekerasan sekolah","Pemantauan berkala"];
+var EVAL = ["Tercapai","Sebagian tercapai","Belum tercapai"];
+var BULAN = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+var BULAN_P = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+
+/* ---------- Data ---------- */
+var DB = null;
+function defaultDB(){return {versi:1,entri:[],atur:{sekolah:"",guru:"",kepsek:"",kota:"",ta:taSekarang(),binaan:150,autolock:5,menitJP:40,kelas:"7A,7B,7C,8A,8B,8C,9A,9B,9C",geminiKey:"",geminiModel:"gemini-2.5-flash"},contohDimuat:false};}
+function taSekarang(){var d=new Date(),y=d.getFullYear();return d.getMonth()>=6?y+"/"+(y+1):(y-1)+"/"+y;}
+function load(){var raw=lsGet(KEY);if(raw){try{DB=JSON.parse(raw);}catch(e){DB=null;}}
+  if(!DB||!Array.isArray(DB.entri)){DB=defaultDB();}
+  var d=defaultDB().atur;for(var k in d)if(DB.atur[k]===undefined)DB.atur[k]=d[k];
+  if(!DB.contohDimuat){DB.entri=DB.entri.concat(contoh());DB.contohDimuat=true;save();}}
+function save(){if(!lsSet(KEY,JSON.stringify(DB)))toast("Gagal menyimpan ke perangkat (penyimpanan penuh atau diblokir).");}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function today(){var d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+function pad(n){return(n<10?"0":"")+n;}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function fmtTgl(s){if(!s)return"-";var p=s.split("-");return +p[2]+" "+BULAN[+p[1]-1]+" "+p[0];}
+function fmtTglP(s){if(!s)return"-";var p=s.split("-");return +p[2]+" "+BULAN_P[+p[1]-1]+" "+p[0];}
+function jam(m){m=+m||0;var h=Math.floor(m/60),r=m%60;return h?(h+" j"+(r?" "+r+" m":"")):r+" m";}
+
+/* Data contoh — semua nama FIKTIF */
+function contoh(){
+  var T=[
+   ["2026-07-15","Bimbingan klasikal","Belajar","7A","",32,"Mengenal lingkungan SMP & cara belajar efektif",80,"Siswa memahami tata tertib dan strategi belajar mandiri","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-07-16","Bimbingan klasikal","Pribadi","7B","",31,"Mengenal diri: kekuatan dan minat",80,"Siswa mengisi lembar refleksi diri","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-07-22","Konseling individual","Belajar","8B","Raka P. (contoh)",1,"Kesulitan mengatur waktu belajar",40,"Konseli menyusun jadwal belajar mingguan","Sebagian tercapai","Sesi lanjutan","2026-07-29","Selesai"],
+   ["2026-07-29","Konseling individual","Belajar","8B","Raka P. (contoh)",1,"Evaluasi jadwal belajar",30,"Jadwal dijalankan 4 dari 5 hari","Tercapai","Pemantauan berkala","2026-08-26","Selesai"],
+   ["2026-08-05","Konseling kelompok","Sosial","9A","Nayla A. (contoh), Salsa R. (contoh), Fajar D. (contoh)",3,"Konflik dalam kelompok tugas",60,"Anggota menyepakati pembagian peran","Tercapai","Koordinasi wali kelas/guru","2026-08-12","Selesai"],
+   ["2026-08-07","Bimbingan klasikal","Sosial","8A","",32,"Pertemanan sehat dan stop perundungan",80,"Siswa membuat ikrar kelas anti-perundungan","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-08-14","Konsultasi (orang tua/guru)","Belajar","7C","Orang tua Dimas K. (contoh)",1,"Penurunan kehadiran",45,"Orang tua bersedia mendampingi rutinitas pagi","Sebagian tercapai","Pemantauan berkala","2026-09-14","Selesai"],
+   ["2026-08-20","Bimbingan klasikal","Karier","9B","",30,"Mengenal jalur SMA, SMK, dan MA",80,"Siswa memetakan pilihan awal","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-08-26","Mediasi","Sosial","8C","Yoga S. (contoh), Bima T. (contoh)",2,"Salah paham di grup percakapan kelas",50,"Kedua siswa saling meminta maaf dan menyepakati aturan grup","Tercapai","Pemantauan berkala","2026-09-09","Selesai"],
+   ["2026-09-02","Konseling individual","Pribadi","9C","Kirana W. (contoh)",1,"Cemas menghadapi ujian",40,"Konseli berlatih teknik napas dan menyusun rencana belajar","Sebagian tercapai","Sesi lanjutan","2026-09-09","Selesai"],
+   ["2026-09-09","Konseling individual","Pribadi","9C","Kirana W. (contoh)",1,"Lanjutan: mengelola kecemasan",40,"Kecemasan menurun menurut konseli; tetap dipantau","Tercapai","Pemantauan berkala","2026-10-07","Selesai"],
+   ["2026-09-10","Bimbingan klasikal","Belajar","7A","",32,"Teknik mencatat dan membaca efektif",80,"Siswa praktik peta pikiran","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-09-17","Bimbingan kelas besar/lintas kelas","Karier","9A","Kelas 9A–9C",94,"Pameran sekolah lanjutan (SMA/SMK/MA)",120,"Siswa mendapat informasi dari 6 sekolah lanjutan","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-09-24","Kunjungan rumah","Pribadi","8A","Laras M. (contoh)",1,"Ketidakhadiran 5 hari berturut-turut",90,"Keluarga sedang menghadapi masalah ekonomi; siswa ingin kembali sekolah","Sebagian tercapai","Koordinasi wali kelas/guru","2026-10-01","Selesai"],
+   ["2026-10-01","Konferensi kasus","Pribadi","8A","Wali kelas, orang tua, guru BK, wakasek kesiswaan",4,"Dukungan kehadiran Laras M. (contoh)",60,"Disepakati pendampingan harian dan usulan bantuan pendidikan","Tercapai","Pemantauan berkala","2026-11-20","Terbuka"],
+   ["2026-10-08","Bimbingan klasikal","Pribadi","8B","",31,"Mengelola emosi",80,"Siswa mempraktikkan jeda 5 detik","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-10-14","Konseling individual","Sosial","7B","Citra N. (contoh)",1,"Merasa dikucilkan teman sekelas",40,"Konseli menyusun langkah mendekati teman; kemungkinan perundungan dicek","Sebagian tercapai","Lapor tim pencegahan & penanganan kekerasan sekolah","2026-10-16","Selesai"],
+   ["2026-10-21","Perencanaan individual/peminatan","Karier","9B","Arka F. (contoh)",1,"Bingung memilih SMK atau SMA",40,"Konseli menyusun daftar pertimbangan dan rencana tanya orang tua","Sebagian tercapai","Konsultasi dengan orang tua","2026-11-25","Terbuka"],
+   ["2026-10-22","Bimbingan kelompok","Belajar","7C","6 siswa (contoh)",6,"Kelompok belajar matematika sebaya",60,"Terbentuk jadwal belajar bersama","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-10-28","Konseling individual","Pribadi","9A","Rendi H. (contoh)",1,"Perubahan suasana hati yang berat dan menarik diri",45,"Konseli bersedia didampingi; perlu layanan profesional","Sebagian tercapai","Rujukan ke psikolog/layanan profesional","2026-11-04","Terbuka",true],
+   ["2026-10-29","Konsultasi (orang tua/guru)","Pribadi","9A","Orang tua Rendi H. (contoh)",1,"Persetujuan rujukan",40,"Orang tua menyetujui rujukan ke psikolog puskesmas","Tercapai","Rujukan ke psikolog/layanan profesional","2026-11-12","Terbuka",true],
+   ["2026-11-04","Bimbingan klasikal","Karier","8C","",32,"Cita-citaku dan langkah kecil hari ini",80,"Siswa membuat peta cita-cita","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-11-05","Kolaborasi/koordinasi","Belajar","9B","Guru mapel kelas 9",5,"Strategi persiapan asesmen akhir",60,"Disepakati jadwal remedial dan klinik belajar","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-11-11","Konseling individual","Sosial","8C","Bima T. (contoh)",1,"Tekanan teman untuk bolos",30,"Konseli berlatih cara menolak dengan tegas","Sebagian tercapai","Sesi lanjutan","2026-11-18","Terbuka"],
+   ["2026-11-12","Bimbingan klasikal","Sosial","7A","",32,"Etika bermedia sosial",80,"Siswa menyusun kesepakatan kelas bermedia sosial","Tercapai","Tidak perlu tindak lanjut","",""],
+   ["2026-11-16","Layanan informasi & media","Karier","9C","Papan informasi BK",0,"Poster jalur penerimaan SMA/SMK",30,"Poster dipasang di dekat ruang BK","Tercapai","Tidak perlu tindak lanjut","",""]
+  ];
+  return T.map(function(r){var j=jenisOf(r[1]);return{id:uid(),tgl:r[0],jenis:r[1],komponen:j.k,bidang:r[2],kelas:r[3],sasaran:r[4],jml:r[5],topik:r[6],durasi:r[7],media:"Tatap muka",pihak:"",hasil:r[8],evaluasi:r[9],tlJenis:r[10],tl:"",tlTgl:r[11],tlStatus:r[10]==="Tidak perlu tindak lanjut"?"Tidak perlu":(r[12]||"Terbuka"),rujuk:!!r[13],contoh:true,dibuat:Date.now()};});
+}
+
+/* ---------- Kunci layar ---------- */
+var unlocked=false, idleTimer=null, failCount=0, failUntil=0;
+function pinData(){var r=lsGet(KEY_PIN);if(!r)return null;try{return JSON.parse(r);}catch(e){return null;}}
+function showLock(){
+  unlocked=false;closeDlg();
+  document.getElementById("main").innerHTML="";document.getElementById("printArea").innerHTML="";
+  var has=!!pinData();
+  document.getElementById("lock").hidden=false;
+  document.getElementById("lockSetup").hidden=has;document.getElementById("lockEnter").hidden=!has;
+  document.getElementById("noStore").hidden=storeOK;
+  setTimeout(function(){var el=document.getElementById(has?"pinIn":"pin1");if(el){el.value="";el.focus();}},30);
+}
+function doUnlock(){
+  unlocked=true;document.getElementById("lock").hidden=true;
+  load();applyTheme();go(curTab||"beranda");resetIdle();
+}
+function resetIdle(){
+  if(!unlocked)return;clearTimeout(idleTimer);
+  var m=+((DB&&DB.atur.autolock)||5);if(m>0)idleTimer=setTimeout(showLock,m*60000);
+}
+["mousemove","keydown","touchstart","click","scroll"].forEach(function(ev){document.addEventListener(ev,resetIdle,{passive:true});});
+document.getElementById("btnSetPin").onclick=function(){
+  var a=document.getElementById("pin1").value.trim(),b=document.getElementById("pin2").value.trim();
+  if(!/^\d{4,8}$/.test(a)){toast("PIN harus 4–8 angka.");return;}
+  if(/^(\d)\1+$/.test(a)||"0123456789".indexOf(a)>-1||"9876543210".indexOf(a)>-1){toast("PIN terlalu mudah ditebak. Pilih kombinasi lain.");return;}
+  if(a!==b){toast("Kedua PIN tidak sama.");return;}
+  var salt=randHex(16);lsSet(KEY_PIN,JSON.stringify({salt:salt,hash:hashPin(a,salt)}));
+  toast("PIN tersimpan. Jangan sampai lupa.");doUnlock();
+};
+function tryUnlock(){
+  var msg=document.getElementById("pinMsg");
+  if(Date.now()<failUntil){msg.hidden=false;msg.textContent="Terlalu banyak percobaan. Tunggu "+Math.ceil((failUntil-Date.now())/1000)+" detik.";return;}
+  var p=pinData(),v=document.getElementById("pinIn").value.trim();
+  if(p&&hashPin(v,p.salt)===p.hash){failCount=0;msg.hidden=true;doUnlock();}
+  else{failCount++;if(failCount>=5){failUntil=Date.now()+30000;failCount=0;}
+    msg.hidden=false;msg.textContent="PIN salah.";document.getElementById("pinIn").value="";document.getElementById("pinIn").focus();}
+}
+document.getElementById("btnUnlock").onclick=tryUnlock;
+document.getElementById("pinIn").addEventListener("keydown",function(e){if(e.key==="Enter")tryUnlock();});
+document.getElementById("pin2").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("btnSetPin").click();});
+document.getElementById("btnForgot").onclick=function(){
+  var t=prompt("PIN tidak bisa dipulihkan. Untuk menghapus SEMUA data jurnal di perangkat ini dan membuat PIN baru, ketik HAPUS:");
+  if(t==="HAPUS"){lsDel(KEY);lsDel(KEY_PIN);DB=null;toast("Semua data dihapus.");showLock();}
+};
+document.getElementById("btnLock").onclick=showLock;
+
+/* ---------- Tema ---------- */
+function applyTheme(){var t=lsGet(KEY_THEME);if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme");}
+document.getElementById("btnTheme").onclick=function(){
+  var cur=document.documentElement.getAttribute("data-theme");
+  var dark=cur?cur==="dark":window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;
+  lsSet(KEY_THEME,dark?"light":"dark");applyTheme();
+};
+applyTheme();
+
+/* ---------- Navigasi ---------- */
+var curTab="beranda", editId=null;
+var tabs=document.querySelectorAll("nav.tabs button");
+tabs.forEach(function(b){b.onclick=function(){if(b.dataset.tab==="catat")editId=null;go(b.dataset.tab);};});
+function go(t){
+  if(!unlocked)return;curTab=t;
+  tabs.forEach(function(b){if(b.dataset.tab===t)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  var m=document.getElementById("main");
+  ({beranda:vBeranda,catat:vCatat,jurnal:vJurnal,tl:vTL,rekap:vRekap,atur:vAtur,dasar:vDasar}[t]||vBeranda)(m);
+  updBadge();
+  var s=DB.atur;document.getElementById("hdSub").textContent=(s.sekolah?s.sekolah+" · ":"")+"TA "+s.ta;
+  window.scrollTo(0,0);
+}
+function updBadge(){var n=tlTerbuka().filter(function(e){return e.tlTgl&&e.tlTgl<=today();}).length;var b=document.getElementById("tlBadge");b.hidden=!n;b.textContent=n;}
+function tlTerbuka(){return DB.entri.filter(function(e){return e.tlStatus==="Terbuka";}).sort(function(a,b){return(a.tlTgl||"9").localeCompare(b.tlTgl||"9");});}
+function sorted(){return DB.entri.slice().sort(function(a,b){return b.tgl.localeCompare(a.tgl)||b.dibuat-a.dibuat;});}
+
+/* ---------- Statistik ---------- */
+function siswaUnik(list){
+  var set={};list.forEach(function(e){var s=jenisOf(e.jenis).s;if(s==="ind"||s==="kel"){String(e.sasaran||"").split(/[,;]/).forEach(function(n){n=n.trim().toLowerCase();if(n&&n.indexOf("orang tua")<0)set[n]=1;});}});
+  return Object.keys(set).length;
+}
+function siswaKlasikal(list){return list.filter(function(e){return jenisOf(e.jenis).s==="kls";}).reduce(function(a,e){return a+(+e.jml||0);},0);}
+function hitung(list,key){var o={};list.forEach(function(e){var k=e[key]||"(kosong)";o[k]=(o[k]||0)+1;});return o;}
+
+/* ---------- Beranda ---------- */
+function vBeranda(m){
+  var L=DB.entri, now=today(), ym=now.slice(0,7);
+  var bln=L.filter(function(e){return e.tgl.slice(0,7)===ym;});
+  var sem=L.filter(function(e){return dalamPeriode(e.tgl,periodeSemesterIni());});
+  var tl=tlTerbuka(), telat=tl.filter(function(e){return e.tlTgl&&e.tlTgl<now;});
+  var ruj=L.filter(function(e){return e.rujuk&&e.tlStatus==="Terbuka";});
+  var nContoh=L.filter(function(e){return e.contoh;}).length;
+  var h='<div class="grid g4" style="margin-bottom:16px">'+
+    st(bln.length,"layanan bulan "+BULAN_P[+ym.slice(5)-1])+
+    st(sem.length,"layanan semester ini")+
+    st(jam(sem.reduce(function(a,e){return a+(+e.durasi||0);},0)),"waktu layanan semester ini")+
+    st(siswaUnik(sem),"siswa dilayani langsung (semester)")+
+    st(tl.length,"tindak lanjut terbuka"+(telat.length?" · "+telat.length+" lewat":""))+'</div>';
+  if(nContoh)h+='<div class="note" style="margin-bottom:16px">Ada <b>'+nContoh+' catatan contoh</b> (nama fiktif) untuk mencoba aplikasi. <button class="btn sm" id="bHapusContoh" type="button">Hapus data contoh</button></div>';
+  if(ruj.length)h+='<div class="note bad" style="margin-bottom:16px"><b>'+ruj.length+' layanan bertanda rujukan</b> masih terbuka. Pastikan konseli sudah tersambung dengan psikolog/layanan profesional dan orang tua terlibat.</div>';
+  h+='<div class="grid g2"><section class="card"><h2>Mulai mencatat</h2><p class="lead">Catat setiap layanan segera setelah selesai: jenis, bidang, topik, durasi, hasil, dan tindak lanjut. Rekap bulanan dan semester tersusun otomatis untuk laporan program BK.</p>'+
+    '<div class="row"><button class="btn pri" type="button" id="bNew">+ Catat layanan</button><button class="btn" type="button" data-go="rekap">Lihat rekap</button></div></section>';
+  h+='<section class="card"><h2>Tindak lanjut terdekat</h2>'+(tl.length?tl.slice(0,4).map(function(e){return '<div class="ent" style="--bc:'+BCOL[e.bidang]+'"><div class="h"><b>'+esc(e.tlJenis)+'</b><span class="meta">'+(e.tlTgl?(e.tlTgl<now?'<span class="pill open">lewat '+fmtTgl(e.tlTgl)+'</span>':'target '+fmtTgl(e.tlTgl)):'')+'</span></div><div class="meta">'+esc(e.jenis)+' · '+esc(e.kelas)+' · '+esc(e.topik)+'</div></div>';}).join("")+'<p style="margin:10px 0 0"><button class="btn sm" type="button" data-go="tl">Semua tindak lanjut</button></p>':'<p class="empty">Tidak ada tindak lanjut terbuka.</p>')+'</section></div>';
+  h+='<section class="card" style="margin-top:16px"><h2>Sebaran semester ini</h2><p class="lead">Jumlah layanan per bidang dan per komponen program.</p><div class="grid g2"><div class="chart">'+donut(sem)+'</div><div class="chart">'+barH(hitungUrut(sem,"komponen",KOMPONEN),"var(--acc)")+'</div></div></section>';
+  m.innerHTML=h;
+  bindGo(m);
+  var b=document.getElementById("bNew");if(b)b.onclick=function(){editId=null;go("catat");};
+  var c=document.getElementById("bHapusContoh");if(c)c.onclick=hapusContoh;
+}
+function st(v,l){return '<div class="stat"><b>'+esc(v)+'</b><span>'+esc(l)+'</span></div>';}
+function bindGo(m){m.querySelectorAll("[data-go]").forEach(function(b){b.onclick=function(){go(b.dataset.go);};});}
+function hapusContoh(){
+  var n=DB.entri.filter(function(e){return e.contoh;}).length;
+  if(!n){toast("Tidak ada data contoh.");return;}
+  if(!confirm("Hapus "+n+" catatan contoh? Catatan buatan Anda tidak ikut terhapus."))return;
+  DB.entri=DB.entri.filter(function(e){return !e.contoh;});save();toast("Data contoh dihapus.");go(curTab);
+}
+
+/* ---------- Form catat ---------- */
+function vCatat(m){
+  var e=editId?DB.entri.filter(function(x){return x.id===editId;})[0]:null;
+  var d=e||{tgl:today(),jenis:"Konseling individual",komponen:"Layanan responsif",bidang:"Pribadi",kelas:"",sasaran:"",jml:1,topik:"",durasi:40,media:"Tatap muka",pihak:"",hasil:"",evaluasi:"",tlJenis:"Tidak perlu tindak lanjut",tl:"",tlTgl:"",tlStatus:"Tidak perlu",rujuk:false};
+  var kelas=DB.atur.kelas.split(",").map(function(s){return s.trim();}).filter(Boolean);
+  var h='<section class="card"><h2>'+(e?"Ubah catatan layanan":"Catat layanan BK")+'</h2><p class="lead">Kolom bertanda * wajib. Tulis seperlunya untuk laporan; hindari detail sensitif yang tidak diperlukan.</p>'+
+  '<form class="f" id="fm" novalidate>'+
+  fld("tgl","Tanggal *",'<input type="date" id="tgl" required value="'+esc(d.tgl)+'">')+
+  fld("jenis","Jenis layanan *",'<select id="jenis">'+JENIS.map(function(j){return '<option'+(j.n===d.jenis?' selected':'')+'>'+esc(j.n)+'</option>';}).join("")+'</select>')+
+  fld("komponen","Komponen program",'<select id="komponen">'+KOMPONEN.map(function(k){return '<option'+(k===d.komponen?' selected':'')+'>'+esc(k)+'</option>';}).join("")+'</select>','Terisi otomatis dari jenis layanan; ubah bila perlu.')+
+  '<div class="fld full"><span class="lb" id="lbB">Bidang layanan *</span><div class="seg" role="radiogroup" aria-labelledby="lbB">'+BIDANG.map(function(b){return '<label><input type="radio" name="bidang" value="'+b+'"'+(b===d.bidang?' checked':'')+'><span style="color:'+BCOL[b]+'">●</span> '+b+'</label>';}).join("")+'</div></div>'+
+  fld("kelas","Kelas",'<input type="text" id="kelas" list="dlKelas" value="'+esc(d.kelas)+'" placeholder="mis. 8B"><datalist id="dlKelas">'+kelas.map(function(k){return '<option value="'+esc(k)+'">';}).join("")+'</datalist>')+
+  fld("sasaran","Sasaran / konseli",'<input type="text" id="sasaran" value="'+esc(d.sasaran)+'" placeholder="Inisial atau kode, pisahkan dengan koma">','<span id="hintSas">Untuk konseling, isi inisial/kode siswa. Untuk klasikal boleh dikosongkan.</span>')+
+  fld("jml","Jumlah peserta",'<input type="number" id="jml" min="0" max="999" value="'+esc(d.jml)+'">')+
+  fld("durasi","Durasi (menit) *",'<input type="number" id="durasi" min="5" max="600" step="5" value="'+esc(d.durasi)+'">','1 JP = '+DB.atur.menitJP+' menit (ubah di Pengaturan).')+
+  fld("media","Cara/media",'<select id="media">'+["Tatap muka","Daring (video)","Telepon/pesan","Kunjungan"].map(function(x){return '<option'+(x===d.media?' selected':'')+'>'+x+'</option>';}).join("")+'</select>')+
+  fld("topik","Topik / masalah *",'<input type="text" id="topik" value="'+esc(d.topik)+'" placeholder="mis. Mengatur waktu belajar">','','full')+
+  fld("pihak","Pihak yang terlibat",'<input type="text" id="pihak" value="'+esc(d.pihak)+'" placeholder="mis. wali kelas, orang tua">','','full')+
+  fld("hasil","Hasil layanan",'<textarea id="hasil" placeholder="Ringkas: apa yang dicapai/disepakati konseli. Hindari label diagnosis.">'+esc(d.hasil)+'</textarea>','','full')+
+  '<div class="fld full"><span class="lb" id="lbE">Evaluasi hasil (penilaian guru BK)</span><div class="seg" role="radiogroup" aria-labelledby="lbE">'+EVAL.concat([""]).map(function(v){return '<label><input type="radio" name="evaluasi" value="'+v+'"'+(v===(d.evaluasi||"")?' checked':'')+'> '+(v||"Belum dinilai")+'</label>';}).join("")+'</div></div>'+
+  fld("tlJenis","Tindak lanjut",'<select id="tlJenis">'+TL_JENIS.map(function(x){return '<option'+(x===d.tlJenis?' selected':'')+'>'+esc(x)+'</option>';}).join("")+'</select>')+
+  fld("tlTgl","Target tanggal tindak lanjut",'<input type="date" id="tlTgl" value="'+esc(d.tlTgl)+'">')+
+  fld("tlStatus","Status tindak lanjut",'<select id="tlStatus">'+["Tidak perlu","Terbuka","Selesai"].map(function(x){return '<option'+(x===d.tlStatus?' selected':'')+'>'+x+'</option>';}).join("")+'</select>')+
+  fld("tl","Catatan tindak lanjut",'<input type="text" id="tl" value="'+esc(d.tl)+'" placeholder="mis. jadwal sesi berikutnya, pihak rujukan">','','full')+
+  '<div class="fld full"><label class="chk"><input type="checkbox" id="rujuk"'+(d.rujuk?' checked':'')+'><span><b>Perlu rujukan profesional</b> — tandai bila masalah di luar kewenangan guru BK (mis. indikasi gangguan kesehatan mental berat, risiko keselamatan, kekerasan). Libatkan orang tua dan kepala sekolah sesuai prosedur.</span></label></div>'+
+  '<div id="rujukNote" class="note bad fld full" hidden>Guru BK tidak menegakkan diagnosis. Catat fakta yang teramati, segera hubungkan konseli dengan psikolog/puskesmas/layanan profesional, dan untuk dugaan kekerasan laporkan ke tim pencegahan dan penanganan kekerasan di sekolah. Bila ada bahaya segera bagi keselamatan, hubungi layanan darurat setempat.</div>'+
+  '<div class="fld full row" style="margin-top:6px"><button class="btn pri" type="submit">'+(e?"Simpan perubahan":"Simpan catatan")+'</button>'+(e?'<button class="btn" type="button" id="bBatal">Batal</button>':'<button class="btn" type="button" id="bSimpanLagi">Simpan &amp; catat lagi</button>')+'</div>'+
+  '</form></section>';
+  m.innerHTML=h;
+  var $=function(id){return document.getElementById(id);};
+  function syncJenis(first){var j=jenisOf($("jenis").value);if(!first)$("komponen").value=j.k;
+    $("hintSas").textContent=j.s==="kls"?"Untuk klasikal/kelas besar cukup isi kelas dan jumlah peserta.":j.s==="pih"?"Isi pihak yang dikonsultasi/hadir (mis. orang tua siswa berinisial).":"Isi inisial atau kode siswa; pisahkan dengan koma bila lebih dari satu.";
+    if(!first&&j.s==="kls"&&+$("durasi").value<80)$("durasi").value=2*DB.atur.menitJP;
+    if(!first&&j.n.indexOf("Rujukan")===0){$("rujuk").checked=true;syncRujuk();}}
+  function syncRujuk(){$("rujukNote").hidden=!$("rujuk").checked;}
+  function syncTL(){var v=$("tlJenis").value;if(v==="Tidak perlu tindak lanjut")$("tlStatus").value="Tidak perlu";else if($("tlStatus").value==="Tidak perlu")$("tlStatus").value="Terbuka";
+    if(/Rujukan|kekerasan/.test(v)){$("rujuk").checked=true;syncRujuk();}}
+  $("jenis").onchange=function(){syncJenis(false);};$("rujuk").onchange=syncRujuk;$("tlJenis").onchange=syncTL;
+  syncJenis(true);syncRujuk();
+  var lagi=false;
+  if($("bSimpanLagi"))$("bSimpanLagi").onclick=function(){lagi=true;$("fm").requestSubmit?$("fm").requestSubmit():$("fm").dispatchEvent(new Event("submit",{cancelable:true}));};
+  if($("bBatal"))$("bBatal").onclick=function(){editId=null;go("jurnal");};
+  $("fm").onsubmit=function(ev){ev.preventDefault();
+    var b=document.querySelector('input[name=bidang]:checked'),ev2=document.querySelector('input[name=evaluasi]:checked');
+    var rec={tgl:$("tgl").value,jenis:$("jenis").value,komponen:$("komponen").value,bidang:b?b.value:"",kelas:$("kelas").value.trim(),sasaran:$("sasaran").value.trim(),
+      jml:Math.max(0,parseInt($("jml").value,10)||0),topik:$("topik").value.trim(),durasi:Math.max(0,parseInt($("durasi").value,10)||0),media:$("media").value,pihak:$("pihak").value.trim(),
+      hasil:$("hasil").value.trim(),evaluasi:ev2?ev2.value:"",tlJenis:$("tlJenis").value,tl:$("tl").value.trim(),tlTgl:$("tlTgl").value,tlStatus:$("tlStatus").value,rujuk:$("rujuk").checked};
+    var err=[];if(!rec.tgl)err.push("tanggal");if(!rec.bidang)err.push("bidang");if(!rec.topik)err.push("topik");if(!rec.durasi)err.push("durasi");
+    if(err.length){toast("Lengkapi: "+err.join(", ")+".");var f=$(err[0]==="bidang"?"tgl":err[0]);if(f)f.focus();lagi=false;return;}
+    if(rec.tlStatus==="Terbuka"&&!rec.tlTgl){var dd=new Date(rec.tgl);dd.setDate(dd.getDate()+7);rec.tlTgl=dd.getFullYear()+"-"+pad(dd.getMonth()+1)+"-"+pad(dd.getDate());}
+    if(e){for(var k in rec)e[k]=rec[k];toast("Perubahan disimpan.");}
+    else{rec.id=uid();rec.contoh=false;rec.dibuat=Date.now();DB.entri.push(rec);toast("Catatan layanan disimpan.");}
+    save();editId=null;
+    if(lagi){lagi=false;go("catat");}else go("jurnal");
+  };
+}
+function fld(id,label,input,hint,cls){return '<div class="fld'+(cls?" "+cls:"")+'"><label for="'+id+'">'+label+'</label>'+input+(hint?'<span class="hint">'+hint+'</span>':'')+'</div>';}
+
+/* ---------- Jurnal ---------- */
+var flt={q:"",bulan:"",jenis:"",bidang:"",kelas:""};
+function vJurnal(m){
+  var months={};DB.entri.forEach(function(e){months[e.tgl.slice(0,7)]=1;});
+  var mlist=Object.keys(months).sort().reverse();
+  var kelas={};DB.entri.forEach(function(e){if(e.kelas)kelas[e.kelas]=1;});
+  var h='<section class="card"><div class="row" style="justify-content:space-between;margin-bottom:10px"><h2>Jurnal layanan</h2><div class="row"><button class="btn sm" type="button" id="bCSV">Ekspor CSV</button><button class="btn sm pri" type="button" id="bNew2">+ Catat</button></div></div>'+
+  '<div class="filters"><input class="q" type="search" id="fq" placeholder="Cari topik, sasaran, hasil…" aria-label="Cari" value="'+esc(flt.q)+'">'+
+  sel("fbulan","Semua bulan",mlist.map(function(x){return[x,BULAN_P[+x.slice(5)-1]+" "+x.slice(0,4)];}),flt.bulan,"Saring bulan")+
+  sel("fjenis","Semua jenis",JENIS.map(function(j){return[j.n,j.n];}),flt.jenis,"Saring jenis")+
+  sel("fbidang","Semua bidang",BIDANG.map(function(b){return[b,b];}),flt.bidang,"Saring bidang")+
+  sel("fkelas","Semua kelas",Object.keys(kelas).sort().map(function(k){return[k,k];}),flt.kelas,"Saring kelas")+'</div>'+
+  '<p class="meta" id="jInfo" style="color:var(--mut);font-size:14px;margin:0 0 10px"></p><div id="jList"></div></section>';
+  m.innerHTML=h;
+  ["fq","fbulan","fjenis","fbidang","fkelas"].forEach(function(id){var el=document.getElementById(id);el.oninput=el.onchange=function(){flt={q:fq.value,bulan:fbulan.value,jenis:fjenis.value,bidang:fbidang.value,kelas:fkelas.value};renderList();};});
+  var fq=document.getElementById("fq"),fbulan=document.getElementById("fbulan"),fjenis=document.getElementById("fjenis"),fbidang=document.getElementById("fbidang"),fkelas=document.getElementById("fkelas");
+  document.getElementById("bNew2").onclick=function(){editId=null;go("catat");};
+  document.getElementById("bCSV").onclick=function(){eksporCSV(filtered());};
+  renderList();
+}
+function sel(id,all,opts,val,aria){return '<select id="'+id+'" aria-label="'+aria+'"><option value="">'+all+'</option>'+opts.map(function(o){return '<option value="'+esc(o[0])+'"'+(o[0]===val?' selected':'')+'>'+esc(o[1])+'</option>';}).join("")+'</select>';}
+function filtered(){var q=flt.q.toLowerCase();return sorted().filter(function(e){
+  if(flt.bulan&&e.tgl.slice(0,7)!==flt.bulan)return false;if(flt.jenis&&e.jenis!==flt.jenis)return false;if(flt.bidang&&e.bidang!==flt.bidang)return false;if(flt.kelas&&e.kelas!==flt.kelas)return false;
+  if(q&&[e.topik,e.sasaran,e.hasil,e.tl,e.pihak,e.kelas,e.jenis].join(" ").toLowerCase().indexOf(q)<0)return false;return true;});}
+function entHTML(e,withAct){
+  var tlp=e.tlStatus==="Terbuka"?'<span class="pill open">TL terbuka'+(e.tlTgl?" · "+fmtTgl(e.tlTgl):"")+'</span>':e.tlStatus==="Selesai"?'<span class="pill done">TL selesai</span>':'';
+  return '<article class="ent" style="--bc:'+(BCOL[e.bidang]||"var(--acc)")+'"><div class="h"><b>'+esc(e.topik)+'</b>'+(e.contoh?'<span class="pill contoh">contoh</span>':'')+(e.rujuk?'<span class="pill ruj">rujukan</span>':'')+tlp+'</div>'+
+  '<div class="meta">'+fmtTgl(e.tgl)+' · '+esc(e.jenis)+' · bidang '+esc(e.bidang)+(e.kelas?' · '+esc(e.kelas):'')+' · '+jam(e.durasi)+(e.jml?' · '+e.jml+' peserta':'')+'</div>'+
+  (e.sasaran?'<div class="meta">Sasaran: '+esc(e.sasaran)+'</div>':'')+
+  (e.hasil?'<p>'+esc(e.hasil)+'</p>':'')+
+  (e.tlJenis&&e.tlJenis!=="Tidak perlu tindak lanjut"?'<p class="meta"><b>Tindak lanjut:</b> '+esc(e.tlJenis)+(e.tl?' — '+esc(e.tl):'')+'</p>':'')+
+  (withAct?'<div class="act"><button class="btn sm" type="button" data-edit="'+e.id+'">Ubah</button><button class="btn sm" type="button" data-dup="'+e.id+'">Duplikat</button>'+(e.tlStatus==="Terbuka"?'<button class="btn sm" type="button" data-done="'+e.id+'">Tandai TL selesai</button>':'')+'<button class="btn sm bad" type="button" data-del="'+e.id+'">Hapus</button></div>':'')+'</article>';
+}
+function renderList(){
+  var L=filtered(),box=document.getElementById("jList");
+  document.getElementById("jInfo").textContent=L.length+" catatan · "+jam(L.reduce(function(a,e){return a+(+e.durasi||0);},0))+" waktu layanan";
+  box.innerHTML=L.length?L.map(function(e){return entHTML(e,true);}).join(""):'<div class="empty">Belum ada catatan yang cocok.</div>';
+  bindEntAct(box,renderList);
+}
+function bindEntAct(box,after){
+  box.querySelectorAll("[data-edit]").forEach(function(b){b.onclick=function(){editId=b.dataset.edit;go("catat");};});
+  box.querySelectorAll("[data-dup]").forEach(function(b){b.onclick=function(){var e=byId(b.dataset.dup);if(!e)return;var c=JSON.parse(JSON.stringify(e));c.id=uid();c.tgl=today();c.contoh=false;c.dibuat=Date.now();c.hasil="";c.evaluasi="";if(c.tlStatus==="Selesai")c.tlStatus="Terbuka";DB.entri.push(c);save();editId=c.id;go("catat");toast("Salinan dibuat; sesuaikan isinya.");};});
+  box.querySelectorAll("[data-done]").forEach(function(b){b.onclick=function(){var e=byId(b.dataset.done);if(!e)return;e.tlStatus="Selesai";save();toast("Tindak lanjut ditandai selesai.");after();updBadge();};});
+  box.querySelectorAll("[data-del]").forEach(function(b){b.onclick=function(){if(!confirm("Hapus catatan ini secara permanen?"))return;DB.entri=DB.entri.filter(function(x){return x.id!==b.dataset.del;});save();toast("Catatan dihapus.");after();updBadge();};});
+}
+function byId(id){return DB.entri.filter(function(x){return x.id===id;})[0];}
+
+/* ---------- Tindak lanjut ---------- */
+function vTL(m){
+  var L=tlTerbuka(),now=today();
+  var telat=L.filter(function(e){return e.tlTgl&&e.tlTgl<now;}),hariIni=L.filter(function(e){return e.tlTgl===now;}),nanti=L.filter(function(e){return !e.tlTgl||e.tlTgl>now;});
+  function grp(t,arr,cls){return '<h3 style="margin-top:16px">'+t+' ('+arr.length+')</h3>'+(arr.length?arr.map(function(e){return entHTML(e,true);}).join(""):'<p class="meta" style="color:var(--mut)">Tidak ada.</p>');}
+  m.innerHTML='<section class="card"><h2>Tindak lanjut</h2><p class="lead">Pantau sesi lanjutan, konsultasi orang tua, kunjungan rumah, konferensi kasus, dan rujukan yang belum selesai.</p><div id="tlBox">'+
+   grp("Lewat target",telat)+grp("Hari ini",hariIni)+grp("Akan datang",nanti)+'</div></section>';
+  bindEntAct(document.getElementById("tlBox"),function(){vTL(m);});
+}
+
+/* ---------- Periode ---------- */
+function periodeSemesterIni(){var d=new Date(),y=d.getFullYear(),mo=d.getMonth();return mo>=6?{a:y+"-07-01",b:y+"-12-31",l:"Semester Ganjil "+y+"/"+(y+1)}:{a:y+"-01-01",b:y+"-06-30",l:"Semester Genap "+(y-1)+"/"+y};}
+function dalamPeriode(t,p){return t>=p.a&&t<=p.b;}
+var per={mode:"semester",bulan:today().slice(0,7),sem:"",a:"",b:""};
+function periodeAktif(){
+  if(per.mode==="bulan"){var y=+per.bulan.slice(0,4),mo=+per.bulan.slice(5);var last=new Date(y,mo,0).getDate();return{a:per.bulan+"-01",b:per.bulan+"-"+pad(last),l:"Bulan "+BULAN_P[mo-1]+" "+y};}
+  if(per.mode==="semester"){var s=per.sem||semKey(today());var yy=+s.slice(0,4),g=s.slice(5);return g==="1"?{a:yy+"-07-01",b:yy+"-12-31",l:"Semester Ganjil TA "+yy+"/"+(yy+1)}:{a:(yy+1)+"-01-01",b:(yy+1)+"-06-30",l:"Semester Genap TA "+yy+"/"+(yy+1)};}
+  if(per.mode==="ta"){var t=(per.sem||semKey(today())).slice(0,4);return{a:t+"-07-01",b:(+t+1)+"-06-30",l:"Tahun Ajaran "+t+"/"+(+t+1)};}
+  return{a:per.a||"2000-01-01",b:per.b||"2099-12-31",l:"Periode "+fmtTglP(per.a)+" – "+fmtTglP(per.b)};
+}
+function semKey(t){var y=+t.slice(0,4),mo=+t.slice(5,7);return mo>=7?y+"-1":(y-1)+"-2";}
+
+/* ---------- Rekap ---------- */
+function vRekap(m){
+  var sems={};DB.entri.forEach(function(e){sems[semKey(e.tgl)]=1;});sems[semKey(today())]=1;
+  var slist=Object.keys(sems).sort().reverse();
+  var months={};DB.entri.forEach(function(e){months[e.tgl.slice(0,7)]=1;});months[today().slice(0,7)]=1;
+  var mlist=Object.keys(months).sort().reverse();
+  var h='<section class="card"><h2>Rekap &amp; grafik</h2><p class="lead">Pilih periode laporan. Rekap hanya menampilkan angka agregat; nama konseli tidak ikut dicetak.</p>'+
+  '<div class="row" style="margin-bottom:10px"><div class="seg" role="radiogroup" aria-label="Jenis periode">'+[["bulan","Bulanan"],["semester","Semester"],["ta","Tahun ajaran"],["rentang","Rentang tanggal"]].map(function(o){return '<label><input type="radio" name="pmode" value="'+o[0]+'"'+(per.mode===o[0]?' checked':'')+'> '+o[1]+'</label>';}).join("")+'</div></div>'+
+  '<div class="row" id="pCtl" style="margin-bottom:6px"></div></section><div id="rk"></div>';
+  m.innerHTML=h;
+  function ctl(){var c=document.getElementById("pCtl");
+    if(per.mode==="bulan")c.innerHTML=sel("pBln","",mlist.map(function(x){return[x,BULAN_P[+x.slice(5)-1]+" "+x.slice(0,4)];}),per.bulan,"Pilih bulan").replace('<option value=""></option>','');
+    else if(per.mode==="semester"||per.mode==="ta")c.innerHTML=sel("pSem","",(per.mode==="ta"?uniq(slist.map(function(s){return s.slice(0,4);})).map(function(y){return[y+"-1","TA "+y+"/"+(+y+1)];}):slist.map(function(s){var y=+s.slice(0,4);return[s,(s.slice(5)==="1"?"Ganjil ":"Genap ")+y+"/"+(y+1)];})),per.sem||(per.mode==="ta"?semKey(today()).slice(0,4)+"-1":semKey(today())),"Pilih periode").replace('<option value=""></option>','');
+    else c.innerHTML='<label class="fld" style="flex:1;min-width:150px">Dari<input type="date" id="pA" value="'+esc(per.a)+'"></label><label class="fld" style="flex:1;min-width:150px">Sampai<input type="date" id="pB" value="'+esc(per.b)+'"></label>';
+    var a=document.getElementById("pBln");if(a)a.onchange=function(){per.bulan=a.value;draw();};
+    var s=document.getElementById("pSem");if(s){if(!per.sem)per.sem=s.value;s.onchange=function(){per.sem=s.value;draw();};}
+    var pa=document.getElementById("pA"),pb=document.getElementById("pB");if(pa){pa.onchange=pb.onchange=function(){per.a=pa.value;per.b=pb.value;draw();};}
+  }
+  document.querySelectorAll("input[name=pmode]").forEach(function(r){r.onchange=function(){per.mode=r.value;per.sem="";ctl();draw();};});
+  ctl();draw();
+}
+function uniq(a){return a.filter(function(x,i){return a.indexOf(x)===i;});}
+function hitungUrut(list,key,order){var o=hitung(list,key);var arr=order.map(function(k){return[k,o[k]||0];});Object.keys(o).forEach(function(k){if(order.indexOf(k)<0)arr.push([k,o[k]]);});return arr;}
+function dataRekap(p){
+  var L=DB.entri.filter(function(e){return dalamPeriode(e.tgl,p);});
+  var menit=L.reduce(function(a,e){return a+(+e.durasi||0);},0);
+  return{L:L,p:p,menit:menit,unik:siswaUnik(L),kls:siswaKlasikal(L),
+    jenis:hitungUrut(L,"jenis",JENIS.map(function(j){return j.n;})).filter(function(x){return x[1];}),
+    bidang:hitungUrut(L,"bidang",BIDANG),komponen:hitungUrut(L,"komponen",KOMPONEN),
+    tlBuka:L.filter(function(e){return e.tlStatus==="Terbuka";}).length,tlSel:L.filter(function(e){return e.tlStatus==="Selesai";}).length,
+    rujuk:L.filter(function(e){return e.rujuk;}).length,
+    eval:hitungUrut(L.filter(function(e){return e.evaluasi;}),"evaluasi",EVAL)};
+}
+function draw(){
+  var R=dataRekap(periodeAktif()),L=R.L,box=document.getElementById("rk");
+  if(!L.length){box.innerHTML='<section class="card"><h2>'+esc(R.p.l)+'</h2><div class="empty">Belum ada layanan tercatat pada periode ini.</div></section>';return;}
+  var mj=+DB.atur.menitJP||40;
+  var h='<section class="card"><div class="row" style="justify-content:space-between"><h2>'+esc(R.p.l)+'</h2><div class="row"><button class="btn sm pri" type="button" id="bPrint">Cetak laporan</button><button class="btn sm" type="button" id="bCSV2">Ekspor rekap CSV</button><button class="btn sm" type="button" id="bAI">Narasi laporan (AI, opsional)</button></div></div>'+
+  '<div class="grid g4" style="margin-top:12px">'+st(L.length,"layanan tercatat")+st(jam(R.menit),"waktu layanan ("+(Math.round(R.menit/mj*10)/10)+" JP)")+st(R.unik,"siswa dilayani langsung")+st(R.kls,"peserta klasikal/kelas besar (akumulatif)")+st(R.tlSel+" / "+(R.tlSel+R.tlBuka),"tindak lanjut selesai")+'</div>'+
+  (R.unik?'<p class="meta" style="color:var(--mut);font-size:13.5px;margin:10px 0 0">Cakupan layanan langsung: '+R.unik+' dari '+DB.atur.binaan+' siswa binaan ('+Math.round(R.unik/DB.atur.binaan*100)+'%). Rasio ideal 1 guru BK : 150 siswa (Permendikbud 111/2014).</p>':'')+
+  '</section>';
+  h+='<div class="grid g2" style="margin-top:16px"><section class="card chart"><h3>Sebaran per bidang</h3>'+donut(L)+'</section><section class="card chart"><h3>Per komponen program</h3>'+barH(R.komponen,"var(--acc)")+'</section></div>';
+  h+='<section class="card chart"><h3>Per jenis layanan</h3>'+barH(R.jenis,"var(--acc)")+'</section>';
+  if(per.mode!=="bulan")h+='<section class="card chart"><h3>Tren bulanan per bidang</h3>'+stack(L,R.p)+'</section>';
+  h+='<section class="card"><h3>Matriks jenis layanan × bidang</h3>'+matriks(L)+'</section>';
+  h+='<section class="card"><h3>Bimbingan klasikal per kelas</h3>'+tabelKelas(L)+'</section>';
+  h+='<section class="card"><h3>Evaluasi hasil &amp; tindak lanjut</h3>'+tabelEval(R)+'</section>';
+  box.innerHTML=h;
+  document.getElementById("bPrint").onclick=function(){cetak(R);};
+  document.getElementById("bCSV2").onclick=function(){eksporRekapCSV(R);};
+  document.getElementById("bAI").onclick=function(){narasiAI(R);};
+}
+function matriks(L){
+  var rows=JENIS.map(function(j){return j.n;}).filter(function(n){return L.some(function(e){return e.jenis===n;});});
+  var h='<div class="tw"><table><thead><tr><th>Jenis layanan</th>'+BIDANG.map(function(b){return '<th class="n">'+b+'</th>';}).join("")+'<th class="n">Jumlah</th><th class="n">Waktu</th></tr></thead><tbody>';
+  rows.forEach(function(n){var s=L.filter(function(e){return e.jenis===n;});h+='<tr><td>'+esc(n)+'</td>'+BIDANG.map(function(b){return '<td class="n">'+(s.filter(function(e){return e.bidang===b;}).length||"–")+'</td>';}).join("")+'<td class="n">'+s.length+'</td><td class="n">'+jam(s.reduce(function(a,e){return a+(+e.durasi||0);},0))+'</td></tr>';});
+  h+='<tr class="tot"><td>Jumlah</td>'+BIDANG.map(function(b){return '<td class="n">'+L.filter(function(e){return e.bidang===b;}).length+'</td>';}).join("")+'<td class="n">'+L.length+'</td><td class="n">'+jam(L.reduce(function(a,e){return a+(+e.durasi||0);},0))+'</td></tr></tbody></table></div>';
+  return h;
+}
+function tabelKelas(L){
+  var K=L.filter(function(e){return e.jenis==="Bimbingan klasikal";});var mj=+DB.atur.menitJP||40;
+  if(!K.length)return '<p class="meta" style="color:var(--mut)">Belum ada bimbingan klasikal pada periode ini.</p>';
+  var by={};K.forEach(function(e){var k=e.kelas||"(tanpa kelas)";(by[k]=by[k]||[]).push(e);});
+  var h='<div class="tw"><table><thead><tr><th>Kelas</th><th class="n">Pertemuan</th><th class="n">JP</th>'+BIDANG.map(function(b){return '<th class="n">'+b+'</th>';}).join("")+'<th>Topik</th></tr></thead><tbody>';
+  Object.keys(by).sort().forEach(function(k){var s=by[k];h+='<tr><td>'+esc(k)+'</td><td class="n">'+s.length+'</td><td class="n">'+Math.round(s.reduce(function(a,e){return a+(+e.durasi||0);},0)/mj*10)/10+'</td>'+BIDANG.map(function(b){return '<td class="n">'+(s.filter(function(e){return e.bidang===b;}).length||"–")+'</td>';}).join("")+'<td>'+s.map(function(e){return esc(e.topik);}).join("; ")+'</td></tr>';});
+  return h+'</tbody></table></div><p class="meta" style="color:var(--mut);font-size:13px;margin:8px 0 0">Acuan: bimbingan klasikal 2 JP per kelas per minggu, atau kegiatan setara di luar kelas (Permendikbud 111/2014).</p>';
+}
+function tabelEval(R){
+  var tot=R.eval.reduce(function(a,x){return a+x[1];},0);
+  var h='<div class="tw"><table><thead><tr><th>Evaluasi hasil</th><th class="n">Layanan</th><th class="n">%</th></tr></thead><tbody>'+R.eval.map(function(x){return '<tr><td>'+x[0]+'</td><td class="n">'+x[1]+'</td><td class="n">'+(tot?Math.round(x[1]/tot*100):0)+'%</td></tr>';}).join("")+
+  '<tr class="tot"><td>Dinilai</td><td class="n">'+tot+'</td><td class="n">'+(R.L.length?Math.round(tot/R.L.length*100):0)+'% dari semua</td></tr></tbody></table></div>';
+  var tl=hitungUrut(R.L.filter(function(e){return e.tlJenis&&e.tlJenis!=="Tidak perlu tindak lanjut";}),"tlJenis",TL_JENIS).filter(function(x){return x[1];});
+  h+='<div class="tw" style="margin-top:12px"><table><thead><tr><th>Jenis tindak lanjut</th><th class="n">Jumlah</th></tr></thead><tbody>'+(tl.length?tl.map(function(x){return '<tr><td>'+esc(x[0])+'</td><td class="n">'+x[1]+'</td></tr>';}).join(""):'<tr><td colspan="2">Tidak ada</td></tr>')+'</tbody></table></div>';
+  h+='<p class="meta" style="font-size:13.5px;margin:8px 0 0">Tindak lanjut terbuka: <b>'+R.tlBuka+'</b> · selesai: <b>'+R.tlSel+'</b> · bertanda rujukan: <b>'+R.rujuk+'</b></p>';
+  return h;
+}
+
+/* ---------- Grafik SVG ---------- */
+function donut(L){
+  var data=BIDANG.map(function(b){return[b,L.filter(function(e){return e.bidang===b;}).length];}),tot=data.reduce(function(a,x){return a+x[1];},0);
+  if(!tot)return '<p class="empty">Belum ada data.</p>';
+  var cx=90,cy=90,r=70,rw=26,ang=-Math.PI/2,paths="";
+  data.forEach(function(x){if(!x[1])return;var a2=ang+x[1]/tot*Math.PI*2;
+    if(x[1]===tot){paths+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+BCOL[x[0]]+'" stroke-width="'+rw+'"><title>'+x[0]+': '+x[1]+'</title></circle>';}
+    else{var large=a2-ang>Math.PI?1:0;paths+='<path d="M'+(cx+r*Math.cos(ang)).toFixed(2)+' '+(cy+r*Math.sin(ang)).toFixed(2)+' A'+r+' '+r+' 0 '+large+' 1 '+(cx+r*Math.cos(a2)).toFixed(2)+' '+(cy+r*Math.sin(a2)).toFixed(2)+'" fill="none" stroke="'+BCOL[x[0]]+'" stroke-width="'+rw+'"><title>'+x[0]+': '+x[1]+'</title></path>';}
+    ang=a2;});
+  var leg='<g font-size="14">'+data.map(function(x,i){return '<rect x="200" y="'+(36+i*30)+'" width="14" height="14" rx="3" fill="'+BCOL[x[0]]+'"/><text x="222" y="'+(48+i*30)+'">'+x[0]+' — '+x[1]+' ('+Math.round(x[1]/tot*100)+'%)</text>';}).join("")+'</g>';
+  return '<svg viewBox="0 0 400 180" role="img" aria-label="Sebaran layanan per bidang: '+data.map(function(x){return x[0]+' '+x[1];}).join(", ")+'">'+paths+'<text x="'+cx+'" y="'+(cy+2)+'" text-anchor="middle" font-size="26" font-weight="800">'+tot+'</text><text x="'+cx+'" y="'+(cy+20)+'" text-anchor="middle" font-size="11">layanan</text>'+leg+'</svg>';
+}
+function barH(arr,color){
+  arr=arr.filter(function(x){return x[1]>0;});if(!arr.length)return '<p class="empty">Belum ada data.</p>';
+  var max=Math.max.apply(null,arr.map(function(x){return x[1];})),rowH=30,W=520,lw=210,h=arr.length*rowH+8;
+  var s='<svg viewBox="0 0 '+W+' '+h+'" role="img" aria-label="'+esc(arr.map(function(x){return x[0]+" "+x[1];}).join(", "))+'">';
+  arr.forEach(function(x,i){var y=i*rowH+4,bw=Math.max(2,(W-lw-50)*x[1]/max);
+    s+='<text x="'+(lw-8)+'" y="'+(y+18)+'" text-anchor="end" font-size="13">'+esc(x[0].length>32?x[0].slice(0,31)+"…":x[0])+'</text><rect x="'+lw+'" y="'+(y+4)+'" width="'+bw.toFixed(1)+'" height="20" rx="5" fill="'+color+'"><title>'+esc(x[0])+': '+x[1]+'</title></rect><text x="'+(lw+bw+6).toFixed(1)+'" y="'+(y+19)+'" font-size="13" font-weight="700">'+x[1]+'</text>';});
+  return s+'</svg>';
+}
+function stack(L,p){
+  var a=p.a.slice(0,7),b=p.b.slice(0,7),months=[];var y=+a.slice(0,4),mo=+a.slice(5);
+  var lastData=L.reduce(function(m,e){return e.tgl.slice(0,7)>m?e.tgl.slice(0,7):m;},a);
+  if(b>lastData&&b>today().slice(0,7))b=lastData>today().slice(0,7)?lastData:today().slice(0,7);
+  while((y+"-"+pad(mo))<=b&&months.length<24){months.push(y+"-"+pad(mo));mo++;if(mo>12){mo=1;y++;}}
+  var data=months.map(function(m){return BIDANG.map(function(bd){return L.filter(function(e){return e.tgl.slice(0,7)===m&&e.bidang===bd;}).length;});});
+  var max=Math.max(1,Math.max.apply(null,data.map(function(d){return d.reduce(function(s,x){return s+x;},0);})));max=Math.ceil(max/4)*4;
+  var W=560,H=220,pl=30,pb=26,pt=10,cw=(W-pl-10)/months.length,bw=Math.min(44,cw*.6);
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Tren layanan per bulan">';
+  for(var g=0;g<=4;g++){var gy=pt+(H-pt-pb)*(1-g/4);s+='<line class="ax" x1="'+pl+'" x2="'+(W-10)+'" y1="'+gy+'" y2="'+gy+'" stroke="currentColor" stroke-opacity=".15"/><text x="'+(pl-6)+'" y="'+(gy+4)+'" text-anchor="end" font-size="11">'+Math.round(max*g/4)+'</text>';}
+  months.forEach(function(m,i){var x=pl+i*cw+(cw-bw)/2,yb=H-pb;
+    data[i].forEach(function(v,j){if(!v)return;var hh=(H-pt-pb)*v/max;yb-=hh;s+='<rect x="'+x.toFixed(1)+'" y="'+yb.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+hh.toFixed(1)+'" fill="'+BCOL[BIDANG[j]]+'"><title>'+BULAN[+m.slice(5)-1]+' · '+BIDANG[j]+': '+v+'</title></rect>';});
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="12">'+BULAN[+m.slice(5)-1]+'</text>';});
+  s+='</svg><div class="legend">'+BIDANG.map(function(b){return '<span><i style="background:'+BCOL[b]+'"></i>'+b+'</span>';}).join("")+'</div>';
+  return s;
+}
+
+/* ---------- Cetak ---------- */
+function cetak(R){
+  var a=DB.atur,mj=+a.menitJP||40,L=R.L;
+  var h='<h1>LAPORAN PELAKSANAAN LAYANAN BIMBINGAN DAN KONSELING</h1><p class="sub">'+esc(a.sekolah||"[Nama sekolah]")+' · '+esc(R.p.l)+'</p>'+
+  '<h2>A. Ringkasan</h2><table><tbody><tr><td>Jumlah layanan tercatat</td><td>'+L.length+'</td></tr><tr><td>Waktu layanan</td><td>'+jam(R.menit)+' (setara '+(Math.round(R.menit/mj*10)/10)+' JP @ '+mj+' menit)</td></tr><tr><td>Siswa dilayani langsung (individual/kelompok)</td><td>'+R.unik+' dari '+a.binaan+' siswa binaan</td></tr><tr><td>Peserta bimbingan klasikal/kelas besar (akumulatif)</td><td>'+R.kls+'</td></tr><tr><td>Tindak lanjut selesai / terbuka</td><td>'+R.tlSel+' / '+R.tlBuka+'</td></tr><tr><td>Layanan bertanda rujukan profesional</td><td>'+R.rujuk+'</td></tr></tbody></table>'+
+  '<h2>B. Sebaran per komponen dan bidang</h2><table><thead><tr><th>Komponen program</th><th>Jumlah</th></tr></thead><tbody>'+R.komponen.map(function(x){return '<tr><td>'+esc(x[0])+'</td><td>'+x[1]+'</td></tr>';}).join("")+'</tbody></table>'+
+  '<div style="max-width:420px;margin-top:8px">'+donut(L)+'</div>'+
+  '<h2>C. Matriks jenis layanan × bidang</h2>'+matriks(L)+
+  '<h2>D. Bimbingan klasikal per kelas</h2>'+tabelKelas(L)+
+  '<h2>E. Evaluasi dan tindak lanjut</h2>'+tabelEval(R)+
+  '<h2>F. Hambatan dan rencana perbaikan</h2><p>..................................................................................................................................................................</p><p>..................................................................................................................................................................</p>'+
+  '<p class="rhs">Dokumen ini hanya memuat data agregat. Catatan individual konseli bersifat rahasia dan disimpan oleh guru BK sesuai asas kerahasiaan.</p>'+
+  '<div class="ttd"><div>Mengetahui,<br>Kepala Sekolah<div class="nm">'+esc(a.kepsek||"(..............................)")+'</div></div><div>'+esc(a.kota||"............")+', '+fmtTglP(today())+'<br>Guru BK<div class="nm">'+esc(a.guru||"(..............................)")+'</div></div></div>';
+  var pa=document.getElementById("printArea");pa.innerHTML=h;
+  setTimeout(function(){window.print();},60);
+}
+
+/* ---------- Ekspor ---------- */
+function unduh(nama,isi,tipe){
+  try{var blob=new Blob([isi],{type:tipe});var u=URL.createObjectURL(blob);var a=document.createElement("a");a.href=u;a.download=nama;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},500);}
+  catch(e){toast("Gagal mengunduh berkas.");}
+}
+function csvCell(v){v=String(v==null?"":v);return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function eksporCSV(L){
+  if(!L.length){toast("Tidak ada catatan untuk diekspor.");return;}
+  var anon=confirm("Ekspor berisi catatan rahasia.\n\nOK = samarkan kolom sasaran dan hasil (disarankan)\nBatal = sertakan lengkap (simpan berkas dengan aman)");
+  var head=["Tanggal","Jenis layanan","Komponen","Bidang","Kelas","Sasaran","Jumlah peserta","Topik","Durasi (menit)","Media","Pihak terlibat","Hasil","Evaluasi","Tindak lanjut","Catatan TL","Target TL","Status TL","Rujukan","Contoh"];
+  var rows=L.map(function(e){return[e.tgl,e.jenis,e.komponen,e.bidang,e.kelas,anon?(e.sasaran?"[disamarkan]":""):e.sasaran,e.jml,e.topik,e.durasi,e.media,anon?"":e.pihak,anon?"":e.hasil,e.evaluasi,e.tlJenis,anon?"":e.tl,e.tlTgl,e.tlStatus,e.rujuk?"ya":"",e.contoh?"ya":""];});
+  unduh("jurnal-layanan-bk-"+today()+".csv","﻿"+[head].concat(rows).map(function(r){return r.map(csvCell).join(",");}).join("\r\n"),"text/csv;charset=utf-8");
+}
+function eksporRekapCSV(R){
+  var rows=[["Rekap layanan BK",R.p.l],[],["Jenis layanan"].concat(BIDANG).concat(["Jumlah","Menit"])];
+  JENIS.forEach(function(j){var s=R.L.filter(function(e){return e.jenis===j.n;});if(!s.length)return;rows.push([j.n].concat(BIDANG.map(function(b){return s.filter(function(e){return e.bidang===b;}).length;})).concat([s.length,s.reduce(function(a,e){return a+(+e.durasi||0);},0)]));});
+  rows.push([],["Komponen","Jumlah"]);R.komponen.forEach(function(x){rows.push(x);});
+  rows.push([],["Ringkasan",""],["Layanan",R.L.length],["Menit",R.menit],["Siswa dilayani langsung",R.unik],["Peserta klasikal akumulatif",R.kls],["TL selesai",R.tlSel],["TL terbuka",R.tlBuka],["Rujukan",R.rujuk]);
+  unduh("rekap-bk-"+R.p.a+"_"+R.p.b+".csv","﻿"+rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n"),"text/csv;charset=utf-8");
+}
+
+/* ---------- AI opsional (Gemini, kunci milik pengguna) ---------- */
+function narasiAI(R){
+  var a=DB.atur;
+  if(!a.geminiKey){openDlg("Narasi laporan dengan AI",'<p>Fitur ini opsional. Isi kunci API Gemini milik Anda sendiri di <b>Pengaturan</b> untuk mengaktifkannya.</p><p class="note">Yang dikirim ke Google hanya <b>angka agregat</b> (jumlah per jenis, bidang, komponen, evaluasi). Nama, inisial, topik individual, dan hasil konseling <b>tidak</b> dikirim.</p>');return;}
+  var ringkas={periode:R.p.l,jumlahLayanan:R.L.length,menit:R.menit,siswaDilayaniLangsung:R.unik,siswaBinaan:a.binaan,pesertaKlasikalAkumulatif:R.kls,
+    perJenis:R.jenis,perBidang:R.bidang,perKomponen:R.komponen,evaluasi:R.eval,tindakLanjutSelesai:R.tlSel,tindakLanjutTerbuka:R.tlBuka,rujukan:R.rujuk,
+    topikKlasikal:R.L.filter(function(e){return jenisOf(e.jenis).s==="kls";}).map(function(e){return e.topik;})};
+  var prompt="Anda membantu guru BK SMP di Indonesia menulis bagian narasi 'Laporan Pelaksanaan Program BK'. Berdasarkan data agregat JSON berikut, tulis dalam bahasa Indonesia baku 4 bagian singkat: (1) Gambaran pelaksanaan layanan, (2) Analisis sebaran komponen dan bidang (sebut bidang/komponen yang kurang terlayani), (3) Ketercapaian dan tindak lanjut, (4) Rekomendasi program semester berikutnya (3–5 butir). Jangan mengarang angka di luar data, jangan menyebut nama siswa, jangan membuat diagnosis. Maksimal 350 kata.\n\nDATA:\n"+JSON.stringify(ringkas);
+  openDlg("Narasi laporan dengan AI",'<p class="note">Hanya angka agregat dan topik bimbingan klasikal yang dikirim ke Gemini. Periksa dan sunting hasilnya sebelum dipakai.</p><div id="aiOut" style="white-space:pre-wrap;margin-top:12px">Menyusun narasi…</div><div class="row" style="margin-top:12px"><button class="btn sm" type="button" id="aiCopy">Salin</button></div>');
+  var models=[a.geminiModel||"gemini-2.5-flash","gemini-2.5-flash","gemini-2.0-flash"].filter(function(x,i,s){return s.indexOf(x)===i;});
+  (function coba(i){
+    if(i>=models.length){document.getElementById("aiOut").textContent="Gagal menghubungi Gemini. Periksa kunci API, nama model, atau koneksi internet.";return;}
+    fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(models[i])+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":a.geminiKey},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:.4}})})
+    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+    .then(function(j){var t=j&&j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts?j.candidates[0].content.parts.map(function(p){return p.text||"";}).join(""):"";var o=document.getElementById("aiOut");if(o)o.textContent=t.replace(/\*\*/g,"")||"Tidak ada jawaban.";})
+    .catch(function(){coba(i+1);});
+  })(0);
+  setTimeout(function(){var c=document.getElementById("aiCopy");if(c)c.onclick=function(){var t=document.getElementById("aiOut").textContent;try{navigator.clipboard.writeText(t).then(function(){toast("Disalin.");});}catch(e){toast("Salin manual.");}};},0);
+}
+
+/* ---------- Pengaturan ---------- */
+function vAtur(m){
+  var a=DB.atur;
+  m.innerHTML='<section class="card"><h2>Pengaturan</h2><p class="lead">Identitas hanya dipakai pada kop dan tanda tangan laporan cetak. Semua tersimpan di perangkat ini.</p>'+
+  '<form class="f" id="fa">'+fld("aSek","Nama sekolah",'<input type="text" id="aSek" value="'+esc(a.sekolah)+'">')+fld("aKota","Kota (untuk tanggal laporan)",'<input type="text" id="aKota" value="'+esc(a.kota)+'">')+
+  fld("aGuru","Nama guru BK",'<input type="text" id="aGuru" value="'+esc(a.guru)+'">')+fld("aKs","Nama kepala sekolah",'<input type="text" id="aKs" value="'+esc(a.kepsek)+'">')+
+  fld("aTa","Tahun ajaran",'<input type="text" id="aTa" value="'+esc(a.ta)+'" placeholder="2026/2027">')+fld("aBin","Jumlah siswa binaan",'<input type="number" id="aBin" min="1" value="'+esc(a.binaan)+'">','Acuan rasio 1:150 (Permendikbud 111/2014).')+
+  fld("aJP","Menit per JP",'<input type="number" id="aJP" min="30" max="60" value="'+esc(a.menitJP)+'">')+fld("aLock","Kunci otomatis setelah (menit)",'<select id="aLock">'+[1,2,5,10,15,30].map(function(x){return '<option'+(+a.autolock===x?' selected':'')+'>'+x+'</option>';}).join("")+'</select>')+
+  fld("aKelas","Daftar kelas",'<input type="text" id="aKelas" value="'+esc(a.kelas)+'">','Pisahkan dengan koma; dipakai untuk saran isian kelas.','full')+
+  '<div class="fld full"><h3 style="margin-top:8px">AI opsional (Gemini)</h3><p class="hint" style="margin:0">Hanya untuk menyusun narasi laporan dari angka agregat. Kunci API milik Anda sendiri, tersimpan di perangkat ini, dan dikirim langsung ke Google saat Anda menekan tombol narasi. Kosongkan untuk menonaktifkan.</p></div>'+
+  fld("aKey","Kunci API Gemini",'<input type="password" id="aKey" value="'+esc(a.geminiKey)+'" autocomplete="off" placeholder="kosong = AI nonaktif">')+fld("aMod","Model",'<input type="text" id="aMod" value="'+esc(a.geminiModel)+'">')+
+  '<div class="fld full row"><button class="btn pri" type="submit">Simpan pengaturan</button></div></form></section>'+
+  '<section class="card"><h2>Ganti PIN</h2><div class="f" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">'+fld("cpOld","PIN lama",'<input type="password" id="cpOld" inputmode="numeric" maxlength="8">')+fld("cpNew","PIN baru (4–8 angka)",'<input type="password" id="cpNew" inputmode="numeric" maxlength="8">')+'<div class="fld" style="justify-content:flex-end"><button class="btn" type="button" id="bCP">Ganti PIN</button></div></div>'+
+  '<p class="note" style="margin-top:12px">PIN adalah kunci tampilan, bukan enkripsi. Untuk perlindungan lebih, gunakan akun perangkat yang terkunci dan jangan pakai perangkat bersama.</p></section>'+
+  '<section class="card"><h2>Cadangan &amp; data</h2><p class="lead">Data hanya ada di browser perangkat ini. Buat cadangan JSON secara berkala dan simpan di tempat aman (bukan grup percakapan).</p>'+
+  '<div class="row"><button class="btn pri" type="button" id="bExp">Ekspor cadangan JSON</button><label class="btn" for="fImp" tabindex="0" id="lImp">Impor cadangan JSON</label><input type="file" id="fImp" accept=".json,application/json" class="sr"><button class="btn" type="button" id="bCt">Hapus data contoh</button><button class="btn" type="button" id="bMuat">Muat ulang data contoh</button><button class="btn bad" type="button" id="bAll">Hapus semua data</button></div>'+
+  '<p class="meta" style="color:var(--mut);font-size:13.5px;margin:10px 0 0">'+DB.entri.length+' catatan tersimpan ('+DB.entri.filter(function(e){return e.contoh;}).length+' contoh).</p></section>';
+  var $=function(id){return document.getElementById(id);};
+  $("fa").onsubmit=function(ev){ev.preventDefault();
+    a.sekolah=$("aSek").value.trim();a.kota=$("aKota").value.trim();a.guru=$("aGuru").value.trim();a.kepsek=$("aKs").value.trim();a.ta=$("aTa").value.trim()||taSekarang();
+    a.binaan=Math.max(1,parseInt($("aBin").value,10)||150);a.menitJP=Math.min(60,Math.max(30,parseInt($("aJP").value,10)||40));a.autolock=+$("aLock").value;a.kelas=$("aKelas").value;
+    a.geminiKey=$("aKey").value.trim();a.geminiModel=$("aMod").value.trim()||"gemini-2.5-flash";save();resetIdle();toast("Pengaturan disimpan.");go("atur");};
+  $("bCP").onclick=function(){var p=pinData(),o=$("cpOld").value.trim(),n=$("cpNew").value.trim();
+    if(!p||hashPin(o,p.salt)!==p.hash){toast("PIN lama salah.");return;}
+    if(!/^\d{4,8}$/.test(n)){toast("PIN baru harus 4–8 angka.");return;}
+    var s=randHex(16);lsSet(KEY_PIN,JSON.stringify({salt:s,hash:hashPin(n,s)}));$("cpOld").value=$("cpNew").value="";toast("PIN diganti.");};
+  $("bExp").onclick=function(){var c=JSON.parse(JSON.stringify(DB));c.atur.geminiKey="";c.diekspor=new Date().toISOString();c.aplikasi="Jurnal Layanan BK";
+    unduh("cadangan-jurnal-bk-"+today()+".json",JSON.stringify(c,null,1),"application/json");toast("Cadangan diunduh (tanpa kunci API). Simpan dengan aman.");};
+  $("lImp").onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();$("fImp").click();}};
+  $("fImp").onchange=function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){
+    try{var d=JSON.parse(rd.result);if(!d||!Array.isArray(d.entri))throw 0;
+      var ok=d.entri.every(function(e){return e&&typeof e.tgl==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(e.tgl)&&typeof e.jenis==="string";});if(!ok)throw 0;
+      var gab=confirm("Cadangan berisi "+d.entri.length+" catatan.\n\nOK = gabungkan dengan data sekarang\nBatal = ganti seluruh data sekarang");
+      if(gab){var ids={};DB.entri.forEach(function(e){ids[e.id]=1;});d.entri.forEach(function(e){if(!e.id||ids[e.id])e.id=uid();DB.entri.push(e);});}
+      else{if(!confirm("Yakin mengganti SEMUA data sekarang dengan isi cadangan?"))return;var key=DB.atur.geminiKey;DB.entri=d.entri;if(d.atur){for(var k in d.atur)DB.atur[k]=d.atur[k];}if(!DB.atur.geminiKey)DB.atur.geminiKey=key;}
+      DB.entri.forEach(function(e){e.dibuat=e.dibuat||Date.now();e.tlStatus=e.tlStatus||"Tidak perlu";});
+      DB.contohDimuat=true;save();toast("Cadangan dipulihkan.");go("atur");}
+    catch(e){toast("Berkas bukan cadangan Jurnal Layanan BK yang valid.");}};rd.readAsText(f);this.value="";};
+  $("bCt").onclick=hapusContoh;
+  $("bMuat").onclick=function(){DB.entri=DB.entri.filter(function(e){return !e.contoh;}).concat(contoh());save();toast("Data contoh dimuat ulang.");go("atur");};
+  $("bAll").onclick=function(){var t=prompt("Semua catatan, pengaturan, dan PIN di perangkat ini akan dihapus permanen. Ketik HAPUS untuk melanjutkan:");
+    if(t==="HAPUS"){lsDel(KEY);lsDel(KEY_PIN);DB=null;toast("Semua data dihapus.");showLock();}};
+}
+
+/* ---------- Dasar & sumber ---------- */
+function vDasar(m){
+  m.innerHTML='<section class="card"><h2>Dasar dan sumber</h2><p class="lead">Rancangan jurnal ini mengikuti ketentuan layanan BK dan praktik pelaporan program BK di sekolah.</p>'+
+  '<h3>Yang diterapkan di aplikasi</h3><ul>'+
+  '<li><b>Komponen layanan</b>: layanan dasar, peminatan dan perencanaan individual, layanan responsif, dukungan sistem; <b>bidang</b>: pribadi, sosial, belajar, karier (Permendikbud 111/2014 Pasal 6).</li>'+
+  '<li><b>Strategi layanan</b> menurut jumlah individu (individual, kelompok, klasikal, kelas besar/lintas kelas) serta konsultasi, kolaborasi, konferensi kasus, kunjungan rumah, alih tangan kasus, dan advokasi (Pasal 7 dan lampiran). Mediasi ditambahkan sebagai praktik layanan responsif yang lazim di sekolah.</li>'+
+  '<li><b>Bimbingan klasikal</b> 2 JP per kelas per minggu dan <b>rasio</b> 1 guru BK : 150 siswa untuk SMP (Pasal 6 ayat 4 dan Pasal 10). Permendikdasmen 11/2025 juga menyebut pembimbingan oleh guru BK paling sedikit 5 rombongan belajar per tahun.</li>'+
+  '<li><b>Siklus pengelolaan</b>: analisis kebutuhan, perencanaan, pelaksanaan, evaluasi, pelaporan, tindak lanjut (Pasal 8). Jurnal ini mengisi bagian pelaksanaan–evaluasi–pelaporan–tindak lanjut.</li>'+
+  '<li><b>Asas kerahasiaan</b> (Pasal 4): data hanya di perangkat, kunci PIN, laporan cetak hanya berisi angka agregat, ekspor CSV disamarkan secara bawaan.</li>'+
+  '<li><b>Rujukan</b>: guru BK tidak menegakkan diagnosis; kasus di luar kewenangan dialihtangankan ke psikolog/layanan profesional, dan dugaan kekerasan dilaporkan ke tim pencegahan dan penanganan kekerasan di sekolah.</li></ul>'+
+  '<h3>Sumber</h3><ol class="src">'+
+  '<li><a href="https://peraturan.go.id/files/bn1544-2014.pdf" target="_blank" rel="noopener">Permendikbud Nomor 111 Tahun 2014 tentang Bimbingan dan Konseling pada Pendidikan Dasar dan Menengah (peraturan.go.id)</a></li>'+
+  '<li><a href="https://sma.kemdikbud.go.id/data/files/Permendiknas%20Nomor%20111%20Tahun%202014%20Tentang%20Bimbingan%20Dan%20Konseling%20Lampiran.pdf" target="_blank" rel="noopener">Lampiran Permendikbud 111/2014 — Pedoman Bimbingan dan Konseling (Kemendikbud)</a></li>'+
+  '<li><a href="https://www.komunitasbelajar.id/2025/07/permendikdasmen-nomor-11-tahun-2025.html" target="_blank" rel="noopener">Permendikdasmen Nomor 11 Tahun 2025 — pemenuhan beban kerja guru, termasuk guru BK (Komunitas Belajar)</a></li>'+
+  '<li><a href="https://www.komunitasbelajar.id/2018/02/contoh-laporan-pelaksanaan-program-guru.html" target="_blank" rel="noopener">Contoh struktur Laporan Pelaksanaan Program BK (Komunitas Belajar)</a></li>'+
+  '<li><a href="https://merdekabelajar.kemdikbud.go.id/upload/file/278_1691482001.pdf" target="_blank" rel="noopener">Pencegahan dan Penanganan Kekerasan di Lingkungan Satuan Pendidikan — Permendikbudristek 46/2023 (Kemendikbudristek)</a></li></ol>'+
+  '<p class="note" style="margin-top:12px">Aplikasi ini alat bantu administrasi, bukan instrumen asesmen psikologis. Sesuaikan dengan ketentuan terbaru dan kebijakan sekolah Anda.</p></section>';
+}
+
+/* ---------- Dialog & toast ---------- */
+function openDlg(t,html){var d=document.getElementById("dlg");document.getElementById("dlgTitle").textContent=t;document.getElementById("dlgBody").innerHTML=html;try{d.showModal();}catch(e){d.setAttribute("open","");}}
+function closeDlg(){var d=document.getElementById("dlg");if(d.open){try{d.close();}catch(e){d.removeAttribute("open");}}}
+document.getElementById("dlgClose").onclick=closeDlg;
+var tT=null;function toast(t){var el=document.querySelector(".toast");if(!el){el=document.createElement("div");el.className="toast";el.setAttribute("role","status");document.body.appendChild(el);}el.textContent=t;el.hidden=false;clearTimeout(tT);tT=setTimeout(function(){el.hidden=true;},3200);}
+window.addEventListener("afterprint",function(){document.getElementById("printArea").innerHTML="";});
+
+/* ---------- Mulai ---------- */
+showLock();
+</script>
+</body>
+</html>

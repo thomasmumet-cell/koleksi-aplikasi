@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Jurnal Layanan BK",
+    kategori: "Bimbingan Konseling",
+    jenis: "HTML",
+    deskripsi: "Catat layanan BK harian (konseling individual/kelompok, bimbingan klasikal, konsultasi, mediasi, kunjungan rumah, rujukan) per bidang pribadi, sosial, belajar, karier lengkap dengan durasi, hasil, dan tindak lanjut; rekap bulanan/semester, grafik sebaran, dan laporan cetak agregat. Data hanya di perangkat, dikunci PIN.",
+    tanggal: "2026-11-18",
+    tautan: "bk-jurnal-layanan/",
+    status: "aktif"
+  },
+  {
     nama: "Latihan TKA Matematika",
     kategori: "Persiapan TKA",
     jenis: "HTML",
