@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Latihan TKA Matematika",
+    kategori: "Persiapan TKA",
+    jenis: "HTML",
+    deskripsi: "Latihan TKA Matematika SMP per domain (Bilangan, Aljabar, Geometri dan Pengukuran, Data dan Peluang) dengan 52 soal orisinal berstimulus konteks sehari-hari, mode latihan berpembahasan langkah demi langkah, tes berwaktu 30 soal/75 menit, dan peta kekuatan per domain dan level kognitif. Soal tambahan AI Gemini opsional.",
+    tanggal: "2026-11-18",
+    tautan: "tka-matematika/",
+    status: "aktif"
+  },
+  {
     nama: "Peta Beban Mengajar Guru",
     kategori: "Sekolah",
     jenis: "HTML",
