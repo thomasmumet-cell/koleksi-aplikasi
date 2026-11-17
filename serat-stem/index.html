@@ -873,7 +873,7 @@ let cur = 'mesin';
 let PIPE = false;
 
 function load(){ try{ const s=localStorage.getItem(LS_KEY); return s?normalize(JSON.parse(s)):null; }catch(e){ return null; } }
-function loadCfg(){ try{ return Object.assign({engine:'auto',key:'',model:'gemini-2.5-flash'}, JSON.parse(localStorage.getItem(LS_CFG)||'{}')); }catch(e){ return {engine:'auto',key:'',model:'gemini-2.5-flash'}; } }
+function loadCfg(){ const GEMINI_DEFAULT='gemini-3.8-flash'; let c; try{ c=Object.assign({engine:'auto',key:'',model:GEMINI_DEFAULT}, JSON.parse(localStorage.getItem(LS_CFG)||'{}')); }catch(e){ c={engine:'auto',key:'',model:GEMINI_DEFAULT}; } if(!c.model||/^gemini-(1|2)\./.test(c.model)) c.model=GEMINI_DEFAULT; return c; }
 function saveCfg(){ try{ localStorage.setItem(LS_CFG, JSON.stringify(cfg)); }catch(e){} }
 let saveT=null, quotaWarned=false;
 function persist(){ clearTimeout(saveT); saveT=setTimeout(()=>{ try{ localStorage.setItem(LS_KEY, JSON.stringify(book)); }catch(e){ if(!quotaWarned){ quotaWarned=true; toast('Penyimpanan otomatis peramban penuh (gambar besar). Gunakan "Simpan Proyek".',true); } } },500); }
@@ -947,17 +947,28 @@ async function callAI(prompt, o){
       throw new Error((err&&err.message)||'Gagal memanggil Claude.');
     }
   }
-  const url='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(cfg.model||'gemini-2.5-flash')+':generateContent';
   const body={contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{temperature:0.8,maxOutputTokens:16384}};
   if(o.json) body.generationConfig.responseMimeType='application/json';
-  let res;
-  try{ res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':gKey()},body:JSON.stringify(body),signal:aiAbort.signal}); }
-  catch(err){ if(err.name==='AbortError') throw new Error('Dihentikan.'); throw new Error('Tidak dapat menghubungi Gemini. Periksa koneksi internet.'); }
-  const j=await res.json().catch(()=>({}));
-  if(!res.ok) throw new Error('Gemini: '+((j.error&&j.error.message)||res.status));
-  const t=((((j.candidates||[])[0]||{}).content||{}).parts||[]).map(p=>p.text||'').join('');
-  if(!t) throw new Error('Gemini tidak mengembalikan teks (mungkin terblokir filter).');
-  return t;
+  const daftar=[...new Set([cfg.model||'gemini-3.8-flash','gemini-3.8-flash','gemini-flash-latest'])];
+  let lastErr=null;
+  for(const model of daftar){
+    const url='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent';
+    let res;
+    try{ res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':gKey()},body:JSON.stringify(body),signal:aiAbort.signal}); }
+    catch(err){ if(err.name==='AbortError') throw new Error('Dihentikan.'); throw new Error('Tidak dapat menghubungi Gemini. Periksa koneksi internet.'); }
+    const j=await res.json().catch(()=>({}));
+    if(!res.ok){
+      const msg=(j.error&&j.error.message)||String(res.status);
+      const modelMati = res.status===404 || /no longer available|not found|not supported|deprecated|update your code/i.test(msg);
+      if(modelMati){ lastErr=new Error('Gemini ('+model+'): '+msg); continue; }
+      throw new Error('Gemini: '+msg);
+    }
+    if(model!==cfg.model){ cfg.model=model; saveCfg(); const m=document.getElementById('cfgModel'); if(m) m.value=model; toast('Model Gemini otomatis diganti ke '+model+'.'); }
+    const t=((((j.candidates||[])[0]||{}).content||{}).parts||[]).map(p=>p.text||'').join('');
+    if(!t) throw new Error('Gemini tidak mengembalikan teks (mungkin terblokir filter).');
+    return t;
+  }
+  throw lastErr||new Error('Model Gemini tidak tersedia. Ganti nama model di kartu "Mesin AI".');
 }
 function parseJSON(t){
   let s=String(t||'').trim().replace(/^```(?:json)?\s*/i,'').replace(/```\s*$/,'');
@@ -1579,7 +1590,7 @@ function viewMulai(){
     <div class="grid g3">
       <label class="f">Mesin<select id="cfgEngine"><option value="auto">Otomatis</option><option value="claude">Claude (claude.ai)</option><option value="gemini">Gemini (API key)</option></select></label>
       <label class="f">API key Gemini ${DEFAULT_GEMINI_KEY?'<span class="h">(kunci bawaan sudah terpasang; isi hanya untuk mengganti)</span>':''}<input type="password" id="cfgKey" placeholder="${DEFAULT_GEMINI_KEY?'••• kunci bawaan aktif':'AIza… / AQ.…'}"></label>
-      <label class="f">Model Gemini<input type="text" id="cfgModel"></label>
+      <label class="f">Model Gemini<input type="text" id="cfgModel" placeholder="gemini-3.8-flash"></label>
     </div>
     ${!sampleCap?'<p class="hint" style="margin-top:10px">Claude tidak tersedia di tampilan ini, jadi gunakan Gemini.</p>':''}
     <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)">
