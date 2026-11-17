@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Latihan TKAD Bahasa Inggris – Bacaan Panjang",
+    kategori: "Persiapan TKA",
+    jenis: "HTML",
+    deskripsi: "Latihan membaca model TKAD DIY: 18 bacaan panjang orisinal dari lima jenis teks, tiap bacaan untuk 2–3 soal (54 soal PG, PG kompleks, True/False), mode latihan berpembahasan, tes berwaktu ±40 soal/90 menit, dan peta kemampuan per jenis teks dan proses membaca. Bacaan dan soal tambahan dari AI Gemini bersifat opsional.",
+    tanggal: "2026-11-18",
+    tautan: "tkad-inggris-bacaan/",
+    status: "aktif"
+  },
+  {
     nama: "Jurnal Layanan BK",
     kategori: "Bimbingan Konseling",
     jenis: "HTML",

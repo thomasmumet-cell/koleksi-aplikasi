@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Latihan TKAD Bahasa Inggris – Bacaan Panjang</title>
+<meta name="description" content="Latihan membaca Bahasa Inggris model TKAD SMP: bacaan panjang orisinal, satu bacaan untuk 2–3 soal (pilihan ganda, PG kompleks, True/False), mode latihan berpembahasan, tes berwaktu 40 soal/90 menit, dan peta kemampuan per jenis teks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f2e9;--grid:rgba(27,42,65,.055);--card:#fffdf8;--card2:#f9f4ea;--ink:#1b2a41;--mut:#5a6476;--line:#e3dccd;
+  --acc:#d9480f;--acc2:#fff0e6;--on-acc:#fff;--ok:#2b8a3e;--ok-bg:#e9f7ec;--bad:#c92a2a;--bad-bg:#fdeceb;--warn:#a85d00;--warn-bg:#fff4db;
+  --fun:#d9480f;--des:#1864ab;--pro:#2b8a3e;--rec:#862e9c;--nar:#c2255c;--shadow:3px 3px 0 var(--ink);
+  --r:14px;color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121822;--grid:rgba(255,255,255,.035);--card:#1b2331;--card2:#222c3d;--ink:#edf1f7;--mut:#a6b0c0;--line:#313d52;
+  --acc:#ff8c42;--acc2:#3a2618;--on-acc:#1a0f05;--ok:#5fd17a;--ok-bg:#16301f;--bad:#ff7b7b;--bad-bg:#3a1c1e;--warn:#ffc24d;--warn-bg:#3a2e14;
+  --fun:#ff9a52;--des:#5cb3ff;--pro:#62d47c;--rec:#d98af0;--nar:#ff7eb0;--shadow:3px 3px 0 #000;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121822;--grid:rgba(255,255,255,.035);--card:#1b2331;--card2:#222c3d;--ink:#edf1f7;--mut:#a6b0c0;--line:#313d52;
+  --acc:#ff8c42;--acc2:#3a2618;--on-acc:#1a0f05;--ok:#5fd17a;--ok-bg:#16301f;--bad:#ff7b7b;--bad-bg:#3a1c1e;--warn:#ffc24d;--warn-bg:#3a2e14;
+  --fun:#ff9a52;--des:#5cb3ff;--pro:#62d47c;--rec:#d98af0;--nar:#ff7eb0;--shadow:3px 3px 0 #000;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Atkinson Hyperlegible",system-ui,sans-serif;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;min-height:100vh}
+h1,h2,h3,.disp{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0}
+a{color:var(--acc)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 16px}
+/* Header */
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:2px solid var(--ink)}
+.hd{display:flex;align-items:center;gap:12px;padding:10px 0 6px}
+.logo{width:42px;height:42px;flex:none;border-radius:11px;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;font:800 26px "Bricolage Grotesque";box-shadow:var(--shadow);border:2px solid var(--ink)}
+.hd h1{font-size:clamp(18px,4.2vw,24px);font-weight:800}
+.hd small{display:block;color:var(--mut);font-size:13px}
+.hd .sp{flex:1}
+.iconbtn{border:2px solid var(--ink);background:var(--card);border-radius:10px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:none;border:2px solid transparent;background:none;border-radius:999px;padding:6px 14px;cursor:pointer;font-weight:700;color:var(--mut);font-size:15px}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+nav.tabs button:hover{border-color:var(--line)}
+main.wrap{padding:20px 16px 60px}
+section.view{display:none}section.view.on{display:block;animation:in .25s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* Cards */
+.card{background:var(--card);border:2px solid var(--ink);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.soft{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.kick{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);font-weight:700}
+.mut{color:var(--mut)}.small{font-size:14px}
+.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:stretch}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+.hero h2{font-size:clamp(28px,6vw,44px);font-weight:800;margin:6px 0 10px}
+.hero h2 em{font-style:normal;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--acc) 40%,transparent) 62%)}
+.status{border-left:5px solid var(--acc);background:var(--acc2);padding:12px 14px;border-radius:0 10px 10px 0;font-size:15px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .08s,box-shadow .08s;text-decoration:none;min-height:44px}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+.btn.pri{background:var(--acc);color:var(--on-acc)}
+.btn.ghost{box-shadow:none;border-color:var(--line)}
+.btn.sm{padding:6px 12px;min-height:36px;font-size:15px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.dom{position:relative;overflow:hidden;border-color:var(--dc)}
+.dom .bar{height:10px;border-radius:9px;background:var(--line);overflow:hidden;margin:10px 0 4px}
+.dom .bar i{display:block;height:100%;background:var(--dc);border-radius:9px}
+.dom h3{font-size:20px;color:var(--dc)}
+.dom .ico{position:absolute;right:12px;top:10px;font:800 34px "Bricolage Grotesque";color:var(--dc);opacity:.18}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;border-radius:999px;padding:2px 10px;border:1.5px solid currentColor;line-height:1.6;white-space:nowrap}
+.chip.ai{color:var(--warn);background:var(--warn-bg)}
+.c-fun{--dc:var(--fun);color:var(--fun)}.c-des{--dc:var(--des);color:var(--des)}.c-pro{--dc:var(--pro);color:var(--pro)}.c-rec{--dc:var(--rec);color:var(--rec)}.c-nar{--dc:var(--nar);color:var(--nar)}
+.card.c-fun,.card.c-des,.card.c-pro,.card.c-rec,.card.c-nar{color:var(--ink)}
+/* Form */
+fieldset{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px}
+legend{font-weight:700;padding:0 6px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.tog{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:10px;padding:6px 12px;cursor:pointer;background:var(--card)}
+.tog:has(input:checked){border-color:var(--ink);background:var(--card2);font-weight:700}
+.tog input{accent-color:var(--acc);width:18px;height:18px}
+label.f{display:block;font-weight:700;margin:10px 0 4px}
+input[type=text],input[type=password],input[type=number],input[type=date],select,textarea{width:100%;border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:9px 12px}
+textarea{min-height:90px}
+/* Player */
+.ptop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.prog{flex:1;min-width:120px;height:12px;border:2px solid var(--ink);border-radius:9px;overflow:hidden;background:var(--card)}
+.prog i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.timer{font:800 22px "Bricolage Grotesque";font-variant-numeric:tabular-nums;border:2px solid var(--ink);border-radius:10px;padding:2px 12px;background:var(--card)}
+.timer.low{background:var(--bad-bg);color:var(--bad)}
+.qcard{display:grid;grid-template-columns:1fr;gap:14px}
+.qmeta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.stim{background:var(--card2);border:1px dashed var(--mut);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.stim .lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);display:block;margin-bottom:4px}
+.qtext{font-size:19px;font-weight:700;margin:0 0 12px}
+table.tb{border-collapse:collapse;margin:8px 0;font-size:15px;max-width:100%}
+.tbwrap{overflow-x:auto}
+table.tb th,table.tb td{border:1px solid var(--mut);padding:4px 10px;text-align:center}
+table.tb th{background:var(--card)}
+.choice{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;border:2px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px;margin:0 0 8px;cursor:pointer;min-height:48px}
+.choice:hover{border-color:var(--mut)}
+.choice .let{flex:none;width:30px;height:30px;border-radius:8px;border:2px solid var(--ink);display:grid;place-items:center;font-weight:800;font-family:"Bricolage Grotesque"}
+.choice[role=checkbox] .let{border-radius:6px}
+.choice[aria-checked="true"]{border-color:var(--ink);background:var(--acc2)}
+.choice[aria-checked="true"] .let{background:var(--acc);color:var(--on-acc)}
+.choice.right{border-color:var(--ok);background:var(--ok-bg)}
+.choice.right .let{background:var(--ok);color:#fff;border-color:var(--ok)}
+.choice.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.choice:disabled{cursor:default}
+.bs{width:100%;border-collapse:separate;border-spacing:0 6px}
+.bs td{padding:8px 10px;background:var(--card);border-top:2px solid var(--line);border-bottom:2px solid var(--line)}
+.bs td:first-child{border-left:2px solid var(--line);border-radius:10px 0 0 10px}
+.bs td:last-child{border-right:2px solid var(--line);border-radius:0 10px 10px 0;white-space:nowrap;width:1%}
+.bs tr.right td{border-color:var(--ok);background:var(--ok-bg)}.bs tr.wrong td{border-color:var(--bad);background:var(--bad-bg)}
+.bsb{border:2px solid var(--ink);background:var(--card);border-radius:8px;padding:4px 10px;font-weight:700;cursor:pointer;min-width:62px;min-height:38px}
+.bsb[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.fb{border-radius:12px;padding:12px 14px;margin-top:12px;border:2px solid}
+.fb.ok{border-color:var(--ok);background:var(--ok-bg)}.fb.no{border-color:var(--bad);background:var(--bad-bg)}
+.fb h3{font-size:20px;margin-bottom:6px}
+ol.steps{margin:6px 0 0;padding-left:22px}ol.steps li{margin:4px 0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.85em;line-height:1.1;margin:0 2px}
+.fr>span:first-child{border-bottom:1.5px solid currentColor;padding:0 2px}
+.navq{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:6px}
+.navq button{height:42px;border:2px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;font-weight:700;position:relative}
+.navq button.ans{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.navq button.flag{background:var(--warn-bg);border-color:var(--warn);color:var(--ink)}
+.navq button.flag::after{content:"";position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--warn)}
+.navq button.cur{outline:3px solid var(--acc);outline-offset:1px}
+.tesgrid{display:grid;grid-template-columns:1fr 260px;gap:16px}
+@media (max-width:820px){.tesgrid{grid-template-columns:1fr}}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;margin-top:8px}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px;border:1.5px solid var(--ink)}
+.legend .l1::before{background:var(--ink)}.legend .l2::before{background:var(--warn-bg);border-color:var(--warn)}.legend .l3::before{background:var(--card)}
+/* Bacaan */
+.split{display:grid;grid-template-columns:1fr;gap:16px}
+.passage{background:var(--card2);border:1px dashed var(--mut);border-radius:12px;padding:14px 16px;max-height:55vh;overflow:auto;font-family:Georgia,"Times New Roman",serif;font-size:17px;line-height:1.7}
+.passage h3{font:800 20px "Bricolage Grotesque",system-ui,sans-serif;margin:2px 0 8px}
+.passage p{margin:0 0 10px}
+.passage .lbl{font:700 12px "Atkinson Hyperlegible",system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);display:block}
+.passage details summary{cursor:pointer;font-family:"Atkinson Hyperlegible",system-ui,sans-serif;font-weight:700}
+.grpinfo{font-size:13px;color:var(--mut);margin:-4px 0 10px}
+@media (min-width:980px){.split{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start}.passage{position:sticky;top:120px;max-height:calc(100vh - 150px)}}
+.tesgrid .split{grid-template-columns:1fr}
+@media (min-width:1180px){.tesgrid .split{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}}
+/* Peta */
+.heat{width:100%;border-collapse:separate;border-spacing:6px}
+.heat th{font-size:14px;text-align:left;color:var(--mut);font-weight:700}
+.heat td{border-radius:10px;padding:10px;text-align:center;font-weight:800;font-family:"Bricolage Grotesque";font-size:20px;border:2px solid var(--line)}
+.heat td small{display:block;font:400 12px "Atkinson Hyperlegible";color:var(--mut)}
+.heat td.h0{background:var(--card)}.heat td.h1{background:var(--bad-bg);border-color:var(--bad)}.heat td.h2{background:var(--warn-bg);border-color:var(--warn)}.heat td.h3{background:var(--ok-bg);border-color:var(--ok)}
+.heatwrap{overflow-x:auto}
+.big{font:800 52px/1 "Bricolage Grotesque"}
+.banner{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border:2px dashed var(--warn);background:var(--warn-bg);border-radius:12px;padding:10px 14px;margin-bottom:14px}
+.list{list-style:none;padding:0;margin:0}
+.list li{border-bottom:1px solid var(--line);padding:10px 0}
+.tablewrap{overflow-x:auto}
+table.data{border-collapse:collapse;width:100%;font-size:15px}
+table.data th,table.data td{border-bottom:1px solid var(--line);padding:8px;text-align:left;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;z-index:50;font-weight:700;max-width:calc(100% - 32px);display:none}
+.toast.on{display:block;animation:in .2s}
+dialog{border:2px solid var(--ink);border-radius:var(--r);background:var(--card);color:var(--ink);max-width:min(560px,calc(100% - 32px));box-shadow:var(--shadow);padding:20px}
+dialog::backdrop{background:rgba(10,15,25,.55)}
+.aibox{margin-top:10px;border:2px dashed var(--warn);border-radius:12px;padding:10px 14px;background:var(--warn-bg);white-space:pre-wrap}
+.kbd{font-size:13px;color:var(--mut)}
+kbd{border:1.5px solid var(--mut);border-bottom-width:3px;border-radius:5px;padding:0 5px;font-size:12px;background:var(--card)}
+footer{color:var(--mut);font-size:14px;text-align:center;padding:20px 16px 40px}
+@media (max-width:520px){.heat{border-spacing:3px}.heat td{padding:6px 4px;font-size:16px}.heat th{font-size:12px}.hd small{font-size:12px}body{font-size:16px}.card{padding:14px}.qtext{font-size:18px}.big{font-size:42px}}
+@media print{header.top,nav,.btn,footer{display:none!important}body{background:#fff}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="hd">
+      <div class="logo" aria-hidden="true" style="font-size:20px">Aa</div>
+      <div><h1>Latihan TKAD Bahasa Inggris</h1><small>SMP · Bacaan panjang · 1 bacaan untuk 2–3 soal</small></div>
+      <div class="sp"></div>
+      <button class="iconbtn" id="themeBtn" type="button" aria-label="Ganti tema terang/gelap" title="Ganti tema">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Menu utama">
+      <button role="tab" data-v="beranda" aria-selected="true">Beranda</button>
+      <button role="tab" data-v="latihan" aria-selected="false">Latihan</button>
+      <button role="tab" data-v="tes" aria-selected="false">Tes Berwaktu</button>
+      <button role="tab" data-v="peta" aria-selected="false">Peta Kemampuan</button>
+      <button role="tab" data-v="riwayat" aria-selected="false">Riwayat</button>
+      <button role="tab" data-v="ai" aria-selected="false">Soal AI</button>
+      <button role="tab" data-v="atur" aria-selected="false">Pengaturan</button>
+      <button role="tab" data-v="sumber" aria-selected="false">Dasar &amp; Sumber</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+<!-- BERANDA -->
+<section class="view on" id="v-beranda" aria-labelledby="t-beranda">
+  <div class="hero">
+    <div class="card">
+      <span class="kick">Persiapan TKAD · Reading</span>
+      <h2 id="t-beranda">Read deeply, <em>answer wisely</em>.</h2>
+      <p>18 bacaan panjang orisinal (±190–265 kata) dari lima jenis teks. Setiap bacaan dipakai untuk <b>2–3 soal</b> berturut-turut: pilihan ganda, PG kompleks, dan <i>True/False</i>. Kerjakan dengan <b>mode latihan</b> (langsung ada pembahasan berbahasa Indonesia beserta bukti dari teks) atau <b>tes berwaktu</b> seperti hari-H.</p>
+      <div class="row" style="margin-top:14px">
+        <button class="btn pri" type="button" data-quick="latihan">Latihan cepat ±10 soal</button>
+        <button class="btn" type="button" data-quick="tes">Tes ±40 soal · 90 menit</button>
+      </div>
+    </div>
+    <div class="card">
+      <span class="kick">Status mapel</span>
+      <div class="status" style="margin-top:8px"><b>Bahasa Inggris diujikan di TKAD DIY</b> (Tes Kemampuan Akademik Daerah, bagian SPMB DIY 2026 untuk masuk SMA/SMK) bersama IPA: <b>40 soal, 90 menit</b>, bentuk <b>pilihan ganda, PG kompleks, dan benar/salah</b>.</div>
+      <p class="small mut" style="margin:10px 0 0">Bahasa Inggris <b>bukan</b> mata uji TKA SMP nasional (yang wajib hanya Bahasa Indonesia dan Matematika). Rincian di <a href="#" data-go="sumber">Dasar &amp; Sumber</a>. Semua bacaan dan soal di sini orisinal, bukan soal resmi.</p>
+    </div>
+  </div>
+  <h2 style="font-size:24px;margin:26px 0 12px">Lima jenis teks</h2>
+  <div class="grid g4" id="domCards"></div>
+  <div class="soft" style="margin-top:18px">
+    <div class="row" style="justify-content:space-between">
+      <div><b>Halo<span id="helloName"></span>!</b> <span class="mut" id="homeSum"></span></div>
+      <button class="btn sm ghost" type="button" data-go="peta">Lihat peta kemampuan →</button>
+    </div>
+  </div>
+</section>
+
+<!-- LATIHAN -->
+<section class="view" id="v-latihan" aria-labelledby="t-latihan">
+  <div id="latSetup" class="card">
+    <h2 id="t-latihan" style="font-size:26px;margin-bottom:4px">Mode Latihan</h2>
+    <p class="mut" style="margin-top:0">Bacaan tampil di samping soal (di HP: di atas soal). Jawab satu per satu, lalu langsung lihat benar/salah dan pembahasannya. Soal dari bacaan yang sama selalu berurutan.</p>
+    <div id="latForm"></div>
+    <button class="btn pri" type="button" id="latStart">Mulai latihan</button>
+  </div>
+  <div id="latPlay" hidden></div>
+</section>
+
+<!-- TES -->
+<section class="view" id="v-tes" aria-labelledby="t-tes">
+  <div id="tesSetup" class="card">
+    <h2 id="t-tes" style="font-size:26px;margin-bottom:4px">Tes Berwaktu</h2>
+    <p class="mut" style="margin-top:0">Seperti hari-H: tanpa umpan balik sampai selesai, ada penanda ragu-ragu dan navigasi nomor soal. Bawaan ±40 soal · 90 menit (format TKAD DIY 2026). Jumlah soal bisa lebih 1–2 karena bacaan tidak dipotong.</p>
+    <div id="tesForm"></div>
+    <label class="f" for="tesMenit">Durasi (menit)</label>
+    <input type="number" id="tesMenit" min="5" max="180" value="90" style="max-width:140px">
+    <p class="small mut">Saran: sekitar 2¼ menit per soal (sudah termasuk waktu membaca).</p>
+    <button class="btn pri" type="button" id="tesStart">Mulai tes</button>
+  </div>
+  <div id="tesPlay" hidden></div>
+</section>
+
+<!-- PETA -->
+<section class="view" id="v-peta" aria-labelledby="t-peta">
+  <div id="petaContoh"></div>
+  <div class="grid g2">
+    <div class="card"><span class="kick">Ketepatan keseluruhan</span><div class="big" id="pAll">–</div><div class="mut" id="pAllSub"></div></div>
+    <div class="card"><span class="kick">Fokus berikutnya</span><div id="pFokus" style="margin-top:6px"></div></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2 id="t-peta" style="font-size:24px">Peta jenis teks × proses membaca</h2>
+    <p class="small mut">Persentase jawaban benar. <span style="color:var(--bad)">Merah &lt; 50%</span> · <span style="color:var(--warn)">Kuning 50–74%</span> · <span style="color:var(--ok)">Hijau ≥ 75%</span>. Klik sel untuk berlatih bagian itu.</p>
+    <div class="heatwrap"><table class="heat" id="heat"></table></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2 style="font-size:22px">Keterampilan membaca terlemah</h2>
+    <ul class="list" id="weakList"></ul>
+  </div>
+</section>
+
+<!-- RIWAYAT -->
+<section class="view" id="v-riwayat" aria-labelledby="t-riw">
+  <div class="card">
+    <h2 id="t-riw" style="font-size:24px">Riwayat sesi</h2>
+    <p class="small mut">Semua data tersimpan hanya di perangkat ini (localStorage). Ekspor untuk cadangan atau untuk diserahkan ke guru.</p>
+    <div class="row" style="margin:10px 0 14px">
+      <button class="btn sm" type="button" id="expCsv">Ekspor CSV jawaban</button>
+      <button class="btn sm" type="button" id="expJson">Ekspor cadangan JSON</button>
+      <label class="btn sm" for="impJson" style="cursor:pointer">Impor JSON</label>
+      <input type="file" id="impJson" accept=".json,application/json" class="sr">
+      <button class="btn sm ghost" type="button" id="delContoh">Hapus data contoh</button>
+      <button class="btn sm ghost" type="button" id="delAll" style="color:var(--bad)">Hapus semua data</button>
+    </div>
+    <div class="tablewrap"><table class="data" id="sesiTable"></table></div>
+  </div>
+</section>
+
+<!-- AI -->
+<section class="view" id="v-ai" aria-labelledby="t-ai">
+  <div class="card">
+    <h2 id="t-ai" style="font-size:24px">Soal tambahan buatan AI <span class="chip ai">opsional</span></h2>
+    <p class="small">Buat <b>bacaan baru beserta 2–3 soal</b> dengan Gemini memakai kunci API Anda sendiri (isi di <a href="#" data-go="atur">Pengaturan</a>). Setiap bacaan dan soal AI ditandai <span class="chip ai">Perlu dicek guru</span> — periksa isi, kunci, dan pembahasannya sebelum dipakai.</p>
+    <div class="grid g2">
+      <div><label class="f" for="aiDom">Jenis teks</label><select id="aiDom"></select></div>
+      <div><label class="f" for="aiN">Jumlah soal untuk bacaan</label><select id="aiN"><option>2</option><option selected>3</option></select></div>
+      <div><label class="f" for="aiTopik">Topik bacaan (opsional)</label><input type="text" id="aiTopik" placeholder="mis. festival layang-layang di pantai"></div>
+      <div><label class="f" for="aiLvl">Tingkat kesulitan</label><select id="aiLvl"><option value="1">Lebih mudah (kelas VII–VIII)</option><option value="2" selected>Setara kelas IX</option><option value="3">Menantang</option></select></div>
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btn pri" type="button" id="aiGen">Buat soal dengan AI</button><span id="aiStat" class="small mut" role="status"></span></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="row" style="justify-content:space-between"><h2 style="font-size:22px">Soal AI tersimpan (<span id="aiCount">0</span>)</h2>
+    <label class="tog"><input type="checkbox" id="aiInclude"> Sertakan di latihan &amp; tes</label></div>
+    <ul class="list" id="aiList"></ul>
+  </div>
+</section>
+
+<!-- PENGATURAN -->
+<section class="view" id="v-atur" aria-labelledby="t-atur">
+  <div class="card">
+    <h2 id="t-atur" style="font-size:24px">Pengaturan</h2>
+    <label class="f" for="cfgNama">Nama panggilan (opsional, hanya untuk sapaan)</label>
+    <input type="text" id="cfgNama" maxlength="30" placeholder="mis. Nadia">
+    <label class="f" for="cfgTema">Tema</label>
+    <select id="cfgTema"><option value="system">Ikuti perangkat</option><option value="light">Terang</option><option value="dark">Gelap</option></select>
+    <fieldset style="margin-top:16px"><legend>AI Gemini (opsional)</legend>
+      <p class="small mut" style="margin-top:0">Kunci API milik Anda sendiri (gratis di Google AI Studio). Kunci disimpan <b>hanya di perangkat ini</b> dan hanya dikirim ke server Google saat Anda memakai fitur AI.</p>
+      <label class="f" for="cfgKey">Kunci API Gemini</label>
+      <input type="password" id="cfgKey" autocomplete="off" placeholder="Tempel kunci API di sini">
+      <label class="f" for="cfgModel">Model</label>
+      <input type="text" id="cfgModel" placeholder="gemini-flash-latest">
+      <div class="row" style="margin-top:12px"><button class="btn sm" type="button" id="cfgTest">Uji koneksi AI</button><button class="btn sm ghost" type="button" id="cfgDelKey">Hapus kunci</button><span id="cfgStat" class="small mut" role="status"></span></div>
+    </fieldset>
+    <button class="btn pri" type="button" id="cfgSave">Simpan pengaturan</button>
+  </div>
+  <div class="soft" style="margin-top:16px">
+    <b>Pintasan papan ketik</b>
+    <ul class="small" style="margin:6px 0 0;padding-left:20px">
+      <li><kbd>A</kbd>–<kbd>D</kbd> atau <kbd>1</kbd>–<kbd>4</kbd>: pilih jawaban (bacaan bisa digulir dengan <kbd>Tab</kbd> lalu tombol panah)</li>
+      <li><kbd>Enter</kbd>: periksa / soal berikutnya (mode latihan)</li>
+      <li><kbd>←</kbd> <kbd>→</kbd>: pindah soal, <kbd>R</kbd>: tandai ragu-ragu (tes berwaktu)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SUMBER -->
+<section class="view" id="v-sumber" aria-labelledby="t-sumber">
+  <div class="card">
+    <h2 id="t-sumber" style="font-size:24px">Dasar dan sumber</h2>
+    <h3 style="font-size:19px;margin:14px 0 6px">Status Bahasa Inggris: TKAD, bukan TKA nasional</h3>
+    <ul>
+      <li><b>TKA SMP nasional</b> (Permendikdasmen 9/2025) untuk kelas IX hanya menguji <b>Bahasa Indonesia dan Matematika</b>. Bahasa Inggris tidak termasuk.</li>
+      <li><b>TKAD DIY 2026</b> (Tes Kemampuan Akademik Daerah) dipakai dalam SPMB DIY untuk calon siswa SMA/SMK. Mata ujinya <b>IPA dan Bahasa Inggris</b>, masing-masing <b>40 soal dalam 90 menit</b>, dengan bentuk pilihan ganda, pilihan ganda kompleks, dan benar/salah. Tes Bahasa Inggris berlangsung 26 Mei 2026 (menurut ringkasan jadwal yang merujuk Kepgub DIY 95/2026).</li>
+      <li>Pola paket latihan yang beredar: <b>satu teks untuk 2–3 soal</b>, dengan jenis teks pengumuman/notice, email/surat, iklan/brosur, deskriptif, report, prosedur, recount, biografi, dan naratif (fabel/legenda). Aplikasi ini mengikuti pola tersebut dengan bacaan yang lebih panjang.</li>
+      <li>Proses membaca memakai tiga tingkat literasi: <b>Menemukan informasi</b>, <b>Memahami &amp; menafsirkan</b> (gagasan utama, rujukan kata, makna kata, inferensi), dan <b>Mengevaluasi &amp; merefleksi</b> (tujuan teks, pesan moral, menerapkan informasi ke situasi baru).</li>
+    </ul>
+    <p class="small mut">Catatan: informasi TKAD berasal dari ringkasan sekunder; ketentuan resmi dapat berubah setiap tahun. Selalu cek pengumuman Disdikpora DIY. Nama orang, sekolah, layanan, dan aplikasi di dalam bacaan adalah fiktif, kecuali tokoh dan tempat nyata (Susi Susanti, Komodo, Pantai Parangkusumo, Pasar Beringharjo, Rawa Pening).</p>
+    <h3 style="font-size:19px;margin:18px 0 6px">Sumber yang dipakai</h3>
+    <ol>
+      <li><a href="https://blog.amikom.ac.id/tkad-jogja/" target="_blank" rel="noopener">TKAD Jogja 2026: jadwal tes, mata uji, jumlah soal, dan bentuk soal SPMB DIY – Gen Amikom</a></li>
+      <li><a href="https://www.defantri.com/2025/10/soal-tka-aspd-bahasa-inggris-smp-mts.html" target="_blank" rel="noopener">Contoh paket Bahasa Inggris TKA/ASPD SMP: pola satu teks untuk 2–3 soal dan bentuk True/False – Defantri</a></li>
+      <li><a href="https://www.komunitasbelajar.id/2026/01/lat-soal-aspd-bahasa-inggris-smp-mts.html" target="_blank" rel="noopener">Latihan Soal TKAD Bahasa Inggris SMP/MTs: ragam jenis teks – Komunitas Belajar</a></li>
+      <li><a href="https://www.medcom.id/pendidikan/news-pendidikan/ybDy1X0k-soal-tka-sd-smp-2026-juga-disusun-oleh-guru-di-daerah" target="_blank" rel="noopener">Soal TKA SD-SMP 2026 juga disusun guru di daerah; mata uji SMP hanya Bahasa Indonesia dan Matematika – Medcom.id</a></li>
+      <li><a href="https://pusmendik.kemdikbud.go.id/tka/tka/view/mata-pelajaran-wajib/smp" target="_blank" rel="noopener">Pusat Asesmen Pendidikan – TKA SMP: Mata Pelajaran Wajib</a></li>
+    </ol>
+    <h3 style="font-size:19px;margin:18px 0 6px">Privasi</h3>
+    <p class="small">Tidak ada server dan tidak ada akun. Jawaban, riwayat, dan kunci API tersimpan di peramban perangkat ini saja. Data yang berlabel <b>contoh</b> adalah data fiktif untuk memperlihatkan cara kerja peta kemampuan.</p>
+  </div>
+</section>
+</main>
+<footer>Latihan TKAD Bahasa Inggris · bacaan dan soal orisinal untuk latihan, bukan soal resmi · bagian dari <a href="../">Koleksi Aplikasi</a></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg"><div id="dlgBody"></div><div class="row" style="justify-content:flex-end;margin-top:14px" id="dlgBtns"></div></dialog>
+
+<script>
+/* BACAAN PANJANG ORISINAL — Latihan TKAD Bahasa Inggris SMP
+   d: fun (fungsional) | des (deskriptif & report) | pro (prosedur) | rec (recount & biografi) | nar (naratif)
+   Setiap bacaan dipakai untuk 2–3 soal. */
+const TEKS = {
+/* ================= FUNGSIONAL ================= */
+F1:{d:"fun",j:"Email",judul:"Visit to a Green School",isi:`
+<p><b>From:</b> Ms. Ratna Widuri &lt;exchange.coordinator@school.example&gt;<br><b>To:</b> Grade 8 Exchange Participants<br><b>Subject:</b> Final schedule for our visit to Sekar Wangi Green School</p>
+<p>Dear students,</p>
+<p>I am happy to tell you that our visit to Sekar Wangi Green School in Kulon Progo will take place next Thursday. This is the final schedule, so please read it carefully and share it with your parents.</p>
+<p>We will gather in front of the school hall at 6.30 a.m. The bus will leave at exactly 7.00 a.m., and it will not wait for anyone who is late. The trip takes around ninety minutes. When we arrive, the students of Sekar Wangi will welcome us with a short traditional dance. After that, you will be divided into four groups. Each group will join one activity: composting, rainwater harvesting, organic gardening, or making eco-bricks from plastic waste. At 12.00 we will have lunch together, and in the afternoon every group will present what they learned. We plan to be back at our school at 4.00 p.m.</p>
+<p>Please bring a reusable water bottle, a hat, and a notebook. Do not bring single-use plastic bottles or snacks in plastic wrappers, because Sekar Wangi is a plastic-free school. Wear your batik uniform and comfortable shoes, as we will walk around the garden for quite a long time.</p>
+<p>The permission letter signed by your parents must be returned to me no later than Monday. Students who do not return the letter cannot join the trip.</p>
+<p>See you on Thursday!</p>
+<p>Warm regards,<br>Ms. Ratna Widuri<br>Exchange Program Coordinator</p>`},
+
+F2:{d:"fun",j:"Announcement",judul:"Library Reading Marathon",isi:`
+<p style="text-align:center"><b>ANNOUNCEMENT<br>READING MARATHON 2026: “ONE MONTH, ONE BOOK, ONE STORY”</b></p>
+<p>The school library invites all students of Grades 7, 8, and 9 to join the Reading Marathon from 1 to 30 September. The aim of this program is to help students build a daily reading habit and to share good stories with friends.</p>
+<p><b>How to take part</b><br>1. Register at the library desk or scan the QR code on the library door before 31 August.<br>2. Choose at least one book from the library, either fiction or non-fiction. Comics and magazines are not counted.<br>3. Read for at least fifteen minutes every day and write the page numbers in your reading card.<br>4. At the end of the month, write a one-page review or record a two-minute video about your book.</p>
+<p><b>Prizes</b><br>The three best reviews in each grade will receive book vouchers and certificates. The class with the highest number of finished reading cards will win a new bookshelf for its classroom reading corner.</p>
+<p><b>Important notes</b><br>Reading cards must be signed by your homeroom teacher every Friday. Lost reading cards can be replaced only once. Books borrowed for the marathon may be kept for the whole month, but please return them in good condition.</p>
+<p>For more information, contact Mr. Hendra at the library during break time.</p>
+<p><i>Reading is a journey. Start yours today!</i></p>`},
+
+F3:{d:"fun",j:"Advertisement / Brochure",judul:"Ride Green with KayuhKota",isi:`
+<p style="text-align:center"><b>RIDE GREEN WITH KAYUHKOTA!</b><br><i>The smart way to move around the city</i></p>
+<p>Tired of traffic jams and expensive parking? KayuhKota is a bike-sharing service that lets you rent a bicycle from one station and return it at any other station in the city. We now have 45 stations near schools, markets, parks, and bus stops.</p>
+<p><b>How it works</b><br>Download the KayuhKota app, top up your balance, and scan the QR code on the bike to unlock it. When you finish, park the bike in any KayuhKota station and lock it until you hear a beep.</p>
+<p><b>Prices</b><br>• First 30 minutes: Rp3.000<br>• Every additional 30 minutes: Rp2.000<br>• Student weekly pass (show your student card): Rp25.000 for unlimited 30-minute rides<br>• Weekend promo: free first ride every Sunday morning, 6.00–9.00 a.m.</p>
+<p><b>Rules</b><br>Riders must be at least 12 years old. Riders under 17 need permission from a parent in the app. Always wear a helmet; helmets are available at the main stations. Bikes left outside a station will be charged a Rp20.000 fine.</p>
+<p>Save money, stay healthy, and keep our city air clean. <b>KayuhKota – pedal for a better tomorrow.</b></p>`},
+
+F4:{d:"fun",j:"Invitation",judul:"Batik Workshop Invitation",isi:`
+<p>Dear Members of the Art Club,</p>
+<p>To celebrate National Batik Day, the Art Club is proud to invite you to a <b>Batik Tulis Workshop</b> led by Mrs. Sri Lestari, a batik artist from Imogiri who has been teaching batik to young people for more than twenty years.</p>
+<p><b>Day/Date:</b> Saturday, 3 October<br><b>Time:</b> 8.00 a.m. – 12.30 p.m.<br><b>Place:</b> Art Room, 2nd floor</p>
+<p>In this workshop, you will learn how to draw a motif on cotton cloth, how to use a <i>canting</i> to apply hot wax, and how to dye the cloth with natural colours from leaves and wood. Each participant will finish a small handkerchief to take home.</p>
+<p>Because the hot wax can be dangerous, please wear clothes that you do not mind getting dirty and do not bring younger brothers or sisters. All tools and materials are provided by the club, but each participant needs to pay Rp15.000 for the cloth and dye.</p>
+<p>Places are limited to 25 participants. Please confirm your attendance by sending your name and class to the club secretary, Dita (8C), before Wednesday, 30 September. Participants who register first will be accepted first.</p>
+<p>We hope you can join us and learn to love our cultural heritage even more.</p>
+<p>Best wishes,<br>Bima Aditya<br>Chairperson of the Art Club</p>`},
+
+/* ================= DESKRIPTIF & REPORT ================= */
+D1:{d:"des",j:"Report",judul:"The Komodo Dragon",isi:`
+<p>The Komodo dragon is the largest living lizard in the world. It is found only in a few islands in eastern Indonesia, such as Komodo, Rinca, Flores, and some smaller islands around them. Many of these islands are protected as part of Komodo National Park.</p>
+<p>An adult Komodo dragon can grow up to three metres long. Its body is covered with tough, rough scales, and it has a long, strong tail. Although it looks slow, it can run quickly for a short distance, and it is also a good swimmer.</p>
+<p>Komodo dragons are carnivores. They eat almost any kind of meat, including deer, wild pigs, and even dead animals. A Komodo dragon uses its long yellow forked tongue to “taste” the air. In this way, it can find food from a long distance. When it attacks, it bites its prey and waits. Its saliva contains venom that makes the prey weak, so the dragon can follow it until the prey can no longer run.</p>
+<p>A female lays around twenty eggs at one time and hides them in the ground. When the babies hatch, they climb trees immediately. Living in trees keeps them safe, because adult dragons sometimes eat young ones.</p>
+<p>Today, the Komodo dragon is an endangered species. Rising sea levels and the loss of its habitat are serious threats. For this reason, the government and local people work together to protect the dragons and the islands where they live.</p>`},
+
+D2:{d:"des",j:"Report",judul:"Mangrove Forests",isi:`
+<p>Mangroves are trees and shrubs that grow in salty or slightly salty water along tropical coastlines. Indonesia has one of the largest areas of mangrove forest in the world, and it can be found from Sumatra to Papua.</p>
+<p>Mangroves are special because they can live where most plants cannot. Their roots grow above the mud like stilts. These roots help the trees stand in soft ground and allow them to take in air during high tide. Some mangroves can also remove salt from the water they take in.</p>
+<p>Mangrove forests are important for both nature and people. Firstly, their thick roots protect the coast from strong waves and reduce damage from storms. Secondly, they are a safe place for young fish, crabs, and shrimp to grow before moving to the open sea. Many fishermen depend on this. Thirdly, mangroves store a large amount of carbon in their roots and in the mud, which helps to reduce climate change.</p>
+<p>Unfortunately, many mangrove forests have been cut down to build fish ponds, houses, and tourist areas. When mangroves disappear, the coast becomes weaker and the number of fish decreases. To solve this problem, many communities now plant new mangrove seedlings and guard the forests. Students can also help by joining planting activities and by not throwing rubbish into rivers that flow to the sea.</p>`},
+
+D3:{d:"des",j:"Descriptive",judul:"Our Rooftop Garden",isi:`
+<p>On the top floor of our school building, there is a place that many visitors do not expect to see: a rooftop garden. Three years ago, this area was only an empty concrete floor. It was hot and nobody wanted to go there. Now it has become the favourite place for many students.</p>
+<p>The garden is about the size of two classrooms. On the left side, there are twenty wooden boxes filled with soil, where we grow chillies, tomatoes, spinach, and lemongrass. On the right side, there is a small greenhouse made of transparent plastic. Inside it, the Science Club grows seedlings before moving them into the boxes. In the middle, there is a path made of recycled bricks that leads to a shady corner with bamboo benches and a small fishpond.</p>
+<p>The garden uses rainwater collected in two big blue tanks next to the stairs. A simple pipe system carries the water to every box, so we do not waste water from the school tap. The fallen leaves and kitchen waste from the canteen are turned into compost in three black bins behind the greenhouse.</p>
+<p>Every Wednesday afternoon, students from different classes take turns watering the plants and picking the vegetables. The harvest is sold to teachers and parents, and the money is used to buy new seeds. For me, the best thing about the garden is the quiet corner by the fishpond. When I feel tired after a long test, sitting there for a few minutes makes me feel calm again.</p>`},
+
+D4:{d:"des",j:"Report",judul:"How Honeybees Live Together",isi:`
+<p>Honeybees are social insects. This means they live together in large groups called colonies. A single colony can have tens of thousands of bees, and every bee has a job to do.</p>
+<p>There are three types of bees in a colony. The queen is the only bee that lays eggs. She can lay more than a thousand eggs in a day during the busiest season. The drones are male bees. Their main job is to mate with a queen, and they do not collect food. The workers are female bees, and they are the largest group. Young workers clean the hive, feed the babies, and build wax cells. Older workers fly out to collect nectar and pollen from flowers.</p>
+<p>Honeybees have an interesting way of sharing information. When a worker finds a good group of flowers, she returns to the hive and performs a “waggle dance”. The direction of the dance shows where the flowers are, and the length of the dance tells the other bees how far they need to fly.</p>
+<p>Bees are very important to humans. While they move from flower to flower, pollen sticks to their bodies and is carried to other flowers. This process, called pollination, helps plants produce fruits and seeds. Without bees, farmers would have fewer apples, melons, coffee beans, and many other crops. Sadly, the number of bees is falling in many places because of pesticides and the loss of wild flowers.</p>`},
+
+/* ================= PROSEDUR ================= */
+P1:{d:"pro",j:"Procedure",judul:"How to Make a Simple Water Filter",isi:`
+<p>Clean water is important for everyone. In this science project, you can make a simple water filter to see how dirty water can become clearer. <b>Remember: the filtered water is still not safe to drink</b> because it may contain germs. It must be boiled first.</p>
+<p><b>Materials</b><br>• 1 large plastic bottle (1.5 litres)<br>• cotton wool or a clean cloth<br>• activated charcoal<br>• fine sand<br>• small gravel (small stones)<br>• a pair of scissors<br>• a glass jar<br>• muddy water</p>
+<p><b>Steps</b><br>1. Ask an adult to help you cut the bottom of the plastic bottle with the scissors.<br>2. Turn the bottle upside down so that the neck points down, and place it on top of the glass jar.<br>3. Put a thick layer of cotton wool inside the neck of the bottle. This layer stops the sand from falling out.<br>4. Add a layer of activated charcoal on top of the cotton. The charcoal helps to remove bad smells and some chemicals.<br>5. Pour the fine sand on top of the charcoal, and then add the gravel as the top layer.<br>6. Slowly pour the muddy water into the bottle and wait. The water will drip through the layers into the jar.<br>7. Compare the water in the jar with the muddy water. If it is still cloudy, pour it through the filter again.</p>
+<p>After the experiment, write down what you observe and explain which layer you think worked the hardest.</p>`},
+
+P2:{d:"pro",j:"Procedure",judul:"Borrowing E-Books from the School Library App",isi:`
+<p>Our school library now has an app called <b>PustakaKu</b>. With this app, you can borrow e-books for free and read them on a phone, tablet, or laptop. Follow these steps to borrow your first e-book.</p>
+<p><b>Creating your account</b><br>1. Download PustakaKu from the app store and open it.<br>2. Tap “Register” and enter your student ID number (NIS) and your school email address.<br>3. Create a password with at least eight characters. Use a mix of letters and numbers.<br>4. Open your school email and click the link to activate your account. The link only works for 24 hours.</p>
+<p><b>Borrowing an e-book</b><br>5. Log in and type the title or the author’s name in the search bar.<br>6. Choose the book and tap “Borrow”. If the button says “Join Queue”, it means all copies are being borrowed; you will get a message when a copy is free.<br>7. Tap “Read” to open the book. You can borrow up to three e-books at the same time.</p>
+<p><b>Returning an e-book</b><br>8. E-books are returned automatically after 14 days. If you finish earlier, tap “Return” so that other students can borrow the book sooner.</p>
+<p><b>Tip:</b> If you forget your password, do not create a new account. Tap “Forgot Password” and a new link will be sent to your school email.</p>`},
+
+P3:{d:"pro",j:"Procedure (Recipe)",judul:"Banana Oat Pancakes",isi:`
+<p>Do you have some very ripe bananas at home? Don’t throw them away! You can turn them into soft and healthy pancakes for breakfast. This recipe makes about eight small pancakes.</p>
+<p><b>Ingredients</b><br>• 2 ripe bananas<br>• 2 eggs<br>• 6 tablespoons of oats<br>• 4 tablespoons of wheat flour<br>• 100 ml of milk<br>• a pinch of salt<br>• 1 teaspoon of butter or oil for the pan<br>• honey and sliced fruit for serving</p>
+<p><b>Method</b><br>1. Peel the bananas and mash them in a bowl with a fork until they are smooth.<br>2. Crack the eggs into the bowl and stir well.<br>3. Add the oats, flour, milk, and salt. Mix until there are no dry lumps. If the batter is too thick, add a little more milk.<br>4. Leave the batter for five minutes so that the oats become soft.<br>5. Heat a non-stick pan over low heat and spread a little butter on it.<br>6. Pour two tablespoons of batter into the pan for each pancake. Cook for about two minutes until small bubbles appear on the surface.<br>7. Flip the pancake carefully and cook the other side for one more minute.<br>8. Serve the pancakes warm with honey and sliced fruit.</p>
+<p><b>Note:</b> Use low heat. If the heat is too high, the outside of the pancakes will burn before the inside is cooked.</p>`},
+
+/* ================= RECOUNT & BIOGRAFI ================= */
+R1:{d:"rec",j:"Recount",judul:"A Morning at Parangkusumo Beach",isi:`
+<p>Last Sunday, my classmates and I joined a beach clean-up at Parangkusumo Beach, Bantul. The event was organised by the Scouts together with a local environmental group.</p>
+<p>We left school at 5.30 in the morning by two minibuses. When we arrived, the sky was still pink and the sand was cool under our feet. A volunteer named Mas Yoga gave us a short briefing. He explained that we had to separate the rubbish into three bags: plastic, glass, and other waste. He also reminded us to wear gloves and never to pick up sharp objects with bare hands.</p>
+<p>At first, I thought the beach looked quite clean. However, after walking for only ten minutes, my bag was already half full of plastic straws, bottle caps, and food wrappers. My friend Nadia even found an old flip-flop half buried in the sand. We were surprised that so much rubbish was hidden between the plants near the dunes.</p>
+<p>By 9.00, the sun was very hot and we were exhausted. We gathered under a big tree and weighed the bags. Altogether, our group collected 86 kilograms of rubbish, and more than half of it was plastic. Mas Yoga said that most of the plastic probably came from rivers in the city, not from visitors on the beach.</p>
+<p>On the way home, nobody talked much because we were tired. But I kept thinking about what Mas Yoga said. Since that day, I always bring my own water bottle and I try to say no to plastic straws.</p>`},
+
+R2:{d:"rec",j:"Biography",judul:"Susi Susanti: Indonesia’s First Olympic Gold",isi:`
+<p>Susi Susanti is one of the greatest badminton players in Indonesian history. She was born in Tasikmalaya, West Java, on 11 February 1971. As a child, she liked many sports, including ballet, but badminton became her true passion. Her father, who also loved badminton, supported her training from an early age.</p>
+<p>When she was a teenager, Susi moved to Jakarta to train at a famous badminton club. Life was not easy. She had to train for many hours every day and live far from her family. However, she was disciplined and never gave up. Her hard work soon brought results, and she won many international tournaments, including the All England Championships several times.</p>
+<p>The most memorable moment of her career came in 1992 at the Olympic Games in Barcelona, Spain. It was the first time badminton was played as a full Olympic sport. Susi reached the final of the women’s singles and won the match. Her victory gave Indonesia its first-ever Olympic gold medal. On the same day, Alan Budikusuma also won the men’s singles gold, and people in Indonesia celebrated the two victories with great pride.</p>
+<p>After she retired, Susi did not leave the world of badminton. She worked to develop young players and later served in the national badminton association. Many young athletes see her as a role model, not only because of her medals, but also because of her calm attitude and her fighting spirit on the court.</p>`},
+
+R3:{d:"rec",j:"Recount",judul:"My First Science Fair",isi:`
+<p>In March, I took part in a science fair for the first time. My partner, Fikri, and I made a project called “Smart Plant Pot”. It was a pot with a small sensor that turned on a buzzer when the soil became too dry.</p>
+<p>We started working on the project three weeks before the fair. The first week was the hardest. Our sensor did not work at all, and we spent hours checking the cables. Finally, Fikri found the problem: one wire was connected to the wrong pin. When the buzzer finally sounded, we shouted so loudly that my mother came running from the kitchen.</p>
+<p>On the day of the fair, we set up our table early. Many visitors came, including students from other schools. At first, I was so nervous that I forgot what to say. Fikri explained the project while I held the pot. After a few visitors, I felt more confident and started to answer questions myself.</p>
+<p>In the afternoon, the judges came to our table. One judge asked us why we chose a buzzer instead of a light. I answered that a sound is easier to notice when people are busy. The judge smiled and wrote something in her notebook.</p>
+<p>We did not win first prize. We got the “Most Useful Idea” award. Honestly, I was a little disappointed at first. However, when I saw how many people wanted to try our pot, I realised that our idea really mattered. Now we are planning to improve the pot so that it can water the plant automatically.</p>`},
+
+R4:{d:"rec",j:"Recount",judul:"The Lost Phone at Beringharjo Market",isi:`
+<p>Two weeks ago, I went to Beringharjo Market with my aunt to buy a batik shirt for my cousin’s birthday. The market was very crowded because it was a public holiday.</p>
+<p>We visited several stalls and compared prices. At one small stall on the second floor, I found a beautiful blue shirt with a parang motif. The seller, an old man with a friendly smile, let me try it on. I put my phone on his table while I was checking the size in the mirror. After my aunt paid for the shirt, we left to look for some snacks.</p>
+<p>About thirty minutes later, I wanted to take a photo of a traditional cake, and I realised my phone was not in my pocket. My heart was beating fast. My aunt tried to call my number, but nobody answered. We walked back through the busy corridors, but we could not remember which way we had come.</p>
+<p>Just when I was about to cry, my aunt’s phone rang. It was the old seller. He had found my phone on his table and saw that “Bulik” was the last number that called. He had kept the phone safe in his drawer. When we came back to the stall, he gave the phone to me and refused to take the money my aunt offered. “Just be more careful next time,” he said kindly.</p>
+<p>I felt so grateful and a little ashamed of my carelessness. That day I learned that honest people are still everywhere, and that I should always keep my things close to me in crowded places.</p>`},
+
+/* ================= NARATIF ================= */
+N1:{d:"nar",j:"Fable",judul:"The Bamboo and the Teak Tree",isi:`
+<p>At the edge of a village, a tall teak tree stood next to a clump of bamboo. The teak tree was very proud of its thick trunk and strong branches. Every day it looked down at the thin bamboo and laughed.</p>
+<p>“Look at you,” said the teak tree. “Even a small breeze makes you bend. You bow to everyone like a servant. I stand straight and never move. That is why the villagers respect me.”</p>
+<p>The bamboo did not answer angrily. “Each of us has our own way to live,” it said softly. “I bend because that is how I stay safe.”</p>
+<p>One night at the end of the dry season, a terrible storm came. The wind roared and the rain hit the village like stones. The bamboo bent lower and lower until its leaves almost touched the ground, but its roots held the soil tightly. The teak tree refused to bend. It fought the wind with all its strength. Suddenly, there was a loud crack. One of its biggest branches broke and fell, and the trunk was split down the middle.</p>
+<p>In the morning, the storm was over. The bamboo slowly stood up again, wet but unharmed. The teak tree lay half broken on the ground.</p>
+<p>“You were right,” the teak tree whispered sadly. “I thought being strong meant never giving way. Now I understand that being able to bend is also a kind of strength.”</p>`},
+
+N2:{d:"nar",j:"Legend",judul:"The Legend of Rawa Pening",isi:`
+<p>Long ago, in a village in Central Java, there lived a boy named Baru Klinting. Because of a curse, his body was covered with wounds that smelled bad. People in the village did not want to come near him.</p>
+<p>One day, the villagers were holding a big feast. There was plenty of food and music. Baru Klinting, who was very hungry, came and asked for a little food. Instead of helping him, the villagers shouted at him and pushed him away. Some even threw sand at him.</p>
+<p>Only one person was kind to him: an old widow named Nyai Latung. She invited him to her small house and gave him rice and vegetables. Before leaving, Baru Klinting said, “Grandmother, when you hear a loud sound, prepare a <i>lesung</i> (a large wooden rice pounder) and get into it.”</p>
+<p>Baru Klinting went back to the feast. He pushed a small stick of palm leaf into the ground and challenged the villagers to pull it out. Laughing, the strongest men tried one by one, but nobody could move it. Then Baru Klinting pulled the stick out easily. Water started to come out of the hole. It grew bigger and bigger until it flooded the whole village.</p>
+<p>Nyai Latung heard the loud sound and quickly climbed into her lesung. It floated on the water and saved her life. The flooded village became a large lake, which is now known as Rawa Pening. People say the legend teaches us to respect others and to help those who are in need, no matter how they look.</p>`},
+
+N3:{d:"nar",j:"Short Story",judul:"The Borrowed Calculator",isi:`
+<p>On the morning of the mathematics test, Raka realised that his calculator was not in his bag. He searched every pocket twice. Nothing. The test allowed calculators, and there were many difficult questions about percentages. Raka felt his stomach drop.</p>
+<p>Next to him sat Galih, a quiet boy who rarely talked to anyone. Galih noticed Raka’s worried face. Without saying a word, he took out an old calculator with a cracked screen and pushed it to the middle of the table. “We can share,” he whispered. “Just use it when I’m not using it.”</p>
+<p>During the test, the two boys passed the calculator back and forth. It was slow, and several times Raka had to wait. But he finished every question with a few minutes to spare.</p>
+<p>A week later, the teacher returned the test papers. Raka got 88, his best score that semester. Galih got 71. When Raka looked at Galih’s paper, he saw that three questions at the end were empty. Galih had run out of time.</p>
+<p>Raka suddenly understood. Every time he had been waiting for the calculator, Galih had also been waiting. Galih had given away his own time without complaining.</p>
+<p>After school, Raka bought a new calculator with his savings. The next morning he put it on Galih’s desk with a small note: “For next time. Thank you for sharing yours. – Raka”. From that day on, the quiet boy and the boy who forgot his calculator became good friends.</p>`}
+};
+
+const BANK = [
+{id:"F1a",ps:"F1",s:"Tujuan teks (purpose)",l:3,t:"pg",q:"What is the main purpose of the email?",o:["To inform students about the final details of a school visit.","To invite parents to visit Sekar Wangi Green School.","To explain how to make eco-bricks from plastic waste.","To ask students to choose one of four environmental activities."],k:0,p:["Perhatikan kalimat pembuka: “This is the final schedule, so please read it carefully…”.","Isi email berisi jadwal, barang yang dibawa, aturan, dan batas pengumpulan surat izin – semuanya rincian kunjungan.","Jadi tujuannya memberi informasi rinci kunjungan (A). Pilihan D salah karena siswa <i>dibagi</i> ke kelompok, bukan diminta memilih."]},
+{id:"F1b",ps:"F1",s:"Informasi rinci (detail)",l:1,t:"bs",q:"Based on the email, decide whether each statement is TRUE or FALSE.",o:["The bus will wait for students who arrive late.","Students will present what they learned in the afternoon.","Students may bring snacks in plastic wrappers to Sekar Wangi.","Students are expected to arrive back at school at 4.00 p.m."],k:[false,true,false,true],p:["“The bus … will not wait for anyone who is late” → pernyataan 1 FALSE.","“In the afternoon every group will present what they learned” → 2 TRUE.","“Do not bring … snacks in plastic wrappers” → 3 FALSE; “back at our school at 4.00 p.m.” → 4 TRUE."]},
+{id:"F1c",ps:"F1",s:"Inferensi (inference)",l:3,t:"pg",q:"Dimas has packed his batik uniform, a hat, and a notebook, but he has not returned the permission letter. It is now Tuesday. What will most likely happen?",o:["He can join the trip if he brings the letter on Thursday.","He can join the trip because he has prepared everything.","He cannot join the trip because the deadline has passed.","He will be placed in the composting group as a punishment."],k:2,p:["Email menyebut surat izin harus dikembalikan “no later than Monday”.","“Students who do not return the letter cannot join the trip.”","Hari Selasa sudah lewat batas, jadi kemungkinan besar Dimas tidak bisa ikut (C)."]},
+{id:"F2a",ps:"F2",s:"Informasi rinci (detail)",l:1,t:"pg",q:"Which of the following is NOT counted as a reading choice for the marathon?",o:["A novel from the library","A science book about volcanoes","A biography of a famous scientist","A comic about a superhero"],k:3,p:["Langkah 2: “Choose at least one book … either fiction or non-fiction.”","Kalimat berikutnya: “Comics and magazines are not counted.”","Jadi buku komik (D) tidak dihitung."]},
+{id:"F2b",ps:"F2",s:"Menerapkan informasi",l:2,t:"pgk",q:"Which actions must a participant do to complete the Reading Marathon? Choose ALL correct answers.",o:["Read for at least fifteen minutes every day.","Ask the homeroom teacher to sign the reading card every Friday.","Buy a new book from the school canteen.","Write a one-page review or record a two-minute video."],k:[0,1,3],p:["“Read for at least fifteen minutes every day” → A wajib.","“Reading cards must be signed by your homeroom teacher every Friday” → B wajib.","Langkah 4 meminta ulasan satu halaman atau video dua menit → D. Membeli buku (C) tidak disebutkan; buku dipinjam dari perpustakaan."]},
+{id:"F2c",ps:"F2",s:"Inferensi (inference)",l:3,t:"pg",q:"Why does the library give a bookshelf to the class with the most finished reading cards?",o:["To replace the old shelves in the school library.","To encourage the whole class to read together, not only individual students.","To reward the students who write the best reviews.","To store the reading cards that have been signed."],k:1,p:["Hadiah ulasan terbaik diberikan per siswa (voucher dan sertifikat), sedangkan rak buku diberikan per kelas.","Hadiah untuk kelas mendorong semua anggota kelas ikut membaca dan menyelesaikan kartu.","Rak itu untuk “classroom reading corner”, bukan perpustakaan atau tempat kartu. Jawaban B."]},
+{id:"F3a",ps:"F3",s:"Menerapkan informasi",l:2,t:"pg",q:"Nina, who does not have a weekly pass, rides a KayuhKota bike for exactly 1 hour and 30 minutes on a Tuesday. How much does she pay?",o:["Rp5.000","Rp25.000","Rp9.000","Rp7.000"],k:3,p:["1 jam 30 menit = 90 menit = 30 menit pertama + 2 × 30 menit tambahan.","Biaya: Rp3.000 + 2 × Rp2.000 = Rp7.000.","Jawaban D. Promo gratis hanya berlaku Minggu pagi, dan Nina tidak punya kartu mingguan."]},
+{id:"F3b",ps:"F3",s:"Informasi rinci (detail)",l:1,t:"bs",q:"Based on the brochure, decide whether each statement is TRUE or FALSE.",o:["A 15-year-old rider needs permission from a parent in the app.","Bikes must be returned to the same station where they were rented.","Helmets are available at all KayuhKota stations.","The first ride on Sunday at 7.00 a.m. is free."],k:[true,false,false,true],p:["“Riders under 17 need permission from a parent” → 1 TRUE.","Sepeda boleh dikembalikan “at any other station” → 2 FALSE.","Helm tersedia “at the main stations”, bukan semua stasiun → 3 FALSE; promo gratis Minggu 6.00–9.00 → 4 TRUE."]},
+{id:"F3c",ps:"F3",s:"Makna kata (vocabulary)",l:2,t:"pg",q:"“Bikes left outside a station will be charged a Rp20.000 <b>fine</b>.” The word “fine” is closest in meaning to …",o:["a penalty payment","a good condition","a small discount","a clear weather"],k:0,p:["Kata “fine” di sini muncul setelah “will be charged” dan sebelum nominal uang.","Konteksnya aturan: sepeda yang diparkir di luar stasiun dikenai uang denda.","Jadi “fine” = denda, a penalty payment (A)."]},
+{id:"F4a",ps:"F4",s:"Informasi rinci (detail)",l:1,t:"pg",q:"What will each participant bring home after the workshop?",o:["A canting","A certificate from Mrs. Sri Lestari","A small batik handkerchief","A bottle of natural dye"],k:2,p:["Cari kata “take home” di teks.","“Each participant will finish a small handkerchief to take home.”","Jawaban C."]},
+{id:"F4b",ps:"F4",s:"Menerapkan informasi",l:2,t:"pgk",q:"Lusi wants to join the workshop. What should she do? Choose ALL correct answers.",o:["Send her name and class to Dita before 30 September.","Bring her own canting and wax.","Pay Rp15.000 for the cloth and dye.","Wear clothes that she does not mind getting dirty."],k:[0,2,3],p:["Konfirmasi kehadiran: kirim nama dan kelas ke Dita sebelum Rabu, 30 September → A.","“All tools and materials are provided by the club” → B salah; tetapi peserta membayar Rp15.000 → C.","“Please wear clothes that you do not mind getting dirty” → D."]},
+{id:"F4c",ps:"F4",s:"Inferensi (inference)",l:3,t:"pg",q:"Why is it a good idea for members to register early?",o:["Early participants will get a discount.","There are only 25 places, given to the first to register.","The workshop will start earlier for them.","Mrs. Sri Lestari will choose the best early participants."],k:1,p:["“Places are limited to 25 participants.”","“Participants who register first will be accepted first.”","Mendaftar lebih awal memperbesar peluang mendapat tempat (B)."]},
+{id:"D1a",ps:"D1",s:"Gagasan utama (main idea)",l:2,t:"pg",q:"What is the main idea of paragraph 3?",o:["Komodo dragons are carnivores with special ways of finding and catching food.","Komodo dragons live on several islands in Indonesia.","Komodo dragons are good swimmers and fast runners.","Komodo dragons are threatened by rising sea levels."],k:0,p:["Kalimat utama paragraf 3: “Komodo dragons are carnivores.”","Kalimat penjelas membahas makanan, cara mencium/“merasakan” udara dengan lidah, dan cara menyerang mangsa.","Jadi gagasan utamanya A. Pilihan lain adalah isi paragraf 1, 2, dan 5."]},
+{id:"D1b",ps:"D1",s:"Inferensi (inference)",l:3,t:"pg",q:"Why do baby Komodo dragons climb trees immediately after hatching?",o:["Because they look for birds’ eggs to eat.","Because the ground is too hot for them.","Because their mother teaches them to climb.","Because they want to avoid being eaten by adult dragons."],k:3,p:["Paragraf 4: “Living in trees keeps them safe, because adult dragons sometimes eat young ones.”","Jadi alasan memanjat pohon adalah menghindari dimakan komodo dewasa.","Jawaban D."]},
+{id:"D1c",ps:"D1",s:"Informasi rinci (detail)",l:1,t:"bs",q:"Decide whether each statement is TRUE or FALSE according to the text.",o:["Komodo dragons can be found in many countries in Asia.","A Komodo dragon uses its tongue to find food.","The prey of a Komodo dragon dies immediately after the first bite.","Habitat loss is one of the threats to Komodo dragons."],k:[false,true,false,true],p:["“Found only in a few islands in eastern Indonesia” → 1 FALSE.","Lidah dipakai untuk “taste the air” dan menemukan makanan → 2 TRUE.","Komodo menggigit lalu menunggu sampai mangsa lemah → 3 FALSE; “the loss of its habitat are serious threats” → 4 TRUE."]},
+{id:"D2a",ps:"D2",s:"Informasi rinci (detail)",l:1,t:"pgk",q:"According to the text, what are the benefits of mangrove forests? Choose ALL correct answers.",o:["They protect the coast from strong waves.","They provide a safe place for young fish and crabs.","They make sea water less salty for swimmers.","They store carbon in their roots and in the mud."],k:[0,1,3],p:["Paragraf 3 menyebut tiga manfaat dengan penanda Firstly, Secondly, Thirdly.","Firstly: melindungi pantai dari ombak (A). Secondly: tempat aman ikan, kepiting, udang muda (B). Thirdly: menyimpan karbon (D).","Pilihan C tidak disebutkan; teks hanya menyebut sebagian mangrove dapat membuang garam dari air yang diserapnya sendiri."]},
+{id:"D2b",ps:"D2",s:"Rujukan kata (reference)",l:2,t:"pg",q:"“Many fishermen depend on <b>this</b>.” (paragraph 3) The word “this” refers to …",o:["the open sea","the thick roots that protect the coast","the fact that mangroves are a place where young fish, crabs, and shrimp grow","the carbon stored in the mud"],k:2,p:["Lihat kalimat tepat sebelumnya: mangrove menjadi tempat aman ikan, kepiting, dan udang muda tumbuh.","Nelayan bergantung pada hal itu karena hasil tangkapan berasal dari ikan yang tumbuh di sana.","Jadi “this” merujuk pada C."]},
+{id:"D2c",ps:"D2",s:"Inferensi (inference)",l:3,t:"pg",q:"A coastal village has cut down most of its mangroves to build fish ponds. Based on the text, what problem will the village most likely face?",o:["Fishermen may catch fewer fish and the coast may be damaged more easily.","The coast will be better protected from storms.","More young fish will grow near the coast.","The village will store more carbon in the mud."],k:0,p:["Paragraf 4: “When mangroves disappear, the coast becomes weaker and the number of fish decreases.”","Kerugian yang paling mungkin: tangkapan ikan berkurang dan pantai lebih mudah rusak.","Jawaban A; pilihan lain justru manfaat yang hilang."]},
+{id:"D3a",ps:"D3",s:"Informasi rinci (detail)",l:1,t:"pg",q:"Where is the compost made?",o:["In the greenhouse","In three black bins behind the greenhouse","In the wooden boxes on the left side","Next to the stairs"],k:1,p:["Cari kata “compost”.","“…are turned into compost in three black bins behind the greenhouse.”","Jawaban B. Tangki air biru ada di dekat tangga."]},
+{id:"D3b",ps:"D3",s:"Membandingkan informasi",l:2,t:"bs",q:"Compare the rooftop area <b>three years ago</b> and <b>now</b>. Decide whether each statement is TRUE or FALSE.",o:["Three years ago, the rooftop was an empty and hot concrete floor.","Three years ago, many students liked spending time on the rooftop.","Now, the garden uses rainwater instead of water from the school tap.","Now, the money from the harvest is used to buy new seeds."],k:[true,false,true,true],p:["“This area was only an empty concrete floor. It was hot and nobody wanted to go there.” → 1 TRUE, 2 FALSE.","Kebun memakai air hujan dari dua tangki “so we do not waste water from the school tap” → 3 TRUE.","“The money is used to buy new seeds” → 4 TRUE."]},
+{id:"D3c",ps:"D3",s:"Tujuan teks (purpose)",l:3,t:"pg",q:"What does the writer mainly want to show in the last paragraph?",o:["How the Science Club grows seedlings","How to sell vegetables to teachers and parents","Why students should not take long tests","How students take care of the garden and why the writer personally values it"],k:3,p:["Paragraf terakhir berisi kegiatan rutin Rabu (menyiram, memanen, menjual) lalu pendapat pribadi penulis.","“For me, the best thing about the garden is the quiet corner…” menunjukkan nilai pribadi bagi penulis.","Jawaban D menggabungkan kedua isi paragraf itu."]},
+{id:"D4a",ps:"D4",s:"Informasi rinci (detail)",l:1,t:"pg",q:"Which bees fly out of the hive to collect nectar and pollen?",o:["The queen","The drones","The older workers","The young workers"],k:2,p:["Paragraf 2 membedakan pekerja muda dan pekerja tua.","Pekerja muda membersihkan sarang, memberi makan larva, membangun sel lilin.","“Older workers fly out to collect nectar and pollen” → C."]},
+{id:"D4b",ps:"D4",s:"Inferensi (inference)",l:3,t:"pg",q:"A worker bee performs a very long waggle dance. What can the other bees understand from this?",o:["There is danger near the hive.","The flowers are very close to the hive.","The queen is about to lay eggs.","The flowers are far from the hive."],k:3,p:["“The length of the dance tells the other bees how far they need to fly.”","Tarian yang panjang berarti jarak terbang yang jauh.","Jawaban D. Arah tarian menunjukkan arah bunga, bukan bahaya."]},
+{id:"D4c",ps:"D4",s:"Makna kata (vocabulary)",l:2,t:"pg",q:"“This process, called <b>pollination</b>, helps plants produce fruits and seeds.” What does “pollination” mean in the text?",o:["The movement of pollen from one flower to another","The process of making honey from nectar","The dance performed by worker bees","The use of pesticides on farms"],k:0,p:["Kalimat sebelumnya menjelaskan prosesnya: serbuk sari menempel di tubuh lebah lalu terbawa ke bunga lain.","Kata “This process” merujuk pada perpindahan serbuk sari itu.","Jadi pollination = penyerbukan, perpindahan serbuk sari (A)."]},
+{id:"P1a",ps:"P1",s:"Urutan langkah (sequence)",l:2,t:"pg",q:"What is the correct order of layers in the bottle, from the bottom (the bottle neck) to the top?",o:["Gravel – sand – charcoal – cotton","Cotton – charcoal – sand – gravel","Charcoal – cotton – gravel – sand","Sand – cotton – charcoal – gravel"],k:1,p:["Langkah 3: kapas di leher botol (paling bawah).","Langkah 4: arang di atas kapas; langkah 5: pasir di atas arang, lalu kerikil sebagai lapisan teratas.","Urutan: kapas – arang – pasir – kerikil (B)."]},
+{id:"P1b",ps:"P1",s:"Inferensi (inference)",l:3,t:"pg",q:"After filtering, the water in the jar looks clear. Why should you still NOT drink it?",o:["Because the charcoal makes the water taste bitter.","Because the water is too cold to drink.","Because the water may still contain germs and must be boiled first.","Because the cotton has absorbed all the minerals."],k:2,p:["Teks memberi peringatan tebal di awal: “the filtered water is still not safe to drink because it may contain germs. It must be boiled first.”","Air yang tampak jernih belum tentu bebas kuman.","Jawaban C."]},
+{id:"P1c",ps:"P1",s:"Informasi rinci (detail)",l:1,t:"bs",q:"Decide whether each statement is TRUE or FALSE based on the procedure.",o:["An adult should help when cutting the bottle.","The charcoal helps remove bad smells.","The cotton layer is used to make the water flow faster.","Cloudy water can be poured through the filter again."],k:[true,true,false,true],p:["“Ask an adult to help you cut…” → 1 TRUE; “The charcoal helps to remove bad smells” → 2 TRUE.","Fungsi kapas: “stops the sand from falling out”, bukan mempercepat aliran → 3 FALSE.","“If it is still cloudy, pour it through the filter again” → 4 TRUE."]},
+{id:"P2a",ps:"P2",s:"Menerapkan informasi",l:2,t:"pg",q:"Arif registered on Monday at 7 p.m. but forgot to open his email. On Wednesday morning he clicks the activation link. What will probably happen?",o:["His account will be activated normally.","He will automatically join the queue for a book.","He will be able to borrow three e-books immediately.","The link will not work because it is only valid for 24 hours."],k:3,p:["Langkah 4: “The link only works for 24 hours.”","Dari Senin pukul 19.00 sampai Rabu pagi sudah lebih dari 24 jam.","Jadi tautan kemungkinan besar tidak berfungsi (D)."]},
+{id:"P2b",ps:"P2",s:"Makna kata (vocabulary)",l:2,t:"pg",q:"If the button says “<b>Join Queue</b>”, it means that …",o:["all copies of the e-book are being borrowed by other students","the e-book is free to read now","the student has borrowed too many e-books","the e-book will be returned automatically"],k:0,p:["Langkah 6 menjelaskannya langsung: “it means all copies are being borrowed”.","“Queue” berarti antrean; siswa menunggu giliran dan diberi pesan saat salinan tersedia.","Jawaban A."]},
+{id:"P2c",ps:"P2",s:"Menerapkan informasi",l:3,t:"pgk",q:"Which actions follow the instructions in the text? Choose ALL correct answers.",o:["Tapping “Forgot Password” when you cannot remember your password","Creating a second account when you forget your password","Tapping “Return” when you finish a book early","Using a password such as “buku2026” that mixes letters and numbers"],k:[0,2,3],p:["Tip: jika lupa kata sandi “do not create a new account. Tap ‘Forgot Password’” → A benar, B salah.","Langkah 8: jika selesai lebih cepat, tekan “Return” → C benar.","Kata sandi minimal 8 karakter campuran huruf dan angka: “buku2026” = 8 karakter, campuran → D benar."]},
+{id:"P3a",ps:"P3",s:"Informasi rinci (detail)",l:1,t:"pg",q:"What should you do if the batter is too thick?",o:["Add more flour","Cook it on high heat","Add a little more milk","Leave it for one hour"],k:2,p:["Langkah 3: “If the batter is too thick, add a little more milk.”","Jawaban C."]},
+{id:"P3b",ps:"P3",s:"Urutan langkah (sequence)",l:2,t:"pg",q:"What should you do right after you mix the oats, flour, milk, and salt into the banana and eggs?",o:["Flip the pancakes carefully.","Leave the batter for five minutes so the oats become soft.","Heat the pan over high heat.","Serve the pancakes with honey."],k:1,p:["Langkah 3 adalah mencampur oat, tepung, susu, dan garam.","Langkah berikutnya (4): “Leave the batter for five minutes so that the oats become soft.”","Jawaban B."]},
+{id:"P3c",ps:"P3",s:"Inferensi (inference)",l:3,t:"pg",q:"Sari cooked her pancakes on high heat. What most likely happened?",o:["The pancakes cooked perfectly in one minute.","The pancakes became thicker and softer.","The bubbles never appeared on the surface.","The pancakes were burnt outside but not cooked inside."],k:3,p:["Catatan di akhir resep: “If the heat is too high, the outside of the pancakes will burn before the inside is cooked.”","Jawaban D."]},
+{id:"R1a",ps:"R1",s:"Informasi rinci (detail)",l:1,t:"bs",q:"Based on the recount, decide whether each statement is TRUE or FALSE.",o:["The clean-up was organised by the Scouts and a local environmental group.","Students were allowed to pick up sharp objects with bare hands.","The group collected 86 kilograms of rubbish.","Less than half of the rubbish was plastic."],k:[true,false,true,false],p:["Paragraf 1 → 1 TRUE.","Mas Yoga mengingatkan “never to pick up sharp objects with bare hands” → 2 FALSE.","“86 kilograms of rubbish, and more than half of it was plastic” → 3 TRUE, 4 FALSE."]},
+{id:"R1b",ps:"R1",s:"Inferensi (inference)",l:3,t:"pg",q:"According to Mas Yoga, most of the plastic probably came from rivers in the city. What can we conclude from this?",o:["Throwing rubbish into rivers far from the sea can still pollute the beach.","Beach visitors are the only cause of the problem.","The city has no rivers that flow to the sea.","Cleaning the beach once a year is enough."],k:0,p:["Jika plastik di pantai berasal dari sungai di kota, berarti sampah di sungai terbawa sampai laut/pantai.","Maka membuang sampah ke sungai, meski jauh dari laut, tetap mencemari pantai.","Jawaban A."]},
+{id:"R1c",ps:"R1",s:"Pesan/perubahan sikap",l:3,t:"pg",q:"How did the experience change the writer?",o:["The writer decided to become a professional volunteer.","The writer stopped going to the beach.","The writer started selling recycled plastic.","The writer started bringing a water bottle and refusing plastic straws."],k:3,p:["Paragraf terakhir: “Since that day, I always bring my own water bottle and I try to say no to plastic straws.”","Jawaban D."]},
+{id:"R2a",ps:"R2",s:"Informasi rinci (detail)",l:1,t:"pg",q:"Why was Susi Susanti’s victory in 1992 especially important for Indonesia?",o:["It was the first time Indonesia joined the Olympic Games.","It was the first time badminton was played in Spain.","It was Indonesia’s first-ever Olympic gold medal.","It was her first international tournament."],k:2,p:["Paragraf 3: “Her victory gave Indonesia its first-ever Olympic gold medal.”","Jawaban C. Ia sudah menjuarai banyak turnamen internasional sebelumnya, jadi D salah."]},
+{id:"R2b",ps:"R2",s:"Urutan peristiwa (sequence)",l:2,t:"pg",q:"Which event happened FIRST in Susi Susanti’s life?",o:["She moved to Jakarta to train at a badminton club.","She won the Olympic gold medal in Barcelona.","She worked to develop young players.","She served in the national badminton association."],k:0,p:["Urutan biografi: masa kecil → remaja pindah ke Jakarta → menang turnamen → emas Olimpiade 1992 → pensiun dan membina atlet muda.","Di antara pilihan, yang paling awal adalah pindah ke Jakarta (A)."]},
+{id:"R2c",ps:"R2",s:"Inferensi karakter",l:3,t:"pgk",q:"Which qualities of Susi Susanti are shown in the text? Choose ALL correct answers.",o:["Disciplined","Lazy","Never giving up","Caring about the next generation"],k:[0,2,3],p:["“She was disciplined and never gave up” → A dan C.","Setelah pensiun “she worked to develop young players” → peduli generasi berikutnya (D).","Tidak ada bukti malas (B); justru ia berlatih berjam-jam setiap hari."]},
+{id:"R3a",ps:"R3",s:"Rujukan kata (reference)",l:2,t:"pg",q:"“The judge smiled and wrote something in <b>her</b> notebook.” The word “her” refers to …",o:["the writer’s mother","the judge","Fikri","a visitor from another school"],k:1,p:["Kata ganti “her” merujuk pada orang perempuan yang disebut paling dekat sebelumnya dalam kalimat yang sama.","Subjek kalimat adalah “The judge”, dan judge itu yang menulis di bukunya.","Jawaban B."]},
+{id:"R3b",ps:"R3",s:"Informasi rinci (detail)",l:1,t:"pg",q:"What was the problem with the sensor in the first week?",o:["The buzzer was too quiet.","The soil was too wet.","One wire was connected to the wrong pin.","The battery was empty."],k:2,p:["Paragraf 2: “Fikri found the problem: one wire was connected to the wrong pin.”","Jawaban C."]},
+{id:"R3c",ps:"R3",s:"Perasaan & perubahan tokoh",l:3,t:"pg",q:"How did the writer’s feelings change at the end of the story?",o:["From proud to angry","From happy to bored","From confident to nervous","From disappointed to realising the idea was valuable"],k:3,p:["“I was a little disappointed at first” → awalnya kecewa.","“…I realised that our idea really mattered” → menyadari idenya bernilai.","Jawaban D. (Gugup ke percaya diri terjadi saat pameran, bukan di akhir.)"]},
+{id:"R4a",ps:"R4",s:"Informasi rinci (detail)",l:1,t:"pg",q:"How did the seller know whom to contact?",o:["He saw that “Bulik” was the last number that called the phone.","He found the writer’s address on the shirt receipt.","The writer had told him her aunt’s number.","He asked the market security guard."],k:0,p:["Paragraf 4: “He … saw that ‘Bulik’ was the last number that called.”","Jawaban A."]},
+{id:"R4b",ps:"R4",s:"Inferensi (inference)",l:2,t:"pg",q:"Who is “Bulik” in the text?",o:["The writer’s cousin","The old seller","The writer’s aunt","A security guard"],k:2,p:["Bibi penulis mencoba menelepon nomor penulis (paragraf 3).","Penjual melihat “Bulik” sebagai nomor terakhir yang menelepon, lalu yang ditelepon balik adalah ponsel bibi.","Jadi “Bulik” adalah bibi penulis (C)."]},
+{id:"R4c",ps:"R4",s:"Pesan moral (moral value)",l:3,t:"pgk",q:"What lessons can be learned from the text? Choose ALL correct answers.",o:["Honest people still exist around us.","We should keep our things close in crowded places.","We should never shop at traditional markets.","We should always ask strangers to keep our phones."],k:[0,1],p:["Kalimat penutup: “honest people are still everywhere, and … I should always keep my things close to me in crowded places.”","Jawaban A dan B. C dan D tidak didukung teks."]},
+{id:"N1a",ps:"N1",s:"Klimaks / alur",l:2,t:"pg",q:"Which part is the climax of the story?",o:["The teak tree laughs at the bamboo every day.","The bamboo says it bends to stay safe.","In the morning, the bamboo stands up again.","During the storm, the teak tree refuses to bend and its branch breaks."],k:3,p:["Klimaks adalah puncak konflik/ketegangan cerita.","Ketegangan memuncak saat badai: pohon jati melawan angin hingga dahannya patah dan batangnya terbelah.","Jawaban D. A–B termasuk komplikasi awal, C termasuk resolusi."]},
+{id:"N1b",ps:"N1",s:"Pesan moral (moral value)",l:3,t:"pg",q:"What is the moral value of the story?",o:["Tall trees are always more useful than short plants.","Being flexible and humble can be a kind of strength.","We should always fight against problems with all our power.","Bamboo is better than teak for building houses."],k:1,p:["Kalimat penutup jati: “being able to bend is also a kind of strength.”","Bambu rendah hati (tidak marah saat diejek) dan lentur, sehingga selamat.","Jawaban B."]},
+{id:"N1c",ps:"N1",s:"Makna kata (vocabulary)",l:2,t:"pg",q:"“The bamboo slowly stood up again, wet but <b>unharmed</b>.” The word “unharmed” means …",o:["not hurt","very tired","broken","angry"],k:0,p:["Awalan un- berarti “tidak”; harmed = terluka/rusak.","Konteksnya bambu kembali tegak setelah badai, berbeda dengan jati yang patah.","Jadi unharmed = tidak terluka (A)."]},
+{id:"N2a",ps:"N2",s:"Informasi rinci (detail)",l:1,t:"pg",q:"How did Nyai Latung survive the flood?",o:["She climbed a tall tree.","She ran to a hill with Baru Klinting.","She held the palm leaf stick.","She got into a lesung that floated on the water."],k:3,p:["Paragraf 5: “Nyai Latung … climbed into her lesung. It floated on the water and saved her life.”","Jawaban D."]},
+{id:"N2b",ps:"N2",s:"Sebab-akibat",l:2,t:"bs",q:"Decide whether each statement about the legend is TRUE or FALSE.",o:["The villagers welcomed Baru Klinting to the feast.","Nyai Latung gave Baru Klinting food.","Nobody except Baru Klinting could pull out the stick.","Rawa Pening was formed from the water that came out of the hole."],k:[false,true,true,true],p:["Penduduk “shouted at him and pushed him away” → 1 FALSE.","Nyai Latung memberinya nasi dan sayur → 2 TRUE.","Orang terkuat tidak bisa mencabutnya, Baru Klinting mencabutnya dengan mudah → 3 TRUE; air dari lubang membanjiri desa dan menjadi danau → 4 TRUE."]},
+{id:"N2c",ps:"N2",s:"Pesan moral (moral value)",l:3,t:"pg",q:"Which situation best shows the lesson of the legend in daily life?",o:["Ignoring a new classmate because his clothes look old","Laughing at someone who cannot answer a question","Sharing your lunch with a friend who forgot to bring food","Winning a game by being the strongest player"],k:2,p:["Pesan legenda: menghormati orang lain dan menolong yang membutuhkan, “no matter how they look”.","Berbagi bekal dengan teman yang lupa membawa makanan adalah contoh menolong yang membutuhkan.","Jawaban C; A dan B justru seperti sikap penduduk desa."]},
+{id:"N3a",ps:"N3",s:"Inferensi (inference)",l:3,t:"pg",q:"Why did Galih leave three questions empty?",o:["Because he did not study for the test.","Because he ran out of time after sharing his calculator.","Because the questions were not about percentages.","Because his calculator was broken."],k:1,p:["“Galih had run out of time.”","Raka kemudian menyadari: setiap kali ia menunggu kalkulator, Galih juga menunggu – Galih memberikan waktunya sendiri.","Jawaban B. Layarnya retak, tetapi kalkulator masih bisa dipakai."]},
+{id:"N3b",ps:"N3",s:"Karakter tokoh",l:2,t:"pgk",q:"Which words describe Galih’s character in the story? Choose ALL correct answers.",o:["Generous","Selfish","Quiet","Uncomplaining"],k:[0,2,3],p:["Galih berbagi kalkulator meski merugikan dirinya → generous (A).","Teks menyebutnya “a quiet boy who rarely talked” → C.","Ia memberikan waktunya “without complaining” → uncomplaining (D). Selfish (B) berlawanan dengan sikapnya."]},
+{id:"N3c",ps:"N3",s:"Gagasan utama (main idea)",l:2,t:"pg",q:"What is the story mainly about?",o:["A kind act of sharing that leads to gratitude and friendship","A boy who gets the best score in his class","How to use a calculator in a mathematics test","A teacher who allows calculators in tests"],k:0,p:["Inti cerita: Galih berbagi kalkulator → Raka menyadari pengorbanan Galih → membalas dengan kalkulator baru → keduanya bersahabat.","Jawaban A merangkum keseluruhan cerita, bukan hanya satu bagian."]}
+];
+
+(function(){
+"use strict";
+const DOM = {fun:{n:"Teks Fungsional",ic:"✉",sub:"email, pengumuman, iklan, undangan"},des:{n:"Deskriptif & Report",ic:"◉",sub:"tempat, hewan, alam"},pro:{n:"Prosedur",ic:"1·2·3",sub:"langkah, resep, petunjuk"},rec:{n:"Recount & Biografi",ic:"↺",sub:"pengalaman, tokoh"},nar:{n:"Naratif",ic:"✦",sub:"fabel, legenda, cerpen"}};
+const LVL = {1:"Menemukan informasi",2:"Memahami & menafsirkan",3:"Mengevaluasi & merefleksi"};
+const TIPE = {pg:"Pilihan ganda",pgk:"PG kompleks",bs:"True/False"};
+const LET = "ABCDEFGH";
+const KEY = "tkadInggrisBacaan.v1", KEYAPI = "tkadInggrisBacaan.apikey";
+const $ = s => document.querySelector(s);
+const esc = t => String(t==null?"":t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+const frac = h => String(h).replace(/⟦([^|⟧]+)\|([^⟧]+)⟧/g, (m,a,b)=>'<span class="fr" role="math" aria-label="'+a.replace(/<[^>]+>/g,"")+' per '+b.replace(/<[^>]+>/g,"")+'"><span>'+a+'</span><span>'+b+'</span></span>');
+const R = (q, html) => frac(q.ai ? esc(html).replace(/&lt;(\/?)(b|i)&gt;/g,"<$1$2>") : html);
+BANK.forEach((q,i)=>{ q.urut=i; q.d=TEKS[q.ps].d; });
+function teks(id){ return TEKS[id] || (S.aiTeks||{})[id] || null; }
+function teksHTML(t){ return t.ai ? String(t.isi).split(/\n\s*\n/).map(p=>"<p>"+esc(p).replace(/\n/g,"<br>")+"</p>").join("") : t.isi; }
+
+/* ---------- Penyimpanan ---------- */
+function load(){ try{ const s = JSON.parse(localStorage.getItem(KEY)||"null"); if(s && typeof s==="object") return s; }catch(e){} return null; }
+let S = load() || {jawaban:[], sesi:[], ai:[], aiTeks:{}, cfg:{tema:"system", nama:"", model:"gemini-flash-latest", aiInclude:true}, contohDiisi:false};
+S.jawaban=S.jawaban||[];S.sesi=S.sesi||[];S.ai=S.ai||[];S.aiTeks=S.aiTeks||{};S.cfg=Object.assign({tema:"system",nama:"",model:"gemini-flash-latest",aiInclude:true},S.cfg||{});
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast("Penyimpanan perangkat tidak tersedia; data hanya bertahan selama halaman terbuka."); } }
+function getKey(){ try{ return localStorage.getItem(KEYAPI)||""; }catch(e){ return ""; } }
+function setKey(k){ try{ if(k) localStorage.setItem(KEYAPI,k); else localStorage.removeItem(KEYAPI); }catch(e){} }
+
+/* ---------- Data contoh (fiktif) ---------- */
+function isiContoh(){
+  if(S.contohDiisi) return;
+  // pola fiktif: kuat di teks prosedur/fungsional, lemah di naratif-evaluasi
+  const peluang = {fun:[.9,.75,.6],des:[.85,.6,.4],pro:[.9,.8,.65],rec:[.8,.6,.45],nar:[.75,.5,.3]};
+  let seed = 7; const rnd = () => (seed = (seed*9301+49297)%233280)/233280;
+  const t0 = Date.now() - 6*864e5;
+  [["Latihan",0],["Tes",3]].forEach(([mode,hari],si)=>{
+    const id = "contoh-"+si, mulai = t0 + hari*864e5;
+    let n=0,b=0;
+    BANK.forEach((q,i)=>{ if((i+si)%2) return; const ok = rnd() < peluang[q.d][q.l-1]; n++; if(ok)b++;
+      S.jawaban.push({qid:q.id,ps:q.ps,d:q.d,s:q.s,l:q.l,t:q.t,ok:ok,w:mulai+i*60000,sesi:id,mode:mode,contoh:true}); });
+    S.sesi.push({id:id,mode:mode,mulai:mulai,n:n,benar:b,skor:Math.round(b/n*100),durasi:mode==="Tes"?90*60:0,contoh:true});
+  });
+  S.contohDiisi = true; save();
+}
+function adaContoh(){ return S.jawaban.some(j=>j.contoh) || S.sesi.some(s=>s.contoh); }
+function hapusContoh(){ S.jawaban=S.jawaban.filter(j=>!j.contoh); S.sesi=S.sesi.filter(s=>!s.contoh); save(); renderAll(); toast("Data contoh dihapus."); }
+
+/* ---------- Tema ---------- */
+function applyTheme(){ const t=S.cfg.tema; if(t==="system") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme",t); }
+$("#themeBtn").addEventListener("click",()=>{ const dark = document.documentElement.getAttribute("data-theme")==="dark" || (S.cfg.tema==="system" && matchMedia("(prefers-color-scheme: dark)").matches); S.cfg.tema = dark?"light":"dark"; applyTheme(); save(); $("#cfgTema").value=S.cfg.tema; });
+
+/* ---------- Navigasi ---------- */
+let current = "beranda";
+function go(v){
+  if(v===current) return;
+  if(TES && !TES.done && v!=="tes"){ if(!confirm("Tes sedang berjalan. Tinggalkan halaman tes? (Waktu tetap berjalan.)")) return; }
+  current=v;
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected", b.dataset.v===v?"true":"false"));
+  document.querySelectorAll("section.view").forEach(s=>s.classList.toggle("on", s.id==="v-"+v));
+  if(v==="peta") renderPeta(); if(v==="riwayat") renderRiwayat(); if(v==="ai") renderAI(); if(v==="beranda") renderHome();
+  window.scrollTo({top:0});
+}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>go(b.dataset.v)));
+document.addEventListener("click",e=>{ const g=e.target.closest("[data-go]"); if(g){ e.preventDefault(); go(g.dataset.go); } });
+$("nav.tabs").addEventListener("keydown",e=>{ if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft") return; const bs=[...document.querySelectorAll("nav.tabs button")]; let i=bs.indexOf(document.activeElement); if(i<0) return; i=(i+(e.key==="ArrowRight"?1:-1)+bs.length)%bs.length; bs[i].focus(); });
+
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("on"),3200); }
+function dialog(html, btns){ const d=$("#dlg"); $("#dlgBody").innerHTML=html; const box=$("#dlgBtns"); box.innerHTML="";
+  (btns||[{t:"Tutup"}]).forEach(b=>{ const x=document.createElement("button"); x.type="button"; x.className="btn sm"+(b.pri?" pri":""); x.textContent=b.t; x.onclick=()=>{ d.close(); if(b.f) b.f(); }; box.appendChild(x); });
+  if(d.showModal) d.showModal(); else d.setAttribute("open",""); }
+
+/* ---------- Bank aktif ---------- */
+function pool(){ return BANK.concat(S.cfg.aiInclude ? S.ai : []); }
+function stat(filter){ const js=S.jawaban.filter(filter); const b=js.filter(j=>j.ok).length; return {n:js.length,b:b,p:js.length?Math.round(b/js.length*100):null}; }
+
+/* ---------- Form pemilihan soal ---------- */
+function formHTML(px, n){
+  const doms = Object.keys(DOM).map(k=>`<label class="tog c-${k}"><input type="checkbox" name="${px}d" value="${k}" checked> <span style="color:var(--ink)">${DOM[k].n}</span></label>`).join("");
+  const lv = Object.keys(LVL).map(k=>`<label class="tog"><input type="checkbox" name="${px}l" value="${k}" checked> ${LVL[k]}</label>`).join("");
+  const ns = [6,10,20,30,40,"semua"].map(v=>`<label class="tog"><input type="radio" name="${px}n" value="${v}" ${String(v)===String(n)?"checked":""}> ${v==="semua"?"Semua":"±"+v+" soal"}</label>`).join("");
+  return `<fieldset><legend>Jenis teks</legend><div class="opts">${doms}</div></fieldset>
+  <fieldset><legend>Proses membaca</legend><div class="opts">${lv}</div></fieldset>
+  <fieldset><legend>Jumlah soal</legend><div class="opts">${ns}</div><p class="small mut" style="margin:8px 0 0">Bacaan tidak dipotong, jadi jumlahnya bisa lebih 1–2 soal.</p></fieldset>
+  <label class="tog" style="margin-bottom:12px"><input type="checkbox" name="${px}w"> Utamakan soal yang pernah salah / belum dikerjakan</label>`;
+}
+function readForm(px){
+  const d=[...document.querySelectorAll(`input[name=${px}d]:checked`)].map(i=>i.value);
+  const l=[...document.querySelectorAll(`input[name=${px}l]:checked`)].map(i=>+i.value);
+  const nv=(document.querySelector(`input[name=${px}n]:checked`)||{}).value||"10";
+  const weak=(document.querySelector(`input[name=${px}w]`)||{}).checked;
+  return {d,l,n:nv==="semua"?999:+nv,weak};
+}
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function pilihSoal(o){
+  let ps = pool().filter(q=>o.d.includes(q.d)&&o.l.includes(q.l)&&teks(q.ps));
+  if(o.sub) ps = ps.filter(q=>q.s===o.sub);
+  if(!ps.length) return [];
+  let prior = q => 0;
+  if(o.weak){ const last={}; S.jawaban.filter(j=>!j.contoh).forEach(j=>{ last[j.qid]=j.ok; }); prior = q => last[q.id]===false?0:(last[q.id]===undefined?1:2); }
+  // kelompokkan per bacaan: soal dari satu bacaan selalu berurutan dan tidak dipotong
+  const g={}; ps.forEach(q=>{ (g[q.ps]=g[q.ps]||[]).push(q); });
+  const groups=Object.keys(g).map(k=>({d:g[k][0].d, qs:g[k].sort((a,b)=>(a.urut==null?9e9:a.urut)-(b.urut==null?9e9:b.urut)||String(a.id).localeCompare(String(b.id))), pr:Math.min.apply(null,g[k].map(prior))}));
+  const by={}; shuffle(groups).sort((a,b)=>a.pr-b.pr).forEach(x=>{ (by[x.d]=by[x.d]||[]).push(x); });
+  const out=[]; const ks=shuffle(Object.keys(by)); let i=0;
+  while(out.length<Math.min(o.n,ps.length)){ const k=ks[i%ks.length]; if(by[k].length) out.push.apply(out, by[k].shift().qs); i++; if(i>5000) break; }
+  return out;
+}
+
+/* ---------- Render satu soal ---------- */
+function qHTML(q, ans, opt){
+  opt=opt||{}; const reveal=!!opt.reveal; let h="", qh="";
+  h+=`<div class="qmeta"><span class="chip c-${q.d}">${DOM[q.d].n}</span><span class="chip" style="color:var(--mut)">${LVL[q.l]}</span><span class="chip" style="color:var(--mut)">${TIPE[q.t]}</span>${q.ai?'<span class="chip ai">Buatan AI · perlu dicek guru</span>':""}</div>`;
+  const tx=teks(q.ps);
+  if(opt.list&&opt.list.length){ const L=opt.list,i=opt.idx; let a=i,b=i; while(a>0&&L[a-1].ps===q.ps)a--; while(b<L.length-1&&L[b+1].ps===q.ps)b++;
+    qh+=`<p class="grpinfo">${a===b?"Bacaan untuk soal "+(a+1):"Bacaan untuk soal "+(a+1)+"–"+(b+1)} · soal ke-${i-a+1} dari ${b-a+1}</p>`; }
+  qh+=`<p class="qtext" id="qtext">${R(q,q.q)}</p>`;
+  if(q.t==="bs"){
+    qh+=`<table class="bs" aria-labelledby="qtext"><tbody>`+q.o.map((s,i)=>{
+      const v=ans?ans[i]:undefined; let cls="";
+      if(reveal){ cls = (v===q.k[i])?"right":"wrong"; }
+      return `<tr class="${cls}"><td>${R(q,s)}${reveal?`<div class="small mut">Kunci: <b>${q.k[i]?"True":"False"}</b></div>`:""}</td><td><div class="row" style="gap:6px;flex-wrap:nowrap" role="group" aria-label="Pernyataan ${i+1}">
+      <button type="button" class="bsb" data-bs="${i}" data-v="1" aria-pressed="${v===true}" ${reveal?"disabled":""}>True</button>
+      <button type="button" class="bsb" data-bs="${i}" data-v="0" aria-pressed="${v===false}" ${reveal?"disabled":""}>False</button></div></td></tr>`; }).join("")+`</tbody></table>`;
+  } else {
+    const multi=q.t==="pgk";
+    if(multi) qh+=`<p class="small mut" style="margin:-6px 0 8px">Jawaban benar bisa lebih dari satu.</p>`;
+    qh+=`<div role="${multi?"group":"radiogroup"}" aria-labelledby="qtext">`+q.o.map((s,i)=>{
+      const sel = multi ? (ans||[]).includes(i) : ans===i; let cls="";
+      if(reveal){ const right = multi? q.k.includes(i) : q.k===i; if(right) cls="right"; else if(sel) cls="wrong"; }
+      return `<button type="button" class="choice ${cls}" role="${multi?"checkbox":"radio"}" aria-checked="${sel}" data-i="${i}" ${reveal?"disabled":""}><span class="let">${LET[i]}</span><span>${R(q,s)}</span></button>`;
+    }).join("")+`</div>`;
+  }
+  if(tx){ const ph=`<span class="lbl">${esc(tx.j)}${tx.ai?' · <span class="chip ai">Bacaan AI · perlu dicek guru</span>':""}</span><h3>${esc(tx.judul)}</h3>${teksHTML(tx)}`;
+    h+=`<div class="split"><div class="passage" tabindex="0" role="region" aria-label="Bacaan: ${esc(tx.judul)}">${opt.compact?`<details><summary>Tampilkan bacaan “${esc(tx.judul)}”</summary>${ph}</details>`:ph}</div><div class="qside">${qh}</div></div>`; }
+  else h+=qh;
+  return h;
+}
+function isAnswered(q,a){ if(a==null) return false; if(q.t==="pg") return Number.isInteger(a); if(q.t==="pgk") return a.length>0; return a.every(v=>v===true||v===false); }
+function benar(q,a){ if(!isAnswered(q,a)) return false; if(q.t==="pg") return a===q.k; if(q.t==="pgk") return a.length===q.k.length && a.every(i=>q.k.includes(i)); return a.every((v,i)=>v===q.k[i]); }
+function kunciTeks(q){ if(q.t==="pg") return LET[q.k]; if(q.t==="pgk") return q.k.map(i=>LET[i]).join(", "); return q.k.map((v,i)=>(i+1)+"="+(v?"True":"False")).join(", "); }
+function bindAnswer(root, q, getA, setA, after){
+  root.querySelectorAll(".choice").forEach(b=>b.addEventListener("click",()=>{ const i=+b.dataset.i; pick(q,i,getA,setA); after(); }));
+  root.querySelectorAll(".bsb").forEach(b=>b.addEventListener("click",()=>{ const a=(getA()||q.o.map(()=>null)).slice(); a[+b.dataset.bs]=b.dataset.v==="1"; setA(a); after(); }));
+}
+function pick(q,i,getA,setA){ if(i>=q.o.length) return; if(q.t==="pg") setA(i); else if(q.t==="pgk"){ const a=(getA()||[]).slice(); const k=a.indexOf(i); if(k>=0)a.splice(k,1); else a.push(i); a.sort(); setA(a); } }
+function catat(q, ok, sesi, mode){ S.jawaban.push({qid:q.id,ps:q.ps,d:q.d,s:q.s,l:q.l,t:q.t,ok:ok,w:Date.now(),sesi:sesi,mode:mode,ai:!!q.ai}); }
+
+/* ---------- MODE LATIHAN ---------- */
+let LAT=null;
+function mulaiLatihan(o){
+  const qs=pilihSoal(o); if(!qs.length){ toast("Tidak ada soal untuk pilihan ini. Centang minimal satu domain dan level."); return; }
+  LAT={qs, i:0, a:qs.map(()=>null), checked:qs.map(()=>false), id:"L"+Date.now(), mulai:Date.now()};
+  $("#latSetup").hidden=true; $("#latPlay").hidden=false; renderLat(); go("latihan");
+}
+function renderLat(){
+  const L=LAT, q=L.qs[L.i], a=L.a[L.i], chk=L.checked[L.i], el=$("#latPlay");
+  const done=L.checked.filter(Boolean).length;
+  let h=`<div class="ptop"><button class="btn sm ghost" type="button" id="latQuit">✕ Akhiri</button><div class="prog" role="progressbar" aria-label="Kemajuan" aria-valuemin="0" aria-valuemax="${L.qs.length}" aria-valuenow="${done}"><i style="width:${done/L.qs.length*100}%"></i></div><b>${L.i+1}/${L.qs.length}</b></div>`;
+  h+=`<div class="card" id="latCard">${qHTML(q,a,{reveal:chk,list:L.qs,idx:L.i})}`;
+  if(chk){ const ok=benar(q,a);
+    h+=`<div class="fb ${ok?"ok":"no"}" tabindex="-1" id="fb"><h3>${ok?"✓ Benar!":"✗ Belum tepat"}</h3>${ok?"":`<div>Kunci: <b>${kunciTeks(q)}</b></div>`}
+    <b>Pembahasan</b><ol class="steps">${q.p.map(s=>`<li>${R(q,s)}</li>`).join("")}</ol>
+    <div class="row" style="margin-top:10px"><button class="btn sm" type="button" id="aiExplain">Jelaskan ulang dengan AI</button></div><div id="aiOut"></div></div>`; }
+  h+=`<div class="row" style="justify-content:space-between;margin-top:14px">
+    <button class="btn sm ghost" type="button" id="latPrev" ${L.i===0?"disabled":""}>← Sebelumnya</button>
+    ${chk?`<button class="btn pri" type="button" id="latNext">${L.i===L.qs.length-1?"Lihat hasil":"Soal berikutnya →"}</button>`:`<button class="btn pri" type="button" id="latCheck" ${isAnswered(q,a)?"":"disabled"}>Periksa jawaban</button>`}
+  </div><p class="kbd" style="margin:8px 0 0">Pintasan: <kbd>A</kbd>–<kbd>D</kbd> pilih, <kbd>Enter</kbd> periksa/lanjut.</p></div>`;
+  el.innerHTML=h;
+  if(!chk) bindAnswer(el,q,()=>L.a[L.i],v=>{L.a[L.i]=v;},renderLatKeepFocus);
+  $("#latQuit").onclick=()=>selesaiLatihan(true);
+  $("#latPrev").onclick=()=>{ if(L.i>0){L.i--;renderLat();} };
+  if($("#latCheck")) $("#latCheck").onclick=periksaLat;
+  if($("#latNext")) $("#latNext").onclick=()=>{ if(L.i<L.qs.length-1){L.i++;renderLat(); $("#latCard").scrollIntoView({block:"start"}); const ps=$("#latCard .passage"); if(ps&&L.qs[L.i-1].ps!==L.qs[L.i].ps) ps.scrollTop=0;} else selesaiLatihan(); };
+  if($("#aiExplain")) $("#aiExplain").onclick=()=>jelaskanAI(q,a);
+}
+function renderLatKeepFocus(){ const f=document.activeElement; const sel=f&&f.dataset?(f.dataset.i!=null?`.choice[data-i="${f.dataset.i}"]`:(f.dataset.bs!=null?`.bsb[data-bs="${f.dataset.bs}"][data-v="${f.dataset.v}"]`:null)):null; renderLat(); if(sel){ const n=$("#latPlay").querySelector(sel); if(n) n.focus(); } }
+function periksaLat(){ const L=LAT,q=L.qs[L.i],a=L.a[L.i]; if(!isAnswered(q,a)) return; L.checked[L.i]=true; catat(q,benar(q,a),L.id,"Latihan"); save(); renderLat(); const fb=$("#fb"); if(fb){ fb.focus({preventScroll:true}); fb.scrollIntoView({block:"nearest",behavior:"smooth"}); } }
+function selesaiLatihan(early){
+  const L=LAT; const n=L.checked.filter(Boolean).length;
+  if(n){ const b=L.qs.filter((q,i)=>L.checked[i]&&benar(q,L.a[i])).length; S.sesi.push({id:L.id,mode:"Latihan",mulai:L.mulai,n:n,benar:b,skor:Math.round(b/n*100),durasi:Math.round((Date.now()-L.mulai)/1000)}); save();
+    hasilView($("#latPlay"), L.qs.filter((q,i)=>L.checked[i]), L.a.filter((a,i)=>L.checked[i]), "Latihan", ()=>{ $("#latPlay").hidden=true; $("#latSetup").hidden=false; LAT=null; });
+  } else { $("#latPlay").hidden=true; $("#latSetup").hidden=false; LAT=null; }
+}
+
+/* ---------- MODE TES ---------- */
+let TES=null, tick=null;
+function mulaiTes(o, menit){
+  const qs=pilihSoal(o); if(!qs.length){ toast("Tidak ada soal untuk pilihan ini."); return; }
+  TES={qs,i:0,a:qs.map(()=>null),flag:qs.map(()=>false),id:"T"+Date.now(),mulai:Date.now(),durasi:Math.max(1,menit)*60,done:false};
+  $("#tesSetup").hidden=true; $("#tesPlay").hidden=false; renderTes(); go("tes");
+  clearInterval(tick); tick=setInterval(updTimer,1000);
+}
+function sisa(){ return Math.max(0, TES.durasi - Math.floor((Date.now()-TES.mulai)/1000)); }
+function fmt(s){ const m=Math.floor(s/60), d=s%60; return (m<10?"0":"")+m+":"+(d<10?"0":"")+d; }
+function updTimer(){ if(!TES||TES.done) return; const s=sisa(); const t=$("#timer"); if(t){ t.textContent=fmt(s); t.classList.toggle("low", s<=300); }
+  if(s===300) toast("Sisa waktu 5 menit."); if(s<=0){ toast("Waktu habis. Jawaban dikumpulkan otomatis."); kumpulTes(); } }
+function renderTes(){
+  const T=TES, q=T.qs[T.i], el=$("#tesPlay");
+  const nAns=T.qs.filter((q,i)=>isAnswered(q,T.a[i])).length;
+  let h=`<div class="ptop"><span class="timer" id="timer" aria-label="Sisa waktu" role="timer">${fmt(sisa())}</span><div class="prog" aria-hidden="true"><i style="width:${nAns/T.qs.length*100}%"></i></div><b>${nAns}/${T.qs.length} terjawab</b></div>
+  <div class="tesgrid"><div class="card" id="tesCard"><div class="row" style="justify-content:space-between;margin-bottom:6px"><h2 style="font-size:22px">Soal ${T.i+1}</h2>
+  <label class="tog"><input type="checkbox" id="ragu" ${T.flag[T.i]?"checked":""}> Ragu-ragu</label></div>${qHTML(q,T.a[T.i],{list:T.qs,idx:T.i})}
+  <div class="row" style="justify-content:space-between;margin-top:14px"><button class="btn sm" type="button" id="tPrev" ${T.i===0?"disabled":""}>← Sebelumnya</button>
+  ${T.i<T.qs.length-1?`<button class="btn sm pri" type="button" id="tNext">Berikutnya →</button>`:`<button class="btn sm pri" type="button" id="tEnd2">Selesai &amp; kumpulkan</button>`}</div></div>
+  <aside class="card" aria-label="Navigasi nomor soal"><b>Nomor soal</b><div class="navq" style="margin-top:8px">${T.qs.map((qq,i)=>`<button type="button" data-n="${i}" class="${isAnswered(qq,T.a[i])?"ans":""} ${T.flag[i]?"flag":""} ${i===T.i?"cur":""}" aria-label="Soal ${i+1}${isAnswered(qq,T.a[i])?", terjawab":""}${T.flag[i]?", ragu-ragu":""}" ${i===T.i?'aria-current="true"':""}>${i+1}</button>`).join("")}</div>
+  <div class="legend"><span class="l1">Terjawab</span><span class="l2">Ragu</span><span class="l3">Belum</span></div>
+  <button class="btn pri" type="button" id="tEnd" style="width:100%;margin-top:14px">Selesai &amp; kumpulkan</button>
+  <p class="kbd">Pintasan: <kbd>←</kbd> <kbd>→</kbd> pindah, <kbd>R</kbd> ragu-ragu.</p></aside></div>`;
+  el.innerHTML=h;
+  bindAnswer(el,q,()=>T.a[T.i],v=>{T.a[T.i]=v;},()=>{ const f=document.activeElement; const sel=f&&f.dataset?(f.dataset.i!=null?`.choice[data-i="${f.dataset.i}"]`:(f.dataset.bs!=null?`.bsb[data-bs="${f.dataset.bs}"][data-v="${f.dataset.v}"]`:null)):null; renderTes(); if(sel){const n=el.querySelector(sel); if(n) n.focus();} });
+  $("#ragu").onchange=e=>{ T.flag[T.i]=e.target.checked; renderTes(); $("#ragu").focus(); };
+  $("#tPrev").onclick=()=>pindah(T.i-1);
+  if($("#tNext")) $("#tNext").onclick=()=>pindah(T.i+1);
+  el.querySelectorAll(".navq button").forEach(b=>b.onclick=()=>pindah(+b.dataset.n));
+  const end=()=>{ const kosong=T.qs.filter((q,i)=>!isAnswered(q,T.a[i])).length, ragu=T.flag.filter(Boolean).length;
+    dialog(`<h2 style="font-size:22px">Kumpulkan jawaban?</h2><p>${kosong?`Masih ada <b>${kosong} soal belum dijawab</b>. `:"Semua soal sudah dijawab. "}${ragu?`Ada <b>${ragu} soal ditandai ragu-ragu</b>.`:""}</p><p class="small mut">Setelah dikumpulkan, jawaban tidak bisa diubah.</p>`,[{t:"Periksa lagi"},{t:"Kumpulkan",pri:true,f:kumpulTes}]); };
+  $("#tEnd").onclick=end; if($("#tEnd2")) $("#tEnd2").onclick=end;
+}
+function pindah(i){ if(!TES||i<0||i>=TES.qs.length) return; TES.i=i; renderTes(); $("#tesCard").scrollIntoView({block:"nearest"}); }
+function kumpulTes(){
+  const T=TES; if(!T||T.done) return; T.done=true; clearInterval(tick);
+  let b=0; T.qs.forEach((q,i)=>{ const ok=benar(q,T.a[i]); if(ok)b++; catat(q,ok,T.id,"Tes"); });
+  S.sesi.push({id:T.id,mode:"Tes",mulai:T.mulai,n:T.qs.length,benar:b,skor:Math.round(b/T.qs.length*100),durasi:Math.min(T.durasi,Math.round((Date.now()-T.mulai)/1000))}); save();
+  hasilView($("#tesPlay"), T.qs, T.a, "Tes", ()=>{ $("#tesPlay").hidden=true; $("#tesSetup").hidden=false; TES=null; });
+}
+
+/* ---------- Hasil ---------- */
+function hasilView(el, qs, as, mode, back){
+  const n=qs.length, b=qs.filter((q,i)=>benar(q,as[i])).length, sk=Math.round(b/n*100);
+  const per={}; qs.forEach((q,i)=>{ const p=per[q.d]=per[q.d]||{n:0,b:0}; p.n++; if(benar(q,as[i])) p.b++; });
+  let h=`<div class="card"><span class="kick">Hasil ${mode}</span><div class="row" style="align-items:flex-end;gap:18px;margin:6px 0 10px"><div class="big">${sk}</div><div><b>${b} dari ${n} soal benar</b><br><span class="mut small">${pesan(sk)}</span></div></div>
+  <div class="grid g4">${Object.keys(per).map(k=>`<div class="soft c-${k}"><b>${DOM[k].n}</b><div class="disp" style="font-size:26px;font-weight:800">${per[k].b}/${per[k].n}</div></div>`).join("")}</div>
+  <div class="row" style="margin-top:14px"><button class="btn pri" type="button" id="hBack">Selesai</button><button class="btn" type="button" data-go="peta">Lihat peta kemampuan</button><button class="btn ghost" type="button" onclick="window.print()">Cetak hasil</button></div></div>
+  <h2 style="font-size:22px;margin:22px 0 10px">Pembahasan</h2>`;
+  h+=qs.map((q,i)=>{ const ok=benar(q,as[i]); return `<details class="card" style="margin-bottom:12px" ${ok?"":"open"}><summary style="cursor:pointer;font-weight:700">${ok?"✓":"✗"} Soal ${i+1} · ${DOM[q.d].n} · ${LVL[q.l]} ${isAnswered(q,as[i])?"":'<span class="chip" style="color:var(--bad)">tidak dijawab</span>'}</summary><div style="margin-top:10px">${qHTML(q,as[i],{reveal:true,compact:i>0&&qs[i-1].ps===q.ps,list:qs,idx:i})}<div class="fb ${ok?"ok":"no"}"><div>Kunci: <b>${kunciTeks(q)}</b></div><ol class="steps">${q.p.map(s=>`<li>${R(q,s)}</li>`).join("")}</ol></div></div></details>`; }).join("");
+  el.innerHTML=h; $("#hBack").onclick=()=>{ back(); renderHome(); window.scrollTo({top:0}); };
+  el.scrollIntoView({block:"start"});
+}
+function pesan(s){ return s>=85?"Excellent! Pertahankan dan coba bacaan yang lebih menantang.":s>=70?"Good job! Perkuat jenis teks yang masih merah/kuning.":s>=50?"Sudah ada dasar. Baca ulang bukti di teks untuk soal yang salah.":"Tidak apa-apa. Mulai dari soal menemukan informasi per jenis teks."; }
+
+/* ---------- Keyboard ---------- */
+document.addEventListener("keydown",e=>{
+  if(e.target.matches("input[type=text],input[type=password],input[type=number],textarea,select")||e.ctrlKey||e.metaKey||e.altKey) return;
+  if($("#dlg").open) return;
+  const k=e.key.toUpperCase(); const idx="ABCDEFGH".indexOf(k)>=0&&k.length===1?"ABCDEFGH".indexOf(k):("12345678".indexOf(k)>=0&&k.length===1?"12345678".indexOf(k):-1);
+  if(current==="latihan"&&LAT&&!$("#latPlay").hidden&&$("#latCard")){
+    const L=LAT,q=L.qs[L.i];
+    if(idx>=0&&!L.checked[L.i]&&q.t!=="bs"){ pick(q,idx,()=>L.a[L.i],v=>{L.a[L.i]=v;}); renderLat(); e.preventDefault(); }
+    else if(e.key==="Enter"&&!e.target.matches("button,summary,a")){ if(L.checked[L.i]) $("#latNext").click(); else if($("#latCheck")&&!$("#latCheck").disabled) periksaLat(); e.preventDefault(); }
+  } else if(current==="tes"&&TES&&!TES.done){
+    const q=TES.qs[TES.i];
+    if(idx>=0&&q.t!=="bs"){ pick(q,idx,()=>TES.a[TES.i],v=>{TES.a[TES.i]=v;}); renderTes(); e.preventDefault(); }
+    else if(e.key==="ArrowRight"){ pindah(TES.i+1); e.preventDefault(); }
+    else if(e.key==="ArrowLeft"){ pindah(TES.i-1); e.preventDefault(); }
+    else if(k==="R"){ TES.flag[TES.i]=!TES.flag[TES.i]; renderTes(); }
+  }
+});
+window.addEventListener("beforeunload",e=>{ if(TES&&!TES.done){ e.preventDefault(); e.returnValue=""; } });
+
+/* ---------- Beranda ---------- */
+function renderHome(){
+  $("#domCards").innerHTML=Object.keys(DOM).map(k=>{ const n=pool().filter(q=>q.d===k).length, st=stat(j=>j.d===k);
+    return `<div class="card dom c-${k}"><span class="ico" aria-hidden="true">${DOM[k].ic}</span><h3>${DOM[k].n}</h3><div class="small mut">${DOM[k].sub}<br>${new Set(pool().filter(q=>q.d===k).map(q=>q.ps)).size} bacaan · ${n} soal · ${st.n?st.n+" jawaban tercatat":"belum ada jawaban"}</div>
+    <div class="bar" aria-hidden="true"><i style="width:${st.p||0}%"></i></div><div class="small"><b>${st.p==null?"–":st.p+"%"}</b> benar</div>
+    <button class="btn sm" type="button" style="margin-top:10px" data-latdom="${k}">Latih ${DOM[k].n}</button></div>`; }).join("");
+  document.querySelectorAll("[data-latdom]").forEach(b=>b.onclick=()=>mulaiLatihan({d:[b.dataset.latdom],l:[1,2,3],n:10}));
+  $("#helloName").textContent=S.cfg.nama?", "+S.cfg.nama:"";
+  const all=stat(j=>true), own=S.sesi.filter(s=>!s.contoh);
+  $("#homeSum").textContent = own.length ? `Kamu sudah menyelesaikan ${own.length} sesi. Skor terakhir: ${own[own.length-1].skor}.` : `Belum ada sesi milikmu. ${adaContoh()?"Peta kemampuan saat ini menampilkan data contoh.":""}`;
+}
+document.querySelectorAll("[data-quick]").forEach(b=>b.onclick=()=>{ if(b.dataset.quick==="latihan") mulaiLatihan({d:Object.keys(DOM),l:[1,2,3],n:10}); else { $("#tesMenit").value=90; mulaiTes({d:Object.keys(DOM),l:[1,2,3],n:40},90); } });
+
+/* ---------- Peta ---------- */
+function renderPeta(){
+  $("#petaContoh").innerHTML = adaContoh() ? `<div class="banner"><span><b>Data contoh.</b> Peta ini masih memuat data fiktif berlabel “contoh”${S.sesi.some(s=>!s.contoh)?" bercampur dengan datamu":""}.</span><button class="btn sm" type="button" id="pDelContoh">Hapus data contoh</button></div>` : "";
+  if($("#pDelContoh")) $("#pDelContoh").onclick=hapusContoh;
+  const all=stat(()=>true);
+  $("#pAll").textContent = all.p==null?"–":all.p+"%"; $("#pAllSub").textContent = all.n?`${all.b} benar dari ${all.n} jawaban tercatat`:"Belum ada data. Mulai latihan dulu.";
+  let h=`<thead><tr><th scope="col">Jenis teks</th>${Object.keys(LVL).map(l=>`<th scope="col">${LVL[l]}</th>`).join("")}<th scope="col">Total</th></tr></thead><tbody>`;
+  Object.keys(DOM).forEach(d=>{
+    h+=`<tr><th scope="row" class="c-${d}" style="color:var(--dc)">${DOM[d].n}</th>`;
+    [1,2,3].forEach(l=>{ const s=stat(j=>j.d===d&&j.l===l); const c=s.p==null?"h0":s.p<50?"h1":s.p<75?"h2":"h3";
+      h+=`<td class="${c}" tabindex="0" role="button" data-hd="${d}" data-hl="${l}" aria-label="${DOM[d].n}, ${LVL[l]}: ${s.p==null?"belum ada data":s.p+" persen dari "+s.n+" jawaban"}. Tekan untuk berlatih.">${s.p==null?"–":s.p+"%"}<small>${s.n} jawaban</small></td>`; });
+    const t=stat(j=>j.d===d); h+=`<td class="${t.p==null?"h0":t.p<50?"h1":t.p<75?"h2":"h3"}">${t.p==null?"–":t.p+"%"}<small>${t.n} jawaban</small></td></tr>`;
+  });
+  $("#heat").innerHTML=h+"</tbody>";
+  $("#heat").querySelectorAll("td[data-hd]").forEach(td=>{ const f=()=>mulaiLatihan({d:[td.dataset.hd],l:[+td.dataset.hl],n:10,weak:true}); td.onclick=f; td.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); f(); } }; });
+  // subelemen terlemah
+  const sub={}; S.jawaban.forEach(j=>{ const k=j.d+"|"+j.s; const o=sub[k]=sub[k]||{d:j.d,s:j.s,n:0,b:0}; o.n++; if(j.ok)o.b++; });
+  const weak=Object.values(sub).filter(o=>o.n>=1).map(o=>Object.assign(o,{p:Math.round(o.b/o.n*100)})).filter(o=>o.p<75).sort((a,b)=>a.p-b.p||b.n-a.n).slice(0,6);
+  $("#weakList").innerHTML = weak.length ? weak.map((o,i)=>`<li class="row" style="justify-content:space-between"><span><span class="chip c-${o.d}">${DOM[o.d].n}</span> <b>${esc(o.s)}</b> <span class="mut small">· ${o.b}/${o.n} benar (${o.p}%)</span></span><button class="btn sm" type="button" data-ws="${i}">Latih</button></li>`).join("") : `<li class="mut">${all.n?"Belum ada subelemen di bawah 75%. Hebat!":"Belum ada data."}</li>`;
+  $("#weakList").querySelectorAll("[data-ws]").forEach(b=>b.onclick=()=>{ const o=weak[+b.dataset.ws]; let qs={d:[o.d],l:[1,2,3],n:10,sub:o.s}; if(!pilihSoal(qs).length) qs={d:[o.d],l:[1,2,3],n:10,weak:true}; mulaiLatihan(qs); });
+  // fokus
+  const cells=[]; Object.keys(DOM).forEach(d=>[1,2,3].forEach(l=>{ const s=stat(j=>j.d===d&&j.l===l); if(s.n) cells.push({d,l,p:s.p,n:s.n}); }));
+  cells.sort((a,b)=>a.p-b.p);
+  $("#pFokus").innerHTML = cells.length ? `<p style="margin:0 0 8px">Paling perlu dikuatkan: <b>${DOM[cells[0].d].n} – ${LVL[cells[0].l]}</b> (${cells[0].p}%).</p><p class="small mut" style="margin:0 0 10px">${saran(cells[0])}</p><button class="btn sm pri" type="button" id="fokusGo">Latih 10 soal bagian ini</button>` : `<p class="mut">Kerjakan beberapa soal untuk melihat rekomendasi.</p>`;
+  if($("#fokusGo")) $("#fokusGo").onclick=()=>mulaiLatihan({d:[cells[0].d],l:[cells[0].l],n:10,weak:true});
+}
+function saran(c){
+  if(c.l===1) return "Latih scanning: garis bawahi kata kunci di soal (nama, angka, waktu), cari kata yang sama atau sinonimnya di bacaan, lalu baca kalimat di sekitarnya.";
+  if(c.l===2) return "Perhatikan kalimat utama tiap paragraf, kata ganti (it, they, this) dan kata yang dirujuknya, serta tebak arti kata dari kalimat di sekitarnya.";
+  return "Untuk soal tujuan, pesan moral, dan inferensi, jangan hanya mencari kalimat yang sama. Pilih jawaban yang didukung bukti di teks dan buang pilihan yang terlalu luas atau tidak disebut.";
+}
+/* ---------- Riwayat & ekspor ---------- */
+function tglJam(w){ return new Date(w).toLocaleString("id-ID",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}); }
+function renderRiwayat(){
+  const rows=S.sesi.slice().reverse();
+  $("#sesiTable").innerHTML = rows.length ? `<thead><tr><th>Waktu</th><th>Mode</th><th>Soal</th><th>Benar</th><th>Skor</th><th>Durasi</th><th>Keterangan</th></tr></thead><tbody>${rows.map(s=>`<tr><td>${tglJam(s.mulai)}</td><td>${s.mode}</td><td>${s.n}</td><td>${s.benar}</td><td><b>${s.skor}</b></td><td>${s.durasi?Math.round(s.durasi/60)+" mnt":"–"}</td><td>${s.contoh?'<span class="chip ai">contoh</span>':""}</td></tr>`).join("")}</tbody>` : `<tbody><tr><td class="mut">Belum ada sesi.</td></tr></tbody>`;
+  $("#delContoh").disabled=!adaContoh();
+}
+function unduh(nama, isi, tipe){ const b=new Blob([isi],{type:tipe}); const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download=nama; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500); }
+const csvCell=v=>{ const s=String(v==null?"":v); return /[",;\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; };
+$("#expCsv").onclick=()=>{ const hd=["waktu","sesi","mode","id_soal","bacaan","jenis_teks","keterampilan","proses","bentuk","benar","buatan_ai","contoh"];
+  const rows=S.jawaban.map(j=>[new Date(j.w).toISOString(),j.sesi,j.mode,j.qid,j.ps||"",DOM[j.d]?DOM[j.d].n:j.d,j.s,LVL[j.l],TIPE[j.t],j.ok?1:0,j.ai?"ya":"tidak",j.contoh?"ya":"tidak"]);
+  unduh("tkad-inggris-jawaban.csv","﻿"+[hd].concat(rows).map(r=>r.map(csvCell).join(",")).join("\n"),"text/csv;charset=utf-8"); };
+$("#expJson").onclick=()=>{ const c=JSON.parse(JSON.stringify(S)); unduh("tkad-inggris-cadangan.json",JSON.stringify({app:"tkad-inggris-bacaan",versi:1,diekspor:new Date().toISOString(),data:c},null,1),"application/json"); };
+$("#impJson").onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ try{ const o=JSON.parse(r.result); const d=o.data||o; if(!Array.isArray(d.jawaban)||!Array.isArray(d.sesi)) throw 0;
+  const ids=new Set(S.sesi.map(s=>s.id)); d.sesi.forEach(s=>{ if(!ids.has(s.id)) S.sesi.push(s); }); const jk=new Set(S.jawaban.map(j=>j.sesi+j.qid+j.w)); d.jawaban.forEach(j=>{ if(!jk.has(j.sesi+j.qid+j.w)) S.jawaban.push(j); });
+  if(d.aiTeks&&typeof d.aiTeks==="object"){ Object.keys(d.aiTeks).forEach(k=>{ const t=d.aiTeks[k]; if(!S.aiTeks[k]&&t&&DOM[t.d]&&typeof t.isi==="string"&&typeof t.judul==="string") S.aiTeks[k]=Object.assign({},t,{ai:true}); }); }
+  if(Array.isArray(d.ai)){ const ai=new Set(S.ai.map(q=>q.id)); d.ai.forEach(q=>{ if(!ai.has(q.id)&&validAI(q)) S.ai.push(Object.assign(q,{ai:true})); }); }
+  save(); renderAll(); toast("Data berhasil diimpor."); }catch(x){ toast("Berkas tidak dikenali sebagai cadangan aplikasi ini."); } e.target.value=""; }; r.readAsText(f); };
+$("#delContoh").onclick=hapusContoh;
+$("#delAll").onclick=()=>dialog(`<h2 style="font-size:22px">Hapus semua data?</h2><p>Riwayat, jawaban, dan soal AI di perangkat ini akan dihapus. Ekspor cadangan dulu bila perlu.</p>`,[{t:"Batal"},{t:"Hapus semua",pri:true,f:()=>{ S.jawaban=[];S.sesi=[];S.ai=[];S.aiTeks={};S.contohDiisi=true; save(); renderAll(); toast("Semua data dihapus."); }}]);
+
+/* ---------- AI (Gemini, opsional) ---------- */
+const MODELS_CADANGAN=["gemini-flash-latest","gemini-flash-lite-latest"];
+async function gemini(prompt, json){
+  const key=getKey(); if(!key) throw new Error("Isi kunci API Gemini di menu Pengaturan terlebih dahulu.");
+  const daftar=[S.cfg.model||"gemini-flash-latest"].concat(MODELS_CADANGAN).filter((m,i,a)=>m&&a.indexOf(m)===i);
+  let last=null;
+  for(const model of daftar){
+    const body={contents:[{role:"user",parts:[{text:prompt}]}],generationConfig:{temperature:json?0.9:0.5}};
+    if(json) body.generationConfig.responseMimeType="application/json";
+    let res; try{ res=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(model)+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify(body)}); }
+    catch(e){ throw new Error("Tidak dapat menghubungi Gemini. Periksa koneksi internet."); }
+    const j=await res.json().catch(()=>({}));
+    if(!res.ok){ const msg=(j.error&&j.error.message)||("HTTP "+res.status); last=new Error("Gemini ("+model+"): "+msg);
+      if(res.status===404||res.status===429||res.status>=500||/not found|not supported|overloaded|unavailable/i.test(msg)) continue; throw last; }
+    const t=((((j.candidates||[])[0]||{}).content||{}).parts||[]).map(p=>p.text||"").join("");
+    if(t) return t; last=new Error("Jawaban Gemini kosong.");
+  }
+  throw last||new Error("Gemini tidak tersedia.");
+}
+function validAI(q){ return q&&typeof q.q==="string"&&q.q.trim()&&typeof q.ps==="string"&&Array.isArray(q.o)&&q.o.length>=3&&q.o.length<=5&&q.o.every(s=>typeof s==="string"&&s.trim())&&Number.isInteger(q.k)&&q.k>=0&&q.k<q.o.length&&Array.isArray(q.p)&&q.p.length>0&&DOM[q.d]&&LVL[q.l]&&new Set(q.o).size===q.o.length; }
+async function buatSoalAI(){
+  const d=$("#aiDom").value, n=+$("#aiN").value, lv=+$("#aiLvl").value, topik=$("#aiTopik").value.trim();
+  const tingkat={1:"lebih mudah (kosakata kelas VII–VIII)",2:"setara siswa kelas IX SMP",3:"menantang untuk kelas IX (lebih banyak inferensi)"}[lv];
+  const prompt=`Kamu penulis soal membaca Bahasa Inggris untuk Tes Kemampuan Akademik Daerah (TKAD) siswa kelas IX SMP di Indonesia. Tulis SATU bacaan bahasa Inggris ORISINAL berjenis "${DOM[d].n}" (${DOM[d].sub})${topik?` dengan topik "${topik}"`:""}, panjang 180–260 kata, dengan tingkat ${tingkat}, konteks yang akrab bagi remaja Indonesia, tanpa menyalin teks yang sudah ada. Pakai nama orang, sekolah, dan merek fiktif.
+Lalu buat ${n} soal pilihan ganda (4 opsi, tepat satu benar) dalam bahasa Inggris tentang bacaan itu, dengan proses membaca berbeda: 1 = menemukan informasi tersurat, 2 = memahami & menafsirkan (gagasan utama, rujukan kata, makna kata, inferensi sederhana), 3 = mengevaluasi & merefleksi (tujuan teks, pesan moral, menerapkan informasi). Jawaban harus benar-benar didukung teks; pengecoh masuk akal. Pembahasan dalam bahasa Indonesia, 2–3 langkah, mengutip bukti dari teks.
+Kembalikan HANYA JSON: {"judul":"judul bacaan","jenis":"jenis teks dalam bahasa Inggris (mis. Announcement, Fable)","teks":"isi bacaan, paragraf dipisah baris kosong","soal":[{"s":"keterampilan singkat dalam bahasa Indonesia","l":1,"q":"pertanyaan","o":["A","B","C","D"],"k":0,"p":["langkah 1","langkah 2"]}]}`;
+  const btn=$("#aiGen"); btn.disabled=true; $("#aiStat").textContent="Sedang menulis bacaan dan soal…";
+  try{
+    let t=await gemini(prompt,true); t=t.replace(/^```(json)?/i,"").replace(/```$/,"").trim();
+    const x=JSON.parse(t); const isi=String(x.teks||"").slice(0,4000).trim(); if(isi.split(/\s+/).length<80) throw new Error("Bacaan dari AI terlalu pendek. Coba lagi.");
+    const pid="AT"+Date.now().toString(36); const tx={d:d,j:String(x.jenis||DOM[d].n).slice(0,60),judul:String(x.judul||"Bacaan AI").slice(0,120),isi:isi,ai:true,dibuat:Date.now()};
+    const qs=[]; (Array.isArray(x.soal)?x.soal:[]).slice(0,3).forEach((y,i)=>{ const l=[1,2,3].includes(+y.l)?+y.l:2; const q={id:pid+"-"+(i+1),ps:pid,d:d,l:l,t:"pg",urut:i,s:String(y.s||"Bacaan AI").slice(0,80),q:String(y.q||"").slice(0,600),o:(y.o||[]).map(s=>String(s).slice(0,300)),k:+y.k,p:(y.p||[]).map(s=>String(s).slice(0,500)),ai:true,dibuat:Date.now()}; if(validAI(q)) qs.push(q); });
+    if(qs.length<2) throw new Error("Format soal dari AI tidak valid. Coba lagi.");
+    S.aiTeks[pid]=tx; qs.forEach(q=>S.ai.push(q)); save(); renderAI(); $("#aiStat").textContent=`1 bacaan dan ${qs.length} soal ditambahkan. Mohon dicek guru sebelum dipakai.`;
+  }catch(e){ $("#aiStat").textContent=e.message||"Gagal membuat soal."; }
+  btn.disabled=false;
+}
+function renderAI(){
+  $("#aiDom").innerHTML||( $("#aiDom").innerHTML=Object.keys(DOM).map(k=>`<option value="${k}">${DOM[k].n}</option>`).join("") );
+  $("#aiCount").textContent=Object.keys(S.aiTeks).length+" bacaan · "+S.ai.length; $("#aiInclude").checked=!!S.cfg.aiInclude;
+  const ids=Object.keys(S.aiTeks);
+  $("#aiList").innerHTML = ids.length ? ids.map(k=>{ const t=S.aiTeks[k], qs=S.ai.filter(q=>q.ps===k); return `<li><div class="row" style="justify-content:space-between"><span><span class="chip ai">Perlu dicek guru</span> <span class="chip c-${t.d}">${DOM[t.d].n}</span> <b>${esc(t.judul)}</b> <span class="small mut">· ${qs.length} soal</span></span><span class="row" style="gap:6px"><button class="btn sm" type="button" data-aiv="${k}">Lihat</button><button class="btn sm ghost" type="button" data-aid="${k}" aria-label="Hapus bacaan AI ${esc(t.judul)}">Hapus</button></span></div></li>`; }).join("") : `<li class="mut">Belum ada bacaan AI.</li>`;
+  $("#aiList").querySelectorAll("[data-aid]").forEach(b=>b.onclick=()=>{ const k=b.dataset.aid; delete S.aiTeks[k]; S.ai=S.ai.filter(q=>q.ps!==k); save(); renderAI(); });
+  $("#aiList").querySelectorAll("[data-aiv]").forEach(b=>b.onclick=()=>{ const qs=S.ai.filter(q=>q.ps===b.dataset.aiv); dialog(qs.map((q,i)=>`${qHTML(q,null,{reveal:true,compact:i>0})}<div class="fb ok" style="margin-bottom:14px"><div>Kunci: <b>${kunciTeks(q)}</b></div><ol class="steps">${q.p.map(s=>`<li>${R(q,s)}</li>`).join("")}</ol></div>`).join("")); });
+}
+$("#aiGen").onclick=buatSoalAI;
+$("#aiInclude").onchange=e=>{ S.cfg.aiInclude=e.target.checked; save(); };
+async function jelaskanAI(q,a){
+  const out=$("#aiOut"); const btn=$("#aiExplain"); btn.disabled=true; out.innerHTML=`<div class="aibox" role="status">Meminta penjelasan…</div>`;
+  const opsi=q.t==="bs"?q.o.map((s,i)=>`Pernyataan ${i+1}: ${s} (kunci: ${q.k[i]?"True":"False"})`).join("\n"):q.o.map((s,i)=>`${LET[i]}. ${s}`).join("\n");
+  const tx=teks(q.ps);
+  const strip=s=>String(s).replace(/<[^>]+>/g," ").replace(/⟦([^|⟧]+)\|([^⟧]+)⟧/g,"$1/$2");
+  const prompt=`Jelaskan ulang soal membaca Bahasa Inggris berikut kepada siswa kelas IX SMP dengan bahasa Indonesia yang ramah dan sederhana, maksimal 170 kata. Tunjukkan kalimat bukti di bacaan (kutip dalam bahasa Inggris lalu artikan), jelaskan mengapa kunci benar dan mengapa pilihan siswa (jika salah) kurang tepat, lalu beri satu tips strategi membaca. Jangan memakai Markdown tebal.
+Bacaan: ${strip(tx?tx.isi:"-")}
+Soal: ${strip(q.q)}
+${strip(opsi)}
+Kunci: ${kunciTeks(q)}
+Pembahasan guru: ${strip(q.p.join(" "))}
+Jawaban siswa: ${a==null?"-":JSON.stringify(a)}`;
+  try{ const t=await gemini(prompt,false); out.innerHTML=`<div class="aibox"><span class="chip ai">Penjelasan AI · perlu dicek guru</span>\n${esc(t.replace(/\*\*/g,"").trim())}</div>`; }
+  catch(e){ out.innerHTML=`<div class="aibox">${esc(e.message)}</div>`; }
+  btn.disabled=false;
+}
+
+/* ---------- Pengaturan ---------- */
+function renderAtur(){ $("#cfgNama").value=S.cfg.nama||""; $("#cfgTema").value=S.cfg.tema; $("#cfgModel").value=S.cfg.model||""; $("#cfgKey").value=getKey(); }
+$("#cfgSave").onclick=()=>{ S.cfg.nama=$("#cfgNama").value.trim().slice(0,30); S.cfg.tema=$("#cfgTema").value; S.cfg.model=$("#cfgModel").value.trim()||"gemini-flash-latest"; setKey($("#cfgKey").value.trim()); save(); applyTheme(); renderHome(); toast("Pengaturan disimpan di perangkat ini."); };
+$("#cfgTema").onchange=()=>{ S.cfg.tema=$("#cfgTema").value; applyTheme(); save(); };
+$("#cfgDelKey").onclick=()=>{ setKey(""); $("#cfgKey").value=""; toast("Kunci API dihapus dari perangkat ini."); };
+$("#cfgTest").onclick=async()=>{ setKey($("#cfgKey").value.trim()); S.cfg.model=$("#cfgModel").value.trim()||"gemini-flash-latest"; save(); $("#cfgStat").textContent="Menguji…"; try{ const t=await gemini("Balas hanya dengan kata: siap",false); $("#cfgStat").textContent="Terhubung ✓ ("+t.trim().slice(0,20)+")"; }catch(e){ $("#cfgStat").textContent=e.message; } };
+
+/* ---------- Mulai ---------- */
+$("#latForm").innerHTML=formHTML("lat",10);
+$("#tesForm").innerHTML=formHTML("tes",40);
+$("#latStart").onclick=()=>mulaiLatihan(readForm("lat"));
+$("#tesStart").onclick=()=>{ const m=Math.min(180,Math.max(5,+$("#tesMenit").value||90)); mulaiTes(readForm("tes"),m); };
+document.querySelectorAll("input[name=tesn]").forEach(r=>r.addEventListener("change",()=>{ const n=r.value==="semua"?pool().length:+r.value; $("#tesMenit").value=Math.max(5,Math.round(n*2.25)); }));
+function renderAll(){ renderHome(); renderPeta(); renderRiwayat(); renderAI(); }
+applyTheme(); isiContoh(); renderAtur(); renderAll();
+})();
+</script>
+</body>
+</html>
