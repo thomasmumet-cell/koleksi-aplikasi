@@ -162,7 +162,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #9bd3bf;border-color:v
     <main id="main"><div class="wrap" id="view"></div></main>
   </div>
 </div>
-<div class="prog" id="prog"><b id="progT">Menulis…</b><div class="bar"><i id="progBar"></i></div><div class="msg" id="progMsg"></div><div class="live" id="progLive"></div><div class="row" style="margin-top:8px"><button class="btn sm" onclick="cancelAI()">Hentikan</button></div></div>
+<div class="prog" id="prog"><b id="progT">Menulis…</b><div class="bar"><i id="progBar"></i></div><div class="msg" id="progMsg"></div><div class="msg" id="progClock" style="font-variant-numeric:tabular-nums;opacity:.75"></div><div class="live" id="progLive"></div><div class="row" style="margin-top:8px"><button class="btn sm" onclick="cancelAI()">Hentikan</button></div></div>
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="box" id="modalBox"></div></div>
 
@@ -838,6 +838,21 @@ ACUAN WAJIB KEDUA (dikunci): ${ACUAN.cetakBiru.judul}
 - Etnosains: ${ACUAN.cetakBiru.etnosains}
 - Penilaian: nilai proses, bukan estetika. Tinggalkan penilaian yang hanya melihat bentuk akhir, kerapian, atau kecepatan merakit; nilai kualitas pertanyaan inkuiri, pemanfaatan matematika, revisi desain, dan ketajaman refleksi. Prototipe gagal yang dianalisis lebih berharga daripada prototipe sukses tanpa pemahaman saintifik.
 - Prinsip kunci: ${ACUAN.cetakBiru.kutipan}`;
+const CP_MAT = `Pada akhir Fase D, murid memiliki kemampuan sebagai berikut.
+# Bilangan
+Membaca, menulis, dan membandingkan bilangan bulat, bilangan rasional, bilangan desimal, bilangan berpangkat bulat dan akar, serta bilangan dalam notasi ilmiah; menerapkan operasi aritmetika pada bilangan real dan memberikan estimasi atau perkiraan dalam menyelesaikan masalah, termasuk yang berkaitan dengan literasi finansial; menggunakan faktorisasi prima dan pengertian rasio (skala, proporsi, dan laju perubahan) dalam penyelesaian masalah.
+# Aljabar
+Mengenali, memprediksi, dan menggeneralisasi pola dalam bentuk susunan benda dan bilangan; menyatakan suatu situasi ke dalam bentuk aljabar; menggunakan sifat-sifat operasi (komutatif, asosiatif, dan distributif) untuk menghasilkan bentuk aljabar yang ekuivalen; memahami relasi dan fungsi serta menyajikannya dalam bentuk diagram panah, tabel, himpunan pasangan berurutan, dan grafik; membedakan beberapa fungsi nonlinear dari fungsi linear secara grafik; menyelesaikan persamaan dan pertidaksamaan linear satu variabel; serta menyajikan, menganalisis, dan menyelesaikan masalah dengan menggunakan relasi, fungsi, persamaan linear, dan sistem persamaan linear dua variabel.
+# Pengukuran
+Menjelaskan cara untuk menentukan luas lingkaran dan menyelesaikan masalah yang terkait; menjelaskan cara untuk menentukan luas permukaan dan volume bangun ruang (prisma, tabung, bola, limas, dan kerucut) dan menyelesaikan masalah yang terkait; menjelaskan pengaruh perubahan secara proporsional dari bangun datar dan bangun ruang terhadap ukuran panjang, besar sudut, luas, dan/atau volume.
+# Geometri
+Membuat jaring-jaring bangun ruang (prisma, tabung, limas, dan kerucut) dan membuat bangun ruang tersebut dari jaring-jaringnya; menggunakan hubungan antarsudut yang terbentuk oleh dua garis yang berpotongan dan oleh dua garis sejajar yang dipotong sebuah garis transversal untuk menyelesaikan masalah, termasuk menentukan jumlah besar sudut dalam sebuah segitiga, menentukan besar sudut yang belum diketahui pada sebuah segitiga, dan menjelaskan sifat-sifat kekongruenan dan kesebangunan pada segitiga dan segi empat; menunjukkan kebenaran teorema Pythagoras dan menggunakannya dalam menyelesaikan masalah, termasuk jarak antara dua titik pada bidang koordinat Kartesius; serta melakukan transformasi tunggal (refleksi, translasi, rotasi, dan dilatasi) titik, garis, dan bangun datar pada bidang koordinat Kartesius dan menggunakannya untuk menyelesaikan masalah.
+# Analisis Data dan Peluang
+Merumuskan pertanyaan, mengumpulkan, menyajikan, dan menganalisis data untuk menjawab pertanyaan; menggunakan diagram batang dan diagram lingkaran untuk menyajikan dan menginterpretasi data; mengambil sampel yang mewakili suatu populasi untuk mendapatkan data yang terkait dengan diri mereka dan lingkungan mereka; menentukan dan menafsirkan rerata (mean), median, modus, dan jangkauan (range) dari data tersebut untuk menyelesaikan masalah, termasuk membandingkan suatu data terhadap kelompoknya, membandingkan dua kelompok data, memprediksi, membuat keputusan, dan menyusun argumen; menyelidiki kemungkinan adanya perubahan pengukuran pusat tersebut akibat perubahan data; serta menjelaskan dan menggunakan pengertian peluang, frekuensi relatif, dan frekuensi harapan satu kejadian pada suatu percobaan sederhana.`;
+const MAT7 = [{"judul":"Bilangan Bulat","ide":"Termometer sederhana dan grafik suhu harian di lingkungan sekolah","subbab":["Mengenal dan Membandingkan Bilangan Bulat","Operasi Hitung Bilangan Bulat","Bilangan Bulat dalam Kehidupan Sehari-hari"]},{"judul":"Bilangan Rasional","ide":"Menskalakan resep jajanan tradisional untuk bazar kelas","subbab":["Pecahan dan Desimal","Operasi Hitung Bilangan Rasional","Estimasi dan Literasi Finansial"]},{"judul":"Rasio dan Proporsi","ide":"Membuat maket atau denah sekolah berskala","subbab":["Rasio dan Skala","Perbandingan Senilai dan Berbalik Nilai","Laju Perubahan"]},{"judul":"Bentuk Aljabar","ide":"Pola anyaman bambu atau ubin dan rumus kebutuhan bahannya","subbab":["Pola Bilangan dan Generalisasi","Mengenal Bentuk Aljabar","Operasi Bentuk Aljabar"]},{"judul":"Persamaan dan Pertidaksamaan Linear Satu Variabel","ide":"Merancang anggaran kas kelas atau usaha bazar sekolah","subbab":["Kalimat Terbuka dan Persamaan Linear","Menyelesaikan Persamaan Linear Satu Variabel","Pertidaksamaan Linear Satu Variabel"]},{"judul":"Garis, Sudut, dan Bangun Datar","ide":"Merancang layang-layang yang stabil dari bahan sederhana","subbab":["Hubungan Antarsudut","Segitiga dan Segi Empat","Keliling dan Luas Bangun Datar"]},{"judul":"Data dan Diagram","ide":"Survei sampah plastik di sekolah dan menyajikan datanya","subbab":["Merumuskan Pertanyaan dan Mengumpulkan Data","Menyajikan Data dengan Diagram Batang dan Lingkaran","Membaca dan Menafsirkan Data"]}];
+function presetKerangka(){ const k=book.meta.kelas; if(book.meta.mapel==='Matematika'&&k==='VII') return MAT7; if(book.meta.mapel==='Ilmu Pengetahuan Alam'&&k==='VII') return ATP7_IPA; return null; }
+function cpBawaan(){ return book.meta.mapel==='Matematika'?CP_MAT:(book.meta.mapel==='Ilmu Pengetahuan Alam'?CP_IPA:''); }
+function syncCP(){ if(book && book.meta.mapel==='Matematika' && (!book.cp || book.cp===CP_IPA)) book.cp=CP_MAT; if(book && book.meta.mapel==='Ilmu Pengetahuan Alam' && (!book.cp || book.cp===CP_MAT)) book.cp=CP_IPA; }
 const MAPEL = ['Ilmu Pengetahuan Alam','Matematika','Informatika','Ilmu Pengetahuan Sosial','Prakarya','Seni Budaya','Bahasa Indonesia','Bahasa Inggris','Pendidikan Jasmani, Olahraga, dan Kesehatan','Koding dan Kecerdasan Artifisial','Lainnya'];
 const CP_IPA = `Pada akhir Fase D ini, murid diharapkan memiliki kemampuan sebagai berikut.
 # Pemahaman IPA
@@ -1012,10 +1027,12 @@ function parseJSON(t){
 async function aiJSON(prompt,o){ const t=await callAI(prompt+'\n\nKembalikan HANYA JSON yang valid, tanpa penjelasan dan tanpa ```.',Object.assign({json:true},o||{})); return parseJSON(t); }
 
 /* ---- progress ---- */
-function progStart(title){ aiCancelled=false; $('#progT').textContent=title; $('#progBar').style.width='0%'; $('#progMsg').textContent=''; $('#progLive').textContent=''; $('#prog').classList.add('on'); }
+let progTimer=null, progT0=0, progFirst=false;
+function progTick(){ const s=Math.round((Date.now()-progT0)/1000); const el=$('#progClock'); if(el) el.textContent='⏱ '+Math.floor(s/60)+':'+String(s%60).padStart(2,'0')+(progFirst?'':' · menunggu jawaban pertama AI…'); }
+function progStart(title){ progT0=Date.now(); progFirst=false; clearInterval(progTimer); progTimer=setInterval(progTick,1000); setTimeout(progTick,0); aiCancelled=false; $('#progT').textContent=title; $('#progBar').style.width='0%'; $('#progMsg').textContent=''; $('#progLive').textContent=''; $('#prog').classList.add('on'); }
 function progSet(p,msg){ if(PIPE){ if(msg!=null) $('#progMsg').textContent=msg; $('#progLive').textContent=''; return; } $('#progBar').style.width=Math.round(p*100)+'%'; if(msg!=null) $('#progMsg').textContent=msg; $('#progLive').textContent=''; }
-function progLive(t){ t=String(t); const n=t.indexOf('\n'); $('#progLive').textContent = (n>0&&t.startsWith('Menerima ')) ? t.slice(0,n)+'\n…'+t.slice(n+1).slice(-260) : t.slice(-300); }
-function progEnd(){ $('#prog').classList.remove('on'); }
+function progLive(t){ progFirst=true; t=String(t); const n=t.indexOf('\n'); $('#progLive').textContent = (n>0&&t.startsWith('Menerima ')) ? t.slice(0,n)+'\n…'+t.slice(n+1).slice(-260) : t.slice(-300); }
+function progEnd(){ clearInterval(progTimer); $('#prog').classList.remove('on'); }
 async function runAI(title, fn){
   if(PIPE){ await fn(); return; }
   progStart(title);
@@ -1064,6 +1081,14 @@ const MARKUP_RULES = `FORMAT PENULISAN (wajib, teks biasa tanpa HTML):
 const LEN = {pendek:'sekitar 350–450 kata', sedang:'sekitar 650–850 kata', panjang:'sekitar 1.100–1.400 kata'};
 
 /* ---- tugas AI ---- */
+function pakaiPreset(){ if(book.chapters.some(chapterHasContent) && !confirm('Bab yang sudah berisi naskah akan diganti kerangka bawaan. Lanjutkan?')) return; pakaiATP7(); syncCP(); persist(); render(); toast('Kerangka bawaan '+mapelName()+' kelas VII dipasang ✓'); }
+async function tesAI(){
+  const out=$('#tesAIout'); if(!out) return; const t0=Date.now();
+  if(!engine()){ out.textContent='❌ Mesin AI belum aktif.'; return; }
+  out.textContent='Menghubungi '+(engine()==='claude'?'Claude':'Gemini ('+(cfg.model||'')+')')+'…';
+  try{ const r=await callAI('Jawab hanya dengan kata: SIAP',{}); out.textContent='✅ Tersambung'+(engine()==='gemini'?' · model '+cfg.model:'')+' · '+((Date.now()-t0)/1000).toFixed(1)+' detik · jawaban: '+String(r).trim().slice(0,30); }
+  catch(e){ out.textContent='❌ '+(e.message||e)+' ('+((Date.now()-t0)/1000).toFixed(1)+' detik)'; }
+}
 async function aiKerangka(){
   const g=book.gaya;
   await runAI('Menyusun kerangka buku', async ()=>{
@@ -1072,7 +1097,7 @@ async function aiKerangka(){
 
 TUGAS: Susun kerangka buku teks ${mapelName()} kelas ${book.meta.kelas} berbasis STEM sebanyak ${g.jumlahBab} bab, masing-masing ${g.jumlahSub} sub bab. Urutan bab mengikuti Capaian Pembelajaran berikut dan logis dari sederhana ke kompleks. Setiap bab punya satu ide Proyek STEM yang memenuhi prinsip 5M dan dapat dikerjakan murid SMP dengan alat sederhana, sebisa mungkin berbasis kearifan lokal.
 Capaian Pembelajaran:
-${book.cp||'(sesuaikan dengan CP Fase D mata pelajaran ini)'}
+${(book.cp && !(book.cp===CP_IPA && book.meta.mapel!=='Ilmu Pengetahuan Alam')) ? book.cp : '(sesuaikan dengan CP Fase D mata pelajaran '+mapelName()+')'}
 ${book.meta.judul?'':'Usulkan juga judul buku yang menarik.'}
 
 Skema JSON:
@@ -1178,14 +1203,14 @@ TUGAS: Rancang kegiatan "Ayo Mencoba" berupa PROYEK STEM kelompok (PBL-STEM) yan
 - judul: judul proyek singkat dan menarik.
 - pertanyaan: satu pertanyaan pemicu (driving question) yang terbuka dan menuntut solusi berbasis bukti.
 - prediksi: 2 pertanyaan asesmen diagnostik yang meminta murid memprediksi beserta alasannya sebelum kegiatan.
-- steam: FUNGSI NYATA setiap unsur dalam memecahkan masalah (bukan label): S=konsep IPA yang menjelaskan fenomena dan menjadi dasar keputusan desain; T=alat/bahan/sensor yang dipilih beserta alasannya (tidak harus digital); E=apa yang dirancang, diuji, dan direvisi; M=apa yang diukur, dihitung, dan dibandingkan. Masing-masing 1–2 kalimat konkret.
+- steam: FUNGSI NYATA setiap unsur dalam memecahkan masalah (bukan label): S=konsep ${book.meta.mapel==='Matematika'?'sains (fisika/biologi sederhana) yang terkait masalah':'IPA yang menjelaskan fenomena'} dan menjadi dasar keputusan desain; T=alat/bahan/sensor yang dipilih beserta alasannya (tidak harus digital); E=apa yang dirancang, diuji, dan direvisi; M=apa yang diukur, dihitung, dan dibandingkan. Masing-masing 1–2 kalimat konkret.
 - sukses: 2–4 kriteria keberhasilan yang TERUKUR (ada angka atau ukuran yang jelas).
 - batasan: 2–4 batasan (bahan, biaya, ukuran, waktu, keselamatan).
 - alat: daftar alat dan bahan sederhana, murah, mudah didapat (utamakan bahan bekas/lokal).
 - langkah: TEPAT 7 langkah sesuai urutan tahap berikut, tiap langkah diawali nama tahap lalu titik dua: ${ACUAN.tahap.map(t=>'"'+t[0]+': ..."').join(', ')}. Tahap Menguji harus menyebut data yang diukur dan pengulangan; tahap Mendesain Ulang harus berbasis analisis data uji, termasuk analisis kegagalan.
 - data: lembar data pengujian berupa "kolom" (3–5 judul kolom tabel, misalnya Percobaan ke-, variabel yang diubah, hasil ukur dengan satuan) dan "keterangan" (1 kalimat cara mengisi).
 - produk: paragraf singkat tentang produk akhir dan cara mempresentasikan desain, alasan ilmiah, cara kerja, serta hasil pengujian; kelompok lain memberi kritik.
-- rubrik: TEPAT 6 aspek rubrik analitik dengan urutan Masalah, Penalaran IPA, Rekayasa, Data & Matematika, Kreativitas & Komunikasi, Kolaborasi; tiap aspek berisi deskripsi skor 4 (sangat baik) dan skor 1 (perlu bimbingan) yang khas proyek ini.
+- rubrik: TEPAT 6 aspek rubrik analitik dengan urutan Masalah, ${book.meta.mapel==='Matematika'?'Penalaran Matematis':'Penalaran IPA'}, Rekayasa, Data & Matematika, Kreativitas & Komunikasi, Kolaborasi; tiap aspek berisi deskripsi skor 4 (sangat baik) dan skor 1 (perlu bimbingan) yang khas proyek ini.
 - refleksi: 4 pertanyaan refleksi diri metakognitif yang dijawab individu (kesesuaian dengan prediksi, kegagalan paling berharga, perubahan jika mengulang, transfer konsep ke konteks lain).
 
 Skema JSON:
@@ -1395,7 +1420,8 @@ Skema JSON: {"judul":["...","...","...","...","..."]}`);
   book.meta.judul=list[0]+(/stem/i.test(list[0])?'':' IPA Berbasis STEM'.replace('IPA',mapelName()==='Ilmu Pengetahuan Alam'?'IPA':mapelName()));
 }
 function pakaiATP7(){
-  book.chapters=ATP7_IPA.map(b=>{ const c=blankChapter(b.judul); c.ide=b.ide; c.subbab=b.subbab.map(j=>({judul:j,isi:''})); return c; });
+  const P=presetKerangka()||ATP7_IPA;
+  book.chapters=P.map(b=>{ const c=blankChapter(b.judul); c.ide=b.ide; c.subbab=b.subbab.map(j=>({judul:j,isi:''})); return c; });
 }
 function chapterFilled(c,part,si){
   if(part==='pembuka') return !!(c.apersepsi && c.pemantik.length && c.tujuan.length);
@@ -1436,7 +1462,7 @@ async function buatBukuOtomatis(){
     if(ulang){ book.prakata=''; book.aas={pg:[],esai:[]}; book.glosarium=[]; book.pustaka=[]; if(M.sumber!=='ada') book.chapters=[]; }
     // 1. Kerangka
     const perluKerangka = ulang || !book.chapters.length || book.chapters.some(c=>!c.judul||!c.subbab.length||c.subbab.some(s=>!s.judul));
-    if(M.sumber==='atp7'){ await step('Kerangka 7 bab dari ATP IPA kelas VII', async()=>pakaiATP7(), !perluKerangka); }
+    if(M.sumber==='atp7'){ await step('Kerangka 7 bab bawaan kelas VII ('+(book.meta.mapel==='Matematika'?'Matematika':'IPA')+')', async()=>pakaiATP7(), !perluKerangka); }
     else if(M.sumber==='ai'){ await step('Menyusun kerangka buku', async()=>{ if(ulang) book.chapters=[]; await aiKerangka(); }, !perluKerangka); }
     else { if(perluKerangka) throw new Error('Kerangka belum lengkap. Lengkapi di menu Kerangka Buku atau pilih sumber kerangka lain.'); }
     if(!book.chapters.length) throw new Error('Kerangka buku kosong.');
@@ -1445,7 +1471,8 @@ async function buatBukuOtomatis(){
     // 2. Judul, CP, Prakata
     await step('Membuat judul best seller', genJudul, !!book.meta.judul);
     const isIPA = mapelName()==='Ilmu Pengetahuan Alam';
-    await step('Capaian Pembelajaran', async()=>{ if(isIPA) book.cp=CP_IPA; else await aiCP(); }, !ulang && book.cp && (isIPA || book.cp!==CP_IPA));
+    const cpB=cpBawaan();
+    await step('Capaian Pembelajaran', async()=>{ if(cpB) book.cp=cpB; else await aiCP(); }, !ulang && book.cp && (cpB ? book.cp===cpB : (book.cp!==CP_IPA && book.cp!==CP_MAT)));
     await step('Prakata', aiPrakata, !!book.prakata && !ulang);
     // 3. Bab
     for(let ci=0; ci<book.chapters.length; ci++){
@@ -1481,13 +1508,13 @@ async function muatContoh(){
   book=normalize(JSON.parse(JSON.stringify(CONTOH_BUKU))); persist(); render(); toast('Contoh buku dimuat. Lihat hasilnya di Pratinjau & Ekspor.');
 }
 function estimasi(){
-  const nb=book.mesin.sumber==='atp7'?7:(book.mesin.sumber==='ada'?book.chapters.length:book.gaya.jumlahBab);
-  const ns=book.mesin.sumber==='atp7'?25:(book.mesin.sumber==='ada'?book.chapters.reduce((a,c)=>a+c.subbab.length,0):nb*book.gaya.jumlahSub);
+  const nb=book.mesin.sumber==='atp7'?(presetKerangka()||ATP7_IPA).length:(book.mesin.sumber==='ada'?book.chapters.length:book.gaya.jumlahBab);
+  const ns=book.mesin.sumber==='atp7'?(presetKerangka()||ATP7_IPA).reduce((a,b)=>a+b.subbab.length,0):(book.mesin.sumber==='ada'?book.chapters.reduce((a,c)=>a+c.subbab.length,0):nb*book.gaya.jumlahSub);
   const req=6+nb*4+ns+3; return {req, menit:Math.round(req*(engine()==='gemini'?0.5:0.6))};
 }
 function viewMesin(){
-  const M=book.mesin, e=engine(), est=estimasi(), isIPA7=book.meta.mapel==='Ilmu Pengetahuan Alam'&&book.meta.kelas==='VII';
-  const sumberOpts=[['atp7','Kerangka ATP IPA kelas VII (7 bab, 25 sub bab)'],['ai','AI menyusun kerangka dari CP'],['ada','Pakai kerangka yang sudah saya isi']];
+  const M=book.mesin, e=engine(), est=estimasi(), isIPA7=!!presetKerangka();
+  const sumberOpts=[['atp7','Kerangka bawaan kelas VII (instan)'],['ai','AI menyusun kerangka dari CP'],['ada','Pakai kerangka yang sudah saya isi']];
   return `<h1 class="pt">⚡ Mesin Buku Otomatis</h1><p class="sub">Isi beberapa data, lalu klik satu tombol. Mesin menulis buku lengkap sesuai template penerbit dengan dua kunci acuan: Panduan STEM Kemendikdasmen 2025 dan Cetak Biru STEM Mendalam (Prof. Asri Widowati). Hasilnya mencakup judul, prakata, CP, seluruh bab (pembuka, isi, Pojok STEM, penutup, proyek 7 tahap, asesmen), asesmen akhir semester, glosarium, dan daftar pustaka. Hasilnya langsung diunduh sebagai .docx dan disimpan ke Google Drive.</p>
   <div class="card"><div class="hd"><h3>1. Data Buku</h3></div>
     <div class="grid g3">${F('Mata pelajaran','meta.mapel',{type:'select',opts:MAPEL,r:1})}${book.meta.mapel==='Lainnya'?F('Nama mapel','meta.mapelLain'):''}${F('Kelas','meta.kelas',{type:'select',opts:['VII','VIII','IX'],r:1})}${F('Nama penulis','meta.penulis.0',{r:0})}</div>
@@ -1501,7 +1528,7 @@ function viewMesin(){
       ${F('Panjang tiap sub bab','gaya.panjang',{type:'select',opts:['pendek','sedang','panjang']})}
     </div>
     ${M.sumber==='ai'?`<div class="grid g3" style="margin-top:12px">${F('Jumlah bab','gaya.jumlahBab',{type:'number',k:'num',r:1})}${F('Sub bab per bab','gaya.jumlahSub',{type:'number',k:'num',r:1})}${F('Konteks','gaya.konteks')}</div>`:`<div style="margin-top:12px">${F('Konteks contoh','gaya.konteks')}</div>`}
-    ${M.sumber==='atp7'&&!isIPA7?'<div class="note" style="margin-top:12px">Kerangka ATP bawaan disusun untuk IPA kelas VII. Untuk mapel atau kelas lain, pilih "AI menyusun kerangka dari CP".</div>':''}
+    ${M.sumber==='atp7'&&!isIPA7?'<div class="note" style="margin-top:12px">Kerangka bawaan tersedia untuk IPA dan Matematika kelas VII. Untuk mapel atau kelas lain, pilih "AI menyusun kerangka dari CP".</div>':''}
     <div class="row" style="margin-top:12px;gap:18px;font-size:13.5px">
       <label class="row"><input type="checkbox" data-b="mesin.unduh"> Unduh .docx otomatis</label>
       <label class="row"><input type="checkbox" data-b="mesin.drive"> Simpan ke Google Drive otomatis</label>
@@ -1554,7 +1581,7 @@ function render(){
   else if(cur==='kerangka') v.innerHTML=viewKerangka();
   else if(cur==='acuan') v.innerHTML=viewAcuan();
   else if(cur==='prakata') v.innerHTML=viewText('prakata','Prakata','Pengantar dari penulis. Tempat dan tanggal penandatanganan diatur di "Identitas & Pengaturan".','aiPrakata()',false);
-  else if(cur==='cp') v.innerHTML=viewText('cp','Capaian Pembelajaran','Sudah terisi CP IPA Fase D dari template. Untuk mapel lain, gunakan AI lalu cocokkan dengan dokumen CP resmi.','aiCP()',true);
+  else if(cur==='cp') v.innerHTML=viewText('cp','Capaian Pembelajaran',(book.meta.mapel==='Matematika'?'Sudah terisi CP Matematika Fase D (Kepka BSKAP 046/H/KR/2025). Cocokkan dengan dokumen CP resmi sebelum naik cetak.':'Sudah terisi CP IPA Fase D dari template. Untuk mapel lain, gunakan AI lalu cocokkan dengan dokumen CP resmi.'),'aiCP()',true);
   else if(cur.startsWith('bab')) v.innerHTML=viewBab(+cur.slice(3));
   else if(cur==='aas') v.innerHTML=viewAAS();
   else if(cur==='glos') v.innerHTML=viewGlos();
@@ -1625,6 +1652,7 @@ function viewMulai(){
     ${!sampleCap?'<p class="hint" style="margin-top:10px">Claude tidak tersedia di tampilan ini, jadi gunakan Gemini.</p>':''}
     <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)">
       <label class="f">URL Web App Google Drive (Apps Script) <span class="h">${DEFAULT_DRIVE_URL?'(bawaan sudah terpasang)':'(dari Code.gs, berakhiran /exec)'}</span><input type="text" id="cfgDrive" placeholder="${DEFAULT_DRIVE_URL?'URL bawaan aktif':'https://script.google.com/macros/s/…/exec'}"></label>
+      <div class="row" style="margin-top:10px;gap:8px;align-items:center"><button class="btn sm" onclick="tesAI()">🔌 Tes koneksi AI</button><span class="hint" id="tesAIout"></span></div>
       <p class="hint" style="margin:6px 0 0">Hasil naskah dan file proyek tersimpan di folder <a href="${DRIVE_FOLDER_URL}" target="_blank" rel="noopener">data_buku</a>, dalam subfolder per judul buku.</p>
     </div>
   </div>`;
@@ -1634,7 +1662,7 @@ function viewKerangka(){
     <div style="margin:8px 0 0 64px">${c.subbab.map((s,j)=>`<div class="row" style="margin-bottom:6px"><b style="width:22px">${ABC[j]}.</b><input type="text" style="flex:1" data-b="chapters.${i}.subbab.${j}.judul" placeholder="Judul sub bab"><button class="btn sm ghost del" onclick="delSub(${i},${j})">✕</button></div>`).join('')}
     <div class="row"><button class="btn sm" onclick="addSub(${i})">+ Sub bab</button><input type="text" style="flex:1" data-b="chapters.${i}.ide" placeholder="Ide Proyek STEM (opsional)"></div></div></div>`).join('');
   return `<h1 class="pt">Kerangka Buku</h1><p class="sub">Tentukan bab dan sub bab. Semua tulisan AI mengikuti kerangka ini.</p>
-  <div class="card"><div class="hd"><h3>🗂️ Bab & Sub Bab</h3><span class="sp"></span>${aiBtn('aiKerangka()','Susun kerangka dengan AI')}</div>
+  <div class="card"><div class="hd"><h3>🗂️ Bab & Sub Bab</h3><span class="sp"></span>${presetKerangka()?`<button class="btn sm" onclick="pakaiPreset()">📋 Pakai kerangka bawaan (instan)</button>`:''}${aiBtn('aiKerangka()','Susun kerangka dengan AI')}</div>
    <p class="hint">AI memakai Capaian Pembelajaran, mapel, kelas, jumlah bab (${book.gaya.jumlahBab}) dan sub bab (${book.gaya.jumlahSub}). Bab yang sudah berisi naskah tidak ditimpa.</p>
    <div class="chapters">${chs}</div><button class="btn" onclick="addCh()">+ Tambah bab</button></div>`;
 }
@@ -1821,7 +1849,7 @@ document.addEventListener('input',e=>{
   if(e.target.id==='cfgDrive'){ cfg.driveUrl=e.target.value.trim(); saveCfg(); }
 });
 const _render=render;
-render=function(){ _render(); const a=$('#cfgEngine'); if(a){ a.value=cfg.engine; $('#cfgKey').value=cfg.key; $('#cfgModel').value=cfg.model; $('#cfgDrive').value=cfg.driveUrl||''; } };
+render=function(){ syncCP(); _render(); const a=$('#cfgEngine'); if(a){ a.value=cfg.engine; $('#cfgKey').value=cfg.key; $('#cfgModel').value=cfg.model; $('#cfgDrive').value=cfg.driveUrl||''; } };
 render();
 updatePill();
 setTimeout(initCaps,0);
