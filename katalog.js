@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "SERAT STEM – Mesin Pembuat Buku Berbasis STEM",
+    kategori: "Pembelajaran",
+    jenis: "AI Tool",
+    deskripsi: "Mesin sekali klik untuk menulis naskah buku SMP berbasis STEM sesuai template penerbit (17,6 × 25 cm, ekspor .docx): judul, CP, prakata, semua bab, proyek PBL-STEM, asesmen, glosarium, dan pustaka. Dikunci pada Panduan STEM Kemendikdasmen 2025 dan Cetak Biru STEM Mendalam (Prof. Asri Widowati). Isi kunci API Gemini; simpan ke Google Drive lewat Apps Script sendiri.",
+    tanggal: "2026-11-17",
+    tautan: "serat-stem/",
+    status: "aktif"
+  },
+  {
     nama: "Dompetku – Keuangan Pribadi",
     kategori: "Keuangan",
     jenis: "HTML",
