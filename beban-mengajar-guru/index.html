@@ -30,6 +30,7 @@
   --cl:26%; --cs:38%; --shadow:0 1px 0 rgba(0,0,0,.3),0 8px 24px -14px rgba(0,0,0,.7);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif;
   background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% 28px;background-attachment:fixed}
@@ -950,7 +951,7 @@ document.addEventListener("click",function(e){
     if(dr.jpGagal){var gl={};dr.gagal.forEach(function(b){var k=b.k.nama+" "+b.m.kode;gl[k]=(gl[k]||0)+b.n});alert("Draf tersusun, tetapi "+dr.jpGagal+" JP belum mendapat tempat karena bentrok guru atau kurang jam:\n"+Object.keys(gl).map(function(k){return "• "+k+" ("+gl[k]+" JP)"}).join("\n")+"\n\nTambah jam di Atur jam atau sesuaikan manual lewat impor.")}
     else toast("Draf jadwal tersusun tanpa bentrok. Periksa dan sesuaikan sebelum dipakai.")}
   else if(a==="csvJadwal"){var rows=[["Hari","Jam ke","Mulai","Selesai","Kelas","Kode mapel","Mapel/kegiatan","Kode guru","Nama guru"]];
-    entriJadwal().sort(function(x,y){return urutHari(x.hari)-urutHari(y.hari)||x.ke-y.ke||S.kelas.indexOf(x.k)-S.kelas.indexOf(y.k)}).forEach(function(e){var w=waktuSlot(e.hari,e.ke);rows.push([e.hari,e.ke,w.m,w.s,e.k.nama,e.m?e.m.kode:"",e.m?e.m.nama:e.ket,e.g?e.g.kode:"",e.g?e.g.nama:""])});
+    entriJadwal().sort(function(x,y){return urutHari(x.hari)-urutHari(y.hari)||x.ke-y.ke||S.kelas.indexOf(x.k)-S.kelas.indexOf(y.k)}).forEach(function(e){var w=waktuSlot(e.hari,e.ke);rows.push([e.hari,e.ke,w.m,w.s,e.k.nama,e.m?e.m.kode:"",e.m?e.m.nama:e.ket,semuaGuru(e).map(function(g){return g.kode}).join(", "),semuaGuru(e).map(function(g){return g.nama}).join("; ")])});
     unduh("jadwal-mengajar-"+(S.meta.tp||"").replace(/\W/g,"")+".csv",csv(rows),"text/csv")}
   else if(a==="cetakJadwal"){document.body.classList.add("pj");window.print();setTimeout(function(){document.body.classList.remove("pj")},800)}
   else if(a==="mapelBaru"){S.mapel.push({id:"m"+uid(),kode:"BARU",nama:"Mapel baru",jp:{7:2,8:2,9:2}});ubah()}
@@ -985,7 +986,7 @@ function bacaTabel(teks){
 var KOLOM={kode:/^(kode|kd|no\.?\s*kode|kode\s*guru)$/,nama:/^(nama|nama\s*(lengkap|guru)?(\s*(dan|&)\s*gelar)?|guru)$/,jenis:/^(jenis|jabatan|tugas\s*pokok|peran|status\s*tugas)$/,
   mapel:/^(mapel|mata\s*pelajaran|mapel\s*(yang\s*)?(diampu|ampu)|mengajar|bidang\s*studi)$/,tugas:/^(tugas\s*tambahan|tugas\s*lain|tambahan)$/,wali:/^(wali\s*kelas|wali|kelas\s*wali|walas)$/,nip:/^(nip|nik|nuptk|nrg|nip\s*\/\s*nuptk)$/};
 function petaKolom(head){
-  var m={},kenal=0;head.forEach(function(x,i){var t=x.toLowerCase().replace(/[_*]/g," ").replace(/\s+/g," ").trim();Object.keys(KOLOM).forEach(function(k){if(m[k]==null&&KOLOM[k].test(t)){m[k]=i;kenal++}})});
+  var m={},kenal=0;head.forEach(function(x,i){var t=x.toLowerCase().replace(/[_*]/g," ").replace(/\s+/g," ").trim();if(/^(\S\s)+\S$/.test(t))t=t.replace(/\s/g,"");if(/^(bidst|bid\.?\s*st(udi)?\.?|bidang)$/.test(t))t="mapel";Object.keys(KOLOM).forEach(function(k){if(m[k]==null&&KOLOM[k].test(t)){m[k]=i;kenal++}})});
   return kenal&&m.nama!=null?m:null;
 }
 function normal(s){return String(s||"").toLowerCase().replace(/[\s.\-_&]/g,"")}
@@ -1114,22 +1115,25 @@ function maxJam(){var n=0;S.jadwal.hari.forEach(function(h){n=Math.max(n,+S.jadw
 function slotIsi(hari,ke,kid){return S.jadwal.isi[hari+"|"+ke+"|"+kid]||null}
 function kelasById(id){for(var i=0;i<S.kelas.length;i++)if(S.kelas[i].id===id)return S.kelas[i];return null}
 function entriJadwal(){
-  return Object.keys(S.jadwal.isi).map(function(key){var p=key.split("|"),e=S.jadwal.isi[key];return {key:key,hari:p[0],ke:+p[1],kid:p[2],k:kelasById(p[2]),m:e.m?mapelById(e.m):null,g:e.g?guruById(e.g):null,ket:e.ket||""}}).filter(function(e){return e.k});
+  return Object.keys(S.jadwal.isi).map(function(key){var p=key.split("|"),e=S.jadwal.isi[key];return {key:key,hari:p[0],ke:+p[1],kid:p[2],k:kelasById(p[2]),m:e.m?mapelById(e.m):null,g:e.g?guruById(e.g):null,gx:(e.gl||[]).map(guruById).filter(Boolean),ket:e.ket||""}}).filter(function(e){return e.k});
+}
+function adaGuru(e,g){return !!g&&(e.g===g||e.gx.indexOf(g)>=0)}
+function semuaGuru(e){return (e.g?[e.g]:[]).concat(e.gx)
 }
 function urutHari(h){var i=HARI_SEMUA.indexOf(h);return i<0?9:i}
 function labelSel(e,mode){
   if(!e)return "";
   var mk=e.m?e.m.kode:(e.ket||"");
   if(mode==="guru")return '<b>'+esc(e.k.nama)+'</b><small>'+esc(mk)+'</small>';
-  if(mode==="kelas")return '<b>'+esc(mk)+'</b><small>'+esc(e.g?pendek(e.g.nama)+" ("+e.g.kode+")":(e.m?"belum ada guru":""))+'</small>';
-  return '<b>'+esc(mk)+'</b><small>'+esc(e.g?e.g.kode:"")+'</small>';
+  if(mode==="kelas")return '<b>'+esc(mk)+'</b><small>'+esc(e.g?pendek(e.g.nama)+" ("+e.g.kode+")":(e.m?"belum ada guru":""))+(e.gx.length?" + "+e.gx.map(function(x){return x.kode}).join(", "):"")+'</small>';
+  return '<b>'+esc(mk)+'</b><small>'+esc(semuaGuru(e).map(function(x){return x.kode}).join(", "))+'</small>';
 }
 
 /* ---------- pemeriksaan jadwal ---------- */
 function cekJadwal(){
   var E=entriJadwal(),out=[],per={},hit={};
-  E.forEach(function(e){if(e.g){var k=e.hari+"|"+e.ke+"|"+e.g.id;(per[k]=per[k]||[]).push(e)}});
-  Object.keys(per).forEach(function(k){var a=per[k];if(a.length>1)out.push({k:"e",t:"<b>Bentrok</b>: "+esc(a[0].g.nama)+" dijadwalkan di "+esc(a.map(function(x){return x.k.nama}).join(" dan "))+" pada "+a[0].hari+" jam ke-"+a[0].ke+"."})});
+  E.forEach(function(e){semuaGuru(e).forEach(function(g){var k=e.hari+"|"+e.ke+"|"+g.id;(per[k]=per[k]||[]).push({e:e,g:g})})});
+  Object.keys(per).forEach(function(k){var a=per[k].map(function(x){return x.e});if(a.length>1)out.push({k:"e",t:"<b>Bentrok</b>: "+esc(per[k][0].g.nama)+" dijadwalkan di "+esc(a.map(function(x){return x.k.nama}).join(" dan "))+" pada "+a[0].hari+" jam ke-"+a[0].ke+"."})});
   E.forEach(function(e){if(e.m){var k=e.kid+"|"+e.m.id;hit[k]=(hit[k]||0)+1}});
   var kurangT=[],lebihT=[],bedaGuru=[];
   S.kelas.forEach(function(kl){S.mapel.forEach(function(m){var jp=jpOf(m,kl),n=hit[kl.id+"|"+m.id]||0;
@@ -1189,7 +1193,7 @@ function slotSekarang(){
 function renderJadwal(){
   if(!$("#t-jadwal"))return;
   var E=entriJadwal(),C=cekJadwal(),bentrok=C.filter(function(x){return x.k==="e"}).length;
-  var jpJ=E.filter(function(e){return e.m}).length,guruAktif={};E.forEach(function(e){if(e.g)guruAktif[e.g.id]=1});
+  var jpJ=E.filter(function(e){return e.m}).length,guruAktif={};E.forEach(function(e){semuaGuru(e).forEach(function(g){guruAktif[g.id]=1})});
   $("#jKpi").innerHTML=kp(E.length?jpJ:"–","JP/minggu terjadwal","")+kp(Object.keys(guruAktif).length+"/"+S.guru.filter(function(g){return g.jenis!=="ks"}).length,"guru punya jadwal","")+kp(bentrok,"bentrok guru",bentrok?"bad":"ok")+kp(C.length-bentrok,"catatan lain",C.length-bentrok?"mid":"ok");
   function kp(v,l,c){return '<div class="kpi '+c+'"><div class="v">'+v+'</div><div class="l">'+esc(l)+'</div></div>'}
   $("#jContoh").hidden=!S.jadwal.contoh;
@@ -1208,7 +1212,7 @@ function renderJadwal(){
   var o=$("#jIsi");
   if(JV.q){o.innerHTML=hasilCari(JV.q);return}
   if(JV.mode==="sekarang")o.innerHTML=viewSekarang();
-  else if(JV.mode==="guru")o.innerHTML=gridMingguan(function(h,k){return E.filter(function(e){return e.hari===h&&e.ke===k&&e.g&&e.g.id===JV.guru})},"guru",guruById(JV.guru));
+  else if(JV.mode==="guru"){var gg=guruById(JV.guru);o.innerHTML=gridMingguan(function(h,k){return E.filter(function(e){return e.hari===h&&e.ke===k&&adaGuru(e,gg)})},"guru",gg)}
   else if(JV.mode==="kelas")o.innerHTML=gridMingguan(function(h,k){return E.filter(function(e){return e.hari===h&&e.ke===k&&e.kid===JV.kelas})},"kelas",kelasById(JV.kelas));
   else o.innerHTML=viewHari(JV.hari,JV.ke?+JV.ke:null);
 }
@@ -1219,7 +1223,8 @@ function gridMingguan(ambil,mode,obj){
   h+=judulCetak((mode==="guru"?"Jadwal mengajar ":"Jadwal pelajaran kelas ")+(mode==="guru"?obj.kode+" · "+obj.nama:obj.nama));
   h+='<div class="scroll"><table class="jgrid"><thead><tr><th scope="col">Jam</th>'+S.jadwal.hari.map(function(d){return '<th scope="col">'+d+'</th>'}).join("")+'</tr></thead><tbody>';
   for(var k=1;k<=n;k++){
-    h+='<tr><th scope="row">'+k+'<small>'+waktuSlot(S.jadwal.hari[0],k).m+'</small></th>';
+    var wks=S.jadwal.hari.filter(function(d){return k<=(+S.jadwal.jam[d]||0)}).map(function(d){return waktuSlot(d,k).m}),sama=wks.every(function(x){return x===wks[0]});
+    h+='<tr><th scope="row">'+k+'<small>'+(sama&&wks[0]?wks[0]:"")+'</small></th>';
     S.jadwal.hari.forEach(function(d){
       if(k>(+S.jadwal.jam[d]||0)){h+='<td class="na"></td>';return}
       var a=ambil(d,k);tot+=a.filter(function(e){return e.m}).length;
@@ -1239,7 +1244,7 @@ function viewHari(hari,ke){
   h+='<div class="scroll"><table class="jgrid induk"><thead><tr><th scope="col">Jam</th>'+S.kelas.map(function(k){return '<th scope="col">'+esc(k.nama)+'</th>'}).join("")+'</tr></thead><tbody>';
   for(var k=1;k<=nj;k++){if(ke&&k!==ke)continue;var w=waktuSlot(hari,k);
     h+='<tr><th scope="row">'+k+'<small>'+w.m+'–'+w.s+'</small></th>'+S.kelas.map(function(kl){var e=E.filter(function(x){return x.hari===hari&&x.ke===k&&x.kid===kl.id})[0];
-      var bent=e&&e.g&&E.some(function(x){return x!==e&&x.g===e.g&&x.hari===hari&&x.ke===k});
+      var bent=e&&semuaGuru(e).some(function(g){return E.some(function(x){return x!==e&&adaGuru(x,g)&&x.hari===hari&&x.ke===k})});
       return '<td'+(bent?' class="bentrok"':'')+'>'+(e?'<div class="jsel" style="--h:'+(e.g?hue(e.g):0)+'" title="'+esc((e.m?e.m.nama:e.ket)+(e.g?" — "+e.g.nama:""))+'">'+labelSel(e,"induk")+'</div>':'<span class="muted">·</span>')+'</td>'}).join("")+'</tr>';}
   return h+'</tbody></table></div><p class="sub" style="margin:8px 0 0">Angka kecil = kode guru. Arahkan kursor/ketuk sel untuk nama lengkap. Sel bergaris merah = bentrok.</p>';
 }
@@ -1254,10 +1259,10 @@ function viewSekarang(){
   if(!ke)return h+viewHari(hari,null);
   var di=E.filter(function(e){return e.hari===hari&&e.ke===ke});
   h+='<div class="grid2"><div><h3 class="jh">Siapa mengajar di mana</h3><div class="scroll"><table><thead><tr><th>Kelas</th><th>Mapel</th><th>Guru</th></tr></thead><tbody>'+
-    S.kelas.map(function(kl){var e=di.filter(function(x){return x.kid===kl.id})[0];return '<tr><td><b>'+esc(kl.nama)+'</b></td><td>'+(e?esc(e.m?e.m.nama:e.ket):'<span class="muted">—</span>')+'</td><td>'+(e&&e.g?esc(e.g.kode+" · "+e.g.nama):(e&&e.m?'<span class="pill bad">kosong</span>':''))+'</td></tr>'}).join("")+'</tbody></table></div></div>';
-  var sibuk={};di.forEach(function(e){if(e.g)sibuk[e.g.id]=1});
+    S.kelas.map(function(kl){var e=di.filter(function(x){return x.kid===kl.id})[0];return '<tr><td><b>'+esc(kl.nama)+'</b></td><td>'+(e?esc(e.m?e.m.nama:e.ket):'<span class="muted">—</span>')+'</td><td>'+(e&&e.g?esc(semuaGuru(e).map(function(g){return g.kode+" · "+g.nama}).join("; ")):(e&&e.m?'<span class="pill bad">kosong</span>':''))+'</td></tr>'}).join("")+'</tbody></table></div></div>';
+  var sibuk={};di.forEach(function(e){semuaGuru(e).forEach(function(g){sibuk[g.id]=1})});
   var bebas=S.guru.filter(function(g){return g.jenis==="mapel"&&!sibuk[g.id]});
-  h+='<div><h3 class="jh">Guru tidak mengajar pada jam ini <span class="muted" style="font-size:13px">('+bebas.length+')</span></h3><p class="sub">Bahan memilih guru pengganti bila ada guru berhalangan.</p><div class="chips">'+(bebas.map(function(g){var jl=E.filter(function(e){return e.hari===hari&&e.g===g}).length;return '<span class="chip" title="'+jl+' JP hari '+hari+'"><b>'+esc(g.kode)+'</b> '+esc(pendek(g.nama))+' · '+jl+' JP hari ini</span>'}).join("")||'<span class="muted">Semua guru mapel sedang mengajar.</span>')+'</div></div></div>';
+  h+='<div><h3 class="jh">Guru tidak mengajar pada jam ini <span class="muted" style="font-size:13px">('+bebas.length+')</span></h3><p class="sub">Bahan memilih guru pengganti bila ada guru berhalangan.</p><div class="chips">'+(bebas.map(function(g){var jl=E.filter(function(e){return e.hari===hari&&adaGuru(e,g)}).length;return '<span class="chip" title="'+jl+' JP hari '+hari+'"><b>'+esc(g.kode)+'</b> '+esc(pendek(g.nama))+' · '+jl+' JP hari ini</span>'}).join("")||'<span class="muted">Semua guru mapel sedang mengajar.</span>')+'</div></div></div>';
   return h;
 }
 function hasilCari(q){
@@ -1266,10 +1271,10 @@ function hasilCari(q){
   var K=S.kelas.filter(function(k){return normKelas(k.nama)===normKelas(q)||normal(k.nama)===n});
   var M=S.mapel.filter(function(m){return normal(m.kode)===n||normal(m.nama).indexOf(n)>=0});
   if(!G.length&&!K.length&&!M.length)return '<p class="muted">Tidak ada guru, kelas, atau mapel yang cocok dengan “'+esc(q)+'”.</p>';
-  G.slice(0,4).forEach(function(g){h+='<div class="hasil"><h3 class="jh">Guru: '+esc(g.kode+" · "+g.nama)+' <button class="btn sm noprint" type="button" data-jbuka="guru|'+g.id+'">Buka jadwal</button></h3>'+gridMingguan(function(d,k){return E.filter(function(e){return e.hari===d&&e.ke===k&&e.g===g})},"guru",g)+'</div>'});
+  G.slice(0,4).forEach(function(g){h+='<div class="hasil"><h3 class="jh">Guru: '+esc(g.kode+" · "+g.nama)+' <button class="btn sm noprint" type="button" data-jbuka="guru|'+g.id+'">Buka jadwal</button></h3>'+gridMingguan(function(d,k){return E.filter(function(e){return e.hari===d&&e.ke===k&&adaGuru(e,g)})},"guru",g)+'</div>'});
   K.slice(0,2).forEach(function(k){h+='<div class="hasil"><h3 class="jh">Kelas '+esc(k.nama)+'</h3>'+gridMingguan(function(d,ke){return E.filter(function(e){return e.hari===d&&e.ke===ke&&e.kid===k.id})},"kelas",k)+'</div>'});
   M.slice(0,2).forEach(function(m){var a=E.filter(function(e){return e.m===m}).sort(function(x,y){return urutHari(x.hari)-urutHari(y.hari)||x.ke-y.ke||x.k.nama.localeCompare(y.k.nama)});
-    h+='<div class="hasil"><h3 class="jh">Mapel '+esc(m.nama)+' <span class="muted" style="font-size:13px">('+a.length+' JP/minggu)</span></h3><div class="scroll"><table><thead><tr><th>Hari</th><th>Jam</th><th>Kelas</th><th>Guru</th></tr></thead><tbody>'+a.map(function(e){var w=waktuSlot(e.hari,e.ke);return '<tr><td>'+e.hari+'</td><td class="num">'+e.ke+' · '+w.m+'–'+w.s+'</td><td>'+esc(e.k.nama)+'</td><td>'+esc(e.g?e.g.kode+" · "+e.g.nama:"—")+'</td></tr>'}).join("")+'</tbody></table></div></div>'});
+    h+='<div class="hasil"><h3 class="jh">Mapel '+esc(m.nama)+' <span class="muted" style="font-size:13px">('+a.length+' JP/minggu)</span></h3><div class="scroll"><table><thead><tr><th>Hari</th><th>Jam</th><th>Kelas</th><th>Guru</th></tr></thead><tbody>'+a.map(function(e){var w=waktuSlot(e.hari,e.ke);return '<tr><td>'+e.hari+'</td><td class="num">'+e.ke+' · '+w.m+'–'+w.s+'</td><td>'+esc(e.k.nama)+'</td><td>'+esc(semuaGuru(e).map(function(g){return g.kode+" · "+g.nama}).join("; ")||"—")+'</td></tr>'}).join("")+'</tbody></table></div></div>'});
   return h;
 }
 
@@ -1284,31 +1289,38 @@ function cariGuruTeks(x){
 function kelasDari(x){var nk=normKelas(x);if(!nk)return null;return S.kelas.filter(function(k){return normKelas(k.nama)===nk})[0]||null}
 var KEG=/^(istirahat|ishoma|upacara|literasi|apel|senam|sholat|salat|doa|pembiasaan|kokurikuler|p5|ekskul|ekstrakurikuler|pramuka|jumat\s*bersih|kebersihan|bk|bimbingan|perwalian|tadarus|dhuha|kegiatan)/i;
 function selJadwal(teks,kl){
-  var t=String(teks||"").trim(),w=[];if(!t||/^[-–—·.]$/.test(t))return {kosong:true};
+  var t=String(teks||"").trim(),w=[];if(!t||/^[-–—·.0]$/.test(t))return {kosong:true};
   if(KEG.test(t)&&!cariMapel(t))return {ket:t};
   var tok=t.split(/[\s\/|,;()\[\]-]+/).filter(Boolean),m=null,g=null;
   m=cariMapel(t);if(m)tok=[];
-  tok.forEach(function(x){if(!g&&/^\d{1,3}$/.test(x)){var gg=cariGuruTeks(x);if(gg){g=gg;return}}if(!m){var mm=cariMapel(x);if(mm){m=mm;return}}});
+  var gl=[];
+  tok.forEach(function(x){if(/^\d{1,3}$/.test(x)){var gg=cariGuruTeks(x);if(gg){if(!g)g=gg;else if(gg!==g&&gl.indexOf(gg)<0)gl.push(gg);return}}if(!m){var mm=cariMapel(x);if(mm){m=mm;return}}});
   if(!g){var rest=t;if(m)rest=rest.replace(new RegExp(m.kode.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"i"),"");rest=rest.replace(/^[\s\/|,;:-]+|[\s\/|,;:-]+$/g,"");if(rest)g=cariGuruTeks(rest)}
   if(kl){if(!m&&g){var cand=S.mapel.filter(function(mm){return S.peta[kl.id+"|"+mm.id]===g.id});if(cand.length===1)m=cand[0]}
     if(m&&!g){var pg=S.peta[kl.id+"|"+m.id];if(pg)g=guruById(pg)}}
   if(!m&&!g)return {ket:t,warn:"“"+t+"” tidak dikenali sebagai mapel/guru; disimpan sebagai kegiatan"};
-  return {m:m,g:g};
+  if(!m&&g&&g.mapel.length===1)m=mapelById(g.mapel[0]);
+  return {m:m,g:g,gl:gl};
 }
 var JIMP=null;
 function analisisJadwal(){
   var rows=bacaTabel($("#jiTeks").value),out=[],warn=[],info=[];
   if(!rows.length){JIMP=null;$("#jiPratinjau").innerHTML="";$("#jiRingkas").textContent="";$("#jiTerapkan").disabled=true;return}
+  /* judul kolom dua baris (mis. HARI/JP di baris atas, KE/7A/7B di baris bawah) */
+  if(rows.length>1&&rows[0].filter(function(x){return kelasDari(x)}).length<2&&rows[1].filter(function(x){return kelasDari(x)}).length>=2){
+    var gab=rows[0].map(function(x,i){var y=rows[1][i]||"";return kelasDari(y)?y:((x+" "+y).trim())});for(var gi=rows[0].length;gi<rows[1].length;gi++)gab.push(rows[1][gi]);
+    rows=[gab].concat(rows.slice(2));}
   var head=rows[0].map(function(x){return x.toLowerCase().trim()});
-  var iH=head.findIndex(function(x){return /^hari$/.test(x)}),iKe=head.findIndex(function(x){return /^(jam\s*ke|jam\s*ke-?|ke|jp|jam|jam pelajaran)$/.test(x)});
+  var iH=head.findIndex(function(x){return /^hari\b/.test(x)}),iKe=head.findIndex(function(x){return /^(jam\s*ke-?|ke|jp|jp\s*ke|jam|jam pelajaran)$/.test(x)});
   var iM=head.findIndex(function(x){return /^(mulai|jam\s*mulai|dari)$/.test(x)}),iS=head.findIndex(function(x){return /^(selesai|jam\s*selesai|sampai|s\/d)$/.test(x)}),iW=head.findIndex(function(x){return /^(waktu|pukul)$/.test(x)});
   var kolKelas=[];rows[0].forEach(function(x,i){if(i!==iH&&i!==iKe&&i!==iM&&i!==iS&&i!==iW){var k=kelasDari(x);if(k)kolKelas.push({i:i,k:k})}});
   var iK=head.findIndex(function(x){return /^(kelas|rombel|rombongan belajar)$/.test(x)}),iMp=head.findIndex(function(x){return /^(mapel|mata pelajaran|pelajaran)$/.test(x)}),iG=head.findIndex(function(x){return /^(guru|kode guru|kode|pengajar|nama guru|pengampu)$/.test(x)});
   var bentuk=kolKelas.length>=2?"grid":(iK>=0&&(iMp>=0||iG>=0)?"daftar":null);
   if(!bentuk||iH<0){$("#jiPratinjau").innerHTML='<ul class="issues"><li>Judul kolom tidak dikenali. Gunakan salah satu templat: <b>format daftar</b> (Hari, Jam ke, Mulai, Selesai, Kelas, Mapel, Guru) atau <b>format jadwal induk</b> (Hari, Jam ke, Waktu, lalu satu kolom per kelas: VII A, VII B, …).</li></ul>';$("#jiTerapkan").disabled=true;JIMP=null;return}
-  var hariAkhir=null,cnt={},waktu={};
+  var hariAkhir=null,cnt={},waktu={},selesai=false,lastCell={};
   rows.slice(1).forEach(function(r,ri){
-    var hv=iH>=0?r[iH]:"";var hari=hariDari(hv)||(hv?null:hariAkhir);if(hv&&!hariDari(hv)){warn.push("Baris "+(ri+2)+": hari “"+hv+"” tidak dikenal");return}if(!hari)return;hariAkhir=hari;
+    if(selesai)return;
+    var hv=iH>=0?r[iH]:"";var hari=hariDari(hv)||(hv?null:hariAkhir);if(hv&&!hariDari(hv)){if(hariAkhir){selesai=true;info.push("Pembacaan berhenti di baris “"+hv+"” (akhir tabel jadwal).")}else warn.push("Baris "+(ri+2)+": hari “"+hv+"” tidak dikenal");return}if(!hari)return;hariAkhir=hari;
     var kev=iKe>=0?String(r[iKe]||"").trim():"",ke=/^\d{1,2}$/.test(kev)?parseInt(kev,10):NaN,wm=null,ws=null;
     var wt=(iW>=0?r[iW]:"")||(isNaN(ke)?kev:"");var mm=String(wt||"").match(/(\d{1,2}[.:]\d{2})\s*[-–sd\/]+\s*(\d{1,2}[.:]\d{2})/);if(mm){wm=keJam(keMenit(mm[1]));ws=keJam(keMenit(mm[2]))}
     if(iM>=0&&keMenit(r[iM])!=null)wm=keJam(keMenit(r[iM]));if(iS>=0&&keMenit(r[iS])!=null)ws=keJam(keMenit(r[iS]));
@@ -1320,7 +1332,12 @@ function analisisJadwal(){
     }
     if(bentuk==="grid"){cnt[hari]=Math.max(cnt[hari]||0,ke)}else cnt[hari]=Math.max(cnt[hari]||0,ke);
     if(wm&&ws)waktu[hari+"|"+ke]={m:wm,s:ws};
-    if(bentuk==="grid"){kolKelas.forEach(function(c){var p=selJadwal(r[c.i],c.k);if(p.kosong)return;if(p.warn)warn.push(hari+" jam "+ke+" "+c.k.nama+": "+p.warn);out.push({hari:hari,ke:ke,k:c.k,m:p.m||null,g:p.g||null,ket:p.ket||""})})}
+    if(ke>14||ke<1)return;
+    if(bentuk==="grid"){kolKelas.forEach(function(c){var p=selJadwal(r[c.i],c.k),key=hari+"|"+c.k.id,lc=lastCell[key];
+      if(p.kosong){/* blok gabungan (mis. agama lintas kelas) yang hanya ditulis di sel pertama */
+        if(lc&&lc.ke===ke-1&&lc.gl&&lc.gl.length&&lc.m&&lc.run<jpOf(lc.m,c.k)){out.push({hari:hari,ke:ke,k:c.k,m:lc.m,g:lc.g,gl:lc.gl,ket:""});lastCell[key]={ke:ke,m:lc.m,g:lc.g,gl:lc.gl,run:lc.run+1}}
+        return}
+      if(p.warn)warn.push(hari+" jam "+ke+" "+c.k.nama+": "+p.warn);out.push({hari:hari,ke:ke,k:c.k,m:p.m||null,g:p.g||null,gl:p.gl||[],ket:p.ket||""});lastCell[key]={ke:ke,m:p.m||null,g:p.g||null,gl:p.gl||[],run:1}})}
     else{var kl=kelasDari(r[iK]);if(!kl){if(r[iK])warn.push("Baris "+(ri+2)+": kelas “"+r[iK]+"” tidak ada");return}
       var mp=iMp>=0?r[iMp]:"",gv=iG>=0?r[iG]:"",m=mp?cariMapel(mp):null,g=gv?cariGuruTeks(gv):null,ket="";
       if(mp&&!m){if(KEG.test(mp))ket=mp;else warn.push("Baris "+(ri+2)+": mapel “"+mp+"” tidak dikenal")}
@@ -1330,6 +1347,7 @@ function analisisJadwal(){
       if(!m&&!g&&!ket)return;
       out.push({hari:hari,ke:ke,k:kl,m:m,g:g,ket:ket})}
   });
+  var uniq={};out.forEach(function(e){uniq[e.hari+"|"+e.ke+"|"+e.k.id]=e});var nDup=out.length-Object.keys(uniq).length;out=Object.keys(uniq).map(function(k){return uniq[k]});if(nDup)info.push(nDup+" sel ganda digabung.");
   JIMP={rows:out,waktu:waktu,cnt:cnt,bentuk:bentuk};
   var hariAda=Object.keys(cnt).sort(function(a,b){return urutHari(a)-urutHari(b)});
   var gUnik={};out.forEach(function(e){if(e.g)gUnik[e.g.id]=1});
@@ -1339,7 +1357,7 @@ function analisisJadwal(){
   if(Object.keys(waktu).length)info.push("Waktu jam pelajaran ikut diambil dari data ("+Object.keys(waktu).length+" slot).");
   var contoh=out.slice(0,40);
   $("#jiPratinjau").innerHTML='<p class="muted" style="font-size:13px;margin:0 0 6px">'+info.join(" ")+'</p>'+(warn.length?'<ul class="issues" style="margin-bottom:8px">'+warn.slice(0,8).map(function(x){return '<li class="w">'+esc(x)+'</li>'}).join("")+(warn.length>8?'<li class="w">… dan '+(warn.length-8)+' catatan lain</li>':"")+'</ul>':"")+
-    '<div class="scroll" style="max-height:260px;overflow:auto"><table><thead><tr><th>Hari</th><th>Jam</th><th>Kelas</th><th>Mapel/kegiatan</th><th>Guru</th></tr></thead><tbody>'+contoh.map(function(e){return '<tr><td>'+e.hari+'</td><td class="num">'+e.ke+'</td><td>'+esc(e.k.nama)+'</td><td>'+esc(e.m?e.m.kode:e.ket)+'</td><td>'+(e.g?esc(e.g.kode+" · "+pendek(e.g.nama)):(e.m?'<span class="pill bad">?</span>':''))+'</td></tr>'}).join("")+(out.length>40?'<tr><td colspan="5" class="muted">… '+(out.length-40)+' baris lain</td></tr>':'')+'</tbody></table></div>';
+    '<div class="scroll" style="max-height:260px;overflow:auto"><table><thead><tr><th>Hari</th><th>Jam</th><th>Kelas</th><th>Mapel/kegiatan</th><th>Guru</th></tr></thead><tbody>'+contoh.map(function(e){return '<tr><td>'+e.hari+'</td><td class="num">'+e.ke+'</td><td>'+esc(e.k.nama)+'</td><td>'+esc(e.m?e.m.kode:e.ket)+'</td><td>'+(e.g?esc([e.g].concat(e.gl||[]).map(function(g){return g.kode+" · "+pendek(g.nama)}).join("; ")):(e.m?'<span class="pill bad">?</span>':''))+'</td></tr>'}).join("")+(out.length>40?'<tr><td colspan="5" class="muted">… '+(out.length-40)+' baris lain</td></tr>':'')+'</tbody></table></div>';
   $("#jiRingkas").innerHTML='<b>'+out.length+'</b> sel jadwal siap diimpor · '+Object.keys(gUnik).length+' guru dikenali'+(tanpaG?' · <span style="color:var(--red)">'+tanpaG+' jam tanpa guru</span>':'')+(warn.length?' · '+warn.length+' catatan':'')+'.';
   $("#jiTerapkan").disabled=!out.length;
 }
@@ -1353,13 +1371,13 @@ function terapkanJadwal(){
   S.jadwal.hari.sort(function(a,b){return urutHari(a)-urutHari(b)});
   if(ganti)S.jadwal.hari=S.jadwal.hari.filter(function(h){return JIMP.cnt[h]});
   Object.keys(JIMP.waktu).forEach(function(k){S.jadwal.waktu[k]=JIMP.waktu[k]});
-  JIMP.rows.forEach(function(e){S.jadwal.isi[e.hari+"|"+e.ke+"|"+e.k.id]={m:e.m?e.m.id:"",g:e.g?e.g.id:"",ket:e.ket||""}});
+  JIMP.rows.forEach(function(e){var x={m:e.m?e.m.id:"",g:e.g?e.g.id:"",ket:e.ket||""};if(e.gl&&e.gl.length)x.gl=e.gl.map(function(g){return g.id});S.jadwal.isi[e.hari+"|"+e.ke+"|"+e.k.id]=x});
   $("#dlgJadwal").close();JV.q="";$("#jCari").value="";ubah();toast(JIMP.rows.length+" sel jadwal diimpor");
 }
 function templatJadwal(bentuk){
   var J=S.jadwal,rows;
   if(bentuk==="grid"){rows=[["Hari","Jam ke","Waktu"].concat(S.kelas.map(function(k){return k.nama}))];
-    J.hari.forEach(function(h){for(var k=1;k<=(+J.jam[h]||0);k++){var w=waktuSlot(h,k);rows.push([k===1?h:"",k,w.m+"-"+w.s].concat(S.kelas.map(function(kl){var e=slotIsi(h,k,kl.id);if(!e)return "";var m=mapelById(e.m),g=guruById(e.g);return m?(m.kode+(g?"/"+g.kode:"")):(e.ket||"")})))}});
+    J.hari.forEach(function(h){for(var k=1;k<=(+J.jam[h]||0);k++){var w=waktuSlot(h,k);rows.push([k===1?h:"",k,w.m+"-"+w.s].concat(S.kelas.map(function(kl){var e=slotIsi(h,k,kl.id);if(!e)return "";var m=mapelById(e.m),g=guruById(e.g),gl=(e.gl||[]).map(guruById).filter(Boolean).map(function(x){return x.kode});return m?(m.kode+(g?"/"+[g.kode].concat(gl).join(","):"")):(e.ket||"")})))}});
     rows.push([]);rows.push(["# Isi sel dengan KODE MAPEL/KODE GURU, mis. MAT/07. Cukup kode mapel bila pengampu sudah ada di peta; cukup kode guru bila guru hanya mengampu satu mapel di kelas itu."]);
   }else{rows=[["Hari","Jam ke","Mulai","Selesai","Kelas","Mapel","Guru"]];
     J.hari.forEach(function(h){for(var k=1;k<=(+J.jam[h]||0);k++){var w=waktuSlot(h,k);S.kelas.forEach(function(kl){var e=slotIsi(h,k,kl.id),m=e&&mapelById(e.m),g=e&&guruById(e.g);rows.push([h,k,w.m,w.s,kl.nama,m?m.kode:(e?e.ket:""),g?g.kode:""])})}});
@@ -1401,7 +1419,7 @@ $("#jMode").addEventListener("click",function(e){var b=e.target.closest("button[
 ["jGuru","jKelas","jHari","jKe"].forEach(function(id){$("#"+id).addEventListener("change",function(){var k={jGuru:"guru",jKelas:"kelas",jHari:"hari",jKe:"ke"}[id];JV[k]=this.value;if(id==="jHari")JV.ke="";if((id==="jHari"||id==="jKe")&&JV.mode!=="hari"&&JV.mode!=="sekarang")JV.mode="sekarang";renderJadwal()})});
 $("#jIsi").addEventListener("click",function(e){var b=e.target.closest("[data-jbuka]");if(!b)return;var p=b.dataset.jbuka.split("|");JV.mode=p[0];JV[p[0]]=p[1];JV.q="";$("#jCari").value="";renderJadwal()});
 setInterval(function(){if($("#t-jadwal").classList.contains("on")&&JV.mode==="sekarang"&&!JV.q&&!JV.ke)renderJadwal()},60000);
-function bersihkanJadwalGuru(ids){if(!S.jadwal)return;Object.keys(S.jadwal.isi).forEach(function(k){if(ids.indexOf(S.jadwal.isi[k].g)>=0)S.jadwal.isi[k].g=""})}
+function bersihkanJadwalGuru(ids){if(!S.jadwal)return;Object.keys(S.jadwal.isi).forEach(function(k){var e=S.jadwal.isi[k];if(ids.indexOf(e.g)>=0)e.g="";if(e.gl)e.gl=e.gl.filter(function(x){return ids.indexOf(x)<0})})}
 
 /* ---------- baca berkas Excel (.xlsx) tanpa pustaka luar ---------- */
 function u16(b,o){return b[o]|(b[o+1]<<8)}
