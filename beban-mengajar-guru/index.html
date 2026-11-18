@@ -400,6 +400,10 @@ h3.jh{font-size:16px;margin:10px 0 8px;display:flex;gap:8px;align-items:center;f
           <label class="btn" style="display:inline-block">Impor JSON<input type="file" id="fileImpor" accept=".json,application/json" class="sr"></label>
         </div>
         <div class="row" style="margin-top:12px">
+          <button class="btn pri" type="button" data-act="imporJadwal">⇪ Impor jadwal mengajar</button>
+          <button class="btn" type="button" data-act="imporGuru">⇪ Impor data guru</button>
+        </div>
+        <div class="row" style="margin-top:12px">
           <button class="btn warn" type="button" data-act="hapusContoh">Hapus data contoh</button>
           <button class="btn" type="button" data-act="muatContoh">Muat ulang data contoh</button>
           <button class="btn warn" type="button" data-act="kosongkan">Kosongkan semua</button>
@@ -464,11 +468,11 @@ h3.jh{font-size:16px;margin:10px 0 8px;display:flex;gap:8px;align-items:center;f
 <dialog id="dlgImpor" class="lebar" aria-labelledby="dlgImporJudul">
   <form method="dialog" class="imp" id="formImpor">
     <h2 id="dlgImporJudul">Impor data guru</h2>
-    <p class="muted" style="margin:0;font-size:14px">Salin tabel guru dari Excel/Google Sheets lalu tempel di kotak bawah, atau pilih berkas CSV. Kolom yang dikenali: <b>Kode</b>, <b>Nama</b>, <b>Jenis</b> (Mapel/BK/Kepala sekolah), <b>Mapel</b> (kode atau nama, pisahkan koma), <b>Tugas tambahan</b> (pisahkan titik koma, boleh “x2”), dan <b>Wali kelas</b> (mis. VII A). Hanya kolom Nama yang wajib. Kolom NIP/NIK sengaja <b>tidak</b> diimpor.</p>
+    <p class="muted" style="margin:0;font-size:14px">Pilih berkas <b>Excel (.xlsx)</b> atau CSV, atau salin tabel guru dari Excel/Google Sheets lalu tempel di kotak bawah. Kolom yang dikenali: <b>Kode</b>, <b>Nama</b>, <b>Jenis</b> (Mapel/BK/Kepala sekolah), <b>Mapel</b> (kode atau nama, pisahkan koma), <b>Tugas tambahan</b> (pisahkan titik koma, boleh “x2”), dan <b>Wali kelas</b> (mis. VII A). Hanya kolom Nama yang wajib. Kolom NIP/NIK sengaja <b>tidak</b> diimpor.</p>
     <div class="row">
       <button class="btn sm" type="button" id="impTemplat">Unduh templat CSV</button>
-      <label class="btn sm" style="display:inline-block">Pilih berkas CSV<input type="file" id="impFile" accept=".csv,.txt,text/csv,text/plain" class="sr"></label>
-      <span class="muted" id="impFileNama" style="font-size:13px"></span>
+      <label class="btn sm" style="display:inline-block">Pilih berkas Excel/CSV<input type="file" id="impFile" accept=".xlsx,.csv,.txt,text/csv,text/plain,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="sr"></label>
+      <span class="muted" id="impFileNama" style="font-size:13px"></span><select id="impSheet" hidden aria-label="Pilih sheet"></select>
     </div>
     <label class="f">Tempel data di sini (baris pertama boleh judul kolom)
       <textarea id="impTeks" spellcheck="false" placeholder="Kode	Nama	Jenis	Mapel	Tugas tambahan	Wali kelas&#10;07	Rahmat Hidayat, S.Pd.	Mapel	MAT	Pembina OSIS	VII A"></textarea>
@@ -490,12 +494,12 @@ h3.jh{font-size:16px;margin:10px 0 8px;display:flex;gap:8px;align-items:center;f
 <dialog id="dlgJadwal" class="lebar" aria-labelledby="dlgJadwalJudul">
   <form method="dialog" class="imp">
     <h2 id="dlgJadwalJudul">Impor jadwal mengajar</h2>
-    <p class="muted" style="margin:0;font-size:14px">Tempel jadwal dari Excel/Google Sheets atau pilih berkas CSV. Dua format dikenali:<br>1) <b>Jadwal induk</b>: kolom Hari, Jam ke, Waktu, lalu satu kolom per kelas (VII A, VII B, …); sel berisi <span class="mono">MAT/07</span> (kode mapel/kode guru), cukup kode mapel, atau cukup kode guru.<br>2) <b>Daftar</b>: satu baris per jam: Hari, Jam ke, Mulai, Selesai, Kelas, Mapel, Guru.<br>Sel kosong pada kolom Hari diisi dari baris di atasnya. Baris istirahat dilewati, kegiatan seperti Upacara/Literasi tetap ditampilkan.</p>
+    <p class="muted" style="margin:0;font-size:14px">Pilih berkas <b>Excel (.xlsx)</b> atau CSV, atau tempel jadwal dari Excel/Google Sheets. Sel gabungan (merge) di Excel ikut terbaca. Dua format dikenali:<br>1) <b>Jadwal induk</b>: kolom Hari, Jam ke, Waktu, lalu satu kolom per kelas (VII A, VII B, …); sel berisi <span class="mono">MAT/07</span> (kode mapel/kode guru), cukup kode mapel, atau cukup kode guru.<br>2) <b>Daftar</b>: satu baris per jam: Hari, Jam ke, Mulai, Selesai, Kelas, Mapel, Guru.<br>Sel kosong pada kolom Hari diisi dari baris di atasnya. Baris istirahat dilewati, kegiatan seperti Upacara/Literasi tetap ditampilkan.</p>
     <div class="row">
       <button class="btn sm" type="button" id="jiTplGrid">Templat jadwal induk</button>
       <button class="btn sm" type="button" id="jiTplDaftar">Templat daftar</button>
-      <label class="btn sm" style="display:inline-block">Pilih berkas CSV<input type="file" id="jiFile" accept=".csv,.txt,text/csv,text/plain" class="sr"></label>
-      <span class="muted" id="jiFileNama" style="font-size:13px"></span>
+      <label class="btn sm" style="display:inline-block">Pilih berkas Excel/CSV<input type="file" id="jiFile" accept=".xlsx,.csv,.txt,text/csv,text/plain,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="sr"></label>
+      <span class="muted" id="jiFileNama" style="font-size:13px"></span><select id="jiSheet" hidden aria-label="Pilih sheet"></select>
     </div>
     <label class="f">Tempel data di sini (baris pertama = judul kolom)
       <textarea id="jiTeks" spellcheck="false" placeholder="Hari	Jam ke	Waktu	VII A	VII B&#10;Senin	1	07.00-07.40	MAT/07	B.IND/06"></textarea>
@@ -1061,7 +1065,6 @@ $("#impTeks").addEventListener("input",function(){clearTimeout(analisisImpor._t)
 $$("input[name=impMode]").forEach(function(r){r.addEventListener("change",analisisImpor)});
 $("#impContoh").addEventListener("change",analisisImpor);
 $("#impTerapkan").onclick=terapkanImpor;
-$("#impFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var t=String(rd.result);if(/�/.test(t)){var r2=new FileReader();r2.onload=function(){$("#impTeks").value=r2.result;analisisImpor()};r2.readAsText(f,"windows-1252")}else{$("#impTeks").value=t;analisisImpor()}};rd.readAsText(f,"utf-8");$("#impFileNama").textContent=f.name;this.value=""});
 $("#impTemplat").onclick=function(){
   var mk=S.mapel.slice(0,3).map(function(m){return m.kode});
   var rows=[["Kode","Nama","Jenis","Mapel","Tugas tambahan","Wali kelas"],
@@ -1361,7 +1364,6 @@ function bukaImporJadwal(){
 }
 $("#jiTeks").addEventListener("input",function(){clearTimeout(analisisJadwal._t);analisisJadwal._t=setTimeout(analisisJadwal,250)});
 $("#jiTerapkan").onclick=terapkanJadwal;
-$("#jiFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var t=String(rd.result);if(/\uFFFD/.test(t)){var r2=new FileReader();r2.onload=function(){$("#jiTeks").value=r2.result;analisisJadwal()};r2.readAsText(f,"windows-1252")}else{$("#jiTeks").value=t;analisisJadwal()}};rd.readAsText(f,"utf-8");$("#jiFileNama").textContent=f.name;this.value=""});
 $("#jiTplGrid").onclick=function(){templatJadwal("grid")};
 $("#jiTplDaftar").onclick=function(){templatJadwal("daftar")};
 
@@ -1390,6 +1392,69 @@ $("#jMode").addEventListener("click",function(e){var b=e.target.closest("button[
 $("#jIsi").addEventListener("click",function(e){var b=e.target.closest("[data-jbuka]");if(!b)return;var p=b.dataset.jbuka.split("|");JV.mode=p[0];JV[p[0]]=p[1];JV.q="";$("#jCari").value="";renderJadwal()});
 setInterval(function(){if($("#t-jadwal").classList.contains("on")&&JV.mode==="sekarang"&&!JV.q&&!JV.ke)renderJadwal()},60000);
 function bersihkanJadwalGuru(ids){if(!S.jadwal)return;Object.keys(S.jadwal.isi).forEach(function(k){if(ids.indexOf(S.jadwal.isi[k].g)>=0)S.jadwal.isi[k].g=""})}
+
+/* ---------- baca berkas Excel (.xlsx) tanpa pustaka luar ---------- */
+function u16(b,o){return b[o]|(b[o+1]<<8)}
+function u32(b,o){return (b[o]|(b[o+1]<<8)|(b[o+2]<<16)|(b[o+3]<<24))>>>0}
+async function bukaZip(buf){
+  var b=new Uint8Array(buf),e=-1;
+  for(var i=b.length-22;i>=Math.max(0,b.length-70000);i--){if(u32(b,i)===0x06054b50){e=i;break}}
+  if(e<0)throw new Error("Berkas bukan .xlsx yang valid.");
+  var n=u16(b,e+10),off=u32(b,e+16),F={};
+  for(var k=0;k<n;k++){if(u32(b,off)!==0x02014b50)break;var met=u16(b,off+10),cs=u32(b,off+20),nl=u16(b,off+28),xl=u16(b,off+30),cl=u16(b,off+32),lo=u32(b,off+42);
+    var nama=new TextDecoder().decode(b.subarray(off+46,off+46+nl));F[nama]={met:met,cs:cs,lo:lo};off+=46+nl+xl+cl}
+  async function baca(nama){var f=F[nama];if(!f)return null;var lo=f.lo,st=lo+30+u16(b,lo+26)+u16(b,lo+28),data=b.subarray(st,st+f.cs);
+    if(f.met===0)return new TextDecoder().decode(data);
+    if(f.met!==8)throw new Error("Kompresi berkas tidak didukung.");
+    if(typeof DecompressionStream==="undefined")throw new Error("Peramban ini belum bisa membuka .xlsx. Perbarui peramban atau simpan berkas sebagai CSV.");
+    var s=new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"));return await new Response(s).text()}
+  return {ada:function(n){return !!F[n]},baca:baca};
+}
+function xmlDoc(t){return new DOMParser().parseFromString(t||"<x/>","application/xml")}
+function byTag(el,tag){return Array.prototype.slice.call(el.getElementsByTagNameNS("*",tag))}
+function kolomKe(ref){var m=String(ref).match(/^([A-Z]+)(\d+)$/);if(!m)return null;var c=0;for(var i=0;i<m[1].length;i++)c=c*26+(m[1].charCodeAt(i)-64);return {c:c-1,r:+m[2]-1}}
+async function bacaXlsx(file){
+  var z=await bukaZip(await file.arrayBuffer());
+  var wb=xmlDoc(await z.baca("xl/workbook.xml")),rels=xmlDoc(await z.baca("xl/_rels/workbook.xml.rels"));
+  var target={};byTag(rels,"Relationship").forEach(function(r){target[r.getAttribute("Id")]=r.getAttribute("Target")});
+  var ss=[];var sst=await z.baca("xl/sharedStrings.xml");if(sst)byTag(xmlDoc(sst),"si").forEach(function(si){ss.push(byTag(si,"t").map(function(t){return t.textContent}).join(""))});
+  var sheets=[];
+  for(const s of byTag(wb,"sheet")){
+    var rid=s.getAttribute("r:id")||s.getAttributeNS("http://schemas.openxmlformats.org/officeDocument/2006/relationships","id");
+    var t=target[rid]||"";t=t.replace(/^\/?xl\//,"").replace(/^\//,"");var path="xl/"+t;if(!z.ada(path))continue;
+    var d=xmlDoc(await z.baca(path)),grid=[];
+    byTag(d,"c").forEach(function(c){var p=kolomKe(c.getAttribute("r"));if(!p)return;var ty=c.getAttribute("t"),v=byTag(c,"v")[0],val="";
+      if(ty==="s")val=v?(ss[+v.textContent]||""):"";else if(ty==="inlineStr")val=byTag(c,"t").map(function(x){return x.textContent}).join("");
+      else if(v){val=v.textContent;if(ty!=="str"&&ty!=="b"&&ty!=="e"&&/^\d*\.\d+(E-?\d+)?$/i.test(val)){var f=+val;if(f>0&&f<1){var mn=Math.round(f*1440);val=keJam(mn)}}}
+      (grid[p.r]=grid[p.r]||[])[p.c]=String(val).replace(/[\t\r\n]+/g," ").trim()});
+    byTag(d,"mergeCell").forEach(function(m){var a=String(m.getAttribute("ref")).split(":");var p1=kolomKe(a[0]),p2=kolomKe(a[1]||a[0]);if(!p1||!p2)return;
+      var v=(grid[p1.r]||[])[p1.c]||"";for(var r=p1.r;r<=p2.r;r++)for(var c=p1.c;c<=p2.c;c++){if(r===p1.r&&c===p1.c)continue;
+        if(p2.c>p1.c&&p2.r===p1.r&&r===p1.r)continue; /* gabungan mendatar (judul) tidak disalin */
+        (grid[r]=grid[r]||[])[c]=v}});
+    var lebar=0;grid.forEach(function(r){if(r)lebar=Math.max(lebar,r.length)});
+    var teks=[];for(var r=0;r<grid.length;r++){var row=grid[r]||[];var arr=[];for(var c=0;c<lebar;c++)arr.push(row[c]||"");if(arr.some(function(x){return x}))teks.push(arr.join("\t"))}
+    sheets.push({nama:s.getAttribute("name")||("Sheet"+(sheets.length+1)),teks:teks.join("\n")});
+  }
+  if(!sheets.length)throw new Error("Tidak ada sheet yang bisa dibaca.");
+  return sheets;
+}
+/* lewati baris judul (mis. "JADWAL PELAJARAN SMP …") sampai baris yang berisi judul kolom */
+function potongJudul(teks,pola){var b=teks.split("\n");for(var i=0;i<Math.min(b.length,15);i++){if(pola.test(b[i]))return b.slice(i).join("\n")}return teks}
+function pasangBerkas(inputId,namaId,selId,teksId,analisis,polaJudul,polaSheet){
+  $(inputId).addEventListener("change",function(){var f=this.files[0];if(!f)return;this.value="";$(namaId).textContent=f.name;var sel=$(selId);sel.hidden=true;
+    if(/\.xlsx$/i.test(f.name)){$(namaId).textContent=f.name+" · membaca…";
+      bacaXlsx(f).then(function(sh){$(namaId).textContent=f.name+(sh.length>1?" · pilih sheet:":"");
+        var pilih=0;sh.forEach(function(s,i){if(polaSheet.test(s.nama)&&!polaSheet.test(sh[pilih].nama))pilih=i});
+        sel.innerHTML=sh.map(function(s,i){return '<option value="'+i+'">'+esc(s.nama)+'</option>'}).join("");sel.value=pilih;sel.hidden=sh.length<2;
+        var isi=function(i){$(teksId).value=potongJudul(sh[i].teks,polaJudul);analisis()};sel.onchange=function(){isi(+sel.value)};isi(pilih);
+      }).catch(function(err){$(namaId).textContent=f.name;toast(err.message||"Gagal membaca berkas Excel")});
+      return}
+    if(/\.xls$/i.test(f.name)){toast("Format .xls lama belum didukung. Simpan sebagai .xlsx atau CSV.");return}
+    var rd=new FileReader();rd.onload=function(){var t=String(rd.result);if(t.indexOf("�")>=0){var r2=new FileReader();r2.onload=function(){$(teksId).value=potongJudul(String(r2.result),polaJudul);analisis()};r2.readAsText(f,"windows-1252")}else{$(teksId).value=potongJudul(t,polaJudul);analisis()}};rd.readAsText(f,"utf-8");
+  });
+}
+pasangBerkas("#impFile","#impFileNama","#impSheet","#impTeks",function(){analisisImpor()},/(^|[\t;,"])\s*nama/i,/guru|pegawai|ptk/i);
+pasangBerkas("#jiFile","#jiFileNama","#jiSheet","#jiTeks",function(){analisisJadwal()},/(^|[\t;,"])\s*hari\s*([\t;,"]|$)/i,/jadwal|induk/i);
 
 /* tema */
 function terapkanTema(t){if(t)document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme")}
