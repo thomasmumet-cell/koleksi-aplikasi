@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Latihan TKA Bahasa Indonesia",
+    kategori: "Persiapan TKA",
+    jenis: "HTML",
+    deskripsi: "Latihan TKA Bahasa Indonesia SMP dengan 17 teks orisinal (artikel, berita, dua teks, infografis, tabel, grafik, poster, cerpen, fabel, legenda, puisi, drama), satu teks untuk 2–3 soal (47 soal PG, PG kompleks, benar/salah), mode latihan berpembahasan, tes berwaktu 30 soal/75 menit, dan peta kemampuan per kompetensi. Soal tambahan AI Gemini opsional.",
+    tanggal: "2026-11-18",
+    tautan: "tka-bahasa-indonesia/",
+    status: "aktif"
+  },
+  {
     nama: "Latihan TKAD Bahasa Inggris – Bacaan Panjang",
     kategori: "Persiapan TKA",
     jenis: "HTML",
