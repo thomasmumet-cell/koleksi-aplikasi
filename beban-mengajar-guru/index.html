@@ -1537,7 +1537,7 @@ async function bukaDataSekolah(pw){
   var txt=await new Response(new Blob([gz]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
   return JSON.parse(txt);
 }
-function bukaSandi(){$("#sandiNama").textContent=DATA_SEKOLAH.nama;$("#sandiIn").value="";$("#sandiPesan").textContent="";var d=$("#dlgSandi");if(d.showModal)d.showModal();else d.setAttribute("open","");setTimeout(function(){$("#sandiIn").focus()},30)}
+function bukaSandi(){$("#sandiNama").textContent=DATA_SEKOLAH.nama+" · kode data "+DATA_SEKOLAH.salt.slice(0,4);$("#sandiIn").value="";$("#sandiPesan").textContent="";var d=$("#dlgSandi");if(d.showModal)d.showModal();else d.setAttribute("open","");setTimeout(function(){$("#sandiIn").focus()},30)}
 $("#formSandi").addEventListener("submit",function(e){
   var btn=e.submitter;if(btn&&btn.value==="batal")return;e.preventDefault();
   var pw=$("#sandiIn").value.trim();if(!pw){$("#sandiPesan").textContent="Isi kata sandi.";return}
@@ -1548,7 +1548,15 @@ $("#formSandi").addEventListener("submit",function(e){
     d.tugas=d.tugas||tugasBawaan();d.peta=d.peta||{};S=d;$("#dlgSandi").close();ubah();
     var tb=$('nav.tabs button[data-tab="jadwal"]');if(tb)tb.click();
     toast("Data "+(S.meta.sekolah||"sekolah")+" dimuat: "+S.guru.length+" guru, "+S.kelas.length+" rombel");
-  }).catch(function(err){$("#sandiPesan").textContent=err.message||"Gagal membuka data."}).then(function(){$("#sandiOk").disabled=false});
+  }).catch(function(err){
+    var pesan=err.message||"Gagal membuka data.";$("#sandiPesan").textContent=pesan;
+    /* bila salah, periksa apakah peramban masih memakai versi lama (cache) lalu muat versi terbaru */
+    if(/salah/i.test(pesan)&&location.protocol.indexOf("http")===0&&window.fetch){
+      fetch(location.pathname+"?cek="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){
+        if(t&&t.indexOf(DATA_SEKOLAH.salt)<0&&t.indexOf("DATA_SEKOLAH")>=0){$("#sandiPesan").textContent="Ada versi aplikasi yang lebih baru. Memuat ulang… lalu coba kata sandi lagi.";try{sessionStorage.setItem(KEY+".bukaSandi","1")}catch(e){}setTimeout(function(){location.replace(location.pathname+"?v="+Date.now())},900)}
+      }).catch(function(){});
+    }
+  }).then(function(){$("#sandiOk").disabled=false});
 });
 
 /* tema */
@@ -1566,6 +1574,7 @@ $("nav.tabs .wrap").addEventListener("keydown",function(e){
   var n=bs[(i+(e.key==="ArrowRight"?1:-1)+bs.length)%bs.length];n.focus();n.click();e.preventDefault();
 });
 renderAll();
+try{if(sessionStorage.getItem(KEY+".bukaSandi")){sessionStorage.removeItem(KEY+".bukaSandi");setTimeout(bukaSandi,300)}}catch(e){}
 })();
 </script>
 </body>
