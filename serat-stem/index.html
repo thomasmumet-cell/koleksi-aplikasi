@@ -459,14 +459,15 @@ input:focus,select:focus,textarea:focus{outline:2px solid #9bd3bf;border-color:v
 
     // ===== Sampul & hak cipta (seksi 1)
     const cover = [];
-    const mapel = meta.mapel || 'Ilmu Pengetahuan Alam';
+    const mapel = meta.mapel==='Lainnya' ? (meta.mapelLain||'Mata Pelajaran') : (meta.mapel || 'Ilmu Pengetahuan Alam');
+    const jenjangTxt = ['X','XI','XII'].includes(meta.kelas) ? 'SMA/MA' : 'SMP/MTs';
     cover.push(para({ spacing: { before: 2400, after: 600 }, alignment: AlignmentType.CENTER, children: [H(mapel, { size: 54, bold: false })] }));
     if (meta.judul) cover.push(para({ alignment: AlignmentType.CENTER, spacing: { after: 600 }, children: [H(meta.judul, { size: 32, color: '0B6E4F' })] }));
     cover.push(para({ alignment: AlignmentType.CENTER, spacing: { after: 1600 }, children: [H('Kelas ' + (meta.kelas || 'VII'), { size: 54 })] }));
     (meta.penulis || []).filter(Boolean).forEach(p => cover.push(para({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [H(p, { size: 24 })] })));
     // halaman hak cipta
     const cp = (txt, o) => para(Object.assign({ spacing: { after: 40 }, children: B(txt, { size: 20 }) }, o || {}));
-    cover.push(para({ pageBreakBefore: true, spacing: { after: 160 }, children: [new TextRun({ text: (meta.judul || mapel) + ' untuk Kelas ' + (meta.kelas || 'VII') + ' SMP/MTs', bold: true, font: BODY_FONT, size: 22 })] }));
+    cover.push(para({ pageBreakBefore: true, spacing: { after: 160 }, children: [new TextRun({ text: (meta.judul || mapel) + ' untuk Kelas ' + (meta.kelas || 'VII') + ' ' + jenjangTxt, bold: true, font: BODY_FONT, size: 22 })] }));
     cover.push(cp('Oleh: ' + ((meta.penulis || []).filter(Boolean).join(', ') || 'Nama Penulis')));
     cover.push(cp('Hak Cipta © ' + (meta.tahun || new Date().getFullYear()) + ' pada Penulis', { spacing: { after: 200 } }));
     [['Editor', meta.editor], ['Setting', meta.setting], ['Desain Cover', meta.desainCover], ['Korektor', meta.korektor]].forEach(([k, v]) =>
@@ -900,7 +901,7 @@ const MAT7 = [{"judul":"Bilangan Bulat","ide":"Termometer sederhana dan grafik s
 function presetKerangka(){ const k=book.meta.kelas; if(book.meta.mapel==='Matematika'&&k==='VII') return MAT7; if(book.meta.mapel==='Ilmu Pengetahuan Alam'&&k==='VII') return ATP7_IPA; return null; }
 function cpBawaan(){ return book.meta.mapel==='Matematika'?CP_MAT:(book.meta.mapel==='Ilmu Pengetahuan Alam'?CP_IPA:''); }
 function syncCP(){ if(book && book.meta.mapel==='Matematika' && (!book.cp || book.cp===CP_IPA)) book.cp=CP_MAT; if(book && book.meta.mapel==='Ilmu Pengetahuan Alam' && (!book.cp || book.cp===CP_MAT)) book.cp=CP_IPA; }
-const MAPEL = ['Ilmu Pengetahuan Alam','Matematika','Informatika','Ilmu Pengetahuan Sosial','Prakarya','Seni Budaya','Bahasa Indonesia','Bahasa Inggris','Pendidikan Jasmani, Olahraga, dan Kesehatan','Koding dan Kecerdasan Artifisial','Lainnya'];
+const MAPEL = ['Ilmu Pengetahuan Alam','Matematika','Informatika','Ilmu Pengetahuan Sosial','Prakarya','Seni Budaya','Bahasa Indonesia','Bahasa Inggris','Pendidikan Jasmani, Olahraga, dan Kesehatan','Koding dan Kecerdasan Artifisial','Geografi','Sejarah','Ekonomi','Sosiologi','Lainnya'];
 const CP_IPA = `Pada akhir Fase D ini, murid diharapkan memiliki kemampuan sebagai berikut.
 # Pemahaman IPA
 Menelaah hasil identifikasi makhluk hidup sesuai dengan karakteristiknya; menganalisis klasifikasi, sifat, dan perubahan materi; menganalisis sistem organisasi kehidupan, fungsi, serta kelainan atau gangguan yang muncul pada sistem organ; menganalisis interaksi antar makhluk hidup dan lingkungannya dalam merancang upaya-upaya untuk mencegah dan mengatasi perubahan iklim; menganalisis pewarisan sifat; membuat bioteknologi konvensional di lingkungan sekitarnya; menerapkan pengukuran terhadap aspek fisis dalam kehidupan sehari-hari; menganalisis ragam gerak, gaya, dan tekanan; menganalisis hubungan usaha dan energi; menganalisis pengaruh kalor dan perpindahannya terhadap perubahan suhu; menganalisis gelombang dan pemanfaatannya dalam kehidupan sehari-hari; menganalisis gejala kemagnetan dan kelistrikan untuk menyelesaikan tantangan yang dihadapi dalam kehidupan sehari-hari termasuk pemanfaatan sumber energi listrik ramah lingkungan; menganalisis posisi relatif bumi-bulan-matahari dalam sistem tata surya untuk menjelaskan fenomena alam dan perubahan iklim; serta mengevaluasi keputusan yang tepat untuk menghindari zat aditif dan adiktif yang membahayakan dirinya dan lingkungan.
@@ -947,6 +948,8 @@ function normalize(b){
   if(!b.profil||!b.profil.length) b.profil=blankBook().profil;
   return b;
 }
+function jenjang(){ return ['X','XI','XII'].includes(book.meta.kelas)?'SMA/MA':'SMP/MTs'; }
+function faseKls(){ const k=book.meta.kelas; return k==='X'?'E':(k==='XI'||k==='XII')?'F':'D'; }
 function mapelName(){ return book.meta.mapel==='Lainnya' ? (book.meta.mapelLain||'Mata Pelajaran') : book.meta.mapel; }
 
 /* ================= UTIL ================= */
@@ -1105,12 +1108,12 @@ function outline(){
 }
 function ctx(){
   const m=book.meta, g=book.gaya;
-  return `PERAN: Kamu adalah penulis buku teks pelajaran SMP/MTs yang berpengalaman (Kurikulum Merdeka, Fase D) dan pakar Pembelajaran Berbasis STEM (Science, Technology, Engineering, Mathematics) yang dipadukan dengan prinsip Pembelajaran Mendalam (berkesadaran, bermakna, menggembirakan).
+  return `PERAN: Kamu adalah penulis buku teks pelajaran ${jenjang()} yang berpengalaman (Kurikulum Merdeka, Fase ${faseKls()}) dan pakar Pembelajaran Berbasis STEM (Science, Technology, Engineering, Mathematics) yang dipadukan dengan prinsip Pembelajaran Mendalam (berkesadaran, bermakna, menggembirakan).
 
 DATA BUKU
 - Judul buku: ${m.judul||'(belum ditentukan)'}
 - Mata pelajaran: ${mapelName()}
-- Kelas: ${m.kelas} SMP/MTs (Fase D)
+- Kelas: ${m.kelas} ${jenjang()} (Fase ${faseKls()})
 - Konteks lokal yang diangkat: ${g.konteks||'Indonesia'}
 ${g.catatan?'- Catatan penulis: '+g.catatan+'\n':''}
 KERANGKA BUKU
@@ -1155,7 +1158,7 @@ async function aiKerangka(){
 
 TUGAS: Susun kerangka buku teks ${mapelName()} kelas ${book.meta.kelas} berbasis STEM sebanyak ${g.jumlahBab} bab, masing-masing ${g.jumlahSub} sub bab. Urutan bab mengikuti Capaian Pembelajaran berikut dan logis dari sederhana ke kompleks. Setiap bab punya satu ide Proyek STEM yang memenuhi prinsip 5M dan dapat dikerjakan murid SMP dengan alat sederhana, sebisa mungkin berbasis kearifan lokal.
 Capaian Pembelajaran:
-${(book.cp && !(book.cp===CP_IPA && book.meta.mapel!=='Ilmu Pengetahuan Alam')) ? book.cp : '(sesuaikan dengan CP Fase D mata pelajaran '+mapelName()+')'}
+${(book.cp && !(book.cp===CP_IPA && book.meta.mapel!=='Ilmu Pengetahuan Alam')) ? book.cp : '(sesuaikan dengan CP Fase '+faseKls()+' mata pelajaran '+mapelName()+')'}
 ${book.meta.judul?'':'Usulkan juga judul buku yang menarik.'}
 
 Skema JSON:
@@ -1345,7 +1348,7 @@ async function aiGlosarium(){
 
 Naskah buku (cuplikan): ${text}
 
-TUGAS: Susun GLOSARIUM 20–35 istilah penting yang benar-benar muncul di naskah, urut abjad, definisi singkat 1 kalimat yang mudah dipahami murid SMP. Istilah asing boleh diberi padanan dalam kurung.
+TUGAS: Susun GLOSARIUM 20–35 istilah penting yang benar-benar muncul di naskah, urut abjad, definisi singkat 1 kalimat yang mudah dipahami murid ${jenjang()}. Istilah asing boleh diberi padanan dalam kurung.
 Skema JSON: {"glosarium":[{"istilah":"...","arti":"..."}]}`,{onText:progLive});
     book.glosarium=(r.glosarium||r||[]).filter(g=>g&&g.istilah);
   });
@@ -1575,7 +1578,7 @@ function viewMesin(){
   const sumberOpts=[['atp7','Kerangka bawaan kelas VII (instan)'],['ai','AI menyusun kerangka dari CP'],['ada','Pakai kerangka yang sudah saya isi']];
   return `<h1 class="pt">⚡ Mesin Buku Otomatis</h1><p class="sub">Isi beberapa data, lalu klik satu tombol. Mesin menulis buku lengkap sesuai template penerbit dengan kunci acuan: Panduan STEM Kemendikdasmen 2025, Modul ARKA 5 Formula STEM (STEM 5M, DNA, Kreasi, Jejak, Wahana), dan Cetak Biru STEM Mendalam (Prof. Asri Widowati). Hasilnya mencakup judul, prakata, CP, seluruh bab (pembuka, isi, Pojok STEM, penutup, proyek 7 tahap, asesmen), asesmen akhir semester, glosarium, dan daftar pustaka. Hasilnya langsung diunduh sebagai .docx dan disimpan ke Google Drive.</p>
   <div class="card"><div class="hd"><h3>1. Data Buku</h3></div>
-    <div class="grid g3">${F('Mata pelajaran','meta.mapel',{type:'select',opts:MAPEL,r:1})}${book.meta.mapel==='Lainnya'?F('Nama mapel','meta.mapelLain'):''}${F('Kelas','meta.kelas',{type:'select',opts:['VII','VIII','IX'],r:1})}${F('Nama penulis','meta.penulis.0',{r:0})}</div>
+    <div class="grid g3">${F('Mata pelajaran','meta.mapel',{type:'select',opts:MAPEL,r:1})}${book.meta.mapel==='Lainnya'?F('Nama mapel','meta.mapelLain'):''}${F('Kelas','meta.kelas',{type:'select',opts:['VII','VIII','IX','X','XI','XII'],r:1})}${F('Nama penulis','meta.penulis.0',{r:0})}</div>
     <div class="grid g2" style="margin-top:12px">${F('Judul buku','meta.judul',{h:'(kosongkan agar AI membuat judul best seller)'})}${F('Penulis 2','meta.penulis.1',{h:'(opsional)'})}</div>
     ${(M.judulAlt||[]).length?`<p class="hint" style="margin-top:8px">Alternatif judul dari AI: ${M.judulAlt.map(j=>`<button class="btn sm" onclick="book.meta.judul=${esc(JSON.stringify(j))};persist();render()">${esc(j)}</button>`).join(' ')}</p>`:''}
   </div>
@@ -1689,7 +1692,7 @@ function viewMulai(){
   const e=engine();
   return `<h1 class="pt">Identitas & Pengaturan</h1><p class="sub">Isi identitas naskah sesuai template penerbit, lalu atur gaya penulisan yang dipakai AI di seluruh buku.</p>
   <div class="card"><div class="hd"><h3>📘 Identitas Buku</h3></div>
-    <div class="grid g3">${F('Mata pelajaran','meta.mapel',{type:'select',opts:MAPEL,r:1})}${book.meta.mapel==='Lainnya'?F('Nama mapel','meta.mapelLain'):''}${F('Kelas','meta.kelas',{type:'select',opts:['VII','VIII','IX']})}${F('Tahun terbit','meta.tahun')}</div>
+    <div class="grid g3">${F('Mata pelajaran','meta.mapel',{type:'select',opts:MAPEL,r:1})}${book.meta.mapel==='Lainnya'?F('Nama mapel','meta.mapelLain'):''}${F('Kelas','meta.kelas',{type:'select',opts:['VII','VIII','IX','X','XI','XII']})}${F('Tahun terbit','meta.tahun')}</div>
     <div class="grid" style="margin-top:12px">${F('Judul buku','meta.judul',{ph:'mis. IPA Berbasis STEM: Menjelajah Alam Yogyakarta',h:'(boleh diusulkan AI di Kerangka Buku)'})}</div>
     <div class="grid g2" style="margin-top:12px">${F('Nama Penulis 1','meta.penulis.0')}${F('Nama Penulis 2','meta.penulis.1',{h:'(opsional)'})}</div>
     <div class="grid g4" style="margin-top:12px">${F('Editor','meta.editor')}${F('Setting','meta.setting')}${F('Desain Cover','meta.desainCover')}${F('Korektor','meta.korektor')}</div>
