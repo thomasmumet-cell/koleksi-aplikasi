@@ -40,7 +40,7 @@ const APLIKASI = [
     nama: "Peta Beban Mengajar Guru",
     kategori: "Sekolah",
     jenis: "HTML",
-    deskripsi: "Susun pembagian jam pelajaran per guru dan per kelas, hitung JP tatap muka plus ekuivalensi tugas tambahan (Permendikdasmen 11/2025), tandai guru di bawah 24 atau di atas 40 JP, deteksi mapel/rombel yang belum terisi, dan cetak lampiran SK pembagian tugas. Data guru bisa diimpor dengan tempel dari Excel/Google Sheets atau berkas CSV.",
+    deskripsi: "Susun pembagian jam pelajaran per guru dan per kelas, hitung JP tatap muka plus ekuivalensi tugas tambahan (Permendikdasmen 11/2025), tandai guru di bawah 24 atau di atas 40 JP, deteksi mapel/rombel yang belum terisi, dan cetak lampiran SK pembagian tugas. Data guru dan jadwal mengajar bisa diimpor dari Excel/Google Sheets atau CSV; dasbor jadwal menampilkan siapa mengajar sekarang, guru yang kosong untuk pengganti, pencarian per guru/kelas/mapel, dan cek bentrok.",
     tanggal: "2026-11-18",
     tautan: "beban-mengajar-guru/",
     status: "aktif"
