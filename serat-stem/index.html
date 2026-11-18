@@ -156,6 +156,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #9bd3bf;border-color:v
     <button class="tbtn" onclick="saveToDrive()">☁ Simpan ke Drive</button>
     <button class="tbtn solid" onclick="exportDocx()">⬇ Unduh .docx</button>
     <button class="tbtn" onclick="bukaGamePapan()" title="Buat 3 game papan interaktif dari buku ini">🎮 Game Papan</button>
+    <button class="tbtn" onclick="bukaBookToGame()" title="Jadikan buku ini game petualangan edukasi">📚 Book to Game</button>
     <input type="file" id="fOpen" accept=".json,application/json" hidden onchange="openProject(this)">
   </header>
   <div class="body">
@@ -1912,7 +1913,7 @@ function viewPratinjau(){
   pages+=`<div class="pgx"><h2 class="bab">GLOSARIUM</h2>${book.glosarium.slice().sort((a,b)=>String(a.istilah).localeCompare(String(b.istilah),'id')).map(g=>`<p class="pv-p"><b>${esc(g.istilah)}</b> : ${S.inlineHTML(g.arti)}</p>`).join('')||'<p class="empty">(belum diisi)</p>'}</div>`;
   pages+=`<div class="pgx"><h2 class="bab">DAFTAR PUSTAKA</h2>${allPustaka().sort((a,b)=>a.replace(/\*/g,'').localeCompare(b.replace(/\*/g,''),'id')).map(p=>`<p class="pv-p" style="padding-left:1cm;text-indent:-1cm">${S.inlineHTML(p)}</p>`).join('')||'<p class="empty">(belum diisi)</p>'}</div>`;
   return `<h1 class="pt">Pratinjau & Ekspor</h1><p class="sub">Unduh naskah Word dengan ukuran 17,6 × 25 cm dan gaya paragraf template penerbit (A., 1., a., gambar, tabel), lengkap dengan Daftar Isi, Daftar Tabel, Daftar Gambar, Sumber Kredit Gambar, dan Indeks bernomor halaman otomatis.</p>
-  <div class="card"><div class="hd"><h3>✅ Kelengkapan Naskah</h3><span class="sp"></span><label class="row" style="font-size:13px"><input type="checkbox" data-b="kunci"> Sertakan kunci jawaban</label><button class="btn pri" onclick="exportDocx()">⬇ Unduh .docx</button><button class="btn pri" onclick="saveToDrive()">☁ Simpan ke Drive</button><button class="btn" onclick="saveProject()">Simpan Proyek (.json)</button><button class="btn" onclick="bukaGamePapan()">🎮 Game Papan Interaktif</button></div>
+  <div class="card"><div class="hd"><h3>✅ Kelengkapan Naskah</h3><span class="sp"></span><label class="row" style="font-size:13px"><input type="checkbox" data-b="kunci"> Sertakan kunci jawaban</label><button class="btn pri" onclick="exportDocx()">⬇ Unduh .docx</button><button class="btn pri" onclick="saveToDrive()">☁ Simpan ke Drive</button><button class="btn" onclick="saveProject()">Simpan Proyek (.json)</button><button class="btn" onclick="bukaGamePapan()">🎮 Game Papan Interaktif</button><button class="btn" onclick="bukaBookToGame()">📚 Book to Game</button></div>
    <div class="chk">${checks.map(([t,s])=>`<div class="${s==='full'?'ok':''}">${esc(t)}</div>`).join('')}</div>
    <p class="hint" style="margin-top:10px">Saat dibuka di Word, pilih <b>Ya</b> bila diminta memperbarui kolom (fields) agar nomor halaman daftar isi dan indeks terisi.</p></div>
   <div class="pv">${pages}</div>`;
@@ -1928,6 +1929,17 @@ function bukaGamePapan(){
   const w=window.open(url,'_blank');
   if(!w){ toast('Izinkan pop-up untuk membuka Game Papan, atau buka menu Koleksi › Arena Papan STEM.',true); return; }
   const kirim=e=>{ if(e.source===w && e.data && e.data.type==='gp-minta'){ w.postMessage({type:'gp-buku',buku:salin},'*'); window.removeEventListener('message',kirim); } };
+  window.addEventListener('message',kirim);
+}
+
+/* Book to Game: buku yang sedang ditulis langsung menjadi game petualangan.
+   Di koleksi (asal yang sama) game ikut berubah otomatis setiap naskah disimpan. */
+function bukaBookToGame(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(book)); }catch(e){}
+  const salin=JSON.parse(JSON.stringify(book)); salin.profil=[]; if(salin.meta) salin.meta.penulis=[];
+  const w=window.open(new URL('../book-to-game/index.html?sumber=serat-stem', location.href).href,'_blank');
+  if(!w){ toast('Izinkan pop-up untuk membuka Book to Game.',true); return; }
+  const kirim=e=>{ if(e.source===w && e.data && e.data.type==='b2g-minta'){ w.postMessage({type:'b2g-buku',buku:salin},'*'); window.removeEventListener('message',kirim); } };
   window.addEventListener('message',kirim);
 }
 

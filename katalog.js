@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Book to Game – Buku STEM jadi Game",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Mesin pembangun game dari buku: unggah buku STEM (Word, PDF, atau proyek SERAT STEM) dan setiap bab otomatis menjadi level petualangan yang saling terhubung, lengkap dengan tokoh dan dialog, kartu konsep bergambar, kode istilah, gerbang kuis, lab virtual (alat, langkah rekayasa, kriteria, prediksi), tantangan bos berubrik, lencana, tingkat kesulitan SD/SMP/SMA, dan rapor capaian per tujuan pembelajaran. Revisi buku langsung menyinkronkan game (hanya bab yang berubah), bisa dipasang di Android/Windows atau diunduh sebagai game luring satu berkas; AI Gemini opsional menambah dialog, soal, dan eksperimen simulasi dari isi bab.",
+    tanggal: "2026-11-19",
+    tautan: "book-to-game/",
+    status: "aktif"
+  },
+  {
     nama: "Arena Papan STEM – Game Papan Interaktif",
     kategori: "Pembelajaran",
     jenis: "HTML",

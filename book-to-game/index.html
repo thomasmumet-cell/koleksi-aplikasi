@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Book to Game</title>
+<meta name="description" content="Book to Game: unggah buku STEM (Word, PDF, atau proyek SERAT STEM) dan mesin langsung membangun game petualangan edukasi — setiap bab menjadi level dengan karakter, misi, lab virtual, kuis, hadiah, dan rapor capaian. Satu data untuk Android, Windows, dan Web.">
+<meta name="theme-color" content="#3b2a86">
+<link rel="manifest" href="manifest.webmanifest" id="lnkManifest">
+<link rel="icon" href="ikon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="ikon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f1ff;--paper:#fff;--paper2:#f1eefb;--ink:#1d1640;--mut:#5d5784;--line:#ddd6f3;
+  --pri:#5b3fd1;--pri-ink:#fff;--S:#2f9e44;--T:#1c7ed6;--E:#f08c00;--M:#c2255c;--gold:#f5b700;--ok:#2b8a3e;--bad:#e03131;
+  --shadow:0 2px 0 var(--line),0 16px 34px -20px rgba(40,20,110,.55);color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#120e26;--paper:#1d1838;--paper2:#262049;--ink:#f0ecff;--mut:#b2aad6;--line:#352d63;
+  --pri:#8c74ff;--pri-ink:#140c33;--S:#51cf66;--T:#4dabf7;--E:#ffa94d;--M:#f06595;--gold:#ffd43b;--ok:#51cf66;--bad:#ff6b6b;
+  --shadow:0 2px 0 #000,0 16px 34px -20px #000;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#120e26;--paper:#1d1838;--paper2:#262049;--ink:#f0ecff;--mut:#b2aad6;--line:#352d63;
+  --pri:#8c74ff;--pri-ink:#140c33;--S:#51cf66;--T:#4dabf7;--E:#ffa94d;--M:#f06595;--gold:#ffd43b;--ok:#51cf66;--bad:#ff6b6b;
+  --shadow:0 2px 0 #000,0 16px 34px -20px #000;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font:17px/1.55 Nunito,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+h1,h2,h3,.disp{font-family:Fredoka,Nunito,sans-serif;line-height:1.12;margin:0;font-weight:700}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation}
+:focus-visible{outline:3px solid var(--T);outline-offset:3px;border-radius:10px}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;gap:10px;padding:10px 0}
+.logo{width:42px;height:42px;border-radius:12px;flex:none}
+.hd h1{font-size:clamp(20px,3.2vw,28px)}
+.hd small{display:block;color:var(--mut);font-size:13px;line-height:1.2}
+.sp{flex:1}
+.ib{border:2px solid var(--line);background:var(--paper);border-radius:12px;min-width:44px;height:44px;padding:0 10px;display:inline-grid;place-items:center;font-weight:800}
+.ib:hover{border-color:var(--pri)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--line);background:var(--paper);border-radius:14px;padding:10px 16px;font-weight:800;min-height:48px;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--pri)}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#2b1d00}
+.btn.sm{min-height:38px;padding:6px 12px;font-size:15px;border-radius:10px}
+.btn.big{font-size:20px;min-height:58px;padding:12px 24px;border-radius:18px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+main{padding:18px 0 80px}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.mt{margin-top:16px}
+.lead{color:var(--mut);margin:6px 0 0}
+.note{color:var(--mut);font-size:14.5px}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--paper2);border:1px solid var(--line);font-size:12.5px;font-weight:800;margin:0 4px 4px 0;white-space:nowrap}
+.pill.ai{background:color-mix(in srgb,var(--E) 20%,var(--paper));border-color:var(--E)}
+.pill.baru{background:color-mix(in srgb,var(--S) 22%,var(--paper));border-color:var(--S)}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:center}
+@media (max-width:800px){.hero{grid-template-columns:1fr}}
+.hero h2{font-size:clamp(30px,5vw,48px)}
+.drop{border:3px dashed var(--line);border-radius:20px;padding:22px;text-align:center;background:var(--paper2)}
+.drop.on{border-color:var(--pri);background:color-mix(in srgb,var(--pri) 10%,var(--paper2))}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.flow div{background:var(--paper2);border:1px solid var(--line);border-radius:14px;padding:10px;font-size:14px;text-align:center}
+.flow b{display:block;font:700 22px Fredoka}
+@media (max-width:600px){.flow{grid-template-columns:1fr 1fr}}
+.books{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr))}
+.book{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.book:before{content:"";position:absolute;left:0;right:0;top:0;height:7px;background:linear-gradient(90deg,var(--S) 0 25%,var(--T) 25% 50%,var(--E) 50% 75%,var(--M) 75%)}
+.book h3{font-size:22px;margin-top:4px}
+.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.fld label{font-weight:800;font-size:14.5px}
+.fld input,.fld select,.fld textarea{border:2px solid var(--line);background:var(--paper2);border-radius:12px;padding:10px 12px;min-height:46px;width:100%}
+.fld textarea{min-height:120px;resize:vertical}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:0 12px}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:12px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--paper);padding:8px 14px;font-weight:800}
+.seg button[aria-pressed="true"]{background:var(--pri);color:var(--pri-ink)}
+.tw{overflow-x:auto;border:2px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--paper2)}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;white-space:nowrap}
+.bar{height:12px;background:var(--paper2);border-radius:99px;overflow:hidden;border:1px solid var(--line);min-width:80px}
+.bar i{display:block;height:100%;background:var(--pri)}
+
+/* Peta level */
+.mapwrap{position:relative;background:radial-gradient(circle at 20% 10%,color-mix(in srgb,var(--S) 18%,transparent),transparent 40%),radial-gradient(circle at 80% 60%,color-mix(in srgb,var(--T) 18%,transparent),transparent 45%),var(--paper);border:2px solid var(--line);border-radius:24px;padding:14px;box-shadow:var(--shadow);overflow:hidden}
+.map{position:relative;width:100%}
+.map svg.path{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:4px;width:150px;text-align:center;border:0;background:none;padding:0}
+.node .o{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;font:700 32px Fredoka;color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.25),0 10px 24px -8px rgba(0,0,0,.5);border:4px solid #fff;position:relative}
+.node.kunci .o{filter:grayscale(1);opacity:.55}
+.node.kini .o{animation:pulse 1.6s infinite}
+.node .t{font-weight:800;font-size:14px;line-height:1.2;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:3px 8px;max-width:150px}
+.node .st{font-size:16px;letter-spacing:1px;color:var(--gold);text-shadow:0 1px 0 #0006}
+.node .bd{position:absolute;right:-6px;top:-6px;width:32px;height:32px;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-size:17px;border:2px solid #fff}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:8px 14px;font-weight:800;box-shadow:var(--shadow)}
+.stat b{font:700 24px Fredoka;margin-right:4px}
+
+/* Adegan dialog */
+.scene{display:grid;gap:12px}
+.bub{display:flex;gap:12px;align-items:flex-end;animation:muncul .3s}
+.bub .av{flex:none;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:34px;border:3px solid #fff;box-shadow:var(--shadow)}
+.bub .tx{background:var(--paper);border:2px solid var(--line);border-radius:18px 18px 18px 4px;padding:12px 16px;box-shadow:var(--shadow);max-width:760px}
+.bub .tx b{display:block;font:700 15px Fredoka;margin-bottom:2px}
+.bub.kanan{flex-direction:row-reverse}.bub.kanan .tx{border-radius:18px 18px 4px 18px}
+@keyframes muncul{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.misi{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr))}
+.mcard{border:2px solid var(--line);background:var(--paper);border-radius:20px;padding:16px;text-align:left;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;min-height:150px}
+.mcard .ik{font-size:36px}
+.mcard h3{font-size:20px}
+.mcard .st{color:var(--gold);font-size:20px;letter-spacing:2px;margin-top:auto}
+.mcard[disabled]{opacity:.5}
+
+/* Layar misi */
+.stage{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.prog{height:12px;background:var(--paper2);border-radius:99px;overflow:hidden;margin:8px 0 14px;border:1px solid var(--line)}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--S),var(--T));transition:width .3s}
+.q{font:800 clamp(19px,2.4vw,26px)/1.35 Nunito}
+.opts{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin-top:14px}
+@media (max-width:640px){.opts{grid-template-columns:1fr}}
+.opt{border:3px solid var(--line);background:var(--paper2);border-radius:16px;padding:12px 14px;text-align:left;font-weight:800;display:flex;gap:10px;align-items:center;min-height:62px}
+.opt i{font-style:normal;flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--pri);color:var(--pri-ink);font-family:Fredoka}
+.opt.benar{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 18%,var(--paper))}
+.opt.salah{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--paper));animation:shake .35s}
+.opt.hapus{opacity:.25;pointer-events:none}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.fb{margin-top:12px;padding:10px 14px;border-radius:14px;font-weight:700}
+.fb.ok{background:color-mix(in srgb,var(--ok) 16%,var(--paper));border:2px solid var(--ok)}
+.fb.no{background:color-mix(in srgb,var(--bad) 12%,var(--paper));border:2px solid var(--bad)}
+.timer{font:700 22px Fredoka;padding:4px 12px;border-radius:12px;background:var(--paper2);border:2px solid var(--line)}
+.kartu{display:grid;grid-template-columns:1fr minmax(0,320px);gap:16px}
+@media (max-width:800px){.kartu{grid-template-columns:1fr}}
+.kartu ul{margin:6px 0 0;padding-left:20px}
+.ilus{border-radius:16px;border:2px solid var(--line);overflow:hidden;background:var(--paper2)}
+.ilus img{width:100%;display:block;max-height:300px;object-fit:contain;background:#fff}
+.ilus .ph{aspect-ratio:4/3;display:grid;place-items:center;text-align:center;padding:14px;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--T) 12%,var(--paper2)) 0 18px,var(--paper2) 18px 36px);font-weight:700;color:var(--mut)}
+.ilus .ph span{font-size:44px;display:block}
+.ilus figcaption{padding:8px 10px;font-size:14px;font-weight:700}
+.stembox{border-left:5px solid var(--E);background:color-mix(in srgb,var(--E) 10%,var(--paper));padding:10px 14px;border-radius:0 14px 14px 0;margin-top:10px;font-size:15px}
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pairs .col{display:flex;flex-direction:column;gap:8px}
+.chipq{border:3px solid var(--line);background:var(--paper2);border-radius:14px;padding:10px 12px;text-align:left;font-weight:800;min-height:54px}
+.chipq.pilih{border-color:var(--pri);background:color-mix(in srgb,var(--pri) 14%,var(--paper))}
+.chipq.cocok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 16%,var(--paper));opacity:.75}
+.chipq.salah{border-color:var(--bad);animation:shake .35s}
+.chipq.art{font-weight:600;font-size:15px}
+.steps .stp{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--line);background:var(--paper2);border-radius:14px;padding:10px 12px;margin-bottom:8px;text-align:left;width:100%;font-weight:700}
+.steps .stp b{flex:none;width:30px;height:30px;border-radius:9px;background:var(--pri);color:var(--pri-ink);display:grid;place-items:center;font-family:Fredoka}
+.steps .stp.salah{border-color:var(--bad);animation:shake .35s}
+.sort2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.steam4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:8px;margin-top:10px}
+.steam4 div{border-radius:14px;padding:10px;color:#fff;font-size:14.5px}
+.res{text-align:center;padding:10px}
+.res .bintang{font-size:56px;letter-spacing:6px;color:var(--gold)}
+.lencana{width:130px;height:130px;margin:10px auto;border-radius:50%;background:conic-gradient(var(--S),var(--T),var(--E),var(--M),var(--S));display:grid;place-items:center;box-shadow:var(--shadow);animation:muncul .5s}
+.lencana div{width:104px;height:104px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font:700 15px Fredoka;padding:8px;text-align:center}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:90}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;z-index:95;font-weight:800;max-width:calc(100% - 32px);box-shadow:var(--shadow)}
+dialog{border:2px solid var(--line);border-radius:20px;background:var(--paper);color:var(--ink);padding:0;width:min(640px,calc(100% - 24px));max-height:calc(100vh - 40px)}
+dialog::backdrop{background:rgba(15,8,40,.6)}
+.dh{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:2px solid var(--line)}
+.dh h2{flex:1;font-size:20px}
+.db{padding:16px}
+.busy{display:inline-block;width:18px;height:18px;border:3px solid var(--line);border-top-color:var(--pri);border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:560px){.hd small{display:none}#btnFull{display:none}.hd h1{font-size:20px}}
+@media print{header.top,.noprint,#toast{display:none!important}body{background:#fff;color:#000}.card,.stage{box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap hd">
+  <img class="logo" src="ikon.svg" alt="" onerror="this.style.display='none'">
+  <div><h1>Book to Game</h1><small id="sub">Buku STEM menjadi game petualangan edukasi</small></div>
+  <span class="sp"></span>
+  <button class="ib" id="btnPasang" hidden title="Pasang sebagai aplikasi (Android/Windows)">⬇ Pasang</button>
+  <button class="ib" id="btnRapor" title="Rapor capaian" aria-label="Rapor capaian">📊</button>
+  <button class="ib" id="btnTheme" title="Tema terang/gelap" aria-label="Ganti tema">◐</button>
+  <button class="ib" id="btnFull" title="Layar penuh" aria-label="Layar penuh">⛶</button>
+</div></header>
+<main><div class="wrap" id="view"></div></main>
+<dialog id="dlg"><div class="dh"><h2 id="dlgT"></h2><button class="ib" onclick="tutupDlg()" aria-label="Tutup">✕</button></div><div class="db" id="dlgB"></div></dialog>
+<canvas id="confetti" hidden></canvas>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<script type="application/json" id="bukuTertanam"></script>
+<script src="inti.js"></script>
+<script src="buku/pustaka.js"></script>
+<script>
+"use strict";
+/* ===================== BOOK TO GAME — aplikasi =====================
+   Buku (SERAT STEM .json, Word .docx, PDF, teks) → model BUKU (inti.js) → GAME.
+   Semua diproses di perangkat. AI Gemini opsional memakai kunci milik pengguna. */
+var SKELETON = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+var B2G = window.BookToGame;
+var K = { prog: "b2g.progres", cfg: "b2g.atur", tema: "b2g.tema" };
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function acak(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function potong(s,n){s=String(s||"");return s.length>n?s.slice(0,n-1).replace(/\s+\S*$/,"")+"…":s;}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){t.hidden=true;},3400);}
+function $(id){return document.getElementById(id);}
+var V=function(){return $("view");};
+function bintangStr(n){return "★★★".slice(0,n)+"☆☆☆".slice(0,3-n);}
+function bintangDari(skor){return skor>=90?3:skor>=75?2:skor>=50?1:0;}
+function predikat(p){return p>=85?"Sangat baik":p>=70?"Baik":p>=55?"Cukup":"Perlu bimbingan";}
+
+/* ---------- Penyimpanan buku (IndexedDB, cadangan memori) ---------- */
+var IDB=null,MEM={};
+function idbBuka(){return new Promise(function(res){try{var r=indexedDB.open("book-to-game",1);r.onupgradeneeded=function(){r.result.createObjectStore("buku");};r.onsuccess=function(){IDB=r.result;res();};r.onerror=function(){res();};}catch(e){res();}});}
+function idbSet(k,v){MEM[k]=v;return new Promise(function(res){if(!IDB)return res(false);try{var t=IDB.transaction("buku","readwrite");t.objectStore("buku").put(v,k);t.oncomplete=function(){res(true);};t.onerror=function(){res(false);};}catch(e){res(false);}});}
+function idbDel(k){delete MEM[k];return new Promise(function(res){if(!IDB)return res();try{var t=IDB.transaction("buku","readwrite");t.objectStore("buku").delete(k);t.oncomplete=res;t.onerror=res;}catch(e){res();}});}
+function idbSemua(){return new Promise(function(res){if(!IDB)return res(Object.keys(MEM).map(function(k){return MEM[k];}));try{var out=[],t=IDB.transaction("buku","readonly"),c=t.objectStore("buku").openCursor();c.onsuccess=function(){var x=c.result;if(x){out.push(x.value);x.continue();}else res(out);};c.onerror=function(){res([]);};}catch(e){res([]);}});}
+
+/* ---------- Pengaturan & progres ---------- */
+var CFG={aiKey:"",aiModel:"",jenjang:"",mode:"normal",suara:true};
+try{Object.assign(CFG,JSON.parse(lsGet(K.cfg)||"{}"));}catch(e){}
+function simpanCfg(){lsSet(K.cfg,JSON.stringify(CFG));}
+function kunciAI(){if(CFG.aiKey)return {key:CFG.aiKey,model:CFG.aiModel||"gemini-3.8-flash",asal:"Pengaturan"};try{var s=JSON.parse(lsGet("serat-stem-cfg")||"{}");if(s.key)return {key:s.key,model:CFG.aiModel||s.model||"gemini-3.8-flash",asal:"SERAT STEM"};}catch(e){}return null;}
+var PROG={aktif:"",pemain:{}};
+try{Object.assign(PROG,JSON.parse(lsGet(K.prog)||"{}"));}catch(e){}
+function simpanProg(){if(!lsSet(K.prog,JSON.stringify(PROG)))toast("Progres tidak bisa disimpan di browser ini.");}
+function progBuku(id){var p=PROG.pemain[PROG.aktif];if(!p)return null;p.buku=p.buku||{};return p.buku[id]=p.buku[id]||{misi:{},lencana:{},bos:{}};}
+
+/* ---------- Tema, layar penuh, suara, konfeti ---------- */
+function applyTheme(){var t=lsGet(K.tema);if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme");}
+applyTheme();
+$("btnTheme").onclick=function(){var c=document.documentElement.getAttribute("data-theme");var d=c?c==="dark":!!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);lsSet(K.tema,d?"light":"dark");applyTheme();};
+$("btnFull").onclick=function(){try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(e){}};
+var AC=null;
+function nada(f,d,tp,del){if(!CFG.suara)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();var o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+(del||0);o.type=tp||"triangle";o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.22,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.05);}catch(e){}}
+function sBenar(){nada(660,.14);nada(880,.2,"triangle",.1);}
+function sSalah(){nada(196,.28,"sawtooth");}
+function sMenang(){[523,659,784,1047].forEach(function(f,i){nada(f,.24,"triangle",i*.13);});}
+function konfeti(){var c=$("confetti"),x=c.getContext("2d");c.hidden=false;c.width=innerWidth;c.height=innerHeight;var col=["#2f9e44","#1c7ed6","#f08c00","#c2255c","#f5b700","#5b3fd1"],P=[];for(var i=0;i<150;i++)P.push({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,v:2+Math.random()*4,r:Math.random()*6,s:6+Math.random()*8,c:col[i%6]});var t0=Date.now(),id=konfeti.id=(konfeti.id||0)+1;(function f(){if(id!==konfeti.id){c.hidden=true;return;}x.clearRect(0,0,c.width,c.height);P.forEach(function(p){p.y+=p.v;p.x+=Math.sin(p.y/30);p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore();});if(Date.now()-t0<3200)requestAnimationFrame(f);else{x.clearRect(0,0,c.width,c.height);c.hidden=true;}})();}
+function bukaDlg(t,h){$("dlgT").textContent=t;$("dlgB").innerHTML=h;try{$("dlg").showModal();}catch(e){$("dlg").setAttribute("open","");}}
+function tutupDlg(){try{$("dlg").close();}catch(e){$("dlg").removeAttribute("open");}}
+
+/* ---------- PWA: pasang di Android/Windows, luring ---------- */
+var TERTANAM=null;
+try{var _t=$("bukuTertanam").textContent.trim();if(_t)TERTANAM=JSON.parse(_t);}catch(e){TERTANAM=null;}
+var promptPasang=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();promptPasang=e;$("btnPasang").hidden=false;});
+$("btnPasang").onclick=function(){if(!promptPasang)return;promptPasang.prompt();promptPasang.userChoice.then(function(){promptPasang=null;$("btnPasang").hidden=true;});};
+if(!TERTANAM&&"serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){navigator.serviceWorker.register("sw.js").catch(function(){});}
+
+/* ---------- Perpustakaan ---------- */
+var RAK=[]; /* {buku, ai, asal} */
+function aiDari(rec,babId,sidik){var a=rec&&rec.ai&&rec.ai[babId];return a&&a.sidik===sidik?a.data:null;}
+async function muatRak(){
+  RAK=[];
+  if(TERTANAM){RAK.push({buku:TERTANAM.buku,ai:TERTANAM.ai||{},asal:"Game luring"});return;}
+  (window.PUSTAKA_B2G||[]).forEach(function(b){RAK.push({buku:b,ai:{},asal:"Koleksi"});});
+  var simpan=await idbSemua();
+  simpan.forEach(function(r){var i=RAK.findIndex(function(x){return x.buku.id===r.buku.id;});if(i>-1){r.asal=r.asal||"Diunggah";RAK[i]=r;}else RAK.push(r);});
+  var s=lsGet("serat-stem-v1");
+  if(s){try{var b=B2G.dariSerat(JSON.parse(s));var j=RAK.findIndex(function(x){return x.buku.id===b.id;});var rec={buku:b,ai:j>-1?RAK[j].ai:{},asal:"SERAT STEM (perangkat ini)",langsung:true};if(j>-1)RAK[j]=rec;else RAK.unshift(rec);}catch(e){}}
+}
+function rakById(id){return RAK.filter(function(r){return r.buku.id===id;})[0];}
+async function simpanRak(rec){var ok=await idbSet(rec.buku.id,{buku:rec.buku,ai:rec.ai||{},asal:rec.asal,ditambah:rec.ditambah||Date.now()});if(!ok&&IDB)toast("Penyimpanan perangkat penuh; buku hanya ada selama halaman terbuka.");}
+
+/* ---------- Pembaca dokumen ---------- */
+function muatSkrip(src){return new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=function(){rej(new Error("Pustaka pembaca tidak dapat dimuat (periksa internet)."));};document.head.appendChild(s);});}
+var CDN={mammoth:"https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js",pdf:"https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js",pdfw:"https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js"};
+function bacaBerkas(f,jenis){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=function(){rej(new Error("Berkas tidak bisa dibaca."));};if(jenis==="teks")r.readAsText(f);else r.readAsArrayBuffer(f);});}
+function kompres(src,maks){return new Promise(function(res){var im=new Image();im.onload=function(){var sc=Math.min(1,(maks||900)/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext("2d").drawImage(im,0,0,c.width,c.height);try{res(c.toDataURL("image/jpeg",.78));}catch(e){res(src);}};im.onerror=function(){res(null);};im.src=src;});}
+async function barisDariHTML(html){
+  var doc=new DOMParser().parseFromString(html,"text/html"),out=[];
+  async function jalan(el){
+    for(var i=0;i<el.children.length;i++){
+      var n=el.children[i],tag=n.tagName.toLowerCase();
+      var imgs=n.querySelectorAll?n.querySelectorAll("img"):[];
+      for(var j=0;j<imgs.length;j++){var src=await kompres(imgs[j].getAttribute("src"),900);if(src)out.push({t:"img",src:src});}
+      if(/^h[1-6]$/.test(tag))out.push({t:+tag[1]<=1?"h1":+tag[1]===2?"h2":"h3",text:n.textContent});
+      else if(tag==="p"){var tx=n.textContent.trim(),b=n.querySelector("strong");var tebal=b&&b.textContent.trim()===tx&&tx.length<80;if(tx)out.push({t:tebal&&!/^\d+[.)]/.test(tx)?"h2":"p",text:tx});}
+      else if(tag==="ul"||tag==="ol"){n.querySelectorAll(":scope > li").forEach(function(li,k){out.push({t:"li",text:(tag==="ol"?(k+1)+". ":"")+li.textContent});});}
+      else if(tag==="table"){n.querySelectorAll("tr").forEach(function(tr){var c=[].map.call(tr.children,function(td){return td.textContent.trim();}).filter(Boolean);if(c.length)out.push({t:"p",text:c.join(" : ")});});}
+      else if(n.children.length)await jalan(n);
+    }
+  }
+  await jalan(doc.body);return out;
+}
+async function bacaDocx(f,lapor){
+  lapor("Memuat pembaca Word…");if(!window.mammoth)await muatSkrip(CDN.mammoth);
+  var buf=await bacaBerkas(f,"biner");lapor("Membaca isi, judul, dan gambar Word…");
+  var r=await mammoth.convertToHtml({arrayBuffer:buf},{styleMap:["p[style-name='Title'] => h1:fresh","p[style-name='Judul'] => h1:fresh","p[style-name='Subtitle'] => p:fresh"],convertImage:mammoth.images.imgElement(function(im){return im.read("base64").then(function(b){return {src:"data:"+im.contentType+";base64,"+b};});})});
+  return barisDariHTML(r.value);
+}
+async function bacaPdf(f,lapor){
+  lapor("Memuat pembaca PDF…");if(!window.pdfjsLib)await muatSkrip(CDN.pdf);
+  pdfjsLib.GlobalWorkerOptions.workerSrc=CDN.pdfw;
+  var pdf=await pdfjsLib.getDocument({data:await bacaBerkas(f,"biner")}).promise,out=[],ukur=[],hal=[];
+  for(var p=1;p<=pdf.numPages;p++){
+    if(p%5===1)lapor("Membaca halaman "+p+" dari "+pdf.numPages+"…");
+    var pg=await pdf.getPage(p),tc=await pg.getTextContent(),baris={};
+    tc.items.forEach(function(it){if(!it.str.trim())return;var y=Math.round(it.transform[5]/3)*3,h=Math.abs(it.transform[3]);(baris[y]=baris[y]||{t:"",h:0}).t+=(baris[y].t?" ":"")+it.str;baris[y].h=Math.max(baris[y].h,h);ukur.push(h);});
+    var L=Object.keys(baris).map(Number).sort(function(a,b){return b-a;}).map(function(y){return baris[y];});
+    hal.push({no:p,L:L,pg:pg});
+  }
+  ukur.sort(function(a,b){return a-b;});var med=ukur[Math.floor(ukur.length/2)]||10,gambarDibuat=0;
+  for(var i=0;i<hal.length;i++){
+    var H=hal[i],adaGambar=H.L.some(function(l){return /^gambar\s+\d/i.test(l.t.trim());});
+    var gbr=null;
+    if(adaGambar&&gambarDibuat<40){try{var vp=H.pg.getViewport({scale:1}),sc=Math.min(1.2,760/vp.width),v2=H.pg.getViewport({scale:sc}),c=document.createElement("canvas");c.width=v2.width;c.height=v2.height;await H.pg.render({canvasContext:c.getContext("2d"),viewport:v2}).promise;gbr={t:"img",src:c.toDataURL("image/jpeg",.7),hal:H.no};gambarDibuat++;}catch(e){}}
+    H.L.forEach(function(l){var t=l.t.replace(/\s+/g," ").trim();if(/^\d{1,3}$/.test(t))return;if(gbr&&/^gambar\s+\d/i.test(t)){out.push(gbr);gbr=null;}var tp=l.h>med*1.6?"h1":l.h>med*1.22?"h2":/^[•\-–]\s/.test(t)?"li":"p";out.push({t:tp,text:t.replace(/^[•\-–]\s/,"")});});
+  }
+  /* gabungkan baris paragraf yang terpotong */
+  var g=[];out.forEach(function(b){var a=g[g.length-1];if(a&&a.t==="p"&&b.t==="p"&&!/[.:?!]$/.test(a.text)&&!/^(\d+[.)]|[A-Ea-e][.)]|BAB\s|Gambar\s)/.test(b.text)&&!/^(\d+[.)]|[A-Ea-e][.)])\s/.test(a.text)&&!(b.text.length<45&&!/[.,;]$/.test(b.text)))a.text+=" "+b.text;else g.push(b);});
+  return g;
+}
+function barisDariTeks(t){return String(t).split(/\r?\n/).map(function(l){var s=l.trim();if(!s)return null;var m=s.match(/^(#{1,3})\s+(.*)$/);if(m)return {t:m[1].length===1?"h1":m[1].length===2?"h2":"h3",text:m[2]};if(/^[-•*]\s+/.test(s))return {t:"li",text:s.replace(/^[-•*]\s+/,"")};return {t:"p",text:s};}).filter(Boolean);}
+async function bukuDariBerkas(f,lapor,meta){
+  var n=f.name.toLowerCase();
+  if(/\.json$/.test(n)){var o=JSON.parse(await bacaBerkas(f,"teks"));if(o&&o.buku&&o.buku.bab)return o.buku;return B2G.dariSerat(o);}
+  var baris;
+  if(/\.docx$/.test(n))baris=await bacaDocx(f,lapor);
+  else if(/\.pdf$/.test(n))baris=await bacaPdf(f,lapor);
+  else if(/\.(txt|md|markdown)$/.test(n))baris=barisDariTeks(await bacaBerkas(f,"teks"));
+  else if(/\.html?$/.test(n))baris=await barisDariHTML(await bacaBerkas(f,"teks"));
+  else throw new Error("Format belum didukung. Gunakan .docx, .pdf, .json (SERAT STEM), .txt, .md, atau .html.");
+  lapor("Mengenali bab, subbab, tujuan, soal, dan glosarium…");
+  return B2G.dariBaris(baris,Object.assign({sumber:/\.pdf$/.test(n)?"PDF":/\.docx$/.test(n)?"Word":"Teks"},meta||{}));
+}
+async function terimaBerkas(f){
+  if(!f)return;
+  bukaDlg("Membangun game dari buku",'<p><span class="busy"></span> <span id="lap">Membaca '+esc(f.name)+'…</span></p>');
+  var lapor=function(t){var e=$("lap");if(e)e.textContent=t;};
+  try{
+    var b=await bukuDariBerkas(f,lapor,{});
+    lapor("Membangun level dan misi…");
+    var lama=rakById(b.id),ubah=lama?B2G.bandingkan(lama.buku,b):null;
+    var rec={buku:b,ai:lama?lama.ai:{},asal:"Diunggah ("+(b.sumber||"berkas")+")",ditambah:Date.now()};
+    await simpanRak(rec);await muatRak();
+    var G=B2G.bangunGame(b,{});
+    var nMisi=G.level.reduce(function(a,l){return a+l.misi.length;},0),nG=b.bab.reduce(function(a,c){return a+c.gambar.length;},0);
+    var h='<p><b>'+esc(b.judul)+'</b> siap dimainkan: <b>'+G.level.length+' level</b>, '+nMisi+' misi, '+b.bab.reduce(function(a,c){return a+c.soal.length;},0)+' soal dari buku, '+b.glosarium.length+' istilah, '+nG+' ilustrasi.</p>';
+    if(ubah){var berubah=ubah.filter(function(x){return x.status!=="sama";});h+='<div class="fb ok">Buku ini sudah ada, jadi game disinkronkan ke versi terbaru. '+(berubah.length?'Bagian yang diperbarui: '+berubah.map(function(x){return esc(x.judul)+" ("+x.status+")";}).join(", ")+'. Progres pemain pada bab lain tetap tersimpan.':'Tidak ada bab yang berubah.')+'</div>';}
+    var kosong=b.bab.filter(function(c){return !c.soal.length;});
+    if(kosong.length)h+='<p class="note">'+kosong.length+' bab tidak memuat soal pilihan ganda berkunci; mesin membuat soal rumpang dari kalimat buku. Untuk soal yang lebih kaya, gunakan “Perkaya dengan AI”.</p>';
+    h+='<div class="row mt"><button class="btn pri big" onclick="tutupDlg();bukaPeta(\''+esc(b.id)+'\')">Main sekarang →</button></div>';
+    $("dlgB").innerHTML=h;
+  }catch(e){$("dlgB").innerHTML='<div class="fb no">Gagal: '+esc(e.message)+'</div><p class="note">Tips: buku sebaiknya memakai judul bab “BAB 1 …” atau gaya Heading 1, subbab memakai Heading 2, soal bernomor dengan pilihan a–d dan bagian “Kunci Jawaban”.</p>';}
+}
+
+/* ---------- Sinkron langsung dengan SERAT STEM (asal yang sama) ---------- */
+var sidikSerat=null;
+function cekSerat(diam){
+  var s=lsGet("serat-stem-v1");if(!s)return;
+  try{var b=B2G.dariSerat(JSON.parse(s));if(sidikSerat&&sidikSerat!==b.sidik){var lama=rakById(b.id);var u=lama?B2G.bandingkan(lama.buku,b).filter(function(x){return x.status!=="sama";}):[];muatRak().then(function(){if(!diam)toast("Buku diperbarui dari SERAT STEM"+(u.length?": "+u.map(function(x){return x.judul;}).slice(0,3).join(", "):"")+". Game ikut diperbarui.");if(GAME&&GAME.bukuId===b.id)bukaPeta(b.id,true);});}sidikSerat=b.sidik;}catch(e){}
+}
+window.addEventListener("storage",function(e){if(e.key==="serat-stem-v1")cekSerat(false);});
+document.addEventListener("visibilitychange",function(){if(!document.hidden)cekSerat(false);});
+
+/* ---------- Unduhan: game luring satu berkas & data ---------- */
+function unduh(nama,isi,tipe){var b=new Blob([isi],{type:tipe});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=nama;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},800);}
+function eksporLuring(id){
+  var r=rakById(id);if(!r)return;var S="</"+"script>";
+  var data=JSON.stringify({buku:r.buku,ai:r.ai||{}}).replace(/</g,"\\u003c");
+  var inti="<script>self.BookToGame=(function(){var f=("+B2G.__pabrik+");var a=f();a.__pabrik=String(f);return a;})();"+S;
+  var h=SKELETON.replace(/<script type="application\/json" id="bukuTertanam">[\s\S]*?<\/script>/,'<script type="application/json" id="bukuTertanam">'+data+S)
+    .replace('<script src="inti.js">'+S,inti).replace('<script src="buku/pustaka.js">'+S,"")
+    .replace(/<link rel="manifest"[^>]*>/,"").replace(/<link rel="(icon|apple-touch-icon)"[^>]*>/g,"").replace(/<img class="logo"[^>]*>/,"");
+  unduh("game-"+r.buku.id+".html",h,"text/html");
+  toast("Game luring diunduh: buka di HP Android, laptop Windows, atau browser mana pun tanpa internet.");
+}
+function eksporData(id){var r=rakById(id);if(!r)return;unduh("data-game-"+r.buku.id+".json",JSON.stringify({format:"book-to-game",v:2,buku:r.buku,ai:r.ai||{}},null,1),"application/json");}
+function bukaArena(id){
+  var r=rakById(id);if(!r)return;var mini=B2G.keSeratMini(r.buku);
+  var w=window.open(new URL("../game-papan-stem/index.html?sumber=b2g",location.href).href,"_blank");
+  if(!w){toast("Izinkan pop-up untuk membuka Mode Papan Kelas.");return;}
+  var kirim=function(e){if(e.source===w&&e.data&&e.data.type==="gp-minta"){w.postMessage({type:"gp-buku",buku:mini},"*");window.removeEventListener("message",kirim);}};
+  window.addEventListener("message",kirim);
+}
+
+/* ---------- AI Gemini (opsional, berbasis isi buku) ---------- */
+function teksBab(c){return ("BAB "+c.no+": "+c.judul+"\nTujuan: "+c.tujuan.join("; ")+"\nKata kunci: "+c.kataKunci.join(", ")+"\n"+c.subbab.map(function(s){return "## "+s.judul+"\n"+s.paragraf.join("\n")+(s.poin.length?"\n- "+s.poin.join("\n- "):"");}).join("\n")+(c.aktivitas?"\nAKTIVITAS: "+c.aktivitas.judul+". "+c.aktivitas.pengantar+"\nLangkah: "+c.aktivitas.langkah.map(function(l){return l.isi;}).join(" | "):"")+"\nRangkuman: "+c.rangkuman.join(" ")).slice(0,14000);}
+async function aiBab(rec,c,jenjang){
+  var k=kunciAI();if(!k)throw new Error("Isi kunci API Gemini di Pengaturan (atau di SERAT STEM) untuk memakai AI.");
+  var prompt="Anda perancang game edukasi untuk murid "+jenjang+" di Indonesia. Gunakan HANYA isi bab buku di bawah sebagai sumber; jangan menambah fakta di luar teks. Kembalikan JSON saja dengan bentuk:\n"+
+  '{"dialog":[{"tokoh":"mentor|robo|warga","teks":"..."}],"soal":[{"q":"...","opsi":["...","...","...","..."],"kunci":0,"pembahasan":"..."}],"simulasi":{"judul":"...","variabel":"nama variabel yang diubah","pertanyaan":"pertanyaan prediksi","pilihan":[{"nilai":"...","hasil":"apa yang terjadi menurut konsep di buku"}],"terbaik":0,"kesimpulan":"..."}}\n'+
+  "Aturan: dialog 4–6 kalimat singkat ramah anak (mentor = Prof. Sinar, robo = Robo Tekno, warga = Pak Karya yang punya masalah dari aktivitas bab); 5 soal pilihan ganda tepat satu jawaban benar, bahasa sesuai jenjang; simulasi = eksperimen virtual sederhana dengan 3–4 pilihan nilai variabel dan hasil yang konsisten dengan konsep bab.\n\nISI BAB:\n"+teksBab(c);
+  var res=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(k.model)+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":k.key},body:JSON.stringify({contents:[{role:"user",parts:[{text:prompt}]}],generationConfig:{temperature:.4,responseMimeType:"application/json"}})});
+  var j=await res.json();if(!res.ok)throw new Error((j.error&&j.error.message)||("HTTP "+res.status));
+  var t=((j.candidates||[])[0]||{}).content;t=t&&t.parts?t.parts.map(function(p){return p.text||"";}).join(""):"";
+  var d=JSON.parse(t.replace(/^```json|```$/g,"").trim());
+  d.soal=(d.soal||[]).filter(function(q){return q&&q.q&&Array.isArray(q.opsi)&&q.opsi.length>=3&&q.kunci>=0&&q.kunci<q.opsi.length;}).map(function(q){return {q:String(q.q),opsi:q.opsi.map(String),kunci:+q.kunci,asal:"ai",pembahasan:String(q.pembahasan||"")};});
+  d.dialog=(d.dialog||[]).filter(function(x){return x&&x.teks&&/^(mentor|robo|warga)$/.test(x.tokoh);}).slice(0,6);
+  if(!d.simulasi||!Array.isArray(d.simulasi.pilihan)||d.simulasi.pilihan.length<2)d.simulasi=null;
+  rec.ai=rec.ai||{};rec.ai[c.id]={sidik:c.sidik,data:d,waktu:Date.now()};
+  await simpanRak(rec);
+  return d;
+}
+async function aiSemua(id){
+  var r=rakById(id);if(!r)return;var j=CFG.jenjang||r.buku.jenjang;
+  var perlu=r.buku.bab.filter(function(c){return !aiDari(r,c.id,c.sidik);});
+  if(!perlu.length){toast("Semua bab sudah diperkaya AI untuk versi buku ini.");return;}
+  bukaDlg("Memperkaya game dengan AI",'<p class="note">Hanya bab yang baru atau berubah yang diproses ('+perlu.length+' bab). Isi dikirim ke Google Gemini dengan kunci Anda.</p><p><span class="busy"></span> <span id="lap">Mulai…</span></p>');
+  for(var i=0;i<perlu.length;i++){var e=$("lap");if(e)e.textContent="Bab "+perlu[i].no+": "+perlu[i].judul+"…";try{await aiBab(r,perlu[i],j);}catch(err){$("dlgB").innerHTML='<div class="fb no">AI berhenti di Bab '+perlu[i].no+': '+esc(err.message)+'</div>';return;}}
+  $("dlgB").innerHTML='<div class="fb ok">Selesai. '+perlu.length+' bab mendapat dialog, soal tambahan, dan eksperimen simulasi (berlabel AI — periksa guru).</div><div class="row mt"><button class="btn pri" onclick="tutupDlg();bukaPeta(\''+esc(id)+'\',true)">Lihat peta</button></div>';
+}
+
+/* ===================== TAMPILAN ===================== */
+var GAME=null,REC=null;
+function kunciBab(l){return B2G.slugify(l.judul);}
+function rekMisi(l,m){var p=progBuku(GAME.bukuId);return p?p.misi[kunciBab(l)+":"+m.id]:null;}
+function statusMisi(l,m){var r=rekMisi(l,m);if(!r)return {selesai:false,bintang:0};if(r.sidik!==m.sidik)return {selesai:false,bintang:0,diperbarui:true,lama:r};return {selesai:true,bintang:r.bintang,skor:r.skor};}
+function levelSelesai(l){var w=l.misi.filter(function(m){return m.wajib;});var cek=w.length?w:l.misi.slice(0,1);return cek.every(function(m){var s=statusMisi(l,m);return s.selesai&&s.bintang>=1;});}
+function levelTerbuka(i){return i===0||levelSelesai(GAME.level[i-1]);}
+function bintangLevel(l){var s=0;l.misi.forEach(function(m){s+=statusMisi(l,m).bintang;});return {dapat:s,maks:l.misi.length*3};}
+function xpBuku(){var p=progBuku(GAME.bukuId),x=0;if(p)for(var k in p.misi)x+=p.misi[k].poin||0;return x;}
+function sub(t){$("sub").textContent=t||"Buku STEM menjadi game petualangan edukasi";}
+
+/* ---------- Beranda ---------- */
+async function vBeranda(){
+  GAME=null;REC=null;sub();await muatRak();
+  if(TERTANAM&&RAK[0]){bukaPeta(RAK[0].buku.id);return;}
+  var h='<section class="card"><div class="hero"><div><span class="pill">Mesin pembangun game dari buku</span><h2 style="margin:8px 0">Unggah buku STEM, langsung jadi game.</h2><p class="lead">Mesin membaca seluruh isi buku (bab, subbab, tujuan pembelajaran, kata kunci, gambar, aktivitas dan eksperimen, soal, glosarium), lalu menyusunnya menjadi petualangan: setiap bab satu level yang saling terhubung, lengkap dengan tokoh, misi, laboratorium virtual, kuis, lencana, dan rapor capaian. Saat buku direvisi, unggah lagi: hanya bab yang berubah yang diperbarui.</p>'+
+    '<div class="flow"><div><b>📘</b>Buku<br>Word · PDF · SERAT</div><div><b>🧠</b>Mesin<br>mengenali struktur</div><div><b>🗺️</b>Game<br>level · misi · hadiah</div><div><b>📱</b>Main di<br>Android · Windows · Web</div></div></div>'+
+    '<div class="drop" id="drop"><div style="font-size:44px" aria-hidden="true">📥</div><p style="margin:4px 0 12px"><b>Tarik buku ke sini</b> atau</p><label class="btn pri big" for="fBuku">Pilih berkas buku</label><input type="file" id="fBuku" class="sr" accept=".docx,.pdf,.json,.txt,.md,.html,.htm"><p class="note" style="margin:10px 0 0">.docx (Word), .pdf, proyek SERAT STEM .json, .txt/.md. Diproses di perangkat ini.</p></div></div></section>';
+  h+='<h2 class="mt" style="font-size:26px">Rak buku → game</h2><div class="books mt">';
+  RAK.forEach(function(r){
+    var b=r.buku,nS=b.bab.reduce(function(a,c){return a+c.soal.length;},0),nG=b.bab.reduce(function(a,c){return a+c.gambar.length;},0),nAI=Object.keys(r.ai||{}).length;
+    h+='<article class="book"><div><span class="pill">'+esc(r.asal)+'</span><span class="pill">'+esc(b.jenjang)+(b.kelas?' · Kelas '+esc(b.kelas):'')+'</span>'+(nAI?'<span class="pill ai">AI: '+nAI+' bab</span>':'')+'</div><h3>'+esc(b.judul)+'</h3><span class="note">'+esc(b.mapel||b.sumber||"")+' · '+b.bab.length+' level · '+nS+' soal · '+b.glosarium.length+' istilah · '+nG+' ilustrasi</span>'+
+      '<div class="row" style="margin-top:auto"><button class="btn pri" onclick="bukaPeta(\''+esc(b.id)+'\')">▶ Main</button><button class="btn sm" onclick="bukaArena(\''+esc(b.id)+'\')" title="3 game papan interaktif untuk kelas">🖥 Papan Kelas</button><button class="btn sm" onclick="menuBuku(\''+esc(b.id)+'\')">⋯</button></div></article>';
+  });
+  if(!RAK.length)h+='<div class="card">Belum ada buku. Unggah buku pertama Anda di atas.</div>';
+  h+='</div>';
+  h+='<section class="card mt"><h3>Cara kerja dan batasannya</h3><ul class="note" style="margin:6px 0 0;padding-left:20px"><li><b>Paling akurat dari SERAT STEM</b>: struktur buku sudah rapi (tujuan, kata kunci, soal berkunci, proyek, rubrik). Buku yang sedang ditulis di SERAT STEM di perangkat ini otomatis muncul dan ikut berubah saat naskah diedit.</li><li><b>Word/PDF</b>: bab dikenali dari judul “BAB …”/Heading 1, subbab dari Heading 2, soal dari nomor + pilihan a–d dengan “Kunci Jawaban”. Gambar Word dipakai langsung; untuk PDF, halaman bergambar dijadikan ilustrasi.</li><li><b>Tanpa AI</b> mesin tetap membuat game lengkap dari isi buku. <b>AI Gemini (opsional)</b> menambah dialog, soal, dan eksperimen simulasi yang tetap bersumber dari teks bab.</li><li>Pasang sebagai aplikasi (tombol ⬇ Pasang di Chrome/Edge) di Android dan Windows, atau unduh <b>game luring satu berkas</b> per buku.</li></ul></section>';
+  V().innerHTML=h;window.scrollTo(0,0);
+  var d=$("drop");["dragover","dragenter"].forEach(function(ev){d.addEventListener(ev,function(e){e.preventDefault();d.classList.add("on");});});
+  ["dragleave","drop"].forEach(function(ev){d.addEventListener(ev,function(){d.classList.remove("on");});});
+  d.addEventListener("drop",function(e){e.preventDefault();if(e.dataTransfer.files[0])terimaBerkas(e.dataTransfer.files[0]);});
+  $("fBuku").onchange=function(){terimaBerkas(this.files[0]);this.value="";};
+}
+function menuBuku(id){
+  var r=rakById(id),k=kunciAI();
+  bukaDlg(r.buku.judul,'<div class="row"><button class="btn" onclick="tutupDlg();aiSemua(\''+esc(id)+'\')">✨ Perkaya dengan AI</button><button class="btn" onclick="eksporLuring(\''+esc(id)+'\')">⬇ Game luring (.html)</button><button class="btn" onclick="eksporData(\''+esc(id)+'\')">⬇ Data game (.json)</button><button class="btn" onclick="tutupDlg();vRapor(\''+esc(id)+'\')">📊 Rapor</button></div>'+
+    '<p class="note mt">Perbarui buku: unggah versi revisi dengan judul yang sama di beranda; hanya bab yang berubah yang direset.</p><p class="note">AI: '+(k?'kunci dari '+esc(k.asal)+' · model '+esc(k.model):'belum ada kunci')+' — <a href="#" onclick="tutupDlg();vAtur();return false">Pengaturan</a></p>'+
+    (r.asal.indexOf("Diunggah")===0?'<button class="btn sm" style="color:var(--bad)" onclick="hapusBuku(\''+esc(id)+'\')">Hapus buku dari perangkat</button>':''));
+}
+async function hapusBuku(id){if(!confirm("Hapus buku ini dari perangkat? Progres pemain tetap tersimpan."))return;await idbDel(id);tutupDlg();vBeranda();}
+
+/* ---------- Pemain ---------- */
+function pastikanPemain(lanjut){
+  if(PROG.aktif&&PROG.pemain[PROG.aktif]){lanjut();return;}
+  var nama=Object.keys(PROG.pemain);
+  bukaDlg("Siapa yang bermain?",(nama.length?'<div class="row">'+nama.map(function(n){return '<button class="btn" onclick="pilihPemain(\''+esc(n).replace(/'/g,"")+'\')">'+esc(n)+'</button>';}).join("")+'</div><p class="note">atau buat pemain baru:</p>':'')+'<div class="fld"><label for="nmP">Nama panggilan</label><input id="nmP" maxlength="30" autocomplete="off"></div><button class="btn pri" id="okP">Mulai</button><p class="note">Progres tersimpan di perangkat ini saja.</p>');
+  pastikanPemain._l=lanjut;
+  $("okP").onclick=function(){var v=$("nmP").value.trim().replace(/[<>'"]/g,"");if(!v){toast("Isi nama panggilan.");return;}PROG.pemain[v]=PROG.pemain[v]||{buku:{}};pilihPemain(v);};
+  setTimeout(function(){var e=$("nmP");if(e)e.focus();},50);
+}
+function pilihPemain(n){PROG.aktif=n;simpanProg();tutupDlg();if(pastikanPemain._l)pastikanPemain._l();}
+
+/* ---------- Peta ---------- */
+function bukaPeta(id,diam){
+  REC=rakById(id);if(!REC){vBeranda();return;}
+  pastikanPemain(function(){
+    var b=REC.buku,pb=progBuku(b.id);
+    var jenjang=pb.jenjang||CFG.jenjang||b.jenjang,mode=pb.mode||CFG.mode||"normal";
+    GAME=B2G.bangunGame(b,{jenjang:jenjang,mode:mode});
+    /* gabungkan hasil AI yang masih sesuai versi bab */
+    GAME.level.forEach(function(l){var a=aiDari(REC,l.id,l.sidik);if(!a)return;l.ai=true;
+      if(a.dialog&&a.dialog.length)l.dialogAI=a.dialog;
+      var kuis=l.misi.filter(function(m){return m.jenis==="kuis";})[0];if(kuis&&a.soal)kuis.soalAI=a.soal.map(function(q){q.tujuan=0;return q;});
+      if(a.simulasi){var lab=l.misi.filter(function(m){return m.jenis==="lab";})[0];if(lab)lab.simulasi=a.simulasi;else l.misi.push({id:"simulasi",jenis:"lab",judul:"Eksperimen Simulasi",ikon:"🧪",cerita:a.simulasi.judul||"Eksperimen virtual",alat:[],pengecoh:[],langkah:[],prediksi:[],sukses:[],batasan:[],simulasi:a.simulasi,tujuan:0,sidik:B2G.sidik([l.sidik,"sim"])});}
+    });
+    vPeta();
+  });
+}
+function vPeta(){
+  henti();
+  var b=REC.buku,pb=progBuku(b.id),L=GAME.level,n=L.length;
+  sub(b.judul);
+  var lencana=L.filter(function(l){return pb.lencana[kunciBab(l)];}).length,bt=0,bm=0;L.forEach(function(l){var x=bintangLevel(l);bt+=x.dapat;bm+=x.maks;});
+  var h='<div class="row noprint">'+(TERTANAM?'':'<button class="btn sm" onclick="vBeranda()">← Rak buku</button>')+'<span class="sp"></span><span class="note">Pemain: <b>'+esc(PROG.aktif)+'</b></span><button class="btn sm" onclick="gantiPemain()">Ganti</button></div>';
+  h+='<div class="row mt" style="justify-content:space-between"><div><h2 style="font-size:clamp(24px,4vw,36px)">'+esc(b.judul)+'</h2><p class="lead">'+esc(b.mapel||"")+(b.kelas?' · Kelas '+esc(b.kelas):'')+' · Sumber: '+esc(b.sumber||"")+'</p></div>'+
+    '<div class="stats"><span class="stat"><b>'+xpBuku()+'</b>XP</span><span class="stat"><b>'+bt+'</b>/'+bm+' ★</span><span class="stat"><b>'+lencana+'</b>/'+n+' lencana</span></div></div>';
+  h+='<div class="row mt noprint"><span class="note">Jenjang:</span><div class="seg" role="group" aria-label="Jenjang">'+["SD","SMP","SMA"].map(function(j){return '<button aria-pressed="'+(GAME.jenjang===j)+'" onclick="setTingkat(\'jenjang\',\''+j+'\')">'+j+'</button>';}).join("")+'</div><span class="note">Kesulitan:</span><div class="seg" role="group" aria-label="Kesulitan">'+[["mudah","Mudah"],["normal","Normal"],["menantang","Menantang"]].map(function(x){return '<button aria-pressed="'+(GAME.mode===x[0])+'" onclick="setTingkat(\'mode\',\''+x[0]+'\')">'+x[1]+'</button>';}).join("")+'</div><button class="btn sm" onclick="vRapor()">📊 Rapor capaian</button></div>';
+  /* peta berliku */
+  var tinggi=Math.max(420,150*n+80),pts=L.map(function(l,i){return {x:(i%2?72:28)+(i%4===0?-6:i%4===2?6:0),y:80+i*150};});
+  var path=pts.map(function(p,i){if(!i)return "M"+p.x+" "+p.y;var a=pts[i-1];return "C"+a.x+" "+(a.y+75)+" "+p.x+" "+(p.y-75)+" "+p.x+" "+p.y;}).join(" ");
+  h+='<div class="mapwrap mt"><div class="map" style="height:'+tinggi+'px"><svg class="path" viewBox="0 0 100 '+tinggi+'" preserveAspectRatio="none" aria-hidden="true"><path d="'+path+'" fill="none" stroke="var(--line)" stroke-width="7" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-dasharray="2 14"/></svg>';
+  var warna=["var(--S)","var(--T)","var(--E)","var(--M)"],kini=-1;
+  L.forEach(function(l,i){var buka=levelTerbuka(i),sl=levelSelesai(l);if(buka&&!sl&&kini<0)kini=i;});
+  L.forEach(function(l,i){
+    var buka=levelTerbuka(i),bl=bintangLevel(l),p=pts[i],ada=l.misi.some(function(m){return statusMisi(l,m).diperbarui;});
+    var bin=Math.round(bl.dapat/Math.max(1,bl.maks)*3);
+    h+='<button class="node'+(buka?'':' kunci')+(i===kini?' kini':'')+'" style="left:'+p.x+'%;top:'+p.y+'px" '+(buka?'onclick="bukaLevel('+i+')"':'onclick="toast(\'Selesaikan Gerbang Kuis level sebelumnya untuk membuka level ini.\')"')+' aria-label="Level '+l.no+': '+esc(l.judul)+(buka?'':' (terkunci)')+'"><span class="o" style="background:'+warna[i%4]+'">'+(buka?l.no:'🔒')+(pb.lencana[kunciBab(l)]?'<span class="bd">🏅</span>':'')+'</span><span class="st">'+bintangStr(bin)+'</span><span class="t">'+esc(potong(l.judul,42))+(ada?' <span class="pill baru">diperbarui</span>':'')+(l.ai?' <span class="pill ai">AI</span>':'')+'</span></button>';
+  });
+  h+='</div></div>';
+  if(GAME.final){var semua=L.every(levelSelesai);h+='<section class="card mt"><h3>🏆 Ujian Akhir Petualangan</h3><p class="note">'+GAME.final.soal.length+' soal asesmen akhir dari buku. '+(semua?'Terbuka!':'Terbuka setelah semua level selesai.')+'</p><button class="btn gold" '+(semua?'onclick="mulaiFinal()"':'disabled')+'>Mulai ujian akhir</button></section>';}
+  V().innerHTML=h;window.scrollTo(0,0);
+}
+function setTingkat(k,v){var pb=progBuku(REC.buku.id);pb[k]=v;CFG[k]=v;simpanCfg();simpanProg();bukaPeta(REC.buku.id);}
+function gantiPemain(){PROG.aktif="";simpanProg();bukaPeta(REC.buku.id);}
+
+/* ---------- Level: adegan + daftar misi ---------- */
+var LV=null;
+function bukaLevel(i){LV=GAME.level[i];vAdegan(0);}
+function vAdegan(k){
+  var T=GAME.tokoh,D=LV.dialogAI||LV.dialog;
+  var h='<div class="row noprint"><button class="btn sm" onclick="vPeta()">← Peta</button><span class="sp"></span><span class="pill">Level '+LV.no+'</span>'+(LV.dialogAI?'<span class="pill ai">dialog AI dari isi buku</span>':'')+'</div><h2 class="mt" style="font-size:clamp(24px,4vw,34px)">'+esc(LV.judul)+'</h2><div class="scene mt" id="scene">';
+  D.slice(0,k+1).forEach(function(d){var t=T[d.tokoh]||T.mentor;h+='<div class="bub'+(d.tokoh==="robo"?' kanan':'')+'"><div class="av" style="background:'+t.warna+'" aria-hidden="true">'+t.emoji+'</div><div class="tx"><b style="color:'+t.warna+'">'+esc(t.nama)+'</b>'+esc(d.teks)+'</div></div>';});
+  h+='</div><div class="row mt">'+(k<D.length-1?'<button class="btn pri big" id="lanjut" onclick="vAdegan('+(k+1)+')">Lanjut ▸</button><button class="btn" onclick="vMisiDaftar()">Lewati</button>':'<button class="btn pri big" id="lanjut" onclick="vMisiDaftar()">Lihat misi ▸</button>')+'</div>';
+  V().innerHTML=h;var l=$("lanjut");if(l)l.focus();
+}
+function vMisiDaftar(){
+  henti();
+  var h='<div class="row noprint"><button class="btn sm" onclick="vPeta()">← Peta</button><button class="btn sm" onclick="vAdegan(0)">💬 Cerita</button><span class="sp"></span>'+(TERTANAM?'':'<button class="btn sm" onclick="aiLevel()">✨ Perkaya level dengan AI</button>')+'</div>';
+  h+='<h2 class="mt" style="font-size:clamp(24px,4vw,34px)">Level '+LV.no+': '+esc(LV.judul)+'</h2>';
+  h+='<details class="mt"><summary style="cursor:pointer;font-weight:800">🎯 Tujuan pembelajaran level ini</summary><ol>'+LV.tujuan.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ol></details>';
+  h+='<div class="misi mt">';
+  LV.misi.forEach(function(m,i){var s=statusMisi(LV,m);h+='<button class="mcard" onclick="mulaiMisi('+i+')"><span class="ik" aria-hidden="true">'+m.ikon+'</span><h3>'+esc(m.judul)+'</h3><span class="note">'+esc(potong(m.cerita,110))+'</span>'+(m.wajib?'<span class="pill">wajib: membuka level berikut</span>':'')+(s.diperbarui?'<span class="pill baru">isi buku diperbarui — main lagi</span>':'')+'<span class="st">'+bintangStr(s.bintang)+'</span></button>';});
+  h+='</div>';
+  if(levelSelesai(LV)&&LV.penutup.length)h+='<section class="card mt"><h3>📝 Rangkuman dari buku</h3><ul>'+LV.penutup.map(function(r){return '<li>'+esc(r)+'</li>';}).join("")+'</ul>'+(LV.refleksi.length?'<p class="note"><b>Refleksi:</b> '+LV.refleksi.map(esc).join(" ")+'</p>':'')+'</section>';
+  V().innerHTML=h;window.scrollTo(0,0);
+}
+async function aiLevel(){
+  var c=REC.buku.bab.filter(function(x){return x.id===LV.id;})[0];
+  bukaDlg("Perkaya level dengan AI",'<p><span class="busy"></span> Membaca isi Bab '+c.no+' dan membuat dialog, soal, dan eksperimen simulasi…</p>');
+  try{await aiBab(REC,c,GAME.jenjang);tutupDlg();var i=GAME.level.indexOf(LV);bukaPeta(REC.buku.id);setTimeout(function(){bukaLevel(i);vMisiDaftar();},50);toast("Level diperkaya AI (label AI — periksa guru).");}
+  catch(e){$("dlgB").innerHTML='<div class="fb no">'+esc(e.message)+'</div>';}
+}
+
+/* ---------- Kerangka misi & penilaian ---------- */
+var MS=null;
+function henti(){konfeti.id=(konfeti.id||0)+1;}
+function mulaiMisi(i){henti();var m=LV.misi[i];MS={m:m,idx:i,tujuan:{},poin:0,benar:0,total:0};({jelajah:mJelajah,istilah:mIstilah,kuis:mKuis,lab:mLab,bos:mBos}[m.jenis])(m);}
+function catatTujuan(t,b,n){t=t||0;var x=MS.tujuan[t]=MS.tujuan[t]||[0,0];x[0]+=b;x[1]+=n;}
+function kepala(judul,i,n){return '<div class="row noprint"><button class="btn sm" onclick="if(confirm(\'Keluar dari misi? Kemajuan misi ini tidak disimpan.\')){bersihTimer();vMisiDaftar();}">✕ Keluar</button><span class="sp"></span><span class="pill">Level '+LV.no+'</span><span class="pill">'+esc(MS.m.judul)+'</span></div><div class="prog"><i style="width:'+(n?Math.round(i/n*100):0)+'%"></i></div>';}
+var TM=null;function bersihTimer(){clearInterval(TM);TM=null;}
+function selesaiMisi(skor,catatan){
+  bersihTimer();skor=Math.max(0,Math.min(100,Math.round(skor)));var bin=bintangDari(skor),pb=progBuku(GAME.bukuId),key=kunciBab(LV)+":"+MS.m.id,lama=pb.misi[key];
+  var poin=MS.poin+bin*20,lebih=!lama||lama.sidik!==MS.m.sidik||skor>=lama.skor;
+  if(lebih)pb.misi[key]={sidik:MS.m.sidik,skor:skor,bintang:bin,poin:poin,tujuan:MS.tujuan,waktu:Date.now(),jenjang:GAME.jenjang};
+  if(catatan)pb.bos[kunciBab(LV)]={teks:catatan,waktu:Date.now()};
+  var lencanaBaru=false;if(!pb.lencana[kunciBab(LV)]){var bl=bintangLevel(LV);if(LV.misi.every(function(m){return statusMisi(LV,m).selesai;})&&bl.dapat>=bl.maks*0.6){pb.lencana[kunciBab(LV)]=Date.now();lencanaBaru=true;}}
+  simpanProg();
+  var h='<div class="stage res"><h2 style="font-size:34px">'+(bin?"Misi berhasil!":"Coba lagi, ya!")+'</h2><div class="bintang" aria-label="'+bin+' bintang">'+bintangStr(bin)+'</div><p style="font:700 22px Fredoka">Skor '+skor+' · +'+poin+' XP'+(lama&&!lebih?' (skor terbaikmu tetap '+lama.skor+')':'')+'</p>';
+  if(MS.m.wajib)h+=bin>=1?'<p class="fb ok">Gerbang terbuka! Level berikutnya siap dijelajahi.</p>':'<p class="fb no">Butuh minimal 1 bintang (skor 50) untuk membuka level berikutnya.</p>';
+  if(lencanaBaru)h+='<div class="lencana"><div>🏅<br>Lencana<br>'+esc(LV.lencana)+'</div></div><p><b>Kamu meraih Lencana '+esc(LV.lencana)+'!</b></p>';
+  h+='<div class="row" style="justify-content:center"><button class="btn big pri" onclick="vMisiDaftar()">Lanjut</button><button class="btn big" onclick="mulaiMisi('+MS.idx+')">Ulangi</button><button class="btn big" onclick="vPeta()">Peta</button></div></div>';
+  V().innerHTML=h;window.scrollTo(0,0);if(bin)sMenang();if(bin>=2||lencanaBaru)konfeti();
+}
+
+/* ---------- Soal pilihan ganda bersama (jelajah, kuis, final) ---------- */
+function siapkanSoal(q){var n=GAME.aturan.opsi,idx=q.opsi.map(function(_,i){return i;}),salah=acak(idx.filter(function(i){return i!==q.kunci;})).slice(0,Math.max(1,n-1)),pakai=acak([q.kunci].concat(salah));return {q:q.q,opsi:pakai.map(function(i){return q.opsi[i];}),kunci:pakai.indexOf(q.kunci),asal:q.asal,tujuan:q.tujuan,pembahasan:q.pembahasan,sub:q.sub};}
+function tampilSoal(el,q,opsi,cb){
+  /* opsi: {detik, bantuan:{sisa}} ; cb(benar, sisaDetik) */
+  var sisa=opsi.detik||0,h='<div class="row" style="justify-content:space-between"><span class="note">'+(q.asal==="rumpang"?"Isi bagian rumpang dari kalimat buku":q.asal==="ai"?"Soal AI dari isi buku":"Soal dari buku")+(q.sub?' · '+esc(q.sub):'')+'</span>'+(sisa?'<span class="timer" id="tmr">'+sisa+'</span>':'')+'</div><div class="q mt">'+esc(q.q)+'</div><div class="opts">'+q.opsi.map(function(o,i){return '<button class="opt" data-i="'+i+'"><i>'+"ABCDE"[i]+'</i><span>'+esc(o)+'</span></button>';}).join("")+'</div>';
+  if(opsi.bantuan&&opsi.bantuan.sisa>0&&q.opsi.length>2)h+='<div class="row mt"><button class="btn sm" id="b50">💡 Bantuan: hapus satu pilihan salah ('+opsi.bantuan.sisa+')</button></div>';
+  h+='<div id="fb"></div>';el.innerHTML=h;el.dataset.kunci=q.kunci;var dijawab=false;
+  function jawab(i){if(dijawab)return;dijawab=true;bersihTimer();var ok=i===q.kunci;
+    el.querySelectorAll(".opt").forEach(function(b){b.disabled=true;if(+b.dataset.i===q.kunci)b.classList.add("benar");else if(+b.dataset.i===i)b.classList.add("salah");});
+    if(ok)sBenar();else sSalah();
+    $("fb").innerHTML='<div class="fb '+(ok?'ok':'no')+'">'+(ok?'Tepat! ':(i<0?'Waktu habis. ':'Belum tepat. '))+'Jawaban: <b>'+esc(q.opsi[q.kunci])+'</b>'+(q.pembahasan?'<br><span class="note">'+esc(q.pembahasan)+'</span>':'')+'</div><div class="row mt"><button class="btn pri big" id="nx">Lanjut ▸</button></div>';
+    $("nx").focus();$("nx").onclick=function(){cb(ok,sisa);};}
+  el.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){jawab(+b.dataset.i);};});
+  var b5=$("b50");if(b5)b5.onclick=function(){var c=[].filter.call(el.querySelectorAll(".opt:not(.hapus)"),function(b){return +b.dataset.i!==q.kunci;});if(c.length>1){c[Math.floor(Math.random()*c.length)].classList.add("hapus");opsi.bantuan.sisa--;b5.remove();}};
+  bersihTimer();if(sisa){TM=setInterval(function(){sisa--;var t=$("tmr");if(t)t.textContent=sisa;if(sisa<=5&&sisa>0)nada(440,.06,"square");if(sisa<=0)jawab(-1);},1000);}
+}
+
+/* ---------- Misi: Jelajah Konsep ---------- */
+function ilusHTML(g){if(!g)return "";return '<figure class="ilus" style="margin:0">'+(g.src?'<img src="'+g.src+'" alt="'+esc(g.judul)+'">':'<div class="ph"><div><span aria-hidden="true">🖼️</span>'+esc(g.desc||g.judul)+'</div></div>')+'<figcaption>'+esc(g.judul)+'</figcaption></figure>';}
+function mJelajah(m){
+  var langkah=[];m.kartu.forEach(function(k,i){langkah.push({k:k});if(m.kilat[i])langkah.push({q:m.kilat[i]});});m.kilat.slice(m.kartu.length).forEach(function(q){langkah.push({q:q});});
+  var i=0,bantu={sisa:GAME.aturan.bantuan},benar=0,total=0;
+  function langkahKe(){
+    if(i>=langkah.length){selesaiMisi(total?benar/total*100:100);return;}
+    var L=langkah[i],h=kepala(m.judul,i,langkah.length)+'<div class="stage" id="st"></div>';V().innerHTML=h;var st=$("st");
+    if(L.k){var k=L.k;st.innerHTML='<div class="kartu"><div><span class="pill">Kartu konsep</span><h3 style="font-size:26px;margin:6px 0">'+esc(k.judul)+'</h3><ul>'+k.poin.map(function(p){return '<li>'+esc(p)+'</li>';}).join("")+'</ul>'+(k.daftar.length?'<ul class="note">'+k.daftar.map(function(p){return '<li>'+esc(p)+'</li>';}).join("")+'</ul>':'')+(k.tabel&&k.tabel.rows.length?'<div class="tw mt"><table>'+k.tabel.rows.slice(0,6).map(function(r,ri){return '<tr>'+r.map(function(c){return ri?'<td>'+esc(c)+'</td>':'<th>'+esc(c)+'</th>';}).join("")+'</tr>';}).join("")+'</table></div>':'')+(k.stem?'<div class="stembox"><b>'+esc(k.stem.judul)+'</b> '+esc(potong(k.stem.teks,300))+'</div>':'')+'</div><div>'+(k.gambar||[]).slice(0,2).map(ilusHTML).join('<div style="height:10px"></div>')+'</div></div><div class="row mt"><button class="btn pri big" id="nx">Paham, lanjut ▸</button></div>';
+      $("nx").focus();$("nx").onclick=function(){i++;langkahKe();};}
+    else{var q=siapkanSoal(L.q);tampilSoal(st,q,{bantuan:bantu},function(ok){total++;if(ok){benar++;MS.poin+=10;}catatTujuan(L.q.tujuan,ok?1:0,1);i++;langkahKe();});}
+  }
+  langkahKe();
+}
+
+/* ---------- Misi: Kode Istilah (pasangkan) ---------- */
+function mIstilah(m){
+  var P=m.pasangan,kiri=acak(P.map(function(_,i){return i;})),kanan=acak(P.map(function(_,i){return i;})),pilih=null,cocok=0,salah=0;
+  V().innerHTML=kepala(m.judul,0,1)+'<div class="stage"><p class="lead" style="margin-top:0">'+esc(m.cerita)+' Ketuk istilah, lalu ketuk artinya.</p><div class="pairs mt"><div class="col">'+kiri.map(function(i){return '<button class="chipq" data-k="'+i+'">'+esc(P[i].istilah)+'</button>';}).join("")+'</div><div class="col">'+kanan.map(function(i){return '<button class="chipq art" data-a="'+i+'">'+esc(potong(P[i].arti,150))+'</button>';}).join("")+'</div></div></div>';
+  document.querySelectorAll("[data-k]").forEach(function(b){b.onclick=function(){if(b.classList.contains("cocok"))return;document.querySelectorAll("[data-k]").forEach(function(x){x.classList.remove("pilih");});b.classList.add("pilih");pilih=+b.dataset.k;};});
+  document.querySelectorAll("[data-a]").forEach(function(b){b.onclick=function(){if(pilih===null||b.classList.contains("cocok"))return;var a=+b.dataset.a,kb=document.querySelector('[data-k="'+pilih+'"]');
+    if(a===pilih){sBenar();kb.classList.remove("pilih");kb.classList.add("cocok");b.classList.add("cocok");kb.disabled=b.disabled=true;cocok++;MS.poin+=8;pilih=null;
+      if(cocok===P.length){var skor=Math.max(0,100-salah*12);catatTujuan(0,skor/100,1);setTimeout(function(){selesaiMisi(skor);},500);}}
+    else{sSalah();salah++;b.classList.add("salah");setTimeout(function(){b.classList.remove("salah");},400);}};});
+}
+
+/* ---------- Misi: Gerbang Kuis ---------- */
+function mKuis(m){
+  var A=GAME.aturan,pool=acak(m.soal).slice(0,A.soal);if(m.soalAI)pool=pool.concat(acak(m.soalAI).slice(0,Math.min(3,m.soalAI.length)));
+  var i=0,benar=0,bantu={sisa:A.bantuan};
+  function next(){
+    if(i>=pool.length){selesaiMisi(benar/pool.length*100);return;}
+    V().innerHTML=kepala(m.judul,i,pool.length)+'<div class="stage"><div class="note">Soal '+(i+1)+' dari '+pool.length+'</div><div id="sq"></div></div>';
+    var q=siapkanSoal(pool[i]);tampilSoal($("sq"),q,{detik:A.detik,bantuan:bantu},function(ok,sisa){if(ok){benar++;MS.poin+=10+Math.round((sisa||0)/5);}catatTujuan(pool[i].tujuan,ok?1:0,1);i++;next();});
+  }
+  next();
+}
+function mulaiFinal(){
+  LV={no:"Akhir",judul:"Ujian Akhir Petualangan",misi:[],tujuan:["Capaian akhir buku"],penutup:[],refleksi:[],lencana:"Juara Buku"};
+  var m={id:"final",jenis:"kuis",judul:"Ujian Akhir",soal:GAME.final.soal.map(function(q){q.tujuan=0;return q;}),sidik:B2G.sidik(["final",GAME.sidik]),wajib:false,ikon:"🏆",cerita:""};
+  LV.misi=[m];MS={m:m,idx:0,tujuan:{},poin:0};mKuis(m);
+}
+
+/* ---------- Misi: Lab Virtual ---------- */
+function mLab(m){
+  var tahap=[];if(m.alat.length>=2)tahap.push("alat");if(m.langkah.length>=3)tahap.push("langkah");if(m.sukses.length&&m.batasan.length)tahap.push("kriteria");if(m.simulasi)tahap.push("simulasi");tahap.push("rancang");
+  var t=0,skor=[];
+  function ke(){
+    if(t>=tahap.length){var s=skor.length?skor.reduce(function(a,b){return a+b;},0)/skor.length:100;catatTujuan(m.tujuan,s/100,1);selesaiMisi(s);return;}
+    var nama=tahap[t];V().innerHTML=kepala(m.judul,t,tahap.length)+'<div class="stage" id="st"></div>';var st=$("st");
+    if(nama==="alat"){
+      var semua=acak(m.alat.concat(m.pengecoh)),dipilih={};
+      st.innerHTML='<span class="pill">Tahap '+(t+1)+': Siapkan alat dan bahan</span><p class="lead">'+esc(m.cerita)+'</p><p><b>Pilih semua alat dan bahan yang dipakai dalam rancangan proyek ini.</b></p><div class="opts">'+semua.map(function(a,i){return '<button class="opt" data-i="'+i+'" aria-pressed="false"><i>'+(i+1)+'</i><span>'+esc(a)+'</span></button>';}).join("")+'</div><div class="row mt"><button class="btn pri big" id="cek">Periksa</button></div><div id="fb"></div>';
+      st.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){var i=+b.dataset.i;dipilih[i]=!dipilih[i];b.setAttribute("aria-pressed",dipilih[i]);b.style.borderColor=dipilih[i]?"var(--pri)":"";};});
+      $("cek").onclick=function(){var tp=0,fp=0;semua.forEach(function(a,i){var b=st.querySelector('[data-i="'+i+'"]'),benar=m.alat.indexOf(a)>-1;b.disabled=true;if(benar)b.classList.add("benar");if(dipilih[i]&&benar)tp++;if(dipilih[i]&&!benar){fp++;b.classList.add("salah");}});
+        var s=Math.max(0,(tp-fp)/m.alat.length*100);skor.push(s);if(s>=70)sBenar();else sSalah();MS.poin+=Math.round(s/10);
+        $("fb").innerHTML='<div class="fb '+(s>=70?'ok':'no')+'">Tepat '+tp+' dari '+m.alat.length+(fp?', '+fp+' pilihan tidak diperlukan':'')+'.</div><div class="row mt"><button class="btn pri big" id="nx">Lanjut ▸</button></div>';$("cek").remove();$("nx").onclick=function(){t++;ke();};};
+    }else if(nama==="langkah"){
+      var urut=acak(m.langkah.map(function(_,i){return i;})),pos=0,sal=0;
+      function gambar(){st.innerHTML='<span class="pill">Tahap '+(t+1)+': Susun langkah rekayasa</span><p><b>Ketuk langkah sesuai urutan dari pertama sampai terakhir.</b></p><div class="steps" id="done">'+m.langkah.slice(0,pos).map(function(l,i){return '<div class="stp" style="opacity:.7"><b>'+(i+1)+'</b><span>'+(l.tahap?'<u>'+esc(l.tahap)+'</u>: ':'')+esc(potong(l.isi,140))+'</span></div>';}).join("")+'</div><hr style="border:0;border-top:2px dashed var(--line)"><div class="steps">'+urut.map(function(i){return '<button class="stp" data-i="'+i+'"><b>?</b><span>'+esc(potong(m.langkah[i].isi,160))+'</span></button>';}).join("")+'</div>';
+        st.querySelectorAll("button.stp").forEach(function(b){b.onclick=function(){var i=+b.dataset.i;if(i===pos){sBenar();pos++;urut=urut.filter(function(x){return x!==i;});MS.poin+=3;if(pos>=m.langkah.length){skor.push(Math.max(0,100-sal*10));st.insertAdjacentHTML("beforeend","");gambar();st.insertAdjacentHTML("beforeend",'<div class="fb ok mt">Urutan lengkap! Inilah alur proses rekayasa (EDP) proyek ini.</div><div class="row mt"><button class="btn pri big" id="nx">Lanjut ▸</button></div>');$("nx").onclick=function(){t++;ke();};}else gambar();}else{sSalah();sal++;b.classList.add("salah");setTimeout(function(){b.classList.remove("salah");},400);}};});}
+      gambar();
+    }else if(nama==="kriteria"){
+      var item=acak(m.sukses.map(function(x){return {t:x,k:"s"};}).concat(m.batasan.map(function(x){return {t:x,k:"b"};}))),j=0,ok=0;
+      function satu(){if(j>=item.length){var s=ok/item.length*100;skor.push(s);st.innerHTML='<div class="fb '+(s>=70?'ok':'no')+'">Benar '+ok+' dari '+item.length+'. Kriteria keberhasilan = ukuran produk dianggap berhasil; batasan = syarat yang harus dipatuhi.</div><div class="row mt"><button class="btn pri big" id="nx">Lanjut ▸</button></div>';$("nx").onclick=function(){t++;ke();};return;}
+        st.innerHTML='<span class="pill">Tahap '+(t+1)+': Kriteria atau batasan?</span><p class="note">'+(j+1)+' dari '+item.length+'</p><div class="q">'+esc(item[j].t)+'</div><div class="sort2 mt"><button class="opt" id="ks"><i>✓</i><span>Kriteria keberhasilan</span></button><button class="opt" id="kb"><i>⛔</i><span>Batasan desain</span></button></div>';
+        function pilih(k){var benar=k===item[j].k;if(benar){ok++;sBenar();MS.poin+=3;}else sSalah();j++;setTimeout(satu,benar?250:600);$(k==="s"?"ks":"kb").classList.add(benar?"benar":"salah");}
+        $("ks").onclick=function(){pilih("s");};$("kb").onclick=function(){pilih("b");};}
+      satu();
+    }else if(nama==="simulasi"){
+      var S=m.simulasi;st.innerHTML='<span class="pill">Tahap '+(t+1)+': Eksperimen simulasi</span> <span class="pill ai">AI dari isi buku</span><h3 class="mt">'+esc(S.judul||"Eksperimen virtual")+'</h3><p><b>Variabel yang diubah:</b> '+esc(S.variabel||"")+'</p><p class="q">'+esc(S.pertanyaan||"Pilihan mana yang memberi hasil terbaik?")+'</p><div class="opts">'+S.pilihan.map(function(p,i){return '<button class="opt" data-i="'+i+'"><i>'+(i+1)+'</i><span>'+esc(p.nilai)+'</span></button>';}).join("")+'</div><div id="fb"></div>';
+      st.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){var i=+b.dataset.i,ok=i===+S.terbaik;skor.push(ok?100:40);if(ok)sBenar();else sSalah();st.querySelectorAll(".opt").forEach(function(x){x.disabled=true;if(+x.dataset.i===+S.terbaik)x.classList.add("benar");});
+        $("fb").innerHTML='<div class="tw mt"><table><tr><th>'+esc(S.variabel||"Nilai")+'</th><th>Hasil</th></tr>'+S.pilihan.map(function(p){return '<tr><td>'+esc(p.nilai)+'</td><td>'+esc(p.hasil)+'</td></tr>';}).join("")+'</table></div><div class="fb '+(ok?'ok':'no')+'">'+esc(S.kesimpulan||"")+'</div><div class="row mt"><button class="btn pri big" id="nx">Lanjut ▸</button></div>';$("nx").onclick=function(){t++;ke();};};});
+    }else{
+      var s4=m.steam||{},warna={S:"var(--S)",T:"var(--T)",E:"var(--E)",M:"var(--M)"};
+      st.innerHTML='<span class="pill">Tahap '+(t+1)+': Rancang prediksi & tabel pengamatan</span>'+(m.prediksi.length?'<div class="fld mt"><label for="pred">'+esc(m.prediksi[0])+'</label><textarea id="pred" placeholder="Tulis prediksimu di sini…"></textarea></div>':'')+
+        (m.data&&m.data.kolom&&m.data.kolom.length?'<p><b>Tabel pengamatan yang akan kamu isi saat praktik:</b></p><div class="tw"><table><tr>'+m.data.kolom.map(function(c){return '<th>'+esc(c)+'</th>';}).join("")+'</tr>'+[1,2,3].map(function(){return '<tr>'+m.data.kolom.map(function(){return '<td>&nbsp;</td>';}).join("")+'</tr>';}).join("")+'</table></div><p class="note">'+esc(m.data.keterangan||"")+'</p>':'')+
+        (Object.keys(s4).length?'<p class="mt"><b>Hubungan STEM dalam proyek ini</b></p><div class="steam4">'+["S","T","E","M"].filter(function(x){return s4[x];}).map(function(x){return '<div style="background:'+warna[x]+'"><b>'+x+'</b> · '+esc(s4[x])+'</div>';}).join("")+'</div>':'')+
+        (m.produk?'<p class="note mt"><b>Produk akhir:</b> '+esc(m.produk)+'</p>':'')+'<div class="row mt"><button class="btn pri big" id="nx">Selesaikan lab ▸</button></div>';
+      $("nx").onclick=function(){var p=$("pred");if(p&&p.value.trim().length<10){toast("Tulis prediksi singkat dulu (minimal satu kalimat).");p.focus();return;}MS.poin+=10;t++;ke();};
+    }
+  }
+  ke();
+}
+
+/* ---------- Misi: Tantangan Bos ---------- */
+function mBos(m){
+  V().innerHTML=kepala(m.judul,0,2)+'<div class="stage"><span class="pill">🐉 Kasus penalaran</span><div class="q mt">'+esc(m.kasus)+'</div><p><b>Tugasmu:</b> '+esc(m.tuntutan)+'</p><div class="fld"><label for="jb">Jawabanmu</label><textarea id="jb" placeholder="Jelaskan dengan konsep dari bab ini…"></textarea></div><button class="btn pri big" id="kirim">Kirim jawaban</button></div>';
+  $("kirim").onclick=function(){var v=$("jb").value.trim();if(v.length<20){toast("Tulis jawaban minimal satu-dua kalimat.");return;}
+    V().innerHTML=kepala(m.judul,1,2)+'<div class="stage"><p class="note">Jawabanmu:</p><blockquote style="margin:0;padding:10px 14px;border-left:4px solid var(--pri);background:var(--paper2);border-radius:0 12px 12px 0">'+esc(v)+'</blockquote><h3 class="mt">Nilai dirimu dengan rubrik dari buku (1–4)</h3>'+m.rubrik.map(function(r,i){return '<div class="mt"><p style="margin:0 0 6px">'+esc(r)+'</p><div class="seg" role="group">'+[1,2,3,4].map(function(n){return '<button aria-pressed="false" data-r="'+i+'" data-n="'+n+'">'+n+'</button>';}).join("")+'</div></div>';}).join("")+'<p class="note mt">Penilaian diri ini membantu guru; jawabanmu tersimpan di rapor untuk diperiksa guru.</p><button class="btn pri big mt" id="sls">Selesai</button></div>';
+    var nilai={};document.querySelectorAll("[data-r]").forEach(function(b){b.onclick=function(){var r=b.dataset.r;document.querySelectorAll('[data-r="'+r+'"]').forEach(function(x){x.setAttribute("aria-pressed","false");});b.setAttribute("aria-pressed","true");nilai[r]=+b.dataset.n;};});
+    $("sls").onclick=function(){if(Object.keys(nilai).length<m.rubrik.length){toast("Beri nilai untuk setiap aspek rubrik.");return;}var rata=0;for(var k in nilai)rata+=nilai[k];rata/=m.rubrik.length;var s=rata/4*100;catatTujuan(m.tujuan,s/100,1);MS.poin+=Math.round(rata*10);selesaiMisi(s,v);};};
+}
+
+/* ---------- Rapor capaian ---------- */
+function vRapor(id){
+  henti();
+  if(id)REC=rakById(id);if(!REC){toast("Buka sebuah buku dulu.");return;}
+  if(!GAME||GAME.bukuId!==REC.buku.id)GAME=B2G.bangunGame(REC.buku,{});
+  var pemain=Object.keys(PROG.pemain),rows=[];
+  var h='<div class="row noprint"><button class="btn sm" onclick="bukaPeta(\''+esc(REC.buku.id)+'\')">← Peta</button><span class="sp"></span><button class="btn sm" onclick="window.print()">🖨 Cetak</button><button class="btn sm" onclick="eksporRapor()">⬇ CSV</button></div><h2 class="mt" style="font-size:30px">Rapor Capaian</h2><p class="lead">'+esc(REC.buku.judul)+' · capaian dihitung dari misi yang dipetakan ke tujuan pembelajaran tiap bab.</p>';
+  if(!pemain.length)h+='<div class="card mt">Belum ada pemain.</div>';
+  pemain.forEach(function(nm){
+    var pb=(PROG.pemain[nm].buku||{})[REC.buku.id];if(!pb)return;
+    h+='<section class="card mt"><h3>'+esc(nm)+'</h3><div class="tw mt"><table><tr><th>Level</th><th>Tujuan pembelajaran</th><th class="n">Capaian</th><th>Predikat</th><th>Misi</th></tr>';
+    GAME.level.forEach(function(l){
+      var agr={},bin=[];l.misi.forEach(function(m){var r=pb.misi[kunciBab(l)+":"+m.id];if(!r)return;bin.push(m.ikon+bintangStr(r.bintang)+(r.sidik!==m.sidik?"*":""));for(var t in r.tujuan){var a=agr[t]=agr[t]||[0,0];a[0]+=r.tujuan[t][0];a[1]+=r.tujuan[t][1];}});
+      l.tujuan.forEach(function(t,ti){var a=agr[ti],p=a&&a[1]?Math.round(a[0]/a[1]*100):null;rows.push([nm,REC.buku.judul,"Level "+l.no+": "+l.judul,t,p==null?"":p,p==null?"Belum dinilai":predikat(p)]);
+        h+='<tr>'+(ti===0?'<td rowspan="'+l.tujuan.length+'"><b>'+l.no+'.</b> '+esc(l.judul)+(pb.lencana[kunciBab(l)]?' 🏅':'')+'</td>':'')+'<td>'+esc(t)+'</td><td class="n">'+(p==null?'–':'<div class="row" style="flex-wrap:nowrap;gap:6px"><div class="bar"><i style="width:'+p+'%"></i></div>'+p+'%</div>')+'</td><td>'+(p==null?'<span class="note">belum</span>':predikat(p))+'</td>'+(ti===0?'<td rowspan="'+l.tujuan.length+'" style="white-space:nowrap">'+(bin.join("<br>")||'–')+'</td>':'')+'</tr>';});
+      var bos=pb.bos&&pb.bos[kunciBab(l)];if(bos)h+='<tr><td colspan="5" class="note"><b>Jawaban Tantangan Bos:</b> '+esc(bos.teks)+'</td></tr>';
+    });
+    h+='</table></div><p class="note">* isi bab telah diperbarui sejak misi dimainkan.</p></section>';
+  });
+  RAPOR_ROWS=rows;V().innerHTML=h;window.scrollTo(0,0);
+}
+var RAPOR_ROWS=[];
+function eksporRapor(){var q=function(v){v=String(v);return /[",\n;]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};unduh("rapor-"+REC.buku.id+".csv","﻿"+[["pemain","buku","level","tujuan pembelajaran","capaian (%)","predikat"]].concat(RAPOR_ROWS).map(function(r){return r.map(q).join(",");}).join("\n"),"text/csv");}
+$("btnRapor").onclick=function(){if(REC)vRapor();else toast("Pilih buku dulu, lalu buka rapor.");};
+
+/* ---------- Pengaturan ---------- */
+function vAtur(){
+  var k=kunciAI();
+  V().innerHTML='<div class="row"><button class="btn sm" onclick="vBeranda()">← Kembali</button></div><section class="card mt"><h2>Pengaturan</h2><h3 class="mt">AI Gemini (opsional)</h3><p class="note">Dipakai hanya saat Anda menekan “Perkaya dengan AI”. Teks bab dikirim ke Google Gemini memakai kunci Anda; kunci disimpan di perangkat ini. Bila kosong, kunci dari SERAT STEM di perangkat ini dipakai.</p><div class="fgrid"><div class="fld"><label for="ak">Kunci API Gemini</label><input id="ak" type="password" value="'+esc(CFG.aiKey)+'" autocomplete="off"></div><div class="fld"><label for="am">Model</label><input id="am" value="'+esc(CFG.aiModel||(k&&k.model)||"gemini-3.8-flash")+'"></div></div><p class="note">Status: '+(k?'kunci tersedia ('+esc(k.asal)+')':'belum ada kunci')+'</p>'+
+    '<h3 class="mt">Suara</h3><label class="row"><input type="checkbox" id="sn"'+(CFG.suara?' checked':'')+'> Efek suara</label><div class="row mt"><button class="btn pri" id="sv">Simpan</button></div></section>';
+  $("sv").onclick=function(){CFG.aiKey=$("ak").value.trim();CFG.aiModel=$("am").value.trim();CFG.suara=$("sn").checked;simpanCfg();toast("Pengaturan disimpan.");vBeranda();};
+}
+
+document.querySelector(".hd").insertAdjacentHTML("beforeend",'<button class="ib" onclick="vAtur()" title="Pengaturan" aria-label="Pengaturan">⚙</button>');
+
+/* ---------- Mulai ---------- */
+document.addEventListener("keydown",function(e){var opts=document.querySelectorAll(".opt:not([disabled])");if(/^[1-5]$/.test(e.key)&&opts.length&&document.activeElement.tagName!=="TEXTAREA"&&document.activeElement.tagName!=="INPUT"){var b=opts[+e.key-1];if(b)b.click();}});
+(async function(){
+  await idbBuka();await muatRak();cekSerat(true);
+  var q=new URLSearchParams(location.search);
+  if(TERTANAM){bukaPeta(RAK[0].buku.id);return;}
+  if(q.get("buku")&&rakById(q.get("buku"))){bukaPeta(q.get("buku"));return;}
+  if(q.get("sumber")==="serat-stem"){var r=RAK.filter(function(x){return x.langsung;})[0];if(r){bukaPeta(r.buku.id);return;}}
+  vBeranda();
+})();
+window.addEventListener("message",function(e){var d=e.data;if(!d||d.type!=="b2g-buku"||!d.buku)return;try{var b=B2G.dariSerat(d.buku);var lama=rakById(b.id);simpanRak({buku:b,ai:lama?lama.ai:{},asal:"Dikirim dari SERAT STEM",ditambah:Date.now()}).then(muatRak).then(function(){bukaPeta(b.id);toast("Game dibangun dari buku SERAT STEM.");});}catch(err){toast("Gagal: "+err.message);}});
+try{if(window.opener)window.opener.postMessage({type:"b2g-minta"},"*");}catch(e){}
+
+</script>
+</body>
+</html>

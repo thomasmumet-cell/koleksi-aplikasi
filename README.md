@@ -32,3 +32,15 @@ node game-papan-stem/alat/buat-paket.js Proyek_Judul_Buku.json
 
 Perintah itu membuat `game-papan-stem/buku/<slug>.json` dan menyusun ulang `buku/paket.js`
 (hanya soal, glosarium, kata kunci, dan langkah proyek; tanpa nama penulis atau gambar).
+
+## Book to Game (buku STEM → game petualangan)
+
+`book-to-game/` membaca buku (Word, PDF, proyek SERAT STEM, teks) menjadi model BUKU (`inti.js`),
+lalu membangun game: level per bab, misi, lab virtual, kuis, lencana, rapor capaian. Aplikasi PWA
+(bisa dipasang di Android/Windows) dan bisa diunduh sebagai game luring satu berkas per buku.
+
+Menambah/memperbarui buku bawaan dari berkas `Proyek_*.json` SERAT STEM:
+
+```
+node book-to-game/alat/bangun.js Proyek_Judul_Buku.json
+```

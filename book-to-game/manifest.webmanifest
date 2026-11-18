@@ -1,0 +1,18 @@
+{
+  "name": "Book to Game – Buku STEM jadi Game",
+  "short_name": "Book to Game",
+  "description": "Unggah buku STEM, mesin membangun game petualangan edukasi: level per bab, misi, lab virtual, kuis, lencana, dan rapor capaian.",
+  "lang": "id",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#120e26",
+  "theme_color": "#3b2a86",
+  "categories": ["education", "games"],
+  "icons": [
+    { "src": "ikon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "ikon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "ikon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
