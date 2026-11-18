@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asesmen Diagnostik Kilat</title>
+<meta name="description" content="Asesmen awal literasi dan numerasi singkat untuk SMP: input hasil per siswa, pengelompokan perlu bimbingan/cukup/mahir, dan saran aktivitas berdiferensiasi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1e8; --surface:#fffdf8; --surface2:#f0ebdf; --ink:#1c2827; --muted:#56635f; --line:#dcd4c3;
+  --brand:#0e5a57; --brand-ink:#ffffff; --brand-soft:#d8ebe8; --accent:#b8650f;
+  --gb:#a83c26; --gb-bg:#fbe5de; --gc:#8a5d00; --gc-bg:#fbefcf; --gm:#196c43; --gm-bg:#d9f0e2;
+  --ok:#196c43; --no:#a83c26;
+  --shadow:0 1px 0 rgba(0,0,0,.04),0 6px 18px -10px rgba(30,40,30,.25);
+  --r:14px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#111816; --surface:#18221f; --surface2:#1f2b28; --ink:#e6eeeb; --muted:#9db0aa; --line:#2d3c38;
+    --brand:#5cbcb5; --brand-ink:#08201e; --brand-soft:#173532; --accent:#eaa255;
+    --gb:#f29b85; --gb-bg:#3a1e18; --gc:#e8c063; --gc-bg:#33290f; --gm:#74d6a2; --gm-bg:#14301f;
+    --ok:#74d6a2; --no:#f29b85; --shadow:0 1px 0 rgba(0,0,0,.3),0 8px 20px -12px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111816; --surface:#18221f; --surface2:#1f2b28; --ink:#e6eeeb; --muted:#9db0aa; --line:#2d3c38;
+  --brand:#5cbcb5; --brand-ink:#08201e; --brand-soft:#173532; --accent:#eaa255;
+  --gb:#f29b85; --gb-bg:#3a1e18; --gc:#e8c063; --gc-bg:#33290f; --gm:#74d6a2; --gm-bg:#14301f;
+  --ok:#74d6a2; --no:#f29b85; --shadow:0 1px 0 rgba(0,0,0,.3),0 8px 20px -12px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Plus Jakarta Sans",system-ui,sans-serif;min-height:100vh}
+h1,h2,h3,h4{font-family:Fraunces,Georgia,serif;line-height:1.2;margin:0 0 .4em;letter-spacing:-.01em}
+h2{font-size:1.45rem}h3{font-size:1.12rem}
+a{color:var(--brand)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.top{background:var(--brand);color:var(--brand-ink);position:relative;overflow:hidden}
+header.top::before{content:"";position:absolute;inset:0;opacity:.13;background-image:linear-gradient(currentColor 1px,transparent 1px),linear-gradient(90deg,currentColor 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.toprow{display:flex;align-items:center;gap:14px;padding:18px 0 14px;position:relative}
+.logo{width:46px;height:46px;flex:none;border-radius:12px;background:var(--brand-ink);color:var(--brand);display:grid;place-items:center;font:800 1.25rem Fraunces,serif}
+.toprow h1{font-size:1.5rem;margin:0}
+.toprow p{margin:0;opacity:.88;font-size:.9rem}
+.toprow .sp{flex:1}
+.iconbtn{white-space:nowrap;background:transparent;border:1.5px solid currentColor;color:inherit;border-radius:10px;padding:7px 11px;cursor:pointer;font-weight:600;font-size:.85rem}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;position:relative;scrollbar-width:none;padding-bottom:0}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:none;border:0;background:transparent;color:inherit;opacity:.82;padding:10px 14px;border-radius:10px 10px 0 0;cursor:pointer;font-weight:600;font-size:.9rem}
+nav.tabs button[aria-selected="true"]{background:var(--bg);color:var(--ink);opacity:1}
+main{padding:22px 0 30px}
+.banner{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--gc-bg);color:var(--ink);border:1px dashed var(--gc);border-radius:12px;padding:10px 14px;margin-bottom:18px;font-size:.92rem}
+.banner b{color:var(--gc)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.stat{padding:14px 16px}
+.stat .n{font:800 2rem Fraunces,serif;color:var(--brand);line-height:1}
+.stat .l{color:var(--muted);font-size:.85rem}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.row.end{justify-content:flex-end}
+.sp{flex:1}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 13px;cursor:pointer;font-weight:600;font-size:.9rem;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--brand)}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.btn.warn{border-color:var(--gb);color:var(--gb)}
+.btn.sm{padding:5px 10px;font-size:.82rem}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:.85rem;font-weight:600;color:var(--muted)}
+input[type=text],input[type=number],input[type=date],input[type=password],select,textarea{background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;min-height:40px;color:var(--ink);font-weight:500;width:100%}
+textarea{min-height:90px;resize:vertical}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:11px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:7px 13px;cursor:pointer;font-weight:600;font-size:.88rem}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.75rem;font-weight:700;border:1px solid transparent;white-space:nowrap}
+.pill.contoh{background:var(--gc-bg);color:var(--gc);border-color:var(--gc)}
+.g-B{background:var(--gb-bg);color:var(--gb)}
+.g-C{background:var(--gc-bg);color:var(--gc)}
+.g-M{background:var(--gm-bg);color:var(--gm)}
+.g-X{background:var(--surface2);color:var(--muted)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start}
+.steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-weight:800;font-family:Fraunces,serif}
+.bar{display:flex;height:22px;border-radius:7px;overflow:hidden;background:var(--surface2);font-size:.72rem;font-weight:700}
+.bar span{display:grid;place-items:center;min-width:0;overflow:hidden;white-space:nowrap}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.note{border-left:4px solid var(--brand);background:var(--brand-soft);padding:10px 14px;border-radius:0 10px 10px 0;font-size:.9rem}
+/* instrumen */
+.stim{background:var(--surface2);border-radius:12px;padding:14px 16px;margin:10px 0 14px;white-space:pre-line}
+.stim h4{font-size:1rem;margin-bottom:6px}
+.soal{border-top:1px dashed var(--line);padding:12px 0}
+.soal .k{font-weight:800;color:var(--brand);margin-right:6px}
+.soal ol{margin:6px 0 0;padding-left:0;list-style:none;display:grid;gap:3px}
+.soal ol li{padding-left:28px;position:relative}
+.soal ol li::before{content:attr(data-h)".";position:absolute;left:4px;font-weight:700}
+.soal ol li.kunci{color:var(--ok);font-weight:700}
+.meta{font-size:.78rem;color:var(--muted)}
+/* tabel input */
+.tblwrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);max-height:70vh}
+table{border-collapse:separate;border-spacing:0;width:100%}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:center;font-size:.88rem;white-space:nowrap}
+thead th{position:sticky;top:0;background:var(--surface2);z-index:2;font-weight:700}
+th.nm,td.nm{position:sticky;left:0;background:var(--surface);text-align:left;z-index:1;min-width:150px;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+thead th.nm{z-index:3;background:var(--surface2)}
+th.dL{color:var(--brand)} th.dN{color:var(--accent)}
+.sel{width:36px;height:34px;border-radius:9px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;font-weight:800;font-size:1rem;line-height:1}
+.sel.v1{background:var(--gm-bg);border-color:var(--ok);color:var(--ok)}
+.sel.v0{background:var(--gb-bg);border-color:var(--no);color:var(--no)}
+tr.absen td:not(.nm):not(.ab){opacity:.35}
+td.sk{font-weight:700;min-width:74px}
+.tbl2 td,.tbl2 th{text-align:left;white-space:normal}
+.tbl2 td.c,.tbl2 th.c{text-align:center}
+/* kelompok */
+.bins{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.bin{border-radius:var(--r);border:1px solid var(--line);background:var(--surface);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.bin>header{padding:14px 16px 10px}
+.bin>header h3{margin:0;display:flex;align-items:baseline;gap:8px}
+.bin>header .cnt{font:800 1.7rem Fraunces,serif;margin-left:auto}
+.bin.B>header{background:var(--gb-bg);color:var(--gb)}
+.bin.C>header{background:var(--gc-bg);color:var(--gc)}
+.bin.M>header{background:var(--gm-bg);color:var(--gm)}
+.bin .body{padding:12px 16px 16px;display:grid;gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:.82rem;background:var(--surface2)}
+.chip b{font-weight:700}
+.mv{font-weight:800;font-size:.8rem}
+.mv.up{color:var(--ok)} .mv.dn{color:var(--no)}
+.act{border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+.act h4{font-family:"Plus Jakarta Sans",sans-serif;font-size:.92rem;margin:0 0 4px}
+.act p{margin:0;font-size:.86rem}
+.tag{font-size:.7rem;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.04em}
+.ai-out{white-space:pre-wrap;font-size:.88rem;background:var(--surface2);border-radius:10px;padding:10px 12px}
+.matrix td,.matrix th{text-align:center;padding:8px}
+.matrix td b{font:800 1.2rem Fraunces,serif}
+.pbar{height:10px;border-radius:5px;background:var(--surface2);overflow:hidden;min-width:90px}
+.pbar i{display:block;height:100%;background:var(--brand)}
+.pbar i.lo{background:var(--no)} .pbar i.mid{background:var(--gc)}
+details summary{cursor:pointer;font-weight:700}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50;max-width:calc(100% - 32px)}
+.toast.on{opacity:1}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);padding:20px;width:min(640px,calc(100% - 24px));max-height:90vh}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+footer.src{border-top:1px solid var(--line);padding:18px 0 40px;font-size:.85rem;color:var(--muted)}
+footer.src ul{margin:6px 0 0;padding-left:18px}
+.hide{display:none!important}
+@media (max-width:600px){
+  .toprow h1{font-size:1.2rem}.toprow p{display:none}
+  .card{padding:14px}
+  h2{font-size:1.25rem}
+}
+@media print{
+  header.top,nav,.no-print,.banner,footer.src,.toast{display:none!important}
+  body{background:#fff;color:#000;font-size:12px}
+  .card,.bin{box-shadow:none;border-color:#999;break-inside:avoid}
+  .stim{background:#f2f2f2}
+  main{padding:0}
+  .soal{break-inside:avoid}
+  body.tanpa-kunci .soal ol li.kunci{color:inherit;font-weight:400}
+  body.tanpa-kunci .meta{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="toprow">
+      <div class="logo" aria-hidden="true">Ak</div>
+      <div>
+        <h1>Asesmen Diagnostik Kilat</h1>
+        <p>Asesmen awal literasi &amp; numerasi · kelompokkan siswa · rancang pembelajaran berdiferensiasi</p>
+      </div>
+      <div class="sp"></div>
+      <button class="iconbtn" id="btnTema" type="button" aria-label="Ganti mode terang/gelap">◐ Tema</button>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Menu utama" id="tabs"></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="bannerContoh" class="banner hide" role="status"></div>
+  <section id="view" aria-live="polite"></section>
+</main>
+
+<footer class="src wrap">
+  <strong>Dasar dan sumber</strong>
+  <ul>
+    <li><a href="https://uploads.belajar.id/document/files/Panduan_Pembelajaran_dan_Asesmen_01j1z0waaj2pwy101n8qn148fv.pdf" target="_blank" rel="noopener">Panduan Pembelajaran dan Asesmen, Edisi Revisi 2024 (BSKAP)</a>: asesmen awal untuk mengetahui kemampuan awal dan kebutuhan belajar murid, ditindaklanjuti dengan diferensiasi.</li>
+    <li><a href="https://www.detik.com/edu/sekolah/d-8001325/mpls-smp-sma-akan-ada-asesmen-literasi-numerasi-ini-ketentuannya" target="_blank" rel="noopener">detikEdu (8 Juli 2025): Asesmen literasi-numerasi MPLS SMP–SMA</a>: hasil bukan skor/peringkat, dipakai guru untuk penguatan pembelajaran.</li>
+    <li><a href="https://www.detik.com/edu/sekolah/d-8021932/permendikdasmen-13-tahun-2025-isi-lengkap-dan-dampaknya-untuk-sekolah" target="_blank" rel="noopener">detikEdu: Permendikdasmen 13/2025 dan pendekatan pembelajaran mendalam</a>.</li>
+    <li><a href="https://povertyactionlab.org/policy-insight/tailoring-instruction-students-learning-levels-increase-learning" target="_blank" rel="noopener">J-PAL: Teaching at the Right Level</a>: asesmen sederhana, kelompok menurut tingkat kemampuan, asesmen ulang dan pengelompokan ulang berkala.</li>
+  </ul>
+  <p class="small">Soal bawaan adalah butir orisinal untuk asesmen awal kelas VII–IX, bukan instrumen resmi. Semua nama di data contoh fiktif. Data tersimpan hanya di perangkat ini.</p>
+</footer>
+
+<dialog id="dlg"><div id="dlgBody"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const KUNCI = 'adk_v1', KUNCI_UI = 'adk_ui', KUNCI_AI = 'adk_gemini', KUNCI_TEMA = 'adk_tema';
+const RANAH = { L: 'Literasi membaca', N: 'Numerasi' };
+const GRUP = {
+  B: { nama: 'Perlu bimbingan', ket: 'Butuh pendampingan intensif pada konsep dasar.' },
+  C: { nama: 'Cukup', ket: 'Sudah menguasai dasar, perlu penguatan dan latihan bertahap.' },
+  M: { nama: 'Mahir', ket: 'Siap tantangan, pengayaan, dan peran tutor sebaya.' }
+};
+
+/* ---------- utilitas ---------- */
+const $ = s => document.querySelector(s);
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function uid() { return Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4); }
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('on'), 2600); }
+function tglID(s) { if (!s) return '-'; const d = new Date(s + 'T00:00:00'); if (isNaN(d)) return s; return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }); }
+function hariIni() { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); }
+function unduh(nama, isi, tipe) {
+  try {
+    const blob = new Blob([isi], { type: tipe }); const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = nama; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); toast('Berkas ' + nama + ' diunduh.');
+  } catch (e) { salin(isi); }
+}
+async function salin(t) {
+  try { await navigator.clipboard.writeText(t); toast('Tersalin ke papan klip.'); }
+  catch (e) { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('Tersalin.'); } catch (_) { toast('Gagal menyalin.'); } ta.remove(); }
+}
+
+/* ---------- instrumen bawaan (butir orisinal) ---------- */
+function instrumenBawaan() {
+  return {
+    stimulus: [
+      { id: 's1', judul: 'Bank Sampah Sekolah', teks: 'Sejak awal tahun ajaran, OSIS membuka Bank Sampah Sekolah setiap Jumat pukul 07.00–08.00 di samping kantin. Siswa dapat menyetor botol plastik, kertas, dan kardus yang sudah dipilah. Setiap 1 kg botol plastik dihargai Rp3.000, sedangkan 1 kg kertas dihargai Rp1.500. Tabungan dapat diambil pada akhir semester atau ditukar dengan alat tulis.\nDalam tiga bulan, terkumpul 240 kg sampah. Kelas VIII B menjadi penyetor terbanyak. Meski begitu, petugas mengeluhkan banyak botol yang masih berisi sisa minuman sehingga harus dicuci ulang dan membuat antrean lebih lama. OSIS berencana memasang poster tentang cara menyiapkan sampah sebelum disetor.' },
+      { id: 's2', judul: 'Lampu di Ujung Gang', teks: 'Lampu di ujung gang sudah seminggu padam. Setiap malam, Raka melihat Bu Sum, penjual jamu, berjalan pelan sambil meraba pagar. Warga lain hanya menggerutu, "Itu urusan pengurus RT."\nSabtu pagi, Raka memecahkan celengannya. Uangnya hanya cukup untuk satu bola lampu. Ia meminjam tangga Pak Darto dan memasangnya dengan hati-hati, dibantu adiknya yang memegangi tangga.\nMalam itu, gang kembali terang. Bu Sum berhenti di bawah lampu, tersenyum, lalu berkata pelan, "Terang ini milik semua orang, Nak." Esoknya, beberapa warga mulai mengumpulkan iuran untuk lampu cadangan.' }
+    ],
+    butir: [
+      { id: 'L1', ranah: 'L', kode: 'L1', stimulus: 's1', soal: 'Kapan siswa dapat menyetor sampah ke Bank Sampah Sekolah?', opsi: ['Setiap hari sepulang sekolah', 'Setiap Jumat pukul 07.00–08.00', 'Setiap akhir semester', 'Setiap Jumat pada jam istirahat'], kunci: 1, indikator: 'Menemukan informasi tersurat', level: 'Pemahaman', sulit: .3 },
+      { id: 'L2', ranah: 'L', kode: 'L2', stimulus: 's1', soal: 'Mengapa antrean di bank sampah menjadi lebih lama?', opsi: ['Banyak siswa menukar tabungan dengan alat tulis', 'Petugas hanya bertugas selama satu jam', 'Botol yang disetor masih berisi sisa minuman sehingga harus dicuci', 'Sampah dari kelas VIII B terlalu banyak'], kunci: 2, indikator: 'Memahami hubungan sebab-akibat', level: 'Pemahaman', sulit: .45 },
+      { id: 'L3', ranah: 'L', kode: 'L3', stimulus: 's1', soal: 'Gagasan utama teks "Bank Sampah Sekolah" adalah ...', opsi: ['Kelas VIII B paling rajin menyetor sampah', 'Bank Sampah Sekolah berjalan baik, tetapi cara penyetoran sampah masih bermasalah', 'Harga botol plastik lebih mahal daripada kertas', 'Tabungan bank sampah dapat ditukar dengan alat tulis'], kunci: 1, indikator: 'Menentukan gagasan utama', level: 'Penerapan', sulit: .55 },
+      { id: 'L4', ranah: 'L', kode: 'L4', stimulus: 's1', soal: 'Isi poster yang paling tepat untuk mengatasi masalah dalam teks adalah ...', opsi: ['"Ayo menabung di bank sampah setiap hari!"', '"Kosongkan dan bilas botol sebelum disetor."', '"Kelas penyetor terbanyak mendapat hadiah."', '"Bank sampah buka di samping kantin."'], kunci: 1, indikator: 'Mengevaluasi dan memberi solusi berdasarkan teks', level: 'Penalaran', sulit: .6 },
+      { id: 'L5', ranah: 'L', kode: 'L5', stimulus: 's2', soal: 'Sifat Raka yang paling tergambar dalam cerita adalah ...', opsi: ['Peduli dan mau bertindak', 'Pemberani tetapi ceroboh', 'Hemat dan suka menabung', 'Penurut kepada orang tua'], kunci: 0, indikator: 'Menafsirkan watak tokoh', level: 'Penerapan', sulit: .45 },
+      { id: 'L6', ranah: 'L', kode: 'L6', stimulus: 's2', soal: 'Makna ucapan Bu Sum, "Terang ini milik semua orang, Nak," jika dikaitkan dengan akhir cerita adalah ...', opsi: ['Lampu itu sebaiknya dijaga pengurus RT saja', 'Kebaikan kecil seseorang dapat menggerakkan orang lain ikut peduli', 'Bu Sum ingin mengganti uang celengan Raka', 'Warga sebaiknya tidak keluar rumah pada malam hari'], kunci: 1, indikator: 'Merefleksikan pesan/amanat teks', level: 'Penalaran', sulit: .7 },
+      { id: 'N1', ranah: 'N', kode: 'N1', stimulus: 's1', soal: 'Dina menyetor 2,5 kg botol plastik dan 4 kg kertas. Berdasarkan harga dalam teks "Bank Sampah Sekolah", berapa tabungan yang ia peroleh?', opsi: ['Rp10.500', 'Rp13.500', 'Rp19.500', 'Rp12.000'], kunci: 1, indikator: 'Bilangan: operasi desimal dalam konteks', level: 'Penerapan', sulit: .45 },
+      { id: 'N2', ranah: 'N', kode: 'N2', stimulus: '', soal: 'Dari 240 kg sampah yang terkumpul, 3/8 bagian adalah botol plastik. Berapa kilogram botol plastik yang terkumpul?', opsi: ['30 kg', '80 kg', '90 kg', '150 kg'], kunci: 2, indikator: 'Bilangan: pecahan dari suatu jumlah', level: 'Penerapan', sulit: .5 },
+      { id: 'N3', ranah: 'N', kode: 'N3', stimulus: '', soal: 'Kursi di aula disusun bertingkat. Baris pertama berisi 12 kursi dan setiap baris berikutnya bertambah 2 kursi. Berapa kursi pada baris ke-8?', opsi: ['26', '28', '24', '16'], kunci: 0, indikator: 'Aljabar: pola bilangan', level: 'Penalaran', sulit: .55 },
+      { id: 'N4', ranah: 'N', kode: 'N4', stimulus: '', soal: 'Taman kelas berbentuk persegi panjang berukuran 6 m × 4 m. Sekelilingnya akan dipagari, kecuali bagian pintu selebar 1 m. Berapa panjang pagar yang diperlukan?', opsi: ['24 m', '20 m', '19 m', '23 m'], kunci: 2, indikator: 'Geometri dan pengukuran: keliling', level: 'Penerapan', sulit: .55 },
+      { id: 'N5', ranah: 'N', kode: 'N5', stimulus: '', soal: 'Lama membaca lima siswa dalam sehari (menit): 20, 35, 15, 30, 25. Berapa rata-rata lama membaca mereka?', opsi: ['20 menit', '25 menit', '30 menit', '125 menit'], kunci: 1, indikator: 'Data: rata-rata', level: 'Pemahaman', sulit: .4 },
+      { id: 'N6', ranah: 'N', kode: 'N6', stimulus: '', soal: 'Dalam kantong ada 5 kelereng merah, 3 biru, dan 2 hijau. Raka mengambil satu kelereng tanpa melihat. Pernyataan yang benar adalah ...', opsi: ['Peluang terambil kelereng biru adalah 3/10', 'Peluang terambil kelereng merah adalah 1/5', 'Peluang terambil hijau lebih besar daripada biru', 'Pasti terambil kelereng merah'], kunci: 0, indikator: 'Ketidakpastian: peluang sederhana', level: 'Penalaran', sulit: .65 }
+    ]
+  };
+}
+
+/* ---------- pustaka aktivitas (pembelajaran mendalam) ---------- */
+const AKTIVITAS = {
+  L: {
+    B: [
+      { j: 'Membaca berpasangan 10 menit', p: 'Berkesadaran', d: 'Pasangkan dengan teman kelompok Cukup. Baca teks pendek (±150 kata) bergantian per paragraf, lalu jawab 3 pertanyaan "apa, siapa, kapan" dengan menunjuk kalimat buktinya.' },
+      { j: 'Stabilo informasi', p: 'Bermakna', d: 'Gunakan teks dari lingkungan sekolah (pengumuman, jadwal, label). Siswa menandai informasi penting dengan dua warna: fakta (kuning) dan alasan/sebab (hijau).' },
+      { j: 'Cerita ulang tiga kalimat', p: 'Menggembirakan', d: 'Setelah membaca, siswa menceritakan kembali isi teks dalam tiga kalimat (awal–tengah–akhir) memakai kartu bergambar atau gestur.' }
+    ],
+    C: [
+      { j: 'Peta gagasan utama', p: 'Bermakna', d: 'Siswa membuat peta pikiran: gagasan utama di tengah, 2–3 gagasan pendukung, dan satu kalimat bukti dari teks untuk tiap cabang.' },
+      { j: 'Tanya "mengapa menurutmu?"', p: 'Berkesadaran', d: 'Berpasangan, siswa saling bertanya inferensi (sebab, watak, maksud penulis) dan wajib menyebutkan petunjuk dari teks.' },
+      { j: 'Bandingkan dua teks pendek', p: 'Bermakna', d: 'Sajikan dua teks bertema sama (berita dan cerpen). Siswa mengisi tabel persamaan–perbedaan isi dan tujuan.' }
+    ],
+    M: [
+      { j: 'Opini berbasis bukti', p: 'Bermakna', d: 'Siswa menulis tanggapan 1 paragraf terhadap masalah dalam teks dengan minimal dua bukti dan satu usulan solusi, lalu dipresentasikan singkat.' },
+      { j: 'Perancang pertanyaan', p: 'Menggembirakan', d: 'Siswa membuat 3 soal (informasi, interpretasi, evaluasi) untuk kelompok lain dan menyiapkan kunci beserta alasannya.' },
+      { j: 'Tutor sebaya', p: 'Berkesadaran', d: 'Siswa mendampingi kelompok Perlu bimbingan 10–15 menit dengan panduan langkah membaca, lalu menulis refleksi tentang cara menjelaskan.' }
+    ]
+  },
+  N: {
+    B: [
+      { j: 'Benda konkret dan garis bilangan', p: 'Berkesadaran', d: 'Gunakan potongan kertas, kancing, atau pita meteran untuk pecahan, desimal, dan operasi hitung sebelum masuk simbol.' },
+      { j: 'Simulasi kantin', p: 'Bermakna', d: 'Siswa berbelanja dengan uang mainan dan daftar harga kantin: menjumlah, mengembalikan uang, dan menghitung harga per satuan.' },
+      { j: 'Kartu operasi berjenjang', p: 'Menggembirakan', d: 'Permainan kartu soal dari mudah ke sedang; siswa naik level setelah benar 3 kali berturut-turut.' }
+    ],
+    C: [
+      { j: 'Soal cerita dua langkah', p: 'Bermakna', d: 'Siswa menyelesaikan soal kontekstual dua langkah dengan strategi tabel atau gambar, lalu menjelaskan langkahnya kepada pasangan.' },
+      { j: 'Pola dengan stik/korek', p: 'Menggembirakan', d: 'Bangun pola bertingkat dengan stik es krim, catat banyaknya pada tabel, temukan aturan "ditambah berapa" dan tebak suku ke-10.' },
+      { j: 'Ukur ruang kelas', p: 'Bermakna', d: 'Berkelompok mengukur panjang–lebar meja, papan, dan taman, menghitung keliling dan luas, lalu membandingkan hasil antarkelompok.' }
+    ],
+    M: [
+      { j: 'Proyek data kelas', p: 'Bermakna', d: 'Siswa merancang survei singkat (misalnya waktu membaca), mengolah rata-rata, membuat diagram, dan menyimpulkan temuan.' },
+      { j: 'Soal terbuka', p: 'Berkesadaran', d: 'Berikan masalah dengan banyak jawaban benar (mis. ukuran taman berkeliling 20 m). Siswa mencari semua kemungkinan dan menalar mana yang terbaik.' },
+      { j: 'Pembuat soal numerasi', p: 'Menggembirakan', d: 'Siswa membuat soal numerasi dari kegiatan sekolah (bank sampah, kantin, kokurikuler) untuk diuji kelompok lain.' }
+    ]
+  }
+};
+
+/* ---------- data contoh ---------- */
+const NAMA_A = ['Aditya Pratama', 'Bunga Lestari', 'Cahyo Nugroho', 'Dewi Anggraini', 'Eko Saputra', 'Fajar Ramadhan', 'Gita Permatasari', 'Hanif Wibowo', 'Intan Maharani', 'Joko Susilo', 'Kirana Putri', 'Lutfi Hakim', 'Maya Safitri', 'Nanda Kurniawan', 'Oktavia Rahma', 'Putra Wijaya'];
+const NAMA_B = ['Rani Puspita', 'Satria Mahendra', 'Tiara Ayu', 'Umar Faruq', 'Vina Melati', 'Wahyu Setiawan', 'Yasmin Azzahra', 'Zidan Firmansyah', 'Alya Nirmala', 'Bima Arya', 'Citra Kusuma', 'Dimas Prakoso', 'Elsa Wulandari', 'Galih Saputro'];
+function rng(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+function buatContoh(st) {
+  const r = rng(20261119);
+  const daftar = [{ nama: 'VII A', siswa: NAMA_A, ronde: [['Asesmen Awal', '2026-07-16', 0], ['Pemantauan 1', '2026-09-17', .16]] }, { nama: 'VII B', siswa: NAMA_B, ronde: [['Asesmen Awal', '2026-07-16', 0]] }];
+  daftar.forEach(dk => {
+    const k = { id: uid(), nama: dk.nama, contoh: true, siswa: dk.siswa.map(n => ({ id: uid(), nama: n })) };
+    st.kelas.push(k);
+    const kem = k.siswa.map(() => ({ L: .2 + r() * .72, N: .15 + r() * .75 }));
+    dk.ronde.forEach(([nm, tgl, naik]) => {
+      const jaw = {};
+      k.siswa.forEach((s, i) => {
+        jaw[s.id] = {};
+        st.instrumen.butir.forEach(b => {
+          const a = kem[i][b.ranah] + naik, p = 1 / (1 + Math.exp(-(a - (b.sulit ?? .5)) * 7));
+          jaw[s.id][b.id] = r() < p ? 1 : 0;
+        });
+      });
+      const absen = dk.nama === 'VII B' ? [k.siswa[5].id] : [];
+      absen.forEach(id => { jaw[id] = {}; });
+      st.putaran.push({ id: uid(), kelasId: k.id, nama: nm + ' (contoh)', tanggal: tgl, jawaban: jaw, absen, contoh: true });
+    });
+  });
+}
+function stateBaru(denganContoh) {
+  const st = { versi: 1, instrumen: instrumenBawaan(), kelas: [], putaran: [], pengaturan: { bimbingan: 50, mahir: 80 } };
+  if (denganContoh) buatContoh(st);
+  return st;
+}
+
+/* ---------- state ---------- */
+let S = null;
+(function muat() {
+  const raw = lsGet(KUNCI);
+  if (raw) { try { const o = JSON.parse(raw); if (o && o.versi === 1 && o.instrumen && Array.isArray(o.kelas)) S = o; } catch (e) { } }
+  if (!S) S = stateBaru(true);
+})();
+let UI = { tab: 'beranda', kelasId: '', putaranId: '', ranah: 'L', kunciTampil: true };
+try { Object.assign(UI, JSON.parse(lsGet(KUNCI_UI) || '{}')); } catch (e) { }
+function simpan() { if (!lsSet(KUNCI, JSON.stringify(S))) toast('Penyimpanan perangkat tidak tersedia; data hanya bertahan sampai halaman ditutup.'); }
+function simpanUI() { lsSet(KUNCI_UI, JSON.stringify(UI)); }
+function getAI() { try { return JSON.parse(lsGet(KUNCI_AI) || '{}'); } catch (e) { return {}; } }
+
+/* ---------- perhitungan ---------- */
+const butir = r => S.instrumen.butir.filter(b => !r || b.ranah === r);
+const kelasById = id => S.kelas.find(k => k.id === id);
+const putaranKelas = kid => S.putaran.filter(p => p.kelasId === kid).sort((a, b) => (a.tanggal || '').localeCompare(b.tanggal || ''));
+function grupDari(pct) { if (pct == null) return 'X'; const a = S.pengaturan; return pct < a.bimbingan ? 'B' : pct < a.mahir ? 'C' : 'M'; }
+function hasilSiswa(p, sid) {
+  const absen = (p.absen || []).includes(sid), j = p.jawaban[sid] || {}, out = { absen };
+  ['L', 'N'].forEach(r => {
+    const bs = butir(r); let ben = 0, isi = 0;
+    bs.forEach(b => { const v = j[b.id]; if (v === 1 || v === 0) { isi++; ben += v; } });
+    const pct = (!absen && isi > 0) ? Math.round(ben / isi * 100) : null;
+    out[r] = { ben, isi, tot: bs.length, pct, grup: grupDari(pct) };
+  });
+  return out;
+}
+function rekap(p) {
+  const k = kelasById(p.kelasId); if (!k) return [];
+  return k.siswa.map(s => ({ s, h: hasilSiswa(p, s.id) }));
+}
+function sebelum(p) { const ls = putaranKelas(p.kelasId); const i = ls.findIndex(x => x.id === p.id); return i > 0 ? ls[i - 1] : null; }
+function persenButir(p, ids) {
+  return butir().map(b => {
+    let ben = 0, isi = 0;
+    ids.forEach(sid => { if ((p.absen || []).includes(sid)) return; const v = (p.jawaban[sid] || {})[b.id]; if (v === 1 || v === 0) { isi++; ben += v; } });
+    return { b, isi, pct: isi ? Math.round(ben / isi * 100) : null };
+  });
+}
+function pastikanPilihan() {
+  if (!kelasById(UI.kelasId)) UI.kelasId = S.kelas[0]?.id || '';
+  const ps = putaranKelas(UI.kelasId);
+  if (!ps.find(p => p.id === UI.putaranId)) UI.putaranId = ps.length ? ps[ps.length - 1].id : '';
+}
+
+/* ---------- navigasi ---------- */
+const TABS = [['beranda', 'Beranda'], ['instrumen', 'Instrumen'], ['input', 'Input Hasil'], ['kelompok', 'Kelompok & Aktivitas'], ['butir', 'Analisis Butir'], ['kelas', 'Kelas & Siswa'], ['pengaturan', 'Pengaturan']];
+function renderTabs() {
+  $('#tabs').innerHTML = TABS.map(([id, t]) => `<button role="tab" type="button" data-tab="${id}" aria-selected="${UI.tab === id}" id="tab-${id}">${t}</button>`).join('');
+}
+function renderBanner() {
+  const ada = S.kelas.some(k => k.contoh) || S.putaran.some(p => p.contoh);
+  const el = $('#bannerContoh'); el.classList.toggle('hide', !ada);
+  if (ada) el.innerHTML = `<span><b>Data contoh sedang tampil.</b> Kelas dan hasil berlabel <span class="pill contoh">contoh</span> berisi nama fiktif untuk mencoba aplikasi.</span><span class="sp"></span><button class="btn sm warn" type="button" data-act="hapusContoh">Hapus data contoh</button>`;
+}
+function render() {
+  pastikanPilihan(); renderTabs(); renderBanner();
+  const v = $('#view');
+  const f = { beranda: vBeranda, instrumen: vInstrumen, input: vInput, kelompok: vKelompok, butir: vButir, kelas: vKelas, pengaturan: vPengaturan }[UI.tab] || vBeranda;
+  v.innerHTML = f(); v.setAttribute('role', 'tabpanel'); v.setAttribute('aria-labelledby', 'tab-' + UI.tab);
+  document.body.classList.toggle('tanpa-kunci', UI.tab === 'instrumen' && !UI.kunciTampil);
+}
+function pilihKelasPutaran(denganPutaran = true) {
+  const ks = S.kelas.map(k => `<option value="${k.id}" ${k.id === UI.kelasId ? 'selected' : ''}>${esc(k.nama)}${k.contoh ? ' (contoh)' : ''}</option>`).join('');
+  const ps = putaranKelas(UI.kelasId).map(p => `<option value="${p.id}" ${p.id === UI.putaranId ? 'selected' : ''}>${esc(p.nama)} · ${tglID(p.tanggal)}</option>`).join('');
+  return `<div class="row no-print">
+    <label class="f" style="min-width:150px">Kelas<select data-ch="kelas">${ks || '<option value="">Belum ada kelas</option>'}</select></label>
+    ${denganPutaran ? `<label class="f" style="min-width:230px;flex:1;max-width:380px">Putaran asesmen<select data-ch="putaran">${ps || '<option value="">Belum ada putaran</option>'}</select></label>
+    <button class="btn" type="button" data-act="putaranBaru" style="align-self:flex-end" ${UI.kelasId ? '' : 'disabled'}>+ Putaran baru</button>` : ''}
+  </div>`;
+}
+function kosong(pesan, tombol) { return `<div class="card"><p>${pesan}</p>${tombol || ''}</div>`; }
+
+/* ---------- Beranda ---------- */
+function barDistribusi(list, r) {
+  const n = { B: 0, C: 0, M: 0, X: 0 }; list.forEach(x => n[x.h[r].grup]++);
+  const tot = list.length || 1;
+  return `<div class="bar" role="img" aria-label="${RANAH[r]}: perlu bimbingan ${n.B}, cukup ${n.C}, mahir ${n.M}, belum dinilai ${n.X}">${['B', 'C', 'M', 'X'].map(g => n[g] ? `<span class="g-${g}" style="width:${n[g] / tot * 100}%">${n[g]}</span>` : '').join('')}</div>`;
+}
+function vBeranda() {
+  const nSiswa = S.kelas.reduce((a, k) => a + k.siswa.length, 0);
+  const kartuKelas = S.kelas.map(k => {
+    const ps = putaranKelas(k.id); const p = ps[ps.length - 1];
+    if (!p) return `<div class="card"><h3>${esc(k.nama)} ${k.contoh ? '<span class="pill contoh">contoh</span>' : ''}</h3><p class="muted small">Belum ada putaran asesmen.</p><button class="btn sm" type="button" data-act="bukaInput" data-k="${k.id}">Mulai input</button></div>`;
+    const rk = rekap(p);
+    return `<div class="card"><div class="row"><h3 style="margin:0">${esc(k.nama)}</h3>${k.contoh ? '<span class="pill contoh">contoh</span>' : ''}<span class="sp"></span><span class="small muted">${k.siswa.length} siswa</span></div>
+      <p class="small muted" style="margin:4px 0 10px">Terakhir: ${esc(p.nama)} · ${tglID(p.tanggal)}</p>
+      <div class="small" style="margin-bottom:4px">Literasi</div>${barDistribusi(rk, 'L')}
+      <div class="small" style="margin:8px 0 4px">Numerasi</div>${barDistribusi(rk, 'N')}
+      <div class="row" style="margin-top:12px"><button class="btn sm" type="button" data-act="bukaKelompok" data-k="${k.id}" data-p="${p.id}">Lihat kelompok</button><button class="btn sm" type="button" data-act="bukaInput" data-k="${k.id}" data-p="${p.id}">Input</button></div></div>`;
+  }).join('');
+  return `<div class="grid g4" style="margin-bottom:16px">
+      <div class="card stat"><div class="n">${S.kelas.length}</div><div class="l">kelas</div></div>
+      <div class="card stat"><div class="n">${nSiswa}</div><div class="l">siswa</div></div>
+      <div class="card stat"><div class="n">${S.putaran.length}</div><div class="l">putaran asesmen</div></div>
+      <div class="card stat"><div class="n">${butir().length}</div><div class="l">butir soal (${butir('L').length} literasi, ${butir('N').length} numerasi)</div></div>
+    </div>
+    <div class="grid g2" style="margin-bottom:16px">
+      <div class="card"><h2>Alur kilat</h2><ol class="steps">
+        <li><span><b>Cetak atau tayangkan instrumen</b> (±25–30 menit, 12 butir). Bisa pakai soal sekolah sendiri di menu Instrumen.</span></li>
+        <li><span><b>Input benar/salah</b> per siswa. Ketuk sel atau ketik <kbd>B</kbd>/<kbd>S</kbd>.</span></li>
+        <li><span><b>Lihat kelompok</b> Perlu bimbingan, Cukup, Mahir untuk literasi dan numerasi.</span></li>
+        <li><span><b>Ajar sesuai tingkat</b> dengan saran aktivitas per kelompok, sediakan waktu khusus tiap pekan.</span></li>
+        <li><span><b>Ulangi asesmen 4–6 pekan</b> sebagai putaran pemantauan, lalu kelompokkan ulang.</span></li>
+      </ol></div>
+      <div class="card"><h2>Prinsip pemakaian</h2>
+        <div class="note">Hasil asesmen diagnostik <b>bukan nilai rapor dan bukan peringkat</b>. Gunakan untuk merancang pembelajaran penguatan literasi dan numerasi.</div>
+        <ul class="small" style="padding-left:18px;margin:12px 0 0">
+          <li>Siswa mengerjakan mandiri, tanpa latihan atau bocoran kunci sebelumnya.</li>
+          <li>Kelompok bersifat lentur: siswa berpindah kelompok setelah putaran pemantauan.</li>
+          <li>Murid dengan hambatan intelektual dapat diberi asesmen yang disesuaikan.</li>
+          <li>Ambang kelompok saat ini: &lt;${S.pengaturan.bimbingan}% perlu bimbingan, ${S.pengaturan.bimbingan}–${S.pengaturan.mahir - 1}% cukup, ≥${S.pengaturan.mahir}% mahir (ubah di Pengaturan).</li>
+        </ul>
+        <div class="legend" style="margin-top:12px"><span><i class="g-B" style="background:var(--gb)"></i>Perlu bimbingan</span><span><i style="background:var(--gc)"></i>Cukup</span><span><i style="background:var(--gm)"></i>Mahir</span><span><i style="background:var(--line)"></i>Belum dinilai/absen</span></div>
+      </div>
+    </div>
+    <h2>Kelas</h2>
+    <div class="grid g3">${kartuKelas || kosong('Belum ada kelas. Tambahkan di menu Kelas &amp; Siswa.', '<button class="btn pri" type="button" data-tab="kelas">Tambah kelas</button>')}</div>`;
+}
+
+/* ---------- Instrumen ---------- */
+function vInstrumen() {
+  const stim = S.instrumen.stimulus;
+  let html = `<div class="row no-print" style="margin-bottom:14px"><h2 style="margin:0">Instrumen asesmen</h2><span class="sp"></span>
+    <div class="seg" role="group" aria-label="Tampilan kunci"><button type="button" data-act="kunci" data-v="1" aria-pressed="${UI.kunciTampil}">Dengan kunci</button><button type="button" data-act="kunci" data-v="0" aria-pressed="${!UI.kunciTampil}">Lembar siswa</button></div>
+    <button class="btn" type="button" data-act="cetak">Cetak</button>
+    <button class="btn pri" type="button" data-act="butirBaru">+ Butir</button>
+    <button class="btn" type="button" data-act="stimBaru">+ Teks stimulus</button></div>
+    <p class="small muted no-print">Butir bawaan orisinal untuk asesmen awal SMP (12 butir, ±25–30 menit). Anda dapat mengubah, menambah, atau menghapus butir; data lama tetap tersimpan per kode butir.</p>`;
+  const tampilButir = b => `<div class="soal"><div><span class="k">${esc(b.kode)}</span>${esc(b.soal)}</div>
+      <ol>${b.opsi.map((o, i) => `<li data-h="${'ABCD'[i]}" class="${UI.kunciTampil && i === b.kunci ? 'kunci' : ''}">${esc(o)}</li>`).join('')}</ol>
+      ${UI.kunciTampil ? `<div class="meta" style="margin-top:6px">${RANAH[b.ranah]} · ${esc(b.indikator)} · ${esc(b.level || '')}</div>` : ''}
+      <div class="row no-print" style="margin-top:6px"><button class="btn sm" type="button" data-act="editButir" data-id="${b.id}">Ubah</button><button class="btn sm warn" type="button" data-act="hapusButir" data-id="${b.id}">Hapus</button></div></div>`;
+  const sudah = new Set();
+  ['L', 'N'].forEach(r => {
+    const bs = butir(r);
+    html += `<div class="card" style="margin-bottom:16px"><h3>Bagian ${r === 'L' ? 'A' : 'B'}. ${RANAH[r]} <span class="small muted">(${bs.length} butir)</span></h3>`;
+    bs.forEach(b => {
+      if (b.stimulus && !sudah.has(b.stimulus)) {
+        const s = stim.find(x => x.id === b.stimulus);
+        if (s) { sudah.add(s.id); html += `<div class="stim"><h4>${esc(s.judul)}</h4>${esc(s.teks)}<div class="row no-print" style="margin-top:8px"><button class="btn sm" type="button" data-act="editStim" data-id="${s.id}">Ubah teks</button></div></div>`; }
+      }
+      html += tampilButir(b);
+    });
+    if (!bs.length) html += `<p class="muted">Belum ada butir ${RANAH[r].toLowerCase()}.</p>`;
+    html += `</div>`;
+  });
+  const tak = stim.filter(s => !S.instrumen.butir.some(b => b.stimulus === s.id));
+  if (tak.length) html += `<div class="card no-print"><h3>Teks stimulus belum dipakai</h3>${tak.map(s => `<div class="row" style="margin:6px 0"><span>${esc(s.judul)}</span><span class="sp"></span><button class="btn sm" type="button" data-act="editStim" data-id="${s.id}">Ubah</button><button class="btn sm warn" type="button" data-act="hapusStim" data-id="${s.id}">Hapus</button></div>`).join('')}</div>`;
+  html += `<div class="card no-print" style="margin-top:16px"><div class="row"><span class="small muted">Ingin kembali ke soal bawaan?</span><span class="sp"></span><button class="btn sm warn" type="button" data-act="resetInstrumen">Pulihkan instrumen bawaan</button></div></div>`;
+  return html;
+}
+function formButir(b) {
+  const baru = !b; b = b || { id: '', ranah: 'L', kode: '', stimulus: '', soal: '', opsi: ['', '', '', ''], kunci: 0, indikator: '', level: 'Pemahaman' };
+  const so = S.instrumen.stimulus.map(s => `<option value="${s.id}" ${s.id === b.stimulus ? 'selected' : ''}>${esc(s.judul)}</option>`).join('');
+  bukaDialog(`<h3>${baru ? 'Tambah' : 'Ubah'} butir</h3><form id="fButir" class="grid" style="gap:10px">
+    <div class="grid g2" style="gap:10px"><label class="f">Ranah<select name="ranah"><option value="L" ${b.ranah === 'L' ? 'selected' : ''}>Literasi membaca</option><option value="N" ${b.ranah === 'N' ? 'selected' : ''}>Numerasi</option></select></label>
+    <label class="f">Kode<input type="text" name="kode" value="${esc(b.kode)}" placeholder="mis. L7" required maxlength="8"></label></div>
+    <label class="f">Teks stimulus (opsional)<select name="stimulus"><option value="">— tanpa stimulus —</option>${so}</select></label>
+    <label class="f">Pertanyaan<textarea name="soal" required>${esc(b.soal)}</textarea></label>
+    ${b.opsi.map((o, i) => `<label class="f">Pilihan ${'ABCD'[i]}<input type="text" name="o${i}" value="${esc(o)}"></label>`).join('')}
+    <div class="grid g2" style="gap:10px"><label class="f">Kunci<select name="kunci">${'ABCD'.split('').map((h, i) => `<option value="${i}" ${i === b.kunci ? 'selected' : ''}>${h}</option>`).join('')}</select></label>
+    <label class="f">Level kognitif<select name="level">${['Pemahaman', 'Penerapan', 'Penalaran'].map(l => `<option ${l === b.level ? 'selected' : ''}>${l}</option>`).join('')}</select></label></div>
+    <label class="f">Indikator yang diukur<input type="text" name="indikator" value="${esc(b.indikator)}" required placeholder="mis. Menemukan informasi tersurat"></label>
+    <div class="row end"><button class="btn" type="button" data-act="tutup">Batal</button><button class="btn pri" type="submit">Simpan</button></div></form>`);
+  $('#fButir').onsubmit = e => {
+    e.preventDefault(); const f = new FormData(e.target);
+    const kode = String(f.get('kode')).trim();
+    if (S.instrumen.butir.some(x => x.kode.toLowerCase() === kode.toLowerCase() && x.id !== b.id)) { toast('Kode butir sudah dipakai.'); return; }
+    const data = { ranah: f.get('ranah'), kode, stimulus: f.get('stimulus'), soal: String(f.get('soal')).trim(), opsi: [0, 1, 2, 3].map(i => String(f.get('o' + i)).trim()), kunci: +f.get('kunci'), indikator: String(f.get('indikator')).trim(), level: f.get('level') };
+    if (baru) S.instrumen.butir.push(Object.assign({ id: 'b' + uid(), sulit: .5 }, data)); else Object.assign(S.instrumen.butir.find(x => x.id === b.id), data);
+    S.instrumen.butir.sort((a, c) => a.ranah.localeCompare(c.ranah) || a.kode.localeCompare(c.kode, 'id', { numeric: true }));
+    simpan(); tutupDialog(); render(); toast('Butir disimpan.');
+  };
+}
+function formStim(s) {
+  const baru = !s; s = s || { id: '', judul: '', teks: '' };
+  bukaDialog(`<h3>${baru ? 'Tambah' : 'Ubah'} teks stimulus</h3><form id="fStim" class="grid" style="gap:10px">
+    <label class="f">Judul<input type="text" name="judul" value="${esc(s.judul)}" required></label>
+    <label class="f">Isi teks<textarea name="teks" style="min-height:200px" required>${esc(s.teks)}</textarea></label>
+    <div class="row end"><button class="btn" type="button" data-act="tutup">Batal</button><button class="btn pri" type="submit">Simpan</button></div></form>`);
+  $('#fStim').onsubmit = e => {
+    e.preventDefault(); const f = new FormData(e.target);
+    const d = { judul: String(f.get('judul')).trim(), teks: String(f.get('teks')).trim() };
+    if (baru) S.instrumen.stimulus.push(Object.assign({ id: 's' + uid() }, d)); else Object.assign(S.instrumen.stimulus.find(x => x.id === s.id), d);
+    simpan(); tutupDialog(); render(); toast('Teks stimulus disimpan.');
+  };
+}
+
+/* ---------- Input ---------- */
+function vInput() {
+  if (!S.kelas.length) return kosong('Belum ada kelas. Tambahkan kelas dan daftar siswa terlebih dahulu.', '<button class="btn pri" type="button" data-tab="kelas">Ke Kelas &amp; Siswa</button>');
+  const p = S.putaran.find(x => x.id === UI.putaranId), k = kelasById(UI.kelasId);
+  let html = `<h2>Input hasil</h2>${pilihKelasPutaran(true)}`;
+  if (!p) return html + `<div style="margin-top:14px">${kosong('Kelas ini belum punya putaran asesmen. Buat putaran baru, misalnya "Asesmen Awal".', '<button class="btn pri" type="button" data-act="putaranBaru">+ Putaran baru</button>')}</div>`;
+  const bs = butir();
+  html += `<p class="small muted" style="margin:12px 0">Ketuk sel untuk berganti <b style="color:var(--ok)">✓ benar</b> → <b style="color:var(--no)">✗ salah</b> → kosong. Dengan papan ketik: panah untuk berpindah, <kbd>B</kbd>/<kbd>1</kbd> benar, <kbd>S</kbd>/<kbd>0</kbd> salah, <kbd>Del</kbd> kosongkan. Tersimpan otomatis.</p>
+  <div class="tblwrap"><table id="tblInput"><thead><tr><th class="nm" scope="col">Nama siswa</th>${bs.map(b => `<th scope="col" class="d${b.ranah}" title="${esc(b.indikator)}">${esc(b.kode)}</th>`).join('')}<th scope="col">Literasi</th><th scope="col">Numerasi</th><th scope="col">Absen</th></tr></thead><tbody>`;
+  k.siswa.forEach((s, ri) => {
+    const h = hasilSiswa(p, s.id), j = p.jawaban[s.id] || {};
+    html += `<tr data-sid="${s.id}" class="${h.absen ? 'absen' : ''}"><td class="nm" title="${esc(s.nama)}">${ri + 1}. ${esc(s.nama)}</td>${bs.map((b, ci) => { const v = j[b.id]; return `<td><button type="button" class="sel ${v === 1 ? 'v1' : v === 0 ? 'v0' : ''}" data-r="${ri}" data-c="${ci}" data-s="${s.id}" data-b="${b.id}" aria-label="${esc(s.nama)}, ${esc(b.kode)}: ${v === 1 ? 'benar' : v === 0 ? 'salah' : 'kosong'}" ${h.absen ? 'disabled' : ''}>${v === 1 ? '✓' : v === 0 ? '✗' : ''}</button></td>`; }).join('')}
+      <td class="sk" data-sk="L">${skorSel(h.L)}</td><td class="sk" data-sk="N">${skorSel(h.N)}</td>
+      <td class="ab"><input type="checkbox" data-absen="${s.id}" ${h.absen ? 'checked' : ''} aria-label="${esc(s.nama)} tidak hadir"></td></tr>`;
+  });
+  html += `</tbody></table></div>
+  <div class="row" style="margin-top:12px"><button class="btn sm" type="button" data-act="ubahPutaran">Ubah nama/tanggal putaran</button><button class="btn sm warn" type="button" data-act="hapusPutaran">Hapus putaran ini</button><span class="sp"></span><button class="btn pri" type="button" data-act="bukaKelompok" data-k="${k.id}" data-p="${p.id}">Lihat kelompok →</button></div>`;
+  return html;
+}
+function skorSel(x) { if (x.pct == null) return '<span class="muted">–</span>'; return `<span class="pill g-${x.grup}">${x.ben}/${x.isi} · ${x.pct}%</span>`; }
+function setSel(btn, v) {
+  const p = S.putaran.find(x => x.id === UI.putaranId); if (!p) return;
+  const sid = btn.dataset.s, bid = btn.dataset.b;
+  p.jawaban[sid] = p.jawaban[sid] || {};
+  if (v == null) delete p.jawaban[sid][bid]; else p.jawaban[sid][bid] = v;
+  btn.className = 'sel ' + (v === 1 ? 'v1' : v === 0 ? 'v0' : ''); btn.textContent = v === 1 ? '✓' : v === 0 ? '✗' : '';
+  const nm = btn.getAttribute('aria-label').split(':')[0]; btn.setAttribute('aria-label', nm + ': ' + (v === 1 ? 'benar' : v === 0 ? 'salah' : 'kosong'));
+  const tr = btn.closest('tr'), h = hasilSiswa(p, sid);
+  tr.querySelector('[data-sk="L"]').innerHTML = skorSel(h.L); tr.querySelector('[data-sk="N"]').innerHTML = skorSel(h.N);
+  simpan();
+}
+
+/* ---------- Kelompok ---------- */
+function vKelompok() {
+  if (!S.kelas.length) return kosong('Belum ada kelas.', '<button class="btn pri" type="button" data-tab="kelas">Tambah kelas</button>');
+  const p = S.putaran.find(x => x.id === UI.putaranId);
+  let html = `<div class="row" style="margin-bottom:10px"><h2 style="margin:0">Kelompok &amp; aktivitas</h2><span class="sp"></span><button class="btn no-print" type="button" data-act="cetak">Cetak kartu kelompok</button><button class="btn no-print" type="button" data-act="salinKelompok">Salin daftar</button></div>${pilihKelasPutaran(true)}`;
+  if (!p) return html + `<div style="margin-top:14px">${kosong('Belum ada putaran asesmen untuk kelas ini.')}</div>`;
+  const r = UI.ranah, rk = rekap(p), prev = sebelum(p);
+  const prevMap = {}; if (prev) rekap(prev).forEach(x => prevMap[x.s.id] = x.h);
+  const urut = { B: 0, C: 1, M: 2, X: 3 };
+  html += `<div class="row no-print" style="margin:14px 0"><div class="seg" role="group" aria-label="Ranah">${['L', 'N'].map(x => `<button type="button" data-act="ranah" data-v="${x}" aria-pressed="${r === x}">${RANAH[x]}</button>`).join('')}</div>
+    <span class="small muted">${prev ? `Panah menunjukkan perpindahan dari putaran “${esc(prev.nama)}”.` : 'Putaran pertama kelas ini.'}</span></div>
+    <p class="print-only small"><b>${esc(kelasById(p.kelasId).nama)}</b> · ${esc(p.nama)} · ${tglID(p.tanggal)} · ${RANAH[r]}</p>`;
+  html += `<div class="bins">`;
+  ['B', 'C', 'M'].forEach(g => {
+    const anggota = rk.filter(x => x.h[r].grup === g).sort((a, b) => (a.h[r].pct ?? 0) - (b.h[r].pct ?? 0));
+    const ids = anggota.map(x => x.s.id);
+    const pb = persenButir(p, ids).filter(x => x.b.ranah === r && x.pct != null).sort((a, b) => a.pct - b.pct);
+    const fokus = pb.filter(x => x.pct < 70).slice(0, 2);
+    html += `<article class="bin ${g}"><header><h3>${GRUP[g].nama}<span class="cnt">${anggota.length}</span></h3><div class="small">${GRUP[g].ket}</div></header><div class="body">
+      <div class="chips">${anggota.map(x => { const ph = prevMap[x.s.id]; let mv = ''; if (ph && ph[r].grup !== 'X') { const d = urut[g] - urut[ph[r].grup]; mv = d > 0 ? '<span class="mv up" title="naik kelompok">▲</span>' : d < 0 ? '<span class="mv dn" title="turun kelompok">▼</span>' : ''; } return `<span class="chip">${esc(x.s.nama)} <b>${x.h[r].pct}%</b>${mv}</span>`; }).join('') || '<span class="muted small">Tidak ada siswa.</span>'}</div>
+      ${anggota.length ? `<div><div class="tag">Fokus penguatan</div><div class="small">${fokus.length ? fokus.map(x => `${esc(x.b.kode)} ${esc(x.b.indikator)} (${x.pct}% benar)`).join('; ') : 'Semua indikator ≥70% benar; beri tantangan setingkat lebih tinggi.'}</div></div>` : ''}
+      <div class="tag">Saran aktivitas</div>
+      ${AKTIVITAS[r][g].map(a => `<div class="act"><h4>${esc(a.j)} <span class="pill g-X">${a.p}</span></h4><p>${esc(a.d)}</p></div>`).join('')}
+      ${anggota.length ? `<div class="no-print"><button class="btn sm" type="button" data-act="ai" data-g="${g}">✦ Saran AI untuk kelompok ini</button></div><div class="ai-out hide" id="ai-${g}"></div>` : ''}
+    </div></article>`;
+  });
+  html += `</div>`;
+  const belum = rk.filter(x => x.h[r].grup === 'X');
+  if (belum.length) html += `<p class="small muted" style="margin-top:12px">Belum dinilai/absen (${belum.length}): ${belum.map(x => esc(x.s.nama)).join(', ')}. Jadwalkan asesmen susulan.</p>`;
+  // matriks L x N
+  const m = {}; ['B', 'C', 'M'].forEach(a => ['B', 'C', 'M'].forEach(b => m[a + b] = 0));
+  rk.forEach(x => { const a = x.h.L.grup, b = x.h.N.grup; if (a !== 'X' && b !== 'X') m[a + b]++; });
+  html += `<div class="card" style="margin-top:16px"><h3>Peta silang literasi × numerasi</h3><p class="small muted">Membantu menyusun jadwal: siswa di sel kiri atas perlu pendampingan pada kedua ranah.</p>
+    <div class="tblwrap" style="max-height:none"><table class="matrix"><thead><tr><th scope="col">Literasi ↓ / Numerasi →</th>${['B', 'C', 'M'].map(g => `<th scope="col">${GRUP[g].nama}</th>`).join('')}</tr></thead><tbody>
+    ${['B', 'C', 'M'].map(a => `<tr><th scope="row" class="g-${a}">${GRUP[a].nama}</th>${['B', 'C', 'M'].map(b => `<td><b>${m[a + b]}</b></td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+  return html;
+}
+function teksKelompok() {
+  const p = S.putaran.find(x => x.id === UI.putaranId); if (!p) return '';
+  const k = kelasById(p.kelasId), rk = rekap(p);
+  let t = `Pengelompokan asesmen diagnostik\n${k.nama} · ${p.nama} · ${tglID(p.tanggal)}\n`;
+  ['L', 'N'].forEach(r => {
+    t += `\n${RANAH[r].toUpperCase()}\n`;
+    ['B', 'C', 'M'].forEach(g => { const a = rk.filter(x => x.h[r].grup === g); t += `- ${GRUP[g].nama} (${a.length}): ${a.map(x => x.s.nama).join(', ') || '-'}\n`; });
+  });
+  return t + '\nCatatan: hasil asesmen diagnostik bukan nilai rapor atau peringkat.';
+}
+async function saranAI(g) {
+  const out = $('#ai-' + g); if (!out) return;
+  const ai = getAI(); if (!ai.key) { out.classList.remove('hide'); out.innerHTML = 'Isi kunci API Gemini di menu <b>Pengaturan</b> untuk memakai fitur ini.'; return; }
+  const p = S.putaran.find(x => x.id === UI.putaranId), r = UI.ranah, rk = rekap(p);
+  const ids = rk.filter(x => x.h[r].grup === g).map(x => x.s.id);
+  const pb = persenButir(p, ids).filter(x => x.b.ranah === r && x.pct != null).sort((a, b) => a.pct - b.pct);
+  const prompt = `Anda guru SMP di Indonesia yang menerapkan pembelajaran mendalam (berkesadaran, bermakna, menggembirakan) dan pembelajaran berdiferensiasi.
+Kelas: ${kelasById(p.kelasId).nama}. Ranah: ${RANAH[r]}. Kelompok: "${GRUP[g].nama}" (${ids.length} siswa).
+Persentase benar kelompok per indikator: ${pb.map(x => `${x.b.indikator} ${x.pct}%`).join('; ')}.
+Susun 3 aktivitas penguatan berdurasi 30–40 menit untuk kelompok ini, utamakan indikator dengan persentase terendah. Untuk tiap aktivitas tulis: judul, tujuan, alat/bahan sederhana yang ada di sekolah, langkah singkat (memahami–mengaplikasi–merefleksi), dan cara guru mengecek kemajuan. Bahasa Indonesia, ringkas, tanpa tabel.`;
+  out.classList.remove('hide'); out.textContent = 'Meminta saran dari Gemini…';
+  try {
+    const model = (ai.model || 'gemini-2.5-flash').trim();
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': ai.key }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: .7 } }) });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(j.error?.message || ('HTTP ' + res.status));
+    const t = (j.candidates?.[0]?.content?.parts || []).map(x => x.text || '').join('').trim();
+    out.innerHTML = esc(t || 'Tidak ada jawaban.').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/^\s*[*-] /gm, '• ');
+  } catch (e) { out.textContent = 'Gagal memanggil Gemini: ' + e.message; }
+}
+
+/* ---------- Analisis butir ---------- */
+function vButir() {
+  if (!S.kelas.length) return kosong('Belum ada kelas.');
+  const p = S.putaran.find(x => x.id === UI.putaranId);
+  let html = `<div class="row" style="margin-bottom:10px"><h2 style="margin:0">Analisis butir</h2><span class="sp"></span><button class="btn no-print" type="button" data-act="cetak">Cetak</button></div>${pilihKelasPutaran(true)}`;
+  if (!p) return html + `<div style="margin-top:14px">${kosong('Belum ada putaran asesmen.')}</div>`;
+  const k = kelasById(p.kelasId), ids = k.siswa.map(s => s.id), pb = persenButir(p, ids), prev = sebelum(p);
+  const pbPrev = prev ? Object.fromEntries(persenButir(prev, ids).map(x => [x.b.id, x.pct])) : {};
+  html += `<p class="small muted" style="margin:12px 0">Butir dengan persentase benar &lt;50% sebaiknya diajarkan ulang secara klasikal; 50–69% cukup ditangani dalam kelompok.</p>
+  <div class="tblwrap" style="max-height:none"><table class="tbl2"><thead><tr><th scope="col">Butir</th><th scope="col">Indikator</th><th scope="col">Level</th><th scope="col" class="c">Benar</th><th scope="col">Sebaran</th>${prev ? '<th scope="col" class="c">Perubahan</th>' : ''}<th scope="col">Tindak lanjut</th></tr></thead><tbody>
+  ${pb.map(x => { const c = x.pct == null ? '' : x.pct < 50 ? 'lo' : x.pct < 70 ? 'mid' : ''; const d = prev && x.pct != null && pbPrev[x.b.id] != null ? x.pct - pbPrev[x.b.id] : null;
+    return `<tr><td><b>${esc(x.b.kode)}</b></td><td>${esc(x.b.indikator)}<div class="meta">${RANAH[x.b.ranah]}</div></td><td>${esc(x.b.level || '')}</td><td class="c"><b>${x.pct == null ? '–' : x.pct + '%'}</b><div class="meta">${x.isi} siswa</div></td>
+    <td><div class="pbar"><i class="${c}" style="width:${x.pct || 0}%"></i></div></td>${prev ? `<td class="c">${d == null ? '–' : `<span class="mv ${d > 0 ? 'up' : d < 0 ? 'dn' : ''}">${d > 0 ? '+' : ''}${d}</span>`}</td>` : ''}
+    <td class="small">${x.pct == null ? 'Belum ada data' : x.pct < 50 ? '<b>Ajarkan ulang klasikal</b>' : x.pct < 70 ? 'Penguatan dalam kelompok' : 'Tuntas, lanjutkan'}</td></tr>`; }).join('')}
+  </tbody></table></div>`;
+  return html;
+}
+
+/* ---------- Kelas & siswa ---------- */
+function vKelas() {
+  let html = `<div class="grid g2" style="align-items:start"><div class="card"><h2>Tambah kelas</h2><form id="fKelas" class="grid" style="gap:10px">
+    <label class="f">Nama kelas<input type="text" name="nama" placeholder="mis. VII C" required maxlength="30"></label>
+    <label class="f">Daftar siswa (satu nama per baris; boleh tempel dari Excel)<textarea name="siswa" style="min-height:160px" placeholder="Nama siswa 1&#10;Nama siswa 2"></textarea></label>
+    <div class="row end"><button class="btn pri" type="submit">Simpan kelas</button></div></form>
+    <p class="small muted">Data hanya tersimpan di perangkat ini. Hindari menulis NISN atau data pribadi lain.</p></div><div class="grid">`;
+  html += S.kelas.map(k => {
+    const ps = putaranKelas(k.id);
+    return `<details class="card" ${k.id === UI.kelasId ? 'open' : ''}><summary>${esc(k.nama)} · ${k.siswa.length} siswa ${k.contoh ? '<span class="pill contoh">contoh</span>' : ''}</summary>
+      <div class="grid" style="gap:6px;margin-top:10px">${k.siswa.map(s => `<div class="row" style="gap:6px"><input type="text" value="${esc(s.nama)}" data-rename="${k.id}|${s.id}" aria-label="Nama siswa" style="flex:1"><button class="btn sm warn" type="button" data-act="hapusSiswa" data-k="${k.id}" data-id="${s.id}" aria-label="Hapus ${esc(s.nama)}">✕</button></div>`).join('')}</div>
+      <label class="f" style="margin-top:10px">Tambah siswa (satu per baris)<textarea data-tambah="${k.id}" style="min-height:70px"></textarea></label>
+      <div class="row" style="margin-top:8px"><button class="btn sm" type="button" data-act="tambahSiswa" data-k="${k.id}">Tambahkan</button><button class="btn sm" type="button" data-act="renameKelas" data-k="${k.id}">Ganti nama kelas</button><span class="sp"></span><button class="btn sm warn" type="button" data-act="hapusKelas" data-k="${k.id}">Hapus kelas</button></div>
+      <p class="small muted" style="margin:10px 0 0">Putaran: ${ps.map(p => esc(p.nama) + ' (' + tglID(p.tanggal) + ')').join(', ') || 'belum ada'}</p></details>`;
+  }).join('') || kosong('Belum ada kelas.');
+  return html + '</div></div>';
+}
+
+/* ---------- Pengaturan ---------- */
+function vPengaturan() {
+  const ai = getAI();
+  return `<div class="grid g2" style="align-items:start">
+    <div class="card"><h2>Ambang kelompok</h2><form id="fAmbang" class="grid" style="gap:10px">
+      <div class="grid g2" style="gap:10px"><label class="f">Perlu bimbingan jika di bawah (%)<input type="number" name="bimbingan" min="10" max="90" value="${S.pengaturan.bimbingan}"></label>
+      <label class="f">Mahir mulai (%)<input type="number" name="mahir" min="20" max="100" value="${S.pengaturan.mahir}"></label></div>
+      <div class="row end"><button class="btn pri" type="submit">Simpan ambang</button></div></form>
+      <p class="small muted">Persentase dihitung dari butir yang terisi pada tiap ranah.</p></div>
+    <div class="card"><h2>AI Gemini (opsional)</h2><form id="fAI" class="grid" style="gap:10px">
+      <label class="f">Kunci API Gemini milik Anda<input type="password" name="key" value="${esc(ai.key || '')}" autocomplete="off" placeholder="Tempel kunci dari Google AI Studio"></label>
+      <label class="f">Model<input type="text" name="model" value="${esc(ai.model || 'gemini-2.5-flash')}"></label>
+      <div class="row end"><button class="btn" type="button" data-act="hapusKunci">Hapus kunci</button><button class="btn pri" type="submit">Simpan</button></div></form>
+      <p class="small muted">Kunci disimpan hanya di perangkat ini dan tidak ikut diekspor. Yang dikirim ke Gemini hanya nama kelas, ranah, kelompok, dan persentase per indikator, tanpa nama siswa.</p></div>
+    <div class="card"><h2>Ekspor &amp; cadangan</h2><div class="grid" style="gap:8px">
+      <button class="btn" type="button" data-act="csv">Unduh hasil (CSV untuk Excel/Sheets)</button>
+      <button class="btn" type="button" data-act="salinCsv">Salin hasil (tempel ke spreadsheet)</button>
+      <button class="btn" type="button" data-act="json">Unduh cadangan lengkap (JSON)</button>
+      <label class="btn" style="justify-content:center">Pulihkan dari cadangan JSON<input type="file" accept=".json,application/json" id="fileImpor" class="hide"></label></div></div>
+    <div class="card"><h2>Data</h2><div class="grid" style="gap:8px">
+      <button class="btn warn" type="button" data-act="hapusContoh">Hapus data contoh</button>
+      <button class="btn" type="button" data-act="muatContoh">Muat ulang data contoh</button>
+      <button class="btn warn" type="button" data-act="resetSemua">Hapus semua data</button></div>
+      <p class="small muted">Disarankan mengunduh cadangan JSON secara berkala karena data browser bisa terhapus saat riwayat dibersihkan.</p></div>
+  </div>`;
+}
+function buatCSV(sep) {
+  const bs = butir(); const q = v => { v = String(v ?? ''); return /[";,\n\t]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+  const head = ['Kelas', 'Putaran', 'Tanggal', 'No', 'Nama', 'Status', 'Benar Literasi', 'Butir Literasi', '% Literasi', 'Kelompok Literasi', 'Benar Numerasi', 'Butir Numerasi', '% Numerasi', 'Kelompok Numerasi', ...bs.map(b => b.kode)];
+  const rows = [head];
+  S.putaran.slice().sort((a, b) => (a.tanggal || '').localeCompare(b.tanggal || '')).forEach(p => {
+    const k = kelasById(p.kelasId); if (!k) return;
+    k.siswa.forEach((s, i) => {
+      const h = hasilSiswa(p, s.id), j = p.jawaban[s.id] || {};
+      const gn = x => x.grup === 'X' ? '' : GRUP[x.grup].nama;
+      rows.push([k.nama, p.nama, p.tanggal, i + 1, s.nama, h.absen ? 'Absen' : 'Hadir', h.L.ben, h.L.isi, h.L.pct ?? '', gn(h.L), h.N.ben, h.N.isi, h.N.pct ?? '', gn(h.N), ...bs.map(b => j[b.id] === 1 ? 1 : j[b.id] === 0 ? 0 : '')]);
+    });
+  });
+  return rows.map(r => r.map(q).join(sep)).join('\n');
+}
+
+/* ---------- dialog ---------- */
+function bukaDialog(html) { const d = $('#dlg'); $('#dlgBody').innerHTML = html; if (d.showModal) d.showModal(); else d.setAttribute('open', ''); const f = d.querySelector('input,select,textarea'); if (f) f.focus(); }
+function tutupDialog() { const d = $('#dlg'); if (d.close) d.close(); else d.removeAttribute('open'); }
+function formPutaran(p) {
+  const baru = !p; const k = kelasById(UI.kelasId); const n = putaranKelas(UI.kelasId).length;
+  p = p || { nama: n ? 'Pemantauan ' + n : 'Asesmen Awal', tanggal: hariIni() };
+  bukaDialog(`<h3>${baru ? 'Putaran baru' : 'Ubah putaran'} · ${esc(k.nama)}</h3><form id="fPut" class="grid" style="gap:10px">
+    <label class="f">Nama putaran<input type="text" name="nama" value="${esc(p.nama)}" required maxlength="50"></label>
+    <label class="f">Tanggal pelaksanaan<input type="date" name="tanggal" value="${esc(p.tanggal)}" required></label>
+    <p class="small muted" style="margin:0">Tips: lakukan putaran pemantauan 4–6 pekan setelah aktivitas kelompok berjalan, dengan butir setara.</p>
+    <div class="row end"><button class="btn" type="button" data-act="tutup">Batal</button><button class="btn pri" type="submit">Simpan</button></div></form>`);
+  $('#fPut').onsubmit = e => {
+    e.preventDefault(); const f = new FormData(e.target);
+    if (baru) { const np = { id: uid(), kelasId: k.id, nama: String(f.get('nama')).trim(), tanggal: f.get('tanggal'), jawaban: {}, absen: [] }; S.putaran.push(np); UI.putaranId = np.id; UI.tab = 'input'; }
+    else { p.nama = String(f.get('nama')).trim(); p.tanggal = f.get('tanggal'); }
+    simpan(); simpanUI(); tutupDialog(); render();
+  };
+}
+function namaDariTeks(t) { return String(t || '').split(/\r?\n/).map(x => x.split('\t')[0].replace(/^\s*\d+[.)]\s*/, '').trim()).filter(Boolean); }
+
+/* ---------- event ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-act]'); if (!t) return;
+  if (t.dataset.tab && !t.dataset.act) { UI.tab = t.dataset.tab; simpanUI(); render(); window.scrollTo({ top: 0 }); if (t.closest('#tabs')) $('#tab-' + UI.tab)?.focus(); return; }
+  const a = t.dataset.act, p = S.putaran.find(x => x.id === UI.putaranId);
+  switch (a) {
+    case 'hapusContoh': {
+      if (!confirm('Hapus semua kelas dan putaran berlabel contoh?')) return;
+      const ids = S.kelas.filter(k => k.contoh).map(k => k.id);
+      S.kelas = S.kelas.filter(k => !k.contoh); S.putaran = S.putaran.filter(x => !x.contoh && !ids.includes(x.kelasId));
+      simpan(); render(); toast('Data contoh dihapus.'); break;
+    }
+    case 'muatContoh': { S.kelas = S.kelas.filter(k => !k.contoh); S.putaran = S.putaran.filter(x => !x.contoh); buatContoh(S); simpan(); render(); toast('Data contoh dimuat.'); break; }
+    case 'resetSemua': { if (!confirm('Hapus SEMUA kelas, siswa, dan hasil asesmen di perangkat ini? Tindakan ini tidak bisa dibatalkan.')) return; S = stateBaru(false); simpan(); render(); toast('Semua data dihapus.'); break; }
+    case 'bukaInput': UI.kelasId = t.dataset.k; if (t.dataset.p) UI.putaranId = t.dataset.p; UI.tab = 'input'; simpanUI(); render(); break;
+    case 'bukaKelompok': UI.kelasId = t.dataset.k; UI.putaranId = t.dataset.p; UI.tab = 'kelompok'; simpanUI(); render(); window.scrollTo({ top: 0 }); break;
+    case 'putaranBaru': if (UI.kelasId) formPutaran(); break;
+    case 'ubahPutaran': if (p) formPutaran(p); break;
+    case 'hapusPutaran': if (p && confirm('Hapus putaran "' + p.nama + '" beserta semua isiannya?')) { S.putaran = S.putaran.filter(x => x.id !== p.id); UI.putaranId = ''; simpan(); render(); } break;
+    case 'ranah': UI.ranah = t.dataset.v; simpanUI(); render(); break;
+    case 'kunci': UI.kunciTampil = t.dataset.v === '1'; simpanUI(); render(); break;
+    case 'cetak': window.print(); break;
+    case 'butirBaru': formButir(null); break;
+    case 'editButir': formButir(S.instrumen.butir.find(x => x.id === t.dataset.id)); break;
+    case 'hapusButir': if (confirm('Hapus butir ini? Isian lama untuk butir ini tidak lagi dihitung.')) { S.instrumen.butir = S.instrumen.butir.filter(x => x.id !== t.dataset.id); simpan(); render(); } break;
+    case 'stimBaru': formStim(null); break;
+    case 'editStim': formStim(S.instrumen.stimulus.find(x => x.id === t.dataset.id)); break;
+    case 'hapusStim': S.instrumen.stimulus = S.instrumen.stimulus.filter(x => x.id !== t.dataset.id); simpan(); render(); break;
+    case 'resetInstrumen': if (confirm('Kembalikan 12 butir bawaan? Butir buatan Anda akan dihapus.')) { S.instrumen = instrumenBawaan(); simpan(); render(); toast('Instrumen bawaan dipulihkan.'); } break;
+    case 'tutup': tutupDialog(); break;
+    case 'salinKelompok': salin(teksKelompok()); break;
+    case 'ai': saranAI(t.dataset.g); break;
+    case 'tambahSiswa': {
+      const k = kelasById(t.dataset.k), ta = document.querySelector(`[data-tambah="${t.dataset.k}"]`);
+      const nm = namaDariTeks(ta.value); if (!nm.length) { toast('Tulis minimal satu nama.'); return; }
+      nm.forEach(n => k.siswa.push({ id: uid(), nama: n })); UI.kelasId = k.id; simpan(); render(); toast(nm.length + ' siswa ditambahkan.'); break;
+    }
+    case 'hapusSiswa': { const k = kelasById(t.dataset.k); const s = k.siswa.find(x => x.id === t.dataset.id); if (confirm('Hapus ' + s.nama + ' dari ' + k.nama + '?')) { k.siswa = k.siswa.filter(x => x.id !== s.id); UI.kelasId = k.id; simpan(); render(); } break; }
+    case 'renameKelas': { const k = kelasById(t.dataset.k); const n = prompt('Nama kelas baru:', k.nama); if (n && n.trim()) { k.nama = n.trim(); simpan(); render(); } break; }
+    case 'hapusKelas': { const k = kelasById(t.dataset.k); if (confirm('Hapus kelas ' + k.nama + ' beserta semua putaran asesmennya?')) { S.kelas = S.kelas.filter(x => x.id !== k.id); S.putaran = S.putaran.filter(x => x.kelasId !== k.id); simpan(); render(); } break; }
+    case 'hapusKunci': lsSet(KUNCI_AI, JSON.stringify({ model: getAI().model || '' })); render(); toast('Kunci API dihapus dari perangkat.'); break;
+    case 'csv': unduh('asesmen-diagnostik-' + hariIni() + '.csv', '﻿' + buatCSV(';'), 'text/csv;charset=utf-8'); break;
+    case 'salinCsv': salin(buatCSV('\t')); break;
+    case 'json': { const o = JSON.parse(JSON.stringify(S)); unduh('cadangan-asesmen-diagnostik-' + hariIni() + '.json', JSON.stringify(o, null, 1), 'application/json'); break; }
+  }
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('.sel'); if (!b || b.disabled) return;
+  const v = b.classList.contains('v1') ? 0 : b.classList.contains('v0') ? null : 1; setSel(b, v);
+});
+document.addEventListener('keydown', e => {
+  const b = e.target.closest && e.target.closest('.sel'); if (!b) return;
+  const k = e.key.toLowerCase(), r = +b.dataset.r, c = +b.dataset.c;
+  const ke = (rr, cc) => { const n = document.querySelector(`.sel[data-r="${rr}"][data-c="${cc}"]`); if (n) { n.focus(); return true; } return false; };
+  if (k === 'b' || k === '1') { e.preventDefault(); setSel(b, 1); ke(r, c + 1) || ke(r + 1, 0); }
+  else if (k === 's' || k === '0') { e.preventDefault(); setSel(b, 0); ke(r, c + 1) || ke(r + 1, 0); }
+  else if (k === 'delete' || k === 'backspace') { e.preventDefault(); setSel(b, null); }
+  else if (k === 'arrowright') { e.preventDefault(); ke(r, c + 1); }
+  else if (k === 'arrowleft') { e.preventDefault(); ke(r, c - 1); }
+  else if (k === 'arrowdown') { e.preventDefault(); ke(r + 1, c); }
+  else if (k === 'arrowup') { e.preventDefault(); ke(r - 1, c); }
+});
+document.addEventListener('keydown', e => {
+  const t = e.target; if (!t.closest || !t.closest('#tabs') || !['ArrowRight', 'ArrowLeft'].includes(e.key)) return;
+  const i = TABS.findIndex(x => x[0] === UI.tab), n = (i + (e.key === 'ArrowRight' ? 1 : -1) + TABS.length) % TABS.length;
+  UI.tab = TABS[n][0]; simpanUI(); render(); $('#tab-' + UI.tab).focus();
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.ch === 'kelas') { UI.kelasId = t.value; UI.putaranId = ''; simpanUI(); render(); }
+  else if (t.dataset.ch === 'putaran') { UI.putaranId = t.value; simpanUI(); render(); }
+  else if (t.dataset.absen) {
+    if (!p0()) return; const p = p0(), sid = t.dataset.absen; p.absen = p.absen || [];
+    if (t.checked) { if (!p.absen.includes(sid)) p.absen.push(sid); } else p.absen = p.absen.filter(x => x !== sid);
+    simpan(); render();
+  }
+  else if (t.dataset.rename) { const [kid, sid] = t.dataset.rename.split('|'); const s = kelasById(kid)?.siswa.find(x => x.id === sid); if (s && t.value.trim()) { s.nama = t.value.trim(); simpan(); toast('Nama diperbarui.'); } }
+  else if (t.id === 'fileImpor' && t.files[0]) {
+    const fr = new FileReader();
+    fr.onload = () => { try { const o = JSON.parse(fr.result); if (o.versi !== 1 || !o.instrumen || !Array.isArray(o.kelas) || !Array.isArray(o.putaran)) throw 0; if (!confirm('Ganti semua data di perangkat ini dengan isi cadangan?')) return; S = o; S.pengaturan = S.pengaturan || { bimbingan: 50, mahir: 80 }; simpan(); render(); toast('Cadangan dipulihkan.'); } catch (_) { toast('Berkas bukan cadangan Asesmen Diagnostik Kilat yang valid.'); } };
+    fr.readAsText(t.files[0]);
+  }
+});
+function p0() { return S.putaran.find(x => x.id === UI.putaranId); }
+document.addEventListener('submit', e => {
+  if (e.target.id === 'fKelas') {
+    e.preventDefault(); const f = new FormData(e.target); const nama = String(f.get('nama')).trim(); if (!nama) return;
+    const k = { id: uid(), nama, siswa: namaDariTeks(f.get('siswa')).map(n => ({ id: uid(), nama: n })) };
+    S.kelas.push(k); UI.kelasId = k.id; UI.putaranId = ''; simpan(); simpanUI(); render(); toast('Kelas ' + nama + ' disimpan.');
+  } else if (e.target.id === 'fAmbang') {
+    e.preventDefault(); const f = new FormData(e.target); const b = +f.get('bimbingan'), m = +f.get('mahir');
+    if (!(b > 0 && m > b && m <= 100)) { toast('Ambang mahir harus lebih besar dari ambang bimbingan.'); return; }
+    S.pengaturan.bimbingan = b; S.pengaturan.mahir = m; simpan(); render(); toast('Ambang disimpan.');
+  } else if (e.target.id === 'fAI') {
+    e.preventDefault(); const f = new FormData(e.target);
+    if (!lsSet(KUNCI_AI, JSON.stringify({ key: String(f.get('key')).trim(), model: String(f.get('model')).trim() || 'gemini-2.5-flash' }))) toast('Gagal menyimpan di perangkat.'); else toast('Pengaturan AI disimpan di perangkat ini.');
+  }
+});
+$('#dlg').addEventListener('click', e => { if (e.target.id === 'dlg') tutupDialog(); });
+
+/* ---------- tema ---------- */
+function terapkanTema(t) { if (t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
+terapkanTema(lsGet(KUNCI_TEMA));
+$('#btnTema').addEventListener('click', () => {
+  const kini = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const baru = kini === 'dark' ? 'light' : 'dark'; terapkanTema(baru); lsSet(KUNCI_TEMA, baru);
+});
+
+if (!lsGet(KUNCI)) simpan();
+render();
+</script>
+</body>
+</html>

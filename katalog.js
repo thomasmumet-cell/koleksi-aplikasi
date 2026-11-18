@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Asesmen Diagnostik Kilat",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Asesmen awal literasi membaca dan numerasi 12 butir orisinal (bisa diganti soal sekolah), input benar/salah per siswa secepat ketuk atau ketik, lalu siswa otomatis dikelompokkan Perlu bimbingan/Cukup/Mahir lengkap dengan fokus indikator, saran aktivitas pembelajaran mendalam per kelompok, analisis butir, peta silang literasi × numerasi, dan putaran pemantauan untuk pengelompokan ulang. Saran AI Gemini opsional.",
+    tanggal: "2026-11-19",
+    tautan: "asesmen-diagnostik/",
+    status: "aktif"
+  },
+  {
     nama: "Latihan TKA Bahasa Indonesia",
     kategori: "Persiapan TKA",
     jenis: "HTML",
