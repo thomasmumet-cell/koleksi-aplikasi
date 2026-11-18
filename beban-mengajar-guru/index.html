@@ -139,6 +139,7 @@ dialog.lebar{max-width:920px;max-height:calc(100vh - 24px);overflow:auto}
 .imp .opsi{display:grid;gap:6px;font-size:14px}
 .imp .opsi label{display:flex;gap:8px;align-items:flex-start}
 /* jadwal */
+.rombel-cepat{border:1.5px dashed var(--teal);background:var(--teal-soft);border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:14px}
 .cari-cepat{display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--teal);border-radius:12px;padding:4px 10px;min-width:min(340px,100%);flex:0 1 380px;color:var(--teal);box-shadow:var(--shadow)}
 .cari-cepat input{border:0!important;background:transparent!important;padding:7px 2px;width:100%;font-size:15px;outline:none}
 .cari-cepat:focus-within{outline:3px solid var(--focus);outline-offset:2px}
@@ -348,6 +349,17 @@ h3.jh{font-size:16px;margin:10px 0 8px;display:flex;gap:8px;align-items:center;f
           <button class="btn sm" type="button" data-act="kelasBaru">+ Rombel</button>
         </div>
         <p class="sub">Wali kelas otomatis dihitung sebagai tugas tambahan. Guru BK otomatis dihitung dari rombel layanan.</p>
+        <div class="rombel-cepat">
+          <b>Susun rombel cepat</b>
+          <div class="row" style="margin-top:6px">
+            <label class="f">Kelas VII<input type="number" id="rbVII" min="0" max="15"></label>
+            <label class="f">Kelas VIII<input type="number" id="rbVIII" min="0" max="15"></label>
+            <label class="f">Kelas IX<input type="number" id="rbIX" min="0" max="15"></label>
+            <label class="f">Penulisan<select id="rbGaya"><option value="romawi">VII A, VII B …</option><option value="angka">7A, 7B …</option></select></label>
+            <button class="btn sm pri" type="button" data-act="susunRombel" style="align-self:flex-end">Terapkan</button>
+          </div>
+          <p class="muted" style="margin:6px 0 0;font-size:12.5px">Mis. 10 rombel = A sampai J. Rombel yang sudah ada tetap menyimpan wali kelas, guru BK, dan pembagiannya.</p>
+        </div>
         <div class="scroll"><table id="tblKelas"></table></div>
       </div>
     </div>
@@ -588,51 +600,37 @@ function mapelBawaan(){
     ["kka","KKA","Koding & Kecerdasan Artifisial (pilihan)",2,2,2]
   ].map(function(a){return {id:a[0],kode:a[1],nama:a[2],jp:{7:a[3],8:a[4],9:a[5]}}});
 }
-function kelasBawaan(){
-  var out=[];[7,8,9].forEach(function(j){"ABCDE".split("").forEach(function(h){out.push({id:"k"+j+h,nama:ROMAWI[j]+" "+h,jenjang:j,wali:"",bk:""})})});
+var HURUF="ABCDEFGHIJKLMNO";
+function kelasBawaan(n){
+  n=n||10;var out=[];[7,8,9].forEach(function(j){HURUF.slice(0,n).split("").forEach(function(h){out.push({id:"k"+j+h,nama:ROMAWI[j]+" "+h,jenjang:j,wali:"",bk:""})})});
   return out;
 }
 function dataContoh(){
-  var s={meta:{sekolah:"SMP Negeri Contoh",kota:"Yogyakarta",tp:"2026/2027",sem:"Ganjil",min:24,max:40,bkMin:5,contoh:true,ks:"",skNomor:"",skTanggal:""},
-    mapel:mapelBawaan(),kelas:kelasBawaan(),tugas:tugasBawaan(),guru:[],peta:{}};
-  function G(kode,nama,jenis,mapel,tugas){s.guru.push({id:"g"+kode,kode:kode,nama:nama+" (contoh)",jenis:jenis,mapel:mapel,tugas:(tugas||[]).map(function(t){return {t:t[0],n:t[1]||1}})})}
-  G("01","Drs. Bambang Wicaksono, M.Pd.","ks",[]);
-  G("02","Ahmad Fauzi, S.Pd.I.","mapel",["pai"],[["piket"]]);
-  G("03","Siti Rohmah, S.Ag.","mapel",["pai"]);
-  G("04","Yohanes Kurniawan, S.Pd.","mapel",["ppkn"],[["tppkk"]]);
-  G("05","Dewi Lestari, S.Pd.","mapel",["ppkn"],[["osis"]]);
-  G("06","Rina Puspitasari, S.Pd.","mapel",["bin"]);
-  G("07","Agus Setiawan, M.Pd.","mapel",["bin"],[["wakasek"]]);
-  G("08","Maria Ulfa, S.Pd.","mapel",["bin"],[["kaperpus"]]);
-  G("09","Hendra Gunawan, S.Pd.","mapel",["mat"],[["wakasek"]]);
-  G("10","Lusi Anggraini, S.Pd.","mapel",["mat"]);
-  G("11","Teguh Prasetyo, S.Si.","mapel",["mat"],[["korpro",1]]);
-  G("12","Sri Wahyuni, S.Pd.","mapel",["ipa"]);
-  G("13","Bayu Nugroho, S.Pd.","mapel",["ipa"],[["kalab"]]);
-  G("14","Anisa Rahma, S.Pd.","mapel",["ipa"]);
-  G("15","Yulianto, S.Pd.","mapel",["ips"],[["wakasek"]]);
-  G("16","Wulan Sari, S.Pd.","mapel",["ips"]);
-  G("17","Fransiska Dian, S.Pd.","mapel",["big"]);
-  G("18","Rizky Ramadhan, S.Pd.","mapel",["big"],[["ekskul"]]);
-  G("19","Dimas Saputra, S.Pd.","mapel",["pjok"],[["ekskul"]]);
-  G("20","Galih Pratama, S.Or.","mapel",["pjok"],[["ekskul"]]);
-  G("21","Nanda Kusuma, S.Kom.","mapel",["inf","kka"]);
-  G("22","Larasati Putri, S.Sn.","mapel",["sbk"]);
-  G("23","Hari Santoso, S.Pd.","mapel",["sbk"],[["piket"]]);
-  G("24","Sumarni, S.Pd.","mapel",["bjw"],[["orgkab"]]);
-  G("25","Endang Kristiani, S.Pd.","bk",[]);
-  G("26","Taufik Hidayat, S.Psi.","bk",[]);
-  var urut=s.kelas.map(function(k){return k.id});
-  function bagi(m,blok){var i=0;blok.forEach(function(b){for(var x=0;x<b[1];x++){if(i<urut.length){s.peta[urut[i]+"|"+m]="g"+b[0]};i++}})}
-  bagi("pai",[["02",8],["03",7]]);bagi("ppkn",[["04",8],["05",7]]);
-  bagi("bin",[["06",5],["07",5],["08",5]]);bagi("mat",[["10",5],["09",5],["11",5]]);
-  bagi("ipa",[["12",5],["13",5],["14",5]]);bagi("ips",[["15",8],["16",7]]);
-  bagi("big",[["17",8],["18",7]]);bagi("pjok",[["19",8],["20",7]]);
-  bagi("inf",[["21",8]]);bagi("sbk",[["22",8],["23",7]]);bagi("bjw",[["24",15]]);
-  bagi("kka",[["21",5],["11",2]]);
-  var wali=["03","05","06","10","12","14","16","17","22","23","24","02","18","19",""];
-  var bk=["25","25","25","25","25","25","25","25","26","26","26","26","26","",""];
-  s.kelas.forEach(function(k,i){k.wali=wali[i]?"g"+wali[i]:"";k.bk=bk[i]?"g"+bk[i]:""});
+  var s={meta:{sekolah:"SMP Negeri Contoh",kota:"Yogyakarta",tp:"2026/2027",sem:"Ganjil",min:24,max:40,bkMin:5,contoh:true,contohVer:2,ks:"",skNomor:"",skTanggal:""},
+    mapel:mapelBawaan(),kelas:kelasBawaan(10),tugas:tugasBawaan(),guru:[],peta:{}};
+  var no=0;
+  function G(nama,jenis,mapel,tugas){no++;var kode=(no<10?"0":"")+no;s.guru.push({id:"g"+kode,kode:kode,nama:nama+" (contoh)",jenis:jenis,mapel:mapel,tugas:(tugas||[]).map(function(t){return {t:t[0],n:t[1]||1}})});return kode}
+  G("Drs. Bambang Wicaksono, M.Pd.","ks",[]);
+  /* [mapel, [[nama, jumlah rombel, tugas tambahan], ...]] — rombel dibagi berurutan VII A … IX J */
+  var susun=[
+    ["pai",[["Ahmad Fauzi, S.Pd.I.",10,[["piket"]]],["Siti Rohmah, S.Ag.",10],["Muhammad Ridwan, S.Pd.I.",10,[["korinkl"]]]]],
+    ["ppkn",[["Yohanes Kurniawan, S.Pd.",10,[["tppkk"]]],["Dewi Lestari, S.Pd.",10,[["osis"]]],["Paulus Hadi Wibowo, S.Pd.",10]]],
+    ["bin",[["Rina Puspitasari, S.Pd.",5],["Agus Setiawan, M.Pd.",7,[["wakasek"]]],["Maria Ulfa, S.Pd.",5,[["kaperpus"]]],["Nur Aini, S.Pd.",5],["Bagas Wirawan, S.Pd.",4],["Dyah Ayu Pitaloka, S.Pd.",4,[["mgmp"]]]]],
+    ["mat",[["Hendra Gunawan, S.Pd.",5,[["wakasek"]]],["Lusi Anggraini, S.Pd.",5],["Teguh Prasetyo, S.Si.",5,[["korpro",1]]],["Ratna Kusumawati, S.Pd.",5],["Wahyu Hidayat, S.Pd.",5],["Fitri Handayani, S.Pd.",5]]],
+    ["ipa",[["Sri Wahyuni, S.Pd.",5],["Bayu Nugroho, S.Pd.",5,[["kalab"]]],["Anisa Rahma, S.Pd.",5],["Krisna Adi Pratama, S.Si.",5],["Purwanti, S.Pd.",5],["Eko Susanto, S.Pd.",5]]],
+    ["ips",[["Yulianto, S.Pd.",8,[["wakasek"]]],["Wulan Sari, S.Pd.",8],["Ignatius Bima, S.Pd.",7],["Siti Maryam, S.Pd.",7]]],
+    ["big",[["Fransiska Dian, S.Pd.",8],["Rizky Ramadhan, S.Pd.",8,[["ekskul"]]],["Melati Kirana, S.Pd.",7],["Andreas Setyo, S.Pd.",7]]],
+    ["pjok",[["Dimas Saputra, S.Pd.",10,[["ekskul"]]],["Galih Pratama, S.Or.",10,[["ekskul"]]],["Yudha Perdana, S.Or.",10]]],
+    ["inf",[["Nanda Kusuma, S.Kom.",10],["Arief Budiman, S.Kom.",10],["Citra Maharani, S.Kom.",10]]],
+    ["kka",[["Fajar Nugraha, S.Kom.",15],["Intan Permatasari, S.T.",12]]],
+    ["sbk",[["Larasati Putri, S.Sn.",10],["Hari Santoso, S.Pd.",10,[["piket"]]],["Kartika Sari, S.Pd.",10]]],
+    ["bjw",[["Sumarni, S.Pd.",15,[["orgkab"]]],["Joko Widagdo, S.Pd.",15]]]
+  ];
+  var urut=s.kelas.map(function(k){return k.id}),pengampu=[];
+  susun.forEach(function(x){var m=x[0],i=0;x[1].forEach(function(b){var kd=G(b[0],"mapel",[m],b[2]);pengampu.push("g"+kd);for(var n=0;n<b[1];n++){if(i<urut.length)s.peta[urut[i]+"|"+m]="g"+kd;i++}})});
+  var bk=[G("Endang Kristiani, S.Pd.","bk",[]),G("Taufik Hidayat, S.Psi.","bk",[]),G("Rahayu Ningsih, S.Pd.","bk",[]),G("Bonifasius Tri, S.Pd.","bk",[]),G("Annisa Fitriani, S.Psi.","bk",[]),G("Slamet Riyadi, S.Pd.","bk",[])];
+  /* wali kelas: 29 guru mapel (satu rombel sengaja belum punya wali untuk contoh pemeriksaan) */
+  s.kelas.forEach(function(k,i){k.wali=i<29?pengampu[(i*7+1)%pengampu.length]:"";k.bk="g"+bk[Math.floor(i/5)]});
   return s;
 }
 
@@ -640,7 +638,7 @@ function dataContoh(){
 var S;
 function simpan(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function muat(){
-  try{var r=localStorage.getItem(KEY);if(r){var d=JSON.parse(r);if(d&&d.meta&&d.mapel&&d.kelas&&d.guru)return d}}catch(e){}
+  try{var r=localStorage.getItem(KEY);if(r){var d=JSON.parse(r);if(d&&d.meta&&d.mapel&&d.kelas&&d.guru){if(d.meta.contoh&&!d.meta.contohVer)return dataContoh();return d}}}catch(e){}
   return dataContoh();
 }
 S=muat();
@@ -804,6 +802,8 @@ function renderStruktur(){
       '<td><button class="btn sm warn" type="button" data-delm="'+m.id+'" aria-label="Hapus '+esc(m.nama)+'">✕</button></td></tr>';
   });
   $("#tblMapel").innerHTML=h+'</tbody>';
+  [7,8,9].forEach(function(j){var el=$("#rb"+ROMAWI[j]);if(el&&document.activeElement!==el)el.value=S.kelas.filter(function(k){return k.jenjang===j}).length});
+  if(S.kelas.length&&/^\d/.test(S.kelas[0].nama))$("#rbGaya").value="angka";
   var k='<thead><tr><th>Rombel</th><th>Jenjang</th><th>Wali kelas</th><th>Guru BK</th><th></th></tr></thead><tbody>';
   var bkG=S.guru.filter(function(g){return g.jenis==="bk"});
   S.kelas.forEach(function(kl){
@@ -935,13 +935,14 @@ document.addEventListener("click",function(e){
   if(b.dataset.tab){$$("nav.tabs button").forEach(function(x){x.setAttribute("aria-selected",x===b?"true":"false")});$$("section.tab").forEach(function(s){s.classList.toggle("on",s.id==="t-"+b.dataset.tab)});try{localStorage.setItem(KEY+".tab",b.dataset.tab)}catch(err){};return}
   if(b.dataset.edit){bukaGuru(b.dataset.edit);return}
   if(b.dataset.delm){var m=mapelById(b.dataset.delm);if(!confirm("Hapus mapel "+m.nama+"?"))return;S.mapel=S.mapel.filter(function(x){return x!==m});Object.keys(S.peta).forEach(function(k){if(k.split("|")[1]===m.id)delete S.peta[k]});S.guru.forEach(function(g){g.mapel=g.mapel.filter(function(i){return i!==m.id})});ubah();return}
-  if(b.dataset.delk){var kl=S.kelas.filter(function(x){return x.id===b.dataset.delk})[0];if(!confirm("Hapus rombel "+kl.nama+"?"))return;S.kelas=S.kelas.filter(function(x){return x!==kl});Object.keys(S.peta).forEach(function(k){if(k.split("|")[0]===kl.id)delete S.peta[k]});ubah();return}
+  if(b.dataset.delk){var kl=S.kelas.filter(function(x){return x.id===b.dataset.delk})[0];if(!confirm("Hapus rombel "+kl.nama+"?"))return;S.kelas=S.kelas.filter(function(x){return x!==kl});Object.keys(S.peta).forEach(function(k){if(k.split("|")[0]===kl.id)delete S.peta[k]});if(S.jadwal)Object.keys(S.jadwal.isi).forEach(function(k){if(k.split("|")[2]===kl.id)delete S.jadwal.isi[k]});ubah();return}
   if(b.dataset.delt){S.tugas=S.tugas.filter(function(x){return x.id!==b.dataset.delt});S.guru.forEach(function(g){g.tugas=(g.tugas||[]).filter(function(t){return t.t!==b.dataset.delt})});ubah();return}
   var a=b.dataset.act;if(!a)return;
   if(a==="isiOtomatis")isiOtomatis();
   else if(a==="guruBaru")bukaGuru(null);
   else if(a==="imporGuru")bukaImpor();
   else if(a==="imporJadwal")bukaImporJadwal();
+  else if(a==="susunRombel")susunRombel();
   else if(a==="aturBel")bukaBel();
   else if(a==="drafJadwal"){if(!Object.keys(S.peta).length){toast("Peta pembagian masih kosong");return}
     if(Object.keys(S.jadwal.isi).length&&!S.jadwal.contoh&&!confirm("Jadwal yang ada akan diganti draf baru dari peta pembagian. Lanjutkan?"))return;
@@ -953,7 +954,7 @@ document.addEventListener("click",function(e){
     unduh("jadwal-mengajar-"+(S.meta.tp||"").replace(/\W/g,"")+".csv",csv(rows),"text/csv")}
   else if(a==="cetakJadwal"){document.body.classList.add("pj");window.print();setTimeout(function(){document.body.classList.remove("pj")},800)}
   else if(a==="mapelBaru"){S.mapel.push({id:"m"+uid(),kode:"BARU",nama:"Mapel baru",jp:{7:2,8:2,9:2}});ubah()}
-  else if(a==="kelasBaru"){var j=7,ada=S.kelas.filter(function(k){return k.jenjang===j}).length;S.kelas.push({id:"k"+uid(),nama:ROMAWI[j]+" "+String.fromCharCode(65+ada),jenjang:j,wali:"",bk:""});ubah()}
+  else if(a==="kelasBaru"){var j=7,ada=S.kelas.filter(function(k){return k.jenjang===j}).length;S.kelas.push({id:"k"+uid(),nama:ROMAWI[j]+" "+(HURUF[ada]||String(ada+1)),jenjang:j,wali:"",bk:""});S.kelas.sort(function(a,b){return a.jenjang-b.jenjang||normKelas(a.nama).localeCompare(normKelas(b.nama))});ubah();toast("Rombel "+ROMAWI[j]+" baru ditambahkan; ubah jenjang/nama di tabel bila perlu")}
   else if(a==="tugasBaru"){S.tugas.push({id:"t"+uid(),nama:"Tugas tambahan baru",jp:1});ubah()}
   else if(a==="hapusContoh"){if(!confirm("Hapus semua guru contoh dan pembagiannya? Struktur mapel, rombel, dan ekuivalensi tetap disimpan agar bisa langsung diisi."))return;S.guru=[];S.peta={};S.kelas.forEach(function(k){k.wali="";k.bk=""});if(S.jadwal&&S.jadwal.contoh){S.jadwal.isi={};S.jadwal.contoh=false}if(S.jadwal)S.jadwal._dicoba=true;S.meta.contoh=false;S.meta.sekolah="Nama sekolah";ubah();toast("Data contoh dihapus")}
   else if(a==="muatContoh"){if(!confirm("Ganti data sekarang dengan data contoh?"))return;S=dataContoh();ubah();toast("Data contoh dimuat")}
@@ -1471,6 +1472,23 @@ $("#hdrCari").addEventListener("input",function(){var v=this.value;clearTimeout(
   $("#jCari").value=v;JV.q=v.trim();renderJadwal()},200)});
 $("#hdrCari").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();var t=$("#jIsi");if(t)t.scrollIntoView({behavior:"smooth",block:"start"})}});
 $("#jCari").addEventListener("input",function(){$("#hdrCari").value=this.value});
+
+/* susun rombel cepat: n rombel per jenjang (A, B, C, …) */
+function susunRombel(){
+  var gaya=$("#rbGaya").value,baru=[],hapus=[],tambah=0;
+  [7,8,9].forEach(function(j){
+    var n=Math.max(0,Math.min(15,parseInt($("#rb"+ROMAWI[j]).value,10)||0));
+    var ada=S.kelas.filter(function(k){return k.jenjang===j}),dipakai=[];
+    for(var i=0;i<n;i++){var nm=(gaya==="angka"?j:ROMAWI[j]+" ")+HURUF[i];
+      var k=ada.filter(function(x){return dipakai.indexOf(x)<0&&normKelas(x.nama)===normKelas(nm)})[0];
+      if(k){k.nama=nm;dipakai.push(k)}else{k={id:"k"+uid(),nama:nm,jenjang:j,wali:"",bk:""};tambah++}
+      baru.push(k)}
+    ada.forEach(function(x){if(dipakai.indexOf(x)<0)hapus.push(x)});
+  });
+  if(hapus.length&&!confirm("Rombel berikut akan dihapus beserta pembagian dan jadwalnya:\n"+hapus.map(function(k){return k.nama}).join(", ")+"\n\nLanjutkan?"))return;
+  hapus.forEach(function(kl){Object.keys(S.peta).forEach(function(k){if(k.split("|")[0]===kl.id)delete S.peta[k]});if(S.jadwal)Object.keys(S.jadwal.isi).forEach(function(k){if(k.split("|")[2]===kl.id)delete S.jadwal.isi[k]})});
+  S.kelas=baru;ubah();toast("Rombel diperbarui: "+S.kelas.length+" rombel ("+tambah+" baru"+(hapus.length?", "+hapus.length+" dihapus":"")+")");
+}
 
 /* tema */
 function terapkanTema(t){if(t)document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme")}
