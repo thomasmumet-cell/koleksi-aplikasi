@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Arena Papan STEM – Game Papan Interaktif",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Mesin otomatis yang mengubah setiap buku SERAT STEM menjadi 3 game untuk papan interaktif (IFP): Duel Kilat (adu cepat dua tim kiri–kanan dari soal tiap bab dan asesmen akhir), Memori Istilah (cocokkan kartu glosarium), dan Susun Langkah Proyek (urutkan tahap rekayasa “Ayo Mencoba”). Sudah berisi buku Sains Itu Seru! IPA Berbasis STEM kelas VII; buku baru masuk lewat tombol 🎮 Game Papan di SERAT STEM atau impor berkas proyek.",
+    tanggal: "2026-11-19",
+    tautan: "game-papan-stem/",
+    status: "aktif"
+  },
+  {
     nama: "AKPD – Angket Kebutuhan Peserta Didik",
     kategori: "Bimbingan Konseling",
     jenis: "HTML",

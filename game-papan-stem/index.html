@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arena Papan STEM</title>
+<meta name="description" content="Mesin game papan interaktif (IFP) otomatis dari buku SERAT STEM: setiap buku langsung punya 3 game kelas — Duel Kilat, Memori Istilah, dan Susun Langkah Proyek — untuk dua tim di layar sentuh besar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3f6fb;--paper:#fff;--paper2:#eef2f8;--ink:#172036;--mut:#55607a;--line:#d9e0ec;
+  --S:#2f9e44;--T:#1c7ed6;--E:#f08c00;--M:#9c36b5;
+  --A:#e8590c;--A-soft:#fff0e6;--B:#1971c2;--B-soft:#e7f1fc;--ok:#2b8a3e;--bad:#e03131;
+  --shadow:0 2px 0 var(--line),0 14px 30px -18px rgba(20,30,60,.45);color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1424;--paper:#182036;--paper2:#1f2944;--ink:#eef2fb;--mut:#a8b3cc;--line:#2c3757;
+  --S:#51cf66;--T:#4dabf7;--E:#ffa94d;--M:#da77f2;--A:#ff8a4c;--A-soft:#3a2416;--B:#4dabf7;--B-soft:#14294a;--ok:#51cf66;--bad:#ff6b6b;
+  --shadow:0 2px 0 #000,0 14px 30px -18px #000;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1424;--paper:#182036;--paper2:#1f2944;--ink:#eef2fb;--mut:#a8b3cc;--line:#2c3757;
+  --S:#51cf66;--T:#4dabf7;--E:#ffa94d;--M:#da77f2;--A:#ff8a4c;--A-soft:#3a2416;--B:#4dabf7;--B-soft:#14294a;--ok:#51cf66;--bad:#ff6b6b;
+  --shadow:0 2px 0 #000,0 14px 30px -18px #000;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:18px/1.5 Nunito,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+h1,h2,h3,.disp{font-family:"Baloo 2",Nunito,sans-serif;line-height:1.1;margin:0;font-weight:800}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation}
+:focus-visible{outline:4px solid var(--T);outline-offset:3px;border-radius:10px}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 16px}
+.stem{display:inline-flex;gap:3px;vertical-align:middle}
+.stem i{font-style:normal;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;font:800 15px "Baloo 2",sans-serif}
+
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;gap:12px;padding:10px 0}
+.hd h1{font-size:clamp(22px,3.4vw,32px)}
+.hd small{display:block;color:var(--mut);font-size:14px;line-height:1.2}
+.sp{flex:1}
+.ib{border:2px solid var(--line);background:var(--paper);border-radius:14px;min-width:48px;height:48px;padding:0 12px;display:inline-grid;place-items:center;font-weight:800}
+.ib:hover{border-color:var(--T)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--line);background:var(--paper);border-radius:14px;padding:12px 18px;font-weight:800;min-height:52px;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--T)}
+.btn.pri{background:var(--T);border-color:var(--T);color:#fff}
+.btn.big{font-size:22px;padding:14px 26px;min-height:64px;border-radius:18px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+main{padding:20px 0 60px}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}
+.mt{margin-top:18px}
+.lead{color:var(--mut);margin:6px 0 0}
+.note{color:var(--mut);font-size:15px}
+.books{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}
+.book{text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:20px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.book:hover{border-color:var(--T);transform:translateY(-2px)}
+.book:before{content:"";position:absolute;left:0;top:0;right:0;height:8px;background:linear-gradient(90deg,var(--S) 0 25%,var(--T) 25% 50%,var(--E) 50% 75%,var(--M) 75%)}
+.book h3{font-size:24px;margin-top:6px}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--paper2);border:1px solid var(--line);font-size:13px;font-weight:800;margin-right:4px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:2px solid var(--line);background:var(--paper);border-radius:999px;padding:10px 16px;font-weight:800;min-height:48px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.games{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.game{border:0;border-radius:24px;padding:22px;color:#fff;text-align:left;min-height:220px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);position:relative}
+.game h3{font-size:32px}
+.game p{margin:0;opacity:.95}
+.game .go{margin-top:auto;font-weight:800;font-size:20px}
+.game[disabled]{opacity:.45;cursor:not-allowed}
+.g1{background:linear-gradient(135deg,#e8590c,#c92a2a)}
+.g2{background:linear-gradient(135deg,#7048e8,#9c36b5)}
+.g3{background:linear-gradient(135deg,#1c7ed6,#2f9e44)}
+.game .ico{position:absolute;right:18px;top:18px;opacity:.3}
+.set{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr))}
+.fld{display:flex;flex-direction:column;gap:4px}
+.fld label{font-weight:800;font-size:15px}
+.fld input,.fld select{border:2px solid var(--line);background:var(--paper2);border-radius:12px;padding:10px 12px;min-height:50px}
+.drop{border:3px dashed var(--line);border-radius:20px;padding:20px;text-align:center}
+
+/* ---------- Layar game ---------- */
+#play{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+.pbar{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:2px solid var(--line);background:var(--paper)}
+.pbar h2{font-size:clamp(20px,2.6vw,30px);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score{display:flex;align-items:center;gap:8px;font:800 clamp(20px,2.6vw,32px) "Baloo 2",sans-serif;padding:4px 16px;border-radius:14px}
+.score.a{background:var(--A-soft);color:var(--A)}.score.b{background:var(--B-soft);color:var(--B)}
+.score.on{outline:4px solid currentColor}
+.pbody{flex:1;min-height:0;display:flex;flex-direction:column;padding:14px;gap:14px}
+.qbox{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:16px 22px;display:flex;gap:16px;align-items:center;box-shadow:var(--shadow)}
+.qbox .qt{flex:1;font:800 clamp(22px,2.9vw,40px)/1.25 Nunito,sans-serif}
+.qno{font:800 18px Nunito;color:var(--mut)}
+.timer{flex:none;width:86px;height:86px;border-radius:50%;display:grid;place-items:center;font:800 32px "Baloo 2";background:conic-gradient(var(--E) var(--p,100%),var(--paper2) 0);position:relative}
+.timer:after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--paper)}
+.timer span{position:relative;z-index:1}
+.halves{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.halves.one{grid-template-columns:1fr}
+.half{border-radius:22px;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:0;position:relative}
+.half.a{background:var(--A-soft);border:3px solid color-mix(in srgb,var(--A) 40%,transparent)}
+.half.b{background:var(--B-soft);border:3px solid color-mix(in srgb,var(--B) 40%,transparent)}
+.half h3{font-size:26px}
+.half.a h3{color:var(--A)}.half.b h3{color:var(--B)}
+.opts{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0}
+.opt{border:3px solid transparent;background:var(--paper);border-radius:18px;padding:10px 14px;text-align:left;display:flex;align-items:center;gap:12px;font:800 clamp(17px,1.9vw,27px)/1.25 Nunito;box-shadow:var(--shadow);min-height:80px}
+.opt b{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;color:#fff;font:800 24px "Baloo 2"}
+.opt:nth-child(1) b{background:#e03131}.opt:nth-child(2) b{background:#1971c2}.opt:nth-child(3) b{background:#f08c00}.opt:nth-child(4) b{background:#2f9e44}
+.opt.benar{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 22%,var(--paper))}
+.opt.salah{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 18%,var(--paper));animation:shake .35s}
+.opt[disabled]{cursor:default}
+.lockmsg{position:absolute;inset:0;border-radius:20px;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 55%,transparent);font:800 30px "Baloo 2";text-align:center;padding:20px;pointer-events:none}
+.ctrl{display:flex;justify-content:center;gap:12px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+
+/* Memori */
+.mgrid{flex:1;min-height:0;display:grid;gap:12px;grid-template-columns:repeat(var(--cols,4),1fr);grid-auto-rows:1fr}
+.mc{perspective:900px;border:0;background:none;padding:0;min-height:0}
+.mc .in{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.mc.open .in,.mc.done .in{transform:rotateY(180deg)}
+.mc .f,.mc .k{position:absolute;inset:0;border-radius:18px;backface-visibility:hidden;display:grid;place-items:center;padding:10px;box-shadow:var(--shadow);overflow:hidden}
+.mc .f{background:repeating-linear-gradient(45deg,var(--M),var(--M) 14px,color-mix(in srgb,var(--M) 80%,#000) 14px 28px);color:#fff;font:800 clamp(34px,4vw,60px) "Baloo 2"}
+.mc .k{transform:rotateY(180deg);background:var(--paper);border:3px solid var(--line);text-align:center;font-weight:800;line-height:1.2}
+.mc .k.ist{font:800 clamp(18px,2.1vw,32px)/1.15 "Baloo 2";color:var(--M)}
+.mc .k.art{font-size:clamp(12px,1.15vw,18px)}
+.mc.done .k{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--paper))}
+.mc.done.ta .k{border-color:var(--A)}.mc.done.tb .k{border-color:var(--B)}
+.turn{font:800 26px "Baloo 2";padding:6px 18px;border-radius:14px;color:#fff}
+
+/* Susun langkah */
+.lst{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.step{border:3px solid transparent;background:var(--paper);border-radius:16px;padding:10px 14px;text-align:left;font:700 clamp(14px,1.35vw,20px)/1.3 Nunito;box-shadow:var(--shadow)}
+.step.salah{border-color:var(--bad);animation:shake .35s}
+.done-steps{display:flex;gap:6px;flex-wrap:wrap;min-height:46px}
+.done-steps span{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;color:#fff;font:800 22px "Baloo 2";animation:pop .25s}
+.half.a .done-steps span{background:var(--A)}.half.b .done-steps span{background:var(--B)}
+.frozen{opacity:.45;pointer-events:none}
+
+/* Hasil */
+.overlay{position:absolute;inset:0;z-index:5;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 70%,transparent);padding:20px}
+.res{background:var(--paper);border:3px solid var(--line);border-radius:28px;padding:28px;max-width:900px;width:100%;max-height:100%;overflow:auto;text-align:center;box-shadow:var(--shadow);animation:pop .3s}
+.res h2{font-size:clamp(34px,5vw,64px)}
+.res ol{text-align:left}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;z-index:80;font-weight:800;max-width:calc(100% - 32px)}
+@media (max-width:760px){
+  .halves{grid-template-columns:1fr}
+  .opts{grid-template-columns:1fr}
+  .timer{width:64px;height:64px;font-size:24px}
+  .mgrid{--cols:3!important}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap hd">
+  <span class="stem" aria-hidden="true"><i style="background:var(--S)">S</i><i style="background:var(--T)">T</i><i style="background:var(--E)">E</i><i style="background:var(--M)">M</i></span>
+  <div><h1>Arena Papan STEM</h1><small>Game papan interaktif otomatis dari buku SERAT STEM</small></div>
+  <span class="sp"></span>
+  <button class="ib" id="btnFull" title="Layar penuh" aria-label="Layar penuh">⛶</button>
+  <button class="ib" id="btnTheme" title="Tema terang/gelap" aria-label="Ganti tema">◐</button>
+</div></header>
+<main><div class="wrap" id="view"></div></main>
+<div id="play" hidden></div>
+<canvas id="confetti" hidden></canvas>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<script src="ekstrak.js"></script>
+<script src="buku/paket.js"></script>
+<script>
+"use strict";
+/* ===================== Arena Papan STEM =====================
+   Sumber buku: (1) paket bawaan buku/paket.js, (2) proyek SERAT STEM di perangkat
+   ini (localStorage "serat-stem-v1", asal yang sama), (3) dikirim dari tab SERAT STEM
+   (postMessage), (4) impor berkas Proyek_*.json. Tidak ada data yang dikirim ke server. */
+var K_SET="gamePapanStem.atur",K_IMP="gamePapanStem.impor",K_THEME="gamePapanStem.tema";
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){return false;}}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function acak(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function potong(s,n){s=String(s);return s.length>n?s.slice(0,n-1).replace(/\s+\S*$/,"")+"…":s;}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){t.hidden=true;},3000);}
+
+var ATUR={timA:"Tim Merah",timB:"Tim Biru",jumlahTim:2,detik:25,jumlahSoal:10,suara:true};
+try{var _s=JSON.parse(lsGet(K_SET)||"{}");for(var k in _s)if(k in ATUR)ATUR[k]=_s[k];}catch(e){}
+function simpanAtur(){lsSet(K_SET,JSON.stringify(ATUR));}
+
+/* ---------- Tema & layar penuh ---------- */
+function applyTheme(){var t=lsGet(K_THEME);if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme");}
+applyTheme();
+document.getElementById("btnTheme").onclick=function(){var c=document.documentElement.getAttribute("data-theme");var d=c?c==="dark":!!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);lsSet(K_THEME,d?"light":"dark");applyTheme();};
+function layarPenuh(){var d=document;try{if(!d.fullscreenElement)(d.documentElement.requestFullscreen||d.documentElement.webkitRequestFullscreen).call(d.documentElement);else d.exitFullscreen();}catch(e){toast("Layar penuh tidak didukung browser ini.");}}
+document.getElementById("btnFull").onclick=layarPenuh;
+
+/* ---------- Suara ---------- */
+var AC=null;
+function nada(f,d,tipe,del){if(!ATUR.suara)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();var o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+(del||0);o.type=tipe||"sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.25,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+d+.05);}catch(e){}}
+function sBenar(){nada(660,.15,"triangle");nada(880,.22,"triangle",.12);}
+function sSalah(){nada(200,.3,"sawtooth");}
+function sMenang(){[523,659,784,1047].forEach(function(f,i){nada(f,.25,"triangle",i*.14);});}
+function sKlik(){nada(520,.06,"square");}
+
+/* ---------- Konfeti ---------- */
+function konfeti(){
+  var c=document.getElementById("confetti"),x=c.getContext("2d");c.hidden=false;c.width=innerWidth;c.height=innerHeight;
+  var col=["#2f9e44","#1c7ed6","#f08c00","#9c36b5","#e8590c","#fcc419"],P=[];
+  for(var i=0;i<160;i++)P.push({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,v:2+Math.random()*4,r:Math.random()*6.28,s:6+Math.random()*8,c:col[i%col.length]});
+  var t0=Date.now(),id=konfeti.id=(konfeti.id||0)+1;(function f(){if(id!==konfeti.id){x.clearRect(0,0,c.width,c.height);c.hidden=true;return;}x.clearRect(0,0,c.width,c.height);P.forEach(function(p){p.y+=p.v;p.x+=Math.sin(p.y/30);p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore();});
+    if(Date.now()-t0<3500)requestAnimationFrame(f);else{x.clearRect(0,0,c.width,c.height);c.hidden=true;}})();
+}
+
+/* ---------- Daftar buku ---------- */
+var BUKU=[];
+function muatBuku(){
+  BUKU=[];var lihat={};
+  function tambah(p,asal){if(!p||!p.bab)return;var key=p.slug+"|"+asal;if(lihat[key])return;lihat[key]=1;p.asal=asal;BUKU.push(p);}
+  (window.PAKET_BUKU||[]).forEach(function(p){tambah(p,"koleksi");});
+  try{JSON.parse(lsGet(K_IMP)||"[]").forEach(function(p){tambah(p,"impor");});}catch(e){}
+  var s=lsGet("serat-stem-v1");
+  if(s){try{var p=EkstrakSerat.ekstrak(JSON.parse(s));tambah(p,"perangkat");}catch(e){}}
+  if(window._dariTab)tambah(window._dariTab,"tab");
+}
+function simpanImpor(p){var L=[];try{L=JSON.parse(lsGet(K_IMP)||"[]");}catch(e){}L=L.filter(function(x){return x.slug!==p.slug;});L.unshift(p);if(!lsSet(K_IMP,JSON.stringify(L.slice(0,20))))toast("Penyimpanan browser penuh; buku hanya tersedia selama halaman terbuka.");}
+function hapusImpor(slug){var L=[];try{L=JSON.parse(lsGet(K_IMP)||"[]");}catch(e){}lsSet(K_IMP,JSON.stringify(L.filter(function(x){return x.slug!==slug;})));muatBuku();vBeranda();}
+var ASAL={koleksi:"Koleksi",impor:"Diimpor",perangkat:"SERAT STEM di perangkat ini",tab:"Dikirim dari SERAT STEM"};
+
+/* ---------- Beranda ---------- */
+var cur={buku:null,bab:0};
+function vBeranda(){
+  muatBuku();cur.buku=null;
+  var h='<section class="card"><h2 style="font-size:clamp(28px,4vw,44px)">Satu buku STEM, tiga game kelas.</h2><p class="lead">Setiap buku dari SERAT STEM otomatis menjadi tiga game untuk papan interaktif (IFP): <b>Duel Kilat</b> (adu cepat dua tim), <b>Memori Istilah</b> (cocokkan kartu), dan <b>Susun Langkah Proyek</b> (urutkan tahap rekayasa). Pilih buku, pilih bab, lalu main.</p></section>';
+  h+='<h2 class="mt" style="font-size:28px">Pilih buku</h2><div class="books mt">';
+  BUKU.forEach(function(p,i){
+    var ns=p.bab.reduce(function(a,b){return a+b.soal.length;},0)+(p.aas||[]).length;
+    h+='<button class="book" onclick="bukaBuku('+i+')"><div><span class="tag">'+esc(ASAL[p.asal]||p.asal)+'</span>'+(p.kelas?'<span class="tag">Kelas '+esc(p.kelas)+'</span>':'')+'</div><h3>'+esc(p.judul)+'</h3><span class="note">'+esc(p.mapel||"")+' · '+p.bab.length+' bab · '+ns+' soal · '+(p.glosarium||[]).length+' istilah</span><span style="margin-top:auto;font-weight:800;color:var(--T)">Buka 3 game →</span></button>';
+  });
+  if(!BUKU.length)h+='<div class="card">Belum ada buku. Impor proyek SERAT STEM di bawah.</div>';
+  h+='</div><section class="card mt"><h3 style="font-size:24px">Tambah buku</h3><div class="drop mt" id="drop"><p style="margin:0 0 10px">Tarik berkas <b>Proyek_….json</b> dari SERAT STEM ke sini, atau</p><label class="btn pri" for="fImp">Pilih berkas proyek (.json)</label><input type="file" id="fImp" accept=".json,application/json" class="sr" onchange="impor(this.files[0])"><p class="note" style="margin:10px 0 0">Di SERAT STEM, tombol <b>🎮 Game Papan</b> langsung membuka buku yang sedang ditulis di sini. Berkas diproses di perangkat ini saja.</p></div>'+
+    (BUKU.some(function(p){return p.asal==="impor";})?'<div class="row mt">'+BUKU.filter(function(p){return p.asal==="impor";}).map(function(p){return '<button class="btn" onclick="hapusImpor(\''+esc(p.slug)+'\')">Hapus impor: '+esc(potong(p.judul,30))+'</button>';}).join("")+'</div>':'')+'</section>';
+  h+=atuHTML();
+  h+='<section class="card mt"><h3>Tentang</h3><p class="note">Terinspirasi portal game kelas <a href="https://papaninteraktif.com/" target="_blank" rel="noopener">papaninteraktif.com</a> (game numerasi, literasi, logika, dan ice breaking untuk IFP/Smartboard tanpa instalasi), dimodifikasi agar isinya diambil otomatis dari buku <a href="../serat-stem/">SERAT STEM</a>: soal pilihan ganda tiap bab dan asesmen akhir, glosarium, serta langkah proyek “Ayo Mencoba”. Tombol besar untuk layar sentuh, dua tim kiri–kanan, suara, dan layar penuh. Keyboard: Tim kiri tombol 1–4, Tim kanan 7–0.</p></section>';
+  document.getElementById("view").innerHTML=h;window.scrollTo(0,0);
+  var d=document.getElementById("drop");
+  d.addEventListener("dragover",function(e){e.preventDefault();d.style.borderColor="var(--T)";});
+  d.addEventListener("dragleave",function(){d.style.borderColor="";});
+  d.addEventListener("drop",function(e){e.preventDefault();d.style.borderColor="";if(e.dataTransfer.files[0])impor(e.dataTransfer.files[0]);});
+}
+function atuHTML(){
+  return '<section class="card mt"><h3>Pengaturan permainan</h3><div class="set mt"><div class="fld"><label for="aA">Nama tim kiri</label><input id="aA" value="'+esc(ATUR.timA)+'" onchange="ATUR.timA=this.value||\'Tim Merah\';simpanAtur()"></div><div class="fld"><label for="aB">Nama tim kanan</label><input id="aB" value="'+esc(ATUR.timB)+'" onchange="ATUR.timB=this.value||\'Tim Biru\';simpanAtur()"></div><div class="fld"><label for="aJ">Jumlah tim</label><select id="aJ" onchange="ATUR.jumlahTim=+this.value;simpanAtur()"><option value="2"'+(ATUR.jumlahTim===2?" selected":"")+'>2 tim (adu)</option><option value="1"'+(ATUR.jumlahTim===1?" selected":"")+'>1 kelas (main bersama)</option></select></div><div class="fld"><label for="aD">Waktu per soal Duel (detik)</label><input id="aD" type="number" min="5" max="120" value="'+ATUR.detik+'" onchange="ATUR.detik=Math.max(5,Math.min(120,+this.value||25));simpanAtur()"></div><div class="fld"><label for="aN">Jumlah soal Duel</label><input id="aN" type="number" min="3" max="30" value="'+ATUR.jumlahSoal+'" onchange="ATUR.jumlahSoal=Math.max(3,Math.min(30,+this.value||10));simpanAtur()"></div><div class="fld"><label for="aS">Suara</label><select id="aS" onchange="ATUR.suara=this.value===\'1\';simpanAtur()"><option value="1"'+(ATUR.suara?" selected":"")+'>Nyala</option><option value="0"'+(!ATUR.suara?" selected":"")+'>Mati</option></select></div></div></section>';
+}
+function impor(f){
+  if(!f)return;var rd=new FileReader();
+  rd.onload=function(){try{var p=EkstrakSerat.ekstrak(JSON.parse(String(rd.result)));simpanImpor(p);toast("Buku “"+potong(p.judul,40)+"” siap: 3 game dibuat.");muatBuku();var i=BUKU.findIndex(function(x){return x.slug===p.slug&&x.asal==="impor";});if(i>-1)bukaBuku(i);else vBeranda();}catch(e){toast("Gagal: "+e.message);}};
+  rd.readAsText(f);
+}
+
+/* ---------- Halaman buku ---------- */
+function bahan(p,bab){ /* bab: 0 = semua bab */
+  var B=bab?p.bab.filter(function(b){return b.no===bab;}):p.bab;
+  var soal=[],ist=[],lang=[];
+  B.forEach(function(b){soal=soal.concat(b.soal);ist=ist.concat(b.istilah);if(b.langkah.length>=3)lang.push(b);});
+  if(!bab)soal=soal.concat(p.aas||[]);
+  if(ist.length<6){var ada={};ist.forEach(function(g){ada[g.istilah]=1;});acak(p.glosarium||[]).forEach(function(g){if(ist.length<6&&!ada[g.istilah]){ist.push(g);ada[g.istilah]=1;}});}
+  return {soal:soal,istilah:ist,langkah:lang};
+}
+function bukaBuku(i){cur.buku=BUKU[i];cur.bab=0;vBuku();}
+function vBuku(){
+  var p=cur.buku,M=bahan(p,cur.bab);
+  var h='<div class="row"><button class="btn" onclick="vBeranda()">← Semua buku</button><span class="tag">'+esc(ASAL[p.asal]||"")+'</span></div><h2 class="mt" style="font-size:clamp(28px,4vw,44px)">'+esc(p.judul)+'</h2><p class="lead">'+esc(p.mapel||"")+(p.kelas?' · Kelas '+esc(p.kelas):'')+'</p>';
+  h+='<h3 class="mt" style="font-size:22px">Pilih bab</h3><div class="chips mt"><button class="chip" aria-pressed="'+(cur.bab===0)+'" onclick="cur.bab=0;vBuku()">Semua bab + asesmen akhir</button>'+p.bab.map(function(b){return '<button class="chip" aria-pressed="'+(cur.bab===b.no)+'" onclick="cur.bab='+b.no+';vBuku()">Bab '+b.no+': '+esc(potong(b.judul,34))+'</button>';}).join("")+'</div>';
+  var dl=M.langkah.length;
+  h+='<div class="games mt">'+
+    '<button class="game g1" onclick="mulaiDuel()"'+(M.soal.length<3?' disabled':'')+'><span class="ico" aria-hidden="true">⚡</span><h3>Duel Kilat</h3><p>Dua tim berdiri kiri dan kanan papan, menjawab soal yang sama. Yang benar lebih dulu mendapat poin; jawaban salah mengunci tim itu untuk soal tersebut.</p><span class="go">'+Math.min(M.soal.length,ATUR.jumlahSoal)+' dari '+M.soal.length+' soal · Mainkan →</span></button>'+
+    '<button class="game g2" onclick="mulaiMemori()"'+(M.istilah.length<3?' disabled':'')+'><span class="ico" aria-hidden="true">🃏</span><h3>Memori Istilah</h3><p>Balik dua kartu: istilah dan artinya. Pasangan cocok memberi poin dan tim boleh lanjut; jika tidak cocok, giliran pindah.</p><span class="go">'+Math.min(M.istilah.length,8)+' pasang kartu · Mainkan →</span></button>'+
+    '<button class="game g3" onclick="mulaiLangkah()"'+(!dl?' disabled':'')+'><span class="ico" aria-hidden="true">🧩</span><h3>Susun Langkah Proyek</h3><p>Ketuk langkah proyek “Ayo Mencoba” sesuai urutan proses rekayasa. Salah ketuk membuat tim membeku 2 detik. Tim tercepat menang.</p><span class="go">'+(dl?(cur.bab?"Proyek bab ini":dl+" proyek, dipilih acak"):"Tidak ada proyek")+' · Mainkan →</span></button></div>';
+  h+=atuHTML();
+  document.getElementById("view").innerHTML=h;window.scrollTo(0,0);
+}
+
+/* ---------- Kerangka layar main ---------- */
+var G=null,tick=null;
+function tim(){return ATUR.jumlahTim===2?[{id:"a",nama:ATUR.timA},{id:"b",nama:ATUR.timB}]:[{id:"a",nama:"Kelas"}];}
+function bukaPlay(judul){
+  var P=document.getElementById("play");P.hidden=false;document.body.style.overflow="hidden";
+  P.innerHTML='<div class="pbar"><button class="ib" onclick="keluarMain()" aria-label="Keluar dari game">✕</button><h2>'+esc(judul)+'</h2><div id="skor" class="row" style="flex-wrap:nowrap"></div><button class="ib" onclick="layarPenuh()" aria-label="Layar penuh">⛶</button></div><div class="pbody" id="pb"></div>';
+}
+function keluarMain(){clearInterval(tick);konfeti.id=(konfeti.id||0)+1;G=null;var P=document.getElementById("play");P.hidden=true;P.innerHTML="";document.body.style.overflow="";vBuku();}
+function skorHTML(aktif){return tim().map(function(t){return '<span class="score '+t.id+(aktif===t.id?' on':'')+'">'+esc(t.nama)+' <span>'+G.skor[t.id]+'</span></span>';}).join("");}
+function renderSkor(aktif){var s=document.getElementById("skor");if(s)s.innerHTML=skorHTML(aktif);}
+function hasil(judul,isi){
+  var pb=document.getElementById("pb"),T=tim(),pem="";
+  if(T.length===2){var a=G.skor.a,b=G.skor.b;pem=a===b?"Seri!":(a>b?ATUR.timA:ATUR.timB)+" menang!";}else pem="Hebat, kelas!";
+  var o=document.createElement("div");o.className="overlay";
+  o.innerHTML='<div class="res"><div style="font-size:64px" aria-hidden="true">🏆</div><h2>'+esc(pem)+'</h2><p style="font:800 28px Baloo\\ 2,sans-serif">'+T.map(function(t){return esc(t.nama)+": "+G.skor[t.id];}).join(" · ")+'</p>'+(judul?'<h3 class="mt">'+esc(judul)+'</h3>':'')+(isi||"")+'<div class="row mt" style="justify-content:center"><button class="btn big pri" onclick="ulang()">Main lagi</button><button class="btn big" onclick="keluarMain()">Pilih game lain</button></div></div>';
+  pb.appendChild(o);sMenang();konfeti();
+}
+function ulang(){konfeti.id=(konfeti.id||0)+1;var f=G&&G.ulang;if(f)f();}
+
+/* ---------- 1. Duel Kilat ---------- */
+function mulaiDuel(){
+  var M=bahan(cur.buku,cur.bab);if(M.soal.length<3)return;
+  var S=acak(M.soal).slice(0,ATUR.jumlahSoal).map(function(s){var idx=acak(s.opsi.map(function(_,i){return i;}));return {q:s.q,opsi:idx.map(function(i){return s.opsi[i];}),kunci:idx.indexOf(s.kunci)};});
+  G={jenis:"duel",S:S,i:0,skor:{a:0,b:0},kunci:{},selesai:false,ulang:mulaiDuel,catat:[]};
+  bukaPlay("⚡ Duel Kilat · "+(cur.bab?"Bab "+cur.bab:"Semua bab"));duelSoal();
+}
+function duelSoal(){
+  clearInterval(tick);var s=G.S[G.i],T=tim();G.kunci={};G.selesai=false;G.sisa=ATUR.detik;
+  var pb=document.getElementById("pb");renderSkor();
+  pb.innerHTML='<div class="qbox"><div style="flex:1"><div class="qno">Soal '+(G.i+1)+' dari '+G.S.length+'</div><div class="qt">'+esc(s.q)+'</div></div><div class="timer" id="tm"><span id="tmv">'+G.sisa+'</span></div></div>'+
+    '<div class="halves'+(T.length===1?' one':'')+'">'+T.map(function(t,ti){return '<div class="half '+t.id+'" id="h'+t.id+'"><h3>'+esc(t.nama)+'</h3><div class="opts">'+s.opsi.map(function(o,j){return '<button class="opt" data-t="'+t.id+'" data-j="'+j+'" onclick="duelJawab(\''+t.id+'\','+j+')"><b>'+"ABCD"[j]+'</b><span>'+esc(o)+'</span></button>';}).join("")+'</div></div>';}).join("")+'</div><div class="ctrl" id="ctrl"></div>';
+  tick=setInterval(function(){if(!G||G.selesai)return;G.sisa--;var v=document.getElementById("tmv"),tm=document.getElementById("tm");if(v)v.textContent=G.sisa;if(tm)tm.style.setProperty("--p",(G.sisa/ATUR.detik*100)+"%");if(G.sisa<=5&&G.sisa>0)nada(440,.08,"square");if(G.sisa<=0)duelTutup(null);},1000);
+}
+function duelJawab(t,j){
+  if(!G||G.jenis!=="duel"||G.selesai||G.kunci[t])return;
+  var s=G.S[G.i],btn=document.querySelector('.opt[data-t="'+t+'"][data-j="'+j+'"]');
+  if(j===s.kunci){btn.classList.add("benar");G.skor[t]+=10;sBenar();duelTutup(t);}
+  else{btn.classList.add("salah");G.kunci[t]=1;sSalah();var h=document.getElementById("h"+t);h.insertAdjacentHTML("beforeend",'<div class="lockmsg">Terkunci untuk soal ini</div>');h.querySelectorAll(".opt").forEach(function(b){b.disabled=true;});
+    if(Object.keys(G.kunci).length>=tim().length)duelTutup(null);}
+}
+function duelTutup(pemenang){
+  G.selesai=true;clearInterval(tick);var s=G.S[G.i];
+  document.querySelectorAll(".opt").forEach(function(b){b.disabled=true;if(+b.dataset.j===s.kunci)b.classList.add("benar");});
+  document.querySelectorAll(".lockmsg").forEach(function(x){x.remove();});
+  G.catat.push({q:s.q,jawab:s.opsi[s.kunci],oleh:pemenang});
+  renderSkor();
+  var akhir=G.i>=G.S.length-1,nm=pemenang?(tim().filter(function(x){return x.id===pemenang;})[0]||{}).nama:null;
+  document.getElementById("ctrl").innerHTML='<span style="font:800 24px Baloo\\ 2,sans-serif;align-self:center">'+(nm?"✔ "+esc(nm)+" +10":"Jawaban: "+"ABCD"[s.kunci])+'</span><button class="btn big pri" id="lanjut" onclick="duelLanjut()">'+(akhir?"Lihat hasil":"Soal berikutnya →")+'</button>';
+  var l=document.getElementById("lanjut");if(l)l.focus();
+}
+function duelLanjut(){
+  if(G.i>=G.S.length-1){hasil("Pembahasan",'<ol>'+G.catat.map(function(c){return '<li>'+esc(c.q)+' <b>→ '+esc(c.jawab)+'</b></li>';}).join("")+'</ol>');return;}
+  G.i++;duelSoal();
+}
+
+/* ---------- 2. Memori Istilah ---------- */
+function mulaiMemori(){
+  var M=bahan(cur.buku,cur.bab);if(M.istilah.length<3)return;
+  var pas=acak(M.istilah).slice(0,8),kartu=[];
+  pas.forEach(function(g,i){kartu.push({p:i,jenis:"ist",t:g.istilah});kartu.push({p:i,jenis:"art",t:g.arti});});
+  G={jenis:"memori",K:acak(kartu),buka:[],cocok:0,total:pas.length,giliran:"a",skor:{a:0,b:0},langkah:0,kunci:false,pas:pas,ulang:mulaiMemori};
+  bukaPlay("🃏 Memori Istilah · "+(cur.bab?"Bab "+cur.bab:"Semua bab"));
+  var n=G.K.length,cols=n<=8?4:n<=12?4:n<=16?(innerWidth>innerHeight?6:4):6;
+  var pb=document.getElementById("pb");
+  pb.innerHTML='<div class="row" style="justify-content:center" id="turn"></div><div class="mgrid" style="--cols:'+cols+'">'+G.K.map(function(k,i){return '<button class="mc" id="mc'+i+'" onclick="memBalik('+i+')" aria-label="Kartu '+(i+1)+'"><div class="in"><div class="f">?</div><div class="k '+k.jenis+'">'+esc(k.jenis==="art"?potong(k.t,140):k.t)+'</div></div></button>';}).join("")+'</div>';
+  memGiliran();
+}
+function memGiliran(){
+  renderSkor(tim().length===2?G.giliran:null);
+  var t=tim().length===2?tim().filter(function(x){return x.id===G.giliran;})[0]:null;
+  document.getElementById("turn").innerHTML=t?'<span class="turn" style="background:var(--'+(t.id==="a"?"A":"B")+')">Giliran: '+esc(t.nama)+'</span>':'<span class="turn" style="background:var(--M)">Langkah: '+G.langkah+' · Pasangan: '+G.cocok+'/'+G.total+'</span>';
+}
+function memBalik(i){
+  if(!G||G.jenis!=="memori"||G.kunci)return;var el=document.getElementById("mc"+i);
+  if(el.classList.contains("open")||el.classList.contains("done"))return;
+  el.classList.add("open");el.setAttribute("aria-label",G.K[i].t);sKlik();G.buka.push(i);
+  if(G.buka.length<2)return;
+  G.langkah++;var a=G.K[G.buka[0]],b=G.K[G.buka[1]],ia=G.buka[0],ib=G.buka[1];G.buka=[];
+  if(a.p===b.p&&a.jenis!==b.jenis){
+    G.cocok++;G.skor[tim().length===2?G.giliran:"a"]++;sBenar();
+    [ia,ib].forEach(function(x){var e=document.getElementById("mc"+x);e.classList.remove("open");e.classList.add("done","t"+G.giliran);e.disabled=true;});
+    memGiliran();
+    if(G.cocok>=G.total)setTimeout(function(){hasil("Daftar istilah",'<ol>'+G.pas.map(function(g){return '<li><b>'+esc(g.istilah)+'</b>: '+esc(g.arti)+'</li>';}).join("")+'</ol>');},600);
+  }else{
+    G.kunci=true;sSalah();
+    setTimeout(function(){[ia,ib].forEach(function(x){var e=document.getElementById("mc"+x);if(e){e.classList.remove("open");e.setAttribute("aria-label","Kartu");}});if(!G)return;G.kunci=false;if(tim().length===2)G.giliran=G.giliran==="a"?"b":"a";memGiliran();},1500);
+  }
+}
+
+/* ---------- 3. Susun Langkah Proyek ---------- */
+function mulaiLangkah(){
+  var M=bahan(cur.buku,cur.bab);if(!M.langkah.length)return;
+  var b=M.langkah[Math.floor(Math.random()*M.langkah.length)];
+  G={jenis:"langkah",bab:b,L:b.langkah,skor:{a:0,b:0},pos:{a:0,b:0},beku:{},urut:{},selesai:false,t0:Date.now(),ulang:mulaiLangkah};
+  tim().forEach(function(t){G.urut[t.id]=acak(b.langkah.map(function(_,i){return i;}));});
+  bukaPlay("🧩 Susun Langkah · "+(b.proyek||b.judul));renderSkor();
+  var pb=document.getElementById("pb"),T=tim();
+  pb.innerHTML='<div class="qbox"><div style="flex:1"><div class="qno">Bab '+b.no+' · '+esc(b.judul)+'</div><div class="qt" style="font-size:clamp(20px,2.3vw,32px)">Proyek: '+esc(b.proyek||"Ayo Mencoba")+' — ketuk langkah pertama sampai terakhir.</div></div><div class="timer" style="--p:100%"><span id="tmv">0</span></div></div><div class="halves'+(T.length===1?' one':'')+'">'+T.map(function(t){return '<div class="half '+t.id+'" id="h'+t.id+'"><div class="row" style="justify-content:space-between"><h3>'+esc(t.nama)+'</h3><div class="done-steps" id="d'+t.id+'"></div></div><div class="lst" id="l'+t.id+'"></div></div>';}).join("")+'</div>';
+  T.forEach(function(t){langkahRender(t.id);});
+  clearInterval(tick);tick=setInterval(function(){if(!G||G.selesai)return;var v=document.getElementById("tmv");if(v)v.textContent=Math.floor((Date.now()-G.t0)/1000);},500);
+}
+function langkahRender(t){
+  var el=document.getElementById("l"+t);
+  el.innerHTML=G.urut[t].map(function(i){return '<button class="step" data-i="'+i+'" onclick="langkahPilih(\''+t+'\','+i+',this)">'+esc(potong(G.L[i].isi,150))+'</button>';}).join("");
+}
+function langkahPilih(t,i,btn){
+  if(!G||G.jenis!=="langkah"||G.selesai||G.beku[t])return;
+  if(i===G.pos[t]){
+    sBenar();G.pos[t]++;G.skor[t]=G.pos[t];renderSkor();
+    G.urut[t]=G.urut[t].filter(function(x){return x!==i;});
+    document.getElementById("d"+t).insertAdjacentHTML("beforeend",'<span title="'+esc(G.L[i].tahap)+'">'+G.pos[t]+'</span>');
+    langkahRender(t);
+    if(G.pos[t]>=G.L.length){G.selesai=true;clearInterval(tick);var nm=(tim().filter(function(x){return x.id===t;})[0]||{}).nama,dt=Math.floor((Date.now()-G.t0)/1000);
+      G.skor[t]+=5;renderSkor();
+      setTimeout(function(){hasil((tim().length===2?nm+" selesai lebih dulu ("+dt+" detik). ":"Selesai dalam "+dt+" detik. ")+"Urutan yang benar:",'<ol>'+G.L.map(function(l){return '<li>'+(l.tahap?'<b>'+esc(l.tahap)+':</b> ':'')+esc(l.isi)+'</li>';}).join("")+'</ol>');},500);}
+  }else{
+    sSalah();btn.classList.add("salah");G.beku[t]=1;var h=document.getElementById("l"+t);h.classList.add("frozen");
+    setTimeout(function(){if(!G)return;G.beku[t]=0;h.classList.remove("frozen");btn.classList.remove("salah");},2000);
+  }
+}
+
+/* ---------- Keyboard ---------- */
+document.addEventListener("keydown",function(e){
+  if(!G)return;
+  if(e.key==="Escape"){keluarMain();return;}
+  if(G.jenis==="duel"){var mA={"1":0,"2":1,"3":2,"4":3},mB={"7":0,"8":1,"9":2,"0":3};
+    if(e.key in mA)duelJawab("a",mA[e.key]);else if(e.key in mB&&tim().length===2)duelJawab("b",mB[e.key]);
+    else if((e.key==="Enter"||e.key===" ")&&G.selesai&&document.activeElement&&document.activeElement.id!=="lanjut"){e.preventDefault();duelLanjut();}}
+});
+
+/* ---------- Terima buku dari tab SERAT STEM ---------- */
+window.addEventListener("message",function(e){
+  var d=e.data;if(!d||d.type!=="gp-buku"||!d.buku)return;
+  try{var p=EkstrakSerat.ekstrak(d.buku);window._dariTab=p;muatBuku();var i=BUKU.findIndex(function(x){return x.asal==="tab";});if(i>-1){bukaBuku(i);toast("Buku dari SERAT STEM siap: 3 game dibuat otomatis.");}}catch(err){toast("Buku belum bisa dibuat game: "+err.message);}
+});
+try{if(window.opener)window.opener.postMessage({type:"gp-minta"},"*");}catch(e){}
+
+/* ---------- Mulai ---------- */
+(function(){
+  vBeranda();
+  var q=new URLSearchParams(location.search),s=q.get("buku");
+  if(q.get("sumber")==="serat-stem"){var i=BUKU.findIndex(function(x){return x.asal==="perangkat";});if(i>-1)bukaBuku(i);}
+  else if(s){var j=BUKU.findIndex(function(x){return x.slug===s;});if(j>-1)bukaBuku(j);}
+})();
+
+</script>
+</body>
+</html>

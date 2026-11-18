@@ -20,3 +20,15 @@ Atau cukup bilang ke Claude: **"Simpan ke koleksi, kategori ...".**
 
 > Repo ini Public. Jangan simpan kata sandi, ID spreadsheet sekolah, atau data pribadi siswa di sini.
 > Kode Google Apps Script disimpan di repo Private `kode-apps-script`.
+
+## Arena Papan STEM (game otomatis dari buku SERAT STEM)
+
+Setiap buku SERAT STEM otomatis punya 3 game papan interaktif di `game-papan-stem/`.
+Untuk memasukkan buku baru ke koleksi (berkas `Proyek_*.json` hasil SERAT STEM):
+
+```
+node game-papan-stem/alat/buat-paket.js Proyek_Judul_Buku.json
+```
+
+Perintah itu membuat `game-papan-stem/buku/<slug>.json` dan menyusun ulang `buku/paket.js`
+(hanya soal, glosarium, kata kunci, dan langkah proyek; tanpa nama penulis atau gambar).
