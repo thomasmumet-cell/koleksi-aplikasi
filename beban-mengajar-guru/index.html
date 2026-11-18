@@ -129,6 +129,15 @@ footer{color:var(--ink2);font-size:12.5px;padding:10px 0 40px}
 .sk-head{text-align:center;margin-bottom:12px}
 .sk-head h3{font-size:17px;text-transform:uppercase}
 .muted{color:var(--ink2)}
+dialog.lebar{max-width:920px;max-height:calc(100vh - 24px);overflow:auto}
+.imp textarea{width:100%;min-height:120px;font:13px/1.45 ui-monospace,Consolas,monospace;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--card);color:var(--ink)}
+.imp .tag{display:inline-block;font-size:12px;font-weight:700;border-radius:99px;padding:1px 8px;white-space:nowrap}
+.imp .tag.baru{background:color-mix(in srgb,var(--teal) 18%,transparent);color:var(--teal)}
+.imp .tag.ubah{background:var(--ochre-soft);color:var(--ink)}
+.imp .tag.lewat{background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)}
+.imp td.peringatan{color:var(--red);font-size:12.5px}
+.imp .opsi{display:grid;gap:6px;font-size:14px}
+.imp .opsi label{display:flex;gap:8px;align-items:flex-start}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media (max-width:640px){
   .brand .stamp{width:44px;height:44px;font-size:17px}
@@ -242,6 +251,7 @@ footer{color:var(--ink2);font-size:12.5px;padding:10px 0 40px}
     <div class="card">
       <div class="row" style="margin-bottom:10px">
         <div class="grow"><h2>Daftar guru</h2><p class="sub" style="margin:0">Kode guru dipakai di peta. Jangan memasukkan NIP atau data pribadi ke aplikasi publik bila perangkat dipakai bersama.</p></div>
+        <button class="btn" type="button" data-act="imporGuru">⇪ Impor data guru</button>
         <button class="btn pri" type="button" data-act="guruBaru">+ Tambah guru</button>
       </div>
       <div class="scroll"><table id="tblGuru"></table></div>
@@ -383,6 +393,32 @@ footer{color:var(--ink2);font-size:12.5px;padding:10px 0 40px}
       <div class="grow"></div>
       <button class="btn" value="batal" formnovalidate>Batal</button>
       <button class="btn pri" value="simpan">Simpan</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlgImpor" class="lebar" aria-labelledby="dlgImporJudul">
+  <form method="dialog" class="imp" id="formImpor">
+    <h2 id="dlgImporJudul">Impor data guru</h2>
+    <p class="muted" style="margin:0;font-size:14px">Salin tabel guru dari Excel/Google Sheets lalu tempel di kotak bawah, atau pilih berkas CSV. Kolom yang dikenali: <b>Kode</b>, <b>Nama</b>, <b>Jenis</b> (Mapel/BK/Kepala sekolah), <b>Mapel</b> (kode atau nama, pisahkan koma), <b>Tugas tambahan</b> (pisahkan titik koma, boleh “x2”), dan <b>Wali kelas</b> (mis. VII A). Hanya kolom Nama yang wajib. Kolom NIP/NIK sengaja <b>tidak</b> diimpor.</p>
+    <div class="row">
+      <button class="btn sm" type="button" id="impTemplat">Unduh templat CSV</button>
+      <label class="btn sm" style="display:inline-block">Pilih berkas CSV<input type="file" id="impFile" accept=".csv,.txt,text/csv,text/plain" class="sr"></label>
+      <span class="muted" id="impFileNama" style="font-size:13px"></span>
+    </div>
+    <label class="f">Tempel data di sini (baris pertama boleh judul kolom)
+      <textarea id="impTeks" spellcheck="false" placeholder="Kode	Nama	Jenis	Mapel	Tugas tambahan	Wali kelas&#10;07	Rahmat Hidayat, S.Pd.	Mapel	MAT	Pembina OSIS	VII A"></textarea>
+    </label>
+    <div class="opsi">
+      <label><input type="radio" name="impMode" value="gabung" checked> <span><b>Tambah &amp; perbarui</b>: guru dengan kode (atau nama) yang sama diperbarui, sisanya ditambahkan. Pembagian jam yang sudah ada tetap.</span></label>
+      <label><input type="radio" name="impMode" value="ganti"> <span><b>Ganti seluruh daftar guru</b>: guru yang tidak ada di data impor dihapus beserta sel peta, wali kelas, dan BK miliknya.</span></label>
+      <label id="impContohWrap"><input type="checkbox" id="impContoh" checked> <span>Hapus dulu guru <b>contoh</b> beserta pembagiannya</span></label>
+    </div>
+    <div id="impPratinjau"></div>
+    <div class="row">
+      <div class="grow muted" id="impRingkas" style="font-size:14px"></div>
+      <button class="btn" value="batal" formnovalidate>Batal</button>
+      <button class="btn pri" type="button" id="impTerapkan" disabled>Impor</button>
     </div>
   </form>
 </dialog>
@@ -774,6 +810,7 @@ document.addEventListener("click",function(e){
   var a=b.dataset.act;if(!a)return;
   if(a==="isiOtomatis")isiOtomatis();
   else if(a==="guruBaru")bukaGuru(null);
+  else if(a==="imporGuru")bukaImpor();
   else if(a==="mapelBaru"){S.mapel.push({id:"m"+uid(),kode:"BARU",nama:"Mapel baru",jp:{7:2,8:2,9:2}});ubah()}
   else if(a==="kelasBaru"){var j=7,ada=S.kelas.filter(function(k){return k.jenjang===j}).length;S.kelas.push({id:"k"+uid(),nama:ROMAWI[j]+" "+String.fromCharCode(65+ada),jenjang:j,wali:"",bk:""});ubah()}
   else if(a==="tugasBaru"){S.tugas.push({id:"t"+uid(),nama:"Tugas tambahan baru",jp:1});ubah()}
@@ -785,6 +822,129 @@ document.addEventListener("click",function(e){
   else if(a==="salinRingkas")salin(ringkasan());
   else if(a==="cetak")window.print();
 });
+
+
+/* ---------- IMPOR DATA GURU (CSV / tempel dari Excel) ---------- */
+function bacaTabel(teks){
+  teks=String(teks||"").replace(/^﻿/,"").replace(/\r\n?/g,"\n");
+  var baris1=(teks.split("\n").filter(function(x){return x.trim()})[0])||"";
+  var hitungD=function(ch){var n=0,q=false;for(var i=0;i<baris1.length;i++){var c=baris1[i];if(c==='"')q=!q;else if(c===ch&&!q)n++}return n};
+  var d="\t";if(hitungD("\t")===0){d=hitungD(";")>=hitungD(",")?";":","}if(hitungD(d)===0&&hitungD(",")>0)d=",";
+  var rows=[],row=[],sel="",q=false;
+  for(var i=0;i<teks.length;i++){var c=teks[i];
+    if(q){if(c==='"'){if(teks[i+1]==='"'){sel+='"';i++}else q=false}else sel+=c}
+    else if(c==='"'&&sel==="")q=true;
+    else if(c===d){row.push(sel);sel=""}
+    else if(c==="\n"){row.push(sel);rows.push(row);row=[];sel=""}
+    else sel+=c}
+  row.push(sel);rows.push(row);
+  return rows.map(function(r){return r.map(function(x){return x.trim()})}).filter(function(r){return r.some(function(x){return x!==""})&&!/^#/.test(r[0]||"")});
+}
+var KOLOM={kode:/^(kode|kd|no\.?\s*kode|kode\s*guru)$/,nama:/^(nama|nama\s*(lengkap|guru)?(\s*(dan|&)\s*gelar)?|guru)$/,jenis:/^(jenis|jabatan|tugas\s*pokok|peran|status\s*tugas)$/,
+  mapel:/^(mapel|mata\s*pelajaran|mapel\s*(yang\s*)?(diampu|ampu)|mengajar|bidang\s*studi)$/,tugas:/^(tugas\s*tambahan|tugas\s*lain|tambahan)$/,wali:/^(wali\s*kelas|wali|kelas\s*wali|walas)$/,nip:/^(nip|nik|nuptk|nrg|nip\s*\/\s*nuptk)$/};
+function petaKolom(head){
+  var m={},kenal=0;head.forEach(function(x,i){var t=x.toLowerCase().replace(/[_*]/g," ").replace(/\s+/g," ").trim();Object.keys(KOLOM).forEach(function(k){if(m[k]==null&&KOLOM[k].test(t)){m[k]=i;kenal++}})});
+  return kenal&&m.nama!=null?m:null;
+}
+function normal(s){return String(s||"").toLowerCase().replace(/[\s.\-_&]/g,"")}
+function cariMapel(x){
+  var n=normal(x);if(!n)return null;
+  for(var i=0;i<S.mapel.length;i++){var m=S.mapel[i];if(normal(m.kode)===n||normal(m.id)===n||normal(m.nama)===n)return m}
+  for(i=0;i<S.mapel.length;i++){m=S.mapel[i];if(n.length>=4&&(normal(m.nama).indexOf(n)>=0||n.indexOf(normal(m.nama))>=0))return m}
+  var alias={bindo:"bin",bahasaindonesia:"bin",bing:"big",binggris:"big",bahasainggris:"big",agamaislam:"pai",matematika:"mat",pkn:"ppkn",pendidikanpancasila:"ppkn",seni:"sbk",senibudaya:"sbk",prakarya:"sbk",bjawa:"bjw",bahasajawa:"bjw",basajawa:"bjw",informatika:"inf",tik:"inf",penjas:"pjok",olahraga:"pjok",koding:"kka"};
+  return alias[n]?mapelById(alias[n]):null;
+}
+function cariTugas(x){
+  var n=normal(x);if(!n)return null;
+  for(var i=0;i<S.tugas.length;i++){var t=S.tugas[i];if(normal(t.id)===n||normal(t.nama)===n)return t}
+  for(i=0;i<S.tugas.length;i++){t=S.tugas[i];if(n.length>=4&&normal(t.nama).indexOf(n)>=0)return t}
+  return null;
+}
+function normKelas(s){s=String(s||"").toUpperCase().replace(/^KELAS\s*/,"").replace(/[\s.\-_]/g,"");return s.replace(/^(9|IX)/,"IX").replace(/^(8|VIII)/,"VIII").replace(/^(7|VII)/,"VII")}
+function jenisDari(x){var t=String(x||"").toLowerCase();if(/kepala|^ks$/.test(t))return "ks";if(/\bbk\b|konsel|bimbingan/.test(t))return "bk";return "mapel"}
+var IMP=null;
+function analisisImpor(){
+  var rows=bacaTabel($("#impTeks").value),out=[],info=[];
+  if(!rows.length){IMP=null;$("#impPratinjau").innerHTML="";$("#impRingkas").textContent="";$("#impTerapkan").disabled=true;return}
+  var mp=petaKolom(rows[0]),mulai=1;
+  if(!mp){mulai=0;var lebar=Math.max.apply(null,rows.map(function(r){return r.length}));mp=lebar===1?{nama:0}:{kode:0,nama:1,jenis:2,mapel:3,tugas:4,wali:5};info.push(lebar===1?"Tanpa judul kolom: setiap baris dibaca sebagai nama guru.":"Tanpa judul kolom: urutan dibaca Kode, Nama, Jenis, Mapel, Tugas tambahan, Wali kelas.")}
+  if(mp.nip!=null)info.push("Kolom NIP/NIK/NUPTK ditemukan dan sengaja diabaikan.");
+  var buangContoh=$("#impContoh").checked&&S.meta.contoh, ganti=($("input[name=impMode]:checked")||{}).value==="ganti";
+  var dasar=S.guru.filter(function(g){return !(buangContoh&&/\(contoh\)/.test(g.nama))});
+  var kodeDipakai={};
+  rows.slice(mulai).forEach(function(r,i){
+    var ambil=function(k){return mp[k]!=null&&r[mp[k]]!=null?r[mp[k]]:""};
+    var nama=ambil("nama").replace(/\s+/g," "),kode=ambil("kode").replace(/\s+/g,""),warn=[];
+    if(/^\d$/.test(kode))kode="0"+kode;
+    if(!nama){out.push({no:i+1+mulai,lewat:"nama kosong",r:r});return}
+    if(/^\d{18}$/.test(nama.replace(/\s/g,""))){out.push({no:i+1+mulai,lewat:"kolom nama berisi NIP",r:r});return}
+    var mapel=[],tugas=[],wali=null;
+    ambil("mapel").split(/[,;\/|+]|\s+dan\s+/i).forEach(function(x){if(!x.trim())return;var m=cariMapel(x);if(m){if(mapel.indexOf(m.id)<0)mapel.push(m.id)}else warn.push("mapel “"+x.trim()+"” tidak dikenal")});
+    ambil("tugas").split(/[;|\n]/).forEach(function(x){x=x.trim();if(!x||/^[-–—]$/.test(x))return;var n=1,mm=x.match(/\s*(?:x|×)\s*(\d+)\s*$|\s*\((\d+)\)\s*$/i);if(mm){n=+(mm[1]||mm[2])||1;x=x.slice(0,mm.index)}
+      if(/^wali\s*kelas/i.test(x))return;var t=cariTugas(x);if(t)tugas.push({t:t.id,n:n});else warn.push("tugas “"+x+"” tidak dikenal")});
+    var w=ambil("wali");if(w&&!/^[-–—]$/.test(w)){var nk=normKelas(w);wali=S.kelas.filter(function(k){return normKelas(k.nama)===nk})[0]||null;if(!wali)warn.push("kelas wali “"+w+"” tidak ada")}
+    var lama=null;if(kode)lama=dasar.filter(function(g){return g.kode===kode})[0]||null;
+    if(!lama)lama=dasar.filter(function(g){return normal(g.nama.replace(/\s*\(contoh\)/,""))===normal(nama)})[0]||null;
+    if(!kode)kode=lama?lama.kode:"";
+    if(kode&&kodeDipakai[kode]){warn.push("kode "+kode+" ganda di data impor; diberi kode baru");kode=""}
+    if(kode)kodeDipakai[kode]=1;
+    out.push({no:i+1+mulai,nama:nama,kode:kode,jenis:mp.jenis!=null&&ambil("jenis")?jenisDari(ambil("jenis")):(lama?lama.jenis:(mapel.length?"mapel":jenisDari(""))),mapel:mapel,tugas:tugas,wali:wali,lama:lama,warn:warn,adaMapel:mp.mapel!=null&&ambil("mapel")!=="",adaTugas:mp.tugas!=null});
+  });
+  var nomor=Math.max.apply(null,[0].concat(dasar.map(function(g){return +g.kode||0})));
+  out.forEach(function(x){if(!x.lewat&&!x.kode){var k;do{nomor++;k=String(nomor).padStart(2,"0")}while(kodeDipakai[k]||(!ganti&&dasar.some(function(g){return g.kode===k&&g!==x.lama})));x.kode=k;kodeDipakai[k]=1}});
+  IMP={rows:out,ganti:ganti,buangContoh:buangContoh,dasar:dasar};
+  var ok=out.filter(function(x){return !x.lewat}),baru=ok.filter(function(x){return !x.lama}).length,ubah=ok.length-baru,lw=out.length-ok.length;
+  var hapus=ganti?dasar.filter(function(g){return !ok.some(function(x){return x.lama===g})}).length:0;
+  var hh='<p class="muted" style="font-size:13px;margin:0 0 6px">'+info.map(esc).join(" ")+'</p><div class="scroll" style="max-height:300px;overflow:auto"><table><thead><tr><th>Baris</th><th>Status</th><th>Kode</th><th>Nama</th><th>Jenis</th><th>Mapel</th><th>Tugas tambahan</th><th>Wali</th><th>Catatan</th></tr></thead><tbody>';
+  out.forEach(function(x){
+    if(x.lewat){hh+='<tr><td class="num">'+x.no+'</td><td><span class="tag lewat">dilewati</span></td><td colspan="6" class="muted">'+esc(x.r.join(" | "))+'</td><td class="peringatan">'+esc(x.lewat)+'</td></tr>';return}
+    hh+='<tr><td class="num">'+x.no+'</td><td><span class="tag '+(x.lama?"ubah":"baru")+'">'+(x.lama?"perbarui":"baru")+'</span></td><td class="num">'+esc(x.kode)+'</td><td>'+esc(x.nama)+'</td><td>'+({mapel:"Mapel",bk:"BK",ks:"Kepala sekolah"}[x.jenis])+'</td><td>'+esc(x.mapel.map(function(id){return mapelById(id).kode}).join(", ")||(x.lama&&!x.adaMapel?"(tetap)":"—"))+'</td><td style="font-size:13px">'+esc(x.tugas.map(function(t){var tt=tugasById(t.t);return tt.nama+(t.n>1?" ×"+t.n:"")}).join("; ")||(x.lama&&!x.adaTugas?"(tetap)":"—"))+'</td><td>'+esc(x.wali?x.wali.nama:"")+'</td><td class="peringatan">'+esc(x.warn.join("; "))+'</td></tr>'});
+  $("#impPratinjau").innerHTML=hh+'</tbody></table></div>';
+  $("#impRingkas").innerHTML='<b>'+ok.length+'</b> guru siap diimpor ('+baru+' baru, '+ubah+' diperbarui)'+(lw?', '+lw+' baris dilewati':'')+(hapus?', <span style="color:var(--red)">'+hapus+' guru lama akan dihapus</span>':'')+(IMP.buangContoh?', guru contoh dihapus':'')+'.';
+  $("#impTerapkan").disabled=!ok.length;
+}
+function terapkanImpor(){
+  if(!IMP)return;var ok=IMP.rows.filter(function(x){return !x.lewat});if(!ok.length)return;
+  var hapusId=[];
+  if(IMP.buangContoh){S.guru.forEach(function(g){if(/\(contoh\)/.test(g.nama))hapusId.push(g.id)})}
+  if(IMP.ganti){IMP.dasar.forEach(function(g){if(!ok.some(function(x){return x.lama===g}))hapusId.push(g.id)})}
+  if(hapusId.length&&!confirm(hapusId.length+" guru lama akan dihapus beserta sel peta, wali kelas, dan BK miliknya. Lanjutkan?"))return;
+  S.guru=S.guru.filter(function(g){return hapusId.indexOf(g.id)<0});
+  Object.keys(S.peta).forEach(function(k){if(hapusId.indexOf(S.peta[k])>=0)delete S.peta[k]});
+  S.kelas.forEach(function(k){if(hapusId.indexOf(k.wali)>=0)k.wali="";if(hapusId.indexOf(k.bk)>=0)k.bk=""});
+  if(IMP.buangContoh){S.meta.contoh=false;if(S.meta.sekolah==="SMP Negeri Contoh")S.meta.sekolah="Nama sekolah"}
+  var b=0,u=0;
+  ok.forEach(function(x){
+    var g=x.lama&&guruById(x.lama.id);
+    if(g){g.kode=x.kode;g.nama=x.nama;g.jenis=x.jenis;if(x.adaMapel)g.mapel=x.mapel;if(x.adaTugas)g.tugas=x.tugas;u++}
+    else{g={id:"g"+uid(),kode:x.kode,nama:x.nama,jenis:x.jenis,mapel:x.mapel,tugas:x.tugas};S.guru.push(g);b++}
+    if(x.wali)x.wali.wali=g.id;
+  });
+  S.guru.sort(function(a,c){return (+a.kode||999)-(+c.kode||999)||String(a.kode).localeCompare(String(c.kode))});
+  $("#dlgImpor").close();ubah();toast(b+" guru ditambahkan, "+u+" diperbarui");
+}
+function bukaImpor(){
+  $("#impTeks").value="";$("#impFileNama").textContent="";$("#impPratinjau").innerHTML="";$("#impRingkas").textContent="";$("#impTerapkan").disabled=true;IMP=null;
+  $("#impContohWrap").hidden=!S.meta.contoh;
+  var d=$("#dlgImpor");if(d.showModal)d.showModal();else d.setAttribute("open","");setTimeout(function(){$("#impTeks").focus()},30);
+}
+$("#impTeks").addEventListener("input",function(){clearTimeout(analisisImpor._t);analisisImpor._t=setTimeout(analisisImpor,200)});
+$$("input[name=impMode]").forEach(function(r){r.addEventListener("change",analisisImpor)});
+$("#impContoh").addEventListener("change",analisisImpor);
+$("#impTerapkan").onclick=terapkanImpor;
+$("#impFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var t=String(rd.result);if(/�/.test(t)){var r2=new FileReader();r2.onload=function(){$("#impTeks").value=r2.result;analisisImpor()};r2.readAsText(f,"windows-1252")}else{$("#impTeks").value=t;analisisImpor()}};rd.readAsText(f,"utf-8");$("#impFileNama").textContent=f.name;this.value=""});
+$("#impTemplat").onclick=function(){
+  var mk=S.mapel.slice(0,3).map(function(m){return m.kode});
+  var rows=[["Kode","Nama","Jenis","Mapel","Tugas tambahan","Wali kelas"],
+    ["01","Nama Kepala Sekolah, S.Pd.","Kepala sekolah","","",""],
+    ["02","Nama Guru Satu, S.Pd.","Mapel",mk[0]||"","Pembina OSIS",S.kelas[0]?S.kelas[0].nama:""],
+    ["03","Nama Guru Dua, S.Pd.","Mapel",(mk[1]||"")+(mk[2]?", "+mk[2]:""),"Guru piket; Pembina ekstrakurikuler x2",""],
+    ["04","Nama Guru BK, S.Pd.","BK","","",""]];
+  rows.push([]);rows.push(["# Kode mapel yang dikenal: "+S.mapel.map(function(m){return m.kode}).join(", ")]);
+  rows.push(["# Nama tugas tambahan: "+S.tugas.map(function(t){return t.nama}).join(" | ")]);
+  rows.push(["# Hapus baris contoh dan baris berawalan # sebelum diimpor. Jangan isi NIP."]);
+  unduh("templat-data-guru.csv",csv(rows),"text/csv");
+};
 
 /* tema */
 function terapkanTema(t){if(t)document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme")}
