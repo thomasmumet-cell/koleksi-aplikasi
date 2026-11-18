@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AKPD – Angket Kebutuhan Peserta Didik</title>
+<meta name="description" content="Angket Kebutuhan Peserta Didik (AKPD) untuk guru BK SMP: 48 butir bidang pribadi, sosial, belajar, karier; diisi murid di perangkat guru atau disalin dari lembar kertas; analisis otomatis per butir, per bidang, per kelas, peringkat kebutuhan, dan rekomendasi prioritas layanan untuk program BK. Data hanya di perangkat, dikunci PIN.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f2f8;--paper:#ffffff;--paper2:#f7f4fb;--ink:#1f1630;--mut:#5b5269;--line:#e0d9ea;
+  --acc:#7b2c9c;--acc-ink:#fff;--acc-soft:#f1e4f7;--hi:#f2b705;--hi-soft:#fff5d1;
+  --ok:#2b8a3e;--ok-bg:#e7f6ea;--bad:#c2255c;--bad-bg:#fde8ef;--warn:#9a5b00;--warn-bg:#fff2d3;
+  --b-pribadi:#8e3fb0;--b-sosial:#1c6fc0;--b-belajar:#2b8a3e;--b-karier:#d0480e;
+  --k4:#c2255c;--k3:#e8590c;--k2:#e0a100;--k1:#94a3b8;
+  --shadow:0 1px 0 var(--line),0 10px 26px -16px rgba(50,20,80,.4);--r:14px;color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141019;--paper:#1e1825;--paper2:#262030;--ink:#f1ecf7;--mut:#b4aac2;--line:#3a3146;
+  --acc:#d08ef0;--acc-ink:#1b0b24;--acc-soft:#36233f;--hi:#ffcf3f;--hi-soft:#3a3115;
+  --ok:#6bd38a;--ok-bg:#15301e;--bad:#ff7ba7;--bad-bg:#3c1a28;--warn:#ffc65a;--warn-bg:#3a2e14;
+  --b-pribadi:#d08ef0;--b-sosial:#6cb1f7;--b-belajar:#6bd38a;--b-karier:#ff9a5c;
+  --k4:#ff7ba7;--k3:#ff9a5c;--k2:#ffd35c;--k1:#7d8797;
+  --shadow:0 1px 0 #000,0 10px 26px -16px #000;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141019;--paper:#1e1825;--paper2:#262030;--ink:#f1ecf7;--mut:#b4aac2;--line:#3a3146;
+  --acc:#d08ef0;--acc-ink:#1b0b24;--acc-soft:#36233f;--hi:#ffcf3f;--hi-soft:#3a3115;
+  --ok:#6bd38a;--ok-bg:#15301e;--bad:#ff7ba7;--bad-bg:#3c1a28;--warn:#ffc65a;--warn-bg:#3a2e14;
+  --b-pribadi:#d08ef0;--b-sosial:#6cb1f7;--b-belajar:#6bd38a;--b-karier:#ff9a5c;
+  --k4:#ff7ba7;--k3:#ff9a5c;--k2:#ffd35c;--k1:#7d8797;
+  --shadow:0 1px 0 #000,0 10px 26px -16px #000;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Plus Jakarta Sans",system-ui,sans-serif;min-height:100vh;
+  background-image:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--acc) 14%,transparent) 1px,transparent 0);background-size:22px 22px}
+h1,h2,h3,.disp{font-family:"Bricolage Grotesque",Georgia,serif;line-height:1.15;margin:0;font-weight:800;letter-spacing:-.01em}
+a{color:var(--acc)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+[hidden]{display:none!important}
+
+header.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;gap:12px;padding:10px 0 4px}
+.logo{width:42px;height:42px;flex:none;border-radius:12px;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;position:relative}
+.logo:after{content:"";position:absolute;right:-3px;bottom:-3px;width:14px;height:14px;border-radius:50%;background:var(--hi);border:2px solid var(--bg)}
+.hd h1{font-size:clamp(18px,4.4vw,24px)}
+.hd small{display:block;color:var(--mut);font-size:13px;line-height:1.3}
+.hd .sp{flex:1}
+.ib{border:1px solid var(--line);background:var(--paper);border-radius:10px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:none}
+.ib:hover{border-color:var(--acc)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:thin}
+nav.tabs button{border:0;background:none;padding:8px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;color:var(--mut);font-weight:600}
+nav.tabs button[aria-current="page"]{background:var(--acc);color:var(--acc-ink)}
+nav.tabs button:hover:not([aria-current="page"]){background:var(--acc-soft);color:var(--ink)}
+
+.rahasia{display:flex;gap:10px;align-items:flex-start;background:var(--acc-soft);border:1px dashed var(--acc);border-radius:12px;padding:10px 14px;margin:14px 0 0;font-size:14px}
+.rahasia svg{flex:none;margin-top:2px;color:var(--acc)}
+.rahasia button{margin-left:auto;flex:none}
+@media (max-width:560px){.rahasia{flex-wrap:wrap}.rahasia>div{flex:1 1 200px}}
+
+main{padding:18px 0 70px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.card+.card,.mt{margin-top:16px}
+.grid>.card{margin-top:0}
+.card h2{font-size:22px;margin-bottom:6px}
+.card h3{font-size:17px;margin:0 0 6px}
+.lead{color:var(--mut);margin:0 0 12px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(160px,100%),1fr))}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+.stat b{display:block;font:800 30px/1.1 "Bricolage Grotesque",serif}
+.stat span{color:var(--mut);font-size:14px}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+.hero h2{font-size:clamp(26px,5vw,38px)}
+.hero p{color:var(--mut)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.steps li{counter-increment:s;display:flex;gap:10px;align-items:flex-start;background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.steps li:before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;font-weight:700;font-size:14px}
+
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:9px 14px;cursor:pointer;font-weight:600;text-decoration:none;color:var(--ink);line-height:1.2}
+.btn:hover{border-color:var(--acc)}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.btn.hi{background:var(--hi);border-color:var(--hi);color:#2a1d00}
+.btn.bad{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+.btn.sm{padding:6px 10px;font-size:14px;border-radius:8px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row.end{justify-content:flex-end}
+.fld{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;min-width:0}
+.fld label{font-weight:600;font-size:14px}
+.fld input,.fld select,.fld textarea{border:1px solid var(--line);background:var(--paper2);border-radius:10px;padding:9px 11px;width:100%}
+.fld textarea{min-height:80px;resize:vertical}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(180px,100%),1fr));gap:0 12px}
+.note{font-size:14px;color:var(--mut)}
+.note.bad{color:var(--bad)}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:12.5px;font-weight:700;background:var(--paper2);border:1px solid var(--line);white-space:nowrap}
+.pill.contoh{background:var(--hi-soft);border-color:color-mix(in srgb,var(--hi) 60%,var(--line))}
+.pill.sens{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+.bd{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.kat{display:inline-block;padding:1px 9px;border-radius:999px;font-size:12.5px;font-weight:700;color:#fff;white-space:nowrap}
+.kat.k4{background:var(--k4)}.kat.k3{background:var(--k3)}.kat.k2{background:var(--k2);color:#2a1d00}.kat.k1{background:var(--k1);color:#111}
+:root[data-theme="dark"] .kat.k4,:root[data-theme="dark"] .kat.k3{color:#1b0b10}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .kat.k4,:root:not([data-theme="light"]) .kat.k3{color:#1b0b10}}
+
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--paper2);font-weight:700;position:sticky;top:0;z-index:1}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:99px;background:var(--paper2);overflow:hidden;min-width:70px;border:1px solid var(--line)}
+.bar i{display:block;height:100%;border-radius:99px}
+.hbar{display:grid;grid-template-columns:minmax(90px,150px) 1fr 58px;gap:10px;align-items:center;margin:8px 0}
+.hbar .t{font-weight:600;font-size:14px}
+.hbar .bar{height:18px}
+.hbar .v{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.heat td.h{text-align:center;font-weight:700;font-variant-numeric:tabular-nums;min-width:52px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--paper);padding:7px 12px;cursor:pointer;font-weight:600;font-size:14px}
+.seg button[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink)}
+
+/* Grid input salin */
+.bidblk{border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px;background:var(--paper2)}
+.bidblk h4{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:6px}
+.nums{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px}
+.nums button{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:8px 0;font-weight:700;cursor:pointer;font-variant-numeric:tabular-nums}
+.nums button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.nums button.s{box-shadow:inset 0 -3px 0 var(--bad)}
+
+/* Daftar butir */
+.items{list-style:none;padding:0;margin:0}
+.items li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.items li:last-child{border-bottom:0}
+.items .no{flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-weight:800;background:var(--paper2);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.items .tx{flex:1;min-width:0}
+.items .tx small{display:block;color:var(--mut)}
+.items li.off{opacity:.5}
+
+/* Mode siswa */
+#student{position:fixed;inset:0;z-index:80;background:var(--bg);overflow:auto}
+.st-wrap{max-width:760px;margin:0 auto;padding:18px 16px 90px}
+.st-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.st-top h1{font-size:22px;flex:1}
+.prog{height:10px;background:var(--paper2);border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:10px 0 16px}
+.prog i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.q{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:14px;padding:14px;margin-bottom:10px;cursor:pointer;font-size:17px;line-height:1.45}
+.q .bx{flex:none;width:28px;height:28px;border-radius:8px;border:2px solid var(--mut);display:grid;place-items:center;margin-top:1px}
+.q[aria-checked="true"]{border-color:var(--acc);background:var(--acc-soft)}
+.q[aria-checked="true"] .bx{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.q .bx svg{opacity:0}.q[aria-checked="true"] .bx svg{opacity:1}
+.st-foot{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.st-foot .in{max-width:760px;margin:0 auto;display:flex;gap:8px;justify-content:space-between}
+.big{font-size:18px;padding:12px 18px}
+.thanks{text-align:center;padding:40px 10px}
+.thanks .ok{width:84px;height:84px;border-radius:50%;background:var(--ok-bg);color:var(--ok);display:grid;place-items:center;margin:0 auto 14px}
+
+/* Kunci */
+#lock{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;padding:16px;overflow:auto}
+.lockbox{width:min(440px,100%);background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+.lockbox h1{font-size:24px;margin:10px 0 6px}
+.lockbox p{color:var(--mut);margin:0 0 12px;font-size:15px}
+.pin{font-size:24px!important;letter-spacing:.35em;text-align:center}
+
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--paper);color:var(--ink);padding:0;width:min(720px,calc(100% - 24px));max-height:calc(100vh - 40px);box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(20,10,30,.55)}
+.dlg-h{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:2}
+.dlg-h h2{font-size:19px;flex:1}
+.dlg-b{padding:16px 18px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:200;font-weight:600;max-width:calc(100% - 32px);box-shadow:var(--shadow)}
+.ai-out{white-space:pre-wrap;background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:14px;font-size:15px}
+.empty{padding:26px;text-align:center;color:var(--mut);border:1px dashed var(--line);border-radius:12px}
+.callout{border-left:4px solid var(--bad);background:var(--bad-bg);padding:10px 14px;border-radius:0 10px 10px 0;margin:10px 0;font-size:14.5px}
+.callout.info{border-color:var(--acc);background:var(--acc-soft)}
+.src li{margin-bottom:8px}
+
+#printArea{display:none}
+@media print{
+  body{background:#fff;color:#000;font-size:11.5pt}
+  header.top,main,#lock,#student,#toast,dialog,.noprint{display:none!important}
+  #printArea{display:block!important}
+  #printArea h1{font-size:17pt;margin:0 0 4px}
+  #printArea h2{font-size:13pt;margin:14px 0 6px}
+  #printArea table{font-size:10pt}
+  #printArea th{background:#eee!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #printArea th,#printArea td{border:1px solid #999;padding:4px 6px}
+  .pbr{page-break-before:always}
+  .lembar li{break-inside:avoid}
+  @page{margin:14mm}
+}
+.lembar{list-style:none;padding:0;margin:0}
+.lembar li{display:flex;gap:8px;padding:3px 0;border-bottom:1px dotted #bbb}
+.lembar .kotak{flex:none;width:14px;height:14px;border:1.5px solid #000;margin-top:3px}
+</style>
+</head>
+<body>
+<!-- Kunci layar -->
+<div id="lock" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+  <div class="lockbox">
+    <div class="logo" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+    <div id="lockSetup">
+      <h1 id="lockTitle">Buat PIN AKPD</h1>
+      <p>Jawaban angket kebutuhan murid bersifat <b>rahasia</b> (asas kerahasiaan kode etik BK). Buat PIN 4–8 angka untuk mengunci tampilan aplikasi di perangkat ini. Yang disimpan hanya hash PIN, di perangkat ini.</p>
+      <div class="fld"><label for="pin1">PIN baru</label><input id="pin1" class="pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8"></div>
+      <div class="fld"><label for="pin2">Ulangi PIN</label><input id="pin2" class="pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8"></div>
+      <p class="note" style="margin:6px 0 12px">Ini <b>kunci tampilan</b>, bukan enkripsi: orang yang paham teknis dan memegang perangkat ini masih bisa membaca penyimpanan browser. PIN yang terlupa hanya bisa diatasi dengan menghapus semua data AKPD.</p>
+      <button class="btn pri" id="btnSetPin" style="width:100%;justify-content:center">Simpan PIN dan buka</button>
+    </div>
+    <div id="lockEnter" hidden>
+      <h1>AKPD terkunci</h1>
+      <p>Masukkan PIN guru BK untuk membuka data angket.</p>
+      <div class="fld"><label for="pinIn">PIN</label><input id="pinIn" class="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="8"></div>
+      <p id="pinMsg" class="note bad" hidden></p>
+      <button class="btn pri" id="btnUnlock" style="width:100%;justify-content:center">Buka</button>
+      <p style="margin:14px 0 0;font-size:13px"><button class="btn sm bad" id="btnForgot" type="button">Lupa PIN? Hapus semua data</button></p>
+    </div>
+    <p id="noStore" class="callout" hidden>Penyimpanan browser tidak tersedia (mode privat?). Data hanya bertahan selama halaman terbuka. Gunakan ekspor JSON untuk menyimpan.</p>
+  </div>
+</div>
+
+<!-- Mode isi murid -->
+<div id="student" hidden></div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="hd">
+      <div class="logo" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 8 1.5 1.5L12 7"/><path d="M14 8.5h3"/><path d="m8 14 1.5 1.5L12 13"/><path d="M14 14.5h3"/></svg></div>
+      <div><h1>AKPD</h1><small id="hdSub">Angket Kebutuhan Peserta Didik</small></div>
+      <div class="sp"></div>
+      <button class="ib" id="btnTheme" title="Ganti tema terang/gelap" aria-label="Ganti tema terang/gelap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <button class="ib" id="btnLock" title="Kunci sekarang" aria-label="Kunci aplikasi sekarang"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
+    </div>
+    <nav class="tabs" aria-label="Menu utama">
+      <button data-tab="beranda">Beranda</button>
+      <button data-tab="isi">Isi &amp; salin jawaban</button>
+      <button data-tab="resp">Responden</button>
+      <button data-tab="analisis">Analisis</button>
+      <button data-tab="rekom">Prioritas layanan</button>
+      <button data-tab="angket">Butir angket</button>
+      <button data-tab="atur">Pengaturan &amp; data</button>
+      <button data-tab="dasar">Dasar &amp; sumber</button>
+    </nav>
+  </div>
+</header>
+<main id="mainWrap"><div class="wrap" id="main"></div></main>
+<div id="printArea"></div>
+<dialog id="dlg"><div class="dlg-h"><h2 id="dlgT"></h2><button class="ib" id="dlgX" aria-label="Tutup">✕</button></div><div class="dlg-b" id="dlgB"></div></dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+/* =====================================================================
+   AKPD – Angket Kebutuhan Peserta Didik. Semua data di localStorage perangkat ini.
+   Tidak ada kunci API, PIN, atau data pribadi yang ditanam di kode.
+   Nama pada data contoh adalah fiktif.
+   ===================================================================== */
+"use strict";
+var KEY = "bkAkpd.v1", KEY_PIN = "bkAkpd.pin", KEY_THEME = "bkAkpd.tema", KEY_HIDE = "bkAkpd.sembunyiPengingat";
+var memStore = {}, storeOK = true;
+function lsGet(k){try{var v=localStorage.getItem(k);return v===null&&memStore[k]!==undefined?memStore[k]:v;}catch(e){storeOK=false;return memStore[k]===undefined?null:memStore[k];}}
+function lsSet(k,v){memStore[k]=v;try{localStorage.setItem(k,v);return true;}catch(e){storeOK=false;return false;}}
+function lsDel(k){delete memStore[k];try{localStorage.removeItem(k);}catch(e){}}
+try{localStorage.setItem("__t","1");localStorage.removeItem("__t");}catch(e){storeOK=false;}
+
+/* ---------- SHA-256 kecil (hash PIN, tanpa ketergantungan) ---------- */
+function sha256(ascii){
+  function rr(v,a){return (v>>>a)|(v<<(32-a));}
+  var mp=Math.pow,maxWord=mp(2,32),result="",words=[],asciiBitLength=ascii.length*8,i,j;
+  var hash=[],k=[],primeCounter=0,isComposite={};
+  for(var c=2;primeCounter<64;c++){if(!isComposite[c]){for(i=0;i<313;i+=c)isComposite[i]=c;hash[primeCounter]=(mp(c,.5)*maxWord)|0;k[primeCounter++]=(mp(c,1/3)*maxWord)|0;}}
+  hash=hash.slice(0,8);
+  ascii+="\x80";while(ascii.length%64-56)ascii+="\x00";
+  for(i=0;i<ascii.length;i++){j=ascii.charCodeAt(i);if(j>>8)return "";words[i>>2]|=j<<((3-i)%4)*8;}
+  words[words.length]=((asciiBitLength/maxWord)|0);words[words.length]=(asciiBitLength);
+  for(j=0;j<words.length;){
+    var w=words.slice(j,j+=16),oldHash=hash;hash=hash.slice(0,8);
+    for(i=0;i<64;i++){
+      var w15=w[i-15],w2=w[i-2],a=hash[0],e=hash[4];
+      var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+      var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+      hash=[(temp1+temp2)|0].concat(hash);hash[4]=(hash[4]+temp1)|0;
+    }
+    for(i=0;i<8;i++)hash[i]=(hash[i]+oldHash[i])|0;
+  }
+  for(i=0;i<8;i++)for(j=3;j+1;j--){var b=(hash[i]>>(j*8))&255;result+=((b<16)?0:"")+b.toString(16);}
+  return result;
+}
+function hashPin(pin,salt){var h=salt+":"+pin;for(var i=0;i<1500;i++)h=sha256(h+salt);return h;}
+function randHex(n){var a=new Uint8Array(n);try{crypto.getRandomValues(a);}catch(e){for(var i=0;i<n;i++)a[i]=Math.floor(Math.random()*256);}return Array.prototype.map.call(a,function(x){return("0"+x.toString(16)).slice(-2);}).join("");}
+
+/* ---------- Referensi ---------- */
+var BIDANG = ["Pribadi","Sosial","Belajar","Karier"];
+var BCOL = {Pribadi:"var(--b-pribadi)",Sosial:"var(--b-sosial)",Belajar:"var(--b-belajar)",Karier:"var(--b-karier)"};
+var BKODE = {Pribadi:"P",Sosial:"S",Belajar:"B",Karier:"K"};
+var KATN = ["Rendah","Sedang","Tinggi","Sangat tinggi"];
+
+/* Butir orisinal. s:true = butir perhatian khusus (ditindaklanjuti individual & rahasia).
+   [teks, topik, tujuan layanan] */
+var BUTIR_DASAR = {
+Pribadi:[
+ ["Saya ingin lebih mengenal kelebihan dan kekurangan diri saya.","Pemahaman diri","Murid mampu mengenali kekuatan dan hal yang perlu dikembangkan dari dirinya."],
+ ["Saya sering merasa kurang percaya diri saat tampil atau berbicara di depan orang lain.","Percaya diri","Murid berani tampil dan berbicara di depan orang lain dengan percaya diri."],
+ ["Saya ingin belajar cara mengendalikan rasa marah atau kesal.","Pengelolaan emosi","Murid mampu mengenali dan mengelola marah/kesal secara sehat."],
+ ["Saya sering merasa cemas atau khawatir tentang banyak hal.","Mengelola cemas dan stres","Murid mengenal cara sederhana menenangkan diri saat cemas atau tertekan."],
+ ["Saya ingin belajar mengatur waktu antara sekolah, istirahat, dan bermain gawai.","Manajemen diri dan gawai","Murid mampu membagi waktu belajar, istirahat, dan penggunaan gawai secara seimbang."],
+ ["Saya ingin memahami perubahan tubuh dan perasaan di masa remaja.","Perkembangan remaja","Murid memahami perubahan fisik dan emosi masa remaja dan menerimanya secara positif."],
+ ["Saya ingin menjalankan ibadah dan kebiasaan baik dengan lebih rutin.","Nilai religius dan karakter","Murid menjalankan ibadah dan kebiasaan baik secara rutin dan mandiri."],
+ ["Saya sulit bangkit kembali ketika gagal atau mendapat hasil yang kurang baik.","Resiliensi","Murid mampu bangkit dari kegagalan dan memandangnya sebagai bahan belajar."],
+ ["Saya ingin tahu cara menjaga kesehatan diri: tidur cukup, makan teratur, dan bergerak aktif.","Hidup sehat","Murid menerapkan kebiasaan tidur, makan, dan aktivitas fisik yang sehat."],
+ ["Saya ingin belajar mengambil keputusan sendiri dengan penuh tanggung jawab.","Pengambilan keputusan","Murid mampu menimbang pilihan dan mengambil keputusan secara bertanggung jawab."],
+ ["Saya sering merasa sedih atau tidak bersemangat dalam waktu yang lama.","Suasana hati","Murid mendapat pendampingan individual untuk memahami dan mengelola perasaannya.",1],
+ ["Saya ingin tahu cara aman menggunakan media sosial dan internet.","Keamanan digital","Murid menggunakan media sosial dan internet secara aman dan bijak."]
+],
+Sosial:[
+ ["Saya ingin belajar cara berkenalan dan berteman dengan orang baru.","Keterampilan berteman","Murid mampu memulai dan menjaga pertemanan yang sehat."],
+ ["Saya kadang sulit menyampaikan pendapat tanpa menyinggung orang lain.","Komunikasi asertif","Murid mampu menyampaikan pendapat dengan jelas dan santun."],
+ ["Saya ingin belajar cara menyelesaikan perselisihan dengan teman secara damai.","Penyelesaian konflik","Murid mampu menyelesaikan perselisihan dengan cara damai dan adil."],
+ ["Saya pernah diejek, dikucilkan, atau diganggu teman (langsung atau daring).","Perundungan","Murid yang mengalami gangguan mendapat perlindungan dan pendampingan; kelas mendapat layanan pencegahan perundungan.",1],
+ ["Saya ingin belajar bekerja sama dalam kelompok dengan baik.","Kerja sama","Murid mampu berbagi peran dan bekerja sama dalam kelompok."],
+ ["Saya merasa kurang dekat atau sulit berbicara dengan orang tua/keluarga.","Hubungan keluarga","Murid mampu membangun komunikasi yang lebih baik dengan keluarga."],
+ ["Saya ingin belajar menolak ajakan teman yang tidak baik (misalnya merokok atau membolos).","Menolak tekanan teman","Murid berani menolak ajakan negatif dengan tegas dan santun."],
+ ["Saya ingin memahami cara menghargai teman yang berbeda suku, agama, atau kemampuan.","Menghargai keberagaman","Murid menghargai perbedaan dan bersikap inklusif kepada semua teman."],
+ ["Saya merasa sering sendirian dan kurang punya teman dekat di sekolah.","Keterhubungan sosial","Murid mendapat pendampingan untuk membangun rasa diterima dan punya teman.",1],
+ ["Saya ingin tahu batas pergaulan yang sehat dengan teman lawan jenis.","Pergaulan sehat","Murid memahami batas pergaulan yang sehat, aman, dan saling menghormati."],
+ ["Saya ingin belajar sopan santun berkomunikasi dengan guru dan orang yang lebih tua.","Etika berkomunikasi","Murid berkomunikasi dengan santun kepada guru dan orang yang lebih tua."],
+ ["Saya ingin lebih aktif dalam kegiatan kelas, OSIS, atau ekstrakurikuler.","Partisipasi sosial","Murid terlibat aktif dalam kegiatan kelas dan sekolah."]
+],
+Belajar:[
+ ["Saya kesulitan memahami pelajaran tertentu.","Kesulitan mata pelajaran","Murid mengenali pelajaran yang sulit dan tahu cara mencari bantuan belajar."],
+ ["Saya ingin tahu cara belajar yang paling cocok untuk diri saya.","Strategi belajar","Murid mengenal dan memilih strategi belajar yang sesuai dirinya."],
+ ["Saya sulit berkonsentrasi saat pelajaran atau saat belajar di rumah.","Konsentrasi","Murid menerapkan cara menjaga konsentrasi saat belajar."],
+ ["Saya ingin belajar membuat jadwal belajar dan menaatinya.","Jadwal belajar","Murid menyusun dan menjalankan jadwal belajar mingguan."],
+ ["Saya sering menunda-nunda mengerjakan tugas.","Kebiasaan menunda","Murid mampu mengurangi kebiasaan menunda dan menyelesaikan tugas tepat waktu."],
+ ["Saya merasa cemas menghadapi ulangan atau ujian.","Kecemasan ujian","Murid mampu menenangkan diri dan bersiap menghadapi ujian."],
+ ["Saya ingin belajar cara mencatat dan meringkas materi pelajaran.","Teknik mencatat","Murid mampu membuat catatan dan ringkasan yang membantu belajar."],
+ ["Saya malu atau takut bertanya kepada guru ketika belum paham.","Keberanian bertanya","Murid berani bertanya dan meminta penjelasan ketika belum paham."],
+ ["Saya ingin belajar memanfaatkan internet dan AI untuk belajar secara jujur dan bijak.","Belajar digital yang jujur","Murid memanfaatkan internet dan AI untuk belajar dengan jujur dan kritis."],
+ ["Saya sering kurang bersemangat untuk belajar.","Motivasi belajar","Murid menemukan alasan dan tujuan pribadi untuk belajar."],
+ ["Saya ingin tahu cara mempersiapkan diri menghadapi asesmen akhir jenjang (misalnya TKA).","Persiapan asesmen akhir","Murid menyusun rencana persiapan asesmen akhir secara bertahap."],
+ ["Saya belum punya tempat atau suasana belajar yang nyaman di rumah.","Lingkungan belajar","Murid dan keluarga mampu menata tempat dan suasana belajar di rumah."]
+],
+Karier:[
+ ["Saya ingin mengenal bakat dan minat saya.","Bakat dan minat","Murid mengenali bakat dan minatnya sebagai bekal memilih arah studi."],
+ ["Saya belum tahu cita-cita atau pekerjaan yang ingin saya tekuni.","Cita-cita","Murid mulai merumuskan cita-cita dan alasannya."],
+ ["Saya ingin mengetahui pilihan sekolah lanjutan (SMA, SMK, MA, dan lainnya).","Pilihan studi lanjut","Murid memahami perbedaan dan pilihan sekolah lanjutan."],
+ ["Saya ingin tahu hubungan antara mata pelajaran dan pekerjaan di masa depan.","Pelajaran dan pekerjaan","Murid memahami kaitan mata pelajaran dengan bidang pekerjaan."],
+ ["Saya ingin mengenal berbagai jenis pekerjaan dan dunia kerja.","Wawasan dunia kerja","Murid mengenal ragam pekerjaan dan tuntutannya."],
+ ["Saya bingung karena pilihan saya berbeda dengan keinginan orang tua.","Pilihan dan harapan orang tua","Murid dan orang tua mampu membicarakan pilihan studi secara terbuka."],
+ ["Saya ingin tahu jurusan di SMK dan peluang kerjanya.","Informasi SMK","Murid mengenal jurusan SMK dan peluang yang terkait."],
+ ["Saya ingin tahu cara mendaftar sekolah lanjutan (SPMB) dan mencari beasiswa.","SPMB dan beasiswa","Murid memahami alur pendaftaran sekolah lanjutan dan peluang beasiswa."],
+ ["Saya ingin mengembangkan keterampilan atau hobi menjadi prestasi.","Pengembangan bakat","Murid menyusun langkah mengembangkan bakat atau hobi menjadi prestasi."],
+ ["Saya ingin belajar menyusun rencana masa depan langkah demi langkah.","Perencanaan karier","Murid menyusun rencana studi dan karier sederhana."],
+ ["Saya ingin mengenal sikap kerja yang baik: disiplin, jujur, dan bertanggung jawab.","Sikap kerja","Murid membiasakan disiplin, jujur, dan bertanggung jawab sebagai sikap kerja."],
+ ["Saya ingin tahu cara memulai usaha (berwirausaha) sejak muda.","Kewirausahaan","Murid mengenal dasar berwirausaha dan contoh usaha sederhana."]
+]};
+function butirAwal(){
+  var out=[],no=1;
+  BIDANG.forEach(function(b){BUTIR_DASAR[b].forEach(function(r,i){out.push({id:BKODE[b]+(i+1),no:no++,b:b,t:r[0],top:r[1],tj:r[2],s:!!r[3],aktif:true});});});
+  return out;
+}
+
+/* ---------- Utilitas ---------- */
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function pad(n){return("0"+n).slice(-2);}
+function today(){var d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+var BULAN_P=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+function tglID(s){if(!s)return "";var p=s.split("-");return +p[2]+" "+BULAN_P[+p[1]-1]+" "+p[0];}
+function f1(x){return (Math.round(x*10)/10).toLocaleString("id-ID",{minimumFractionDigits:1,maximumFractionDigits:1});}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){t.hidden=true;},3200);}
+function ico(p,s){return '<svg width="'+(s||18)+'" height="'+(s||18)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';}
+var I={shield:'<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>',check:'<path d="m5 12 5 5 9-10"/>',print:'<path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',dl:'<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',up:'<path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 3h14"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.7c1.9.7 3.1 2.5 3.5 5.3"/>',tablet:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M11 18h2"/>',spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',trash:'<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/>',eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'};
+
+/* ---------- Data ---------- */
+var DB=null;
+function defAtur(){return {sekolah:"",ta:"2026/2027",semester:"Ganjil",guru:"",batas:[50,35,20],autolock:5,aiKey:"",aiModel:"gemini-2.5-flash"};}
+function load(){
+  var r=lsGet(KEY);
+  if(r){try{DB=JSON.parse(r);}catch(e){DB=null;}}
+  if(!DB||!DB.butir){DB={v:1,atur:defAtur(),butir:butirAwal(),resp:[]};DB.resp=contohResp();save();}
+  var d=defAtur();for(var k in d)if(DB.atur[k]===undefined)DB.atur[k]=d[k];
+}
+function save(){if(!lsSet(KEY,JSON.stringify(DB)))toast("Gagal menyimpan ke perangkat. Segera ekspor cadangan JSON.");}
+
+/* Data contoh deterministik — nama fiktif */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function contohResp(){
+  var NAMA=["Adit","Bunga","Citra","Dafa","Eka","Fajar","Gita","Hana","Ilham","Joko","Kirana","Lutfi","Maya","Nanda","Oki","Putri","Raka","Sekar","Tegar","Umi","Vino","Wulan","Yoga","Zahra","Bima","Dinda","Galih","Intan","Kevin","Laras"];
+  var INI=["A","B","D","H","K","M","N","P","R","S","T","W"];
+  var base={P1:.42,P2:.48,P3:.36,P4:.28,P5:.55,P6:.3,P7:.33,P8:.3,P9:.22,P10:.26,P11:.04,P12:.4,
+    S1:.25,S2:.3,S3:.34,S4:.05,S5:.24,S6:.17,S7:.2,S8:.15,S9:.03,S10:.27,S11:.14,S12:.31,
+    B1:.62,B2:.5,B3:.44,B4:.47,B5:.45,B6:.52,B7:.28,B8:.38,B9:.36,B10:.3,B11:.25,B12:.14,
+    K1:.46,K2:.33,K3:.35,K4:.29,K5:.27,K6:.11,K7:.22,K8:.24,K9:.32,K10:.3,K11:.12,K12:.2};
+  var adj={"7A":{P6:.2,S1:.2,B2:.12,K3:-.2,K8:-.18,B11:-.15,K10:-.1},"8B":{S3:.15,P3:.14,B5:.12,S10:.12},"9C":{K3:.35,K7:.3,K8:.4,B11:.45,B6:.18,K10:.22,K2:.1,K6:.12,P6:-.15}};
+  var r=rng(20261119),out=[],ni=0;
+  ["7A","8B","9C"].forEach(function(k){
+    for(var a=1;a<=10;a++){
+      var ya=[];
+      for(var id in base){var p=base[id]+((adj[k]||{})[id]||0);if(r()<p)ya.push(id);}
+      out.push({id:uid()+a+k,nama:NAMA[ni%NAMA.length]+" "+INI[ni%INI.length]+". (contoh)",kelas:k,absen:a,tgl:"2026-0"+(k==="7A"?"8-04":k==="8B"?"8-05":"8-06"),ya:ya,contoh:true,sumber:"contoh"});
+      ni++;
+    }
+  });
+  return out;
+}
+
+/* ---------- Kunci layar ---------- */
+var unlocked=false, idleTimer=null, failCount=0, failUntil=0, studentMode=false;
+function pinData(){var r=lsGet(KEY_PIN);if(!r)return null;try{return JSON.parse(r);}catch(e){return null;}}
+function pinOK(v){var p=pinData();return !!(p&&hashPin(v,p.salt)===p.hash);}
+function showLock(){
+  unlocked=false;studentMode=false;closeDlg();
+  document.getElementById("student").hidden=true;document.getElementById("student").innerHTML="";
+  document.getElementById("main").innerHTML="";document.getElementById("printArea").innerHTML="";
+  var has=!!pinData();
+  document.getElementById("lock").hidden=false;
+  document.getElementById("lockSetup").hidden=has;document.getElementById("lockEnter").hidden=!has;
+  document.getElementById("noStore").hidden=storeOK;
+  setTimeout(function(){var el=document.getElementById(has?"pinIn":"pin1");if(el){el.value="";el.focus();}},30);
+}
+function doUnlock(){unlocked=true;document.getElementById("lock").hidden=true;load();applyTheme();go(curTab||"beranda");resetIdle();}
+function resetIdle(){
+  clearTimeout(idleTimer);
+  if(studentMode){idleTimer=setTimeout(stIdle,4*60000);return;}
+  if(!unlocked)return;
+  var m=+((DB&&DB.atur.autolock)||0);if(m>0)idleTimer=setTimeout(showLock,m*60000);
+}
+["mousemove","keydown","touchstart","click","scroll"].forEach(function(ev){document.addEventListener(ev,resetIdle,{passive:true});});
+document.getElementById("btnSetPin").onclick=function(){
+  var a=document.getElementById("pin1").value.trim(),b=document.getElementById("pin2").value.trim();
+  if(!/^\d{4,8}$/.test(a)){toast("PIN harus 4–8 angka.");return;}
+  if(/^(\d)\1+$/.test(a)||"0123456789".indexOf(a)>-1||"9876543210".indexOf(a)>-1){toast("PIN terlalu mudah ditebak. Pilih kombinasi lain.");return;}
+  if(a!==b){toast("Kedua PIN tidak sama.");return;}
+  var salt=randHex(16);lsSet(KEY_PIN,JSON.stringify({salt:salt,hash:hashPin(a,salt)}));
+  toast("PIN tersimpan. Jangan sampai lupa.");doUnlock();
+};
+function tryUnlock(){
+  var msg=document.getElementById("pinMsg");
+  if(Date.now()<failUntil){msg.hidden=false;msg.textContent="Terlalu banyak percobaan. Tunggu "+Math.ceil((failUntil-Date.now())/1000)+" detik.";return;}
+  var v=document.getElementById("pinIn").value.trim();
+  if(pinOK(v)){failCount=0;msg.hidden=true;doUnlock();}
+  else{failCount++;if(failCount>=5){failUntil=Date.now()+30000;failCount=0;}
+    msg.hidden=false;msg.textContent="PIN salah.";document.getElementById("pinIn").value="";document.getElementById("pinIn").focus();}
+}
+document.getElementById("btnUnlock").onclick=tryUnlock;
+document.getElementById("pinIn").addEventListener("keydown",function(e){if(e.key==="Enter")tryUnlock();});
+document.getElementById("pin2").addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById("btnSetPin").click();});
+document.getElementById("btnForgot").onclick=function(){
+  var t=prompt("PIN tidak bisa dipulihkan. Untuk menghapus SEMUA data AKPD di perangkat ini dan membuat PIN baru, ketik HAPUS:");
+  if(t==="HAPUS"){lsDel(KEY);lsDel(KEY_PIN);DB=null;toast("Semua data dihapus.");showLock();}
+};
+document.getElementById("btnLock").onclick=showLock;
+
+/* ---------- Tema ---------- */
+function applyTheme(){var t=lsGet(KEY_THEME);if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme");}
+document.getElementById("btnTheme").onclick=function(){
+  var cur=document.documentElement.getAttribute("data-theme");
+  var dark=cur?cur==="dark":!!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);
+  lsSet(KEY_THEME,dark?"light":"dark");applyTheme();
+};
+applyTheme();
+
+/* ---------- Dialog ---------- */
+var dlg=document.getElementById("dlg");
+function openDlg(t,html){document.getElementById("dlgT").textContent=t;document.getElementById("dlgB").innerHTML=html;try{dlg.showModal();}catch(e){dlg.setAttribute("open","");}}
+function closeDlg(){try{dlg.close();}catch(e){dlg.removeAttribute("open");}}
+document.getElementById("dlgX").onclick=closeDlg;
+
+/* ---------- Navigasi ---------- */
+var curTab="beranda";
+var tabs=document.querySelectorAll("nav.tabs button");
+tabs.forEach(function(b){b.onclick=function(){go(b.dataset.tab);};});
+function go(t){
+  if(!unlocked)return;curTab=t;
+  tabs.forEach(function(b){if(b.dataset.tab===t)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  var m=document.getElementById("main");
+  ({beranda:vBeranda,isi:vIsi,resp:vResp,analisis:vAnalisis,rekom:vRekom,angket:vAngket,atur:vAtur,dasar:vDasar}[t]||vBeranda)(m);
+  var s=DB.atur;document.getElementById("hdSub").textContent=(s.sekolah?s.sekolah+" · ":"Angket Kebutuhan Peserta Didik · ")+"TA "+s.ta+" "+s.semester;
+  window.scrollTo(0,0);
+}
+function rahasiaHTML(){
+  if(lsGet(KEY_HIDE)==="1")return "";
+  return '<div class="rahasia" role="note">'+ico(I.shield)+'<div><b>Pengingat kerahasiaan.</b> Jawaban AKPD adalah data pribadi murid: tampilkan hanya kepada yang berkepentingan dan pakai laporan agregat (tanpa nama) untuk rapat. AKPD bukan alat diagnosis; kebutuhan berat ditindaklanjuti dengan wawancara dan, bila perlu, rujukan ke psikolog/layanan profesional.</div><button class="btn sm" onclick="hideRahasia()">Sembunyikan</button></div>';
+}
+function hideRahasia(){lsSet(KEY_HIDE,"1");go(curTab);toast("Pengingat disembunyikan. Bisa ditampilkan lagi di Pengaturan.");}
+
+/* ---------- Mesin analisis ---------- */
+function aktif(){return DB.butir.filter(function(b){return b.aktif;}).sort(function(a,b){return a.no-b.no;});}
+function butirById(id){for(var i=0;i<DB.butir.length;i++)if(DB.butir[i].id===id)return DB.butir[i];return null;}
+function butirByNo(no){for(var i=0;i<DB.butir.length;i++)if(DB.butir[i].no===no&&DB.butir[i].aktif)return DB.butir[i];return null;}
+function kelasList(){var k=[];DB.resp.forEach(function(r){if(r.kelas&&k.indexOf(r.kelas)<0)k.push(r.kelas);});return k.sort(function(a,b){return a.localeCompare(b,"id",{numeric:true});});}
+function respIn(kelas){return DB.resp.filter(function(r){return !kelas||r.kelas===kelas;});}
+function katIdx(p){var b=DB.atur.batas;return p>=b[0]?3:p>=b[1]?2:p>=b[2]?1:0;}
+function katHTML(p){var i=katIdx(p);return '<span class="kat k'+(i+1)+'">'+KATN[i]+'</span>';}
+function katColor(p){return "var(--k"+(katIdx(p)+1)+")";}
+function hasYa(r,id){return r.ya.indexOf(id)>-1;}
+function analisa(kelas){
+  var L=respIn(kelas),B=aktif(),n=L.length,res={n:n,butir:[],bidang:{},totalYa:0,sens:[]};
+  B.forEach(function(b){
+    var ya=0,siswa=[];L.forEach(function(r){if(hasYa(r,b.id)){ya++;if(b.s)siswa.push(r);}});
+    var p=n?ya/n*100:0;res.butir.push({b:b,ya:ya,p:p});res.totalYa+=ya;
+    if(b.s&&ya)res.sens.push({b:b,siswa:siswa});
+  });
+  BIDANG.forEach(function(bd){
+    var it=res.butir.filter(function(x){return x.b.b===bd;}),ya=0;it.forEach(function(x){ya+=x.ya;});
+    var cap=n*it.length;res.bidang[bd]={ya:ya,k:it.length,p:cap?ya/cap*100:0,porsi:0};
+  });
+  BIDANG.forEach(function(bd){res.bidang[bd].porsi=res.totalYa?res.bidang[bd].ya/res.totalYa*100:0;});
+  res.rank=res.butir.slice().sort(function(a,b){return b.p-a.p||a.b.no-b.b.no;});
+  res.bidRank=BIDANG.slice().sort(function(a,b){return res.bidang[b].p-res.bidang[a].p;});
+  return res;
+}
+function bar(p,col){return '<div class="bar" aria-hidden="true"><i style="width:'+Math.min(100,Math.max(0,p)).toFixed(1)+'%;background:'+(col||"var(--acc)")+'"></i></div>';}
+function sensSiswaCount(kelas){var s={};respIn(kelas).forEach(function(r){aktif().forEach(function(b){if(b.s&&hasYa(r,b.id))s[r.id]=1;});});return Object.keys(s).length;}
+function adaContoh(){return DB.resp.some(function(r){return r.contoh;});}
+
+/* Rekomendasi layanan per butir (berdasarkan tingkat kebutuhan) */
+function rekomButir(x,kelasTinggi){
+  var b=x.b,ki=katIdx(x.p),komp,strat,waktu;
+  if(b.s){
+    komp="Layanan responsif";
+    strat="Konseling individual yang rahasia dan pemantauan; koordinasi wali kelas/orang tua bila perlu"+(b.top==="Perundungan"?"; koordinasi dengan Tim Pencegahan dan Penanganan Kekerasan (TPPK) sekolah; bimbingan klasikal pencegahan perundungan":"")+"; rujuk ke psikolog/layanan profesional bila kondisinya berat.";
+    waktu="Segera (minggu ini)";
+  }else if(ki===3){komp="Layanan dasar";strat="Bimbingan klasikal terjadwal untuk kelas sasaran"+(b.b==="Karier"?", dilanjutkan perencanaan individual":"")+"; papan/media informasi BK.";waktu="Semester ini (prioritas utama)";}
+  else if(ki===2){komp=b.b==="Karier"?"Peminatan & perencanaan individual":"Layanan dasar";strat=b.b==="Karier"?"Bimbingan klasikal/kelompok tentang "+b.top.toLowerCase()+" dan perencanaan individual.":"Bimbingan klasikal atau bimbingan kelompok lintas kelas.";waktu="Semester ini";}
+  else if(ki===1){komp="Layanan dasar";strat="Bimbingan kelompok bagi murid yang memilih butir ini.";waktu="Semester ini/berikutnya";}
+  else{komp="Layanan responsif";strat="Konseling individual atau konsultasi bila murid membutuhkan.";waktu="Sesuai kebutuhan";}
+  return {komp:komp,strat:strat,waktu:waktu,sasaran:kelasTinggi&&kelasTinggi.length?kelasTinggi.join(", "):(ki>=1?"Murid yang memilih":"Perorangan")};
+}
+function kelasTinggiFor(id){
+  var out=[];kelasList().forEach(function(k){var L=respIn(k);if(!L.length)return;var ya=L.filter(function(r){return hasYa(r,id);}).length;if(ya/L.length*100>=DB.atur.batas[1])out.push(k);});return out;
+}
+function narasi(A){
+  if(!A.n)return "Belum ada data responden.";
+  var s=DB.atur,kel=kelasList(),r=A.bidRank,top=A.rank.filter(function(x){return !x.b.s;}).slice(0,5);
+  var t="Asesmen kebutuhan peserta didik menggunakan Angket Kebutuhan Peserta Didik (AKPD) "+aktif().length+" butir yang mencakup bidang pribadi, sosial, belajar, dan karier. Angket diisi oleh "+A.n+" murid"+(kel.length?" dari "+kel.length+" kelas ("+kel.join(", ")+")":"")+(s.sekolah?" di "+s.sekolah:"")+" pada tahun ajaran "+s.ta+".\n\n";
+  t+="Bidang dengan tingkat kebutuhan tertinggi adalah bidang "+r[0].toLowerCase()+" ("+f1(A.bidang[r[0]].p)+"%), diikuti bidang "+r[1].toLowerCase()+" ("+f1(A.bidang[r[1]].p)+"%), "+r[2].toLowerCase()+" ("+f1(A.bidang[r[2]].p)+"%), dan "+r[3].toLowerCase()+" ("+f1(A.bidang[r[3]].p)+"%).\n\n";
+  t+="Lima kebutuhan yang paling banyak dipilih murid adalah: "+top.map(function(x,i){return (i+1)+") "+x.b.top.toLowerCase()+" – "+f1(x.p)+"% ("+KATN[katIdx(x.p)].toLowerCase()+")";}).join("; ")+".\n\n";
+  t+="Berdasarkan temuan tersebut, kebutuhan berkategori sangat tinggi dan tinggi diprioritaskan melalui layanan dasar (bimbingan klasikal dan kelompok) pada semester berjalan, kebutuhan bidang karier diperkuat melalui peminatan dan perencanaan individual, sedangkan kebutuhan yang dipilih sedikit murid dilayani secara kelompok atau individual.";
+  var ns=sensSiswaCount("");
+  if(ns)t+=" Terdapat "+ns+" murid yang memilih butir perhatian khusus; mereka ditindaklanjuti melalui wawancara dan layanan responsif secara rahasia, dan dirujuk ke layanan profesional bila diperlukan.";
+  return t;
+}
+
+/* ---------- Beranda ---------- */
+function vBeranda(m){
+  var A=analisa(""),kel=kelasList(),ns=sensSiswaCount("");
+  var h=rahasiaHTML();
+  h+='<section class="card mt"><div class="hero"><div><span class="pill">Asesmen kebutuhan · dasar program BK</span><h2 style="margin:10px 0 8px">Kenali kebutuhan murid sebelum menyusun program BK.</h2><p>Murid mencentang pernyataan yang sesuai dirinya, langsung di perangkat ini atau di lembar kertas yang lalu Anda salin. Aplikasi menghitung persentase per butir, bidang, dan kelas, mengurutkan kebutuhan, dan menyarankan prioritas layanan.</p>'+
+    '<div class="row"><button class="btn pri" onclick="go(\'isi\')">'+ico(I.tablet)+' Mulai pengisian</button><button class="btn" onclick="go(\'analisis\')">Lihat analisis</button><button class="btn" onclick="go(\'rekom\')">Prioritas layanan</button></div></div>'+
+    '<ol class="steps"><li><div><b>Siapkan angket.</b> 48 butir siap pakai (12 per bidang), bisa diubah di menu Butir angket.</div></li><li><div><b>Kumpulkan jawaban.</b> Mode murid di perangkat guru, atau cetak lembar lalu salin nomor yang dicentang.</div></li><li><div><b>Baca analisis.</b> Persentase, kategori, peringkat, dan peta per kelas.</div></li><li><div><b>Susun program.</b> Tabel prioritas layanan dan narasi deskripsi kebutuhan siap disalin ke program tahunan/semester.</div></li></ol></div></section>';
+  if(adaContoh())h+='<div class="callout info mt"><b>Data contoh sedang tampil.</b> 30 murid fiktif (kelas 7A, 8B, 9C) berlabel “contoh” untuk mencoba aplikasi. <button class="btn sm" onclick="hapusContoh()">Hapus data contoh</button></div>';
+  h+='<div class="grid g4 mt"><div class="stat"><b>'+A.n+'</b><span>murid mengisi</span></div><div class="stat"><b>'+kel.length+'</b><span>kelas</span></div><div class="stat"><b>'+aktif().length+'</b><span>butir aktif</span></div><div class="stat"><b style="color:'+(ns?"var(--bad)":"inherit")+'">'+ns+'</b><span>murid perlu perhatian khusus</span></div></div>';
+  if(A.n){
+    h+='<div class="grid g2 mt"><section class="card"><h3>Tingkat kebutuhan per bidang</h3><p class="note" style="margin:0 0 4px">Persentase jawaban “ya” dari seluruh kemungkinan jawaban di bidang itu.</p>';
+    A.bidRank.forEach(function(bd){var x=A.bidang[bd];h+='<div class="hbar"><span class="t"><span class="bd" style="background:'+BCOL[bd]+'"></span>'+bd+'</span>'+bar(x.p,BCOL[bd])+'<span class="v">'+f1(x.p)+'%</span></div>';});
+    h+='</section><section class="card"><h3>Lima kebutuhan teratas</h3><ol style="margin:6px 0 0;padding-left:20px">';
+    A.rank.filter(function(x){return !x.b.s;}).slice(0,5).forEach(function(x){h+='<li style="margin-bottom:6px"><b>'+esc(x.b.top)+'</b> <span class="note">('+x.b.b+', butir '+x.b.no+')</span><br>'+f1(x.p)+'% · '+katHTML(x.p)+'</li>';});
+    h+='</ol></section></div>';
+    if(ns)h+='<div class="callout mt"><b>'+ns+' murid memilih butir perhatian khusus</b> (suasana hati, perundungan, atau merasa sendirian). Jadwalkan wawancara/konseling individual secara rahasia. <button class="btn sm" onclick="lihatSens(\'\')">Lihat daftar (rahasia)</button></div>';
+  }else h+='<div class="empty mt">Belum ada jawaban. Mulai dari menu <b>Isi &amp; salin jawaban</b>.</div>';
+  m.innerHTML=h;
+}
+function hapusContoh(){
+  var n=DB.resp.filter(function(r){return r.contoh;}).length;
+  if(!n){toast("Tidak ada data contoh.");return;}
+  if(!confirm("Hapus "+n+" responden contoh? Data milik Anda tidak ikut terhapus."))return;
+  DB.resp=DB.resp.filter(function(r){return !r.contoh;});save();toast("Data contoh dihapus.");go(curTab);
+}
+function lihatSens(kelas){
+  var A=analisa(kelas);
+  var h='<p class="callout">Daftar ini <b>rahasia</b>. Gunakan hanya untuk menjadwalkan wawancara atau konseling individual. Jawaban angket bukan diagnosis; pastikan dahulu melalui percakapan yang aman dan suportif.</p>';
+  if(!A.sens.length)h+='<div class="empty">Tidak ada murid yang memilih butir perhatian khusus.</div>';
+  A.sens.forEach(function(s){
+    h+='<h3 style="margin-top:14px">Butir '+s.b.no+': '+esc(s.b.top)+'</h3><p class="note" style="margin:0 0 6px">'+esc(s.b.t)+'</p><div class="tw"><table><thead><tr><th>Nama</th><th>Kelas</th><th class="n">Absen</th><th></th></tr></thead><tbody>'+
+      s.siswa.map(function(r){return '<tr><td>'+esc(r.nama)+'</td><td>'+esc(r.kelas)+'</td><td class="n">'+esc(r.absen||"")+'</td><td><button class="btn sm" onclick="profil(\''+r.id+'\')">Profil</button></td></tr>';}).join("")+'</tbody></table></div>';
+  });
+  h+='<p class="note mt">Saran tindak lanjut: sapa murid secara pribadi, dengarkan tanpa menghakimi, catat di jurnal layanan BK, libatkan wali kelas/orang tua seperlunya, dan rujuk ke psikolog/puskesmas/layanan profesional bila muncul tanda bahaya. Dugaan kekerasan atau perundungan ditangani bersama TPPK sekolah.</p>';
+  openDlg("Murid perlu perhatian khusus",h);
+}
+
+/* ---------- Isi & salin ---------- */
+var salin={id:null,ya:{}}, lastKelas="";
+function parseNos(s){
+  var out=[];String(s||"").split(/[\s,;]+/).forEach(function(t){
+    if(!t)return;var m=t.match(/^(\d+)\s*-\s*(\d+)$/);
+    if(m){var a=+m[1],b=+m[2];if(a>b){var c=a;a=b;b=c;}for(var i=a;i<=b&&i-a<200;i++)out.push(i);}
+    else if(/^\d+$/.test(t))out.push(+t);
+  });return out;
+}
+function nosToStr(ids){
+  var nos=ids.map(function(id){var b=butirById(id);return b?b.no:null;}).filter(function(x){return x;}).sort(function(a,b){return a-b;});
+  var out=[],i=0;while(i<nos.length){var j=i;while(j+1<nos.length&&nos[j+1]===nos[j]+1)j++;out.push(j-i>=2?nos[i]+"-"+nos[j]:(j>i?nos[i]+", "+nos[j]:String(nos[i])));i=j+1;}
+  return out.join(", ");
+}
+function kelasDatalist(){return '<datalist id="dlKelas">'+kelasList().map(function(k){return '<option value="'+esc(k)+'">';}).join("")+'</datalist>';}
+function vIsi(m){
+  var h=rahasiaHTML();
+  h+='<div class="grid g2 mt"><section class="card"><h2>'+ico(I.tablet,22)+' Mode isi murid</h2><p class="lead">Murid mengisi sendiri di laptop/HP/tablet guru secara bergantian. Jawaban murid sebelumnya tidak terlihat oleh murid berikutnya, dan keluar dari mode ini memerlukan PIN guru.</p>'+
+    '<div class="fgrid"><div class="fld"><label for="stKelas">Kelas</label><input id="stKelas" list="dlKelas" placeholder="mis. 7A" value="'+esc(lastKelas)+'"></div><div class="fld"><label for="stTgl">Tanggal</label><input id="stTgl" type="date" value="'+today()+'"></div></div>'+kelasDatalist()+
+    '<button class="btn pri" onclick="mulaiMurid()">Mulai mode murid</button><p class="note mt">Tip: pada HP, gunakan mode layar penuh browser. Bila perangkat ditinggal 4 menit di tengah pengisian, formulir kembali ke awal tanpa menyimpan.</p></section>'+
+    '<section class="card"><h2>'+ico(I.print,22)+' Lembar kertas</h2><p class="lead">Untuk kelas tanpa perangkat: cetak lembar angket, murid mencentang, lalu salin nomor butir yang dicentang di formulir di bawah.</p><div class="row"><button class="btn" onclick="cetakLembar()">'+ico(I.print)+' Cetak lembar angket</button><button class="btn" onclick="templatCSV()">'+ico(I.dl)+' Templat CSV</button><label class="btn" for="fCSV">'+ico(I.up)+' Impor CSV</label><input type="file" id="fCSV" accept=".csv,text/csv" class="sr" onchange="imporCSV(this)"></div><p class="note mt">CSV: kolom <code>nama, kelas, absen, pilihan</code> (pilihan berisi nomor butir, mis. “2 5 11-14”), atau kolom nomor butir 1…'+aktif().length+' berisi 1/0. Pemisah koma atau titik koma.</p></section></div>';
+  h+='<section class="card mt" id="salinCard"></section>';
+  m.innerHTML=h;renderSalin();
+}
+function renderSalin(){
+  var el=document.getElementById("salinCard");if(!el)return;
+  var r=salin.id?DB.resp.filter(function(x){return x.id===salin.id;})[0]:null;
+  var B=aktif(),h='<h2>'+(r?"Ubah jawaban responden":"Salin jawaban dari lembar")+'</h2><p class="lead">'+(r?"Perbarui jawaban lalu simpan.":"Ketuk nomor butir yang dicentang murid, atau ketik nomornya. Butir bergaris merah adalah butir perhatian khusus.")+'</p>';
+  h+='<div class="fgrid"><div class="fld"><label for="sNama">Nama/inisial murid</label><input id="sNama" autocomplete="off" value="'+esc(r?r.nama:"")+'"></div><div class="fld"><label for="sKelas">Kelas</label><input id="sKelas" list="dlKelas" value="'+esc(r?r.kelas:lastKelas)+'"></div><div class="fld"><label for="sAbsen">No. absen</label><input id="sAbsen" inputmode="numeric" value="'+esc(r?r.absen:"")+'"></div><div class="fld"><label for="sTgl">Tanggal</label><input id="sTgl" type="date" value="'+esc(r?r.tgl:today())+'"></div></div>';
+  h+='<div class="fld"><label for="sNos">Nomor butir yang dicentang</label><input id="sNos" placeholder="mis. 2, 5, 11-14, 27" value="'+esc(nosToStr(Object.keys(salin.ya)))+'" oninput="nosKetik(this.value)"></div>';
+  BIDANG.forEach(function(bd){
+    h+='<div class="bidblk"><h4><span class="bd" style="background:'+BCOL[bd]+'"></span>'+bd+'</h4><div class="nums">';
+    B.filter(function(b){return b.b===bd;}).forEach(function(b){h+='<button type="button" class="'+(b.s?"s":"")+'" data-id="'+b.id+'" aria-pressed="'+(salin.ya[b.id]?"true":"false")+'" title="'+esc(b.no+". "+b.t)+'" aria-label="Butir '+b.no+': '+esc(b.top)+'" onclick="togNo(this)">'+b.no+'</button>';});
+    h+='</div></div>';
+  });
+  h+='<div class="row end"><span class="note" id="sCount" style="margin-right:auto">'+Object.keys(salin.ya).length+' butir dipilih</span>'+(r?'<button class="btn" onclick="batalSalin()">Batal</button>':'<button class="btn" onclick="resetSalin()">Kosongkan</button>')+'<button class="btn pri" onclick="simpanSalin()">'+ico(I.check)+(r?' Simpan perubahan':' Simpan &amp; murid berikutnya')+'</button></div>';
+  el.innerHTML=h;
+}
+function togNo(btn){var id=btn.dataset.id;if(salin.ya[id])delete salin.ya[id];else salin.ya[id]=1;btn.setAttribute("aria-pressed",salin.ya[id]?"true":"false");document.getElementById("sNos").value=nosToStr(Object.keys(salin.ya));document.getElementById("sCount").textContent=Object.keys(salin.ya).length+" butir dipilih";}
+function nosKetik(v){
+  salin.ya={};parseNos(v).forEach(function(n){var b=butirByNo(n);if(b)salin.ya[b.id]=1;});
+  document.querySelectorAll("#salinCard .nums button").forEach(function(b){b.setAttribute("aria-pressed",salin.ya[b.dataset.id]?"true":"false");});
+  document.getElementById("sCount").textContent=Object.keys(salin.ya).length+" butir dipilih";
+}
+function resetSalin(){salin={id:null,ya:{}};renderSalin();}
+function batalSalin(){salin={id:null,ya:{}};go("resp");}
+function simpanSalin(){
+  var nama=document.getElementById("sNama").value.trim(),kelas=document.getElementById("sKelas").value.trim().toUpperCase(),absen=document.getElementById("sAbsen").value.trim(),tgl=document.getElementById("sTgl").value||today();
+  if(!nama){toast("Isi nama atau inisial murid.");document.getElementById("sNama").focus();return;}
+  if(!kelas){toast("Isi kelas.");document.getElementById("sKelas").focus();return;}
+  var ya=Object.keys(salin.ya);
+  if(salin.id){var r=DB.resp.filter(function(x){return x.id===salin.id;})[0];if(r){r.nama=nama;r.kelas=kelas;r.absen=absen;r.tgl=tgl;r.ya=ya;}save();toast("Perubahan disimpan.");salin={id:null,ya:{}};go("resp");return;}
+  DB.resp.push({id:uid(),nama:nama,kelas:kelas,absen:absen,tgl:tgl,ya:ya,sumber:"salin lembar"});save();lastKelas=kelas;
+  toast("Tersimpan: "+nama+" ("+ya.length+" butir).");
+  salin={id:null,ya:{}};renderSalin();
+  var a=document.getElementById("sAbsen");if(absen&&/^\d+$/.test(absen))a.value=+absen+1;
+  document.getElementById("sNama").focus();
+}
+function editResp(id){var r=DB.resp.filter(function(x){return x.id===id;})[0];if(!r)return;closeDlg();salin={id:id,ya:{}};r.ya.forEach(function(y){salin.ya[y]=1;});go("isi");setTimeout(function(){var c=document.getElementById("salinCard");if(c)c.scrollIntoView({behavior:"smooth"});},50);}
+
+/* CSV */
+function parseCSV(txt){
+  txt=txt.replace(/^﻿/,"");var first=txt.split(/\r?\n/)[0]||"",d=(first.split(";").length>first.split(",").length)?";":",";
+  var rows=[],row=[],f="",q=false;
+  for(var i=0;i<txt.length;i++){var c=txt[i];
+    if(q){if(c==='"'){if(txt[i+1]==='"'){f+='"';i++;}else q=false;}else f+=c;}
+    else if(c==='"')q=true;else if(c===d){row.push(f);f="";}else if(c==="\n"||c==="\r"){if(c==="\r"&&txt[i+1]==="\n")i++;row.push(f);rows.push(row);row=[];f="";}else f+=c;}
+  if(f!==""||row.length){row.push(f);rows.push(row);}
+  return rows.filter(function(r){return r.some(function(x){return String(x).trim()!=="";});});
+}
+function imporCSV(inp){
+  var f=inp.files&&inp.files[0];if(!f)return;var rd=new FileReader();
+  rd.onload=function(){
+    try{
+      var rows=parseCSV(String(rd.result));if(rows.length<2)throw new Error("Tidak ada baris data.");
+      var hd=rows[0].map(function(x){return String(x).trim().toLowerCase();});
+      var iN=hd.indexOf("nama"),iK=hd.indexOf("kelas"),iA=hd.indexOf("absen"),iP=hd.indexOf("pilihan");
+      if(iN<0||iK<0)throw new Error("Kolom nama dan kelas wajib ada.");
+      var colB={};hd.forEach(function(x,i){var b=/^\d+$/.test(x)?butirByNo(+x):butirById(x.toUpperCase());if(b&&i!==iN&&i!==iK&&i!==iA)colB[i]=b.id;});
+      var n=0;
+      rows.slice(1).forEach(function(r){
+        var nama=String(r[iN]||"").trim();if(!nama)return;var ya=[];
+        if(iP>-1)parseNos(r[iP]).forEach(function(no){var b=butirByNo(no);if(b&&ya.indexOf(b.id)<0)ya.push(b.id);});
+        for(var c in colB){var v=String(r[c]||"").trim().toLowerCase();if(v==="1"||v==="ya"||v==="y"||v==="v"||v==="x")ya.push(colB[c]);}
+        DB.resp.push({id:uid(),nama:nama,kelas:String(r[iK]||"").trim().toUpperCase(),absen:iA>-1?String(r[iA]||"").trim():"",tgl:today(),ya:ya,sumber:"impor CSV"});n++;
+      });
+      save();toast(n+" responden diimpor.");go("resp");
+    }catch(e){toast("Impor gagal: "+e.message);}
+    inp.value="";
+  };rd.readAsText(f);
+}
+function unduh(nama,isi,tipe){
+  var blob=new Blob([isi],{type:tipe||"text/plain"});var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=nama;document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);
+}
+function csvCell(v){v=String(v==null?"":v);return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function templatCSV(){unduh("templat-akpd.csv","﻿nama,kelas,absen,pilihan\nInisial murid,7A,1,\"2 5 11-14 27\"\n","text/csv");}
+function eksporRespCSV(){
+  var B=aktif(),rows=[["nama","kelas","absen","tanggal","sumber"].concat(B.map(function(b){return b.no;}))];
+  DB.resp.forEach(function(r){rows.push([r.nama,r.kelas,r.absen,r.tgl,r.sumber||""].concat(B.map(function(b){return hasYa(r,b.id)?1:0;})));});
+  unduh("akpd-jawaban-"+today()+".csv","﻿"+rows.map(function(r){return r.map(csvCell).join(",");}).join("\n"),"text/csv");toast("CSV jawaban diunduh. Simpan di tempat yang aman.");
+}
+function eksporAnalisisCSV(){
+  var A=analisa(""),kel=kelasList(),AK={};kel.forEach(function(k){AK[k]=analisa(k);});
+  var rows=[["no","bidang","topik","pernyataan","jumlah_ya","jumlah_responden","persen","kategori"].concat(kel.map(function(k){return "persen_"+k;}))];
+  A.butir.forEach(function(x,i){rows.push([x.b.no,x.b.b,x.b.top,x.b.t,x.ya,A.n,f1(x.p),KATN[katIdx(x.p)]].concat(kel.map(function(k){return f1(AK[k].butir[i].p);})));});
+  unduh("akpd-analisis-"+today()+".csv","﻿"+rows.map(function(r){return r.map(csvCell).join(",");}).join("\n"),"text/csv");toast("CSV analisis (agregat) diunduh.");
+}
+
+/* ---------- Mode murid ---------- */
+var st=null;
+function mulaiMurid(){
+  var k=document.getElementById("stKelas").value.trim().toUpperCase();
+  if(!k){toast("Isi kelas dahulu.");document.getElementById("stKelas").focus();return;}
+  lastKelas=k;st={kelas:k,tgl:document.getElementById("stTgl").value||today(),step:0,nama:"",absen:"",ya:{},jumlah:0};
+  studentMode=true;document.getElementById("toast").hidden=true;document.getElementById("student").hidden=false;stRender();resetIdle();
+}
+function stIdle(){if(studentMode&&st&&st.step>0&&st.step<6){st.step=0;st.nama="";st.absen="";st.ya={};stRender();}resetIdle();}
+function stRender(){
+  var el=document.getElementById("student"),B=aktif(),h='<div class="st-wrap"><div class="st-top"><div class="logo" aria-hidden="true">'+ico('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 8 1.5 1.5L12 7"/><path d="m8 14 1.5 1.5L12 13"/>',22)+'</div><h1>Angket Kebutuhan Murid · Kelas '+esc(st.kelas)+'</h1><button class="btn sm" onclick="keluarMurid()">Keluar (guru)</button></div>';
+  if(st.step===0){
+    h+='<div class="card"><h2 style="font-size:26px">Halo! 👋</h2><p>Angket ini membantu guru BK mengetahui hal-hal yang ingin kamu pelajari atau butuh bantuan. <b>Tidak ada jawaban benar atau salah</b>, dan ini bukan ulangan.</p><p>Centang pernyataan yang <b>sesuai dengan dirimu</b>. Lewati yang tidak sesuai. Jawabanmu dijaga kerahasiaannya oleh guru BK.</p>'+
+      '<div class="fgrid"><div class="fld"><label for="stNama">Nama panggilan/inisial</label><input id="stNama" autocomplete="off" value="'+esc(st.nama)+'"></div><div class="fld"><label for="stAbsen">Nomor absen</label><input id="stAbsen" inputmode="numeric" value="'+esc(st.absen)+'"></div></div>'+
+      (st.jumlah?'<p class="note">'+st.jumlah+' murid sudah mengisi di sesi ini.</p>':'')+'</div>';
+    h+='</div><div class="st-foot"><div class="in"><span></span><button class="btn pri big" onclick="stMulai()">Mulai mengisi →</button></div></div>';
+  }else if(st.step>=1&&st.step<=4){
+    var bd=BIDANG[st.step-1],L=B.filter(function(b){return b.b===bd;});
+    h+='<p class="note" style="margin:0">Bagian '+st.step+' dari 4</p><h2 style="font-size:24px;margin-top:2px"><span class="bd" style="background:'+BCOL[bd]+';width:14px;height:14px"></span>'+({Pribadi:"Tentang diriku",Sosial:"Aku dan orang lain",Belajar:"Belajarku",Karier:"Masa depanku"})[bd]+' <span class="note">('+bd+')</span></h2><div class="prog" aria-hidden="true"><i style="width:'+(st.step-1)*25+'%"></i></div><div role="group" aria-label="Pernyataan bidang '+bd+'">';
+    L.forEach(function(b){var on=!!st.ya[b.id];h+='<button type="button" class="q" role="checkbox" aria-checked="'+on+'" data-id="'+b.id+'" onclick="stTog(this)"><span class="bx">'+ico(I.check,18)+'</span><span>'+esc(b.t)+'</span></button>';});
+    h+='</div></div><div class="st-foot"><div class="in"><button class="btn big" onclick="stStep(-1)">← Kembali</button><button class="btn pri big" onclick="stStep(1)">'+(st.step<4?"Lanjut →":"Periksa →")+'</button></div></div>';
+  }else if(st.step===5){
+    var n=Object.keys(st.ya).length;
+    h+='<div class="card"><h2 style="font-size:24px">Hampir selesai, '+esc(st.nama)+'!</h2><p>Kamu mencentang <b>'+n+'</b> pernyataan.'+(n?'':' Tidak apa-apa bila memang tidak ada yang sesuai.')+' Kalau sudah yakin, tekan <b>Kirim</b>. Kamu masih bisa kembali untuk memeriksa.</p><p class="note">Bila ada hal yang ingin kamu ceritakan langsung, kamu boleh menemui guru BK kapan saja.</p></div></div><div class="st-foot"><div class="in"><button class="btn big" onclick="stStep(-1)">← Kembali</button><button class="btn hi big" onclick="stKirim()">'+ico(I.check)+' Kirim</button></div></div>';
+  }else{
+    h+='<div class="card thanks"><div class="ok">'+ico(I.check,44)+'</div><h2 style="font-size:28px">Terima kasih!</h2><p>Jawabanmu sudah tersimpan. Silakan serahkan perangkat kepada teman berikutnya.</p><button class="btn pri big" onclick="stBaru()">Murid berikutnya</button></div></div>';
+  }
+  el.innerHTML=h;el.scrollTop=0;
+  var f=el.querySelector(st.step===0?"#stNama":".st-foot .pri,.thanks .pri");if(f)setTimeout(function(){f.focus();},30);
+}
+function stMulai(){
+  var n=document.getElementById("stNama").value.trim(),a=document.getElementById("stAbsen").value.trim();
+  if(!n){toast("Tulis nama panggilan atau inisialmu.");document.getElementById("stNama").focus();return;}
+  st.nama=n;st.absen=a;st.step=1;stRender();
+}
+function stTog(b){var id=b.dataset.id;if(st.ya[id])delete st.ya[id];else st.ya[id]=1;b.setAttribute("aria-checked",st.ya[id]?"true":"false");}
+function stStep(d){st.step=Math.max(0,Math.min(5,st.step+d));stRender();}
+function stKirim(){
+  DB.resp.push({id:uid(),nama:st.nama,kelas:st.kelas,absen:st.absen,tgl:st.tgl,ya:Object.keys(st.ya),sumber:"mode murid"});save();
+  st.jumlah++;st.step=6;st.nama="";st.absen="";st.ya={};stRender();
+}
+function stBaru(){st.step=0;stRender();}
+function keluarMurid(){
+  openDlg("Keluar dari mode murid",'<p>Masukkan PIN guru BK untuk kembali ke aplikasi. Jawaban yang belum dikirim tidak disimpan.</p><div class="fld"><label for="exPin">PIN</label><input id="exPin" class="pin" type="password" inputmode="numeric" maxlength="8" autocomplete="current-password"></div><p class="note bad" id="exMsg" hidden>PIN salah.</p><div class="row end"><button class="btn" onclick="closeDlg()">Batal</button><button class="btn pri" id="exOk">Keluar</button></div>');
+  var inp=document.getElementById("exPin");setTimeout(function(){inp.focus();},30);
+  function ok(){if(Date.now()<failUntil){document.getElementById("exMsg").hidden=false;document.getElementById("exMsg").textContent="Terlalu banyak percobaan. Tunggu sebentar.";return;}
+    if(pinOK(inp.value.trim())){failCount=0;closeDlg();var j=st?st.jumlah:0;studentMode=false;st=null;document.getElementById("student").hidden=true;document.getElementById("student").innerHTML="";toast(j+" jawaban tersimpan di sesi ini.");go("resp");resetIdle();}
+    else{failCount++;if(failCount>=5){failUntil=Date.now()+30000;failCount=0;}document.getElementById("exMsg").hidden=false;inp.value="";inp.focus();}}
+  document.getElementById("exOk").onclick=ok;inp.addEventListener("keydown",function(e){if(e.key==="Enter")ok();});
+}
+
+/* ---------- Responden ---------- */
+var fKelas="",fCari="";
+function vResp(m){
+  var kel=kelasList(),B=aktif();
+  var L=respIn(fKelas).filter(function(r){return !fCari||(r.nama+" "+r.kelas).toLowerCase().indexOf(fCari.toLowerCase())>-1;}).sort(function(a,b){return a.kelas.localeCompare(b.kelas,"id",{numeric:true})||(+a.absen||0)-(+b.absen||0)||a.nama.localeCompare(b.nama);});
+  var h=rahasiaHTML()+'<section class="card mt"><div class="row" style="justify-content:space-between"><div><h2>Responden</h2><p class="lead" style="margin:0">'+DB.resp.length+' murid tercatat di perangkat ini.</p></div><div class="row"><button class="btn sm" onclick="eksporRespCSV()">'+ico(I.dl)+' CSV jawaban</button>'+(adaContoh()?'<button class="btn sm bad" onclick="hapusContoh()">Hapus data contoh</button>':'')+'</div></div>'+
+    '<div class="row mt"><div class="fld" style="margin:0;min-width:150px"><label for="rK">Kelas</label><select id="rK" onchange="fKelas=this.value;go(\'resp\')"><option value="">Semua kelas</option>'+kel.map(function(k){return '<option'+(k===fKelas?' selected':'')+'>'+esc(k)+'</option>';}).join("")+'</select></div><div class="fld" style="margin:0;flex:1;min-width:180px"><label for="rC">Cari nama</label><input id="rC" type="search" value="'+esc(fCari)+'" oninput="fCari=this.value;clearTimeout(window._rc);window._rc=setTimeout(function(){go(\'resp\');var e=document.getElementById(\'rC\');if(e){e.focus();e.setSelectionRange(e.value.length,e.value.length);}},300)"></div></div>';
+  if(!L.length)h+='<div class="empty mt">Belum ada responden'+(fKelas||fCari?" yang cocok":"")+'.</div>';
+  else{
+    h+='<div class="tw mt"><table><thead><tr><th class="n">Abs</th><th>Nama</th><th>Kelas</th>'+BIDANG.map(function(b){return '<th class="n" title="Jumlah butir dipilih">'+b.slice(0,3)+'.</th>';}).join("")+'<th class="n">Total</th><th>Catatan</th><th><span class="sr">Aksi</span></th></tr></thead><tbody>';
+    L.forEach(function(r){
+      var c={},sens=false;BIDANG.forEach(function(b){c[b]=0;});B.forEach(function(b){if(hasYa(r,b.id)){c[b.b]++;if(b.s)sens=true;}});
+      h+='<tr><td class="n">'+esc(r.absen||"")+'</td><td>'+esc(r.nama)+(r.contoh?' <span class="pill contoh">contoh</span>':'')+'</td><td>'+esc(r.kelas)+'</td>'+BIDANG.map(function(b){return '<td class="n">'+c[b]+'</td>';}).join("")+'<td class="n"><b>'+r.ya.length+'</b></td><td>'+(sens?'<span class="pill sens">perhatian khusus</span>':'<span class="note">'+esc(r.sumber||"")+'</span>')+'</td><td style="white-space:nowrap"><button class="btn sm" onclick="profil(\''+r.id+'\')" aria-label="Profil '+esc(r.nama)+'">'+ico(I.eye,16)+'</button> <button class="btn sm" onclick="editResp(\''+r.id+'\')" aria-label="Ubah '+esc(r.nama)+'">'+ico(I.edit,16)+'</button> <button class="btn sm bad" onclick="hapusResp(\''+r.id+'\')" aria-label="Hapus '+esc(r.nama)+'">'+ico(I.trash,16)+'</button></td></tr>';
+    });
+    h+='</tbody></table></div>';
+  }
+  h+='</section>';m.innerHTML=h;
+}
+function hapusResp(id){var r=DB.resp.filter(function(x){return x.id===id;})[0];if(!r||!confirm("Hapus jawaban "+r.nama+"?"))return;DB.resp=DB.resp.filter(function(x){return x.id!==id;});save();toast("Dihapus.");go("resp");}
+function profilHTML(r){
+  var B=aktif(),h='<p><b>'+esc(r.nama)+'</b> · Kelas '+esc(r.kelas)+(r.absen?' · No. '+esc(r.absen):'')+' · '+tglID(r.tgl)+(r.contoh?' <span class="pill contoh">contoh</span>':'')+'</p>';
+  var sens=B.filter(function(b){return b.s&&hasYa(r,b.id);});
+  if(sens.length)h+='<div class="callout"><b>Butir perhatian khusus dipilih:</b> '+sens.map(function(b){return esc(b.top);}).join(", ")+'. Ajak murid berbicara secara pribadi dan rahasia; rujuk ke layanan profesional bila muncul tanda bahaya.</div>';
+  BIDANG.forEach(function(bd){
+    var L=B.filter(function(b){return b.b===bd&&hasYa(r,b.id);}),tot=B.filter(function(b){return b.b===bd;}).length;
+    h+='<h3 style="margin-top:12px"><span class="bd" style="background:'+BCOL[bd]+'"></span>'+bd+' <span class="note">('+L.length+' dari '+tot+')</span></h3>';
+    h+=L.length?'<ul style="margin:4px 0;padding-left:20px">'+L.map(function(b){return '<li>'+b.no+'. '+esc(b.t)+'</li>';}).join("")+'</ul>':'<p class="note" style="margin:2px 0">Tidak ada butir dipilih.</p>';
+  });
+  return h;
+}
+function profil(id){
+  var r=DB.resp.filter(function(x){return x.id===id;})[0];if(!r)return;
+  openDlg("Profil kebutuhan murid",profilHTML(r)+'<p class="note mt">Profil ini adalah titik awal percakapan, bukan penilaian atau diagnosis.</p><div class="row end"><button class="btn" onclick="cetakProfil(\''+id+'\')">'+ico(I.print)+' Cetak (rahasia)</button><button class="btn pri" onclick="editResp(\''+id+'\')">Ubah jawaban</button></div>');
+}
+
+/* ---------- Analisis ---------- */
+var aKelas="",aBidang="";
+function vAnalisis(m){
+  var kel=kelasList(),A=analisa(aKelas);
+  var h=rahasiaHTML()+'<section class="card mt"><div class="row" style="justify-content:space-between"><div><h2>Analisis AKPD</h2><p class="lead" style="margin:0">'+(aKelas?"Kelas "+esc(aKelas):"Semua kelas")+' · '+A.n+' responden · '+aktif().length+' butir</p></div><div class="row"><button class="btn sm" onclick="cetakLaporan()">'+ico(I.print)+' Cetak laporan</button><button class="btn sm" onclick="eksporAnalisisCSV()">'+ico(I.dl)+' CSV analisis</button></div></div>'+
+    '<div class="row mt" role="group" aria-label="Pilih cakupan"><div class="seg">'+[""].concat(kel).map(function(k){return '<button aria-pressed="'+(k===aKelas)+'" onclick="aKelas=\''+esc(k)+'\';go(\'analisis\')">'+(k?esc(k):"Semua kelas")+'</button>';}).join("")+'</div></div>'+
+    '<p class="note mt" style="margin-bottom:0">Rumus: persentase butir = jumlah murid yang menjawab “ya” ÷ jumlah responden × 100%. Tingkat kebutuhan bidang = jumlah “ya” di bidang ÷ (responden × jumlah butir bidang) × 100%. Kategori: <span class="kat k4">Sangat tinggi</span> ≥ '+DB.atur.batas[0]+'%, <span class="kat k3">Tinggi</span> ≥ '+DB.atur.batas[1]+'%, <span class="kat k2">Sedang</span> ≥ '+DB.atur.batas[2]+'%, <span class="kat k1">Rendah</span> di bawahnya (dapat diubah di Pengaturan).</p></section>';
+  if(!A.n){m.innerHTML=h+'<div class="empty mt">Belum ada data untuk cakupan ini.</div>';return;}
+  h+='<div class="grid g2 mt"><section class="card"><h3>Tingkat kebutuhan per bidang</h3>';
+  A.bidRank.forEach(function(bd,i){var x=A.bidang[bd];h+='<div class="hbar"><span class="t">'+(i+1)+'. <span class="bd" style="background:'+BCOL[bd]+'"></span>'+bd+'</span>'+bar(x.p,BCOL[bd])+'<span class="v">'+f1(x.p)+'%</span></div>';});
+  h+='</section><section class="card"><h3>Porsi kebutuhan</h3><p class="note" style="margin:0 0 6px">Sebaran seluruh jawaban “ya” ('+A.totalYa+') menurut bidang.</p><div class="tw"><table><thead><tr><th>Bidang</th><th class="n">Jawaban ya</th><th class="n">Porsi</th><th class="n">Tingkat</th><th>Kategori</th></tr></thead><tbody>'+
+    A.bidRank.map(function(bd){var x=A.bidang[bd];return '<tr><td><span class="bd" style="background:'+BCOL[bd]+'"></span>'+bd+'</td><td class="n">'+x.ya+'</td><td class="n">'+f1(x.porsi)+'%</td><td class="n">'+f1(x.p)+'%</td><td>'+katHTML(x.p)+'</td></tr>';}).join("")+'</tbody></table></div></section></div>';
+  // peringkat butir
+  var R=A.rank.filter(function(x){return !aBidang||x.b.b===aBidang;});
+  h+='<section class="card mt"><div class="row" style="justify-content:space-between"><h3>Peringkat kebutuhan per butir</h3><div class="seg" role="group" aria-label="Saring bidang">'+[""].concat(BIDANG).map(function(b){return '<button aria-pressed="'+(b===aBidang)+'" onclick="aBidang=\''+b+'\';go(\'analisis\')">'+(b||"Semua")+'</button>';}).join("")+'</div></div><div class="tw mt"><table><thead><tr><th class="n">Ptk</th><th class="n">No</th><th>Kebutuhan</th><th>Bidang</th><th class="n">Ya</th><th style="min-width:110px">%</th><th>Kategori</th></tr></thead><tbody>';
+  R.forEach(function(x,i){h+='<tr><td class="n">'+(i+1)+'</td><td class="n">'+x.b.no+'</td><td><b>'+esc(x.b.top)+'</b>'+(x.b.s?' <span class="pill sens">perhatian khusus</span>':'')+'<br><span class="note">'+esc(x.b.t)+'</span></td><td style="white-space:nowrap"><span class="bd" style="background:'+BCOL[x.b.b]+'"></span>'+x.b.b+'</td><td class="n">'+x.ya+'/'+A.n+'</td><td><div class="row" style="gap:6px;flex-wrap:nowrap">'+bar(x.p,katColor(x.p))+'<b style="font-variant-numeric:tabular-nums">'+f1(x.p)+'</b></div></td><td>'+katHTML(x.p)+'</td></tr>';});
+  h+='</tbody></table></div></section>';
+  // per kelas
+  if(kel.length>1&&!aKelas){
+    var AK={};kel.forEach(function(k){AK[k]=analisa(k);});
+    h+='<section class="card mt"><h3>Peta kebutuhan per kelas</h3><p class="note" style="margin:0 0 8px">Warna mengikuti kategori. Bandingkan kelas untuk menentukan sasaran bimbingan klasikal.</p><div class="tw"><table class="heat"><thead><tr><th>Kelas</th><th class="n">n</th>'+BIDANG.map(function(b){return '<th style="text-align:center">'+b+'</th>';}).join("")+'</tr></thead><tbody>'+
+      kel.map(function(k){return '<tr><td><b>'+esc(k)+'</b></td><td class="n">'+AK[k].n+'</td>'+BIDANG.map(function(b){var p=AK[k].bidang[b].p;return heatTd(p);}).join("")+'</tr>';}).join("")+'</tbody></table></div>';
+    h+='<details class="mt"><summary style="cursor:pointer;font-weight:700">Rincian butir × kelas</summary><div class="tw mt"><table class="heat"><thead><tr><th class="n">No</th><th>Kebutuhan</th>'+kel.map(function(k){return '<th style="text-align:center">'+esc(k)+'</th>';}).join("")+'</tr></thead><tbody>'+
+      A.butir.map(function(x,i){return '<tr><td class="n">'+x.b.no+'</td><td>'+esc(x.b.top)+'</td>'+kel.map(function(k){return heatTd(AK[k].butir[i].p);}).join("")+'</tr>';}).join("")+'</tbody></table></div></details></section>';
+  }
+  if(A.sens.length)h+='<section class="card mt"><h3>Butir perhatian khusus</h3><p class="note">Butir ini tidak diprioritaskan berdasarkan persentase; setiap murid yang memilihnya perlu disapa secara individual dan rahasia.</p><ul>'+A.sens.map(function(s){return '<li><b>'+esc(s.b.top)+'</b> (butir '+s.b.no+'): '+s.siswa.length+' murid</li>';}).join("")+'</ul><button class="btn sm" onclick="lihatSens(\''+esc(aKelas)+'\')">Lihat nama (rahasia)</button></section>';
+  m.innerHTML=h;
+}
+function heatTd(p){var i=katIdx(p);return '<td class="h" style="background:color-mix(in srgb,var(--k'+(i+1)+') '+(15+i*18)+'%,transparent)">'+f1(p)+'</td>';}
+
+/* ---------- Prioritas layanan ---------- */
+var rMin=1, aiTeks="";
+function dataRekom(){
+  var A=analisa("");
+  var L=A.rank.filter(function(x){return x.b.s?x.ya>0:katIdx(x.p)>=rMin;}).map(function(x){return {x:x,r:rekomButir(x,x.b.s?null:kelasTinggiFor(x.b.id))};});
+  L.sort(function(a,b){return (b.x.b.s?1:0)-(a.x.b.s?1:0)||b.x.p-a.x.p;});
+  return {A:A,L:L};
+}
+function vRekom(m){
+  var D=dataRekom(),A=D.A;
+  var h=rahasiaHTML()+'<section class="card mt"><div class="row" style="justify-content:space-between"><div><h2>Prioritas layanan</h2><p class="lead" style="margin:0">Dasar penyusunan deskripsi kebutuhan, tujuan, dan komponen program BK tahunan/semester.</p></div><div class="row"><button class="btn sm" onclick="cetakProgram()">'+ico(I.print)+' Cetak lampiran program</button></div></div>'+
+    '<div class="row mt"><span class="note">Tampilkan kebutuhan mulai kategori:</span><div class="seg" role="group" aria-label="Batas kategori">'+[3,2,1,0].map(function(i){return '<button aria-pressed="'+(rMin===i)+'" onclick="rMin='+i+';go(\'rekom\')">'+KATN[i]+'</button>';}).join("")+'</div></div></section>';
+  if(!A.n){m.innerHTML=h+'<div class="empty mt">Belum ada data.</div>';return;}
+  h+='<section class="card mt"><h3>Deskripsi kebutuhan (narasi otomatis)</h3><p class="note" style="margin:0 0 8px">Dapat disalin ke bagian rasional/deskripsi kebutuhan program BK, lalu disunting.</p><div class="ai-out" id="narOut">'+esc(narasi(A))+'</div><div class="row mt"><button class="btn sm" onclick="salinTeks(\'narOut\')">Salin narasi</button><button class="btn sm hi" onclick="aiNarasi()">'+ico(I.spark)+' Perhalus dengan AI (opsional)</button></div><div id="aiBox"'+(aiTeks?'':' hidden')+'><h3 class="mt">Versi AI</h3><div class="ai-out" id="aiOut">'+esc(aiTeks)+'</div><div class="row mt"><button class="btn sm" onclick="salinTeks(\'aiOut\')">Salin versi AI</button></div></div></section>';
+  h+='<section class="card mt"><h3>Tabel prioritas layanan</h3><div class="tw"><table><thead><tr><th class="n">#</th><th>Bidang · kebutuhan</th><th class="n">%</th><th>Tujuan layanan</th><th>Komponen &amp; strategi</th><th>Sasaran</th><th>Waktu</th></tr></thead><tbody>';
+  if(!D.L.length)h+='<tr><td colspan="7" class="note">Tidak ada kebutuhan pada kategori ini.</td></tr>';
+  D.L.forEach(function(o,i){var x=o.x,r=o.r;h+='<tr><td class="n">'+(i+1)+'</td><td><span class="bd" style="background:'+BCOL[x.b.b]+'"></span>'+x.b.b+'<br><b>'+esc(x.b.top)+'</b> <span class="note">(butir '+x.b.no+')</span>'+(x.b.s?'<br><span class="pill sens">perhatian khusus</span>':'')+'</td><td class="n">'+(x.b.s?x.ya+' murid':f1(x.p)+'<br>'+katHTML(x.p))+'</td><td>'+esc(x.b.tj)+'</td><td><b>'+r.komp+'</b><br><span class="note">'+esc(r.strat)+'</span></td><td>'+esc(x.b.s?"Murid yang memilih (lihat daftar rahasia)":r.sasaran)+'</td><td>'+r.waktu+'</td></tr>';});
+  h+='</tbody></table></div><p class="note mt">Sasaran kelas = kelas yang persentase butirnya ≥ '+DB.atur.batas[1]+'% (kategori tinggi). Saran ini bersifat awal; sesuaikan dengan hasil instrumen lain (observasi, wawancara, sosiometri, data kehadiran) karena asesmen tidak boleh hanya memakai satu instrumen.</p></section>';
+  m.innerHTML=h;
+}
+function salinTeks(id){var t=document.getElementById(id).textContent;try{navigator.clipboard.writeText(t).then(function(){toast("Disalin.");},function(){fallbackCopy(t);});}catch(e){fallbackCopy(t);}}
+function fallbackCopy(t){var a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy");toast("Disalin.");}catch(e){toast("Gagal menyalin.");}a.remove();}
+function aiNarasi(){
+  var s=DB.atur;if(!s.aiKey){toast("Isi kunci API Gemini di Pengaturan bila ingin memakai AI.");go("atur");return;}
+  var A=analisa(""),kel=kelasList(),AK={};kel.forEach(function(k){AK[k]=analisa(k);});
+  var ringkas="Jumlah responden: "+A.n+" murid SMP, "+kel.length+" kelas.\nTingkat kebutuhan bidang: "+A.bidRank.map(function(b){return b+" "+f1(A.bidang[b].p)+"%";}).join(", ")+".\n10 butir teratas: "+A.rank.filter(function(x){return !x.b.s;}).slice(0,10).map(function(x){return x.b.top+" ("+x.b.b+") "+f1(x.p)+"%";}).join("; ")+".\nPer kelas: "+kel.map(function(k){return k+": "+BIDANG.map(function(b){return b+" "+f1(AK[k].bidang[b].p)+"%";}).join(", ");}).join(" | ")+".\nJumlah murid yang memilih butir perhatian khusus: "+sensSiswaCount("")+".";
+  var prompt="Anda membantu guru BK SMP di Indonesia menyusun bagian 'Rasional' dan 'Deskripsi Kebutuhan' program BK tahunan berdasarkan hasil AKPD (data agregat di bawah, tanpa nama murid). Tulis dalam bahasa Indonesia baku, 3–4 paragraf, lalu daftar 5–7 prioritas layanan beserta komponen layanan (layanan dasar; peminatan dan perencanaan individual; layanan responsif; dukungan sistem) dan strategi (bimbingan klasikal, bimbingan kelompok, konseling individual/kelompok, konsultasi, kolaborasi). Jangan membuat diagnosis klinis; sebutkan bahwa kasus berat dirujuk ke layanan profesional. Jangan mengarang angka di luar data.\n\nDATA:\n"+ringkas;
+  var box=document.getElementById("aiBox"),out=document.getElementById("aiOut");box.hidden=false;out.textContent="Menghubungi Gemini… (hanya data agregat yang dikirim)";
+  fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(s.aiModel||"gemini-2.5-flash")+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":s.aiKey},body:JSON.stringify({contents:[{role:"user",parts:[{text:prompt}]}],generationConfig:{temperature:.5}})})
+  .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error((j.error&&j.error.message)||("HTTP "+r.status));return j;});})
+  .then(function(j){var t=((j.candidates||[])[0]||{}).content;t=t&&t.parts?t.parts.map(function(p){return p.text||"";}).join(""):"";aiTeks=t.replace(/\*\*/g,"").replace(/^#+\s*/gm,"")||"(Tidak ada jawaban)";out.textContent=aiTeks;})
+  .catch(function(e){out.textContent="Gagal: "+e.message+". Periksa kunci API, model, dan koneksi internet.";});
+}
+
+/* ---------- Butir angket ---------- */
+function vAngket(m){
+  var h=rahasiaHTML()+'<section class="card mt"><div class="row" style="justify-content:space-between"><div><h2>Butir angket</h2><p class="lead" style="margin:0">'+aktif().length+' butir aktif. Butir ditulis orisinal untuk murid SMP; silakan sesuaikan dengan kondisi sekolah.</p></div><div class="row"><button class="btn sm" onclick="cetakLembar()">'+ico(I.print)+' Cetak lembar</button><button class="btn sm pri" onclick="ubahButir(\'\')">+ Tambah butir</button></div></div></section>';
+  BIDANG.forEach(function(bd){
+    var L=DB.butir.filter(function(b){return b.b===bd;}).sort(function(a,b){return a.no-b.no;});
+    h+='<section class="card mt"><h3><span class="bd" style="background:'+BCOL[bd]+'"></span>Bidang '+bd+' <span class="note">('+L.filter(function(b){return b.aktif;}).length+' aktif)</span></h3><ul class="items">';
+    L.forEach(function(b){h+='<li class="'+(b.aktif?'':'off')+'"><span class="no">'+b.no+'</span><div class="tx">'+esc(b.t)+(b.s?' <span class="pill sens">perhatian khusus</span>':'')+'<small>Topik: '+esc(b.top)+' · Tujuan: '+esc(b.tj)+'</small></div><div class="row" style="flex:none"><button class="btn sm" onclick="ubahButir(\''+b.id+'\')" aria-label="Ubah butir '+b.no+'">'+ico(I.edit,16)+'</button><button class="btn sm" onclick="togButir(\''+b.id+'\')">'+(b.aktif?"Nonaktifkan":"Aktifkan")+'</button></div></li>';});
+    h+='</ul></section>';
+  });
+  h+='<section class="card mt"><h3>Kembalikan butir bawaan</h3><p class="note">Mengembalikan 48 butir bawaan. Jawaban yang tersimpan tetap ada; jawaban untuk butir tambahan Anda tidak ikut dianalisis.</p><button class="btn sm bad" onclick="resetButir()">Kembalikan butir bawaan</button></section>';
+  m.innerHTML=h;
+}
+function togButir(id){var b=butirById(id);if(!b)return;b.aktif=!b.aktif;save();go("angket");}
+function ubahButir(id){
+  var b=id?butirById(id):{id:"",b:"Pribadi",t:"",top:"",tj:"",s:false};
+  openDlg(id?"Ubah butir "+b.no:"Tambah butir",'<div class="fld"><label for="eB">Bidang</label><select id="eB">'+BIDANG.map(function(x){return '<option'+(x===b.b?' selected':'')+'>'+x+'</option>';}).join("")+'</select></div><div class="fld"><label for="eT">Pernyataan (sudut pandang murid, “Saya …”)</label><textarea id="eT">'+esc(b.t)+'</textarea></div><div class="fgrid"><div class="fld"><label for="eTop">Topik singkat</label><input id="eTop" value="'+esc(b.top)+'"></div></div><div class="fld"><label for="eTj">Tujuan layanan</label><input id="eTj" value="'+esc(b.tj)+'" placeholder="Murid mampu …"></div><label class="row" style="margin-bottom:12px"><input type="checkbox" id="eS"'+(b.s?' checked':'')+'> Butir perhatian khusus (ditindaklanjuti individual, tidak diprioritaskan berdasar persentase)</label><div class="row end"><button class="btn" onclick="closeDlg()">Batal</button><button class="btn pri" id="eOk">Simpan</button></div>');
+  document.getElementById("eOk").onclick=function(){
+    var t=document.getElementById("eT").value.trim();if(!t){toast("Isi pernyataan.");return;}
+    var o=id?b:{id:"X"+uid(),no:DB.butir.reduce(function(a,x){return Math.max(a,x.no);},0)+1,aktif:true};
+    o.b=document.getElementById("eB").value;o.t=t;o.top=document.getElementById("eTop").value.trim()||t.slice(0,40);o.tj=document.getElementById("eTj").value.trim()||"Murid terbantu dalam hal "+o.top.toLowerCase()+".";o.s=document.getElementById("eS").checked;
+    if(!id)DB.butir.push(o);save();closeDlg();toast("Butir disimpan.");go("angket");
+  };
+}
+function resetButir(){if(!confirm("Kembalikan 48 butir bawaan? Butir tambahan dan perubahan teks akan hilang."))return;DB.butir=butirAwal();save();toast("Butir bawaan dikembalikan.");go("angket");}
+
+/* ---------- Pengaturan & data ---------- */
+function vAtur(m){
+  var s=DB.atur;
+  var h=rahasiaHTML()+'<div class="grid g2 mt"><section class="card"><h2>Identitas laporan</h2><div class="fld"><label for="aS">Nama sekolah</label><input id="aS" value="'+esc(s.sekolah)+'" placeholder="mis. SMP Negeri …"></div><div class="fgrid"><div class="fld"><label for="aTa">Tahun ajaran</label><input id="aTa" value="'+esc(s.ta)+'"></div><div class="fld"><label for="aSm">Semester</label><select id="aSm"><option'+(s.semester==="Ganjil"?' selected':'')+'>Ganjil</option><option'+(s.semester==="Genap"?' selected':'')+'>Genap</option></select></div></div><div class="fld"><label for="aG">Nama guru BK (untuk tanda tangan laporan)</label><input id="aG" value="'+esc(s.guru)+'"></div>'+
+    '<h3 class="mt">Batas kategori (%)</h3><div class="fgrid"><div class="fld"><label for="b0">Sangat tinggi ≥</label><input id="b0" type="number" min="1" max="100" value="'+s.batas[0]+'"></div><div class="fld"><label for="b1">Tinggi ≥</label><input id="b1" type="number" min="1" max="100" value="'+s.batas[1]+'"></div><div class="fld"><label for="b2">Sedang ≥</label><input id="b2" type="number" min="0" max="100" value="'+s.batas[2]+'"></div></div><p class="note">Batas bawaan adalah kesepakatan praktis, bukan norma baku. Sesuaikan dengan kesepakatan tim BK sekolah.</p>'+
+    '<div class="fld"><label for="aL">Kunci otomatis setelah tidak aktif (menit, 0 = mati)</label><input id="aL" type="number" min="0" max="60" value="'+s.autolock+'"></div><button class="btn pri" onclick="simpanAtur()">Simpan pengaturan</button></section>'+
+    '<section class="card"><h2>AI Gemini (opsional)</h2><p class="note">Hanya dipakai saat Anda menekan tombol “Perhalus dengan AI”. Yang dikirim ke Google hanya angka agregat (persentase bidang, butir, dan kelas) — <b>tanpa nama murid</b>. Kunci disimpan di perangkat ini saja.</p><div class="fld"><label for="aK">Kunci API Gemini</label><input id="aK" type="password" autocomplete="off" value="'+esc(s.aiKey)+'" placeholder="Tempel kunci dari Google AI Studio"></div><div class="fld"><label for="aM">Model</label><input id="aM" value="'+esc(s.aiModel)+'"></div><button class="btn" onclick="simpanAtur()">Simpan</button>'+
+    '<h2 class="mt">Keamanan</h2><div class="row"><button class="btn" onclick="gantiPin()">Ganti PIN</button>'+(lsGet(KEY_HIDE)==="1"?'<button class="btn" onclick="lsDel(KEY_HIDE);go(\'atur\')">Tampilkan pengingat kerahasiaan</button>':'')+'</div></section></div>'+
+    '<section class="card mt"><h2>Cadangan &amp; data</h2><p class="note">Semua data hanya ada di browser perangkat ini. Menghapus riwayat/data situs akan menghapusnya, jadi buat cadangan JSON secara berkala dan simpan di tempat yang aman (bukan grup obrolan).</p><div class="row"><button class="btn" onclick="eksporJSON()">'+ico(I.dl)+' Ekspor cadangan JSON</button><label class="btn" for="fJSON">'+ico(I.up)+' Impor cadangan JSON</label><input type="file" id="fJSON" accept=".json,application/json" class="sr" onchange="imporJSON(this)"><button class="btn" onclick="eksporRespCSV()">'+ico(I.dl)+' CSV jawaban</button><button class="btn" onclick="eksporAnalisisCSV()">'+ico(I.dl)+' CSV analisis</button></div>'+
+    '<div class="row mt"><button class="btn bad" onclick="hapusContoh()"'+(adaContoh()?'':' disabled')+'>Hapus data contoh</button><button class="btn bad" onclick="hapusSemua()">'+ico(I.trash)+' Hapus semua data</button></div></section>';
+  m.innerHTML=h;
+}
+function simpanAtur(){
+  var s=DB.atur,g=function(i){return document.getElementById(i);};
+  s.sekolah=g("aS").value.trim();s.ta=g("aTa").value.trim()||s.ta;s.semester=g("aSm").value;s.guru=g("aG").value.trim();
+  var b=[+g("b0").value,+g("b1").value,+g("b2").value];
+  if(!(b[0]>b[1]&&b[1]>b[2]&&b[2]>=0&&b[0]<=100)){toast("Batas harus menurun: sangat tinggi > tinggi > sedang ≥ 0.");return;}
+  s.batas=b;s.autolock=Math.max(0,Math.min(60,+g("aL").value||0));s.aiKey=g("aK").value.trim();s.aiModel=g("aM").value.trim()||"gemini-2.5-flash";
+  save();toast("Pengaturan disimpan.");go("atur");
+}
+function gantiPin(){
+  openDlg("Ganti PIN",'<div class="fld"><label for="gp0">PIN lama</label><input id="gp0" class="pin" type="password" inputmode="numeric" maxlength="8"></div><div class="fld"><label for="gp1">PIN baru (4–8 angka)</label><input id="gp1" class="pin" type="password" inputmode="numeric" maxlength="8"></div><div class="fld"><label for="gp2">Ulangi PIN baru</label><input id="gp2" class="pin" type="password" inputmode="numeric" maxlength="8"></div><div class="row end"><button class="btn" onclick="closeDlg()">Batal</button><button class="btn pri" id="gpOk">Simpan</button></div>');
+  document.getElementById("gpOk").onclick=function(){
+    var o=document.getElementById("gp0").value.trim(),a=document.getElementById("gp1").value.trim(),b=document.getElementById("gp2").value.trim();
+    if(!pinOK(o)){toast("PIN lama salah.");return;}
+    if(!/^\d{4,8}$/.test(a)||/^(\d)\1+$/.test(a)||"0123456789".indexOf(a)>-1||"9876543210".indexOf(a)>-1){toast("PIN baru 4–8 angka dan tidak mudah ditebak.");return;}
+    if(a!==b){toast("PIN baru tidak sama.");return;}
+    var salt=randHex(16);lsSet(KEY_PIN,JSON.stringify({salt:salt,hash:hashPin(a,salt)}));closeDlg();toast("PIN diganti.");
+  };
+}
+function eksporJSON(){var o=JSON.parse(JSON.stringify(DB));o.atur.aiKey="";o.ekspor=new Date().toISOString();o.aplikasi="AKPD";unduh("cadangan-akpd-"+today()+".json",JSON.stringify(o,null,1),"application/json");toast("Cadangan diunduh (tanpa kunci API). Simpan di tempat aman.");}
+function imporJSON(inp){
+  var f=inp.files&&inp.files[0];if(!f)return;var rd=new FileReader();
+  rd.onload=function(){
+    try{var o=JSON.parse(String(rd.result));if(!o||!Array.isArray(o.butir)||!Array.isArray(o.resp))throw new Error("Format bukan cadangan AKPD.");
+      var mode=confirm("OK = GANTI semua data dengan cadangan ini.\nBatal = GABUNGKAN responden dari cadangan ke data sekarang.");
+      if(mode){var key=DB.atur.aiKey;DB=o;DB.atur=Object.assign(defAtur(),o.atur||{});DB.atur.aiKey=key;}
+      else{var ids={};DB.resp.forEach(function(r){ids[r.id]=1;});o.resp.forEach(function(r){if(!ids[r.id])DB.resp.push(r);});o.butir.forEach(function(b){if(!butirById(b.id))DB.butir.push(b);});}
+      save();toast("Cadangan diimpor.");go("beranda");
+    }catch(e){toast("Impor gagal: "+e.message);}inp.value="";
+  };rd.readAsText(f);
+}
+function hapusSemua(){
+  var t=prompt("Semua jawaban, butir, dan pengaturan AKPD di perangkat ini akan dihapus permanen (PIN tetap). Ketik HAPUS untuk melanjutkan:");
+  if(t!=="HAPUS")return;DB={v:1,atur:defAtur(),butir:butirAwal(),resp:[]};save();toast("Semua data dihapus.");go("beranda");
+}
+
+/* ---------- Dasar & sumber ---------- */
+function vDasar(m){
+  m.innerHTML=rahasiaHTML()+'<section class="card mt"><h2>Dasar dan sumber</h2><p>AKPD adalah instrumen non-tes sederhana untuk menghimpun kebutuhan murid sebagai dasar empirik penyusunan program BK. Aplikasi ini mengikuti alur asesmen kebutuhan dalam panduan operasional BK: menentukan data, memilih instrumen, mengumpulkan dan mengolah data (jawaban “ya” = 1, “tidak” = 0), menghitung persentase per butir dan per bidang, menetapkan prioritas dari persentase tertinggi, lalu merumuskan deskripsi kebutuhan, tujuan, dan komponen program (layanan dasar; peminatan dan perencanaan individual; layanan responsif; dukungan sistem).</p>'+
+  '<div class="callout info"><b>Batas penggunaan.</b> Butir angket ditulis ulang secara orisinal dan belum diuji validitas/reliabilitasnya secara psikometrik. Hasilnya adalah gambaran kebutuhan, bukan tes psikologi dan bukan diagnosis. Panduan menegaskan asesmen tidak memakai satu instrumen tunggal: lengkapi dengan observasi, wawancara, sosiometri, dan data sekolah. Kasus berat dirujuk ke psikolog atau layanan profesional.</div>'+
+  '<h3 class="mt">Prinsip kerahasiaan di aplikasi ini</h3><ul><li>Data hanya tersimpan di localStorage perangkat ini; tidak ada server.</li><li>Kunci layar PIN (hanya hash yang disimpan) — kunci tampilan, bukan enkripsi.</li><li>Mode murid tidak menampilkan jawaban murid lain dan keluar memerlukan PIN.</li><li>Laporan cetak dan AI hanya memakai data agregat tanpa nama.</li><li>Data contoh memakai nama fiktif berlabel “contoh”.</li></ul>'+
+  '<h3 class="mt">Sumber yang dipakai</h3><ol class="src">'+
+  '<li><a href="https://sma.kemdikbud.go.id/data/files/Permendiknas%20Nomor%20111%20Tahun%202014%20Tentang%20Bimbingan%20Dan%20Konseling%20Lampiran.pdf" target="_blank" rel="noopener">Lampiran Permendikbud No. 111 Tahun 2014 tentang Bimbingan dan Konseling pada Pendidikan Dasar dan Menengah</a> — bidang layanan pribadi, sosial, belajar, karier dan program BK berbasis asesmen kebutuhan.</li>'+
+  '<li><a href="https://eprints.uny.ac.id/54129/1/1.%20PANDUAN%20BK%20SD%202016,DITJEN%20GTK%20revisi%20final%2021%20Des%202016.pdf" target="_blank" rel="noopener">Panduan Operasional Penyelenggaraan Bimbingan dan Konseling (Ditjen GTK Kemendikbud, 2016)</a> — langkah asesmen kebutuhan, tabulasi ya/tidak, persentase per butir dan bidang, penetapan prioritas, komponen program.</li>'+
+  '<li><a href="https://www.gebrak.id/2026/09/layanan-bk-di-sekolah-berubah-kemendikdasmen-siapkan-pendampingan-untuk-semua-murid.html" target="_blank" rel="noopener">Layanan BK di Sekolah Berubah, Kemendikdasmen Siapkan Pendampingan untuk Semua Murid (gebrak.id, 2026)</a> — arah BK developmental dan preventif: mengenali kebutuhan murid sejak awal, kolaborasi guru BK dan guru wali.</li>'+
+  '<li><a href="https://e-journal.hamzanwadi.ac.id/index.php/jkp/article/view/26003" target="_blank" rel="noopener">Analisis Angket Kebutuhan Peserta Didik di SMPN 3 Selong dalam Kegiatan Layanan BK (Jurnal Hamzanwadi)</a> — contoh praktik analisis AKPD SMP per bidang dan peringkat butir.</li>'+
+  '</ol></section>';
+}
+
+/* ---------- Cetak ---------- */
+function kop(judul){var s=DB.atur;return '<h1>'+esc(judul)+'</h1><p style="margin:0 0 10px">'+(s.sekolah?esc(s.sekolah)+' · ':'')+'Tahun ajaran '+esc(s.ta)+' · Semester '+esc(s.semester)+' · Dicetak '+tglID(today())+'</p>';}
+function ttd(){var s=DB.atur;return '<table style="margin-top:28px;border:0;width:100%"><tr><td style="border:0;width:50%">Mengetahui,<br>Kepala Sekolah<br><br><br><br>____________________</td><td style="border:0">Guru BK<br><br><br><br><br>'+(s.guru?esc(s.guru):'____________________')+'</td></tr></table>';}
+function doPrint(html){var p=document.getElementById("printArea");p.innerHTML=html;setTimeout(function(){window.print();},60);}
+function cetakLembar(){
+  var B=aktif(),h=kop("Angket Kebutuhan Peserta Didik (AKPD)")+'<p>Nama/inisial: ______________________ &nbsp; Kelas: ________ &nbsp; No. absen: ____ &nbsp; Tanggal: ____________</p><p><b>Petunjuk:</b> Berilah tanda centang (✓) pada kotak pernyataan yang <b>sesuai dengan dirimu</b>. Kosongkan bila tidak sesuai. Tidak ada jawaban benar atau salah. Jawabanmu dirahasiakan oleh guru BK.</p>';
+  BIDANG.forEach(function(bd){h+='<h2>'+bd+'</h2><ul class="lembar">'+B.filter(function(b){return b.b===bd;}).map(function(b){return '<li><span class="kotak"></span><span><b>'+b.no+'.</b> '+esc(b.t)+'</span></li>';}).join("")+'</ul>';});
+  doPrint(h);
+}
+function tabelLaporan(A){
+  var h='<h2>1. Tingkat kebutuhan per bidang</h2><table><thead><tr><th>Peringkat</th><th>Bidang</th><th>Jumlah ya</th><th>Tingkat (%)</th><th>Porsi (%)</th><th>Kategori</th></tr></thead><tbody>'+A.bidRank.map(function(b,i){var x=A.bidang[b];return '<tr><td>'+(i+1)+'</td><td>'+b+'</td><td>'+x.ya+'</td><td>'+f1(x.p)+'</td><td>'+f1(x.porsi)+'</td><td>'+KATN[katIdx(x.p)]+'</td></tr>';}).join("")+'</tbody></table>';
+  h+='<h2>2. Peringkat kebutuhan per butir</h2><table><thead><tr><th>Ptk</th><th>No</th><th>Bidang</th><th>Kebutuhan</th><th>Ya</th><th>%</th><th>Kategori</th></tr></thead><tbody>'+A.rank.filter(function(x){return !x.b.s;}).map(function(x,i){return '<tr><td>'+(i+1)+'</td><td>'+x.b.no+'</td><td>'+x.b.b+'</td><td>'+esc(x.b.top)+'</td><td>'+x.ya+'</td><td>'+f1(x.p)+'</td><td>'+KATN[katIdx(x.p)]+'</td></tr>';}).join("")+'</tbody></table>';
+  return h;
+}
+function cetakLaporan(){
+  var A=analisa(aKelas),kel=kelasList();
+  var h=kop("Laporan Analisis AKPD"+(aKelas?" – Kelas "+aKelas:""))+'<p>Responden: '+A.n+' murid'+(aKelas?'':(kel.length?' dari kelas '+esc(kel.join(", ")):''))+'. Butir: '+aktif().length+'. Kategori: sangat tinggi ≥ '+DB.atur.batas[0]+'%, tinggi ≥ '+DB.atur.batas[1]+'%, sedang ≥ '+DB.atur.batas[2]+'%.</p>'+tabelLaporan(A);
+  if(!aKelas&&kel.length>1){var AK={};kel.forEach(function(k){AK[k]=analisa(k);});h+='<h2>3. Tingkat kebutuhan per kelas (%)</h2><table><thead><tr><th>Kelas</th><th>n</th>'+BIDANG.map(function(b){return '<th>'+b+'</th>';}).join("")+'</tr></thead><tbody>'+kel.map(function(k){return '<tr><td>'+esc(k)+'</td><td>'+AK[k].n+'</td>'+BIDANG.map(function(b){return '<td>'+f1(AK[k].bidang[b].p)+'</td>';}).join("")+'</tr>';}).join("")+'</tbody></table>';}
+  h+='<h2>Deskripsi kebutuhan</h2><p style="white-space:pre-wrap">'+esc(narasi(analisa("")))+'</p><p style="font-size:9pt">Laporan agregat tanpa nama murid. Butir perhatian khusus ditindaklanjuti secara individual dan tidak dicantumkan namanya. AKPD bukan alat diagnosis.</p>'+ttd();
+  doPrint(h);
+}
+function cetakProgram(){
+  var D=dataRekom();
+  var h=kop("Lampiran Program BK: Prioritas Layanan Berdasarkan AKPD")+'<p style="white-space:pre-wrap">'+esc(narasi(D.A))+'</p><table><thead><tr><th>#</th><th>Bidang</th><th>Kebutuhan</th><th>%</th><th>Tujuan layanan</th><th>Komponen</th><th>Strategi</th><th>Sasaran</th><th>Waktu</th></tr></thead><tbody>'+
+    D.L.map(function(o,i){var x=o.x,r=o.r;return '<tr><td>'+(i+1)+'</td><td>'+x.b.b+'</td><td>'+esc(x.b.top)+'</td><td>'+(x.b.s?x.ya+' murid':f1(x.p))+'</td><td>'+esc(x.b.tj)+'</td><td>'+r.komp+'</td><td>'+esc(r.strat)+'</td><td>'+esc(x.b.s?"Murid yang memilih":r.sasaran)+'</td><td>'+r.waktu+'</td></tr>';}).join("")+'</tbody></table>'+ttd();
+  doPrint(h);
+}
+function cetakProfil(id){var r=DB.resp.filter(function(x){return x.id===id;})[0];if(!r)return;closeDlg();doPrint(kop("Profil Kebutuhan Murid – RAHASIA")+profilHTML(r)+'<p style="font-size:9pt;margin-top:16px">Dokumen rahasia BK. Simpan di map konseli. Bukan diagnosis.</p>');}
+window.addEventListener("afterprint",function(){document.getElementById("printArea").innerHTML="";});
+
+/* ---------- Mulai ---------- */
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&dlg.open)closeDlg();});
+showLock();
+
+</script>
+</body>
+</html>

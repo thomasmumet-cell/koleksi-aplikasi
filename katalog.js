@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "AKPD – Angket Kebutuhan Peserta Didik",
+    kategori: "Bimbingan Konseling",
+    jenis: "HTML",
+    deskripsi: "Angket kebutuhan murid 48 butir orisinal bidang pribadi, sosial, belajar, karier yang diisi murid bergantian di perangkat guru (keluar dengan PIN) atau disalin dari lembar cetak; analisis otomatis persentase per butir, bidang, dan kelas, peringkat dan kategori kebutuhan, daftar rahasia butir perhatian khusus, serta tabel prioritas layanan dan narasi deskripsi kebutuhan untuk program BK. Data hanya di perangkat, dikunci PIN.",
+    tanggal: "2026-11-19",
+    tautan: "bk-akpd/",
+    status: "aktif"
+  },
+  {
     nama: "Asesmen Diagnostik Kilat",
     kategori: "Pembelajaran",
     jenis: "HTML",
