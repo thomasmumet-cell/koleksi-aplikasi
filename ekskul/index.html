@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pengelola Ekstrakurikuler</title>
+<meta name="description" content="Kelola ekstrakurikuler SMP: data ekskul, pembina, anggota, jadwal, presensi latihan, prestasi, nilai dan deskripsi rapor, serta rekap per ekskul. Data hanya tersimpan di perangkat.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1e6;--panel:#fffdf8;--panel2:#f9f5ea;--ink:#1d2722;--muted:#56625b;--line:#e2d9c4;
+  --brand:#1d5c4a;--brand2:#2a7a62;--brand-ink:#ffffff;--accent:#c97a12;--accent-soft:#fbeacd;
+  --ok:#2b7a3d;--ok-soft:#e1f2e4;--warn:#9a4a07;--warn-soft:#fdebd6;--bad:#b42318;--bad-soft:#fde4e1;
+  --chip:#e9f0eb;--shadow:0 1px 2px rgba(30,40,30,.06),0 6px 18px rgba(30,40,30,.06);
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111713;--panel:#18201b;--panel2:#1d2620;--ink:#e7ede9;--muted:#a1aea6;--line:#2c3832;
+    --brand:#6cc9a5;--brand2:#8fd8bb;--brand-ink:#0c1a14;--accent:#f0b65a;--accent-soft:#3a2c14;
+    --ok:#7fd396;--ok-soft:#1b3323;--warn:#f3b46e;--warn-soft:#3b2814;--bad:#ff9a8f;--bad-soft:#3d1c19;
+    --chip:#22302a;--shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111713;--panel:#18201b;--panel2:#1d2620;--ink:#e7ede9;--muted:#a1aea6;--line:#2c3832;
+  --brand:#6cc9a5;--brand2:#8fd8bb;--brand-ink:#0c1a14;--accent:#f0b65a;--accent-soft:#3a2c14;
+  --ok:#7fd396;--ok-soft:#1b3323;--warn:#f3b46e;--warn-soft:#3b2814;--bad:#ff9a8f;--bad-soft:#3d1c19;
+  --chip:#22302a;--shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 "Plus Jakarta Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","Plus Jakarta Sans",sans-serif;line-height:1.2;margin:0}
+a{color:var(--brand)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.top{background:var(--brand);color:var(--brand-ink);position:relative;overflow:hidden}
+header.top::after{content:"";position:absolute;inset:auto -40px -60px auto;width:260px;height:260px;border-radius:50%;border:28px solid rgba(255,255,255,.08)}
+.top .wrap{display:flex;align-items:center;gap:14px;padding-top:16px;padding-bottom:14px;position:relative;z-index:1}
+.emblem{width:46px;height:46px;flex:none;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:#241500}
+.top h1{font-size:clamp(20px,3.2vw,28px);font-weight:800;letter-spacing:-.01em}
+.top .sub{opacity:.85;font-size:13px}
+.top .tools{margin-left:auto;display:flex;gap:8px}
+.iconbtn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);color:inherit;border-radius:10px;padding:8px 10px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.iconbtn:hover{background:rgba(255,255,255,.24)}
+nav.tabs{background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:thin}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:12px 12px 9px;cursor:pointer;white-space:nowrap;color:var(--muted);font-weight:600;font-size:14px}
+nav.tabs button[aria-current="page"]{color:var(--brand);border-bottom-color:var(--accent)}
+nav.tabs button:hover{color:var(--ink)}
+main{padding:20px 0 60px}
+.secret{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);border-radius:var(--r);padding:10px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px}
+.secret b{color:var(--warn)}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.head h2{font-size:24px;font-weight:800}
+.head p{margin:4px 0 0;color:var(--muted);font-size:14px;max-width:720px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:"Bricolage Grotesque",sans-serif;font-size:30px;font-weight:800;color:var(--brand);line-height:1.1}
+.stat span{color:var(--muted);font-size:13px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:8px 13px;cursor:pointer;font-weight:600;font-size:14px;color:var(--ink);text-decoration:none}
+.btn:hover{border-color:var(--brand2)}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.acc{background:var(--accent);border-color:var(--accent);color:#231400}
+.btn.dang{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
+.btn.sm{padding:5px 9px;font-size:13px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sp{flex:1}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+input[type=text],input[type=number],input[type=date],input[type=time],input[type=password],input[type=search],select,textarea{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-width:0;width:100%;color:var(--ink)}
+textarea{resize:vertical;min-height:70px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--chip);color:var(--ink);white-space:nowrap}
+.tag.contoh{background:var(--accent-soft);color:var(--warn);text-transform:lowercase}
+.tag.wajib{background:var(--brand);color:var(--brand-ink)}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.bad{background:var(--bad-soft);color:var(--bad)}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th,.tbl td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;background:var(--panel2);position:sticky;top:0}
+.tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+.ekcard{border-top:5px solid var(--c,var(--brand));display:flex;flex-direction:column;gap:8px}
+.ekcard h3{font-size:19px}
+.ekcard .meta{font-size:13px;color:var(--muted)}
+.ekcard .acts{margin-top:auto;display:flex;gap:6px;flex-wrap:wrap}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--c);display:inline-block;flex:none}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:minmax(90px,150px) 1fr 52px;gap:8px;align-items:center;font-size:13px}
+.bar .tr{height:14px;background:var(--chip);border-radius:6px;overflow:hidden}
+.bar .fl{height:100%;background:var(--c,var(--brand2));border-radius:6px}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.stack{display:flex;height:14px;border-radius:6px;overflow:hidden;background:var(--chip)}
+.stack span{display:block;height:100%}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:var(--panel);padding:6px 10px;cursor:pointer;font-weight:700;font-size:13px;min-width:34px;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"][data-v="H"]{background:var(--ok);color:#fff}
+.seg button[aria-pressed="true"][data-v="I"]{background:#3b6fb6;color:#fff}
+.seg button[aria-pressed="true"][data-v="S"]{background:#7a5bb0;color:#fff}
+.seg button[aria-pressed="true"][data-v="A"]{background:var(--bad);color:#fff}
+.week{display:grid;grid-template-columns:repeat(6,minmax(150px,1fr));gap:10px;overflow-x:auto}
+.day{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;min-height:150px}
+.day h3{font-size:15px;margin-bottom:8px}
+.slot{border-left:4px solid var(--c);background:var(--panel2);border-radius:8px;padding:7px 9px;margin-bottom:7px;font-size:13px}
+.slot b{display:block;font-size:14px}
+.alert{border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:8px;border:1px solid}
+.alert.warn{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.alert.bad{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+.alert.ok{background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 30%,transparent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.empty{padding:26px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+dialog{border:1px solid var(--line);border-radius:16px;padding:0;background:var(--panel);color:var(--ink);width:min(720px,calc(100vw - 24px));max-height:calc(100vh - 40px)}
+dialog::backdrop{background:rgba(10,20,15,.45)}
+dialog .dh{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel);z-index:2}
+dialog .dh h2{font-size:19px}
+dialog .db{padding:16px;display:flex;flex-direction:column;gap:12px}
+dialog .df{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:var(--panel)}
+.memlist{max-height:46vh;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.memlist label{display:flex;gap:8px;align-items:center;padding:7px 10px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer}
+.memlist label:last-child{border-bottom:0}
+.memlist select{width:auto;padding:3px 6px;margin-left:auto;font-size:13px}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:100;max-width:calc(100vw - 32px)}
+#toast.on{opacity:1}
+.src li{margin-bottom:10px}
+.kbd{font-family:ui-monospace,monospace;font-size:12px;background:var(--chip);padding:1px 5px;border-radius:5px}
+.pred-SB{color:var(--ok);font-weight:700}.pred-B{color:var(--brand);font-weight:700}.pred-C{color:var(--warn);font-weight:700}.pred-K{color:var(--bad);font-weight:700}
+td textarea{min-height:92px;font-size:13px}
+td select{width:auto;padding:5px 6px}
+#printArea{display:none}
+@media (max-width:640px){
+  .top .tools .lbl{display:none}
+  .bar{grid-template-columns:96px 1fr 44px}
+  .head h2{font-size:21px}
+  .tbl{font-size:13px}
+}
+@media print{
+  body{background:#fff;color:#000;font-size:12px}
+  header.top,nav.tabs,.secret,.noprint,#toast{display:none!important}
+  body.printing main{display:none}
+  body.printing #printArea{display:block}
+  #printArea h1{font-size:18px;margin:4px 0 10px}
+  #printArea .tbl th{background:#eee;color:#000}
+  #printArea .tbl th,#printArea .tbl td{border:1px solid #999;padding:4px 6px}
+  .card,.stat{box-shadow:none;border-color:#bbb}
+  .ttd{display:flex;justify-content:flex-end;margin-top:40px}
+  .ttd div{text-align:center;min-width:220px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="emblem" aria-hidden="true">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h11l-2 3.5L16 11H5"/><path d="M3 21h10"/><circle cx="18" cy="17" r="3"/></svg>
+    </div>
+    <div>
+      <h1>Pengelola Ekstrakurikuler</h1>
+      <div class="sub" id="subTitle">—</div>
+    </div>
+    <div class="tools">
+      <button class="iconbtn" id="btnTema" type="button" aria-label="Ganti tema terang/gelap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span class="lbl">Tema</span>
+      </button>
+    </div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Menu utama"><div class="wrap" id="tabs"></div></nav>
+<main class="wrap" id="view" tabindex="-1"></main>
+<div id="printArea"></div>
+<dialog id="dlg" aria-labelledby="dlgTitle"><form id="dlgForm" method="dialog"></form></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* ============ Konstanta ============ */
+var KEY="ekskul_pengelola_v1", KEY_AI="ekskul_gemini_key", KEY_TEMA="ekskul_tema";
+var HARI=["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"];
+var BENTUK=["Krida","Karya Ilmiah","Olah Bakat/Minat","Keagamaan","Lainnya"];
+var TINGKAT=["Sekolah","Kecamatan","Kabupaten/Kota","Provinsi","Nasional","Internasional"];
+var PERAN=["Anggota","Ketua","Wakil Ketua","Sekretaris","Bendahara"];
+var STAT={H:"Hadir",I:"Izin",S:"Sakit",A:"Alpa"};
+var WARNA=["#1d7a5c","#c2410c","#2563eb","#9333ea","#b45309","#0e7490","#be185d","#4d7c0f"];
+var PRED=[["SB","Sangat Baik"],["B","Baik"],["C","Cukup"],["K","Kurang"]];
+var TABS=[["beranda","Beranda"],["ekskul","Ekskul"],["siswa","Siswa"],["presensi","Presensi"],["jadwal","Jadwal"],["prestasi","Prestasi"],["nilai","Nilai Rapor"],["rekap","Rekap"],["pengaturan","Pengaturan"],["sumber","Dasar & Sumber"]];
+
+/* ============ Utilitas ============ */
+function $(s,el){return (el||document).querySelector(s);}
+function $$(s,el){return Array.prototype.slice.call((el||document).querySelectorAll(s));}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function pad(n){return (n<10?"0":"")+n;}
+function iso(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());}
+function today(){return iso(new Date());}
+function hariIdx(isoStr){var g=new Date(isoStr+"T00:00:00").getDay();return (g+6)%7;}
+var BLN=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+function tgl(s){if(!s)return "—";var p=s.split("-");return parseInt(p[2],10)+" "+BLN[parseInt(p[1],10)-1]+" "+p[0];}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove("on");},2600);}
+function lc1(s){return s?s.charAt(0).toLowerCase()+s.slice(1):s;}
+function namaDepan(n){return String(n||"").trim().split(/\s+/)[0]||"";}
+function byNama(a,b){return a.nama.localeCompare(b.nama,"id");}
+function kelasSort(a,b){return String(a).localeCompare(String(b),"id",{numeric:true});}
+
+/* ============ Penyimpanan ============ */
+var S;
+function defaultP(){return {sekolah:"SMP Negeri Contoh",ta:"2026/2027",semester:"Ganjil",kota:"",bobot:30,sb:88,b:75,c:60,ambang:75,model:"gemini-2.5-flash"};}
+function load(){
+  try{var r=localStorage.getItem(KEY);if(r){S=JSON.parse(r);migrate();return;}}catch(e){}
+  S=dataContoh();save(true);
+}
+function migrate(){
+  var d=defaultP();S.p=S.p||{};for(var k in d)if(S.p[k]==null)S.p[k]=d[k];
+  ["siswa","ekskul","presensi","prestasi"].forEach(function(k){if(!Array.isArray(S[k]))S[k]=[];});
+  if(!S.nilai||typeof S.nilai!=="object")S.nilai={};
+  S.ekskul.forEach(function(e){e.anggota=e.anggota||[];e.jadwal=e.jadwal||[];e.indikator=e.indikator||["Kedisiplinan","Keterampilan","Kerja sama"];});
+}
+function save(silent){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){if(!silent)toast("Gagal menyimpan di perangkat ini (penyimpanan browser tidak tersedia).");}}
+function getKey(){try{return localStorage.getItem(KEY_AI)||"";}catch(e){return "";}}
+function setKey(v){try{if(v)localStorage.setItem(KEY_AI,v);else localStorage.removeItem(KEY_AI);}catch(e){}}
+
+/* ============ Data contoh (fiktif) ============ */
+function dataContoh(){
+  var r=rng(20261121);
+  var nm=["Adit Pradana","Bunga Larasati","Cahya Nugraha","Dimas Saputra","Elsa Wulandari","Fajar Kusuma","Gita Rahmawati","Hanif Ramadhan","Intan Permatasari","Joko Santoso","Kirana Putri","Lutfi Hakim","Maya Anggraini","Naufal Rizki","Oktavia Sari","Panji Wicaksono","Qonita Azzahra","Rafi Firmansyah","Salsa Nabila","Teguh Prasetyo","Umi Kalsum","Vino Ardiansyah","Wulan Dewi","Yoga Pamungkas","Zahra Kamila","Bagas Setiawan","Citra Ayu","Dewa Mahendra","Eka Puspita","Galih Wibowo"];
+  var kls=["7A","7B","8A","8B","9A","9C"];
+  var siswa=nm.map(function(n,i){return {id:"s"+(i+1),nama:n,kelas:kls[Math.floor(i/5)],jk:(i%2?"P":"L"),contoh:true};});
+  function E(id,nama,jenis,bentuk,pembina,pelatih,jadwal,kuota,warna,ind,tujuan){return {id:id,nama:nama,jenis:jenis,bentuk:bentuk,pembina:pembina,pelatih:pelatih,jadwal:jadwal,kuota:kuota,warna:warna,indikator:ind,tujuan:tujuan,anggota:[],contoh:true};}
+  var ek=[
+    E("e1","Pramuka","wajib","Krida","Kak Wahyu Hidayat (contoh)","","[{\"hari\":4,\"mulai\":\"14:00\",\"selesai\":\"16:00\",\"tempat\":\"Lapangan utama\"}]",40,WARNA[0],["Kedisiplinan dan tanggung jawab","Keterampilan kepramukaan (tali-temali, sandi, P3K)","Kerja sama regu dan kepemimpinan"],"Membentuk karakter disiplin, mandiri, peduli, dan cinta tanah air melalui kegiatan kepanduan."),
+    E("e2","Palang Merah Remaja","pilihan","Krida","Bu Rina Astuti (contoh)","Relawan PMI (contoh)","[{\"hari\":1,\"mulai\":\"14:00\",\"selesai\":\"15:30\",\"tempat\":\"Ruang UKS\"}]",20,WARNA[1],["Kedisiplinan","Keterampilan pertolongan pertama","Kepedulian dan kerja sama"],"Menumbuhkan kepedulian dan keterampilan pertolongan pertama."),
+    E("e3","Karya Ilmiah Remaja","pilihan","Karya Ilmiah","Pak Andri Setiadi (contoh)","","[{\"hari\":2,\"mulai\":\"14:00\",\"selesai\":\"15:30\",\"tempat\":\"Lab IPA\"}]",15,WARNA[2],["Rasa ingin tahu dan ketekunan","Keterampilan meneliti dan menulis laporan","Kerja sama dan presentasi"],"Melatih berpikir ilmiah, meneliti sederhana, dan menyajikan hasil."),
+    E("e4","Futsal","pilihan","Olah Bakat/Minat","Pak Bayu Nugroho (contoh)","Pelatih klub (contoh)","[{\"hari\":1,\"mulai\":\"15:00\",\"selesai\":\"16:30\",\"tempat\":\"Lapangan utama\"}]",20,WARNA[3],["Disiplin dan sportivitas","Teknik dasar dan taktik","Kerja sama tim"],"Mengembangkan bakat olahraga, sportivitas, dan kebugaran."),
+    E("e5","Karawitan","pilihan","Olah Bakat/Minat","Bu Sri Handayani (contoh)","Pengrawit tamu (contoh)","[{\"hari\":3,\"mulai\":\"14:00\",\"selesai\":\"15:30\",\"tempat\":\"Pendapa sekolah\"}]",20,WARNA[4],["Disiplin dan ketekunan berlatih","Keterampilan menabuh gamelan","Kekompakan dan rasa menghargai budaya"],"Melestarikan seni budaya Jawa dan melatih kekompakan."),
+    E("e6","Baca Tulis Al-Qur'an","pilihan","Keagamaan","Pak Hasan Basri (contoh)","","[{\"hari\":2,\"mulai\":\"14:00\",\"selesai\":\"15:00\",\"tempat\":\"Masjid sekolah\"}]",25,WARNA[5],["Kedisiplinan dan adab","Kelancaran membaca dan menulis","Keaktifan dan kerja sama"],"Meningkatkan kemampuan baca tulis Al-Qur'an dan akhlak."),
+    E("e7","Jurnalistik","pilihan","Olah Bakat/Minat","Bu Laila Fitri (contoh)","","[{\"hari\":5,\"mulai\":\"08:00\",\"selesai\":\"10:00\",\"tempat\":\"Lab Komputer\"}]",15,WARNA[6],["Disiplin dan tanggung jawab","Keterampilan menulis dan liputan","Kerja sama redaksi"],"Melatih literasi, menulis berita, dan mengelola media sekolah.")
+  ];
+  ek.forEach(function(e){e.jadwal=JSON.parse(e.jadwal);});
+  // Anggota
+  siswa.forEach(function(s,i){if(i<28)ek[0].anggota.push({s:s.id,p:i===0?"Ketua":(i===1?"Sekretaris":"Anggota")});});
+  var pilih={e2:[1,4,6,8,10,13,15,20,24],e3:[2,6,9,12,16,19,26],e4:[0,3,5,7,9,11,15,17,21,23,27],e5:[4,8,12,14,18,22,24,28],e6:[1,9,12,16,20,25,29],e7:[2,10,14,18,26]};
+  ek.forEach(function(e){if(pilih[e.id])pilih[e.id].forEach(function(ix,j){e.anggota.push({s:siswa[ix].id,p:j===0?"Ketua":"Anggota"});});});
+  // Presensi: pertemuan mingguan Sep–Nov 2026
+  var materi={e1:["Upacara pembukaan latihan","Tali-temali dasar","Sandi morse & semaphore","Pionering sederhana","P3K dasar","Penjelajahan","Persiapan perkemahan"],
+    e2:["Pengenalan PMR","Pembalutan","Pembidaian","Evakuasi korban","Simulasi P3K","Donor darah (edukasi)","Kesehatan remaja"],
+    e3:["Merumuskan masalah","Studi pustaka","Merancang percobaan","Pengambilan data","Analisis data","Menulis laporan","Latihan presentasi"],
+    e4:["Passing & kontrol","Dribbling","Shooting","Taktik bertahan","Taktik menyerang","Uji tanding","Evaluasi permainan"],
+    e5:["Pengenalan gamelan","Balungan dasar","Gending Lancaran","Bonang & saron","Latihan kendhang","Gladi bersih","Pentas kelas"],
+    e6:["Makharijul huruf","Tajwid: nun mati","Tajwid: mim mati","Menulis huruf sambung","Tilawah bersama","Hafalan surat pendek","Evaluasi bacaan"],
+    e7:["Unsur berita 5W+1H","Teknik wawancara","Menulis berita","Fotografi jurnalistik","Menyunting naskah","Rapat redaksi","Terbit mading digital"]};
+  var pres=[];
+  ek.forEach(function(e){
+    var h=e.jadwal[0].hari, d=new Date(2026,8,28), n=0;
+    while((d.getDay()+6)%7!==h)d.setDate(d.getDate()+1);
+    while(n<7&&iso(d)<"2026-11-21"){
+      var rec={id:uid()+n,ekskul:e.id,tanggal:iso(d),materi:materi[e.id][n],catatan:"",hadir:{},contoh:true};
+      e.anggota.forEach(function(a){var x=r();var lemah=(a.s==="s4"||a.s==="s20");var v=lemah?(x<.55?"H":x<.7?"S":x<.8?"I":"A"):(x<.93?"H":x<.96?"I":x<.98?"S":"A");rec.hadir[a.s]=v;});
+      pres.push(rec);n++;d.setDate(d.getDate()+7);
+    }
+  });
+  var prestasi=[
+    {id:"p1",ekskul:"e5",tanggal:"2026-09-20",lomba:"Festival Karawitan Pelajar (contoh)",tingkat:"Kabupaten/Kota",peringkat:"Juara 1",penyelenggara:"Panitia festival (contoh)",siswa:["s5","s9","s13","s15","s19"],contoh:true},
+    {id:"p2",ekskul:"e4",tanggal:"2026-10-18",lomba:"Turnamen Futsal Pelajar (contoh)",tingkat:"Kabupaten/Kota",peringkat:"Juara 2",penyelenggara:"Panitia turnamen (contoh)",siswa:["s1","s6","s8","s10","s12"],contoh:true},
+    {id:"p3",ekskul:"e3",tanggal:"2026-11-08",lomba:"Lomba Karya Ilmiah Remaja (contoh)",tingkat:"Provinsi",peringkat:"Finalis",penyelenggara:"Panitia lomba (contoh)",siswa:["s3","s7"],contoh:true},
+    {id:"p4",ekskul:"e1",tanggal:"2026-08-30",lomba:"Lomba Tingkat Penggalang (contoh)",tingkat:"Kecamatan",peringkat:"Juara 3",penyelenggara:"Kwartir ranting (contoh)",siswa:["s1","s2","s11","s16","s21","s26"],contoh:true}
+  ];
+  var st={v:1,p:defaultP(),siswa:siswa,ekskul:ek,presensi:pres,prestasi:prestasi,nilai:{}};
+  // Nilai contoh untuk Pramuka & Futsal
+  ["e1","e4"].forEach(function(eid){
+    var e=ek.filter(function(x){return x.id===eid;})[0],key=eid+"|"+st.p.ta+"|"+st.p.semester;st.nilai[key]={};
+    e.anggota.forEach(function(a){st.nilai[key][a.s]={i:[2+Math.floor(r()*3),2+Math.floor(r()*3),2+Math.floor(r()*3)],d:"",m:false};});
+  });
+  return st;
+}
+function adaContoh(){return S.siswa.some(function(x){return x.contoh;})||S.ekskul.some(function(x){return x.contoh;})||S.prestasi.some(function(x){return x.contoh;})||S.presensi.some(function(x){return x.contoh;});}
+function hapusContoh(){
+  var es=S.ekskul.filter(function(e){return e.contoh;}).map(function(e){return e.id;});
+  var ss=S.siswa.filter(function(s){return s.contoh;}).map(function(s){return s.id;});
+  S.ekskul=S.ekskul.filter(function(e){return !e.contoh;});
+  S.siswa=S.siswa.filter(function(s){return !s.contoh;});
+  S.presensi=S.presensi.filter(function(p){return !p.contoh&&es.indexOf(p.ekskul)<0;});
+  S.prestasi=S.prestasi.filter(function(p){return !p.contoh&&es.indexOf(p.ekskul)<0;});
+  Object.keys(S.nilai).forEach(function(k){if(es.indexOf(k.split("|")[0])>=0)delete S.nilai[k];});
+  ss.forEach(hapusJejakSiswa);
+  save();toast("Data contoh dihapus. Silakan isi data sekolah Anda.");render();
+}
+
+/* ============ Helper domain ============ */
+function ek(id){for(var i=0;i<S.ekskul.length;i++)if(S.ekskul[i].id===id)return S.ekskul[i];return null;}
+function sw(id){for(var i=0;i<S.siswa.length;i++)if(S.siswa[i].id===id)return S.siswa[i];return null;}
+function isAnggota(e,sid){return e.anggota.some(function(a){return a.s===sid;});}
+function ekskulSiswa(sid){return S.ekskul.filter(function(e){return isAnggota(e,sid);});}
+function anggotaList(e){return e.anggota.map(function(a){var s=sw(a.s);return s?{s:s,p:a.p}:null;}).filter(Boolean).sort(function(x,y){return kelasSort(x.s.kelas,y.s.kelas)||x.s.nama.localeCompare(y.s.nama,"id");});}
+function daftarKelas(){var k=[];S.siswa.forEach(function(s){if(s.kelas&&k.indexOf(s.kelas)<0)k.push(s.kelas);});return k.sort(kelasSort);}
+function rentang(){var y=parseInt(S.p.ta,10)||new Date().getFullYear();return S.p.semester==="Genap"?[(y+1)+"-01-01",(y+1)+"-06-30"]:[y+"-07-01",y+"-12-31"];}
+function rentangTA(){var y=parseInt(S.p.ta,10)||new Date().getFullYear();return [y+"-07-01",(y+1)+"-06-30"];}
+function presSem(eid){var r=rentang();return S.presensi.filter(function(p){return p.ekskul===eid&&p.tanggal>=r[0]&&p.tanggal<=r[1];}).sort(function(a,b){return a.tanggal<b.tanggal?-1:1;});}
+function hadirStat(eid,sid){var o={H:0,I:0,S:0,A:0,n:0};presSem(eid).forEach(function(p){var v=p.hadir[sid];if(v){o[v]++;o.n++;}});o.pct=o.n?Math.round(o.H/o.n*100):null;return o;}
+function hadirEkskul(eid){var h=0,n=0;presSem(eid).forEach(function(p){for(var k in p.hadir){n++;if(p.hadir[k]==="H")h++;}});return n?Math.round(h/n*100):null;}
+function jam(e){return e.jadwal.map(function(j){return HARI[j.hari]+" "+j.mulai+"–"+j.selesai+(j.tempat?" · "+j.tempat:"");}).join("; ")||"Belum terjadwal";}
+function nk(eid){return eid+"|"+S.p.ta+"|"+S.p.semester;}
+function nilaiRec(eid,sid,buat){var k=nk(eid);if(!S.nilai[k]){if(!buat)return null;S.nilai[k]={};}if(!S.nilai[k][sid]){if(!buat)return null;S.nilai[k][sid]={i:[0,0,0],d:"",m:false};}return S.nilai[k][sid];}
+function hitung(eid,sid){
+  var rec=nilaiRec(eid,sid,false),hs=hadirStat(eid,sid);
+  var vals=rec?rec.i.filter(function(v){return v>0;}):[];
+  if(!vals.length)return {nilai:null,pred:null,hadir:hs};
+  var ind=vals.reduce(function(a,b){return a+b;},0)/vals.length/4*100;
+  var w=Math.max(0,Math.min(100,+S.p.bobot||0))/100;
+  var n=Math.round(hs.pct==null?ind:(1-w)*ind+w*hs.pct);
+  var pr=n>=S.p.sb?"Sangat Baik":n>=S.p.b?"Baik":n>=S.p.c?"Cukup":"Kurang";
+  return {nilai:n,pred:pr,hadir:hs};
+}
+function predKode(p){return p==="Sangat Baik"?"SB":p==="Baik"?"B":p==="Cukup"?"C":"K";}
+var FRASA={"Sangat Baik":"menunjukkan capaian sangat baik","Baik":"menunjukkan capaian baik","Cukup":"menunjukkan capaian cukup","Kurang":"masih memerlukan pendampingan"};
+function susunDesk(e,s){
+  var h=hitung(e.id,s.id),rec=nilaiRec(e.id,s.id,false);if(!h.pred||!rec)return "";
+  var kuat=[],lemah=[];e.indikator.forEach(function(lb,i){var v=rec.i[i];if(v>=4)kuat.push(lc1(lb));else if(v>0&&v<=2)lemah.push(lc1(lb));});
+  var t="Ananda "+namaDepan(s.nama)+" "+FRASA[h.pred]+" dalam kegiatan "+e.nama;
+  if(kuat.length)t+=", menonjol dalam "+kuat.join(" dan ");
+  t+=".";
+  if(lemah.length)t+=" Perlu meningkatkan "+lemah.join(" dan ")+".";
+  else if(!kuat.length){var mi=0;rec.i.forEach(function(v,i){if(v>0&&(rec.i[mi]===0||v<rec.i[mi]))mi=i;});t+=" Terus kembangkan "+lc1(e.indikator[mi])+".";}
+  if(h.hadir.pct!=null&&h.hadir.pct<S.p.ambang)t+=" Kehadiran latihan perlu ditingkatkan.";
+  return t;
+}
+function deskAkhir(e,s){var rec=nilaiRec(e.id,s.id,false);if(rec&&rec.m&&rec.d)return rec.d;return susunDesk(e,s);}
+function overlap(a,b){return a.hari===b.hari&&a.mulai<b.selesai&&b.mulai<a.selesai;}
+function cekBentrok(){
+  var out=[],E=S.ekskul;
+  for(var i=0;i<E.length;i++)for(var j=i+1;j<E.length;j++){
+    E[i].jadwal.forEach(function(a){E[j].jadwal.forEach(function(b){
+      if(!overlap(a,b))return;
+      if(a.tempat&&b.tempat&&a.tempat.trim().toLowerCase()===b.tempat.trim().toLowerCase())out.push({t:"tempat",hari:a.hari,a:E[i],b:E[j],d:a.tempat});
+      var sama=E[i].anggota.filter(function(x){return isAnggota(E[j],x.s);}).map(function(x){var s=sw(x.s);return s?s.nama:"";}).filter(Boolean);
+      if(sama.length)out.push({t:"siswa",hari:a.hari,a:E[i],b:E[j],d:sama});
+    });});
+  }
+  return out;
+}
+function hapusJejakSiswa(sid){
+  S.ekskul.forEach(function(e){e.anggota=e.anggota.filter(function(a){return a.s!==sid;});});
+  S.presensi.forEach(function(p){delete p.hadir[sid];});
+  S.prestasi.forEach(function(p){p.siswa=(p.siswa||[]).filter(function(x){return x!==sid;});});
+  Object.keys(S.nilai).forEach(function(k){delete S.nilai[k][sid];});
+}
+
+/* ============ Ekspor ============ */
+function unduh(nama,isi,tipe){var b=new Blob([isi],{type:tipe});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=nama;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},400);}
+function csv(nama,rows){var t=rows.map(function(r){return r.map(function(c){c=String(c==null?"":c);return /[;"\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(";");}).join("\r\n");unduh(nama,"﻿"+t,"text/csv;charset=utf-8");toast("Berkas "+nama+" diunduh (CSV, pemisah titik koma).");}
+function fileSafe(s){return String(s).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+function cetak(judul,html){
+  var pa=$("#printArea");
+  pa.innerHTML='<div><b>'+esc(S.p.sekolah)+'</b> · Tahun Ajaran '+esc(S.p.ta)+' · Semester '+esc(S.p.semester)+'</div><h1>'+esc(judul)+'</h1>'+html+'<p class="small" style="margin-top:14px">Dicetak '+tgl(today())+' dari aplikasi Pengelola Ekstrakurikuler.</p>';
+  document.body.classList.add("printing");
+  setTimeout(function(){window.print();},60);
+}
+window.addEventListener("afterprint",function(){document.body.classList.remove("printing");});
+function ttd(jab,nama){return '<div class="ttd"><div>'+(S.p.kota?esc(S.p.kota)+", ":"")+tgl(today())+'<br>'+esc(jab)+'<br><br><br><br>'+(nama?'<b>'+esc(nama)+'</b>':'.................................')+'</div></div>';}
+
+/* ============ UI dasar ============ */
+var tab="beranda",ui={fKelas:"",fCari:"",pEk:"",pTgl:today(),draft:null,nEk:"",prEk:"",prTk:""};
+function renderTabs(){$("#tabs").innerHTML=TABS.map(function(t){return '<button type="button" data-act="tab" data-t="'+t[0]+'"'+(tab===t[0]?' aria-current="page"':'')+'>'+t[1]+'</button>';}).join("");}
+function secretNote(){
+  var s='<div class="secret noprint"><span><b>Data pribadi murid.</b> Semua data hanya disimpan di browser perangkat ini dan tidak dikirim ke server mana pun. Buat cadangan berkala lewat Pengaturan.</span>';
+  if(adaContoh())s+='<span style="flex-basis:100%;height:0"></span><span><span class="tag contoh">contoh</span> Sebagian data adalah contoh fiktif (nama murid dan pembina rekaan).</span><button class="btn sm acc" type="button" data-act="hapusContoh">Hapus data contoh</button>';
+  return s+'</div>';
+}
+function render(){
+  renderTabs();
+  $("#subTitle").textContent=(S.p.sekolah||"Sekolah")+" · TA "+S.p.ta+" · Semester "+S.p.semester;
+  var v=VIEWS[tab]||VIEWS.beranda;
+  $("#view").innerHTML=secretNote()+v();
+}
+function head(t,p,act){return '<div class="head"><div><h2>'+t+'</h2>'+(p?'<p>'+p+'</p>':'')+'</div>'+(act?'<div class="row noprint">'+act+'</div>':'')+'</div>';}
+function bars(items,max,suf){
+  if(!items.length)return '<div class="empty">Belum ada data.</div>';
+  max=max||Math.max.apply(null,items.map(function(i){return i.v;}))||1;
+  return '<div class="bars">'+items.map(function(i){var w=Math.max(0,Math.min(100,i.v/max*100));return '<div class="bar" style="--c:'+(i.c||"var(--brand2)")+'"><span title="'+esc(i.l)+'" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(i.l)+'</span><div class="tr" role="img" aria-label="'+esc(i.l)+': '+i.v+(suf||"")+'"><div class="fl" style="width:'+w+'%"></div></div><span class="v">'+i.v+(suf||"")+'</span></div>';}).join("")+'</div>';
+}
+function predColor(k){return {SB:"var(--ok)",B:"var(--brand2)",C:"var(--accent)",K:"var(--bad)"}[k];}
+function ekOptions(sel,semua){return (semua?'<option value="">'+semua+'</option>':'')+S.ekskul.slice().sort(byNama).map(function(e){return '<option value="'+e.id+'"'+(sel===e.id?" selected":"")+'>'+esc(e.nama)+'</option>';}).join("");}
+
+/* ============ Tampilan ============ */
+var VIEWS={};
+VIEWS.beranda=function(){
+  var sis=S.siswa,E=S.ekskul;
+  var ikut=sis.filter(function(s){return ekskulSiswa(s.id).length>0;}).length;
+  var wajib=E.filter(function(e){return e.jenis==="wajib";});
+  var belum=wajib.length?sis.filter(function(s){return !wajib.some(function(e){return isAnggota(e,s.id);});}):[];
+  var h=0,n=0;E.forEach(function(e){presSem(e.id).forEach(function(p){for(var k in p.hadir){n++;if(p.hadir[k]==="H")h++;}});});
+  var rTA=rentangTA(),pr=S.prestasi.filter(function(p){return p.tanggal>=rTA[0]&&p.tanggal<=rTA[1];});
+  var rendah=[];E.forEach(function(e){e.anggota.forEach(function(a){var st=hadirStat(e.id,a.s),s=sw(a.s);if(s&&st.n>=3&&st.pct<S.p.ambang)rendah.push({s:s,e:e,pct:st.pct});});});
+  rendah.sort(function(a,b){return a.pct-b.pct;});
+  var bt=cekBentrok(),lebih=E.filter(function(e){return e.kuota&&e.anggota.length>e.kuota;});
+  var hi=hariIdx(today()),hariIni=[];E.forEach(function(e){e.jadwal.forEach(function(j){if(j.hari===hi)hariIni.push({e:e,j:j});});});
+  hariIni.sort(function(a,b){return a.j.mulai<b.j.mulai?-1:1;});
+  var x=head("Beranda","Ringkasan ekstrakurikuler semester berjalan: keikutsertaan, kehadiran latihan, prestasi, dan hal yang perlu ditindaklanjuti.",'<button class="btn pri" type="button" data-act="tab" data-t="presensi">+ Isi presensi</button>');
+  x+='<div class="stats">'+
+   '<div class="stat"><b>'+E.length+'</b><span>ekstrakurikuler ('+wajib.length+' wajib)</span></div>'+
+   '<div class="stat"><b>'+sis.length+'</b><span>murid terdata</span></div>'+
+   '<div class="stat"><b>'+(sis.length?Math.round(ikut/sis.length*100):0)+'%</b><span>murid ikut ≥1 ekskul</span></div>'+
+   '<div class="stat"><b>'+(n?Math.round(h/n*100)+"%":"—")+'</b><span>rata-rata kehadiran latihan</span></div>'+
+   '<div class="stat"><b>'+pr.length+'</b><span>prestasi TA '+esc(S.p.ta)+'</span></div></div>';
+  x+='<div class="grid g2"><div class="card"><h3 style="margin-bottom:10px">Perlu ditindaklanjuti</h3>';
+  var ada=false;
+  if(!wajib.length){ada=true;x+='<div class="alert warn">Belum ada ekskul bertanda <b>wajib</b>. Menurut Permendikdasmen 13/2025, kepanduan (Pramuka atau kepanduan lain) wajib disediakan sekolah dan diikuti murid. <button class="btn sm" type="button" data-act="ekBaru">Tambah ekskul</button></div>';}
+  else if(belum.length){ada=true;x+='<div class="alert bad"><b>'+belum.length+' murid</b> belum terdaftar di ekskul wajib ('+esc(wajib.map(function(e){return e.nama;}).join(", "))+'):<div class="chips" style="margin-top:6px">'+belum.slice(0,14).map(function(s){return '<span class="tag">'+esc(s.nama)+' · '+esc(s.kelas)+'</span>';}).join("")+(belum.length>14?'<span class="tag">+'+(belum.length-14)+' lagi</span>':'')+'</div></div>';}
+  if(rendah.length){ada=true;x+='<div class="alert warn"><b>'+rendah.length+' keanggotaan</b> dengan kehadiran di bawah '+S.p.ambang+'%:<ul style="margin:6px 0 0;padding-left:18px">'+rendah.slice(0,6).map(function(r){return '<li>'+esc(r.s.nama)+' ('+esc(r.s.kelas)+') — '+esc(r.e.nama)+': <b>'+r.pct+'%</b></li>';}).join("")+'</ul>'+(rendah.length>6?'<span class="small muted">dan '+(rendah.length-6)+' lainnya — lihat menu Presensi.</span>':'')+'</div>';}
+  if(bt.length){ada=true;x+='<div class="alert warn"><b>'+bt.length+' bentrok jadwal</b> (tempat atau murid yang sama di jam yang sama). <button class="btn sm" type="button" data-act="tab" data-t="jadwal">Lihat jadwal</button></div>';}
+  if(lebih.length){ada=true;x+='<div class="alert warn">Melebihi kuota: '+lebih.map(function(e){return '<b>'+esc(e.nama)+'</b> ('+e.anggota.length+'/'+e.kuota+')';}).join(", ")+'. Pertimbangkan membagi kelompok atau menambah pembina.</div>';}
+  if(!ada)x+='<div class="alert ok">Tidak ada catatan. Semua murid sudah mengikuti ekskul wajib dan jadwal aman.</div>';
+  x+='</div><div class="card"><h3 style="margin-bottom:10px">Jadwal hari ini · '+HARI[hi]+'</h3>';
+  x+=hariIni.length?hariIni.map(function(o){return '<div class="slot" style="--c:'+o.e.warna+'"><b>'+esc(o.e.nama)+'</b>'+o.j.mulai+'–'+o.j.selesai+' · '+esc(o.j.tempat||"-")+' · '+esc(o.e.pembina||"")+' <button class="btn sm noprint" style="margin-left:6px" type="button" data-act="isiPresensi" data-id="'+o.e.id+'">Presensi</button></div>';}).join(""):'<div class="empty">Tidak ada latihan terjadwal hari ini.</div>';
+  x+='</div></div><div class="grid g2" style="margin-top:14px"><div class="card"><h3 style="margin-bottom:10px">Jumlah anggota per ekskul</h3>'+bars(E.slice().sort(function(a,b){return b.anggota.length-a.anggota.length;}).map(function(e){return {l:e.nama,v:e.anggota.length,c:e.warna};}))+'</div>';
+  x+='<div class="card"><h3 style="margin-bottom:10px">Kehadiran latihan semester ini</h3>'+bars(E.filter(function(e){return hadirEkskul(e.id)!=null;}).map(function(e){return {l:e.nama,v:hadirEkskul(e.id),c:e.warna};}).sort(function(a,b){return b.v-a.v;}),100,"%")+'</div></div>';
+  return x;
+};
+
+VIEWS.ekskul=function(){
+  var x=head("Data Ekstrakurikuler","Daftar ekskul wajib (kepanduan) dan pilihan, pembina, jadwal, kuota, serta indikator penilaian yang dipakai untuk nilai rapor.",'<button class="btn pri" type="button" data-act="ekBaru">+ Tambah ekskul</button><button class="btn" type="button" data-act="csvEkskul">Unduh CSV</button>');
+  if(!S.ekskul.length)return x+'<div class="empty">Belum ada ekskul. Tambahkan ekskul pertama Anda.</div>';
+  x+='<div class="grid g3">'+S.ekskul.slice().sort(function(a,b){return (a.jenis==="wajib"?0:1)-(b.jenis==="wajib"?0:1)||byNama(a,b);}).map(function(e){
+    var hk=hadirEkskul(e.id);
+    return '<article class="card ekcard" style="--c:'+e.warna+'"><div class="row"><h3>'+esc(e.nama)+'</h3><span class="sp"></span>'+(e.jenis==="wajib"?'<span class="tag wajib">Wajib</span>':'<span class="tag">Pilihan</span>')+(e.contoh?'<span class="tag contoh">contoh</span>':'')+'</div>'+
+    '<div class="meta"><b>'+esc(e.bentuk)+'</b> · Pembina: '+esc(e.pembina||"-")+(e.pelatih?' · Pelatih: '+esc(e.pelatih):'')+'</div>'+
+    '<div class="meta">🗓 '+esc(jam(e))+'</div>'+
+    '<div class="row small"><span class="tag'+(e.kuota&&e.anggota.length>e.kuota?' bad':'')+'">'+e.anggota.length+(e.kuota?' / '+e.kuota:'')+' anggota</span><span class="tag'+(hk!=null&&hk<S.p.ambang?' warn':' ok')+'">Hadir '+(hk==null?"—":hk+"%")+'</span><span class="tag">'+presSem(e.id).length+' pertemuan</span></div>'+
+    (e.tujuan?'<div class="small muted">'+esc(e.tujuan)+'</div>':'')+
+    '<div class="acts"><button class="btn sm pri" type="button" data-act="anggota" data-id="'+e.id+'">Anggota</button><button class="btn sm" type="button" data-act="ekUbah" data-id="'+e.id+'">Ubah</button><button class="btn sm" type="button" data-act="isiPresensi" data-id="'+e.id+'">Presensi</button><button class="btn sm dang" type="button" data-act="ekHapus" data-id="'+e.id+'">Hapus</button></div></article>';
+  }).join("")+'</div>';
+  return x;
+};
+
+VIEWS.siswa=function(){
+  var kl=daftarKelas(),q=ui.fCari.toLowerCase();
+  var L=S.siswa.filter(function(s){return (!ui.fKelas||s.kelas===ui.fKelas)&&(!q||s.nama.toLowerCase().indexOf(q)>=0);}).sort(function(a,b){return kelasSort(a.kelas,b.kelas)||byNama(a,b);});
+  var x=head("Data Murid","Tambahkan murid satu per satu atau tempel daftar dari spreadsheet. Data hanya tersimpan di perangkat ini.",'<button class="btn pri" type="button" data-act="swBaru">+ Tambah murid</button><button class="btn" type="button" data-act="swImpor">Tempel daftar</button><button class="btn" type="button" data-act="csvSiswa">Unduh rekap CSV</button>');
+  x+='<div class="card" style="margin-bottom:12px"><div class="fgrid"><label class="f">Kelas<select data-ui="fKelas"><option value="">Semua kelas</option>'+kl.map(function(k){return '<option'+(ui.fKelas===k?" selected":"")+'>'+esc(k)+'</option>';}).join("")+'</select></label><label class="f">Cari nama<input type="search" data-ui="fCari" value="'+esc(ui.fCari)+'" placeholder="Ketik nama murid"></label></div></div>';
+  if(!L.length)return x+'<div class="empty">Tidak ada murid'+(S.siswa.length?' yang cocok dengan saringan.':'. Tambahkan atau tempel daftar murid.')+'</div>';
+  var wajib=S.ekskul.filter(function(e){return e.jenis==="wajib";});
+  x+='<p class="small muted">'+L.length+' murid ditampilkan.</p><div class="scroll"><table class="tbl"><thead><tr><th>Nama</th><th>Kelas</th><th>L/P</th><th>Ekskul yang diikuti</th><th class="num">Jumlah</th><th class="noprint">Aksi</th></tr></thead><tbody>'+L.map(function(s){
+    var es=ekskulSiswa(s.id),wj=!wajib.length||wajib.some(function(e){return isAnggota(e,s.id);});
+    return '<tr><td>'+esc(s.nama)+(s.contoh?' <span class="tag contoh">contoh</span>':'')+'</td><td>'+esc(s.kelas)+'</td><td>'+esc(s.jk||"")+'</td><td><div class="chips">'+(es.length?es.map(function(e){return '<span class="tag" style="border-left:4px solid '+e.warna+'">'+esc(e.nama)+'</span>';}).join(""):'<span class="muted small">belum ikut</span>')+(wj?'':'<span class="tag bad">belum ikut ekskul wajib</span>')+'</div></td><td class="num">'+es.length+'</td><td class="noprint"><div class="row"><button class="btn sm" type="button" data-act="swUbah" data-id="'+s.id+'">Ubah</button><button class="btn sm dang" type="button" data-act="swHapus" data-id="'+s.id+'">Hapus</button></div></td></tr>';
+  }).join("")+'</tbody></table></div>';
+  return x;
+};
+
+function draftLoad(){
+  var e=ek(ui.pEk);if(!e){ui.draft=null;return;}
+  var ada=S.presensi.filter(function(p){return p.ekskul===e.id&&p.tanggal===ui.pTgl;})[0];
+  if(ada){ui.draft=JSON.parse(JSON.stringify(ada));ui.draft.baru=false;}
+  else{var h={};e.anggota.forEach(function(a){h[a.s]="H";});ui.draft={id:uid(),ekskul:e.id,tanggal:ui.pTgl,materi:"",catatan:"",hadir:h,baru:true};}
+  e.anggota.forEach(function(a){if(!ui.draft.hadir[a.s])ui.draft.hadir[a.s]="H";});
+}
+VIEWS.presensi=function(){
+  if(!S.ekskul.length)return head("Presensi Latihan","")+'<div class="empty">Tambahkan ekskul terlebih dahulu.</div>';
+  if(!ek(ui.pEk))ui.pEk=S.ekskul.slice().sort(byNama)[0].id;
+  if(!ui.draft||ui.draft.ekskul!==ui.pEk||ui.draft.tanggal!==ui.pTgl)draftLoad();
+  var e=ek(ui.pEk),d=ui.draft,A=anggotaList(e);
+  var cocok=e.jadwal.some(function(j){return j.hari===hariIdx(ui.pTgl);});
+  var x=head("Presensi Latihan","Catat kehadiran tiap pertemuan beserta materi latihan. Rekap kehadiran dipakai otomatis pada nilai rapor.",'<button class="btn" type="button" data-act="csvPresensi">Unduh rekap CSV</button><button class="btn" type="button" data-act="cetakPresensi">Cetak daftar hadir</button>');
+  x+='<div class="card" style="margin-bottom:12px"><div class="fgrid"><label class="f">Ekskul<select data-ui="pEk">'+ekOptions(ui.pEk)+'</select></label><label class="f">Tanggal<input type="date" data-ui="pTgl" value="'+esc(ui.pTgl)+'"></label><label class="f">Materi latihan<input type="text" id="pMateri" value="'+esc(d.materi)+'" placeholder="mis. Tali-temali dasar"></label><label class="f">Catatan<input type="text" id="pCatatan" value="'+esc(d.catatan)+'" placeholder="opsional"></label></div>';
+  x+='<p class="small muted" style="margin:8px 0 0">'+(d.baru?'Pertemuan baru (belum disimpan).':'Pertemuan ini sudah tersimpan — perubahan akan menimpa.')+(cocok?'':' <span class="tag warn">Tanggal ini bukan hari jadwal rutin ('+esc(jam(e))+')</span>')+'</p></div>';
+  if(!A.length)return x+'<div class="empty">Ekskul ini belum memiliki anggota. <button class="btn sm" type="button" data-act="anggota" data-id="'+e.id+'">Atur anggota</button></div>';
+  var c={H:0,I:0,S:0,A:0};A.forEach(function(o){c[d.hadir[o.s.id]]++;});
+  x+='<div class="row" style="margin-bottom:8px"><span class="tag ok">Hadir '+c.H+'</span><span class="tag">Izin '+c.I+'</span><span class="tag">Sakit '+c.S+'</span><span class="tag bad">Alpa '+c.A+'</span><span class="sp"></span><button class="btn sm" type="button" data-act="semuaHadir">Tandai semua hadir</button><button class="btn pri" type="button" data-act="simpanPresensi">Simpan presensi</button>'+(d.baru?'':'<button class="btn sm dang" type="button" data-act="hapusPresensi">Hapus pertemuan</button>')+'</div>';
+  x+='<div class="scroll"><table class="tbl"><thead><tr><th>Nama</th><th>Kelas</th><th>Status</th><th class="num">Hadir semester</th></tr></thead><tbody>'+A.map(function(o){
+    var st=hadirStat(e.id,o.s.id),v=d.hadir[o.s.id];
+    return '<tr><td>'+esc(o.s.nama)+(o.p!=="Anggota"?' <span class="tag">'+esc(o.p)+'</span>':'')+'</td><td>'+esc(o.s.kelas)+'</td><td><div class="seg" role="group" aria-label="Status '+esc(o.s.nama)+'">'+["H","I","S","A"].map(function(k){return '<button type="button" data-act="setHadir" data-s="'+o.s.id+'" data-v="'+k+'" aria-pressed="'+(v===k)+'" title="'+STAT[k]+'">'+k+'</button>';}).join("")+'</div></td><td class="num">'+(st.pct==null?"—":'<span class="tag '+(st.pct<S.p.ambang?"warn":"ok")+'">'+st.pct+'% ('+st.H+'/'+st.n+')</span>')+'</td></tr>';
+  }).join("")+'</tbody></table></div>';
+  var P=presSem(e.id).slice().reverse();
+  x+='<div class="card" style="margin-top:14px"><h3 style="margin-bottom:8px">Riwayat pertemuan semester ini ('+P.length+')</h3>'+(P.length?'<div class="scroll"><table class="tbl"><thead><tr><th>Tanggal</th><th>Materi</th><th class="num">Hadir</th><th class="noprint"></th></tr></thead><tbody>'+P.map(function(p){var t=0,h=0;for(var k in p.hadir){t++;if(p.hadir[k]==="H")h++;}return '<tr><td>'+HARI[hariIdx(p.tanggal)]+', '+tgl(p.tanggal)+(p.contoh?' <span class="tag contoh">contoh</span>':'')+'</td><td>'+esc(p.materi||"-")+'</td><td class="num">'+h+'/'+t+'</td><td class="noprint"><button class="btn sm" type="button" data-act="bukaPresensi" data-t="'+p.tanggal+'">Buka</button></td></tr>';}).join("")+'</tbody></table></div>':'<div class="empty">Belum ada pertemuan tercatat.</div>')+'</div>';
+  return x;
+};
+
+VIEWS.jadwal=function(){
+  var bt=cekBentrok();
+  var x=head("Jadwal Latihan Mingguan","Jadwal semua ekskul dalam satu pekan. Aplikasi menandai bentrok tempat dan murid yang terdaftar di dua ekskul pada jam yang sama.",'<button class="btn" type="button" data-act="cetakJadwal">Cetak jadwal</button>');
+  if(bt.length)x+=bt.map(function(b){return '<div class="alert '+(b.t==="tempat"?"bad":"warn")+'"><b>'+HARI[b.hari]+'</b>: '+esc(b.a.nama)+' dan '+esc(b.b.nama)+(b.t==="tempat"?' memakai tempat yang sama (<b>'+esc(b.d)+'</b>) pada jam yang beririsan.':' beririsan jam dan sama-sama diikuti: '+esc(b.d.join(", "))+'.')+'</div>';}).join("");
+  else x+='<div class="alert ok">Tidak ada bentrok tempat maupun murid.</div>';
+  x+='<div class="week" style="margin-top:12px">'+jadwalHTML()+'</div>';
+  return x;
+};
+function jadwalHTML(){
+  var adaMinggu=S.ekskul.some(function(e){return e.jadwal.some(function(j){return j.hari===6;});});
+  var hs=adaMinggu?[0,1,2,3,4,5,6]:[0,1,2,3,4,5];
+  return hs.map(function(h){
+    var L=[];S.ekskul.forEach(function(e){e.jadwal.forEach(function(j){if(j.hari===h)L.push({e:e,j:j});});});
+    L.sort(function(a,b){return a.j.mulai<b.j.mulai?-1:1;});
+    return '<div class="day"><h3>'+HARI[h]+'</h3>'+(L.length?L.map(function(o){return '<div class="slot" style="--c:'+o.e.warna+'"><b>'+esc(o.e.nama)+'</b>'+o.j.mulai+'–'+o.j.selesai+'<br>'+esc(o.j.tempat||"-")+'<br><span class="muted">'+esc(o.e.pembina||"")+'</span></div>';}).join(""):'<span class="small muted">—</span>')+'</div>';
+  }).join("");
+}
+
+VIEWS.prestasi=function(){
+  var L=S.prestasi.filter(function(p){return (!ui.prEk||p.ekskul===ui.prEk)&&(!ui.prTk||p.tingkat===ui.prTk);}).sort(function(a,b){return a.tanggal<b.tanggal?1:-1;});
+  var x=head("Prestasi Ekstrakurikuler","Catat lomba dan capaian murid. Prestasi dapat dimasukkan ke deskripsi rapor dan laporan sekolah.",'<button class="btn pri" type="button" data-act="prBaru">+ Tambah prestasi</button><button class="btn" type="button" data-act="csvPrestasi">Unduh CSV</button><button class="btn" type="button" data-act="cetakPrestasi">Cetak</button>');
+  var cnt=TINGKAT.map(function(t){return {l:t,v:S.prestasi.filter(function(p){return p.tingkat===t;}).length};}).filter(function(i){return i.v;});
+  x+='<div class="grid g2" style="margin-bottom:12px"><div class="card"><div class="fgrid"><label class="f">Ekskul<select data-ui="prEk">'+ekOptions(ui.prEk,"Semua ekskul")+'</select></label><label class="f">Tingkat<select data-ui="prTk"><option value="">Semua tingkat</option>'+TINGKAT.map(function(t){return '<option'+(ui.prTk===t?" selected":"")+'>'+t+'</option>';}).join("")+'</select></label></div></div><div class="card"><h3 style="margin-bottom:8px;font-size:16px">Sebaran menurut tingkat</h3>'+bars(cnt)+'</div></div>';
+  if(!L.length)return x+'<div class="empty">Belum ada prestasi tercatat.</div>';
+  x+='<div class="scroll"><table class="tbl"><thead><tr><th>Tanggal</th><th>Lomba / kegiatan</th><th>Ekskul</th><th>Tingkat</th><th>Capaian</th><th>Murid</th><th class="noprint"></th></tr></thead><tbody>'+L.map(function(p){var e=ek(p.ekskul);return '<tr><td>'+tgl(p.tanggal)+'</td><td>'+esc(p.lomba)+(p.contoh?' <span class="tag contoh">contoh</span>':'')+'<div class="small muted">'+esc(p.penyelenggara||"")+'</div></td><td>'+esc(e?e.nama:"-")+'</td><td>'+esc(p.tingkat)+'</td><td><b>'+esc(p.peringkat)+'</b></td><td class="small">'+esc((p.siswa||[]).map(function(i){var s=sw(i);return s?s.nama:"";}).filter(Boolean).join(", "))+'</td><td class="noprint"><div class="row"><button class="btn sm" type="button" data-act="prUbah" data-id="'+p.id+'">Ubah</button><button class="btn sm dang" type="button" data-act="prHapus" data-id="'+p.id+'">Hapus</button></div></td></tr>';}).join("")+'</tbody></table></div>';
+  return x;
+};
+
+VIEWS.nilai=function(){
+  if(!S.ekskul.length)return head("Nilai & Deskripsi Rapor","")+'<div class="empty">Tambahkan ekskul terlebih dahulu.</div>';
+  if(!ek(ui.nEk))ui.nEk=S.ekskul.slice().sort(byNama)[0].id;
+  var e=ek(ui.nEk),A=anggotaList(e),aiOn=!!getKey();
+  var x=head("Nilai & Deskripsi Rapor","Penilaian ekstrakurikuler bersifat kualitatif dan dideskripsikan di rapor. Pembina memberi skor 1–4 per indikator; aplikasi menggabungkannya dengan kehadiran untuk menyarankan predikat dan menyusun deskripsi yang bisa disunting.",'<button class="btn" type="button" data-act="csvNilai">Unduh CSV untuk e-Rapor</button><button class="btn" type="button" data-act="cetakNilai">Cetak</button>');
+  x+='<div class="card" style="margin-bottom:12px"><div class="fgrid"><label class="f">Ekskul<select data-ui="nEk">'+ekOptions(ui.nEk)+'</select></label><div class="small muted" style="align-self:end">Semester '+esc(S.p.semester)+' '+esc(S.p.ta)+' · Bobot kehadiran '+S.p.bobot+'% · Predikat: SB ≥ '+S.p.sb+', B ≥ '+S.p.b+', C ≥ '+S.p.c+' (ubah di Pengaturan)</div></div>';
+  x+='<p class="small" style="margin:10px 0 0"><b>Skala skor:</b> 4 = sangat baik/konsisten · 3 = baik · 2 = mulai berkembang · 1 = perlu bimbingan. Indikator: '+e.indikator.map(function(t,i){return '<span class="tag">'+(i+1)+'. '+esc(t)+'</span>';}).join(" ")+'</p></div>';
+  if(!A.length)return x+'<div class="empty">Ekskul ini belum memiliki anggota.</div>';
+  var dist={SB:0,B:0,C:0,K:0,"-":0};
+  A.forEach(function(o){var h=hitung(e.id,o.s.id);dist[h.pred?predKode(h.pred):"-"]++;});
+  x+='<div class="row" style="margin-bottom:8px"><span class="tag ok">SB '+dist.SB+'</span><span class="tag">B '+dist.B+'</span><span class="tag warn">C '+dist.C+'</span><span class="tag bad">K '+dist.K+'</span><span class="tag">Belum dinilai '+dist["-"]+'</span><span class="sp"></span><button class="btn sm" type="button" data-act="isiTiga">Isi kosong dengan 3</button><button class="btn sm" type="button" data-act="susunUlang">Susun ulang semua deskripsi</button><button class="btn sm acc" type="button" data-act="aiDesk"'+(aiOn?'':' disabled title="Isi kunci API Gemini di Pengaturan"')+'>Perhalus dengan AI (opsional)</button></div>';
+  x+='<div class="scroll"><table class="tbl"><thead><tr><th>Nama</th>'+e.indikator.map(function(t,i){return '<th title="'+esc(t)+'">Ind. '+(i+1)+'</th>';}).join("")+'<th class="num">Hadir</th><th class="num">Nilai</th><th>Predikat</th><th style="min-width:260px">Deskripsi rapor</th></tr></thead><tbody>'+A.map(function(o){
+    var rec=nilaiRec(e.id,o.s.id,false)||{i:[0,0,0],d:"",m:false},h=hitung(e.id,o.s.id),pk=h.pred?predKode(h.pred):"";
+    return '<tr><td>'+esc(o.s.nama)+'<div class="small muted">'+esc(o.s.kelas)+'</div></td>'+e.indikator.map(function(t,i){return '<td><select data-skor="'+i+'" data-s="'+o.s.id+'" aria-label="'+esc(o.s.nama)+' – '+esc(t)+'"><option value="0">–</option>'+[4,3,2,1].map(function(v){return '<option value="'+v+'"'+(rec.i[i]===v?" selected":"")+'>'+v+'</option>';}).join("")+'</select></td>';}).join("")+
+    '<td class="num">'+(h.hadir.pct==null?"—":h.hadir.pct+"%")+'</td><td class="num">'+(h.nilai==null?"—":h.nilai)+'</td><td>'+(pk?'<span class="pred-'+pk+'">'+h.pred+'</span>':'<span class="muted">—</span>')+'</td><td><textarea data-desk="'+o.s.id+'" aria-label="Deskripsi rapor '+esc(o.s.nama)+'">'+esc(deskAkhir(e,o.s))+'</textarea>'+(rec.m?'<div class="small muted">disunting manual · <button class="btn sm" type="button" data-act="resetDesk" data-s="'+o.s.id+'">kembalikan otomatis</button></div>':'')+'</td></tr>';
+  }).join("")+'</tbody></table></div>';
+  x+='<p class="small muted">Predikat dan deskripsi adalah saran; keputusan akhir tetap pada pembina dan wali kelas. Saat memakai AI, yang dikirim hanya nama ekskul, indikator, skor, dan predikat — nama murid diganti penanda dan dipulihkan di perangkat.</p>';
+  return x;
+};
+
+function rekapEk(e){
+  var A=anggotaList(e),kel={},jk={L:0,P:0},dist={SB:0,B:0,C:0,K:0,"-":0};
+  A.forEach(function(o){kel[o.s.kelas]=(kel[o.s.kelas]||0)+1;if(jk[o.s.jk]!=null)jk[o.s.jk]++;var h=hitung(e.id,o.s.id);dist[h.pred?predKode(h.pred):"-"]++;});
+  var rTA=rentangTA(),pr=S.prestasi.filter(function(p){return p.ekskul===e.id&&p.tanggal>=rTA[0]&&p.tanggal<=rTA[1];});
+  var hk=hadirEkskul(e.id),rek=[];
+  if(hk!=null&&hk<S.p.ambang)rek.push("Kehadiran rata-rata "+hk+"% di bawah ambang "+S.p.ambang+"%: tinjau waktu latihan, variasi kegiatan, dan komunikasi dengan wali kelas/orang tua.");
+  if(e.kuota&&A.length>e.kuota)rek.push("Anggota melebihi kuota: bagi menjadi beberapa kelompok atau tambah pembina/pelatih.");
+  if(e.kuota&&A.length<e.kuota*0.5)rek.push("Peminat masih sedikit: lakukan promosi (demo/pentas) dan identifikasi minat murid di awal tahun ajaran.");
+  if(presSem(e.id).length<6)rek.push("Pertemuan semester ini baru "+presSem(e.id).length+" kali: pastikan latihan berjalan rutin sesuai program.");
+  if(dist.K+dist.C>0&&A.length&&(dist.K+dist.C)/A.length>=0.3)rek.push("Sepertiga anggota atau lebih berpredikat Cukup/Kurang: rancang latihan berjenjang dan pendampingan sebaya.");
+  if(pr.length)rek.push("Pertahankan dan publikasikan prestasi ("+pr.length+" capaian) untuk memotivasi murid lain.");
+  if(!rek.length)rek.push("Program berjalan baik; lanjutkan dan dokumentasikan praktik baiknya.");
+  return {A:A,kel:kel,jk:jk,dist:dist,pr:pr,hk:hk,rek:rek,pert:presSem(e.id).length};
+}
+VIEWS.rekap=function(){
+  var x=head("Rekap per Ekskul","Bahan evaluasi program di akhir semester/tahun ajaran: anggota, kehadiran, sebaran predikat, prestasi, dan rekomendasi tindak lanjut.",'<button class="btn" type="button" data-act="csvRekap">Unduh rekap CSV</button><button class="btn" type="button" data-act="csvPerSiswa">Rekap ekskul per murid (CSV)</button>');
+  if(!S.ekskul.length)return x+'<div class="empty">Belum ada ekskul.</div>';
+  x+='<div class="grid g2">'+S.ekskul.slice().sort(byNama).map(function(e){
+    var r=rekapEk(e),tot=r.A.length||1;
+    return '<article class="card ekcard" style="--c:'+e.warna+'"><div class="row"><h3>'+esc(e.nama)+'</h3><span class="sp"></span>'+(e.jenis==="wajib"?'<span class="tag wajib">Wajib</span>':'')+'</div>'+
+    '<div class="row small"><span class="tag">'+r.A.length+' anggota (L '+r.jk.L+', P '+r.jk.P+')</span><span class="tag">'+r.pert+' pertemuan</span><span class="tag '+(r.hk!=null&&r.hk<S.p.ambang?"warn":"ok")+'">Hadir '+(r.hk==null?"—":r.hk+"%")+'</span><span class="tag">'+r.pr.length+' prestasi</span></div>'+
+    '<div class="small muted">Per kelas: '+(Object.keys(r.kel).sort(kelasSort).map(function(k){return esc(k)+" ("+r.kel[k]+")";}).join(", ")||"-")+'</div>'+
+    '<div><div class="small" style="font-weight:600;margin-bottom:4px">Sebaran predikat</div><div class="stack" role="img" aria-label="SB '+r.dist.SB+', B '+r.dist.B+', C '+r.dist.C+', K '+r.dist.K+', belum dinilai '+r.dist["-"]+'">'+["SB","B","C","K"].map(function(k){return '<span style="width:'+(r.dist[k]/tot*100)+'%;background:'+predColor(k)+'"></span>';}).join("")+'</div><div class="legend">'+["SB","B","C","K"].map(function(k){return '<span><i style="background:'+predColor(k)+'"></i>'+k+' '+r.dist[k]+'</span>';}).join("")+'<span>Belum '+r.dist["-"]+'</span></div></div>'+
+    '<ul class="small" style="margin:0;padding-left:18px">'+r.rek.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul>'+
+    '<div class="acts"><button class="btn sm pri" type="button" data-act="cetakLaporan" data-id="'+e.id+'">Cetak laporan ekskul</button></div></article>';
+  }).join("")+'</div>';
+  return x;
+};
+
+VIEWS.pengaturan=function(){
+  var P=S.p,k=getKey();
+  var x=head("Pengaturan","Identitas sekolah, aturan penilaian, AI opsional, cadangan data, dan penghapusan data.");
+  x+='<div class="grid g2"><div class="card"><h3 style="margin-bottom:10px">Identitas & periode</h3><div class="fgrid">'+
+   '<label class="f">Nama sekolah<input type="text" data-p="sekolah" value="'+esc(P.sekolah)+'"></label>'+
+   '<label class="f">Kota (untuk tanda tangan)<input type="text" data-p="kota" value="'+esc(P.kota)+'" placeholder="mis. Yogyakarta"></label>'+
+   '<label class="f">Tahun ajaran<input type="text" data-p="ta" value="'+esc(P.ta)+'" placeholder="2026/2027"></label>'+
+   '<label class="f">Semester<select data-p="semester"><option'+(P.semester==="Ganjil"?" selected":"")+'>Ganjil</option><option'+(P.semester==="Genap"?" selected":"")+'>Genap</option></select></label></div>'+
+   '<p class="small muted">Semester Ganjil = Juli–Desember, Genap = Januari–Juni. Nilai disimpan terpisah per ekskul, tahun ajaran, dan semester.</p></div>';
+  x+='<div class="card"><h3 style="margin-bottom:10px">Aturan penilaian (dapat disesuaikan sekolah)</h3><div class="fgrid">'+
+   '<label class="f">Bobot kehadiran (%)<input type="number" min="0" max="100" data-p="bobot" value="'+P.bobot+'"></label>'+
+   '<label class="f">Batas Sangat Baik<input type="number" min="0" max="100" data-p="sb" value="'+P.sb+'"></label>'+
+   '<label class="f">Batas Baik<input type="number" min="0" max="100" data-p="b" value="'+P.b+'"></label>'+
+   '<label class="f">Batas Cukup<input type="number" min="0" max="100" data-p="c" value="'+P.c+'"></label>'+
+   '<label class="f">Ambang kehadiran (%)<input type="number" min="0" max="100" data-p="ambang" value="'+P.ambang+'"></label></div>'+
+   '<p class="small muted">Nilai = (100 − bobot)% × rata-rata skor indikator (skala 1–4 diubah ke 0–100) + bobot% × persentase kehadiran. Di bawah batas Cukup = Kurang. Ini aturan bantu, bukan ketentuan resmi; sesuaikan dengan kesepakatan sekolah.</p></div>';
+  x+='<div class="card"><h3 style="margin-bottom:10px">AI Gemini (opsional)</h3><p class="small muted">Dipakai hanya untuk memperhalus kalimat deskripsi rapor. Kunci API milik Anda disimpan di browser ini saja dan tidak ikut dalam berkas cadangan. Nama murid tidak dikirim.</p><div class="fgrid"><label class="f">Kunci API Gemini<input type="password" id="aiKey" value="'+esc(k)+'" autocomplete="off" placeholder="tempel kunci API Anda"></label><label class="f">Model<input type="text" data-p="model" value="'+esc(P.model)+'"></label></div><div class="row" style="margin-top:10px"><button class="btn pri" type="button" data-act="simpanKey">Simpan kunci</button><button class="btn" type="button" data-act="hapusKey">Hapus kunci</button></div></div>';
+  x+='<div class="card"><h3 style="margin-bottom:10px">Cadangan & data</h3><p class="small muted">Data tersimpan hanya di browser perangkat ini. Membersihkan data browser akan menghapusnya, jadi unduh cadangan secara berkala dan simpan di tempat aman.</p><div class="row"><button class="btn pri" type="button" data-act="ekspor">Unduh cadangan (JSON)</button><label class="btn" for="imporFile">Pulihkan dari cadangan</label><input type="file" id="imporFile" accept=".json,application/json" hidden></div><div class="row" style="margin-top:10px">'+(adaContoh()?'<button class="btn acc" type="button" data-act="hapusContoh">Hapus data contoh</button>':'<button class="btn" type="button" data-act="muatContoh">Muat ulang data contoh</button>')+'<button class="btn dang" type="button" data-act="hapusSemua">Hapus semua data</button></div></div></div>';
+  return x;
+};
+
+VIEWS.sumber=function(){
+  var x=head("Dasar dan Sumber","Rujukan yang dipakai untuk merancang aplikasi ini. Periksa kembali ketentuan terbaru dari Kemendikdasmen dan dinas pendidikan setempat.");
+  x+='<div class="grid g2"><div class="card"><h3 style="margin-bottom:8px">Bagaimana rujukan dipakai</h3><ul class="small" style="padding-left:18px;margin:0">'+
+  '<li><b>Ekskul wajib kepanduan.</b> Permendikdasmen Nomor 13 Tahun 2025 kembali menempatkan Pramuka atau kepanduan lain sebagai ekskul wajib: wajib disediakan sekolah dan wajib diikuti murid. Aplikasi menandai murid yang belum terdaftar di ekskul bertanda <b>wajib</b>.</li>'+
+  '<li><b>Bentuk kegiatan.</b> Pengelompokan krida, karya ilmiah, latihan olah bakat/minat, dan keagamaan mengikuti Permendikbud 62/2014.</li>'+
+  '<li><b>Penilaian.</b> Permendikbud 62/2014 Pasal 7: penilaian ekskul dilakukan secara kualitatif dan dideskripsikan pada rapor; satuan pendidikan mengevaluasi program tiap akhir tahun ajaran. Karena itu aplikasi menghasilkan predikat dan deskripsi, serta laporan evaluasi per ekskul.</li>'+
+  '<li><b>Program ekskul</b> menjadi bagian rencana kerja sekolah dan disosialisasikan kepada murid dan orang tua di awal tahun ajaran (Pasal 5).</li>'+
+  '<li>Permendikbudristek 12/2024 sempat menjadikan kepramukaan ekskul pilihan; ketentuan ini sudah diperbarui oleh Permendikdasmen 13/2025.</li></ul></div>';
+  x+='<div class="card"><h3 style="margin-bottom:8px">Tautan sumber</h3><ol class="src small" style="padding-left:18px;margin:0">'+
+  '<li><a href="https://jogja.antaranews.com/berita/756425/mendikdasmen-tegaskan-siswa-wajib-mengikuti-ekstrakurikuler-kepanduan" target="_blank" rel="noopener">Antara Jogja – Mendikdasmen tegaskan siswa wajib mengikuti ekstrakurikuler kepanduan (Permendikdasmen 13/2025)</a></li>'+
+  '<li><a href="https://www.detik.com/edu/sekolah/d-8021932/permendikdasmen-13-tahun-2025-isi-lengkap-dan-dampaknya-untuk-sekolah" target="_blank" rel="noopener">detikEdu – Permendikdasmen 13 Tahun 2025: isi lengkap dan dampaknya untuk sekolah</a></li>'+
+  '<li><a href="https://pasal.id/peraturan/permen/permendikbud-no-62-tahun-2014" target="_blank" rel="noopener">Permendikbud No. 62 Tahun 2014 tentang Kegiatan Ekstrakurikuler pada Pendidikan Dasar dan Menengah</a></li>'+
+  '<li><a href="https://sma.kemdikbud.go.id/data/files/Permendikbud%20Nomor%2062%20Tahun%202014%20Tentang%20Kegiatan%20Ekstrakurikuler%20pada%20Pendidikan%20Lampiran.pdf" target="_blank" rel="noopener">Lampiran Permendikbud 62/2014 – Pedoman Kegiatan Ekstrakurikuler (Kemendikbud)</a></li>'+
+  '<li><a href="https://peraturan.go.id/files/permendikbudristek-no-12-tahun-2024.pdf" target="_blank" rel="noopener">Permendikbudristek No. 12 Tahun 2024 (peraturan.go.id)</a></li></ol>'+
+  '<p class="small muted" style="margin-top:10px">Aturan bobot dan batas predikat di aplikasi ini adalah alat bantu yang dapat diubah, bukan ketentuan resmi. Data contoh seluruhnya fiktif.</p></div></div>';
+  return x;
+};
+
+/* ============ Dialog ============ */
+var dlg=$("#dlg"),dForm=$("#dlgForm"),onSubmit=null;
+function buka(judul,body,tombol,cb){
+  dForm.innerHTML='<div class="dh"><h2 id="dlgTitle">'+esc(judul)+'</h2><button class="btn sm" type="button" data-act="tutup" aria-label="Tutup">✕</button></div><div class="db">'+body+'</div><div class="df"><button class="btn" type="button" data-act="tutup">Batal</button><button class="btn pri" type="submit">'+esc(tombol||"Simpan")+'</button></div>';
+  onSubmit=cb;
+  if(dlg.showModal)dlg.showModal();else dlg.setAttribute("open","");
+  var f=dForm.querySelector("input,select,textarea");if(f)f.focus();
+}
+function tutup(){if(dlg.close)dlg.close();else dlg.removeAttribute("open");}
+dForm.addEventListener("submit",function(ev){ev.preventDefault();if(onSubmit&&onSubmit(new FormData(dForm))!==false){tutup();save();render();}});
+function konfirmasi(t){return window.confirm(t);}
+
+function jadwalRow(j){j=j||{hari:0,mulai:"14:00",selesai:"15:30",tempat:""};return '<div class="fgrid jrow"><label class="f">Hari<select name="jh">'+HARI.map(function(h,i){return '<option value="'+i+'"'+(j.hari===i?" selected":"")+'>'+h+'</option>';}).join("")+'</select></label><label class="f">Mulai<input type="time" name="jm" value="'+esc(j.mulai)+'"></label><label class="f">Selesai<input type="time" name="js" value="'+esc(j.selesai)+'"></label><label class="f">Tempat<input type="text" name="jt" value="'+esc(j.tempat)+'"></label></div>';}
+function formEkskul(e){
+  var baru=!e;e=e||{nama:"",jenis:"pilihan",bentuk:"Olah Bakat/Minat",pembina:"",pelatih:"",jadwal:[{hari:0,mulai:"14:00",selesai:"15:30",tempat:""}],kuota:20,warna:WARNA[S.ekskul.length%WARNA.length],indikator:["Kedisiplinan dan tanggung jawab","Keterampilan inti","Kerja sama"],tujuan:""};
+  var b='<div class="fgrid"><label class="f">Nama ekskul<input type="text" name="nama" required value="'+esc(e.nama)+'"></label><label class="f">Jenis<select name="jenis"><option value="wajib"'+(e.jenis==="wajib"?" selected":"")+'>Wajib (kepanduan)</option><option value="pilihan"'+(e.jenis!=="wajib"?" selected":"")+'>Pilihan</option></select></label><label class="f">Bentuk<select name="bentuk">'+BENTUK.map(function(x){return '<option'+(e.bentuk===x?" selected":"")+'>'+x+'</option>';}).join("")+'</select></label><label class="f">Kuota anggota<input type="number" name="kuota" min="0" value="'+(e.kuota||0)+'"></label><label class="f">Pembina<input type="text" name="pembina" value="'+esc(e.pembina)+'"></label><label class="f">Pelatih (opsional)<input type="text" name="pelatih" value="'+esc(e.pelatih)+'"></label><label class="f">Warna penanda<select name="warna">'+WARNA.map(function(w,i){return '<option value="'+w+'"'+(e.warna===w?" selected":"")+'>Warna '+(i+1)+'</option>';}).join("")+'</select></label></div>';
+  b+='<div><div class="small" style="font-weight:700;margin-bottom:6px">Jadwal latihan</div><div id="jWrap">'+(e.jadwal.length?e.jadwal:[null]).map(jadwalRow).join("")+'</div><button class="btn sm" type="button" data-act="tambahJadwal" style="margin-top:6px">+ Tambah jadwal</button> <span class="small muted">Kosongkan tempat untuk menghapus baris jadwal tambahan.</span></div>';
+  b+='<div><div class="small" style="font-weight:700;margin-bottom:6px">Indikator penilaian (3 aspek untuk rapor)</div><div class="fgrid">'+[0,1,2].map(function(i){return '<label class="f">Indikator '+(i+1)+'<input type="text" name="ind'+i+'" required value="'+esc(e.indikator[i]||"")+'"></label>';}).join("")+'</div></div>';
+  b+='<label class="f">Tujuan / deskripsi program<textarea name="tujuan">'+esc(e.tujuan||"")+'</textarea></label>';
+  buka(baru?"Tambah ekskul":"Ubah ekskul",b,"Simpan",function(fd){
+    var nama=String(fd.get("nama")||"").trim();if(!nama){toast("Nama ekskul wajib diisi.");return false;}
+    var jh=fd.getAll("jh"),jm=fd.getAll("jm"),js=fd.getAll("js"),jt=fd.getAll("jt"),jad=[];
+    for(var i=0;i<jh.length;i++){if(i>0&&!String(jt[i]).trim())continue;if(jm[i]&&js[i]&&jm[i]>=js[i]){toast("Jam selesai harus setelah jam mulai.");return false;}jad.push({hari:+jh[i],mulai:jm[i],selesai:js[i],tempat:String(jt[i]).trim()});}
+    var o=baru?{id:uid(),anggota:[]}:e;
+    o.nama=nama;o.jenis=fd.get("jenis");o.bentuk=fd.get("bentuk");o.kuota=+fd.get("kuota")||0;o.pembina=String(fd.get("pembina")).trim();o.pelatih=String(fd.get("pelatih")).trim();o.warna=fd.get("warna");o.jadwal=jad;o.indikator=[0,1,2].map(function(i){return String(fd.get("ind"+i)).trim();});o.tujuan=String(fd.get("tujuan")).trim();
+    if(baru)S.ekskul.push(o);toast("Ekskul "+nama+" disimpan.");
+  });
+}
+function formAnggota(e){
+  var kl=daftarKelas();
+  var b='<p class="small muted" style="margin:0">Centang murid yang menjadi anggota '+esc(e.nama)+'. Tersedia '+S.siswa.length+' murid.'+(e.kuota?' Kuota: '+e.kuota+'.':'')+'</p><div class="fgrid"><label class="f">Saring kelas<select id="aKelas"><option value="">Semua</option>'+kl.map(function(k){return '<option>'+esc(k)+'</option>';}).join("")+'</select></label><label class="f">Cari<input type="search" id="aCari" placeholder="nama"></label></div><div class="memlist" id="aList">'+
+  S.siswa.slice().sort(function(a,b){return kelasSort(a.kelas,b.kelas)||byNama(a,b);}).map(function(s){var a=e.anggota.filter(function(x){return x.s===s.id;})[0];return '<label data-k="'+esc(s.kelas)+'" data-n="'+esc(s.nama.toLowerCase())+'"><input type="checkbox" name="m" value="'+s.id+'"'+(a?" checked":"")+'> <span>'+esc(s.nama)+' <span class="muted small">'+esc(s.kelas)+'</span></span><select name="p_'+s.id+'" aria-label="Peran '+esc(s.nama)+'">'+PERAN.map(function(p){return '<option'+(a&&a.p===p?" selected":"")+'>'+p+'</option>';}).join("")+'</select></label>';}).join("")+'</div><div class="row"><button class="btn sm" type="button" data-act="centangTampil">Centang yang tampil</button><button class="btn sm" type="button" data-act="lepasTampil">Lepas yang tampil</button><span class="small muted" id="aJml"></span></div>';
+  if(!S.siswa.length)b='<div class="empty">Belum ada data murid. Tambahkan murid di menu Siswa.</div>';
+  buka("Anggota "+e.nama,b,"Simpan anggota",function(fd){
+    var m=fd.getAll("m");e.anggota=m.map(function(id){return {s:id,p:fd.get("p_"+id)||"Anggota"};});
+    toast(m.length+" anggota disimpan untuk "+e.nama+".");
+  });
+  var f=function(){var k=$("#aKelas")?$("#aKelas").value:"",q=$("#aCari")?$("#aCari").value.toLowerCase():"";$$("#aList label").forEach(function(l){l.hidden=!((!k||l.dataset.k===k)&&(!q||l.dataset.n.indexOf(q)>=0));});var n=$$("#aList input:checked").length;if($("#aJml"))$("#aJml").textContent=n+" dicentang";};
+  if($("#aKelas")){$("#aKelas").addEventListener("change",f);$("#aCari").addEventListener("input",f);$("#aList").addEventListener("change",f);f();}
+}
+function formSiswa(s){
+  var baru=!s;s=s||{nama:"",kelas:ui.fKelas||"",jk:"L"};
+  buka(baru?"Tambah murid":"Ubah murid",'<div class="fgrid"><label class="f">Nama lengkap<input type="text" name="nama" required value="'+esc(s.nama)+'"></label><label class="f">Kelas<input type="text" name="kelas" required value="'+esc(s.kelas)+'" placeholder="mis. 7A" list="dlKelas"><datalist id="dlKelas">'+daftarKelas().map(function(k){return '<option value="'+esc(k)+'">';}).join("")+'</datalist></label><label class="f">L/P<select name="jk"><option'+(s.jk==="L"?" selected":"")+'>L</option><option'+(s.jk==="P"?" selected":"")+'>P</option></select></label></div>',"Simpan",function(fd){
+    var n=String(fd.get("nama")).trim(),k=String(fd.get("kelas")).trim().toUpperCase();if(!n||!k){toast("Nama dan kelas wajib diisi.");return false;}
+    if(baru)S.siswa.push({id:uid(),nama:n,kelas:k,jk:fd.get("jk")});else{s.nama=n;s.kelas=k;s.jk=fd.get("jk");}
+    toast("Data murid disimpan.");
+  });
+}
+function formImpor(){
+  buka("Tempel daftar murid",'<p class="small muted" style="margin:0">Satu murid per baris dengan format <span class="kbd">Nama;Kelas;L/P</span>. Pemisah boleh titik koma, koma, atau tab (salin langsung dari spreadsheet). Kolom L/P opsional.</p><textarea name="isi" rows="10" placeholder="Nama Murid Satu;7A;L&#10;Nama Murid Dua;7A;P"></textarea>',"Tambahkan",function(fd){
+    var baris=String(fd.get("isi")||"").split(/\r?\n/),n=0;
+    baris.forEach(function(b){var c=b.split(/\t|;|,/).map(function(x){return x.trim();});if(!c[0]||!c[1])return;if(/^nama$/i.test(c[0]))return;var jk=(c[2]||"").toUpperCase().charAt(0);S.siswa.push({id:uid(),nama:c[0],kelas:c[1].toUpperCase(),jk:jk==="P"?"P":(jk==="L"?"L":"")});n++;});
+    if(!n){toast("Tidak ada baris yang valid.");return false;}toast(n+" murid ditambahkan.");
+  });
+}
+function formPrestasi(p){
+  var baru=!p;p=p||{ekskul:ui.prEk||(S.ekskul[0]?S.ekskul[0].id:""),tanggal:today(),lomba:"",tingkat:"Kabupaten/Kota",peringkat:"",penyelenggara:"",siswa:[]};
+  var e0=ek(p.ekskul);
+  var b='<div class="fgrid"><label class="f">Ekskul<select name="ekskul" id="prEkSel">'+ekOptions(p.ekskul)+'</select></label><label class="f">Tanggal<input type="date" name="tanggal" required value="'+esc(p.tanggal)+'"></label><label class="f">Tingkat<select name="tingkat">'+TINGKAT.map(function(t){return '<option'+(p.tingkat===t?" selected":"")+'>'+t+'</option>';}).join("")+'</select></label><label class="f">Capaian<input type="text" name="peringkat" required value="'+esc(p.peringkat)+'" placeholder="Juara 1 / Finalis / Medali Emas"></label></div><label class="f">Nama lomba/kegiatan<input type="text" name="lomba" required value="'+esc(p.lomba)+'"></label><label class="f">Penyelenggara<input type="text" name="penyelenggara" value="'+esc(p.penyelenggara)+'"></label><div><div class="small" style="font-weight:700;margin-bottom:6px">Murid yang berprestasi (anggota ekskul)</div><div class="memlist" id="prList">'+prSiswaList(e0,p.siswa)+'</div></div>';
+  buka(baru?"Tambah prestasi":"Ubah prestasi",b,"Simpan",function(fd){
+    var o=baru?{id:uid()}:p;o.ekskul=fd.get("ekskul");o.tanggal=fd.get("tanggal");o.tingkat=fd.get("tingkat");o.peringkat=String(fd.get("peringkat")).trim();o.lomba=String(fd.get("lomba")).trim();o.penyelenggara=String(fd.get("penyelenggara")).trim();o.siswa=fd.getAll("ps");
+    if(!o.lomba||!o.peringkat){toast("Nama lomba dan capaian wajib diisi.");return false;}
+    if(baru)S.prestasi.push(o);toast("Prestasi disimpan.");
+  });
+  $("#prEkSel").addEventListener("change",function(){$("#prList").innerHTML=prSiswaList(ek(this.value),[]);});
+}
+function prSiswaList(e,sel){if(!e||!e.anggota.length)return '<div class="empty">Ekskul ini belum memiliki anggota.</div>';return anggotaList(e).map(function(o){return '<label><input type="checkbox" name="ps" value="'+o.s.id+'"'+(sel.indexOf(o.s.id)>=0?" checked":"")+'> '+esc(o.s.nama)+' <span class="muted small">'+esc(o.s.kelas)+'</span></label>';}).join("");}
+
+/* ============ AI ============ */
+async function gemini(prompt){
+  var key=getKey();if(!key)throw new Error("Kunci API Gemini belum diisi di Pengaturan.");
+  var r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(S.p.model||"gemini-2.5-flash")+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":key},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.6,responseMimeType:"application/json"}})});
+  if(!r.ok)throw new Error("Gemini menolak permintaan (kode "+r.status+"). Periksa kunci API dan nama model.");
+  var j=await r.json();
+  return ((j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts)||[]).map(function(p){return p.text||"";}).join("");
+}
+async function aiDeskripsi(btn){
+  var e=ek(ui.nEk),A=anggotaList(e).filter(function(o){return hitung(e.id,o.s.id).pred;});
+  if(!A.length){toast("Belum ada murid yang dinilai.");return;}
+  if(!konfirmasi("Kirim "+A.length+" data penilaian (tanpa nama murid) ke Gemini untuk memperhalus deskripsi?"))return;
+  btn.disabled=true;btn.textContent="Memproses…";
+  var data=A.map(function(o,i){var rec=nilaiRec(e.id,o.s.id,false),h=hitung(e.id,o.s.id);return {no:i+1,predikat:h.pred,kehadiran_persen:h.hadir.pct,skor:e.indikator.map(function(t,k){return t+": "+(rec.i[k]||"-");}),draf:deskAkhir(e,o.s).split(namaDepan(o.s.nama)).join("[NAMA]")};});
+  var prompt="Anda membantu pembina ekstrakurikuler SMP di Indonesia menulis deskripsi rapor ekstrakurikuler. Ekskul: "+e.nama+". Skala skor 1-4. Untuk setiap data, tulis ulang draf menjadi 1-2 kalimat bahasa Indonesia yang positif, spesifik, dan membangun (maks 35 kata), wajib diawali 'Ananda [NAMA]', sesuai predikat dan skor, tanpa menambah fakta baru. Kembalikan HANYA array JSON berisi string sesuai urutan.\nDATA:\n"+JSON.stringify(data);
+  try{
+    var t=await gemini(prompt),arr=JSON.parse(t.replace(/^```json|```$/g,"").trim());
+    if(!Array.isArray(arr))throw new Error("Format jawaban AI tidak dikenali.");
+    A.forEach(function(o,i){if(typeof arr[i]==="string"&&arr[i].trim()){var rec=nilaiRec(e.id,o.s.id,true);rec.d=arr[i].split("[NAMA]").join(namaDepan(o.s.nama)).trim();rec.m=true;}});
+    save();toast("Deskripsi diperhalus. Periksa kembali sebelum dipakai.");render();
+  }catch(err){toast(err.message||"Gagal menghubungi Gemini.");btn.disabled=false;btn.textContent="Perhalus dengan AI (opsional)";}
+}
+
+/* ============ Laporan cetak ============ */
+function laporanEkskul(e){
+  var r=rekapEk(e);
+  var h='<table class="tbl"><tbody><tr><th>Jenis / bentuk</th><td>'+(e.jenis==="wajib"?"Wajib (kepanduan)":"Pilihan")+' · '+esc(e.bentuk)+'</td></tr><tr><th>Pembina / pelatih</th><td>'+esc(e.pembina||"-")+(e.pelatih?" / "+esc(e.pelatih):"")+'</td></tr><tr><th>Jadwal</th><td>'+esc(jam(e))+'</td></tr><tr><th>Tujuan</th><td>'+esc(e.tujuan||"-")+'</td></tr><tr><th>Anggota</th><td>'+r.A.length+(e.kuota?" dari kuota "+e.kuota:"")+' (L '+r.jk.L+', P '+r.jk.P+')</td></tr><tr><th>Pertemuan semester ini</th><td>'+r.pert+'</td></tr><tr><th>Rata-rata kehadiran</th><td>'+(r.hk==null?"-":r.hk+"%")+'</td></tr><tr><th>Sebaran predikat</th><td>SB '+r.dist.SB+' · B '+r.dist.B+' · C '+r.dist.C+' · K '+r.dist.K+' · belum dinilai '+r.dist["-"]+'</td></tr></tbody></table>';
+  h+='<h3 style="margin:14px 0 6px">Daftar anggota dan capaian</h3><table class="tbl"><thead><tr><th>No</th><th>Nama</th><th>Kelas</th><th>Peran</th><th>Hadir</th><th>Predikat</th></tr></thead><tbody>'+r.A.map(function(o,i){var x=hitung(e.id,o.s.id);return '<tr><td>'+(i+1)+'</td><td>'+esc(o.s.nama)+'</td><td>'+esc(o.s.kelas)+'</td><td>'+esc(o.p)+'</td><td>'+(x.hadir.pct==null?"-":x.hadir.pct+"%")+'</td><td>'+(x.pred||"-")+'</td></tr>';}).join("")+'</tbody></table>';
+  var P=presSem(e.id);
+  h+='<h3 style="margin:14px 0 6px">Kegiatan latihan</h3>'+(P.length?'<table class="tbl"><thead><tr><th>Tanggal</th><th>Materi</th><th>Hadir</th></tr></thead><tbody>'+P.map(function(p){var t=0,hh=0;for(var k in p.hadir){t++;if(p.hadir[k]==="H")hh++;}return '<tr><td>'+tgl(p.tanggal)+'</td><td>'+esc(p.materi||"-")+'</td><td>'+hh+'/'+t+'</td></tr>';}).join("")+'</tbody></table>':'<p>Belum ada catatan.</p>');
+  h+='<h3 style="margin:14px 0 6px">Prestasi tahun ajaran ini</h3>'+(r.pr.length?'<ul>'+r.pr.map(function(p){return '<li>'+tgl(p.tanggal)+' — '+esc(p.lomba)+' ('+esc(p.tingkat)+'): <b>'+esc(p.peringkat)+'</b></li>';}).join("")+'</ul>':'<p>Belum ada.</p>');
+  h+='<h3 style="margin:14px 0 6px">Evaluasi dan rekomendasi tindak lanjut</h3><ul>'+r.rek.map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul>';
+  h+=ttd("Pembina "+e.nama,e.pembina);
+  cetak("Laporan Ekstrakurikuler "+e.nama,h);
+}
+
+/* ============ Aksi ============ */
+var ACT={
+  tab:function(d){tab=d.t;render();$("#view").focus();window.scrollTo(0,0);},
+  tutup:function(){tutup();},
+  hapusContoh:function(){if(konfirmasi("Hapus semua data berlabel contoh (murid, ekskul, presensi, prestasi, nilai)? Data yang Anda buat sendiri tetap ada."))hapusContoh();},
+  muatContoh:function(){if(!konfirmasi("Muat data contoh? Data contoh akan ditambahkan dan data Anda tetap ada."))return;var c=dataContoh();S.siswa=S.siswa.concat(c.siswa);S.ekskul=S.ekskul.concat(c.ekskul);S.presensi=S.presensi.concat(c.presensi);S.prestasi=S.prestasi.concat(c.prestasi);for(var k in c.nilai)S.nilai[k]=c.nilai[k];save();render();toast("Data contoh dimuat.");},
+  ekBaru:function(){formEkskul(null);},
+  ekUbah:function(d){formEkskul(ek(d.id));},
+  ekHapus:function(d){var e=ek(d.id);if(!e||!konfirmasi("Hapus ekskul "+e.nama+" beserta presensi, prestasi, dan nilainya?"))return;S.ekskul=S.ekskul.filter(function(x){return x.id!==e.id;});S.presensi=S.presensi.filter(function(p){return p.ekskul!==e.id;});S.prestasi=S.prestasi.filter(function(p){return p.ekskul!==e.id;});Object.keys(S.nilai).forEach(function(k){if(k.split("|")[0]===e.id)delete S.nilai[k];});save();render();toast("Ekskul dihapus.");},
+  anggota:function(d){formAnggota(ek(d.id));},
+  tambahJadwal:function(){$("#jWrap").insertAdjacentHTML("beforeend",jadwalRow(null));},
+  centangTampil:function(){$$("#aList label").forEach(function(l){if(!l.hidden)l.querySelector("input").checked=true;});$("#aList").dispatchEvent(new Event("change"));},
+  lepasTampil:function(){$$("#aList label").forEach(function(l){if(!l.hidden)l.querySelector("input").checked=false;});$("#aList").dispatchEvent(new Event("change"));},
+  isiPresensi:function(d){ui.pEk=d.id;ui.pTgl=today();ui.draft=null;tab="presensi";render();},
+  swBaru:function(){formSiswa(null);},
+  swUbah:function(d){formSiswa(sw(d.id));},
+  swHapus:function(d){var s=sw(d.id);if(!s||!konfirmasi("Hapus "+s.nama+" beserta keanggotaan, presensi, dan nilainya?"))return;S.siswa=S.siswa.filter(function(x){return x.id!==s.id;});hapusJejakSiswa(s.id);save();render();toast("Murid dihapus.");},
+  swImpor:function(){formImpor();},
+  setHadir:function(d){ui.draft.hadir[d.s]=d.v;bacaDraft();render();var b=$('[data-act="setHadir"][data-s="'+d.s+'"][data-v="'+d.v+'"]');if(b)b.focus();},
+  semuaHadir:function(){bacaDraft();for(var k in ui.draft.hadir)ui.draft.hadir[k]="H";render();},
+  simpanPresensi:function(){bacaDraft();var d=ui.draft,e=ek(d.ekskul),o={id:d.id,ekskul:d.ekskul,tanggal:d.tanggal,materi:d.materi,catatan:d.catatan,hadir:{}};e.anggota.forEach(function(a){o.hadir[a.s]=d.hadir[a.s]||"H";});
+    var i=S.presensi.findIndex(function(p){return p.ekskul===o.ekskul&&p.tanggal===o.tanggal;});if(i>=0){o.contoh=S.presensi[i].contoh;S.presensi[i]=o;}else S.presensi.push(o);ui.draft=null;save();render();toast("Presensi "+e.nama+" "+tgl(o.tanggal)+" tersimpan.");},
+  hapusPresensi:function(){if(!konfirmasi("Hapus catatan presensi pertemuan ini?"))return;var d=ui.draft;S.presensi=S.presensi.filter(function(p){return !(p.ekskul===d.ekskul&&p.tanggal===d.tanggal);});ui.draft=null;save();render();toast("Pertemuan dihapus.");},
+  bukaPresensi:function(d){ui.pTgl=d.t;ui.draft=null;render();window.scrollTo(0,0);},
+  prBaru:function(){if(!S.ekskul.length){toast("Tambahkan ekskul terlebih dahulu.");return;}formPrestasi(null);},
+  prUbah:function(d){formPrestasi(S.prestasi.filter(function(p){return p.id===d.id;})[0]);},
+  prHapus:function(d){if(!konfirmasi("Hapus catatan prestasi ini?"))return;S.prestasi=S.prestasi.filter(function(p){return p.id!==d.id;});save();render();},
+  isiTiga:function(){var e=ek(ui.nEk);e.anggota.forEach(function(a){var r=nilaiRec(e.id,a.s,true);r.i=r.i.map(function(v){return v||3;});});save();render();toast("Skor kosong diisi 3 (Baik). Sesuaikan per murid.");},
+  susunUlang:function(){if(!konfirmasi("Susun ulang semua deskripsi secara otomatis? Suntingan manual akan diganti."))return;var e=ek(ui.nEk);e.anggota.forEach(function(a){var r=nilaiRec(e.id,a.s,false);if(r){r.m=false;r.d="";}});save();render();},
+  resetDesk:function(d){var r=nilaiRec(ui.nEk,d.s,false);if(r){r.m=false;r.d="";}save();render();},
+  aiDesk:function(d,b){aiDeskripsi(b);},
+  simpanKey:function(){setKey($("#aiKey").value.trim());toast(getKey()?"Kunci API disimpan di browser ini.":"Kunci dikosongkan.");},
+  hapusKey:function(){setKey("");$("#aiKey").value="";toast("Kunci API dihapus dari perangkat.");},
+  ekspor:function(){unduh("cadangan-ekskul-"+today()+".json",JSON.stringify(S,null,1),"application/json");toast("Cadangan diunduh. Simpan di tempat aman.");},
+  hapusSemua:function(){if(!konfirmasi("Hapus SEMUA data di perangkat ini? Tindakan ini tidak bisa dibatalkan. Unduh cadangan terlebih dahulu bila perlu."))return;S={v:1,p:S.p,siswa:[],ekskul:[],presensi:[],prestasi:[],nilai:{}};save();render();toast("Semua data dihapus.");},
+  csvEkskul:function(){csv("ekskul.csv",[["Nama","Jenis","Bentuk","Pembina","Pelatih","Jadwal","Kuota","Anggota","Kehadiran %","Indikator"]].concat(S.ekskul.map(function(e){return [e.nama,e.jenis,e.bentuk,e.pembina,e.pelatih,jam(e),e.kuota,e.anggota.length,hadirEkskul(e.id),e.indikator.join(" | ")];})));},
+  csvSiswa:function(){csv("murid-ekskul.csv",[["Nama","Kelas","L/P","Ekskul","Jumlah"]].concat(S.siswa.slice().sort(function(a,b){return kelasSort(a.kelas,b.kelas)||byNama(a,b);}).map(function(s){var es=ekskulSiswa(s.id);return [s.nama,s.kelas,s.jk,es.map(function(e){return e.nama;}).join(", "),es.length];})));},
+  csvPresensi:function(){var e=ek(ui.pEk),P=presSem(e.id);csv("presensi-"+fileSafe(e.nama)+".csv",[["Nama","Kelas"].concat(P.map(function(p){return p.tanggal;})).concat(["H","I","S","A","% Hadir"])].concat(anggotaList(e).map(function(o){var st=hadirStat(e.id,o.s.id);return [o.s.nama,o.s.kelas].concat(P.map(function(p){return p.hadir[o.s.id]||"";})).concat([st.H,st.I,st.S,st.A,st.pct==null?"":st.pct]);})));},
+  csvPrestasi:function(){csv("prestasi-ekskul.csv",[["Tanggal","Lomba","Ekskul","Tingkat","Capaian","Penyelenggara","Murid"]].concat(S.prestasi.slice().sort(function(a,b){return a.tanggal<b.tanggal?-1:1;}).map(function(p){var e=ek(p.ekskul);return [p.tanggal,p.lomba,e?e.nama:"",p.tingkat,p.peringkat,p.penyelenggara,(p.siswa||[]).map(function(i){var s=sw(i);return s?s.nama:"";}).join(", ")];})));},
+  csvNilai:function(){var e=ek(ui.nEk);csv("nilai-rapor-"+fileSafe(e.nama)+".csv",[["Nama","Kelas","Ekskul","Semester","Tahun Ajaran","Kehadiran %","Nilai","Predikat","Deskripsi"]].concat(anggotaList(e).map(function(o){var h=hitung(e.id,o.s.id);return [o.s.nama,o.s.kelas,e.nama,S.p.semester,S.p.ta,h.hadir.pct==null?"":h.hadir.pct,h.nilai==null?"":h.nilai,h.pred||"",deskAkhir(e,o.s)];})));},
+  csvRekap:function(){csv("rekap-ekskul.csv",[["Ekskul","Jenis","Anggota","L","P","Pertemuan","Kehadiran %","SB","B","C","K","Belum dinilai","Prestasi TA"]].concat(S.ekskul.map(function(e){var r=rekapEk(e);return [e.nama,e.jenis,r.A.length,r.jk.L,r.jk.P,r.pert,r.hk==null?"":r.hk,r.dist.SB,r.dist.B,r.dist.C,r.dist.K,r.dist["-"],r.pr.length];})));},
+  csvPerSiswa:function(){csv("rekap-ekskul-per-murid.csv",[["Nama","Kelas","Ekskul","Predikat","Deskripsi"]].concat([].concat.apply([],S.siswa.slice().sort(function(a,b){return kelasSort(a.kelas,b.kelas)||byNama(a,b);}).map(function(s){var es=ekskulSiswa(s.id);if(!es.length)return [[s.nama,s.kelas,"(belum ikut)","",""]];return es.map(function(e){var h=hitung(e.id,s.id);return [s.nama,s.kelas,e.nama,h.pred||"",deskAkhir(e,s)];});}))));},
+  cetakPresensi:function(){var e=ek(ui.pEk),P=presSem(e.id);cetak("Daftar Hadir Latihan "+e.nama,'<p>Pembina: '+esc(e.pembina||"-")+' · Jadwal: '+esc(jam(e))+'</p><table class="tbl"><thead><tr><th>No</th><th>Nama</th><th>Kelas</th>'+P.map(function(p){return '<th>'+p.tanggal.slice(8)+'/'+p.tanggal.slice(5,7)+'</th>';}).join("")+'<th>%</th></tr></thead><tbody>'+anggotaList(e).map(function(o,i){var st=hadirStat(e.id,o.s.id);return '<tr><td>'+(i+1)+'</td><td>'+esc(o.s.nama)+'</td><td>'+esc(o.s.kelas)+'</td>'+P.map(function(p){return '<td>'+(p.hadir[o.s.id]||"")+'</td>';}).join("")+'<td>'+(st.pct==null?"":st.pct)+'</td></tr>';}).join("")+'</tbody></table><p class="small">H = hadir, I = izin, S = sakit, A = alpa.</p>'+ttd("Pembina "+e.nama,e.pembina));},
+  cetakJadwal:function(){cetak("Jadwal Latihan Ekstrakurikuler",'<table class="tbl"><thead><tr><th>Ekskul</th><th>Jenis</th><th>Jadwal</th><th>Pembina</th></tr></thead><tbody>'+S.ekskul.slice().sort(byNama).map(function(e){return '<tr><td>'+esc(e.nama)+'</td><td>'+(e.jenis==="wajib"?"Wajib":"Pilihan")+'</td><td>'+esc(jam(e))+'</td><td>'+esc(e.pembina||"-")+'</td></tr>';}).join("")+'</tbody></table>'+ttd("Kepala Sekolah",""));},
+  cetakPrestasi:function(){cetak("Daftar Prestasi Ekstrakurikuler",'<table class="tbl"><thead><tr><th>Tanggal</th><th>Lomba</th><th>Ekskul</th><th>Tingkat</th><th>Capaian</th><th>Murid</th></tr></thead><tbody>'+S.prestasi.slice().sort(function(a,b){return a.tanggal<b.tanggal?-1:1;}).map(function(p){var e=ek(p.ekskul);return '<tr><td>'+tgl(p.tanggal)+'</td><td>'+esc(p.lomba)+'</td><td>'+esc(e?e.nama:"")+'</td><td>'+esc(p.tingkat)+'</td><td>'+esc(p.peringkat)+'</td><td>'+esc((p.siswa||[]).map(function(i){var s=sw(i);return s?s.nama:"";}).join(", "))+'</td></tr>';}).join("")+'</tbody></table>');},
+  cetakNilai:function(){var e=ek(ui.nEk);cetak("Nilai Ekstrakurikuler "+e.nama,'<p>Pembina: '+esc(e.pembina||"-")+'</p><table class="tbl"><thead><tr><th>No</th><th>Nama</th><th>Kelas</th><th>Hadir</th><th>Predikat</th><th>Deskripsi</th></tr></thead><tbody>'+anggotaList(e).map(function(o,i){var h=hitung(e.id,o.s.id);return '<tr><td>'+(i+1)+'</td><td>'+esc(o.s.nama)+'</td><td>'+esc(o.s.kelas)+'</td><td>'+(h.hadir.pct==null?"-":h.hadir.pct+"%")+'</td><td>'+(h.pred||"-")+'</td><td>'+esc(deskAkhir(e,o.s))+'</td></tr>';}).join("")+'</tbody></table>'+ttd("Pembina "+e.nama,e.pembina));},
+  cetakLaporan:function(d){laporanEkskul(ek(d.id));}
+};
+function bacaDraft(){if(!ui.draft)return;var m=$("#pMateri"),c=$("#pCatatan");if(m)ui.draft.materi=m.value;if(c)ui.draft.catatan=c.value;}
+
+document.addEventListener("click",function(ev){var b=ev.target.closest("[data-act]");if(!b)return;var f=ACT[b.dataset.act];if(f){ev.preventDefault();f(b.dataset,b,ev);}});
+document.addEventListener("change",function(ev){
+  var t=ev.target;
+  if(t.dataset.ui){if(t.dataset.ui==="pTgl"||t.dataset.ui==="pEk")bacaDraft();ui[t.dataset.ui]=t.value;if(t.dataset.ui==="pEk"||t.dataset.ui==="pTgl")ui.draft=null;render();var el=$('[data-ui="'+t.dataset.ui+'"]');if(el)el.focus();return;}
+  if(t.dataset.p){var k=t.dataset.p,v=t.value;if(t.type==="number"){v=Math.max(0,Math.min(100,parseFloat(v)||0));}S.p[k]=v;save();render();var el2=$('[data-p="'+k+'"]');if(el2)el2.focus();return;}
+  if(t.dataset.skor!=null){var r=nilaiRec(ui.nEk,t.dataset.s,true);r.i[+t.dataset.skor]=+t.value;save();var sel='[data-skor="'+t.dataset.skor+'"][data-s="'+t.dataset.s+'"]';render();var el3=$(sel);if(el3)el3.focus();return;}
+  if(t.dataset.desk){var r2=nilaiRec(ui.nEk,t.dataset.desk,true);r2.d=t.value.trim();r2.m=!!r2.d;save();return;}
+  if(t.id==="imporFile"&&t.files&&t.files[0]){var fr=new FileReader();fr.onload=function(){try{var o=JSON.parse(fr.result);if(!o||!Array.isArray(o.siswa)||!Array.isArray(o.ekskul))throw 0;if(!konfirmasi("Ganti seluruh data di perangkat ini dengan isi cadangan?"))return;S=o;migrate();save();render();toast("Cadangan berhasil dipulihkan.");}catch(e){toast("Berkas cadangan tidak valid.");}};fr.readAsText(t.files[0]);t.value="";}
+});
+document.addEventListener("input",function(ev){var t=ev.target;if(t.dataset.ui==="fCari"){ui.fCari=t.value;var pos=t.selectionStart;render();var el=$('[data-ui="fCari"]');if(el){el.focus();try{el.setSelectionRange(pos,pos);}catch(e){}}}});
+
+/* ============ Tema ============ */
+function terapkanTema(t){if(t)document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme");}
+(function(){var t="";try{t=localStorage.getItem(KEY_TEMA)||"";}catch(e){}terapkanTema(t);})();
+$("#btnTema").addEventListener("click",function(){
+  var cur=document.documentElement.getAttribute("data-theme");
+  var gelapSistem=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;
+  var isDark=cur?cur==="dark":gelapSistem,next=isDark?"light":"dark";
+  terapkanTema(next);try{localStorage.setItem(KEY_TEMA,next);}catch(e){}
+});
+
+load();render();
+</script>
+</body>
+</html>

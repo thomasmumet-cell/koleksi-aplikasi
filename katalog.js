@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Pengelola Ekstrakurikuler",
+    kategori: "Sekolah",
+    jenis: "HTML",
+    deskripsi: "Satu tempat untuk mengelola ekskul wajib kepanduan dan ekskul pilihan: pembina, anggota beserta peran, jadwal mingguan dengan deteksi bentrok tempat/murid, presensi latihan, dan catatan prestasi. Nilai rapor dihitung dari skor indikator dan kehadiran menjadi predikat serta deskripsi yang bisa disunting (CSV untuk e-Rapor), dilengkapi peringatan murid yang belum ikut ekskul wajib dan laporan evaluasi per ekskul siap cetak; data hanya di perangkat.",
+    tanggal: "2026-11-21",
+    tautan: "ekskul/",
+    status: "aktif"
+  },
+  {
     nama: "Latihan TKA Bahasa Inggris",
     kategori: "Persiapan TKA",
     jenis: "HTML",
