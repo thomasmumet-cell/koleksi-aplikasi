@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Windows Ultimate Optimizer Pro 2026",
+    kategori: "Sekolah",
+    jenis: "HTML",
+    deskripsi: "Aplikasi desktop Windows 10/11 satu berkas untuk merawat komputer sekolah: analisis CPU, RAM, disk, dan skor kesehatan; pembersihan 36 lokasi sampah, cache Windows Update, Defender, Store, Recycle Bin, dan Event Log; perbaikan DISM, SFC, CHKDSK; optimasi SSD/HDD dan jaringan. Restore Point dan backup Registry dibuat otomatis, hasilnya berupa laporan HTML. Unduh lalu jalankan sebagai Administrator.",
+    tanggal: "2026-11-21",
+    tautan: "windows-optimizer/",
+    status: "aktif"
+  },
+  {
     nama: "Pengelola Ekstrakurikuler",
     kategori: "Sekolah",
     jenis: "HTML",
