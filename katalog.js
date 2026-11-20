@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Tiket Keluar & Refleksi",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Exit ticket digital untuk 3–5 menit terakhir pelajaran: 1–3 soal cek pemahaman (PG, benar/salah, isian) plus refleksi pembelajaran mendalam (keyakinan, perasaan, kebermaknaan, pertanyaan tersisa) yang diisi murid bergiliran di perangkat guru atau di kertas cetak. Rekap otomatis mengelompokkan murid Siap lanjut/Perlu penguatan/Perlu pendampingan, menandai “yakin tapi keliru”, menganalisis soal dan miskonsepsi, menyimpan rencana tindak lanjut guru, dan menampilkan tren per kelas; ringkasan AI Gemini opsional.",
+    tanggal: "2026-11-21",
+    tautan: "tiket-keluar/",
+    status: "aktif"
+  },
+  {
     nama: "Book to Game – Buku STEM jadi Game",
     kategori: "Pembelajaran",
     jenis: "HTML",

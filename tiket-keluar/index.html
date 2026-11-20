@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tiket Keluar &amp; Refleksi</title>
+<meta name="description" content="Exit ticket digital untuk akhir pelajaran: cek pemahaman, refleksi pembelajaran mendalam (berkesadaran, bermakna, menggembirakan), rekap kelas, dan tindak lanjut guru.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4efe6; --surface:#fffaf2; --surface2:#efe7d9; --ink:#1d1b2f; --muted:#57536b; --line:#dbd0bd;
+  --brand:#3a2fa3; --brand-ink:#ffffff; --brand-soft:#e7e4fa; --accent:#b4470f; --accent-soft:#fde3d3;
+  --g1:#1d6f44; --g1-bg:#dcf1e4; --g2:#7d5200; --g2-bg:#fbeecb; --g3:#a3322a; --g3-bg:#fbe1dc;
+  --shadow:0 1px 0 rgba(0,0,0,.04),0 10px 24px -16px rgba(29,27,47,.45);
+  --r:16px; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#14131c; --surface:#1d1b29; --surface2:#262336; --ink:#ecebf5; --muted:#a9a5bf; --line:#383349;
+    --brand:#aca2f7; --brand-ink:#16122e; --brand-soft:#2b2650; --accent:#ff9a62; --accent-soft:#3a2416;
+    --g1:#7fdca5; --g1-bg:#163323; --g2:#f0c463; --g2-bg:#352a10; --g3:#f5a197; --g3-bg:#3c1d1a;
+    --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.7); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14131c; --surface:#1d1b29; --surface2:#262336; --ink:#ecebf5; --muted:#a9a5bf; --line:#383349;
+  --brand:#aca2f7; --brand-ink:#16122e; --brand-soft:#2b2650; --accent:#ff9a62; --accent-soft:#3a2416;
+  --g1:#7fdca5; --g1-bg:#163323; --g2:#f0c463; --g2-bg:#352a10; --g3:#f5a197; --g3-bg:#3c1d1a;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 10px 24px -14px rgba(0,0,0,.7); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Atkinson Hyperlegible",system-ui,sans-serif;min-height:100vh}
+h1,h2,h3,.disp{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0}
+h2{font-size:1.45rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.08rem;font-weight:700}
+a{color:var(--brand)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* header */
+.top{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top .wrap{display:flex;align-items:center;gap:14px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);margin-right:auto}
+.logo-stub{width:52px;height:34px;flex:none;border-radius:7px;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font:800 .72rem "Bricolage Grotesque",system-ui,sans-serif;position:relative;letter-spacing:.03em}
+.logo-stub::before,.logo-stub::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:var(--surface);top:12px}
+.logo-stub::before{left:-5px}.logo-stub::after{right:-5px}
+.logo b{display:block;font:800 1.05rem/1.1 "Bricolage Grotesque"}
+.logo small{color:var(--muted);font-size:.78rem}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap}
+nav.tabs button{border:0;background:transparent;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:700;color:var(--muted)}
+nav.tabs button[aria-current="page"]{background:var(--brand-soft);color:var(--brand)}
+nav.tabs button:hover{color:var(--ink)}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:40px;height:40px;cursor:pointer;display:grid;place-items:center}
+
+main{padding:22px 0 40px}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.head p{margin:.25rem 0 0;color:var(--muted)}
+.btn{border:1px solid var(--line);background:var(--surface);padding:9px 15px;border-radius:11px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:var(--ink);min-height:42px}
+.btn:hover{border-color:var(--brand)}
+.btn.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.btn.acc{background:var(--accent);color:#fff;border-color:var(--accent)}
+:root[data-theme="dark"] .btn.acc{color:#1b0d04}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.acc{color:#1b0d04}}
+.btn.ghost{background:transparent}
+.btn.sm{padding:5px 10px;min-height:34px;font-size:.88rem;border-radius:9px}
+.btn.danger{color:var(--g3)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.muted{color:var(--muted)}
+.tag{display:inline-block;font-size:.76rem;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--surface2);color:var(--muted);letter-spacing:.02em}
+.tag.contoh{background:var(--accent-soft);color:var(--accent)}
+.tag.g1{background:var(--g1-bg);color:var(--g1)}.tag.g2{background:var(--g2-bg);color:var(--g2)}.tag.g3{background:var(--g3-bg);color:var(--g3)}
+
+/* ticket list */
+.tickets{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(310px,1fr))}
+.ticket{display:grid;grid-template-columns:1fr 92px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.ticket .main{padding:16px 16px 14px}
+.ticket .stub{border-left:2px dashed var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 6px;text-align:center;background:var(--surface2)}
+.ticket .stub b{font:800 1.6rem "Bricolage Grotesque";color:var(--brand)}
+.ticket .stub span{font-size:.72rem;color:var(--muted);line-height:1.2}
+.ticket::before,.ticket::after{content:"";position:absolute;right:83px;width:18px;height:18px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
+.ticket::before{top:-10px}.ticket::after{bottom:-10px}
+.ticket h3{margin:6px 0 4px}
+.ticket .meta{font-size:.86rem;color:var(--muted)}
+.ticket .actions{margin-top:12px;display:flex;gap:6px;flex-wrap:wrap}
+.empty{padding:40px 20px;text-align:center;color:var(--muted);border:2px dashed var(--line);border-radius:var(--r)}
+
+/* forms */
+label.f{display:flex;flex-direction:column;gap:5px;font-weight:700;font-size:.92rem}
+input[type=text],input[type=date],input[type=password],input[type=search],select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 11px;min-height:42px;width:100%;font-weight:400}
+textarea{min-height:80px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--brand)}
+fieldset{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0}
+legend{font-weight:700;padding:0 6px}
+.q-item{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface2);display:grid;gap:9px}
+.q-item .qh{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.opts{display:grid;gap:6px}
+.opt-row{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center}
+.opt-row input[type=radio]{width:20px;height:20px;accent-color:var(--brand)}
+.prinsip{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+details.bank summary{cursor:pointer;font-weight:700;color:var(--brand)}
+.bank-list{display:grid;gap:6px;margin-top:8px}
+.bank-list button{text-align:left;border:1px dashed var(--line);background:var(--surface);border-radius:10px;padding:8px 10px;cursor:pointer}
+.bank-list button:hover{border-color:var(--brand)}
+
+/* stats */
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stat b{display:block;font:800 1.8rem/1.1 "Bricolage Grotesque"}
+.stat span{font-size:.85rem;color:var(--muted)}
+.bar{height:12px;border-radius:999px;background:var(--surface2);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .b1{background:var(--g1)}.bar .b2{background:var(--g2)}.bar .b3{background:var(--g3)}.bar .bb{background:var(--brand)}
+.soal-stat{display:grid;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
+.soal-stat:last-child{border-bottom:0}
+.dist{display:flex;gap:6px;flex-wrap:wrap;font-size:.82rem}
+.dist span{padding:2px 8px;border-radius:8px;background:var(--surface2)}
+.dist span.k{background:var(--g1-bg);color:var(--g1);font-weight:700}
+.dist span.w{background:var(--g3-bg);color:var(--g3);font-weight:700}
+.groups{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.grp{border-radius:14px;padding:12px 14px;border:1px solid var(--line)}
+.grp.g1{background:var(--g1-bg)}.grp.g2{background:var(--g2-bg)}.grp.g3{background:var(--g3-bg)}
+.grp h3{display:flex;justify-content:space-between}
+.grp.g1 h3{color:var(--g1)}.grp.g2 h3{color:var(--g2)}.grp.g3 h3{color:var(--g3)}
+.grp p{margin:.4rem 0;font-size:.88rem}
+.names{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.names span{background:var(--surface);border-radius:999px;padding:2px 9px;font-size:.84rem;border:1px solid var(--line)}
+.quotes{display:grid;gap:6px;margin:8px 0 0;padding:0;list-style:none}
+.quotes li{background:var(--surface2);border-radius:10px;padding:8px 11px;font-size:.92rem;white-space:pre-line}
+.quotes li small{color:var(--muted)}
+.moods{display:flex;gap:10px;flex-wrap:wrap}
+.moods div{flex:1;min-width:70px;text-align:center;background:var(--surface2);border-radius:12px;padding:8px}
+.moods div b{display:block;font-size:1.5rem}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--surface2);font-weight:700;white-space:nowrap;position:sticky;top:0}
+td.c,th.c{text-align:center}
+.okc{color:var(--g1);font-weight:700}.noc{color:var(--g3);font-weight:700}
+.cell-toggle{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:2px 8px;cursor:pointer;min-width:34px}
+.note{background:var(--brand-soft);border-radius:12px;padding:12px 14px;font-size:.92rem}
+.ai-out{white-space:pre-wrap;background:var(--surface2);border-radius:12px;padding:12px 14px;font-size:.93rem}
+.trend{display:grid;gap:8px}
+.trend-row{display:grid;grid-template-columns:minmax(120px,1.3fr) 2fr;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.trend-row .bars{display:grid;gap:4px}
+.trend-row .bars div{display:grid;grid-template-columns:86px 1fr 40px;gap:8px;align-items:center;font-size:.8rem;color:var(--muted)}
+
+/* kiosk (mode siswa) */
+body.kiosk .top, body.kiosk footer{display:none}
+.kiosk-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.kiosk-card{max-width:720px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)}
+.kiosk-card h2{font-size:1.6rem}
+.name-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:14px}
+.name-grid button{padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surface2);cursor:pointer;font-weight:700;text-align:left;min-height:52px}
+.name-grid button:hover:not(:disabled){border-color:var(--brand);background:var(--brand-soft)}
+.name-grid button:disabled{opacity:.5;cursor:not-allowed;text-decoration:line-through}
+.sq{border-top:2px dashed var(--line);padding-top:16px;margin-top:16px}
+.sq .qt{font-weight:700;font-size:1.08rem;margin-bottom:8px}
+.choice{display:grid;gap:8px}
+.choice label{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:11px 13px;cursor:pointer;background:var(--surface2)}
+.choice label:has(input:checked){border-color:var(--brand);background:var(--brand-soft);outline:2px solid var(--brand)}
+.choice input{width:20px;height:20px;accent-color:var(--brand)}
+.scale{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.scale label{flex-direction:column;text-align:center;justify-content:center;font-size:.86rem;gap:4px;padding:10px 6px}
+.scale label .em{font-size:1.9rem;line-height:1}
+.scale input{position:absolute;opacity:0;pointer-events:none}
+.thanks{text-align:center;padding:30px 10px}
+.thanks .big{font-size:3.4rem}
+
+/* cetak */
+.sheet{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#fff;color:#111;border:1px solid #bbb}
+.pslip{border:1px dashed #888;padding:12px 14px;font-size:11.5px;line-height:1.4;min-height:130mm;color:#111}
+.pslip h4{margin:0 0 4px;font:800 14px "Bricolage Grotesque",sans-serif}
+.pslip .ln{border-bottom:1px solid #999;height:18px}
+.pslip .box{display:inline-block;width:12px;height:12px;border:1px solid #333;margin-right:4px;vertical-align:-2px}
+@media print{
+  @page{size:A4;margin:8mm}
+  body{background:#fff}
+  .top,footer,.noprint,.head{display:none!important}
+  main{padding:0}
+  .wrap{max-width:none;padding:0}
+  .sheet{border:0;break-after:page}
+  .pslip{min-height:136mm;break-inside:avoid}
+}
+footer{border-top:1px solid var(--line);padding:22px 0 30px;color:var(--muted);font-size:.88rem}
+footer h2{font-size:1rem;color:var(--ink);margin-bottom:6px}
+footer ul{margin:.3rem 0;padding-left:1.1rem}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;opacity:0;transition:.25s;z-index:50;max-width:calc(100% - 32px);font-weight:700;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.banner{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--accent-soft);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:16px;font-size:.93rem}
+@media (max-width:640px){
+  h2{font-size:1.25rem}
+  .top .wrap{gap:8px}
+  nav.tabs{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap}
+  nav.tabs button{white-space:nowrap}
+  .ticket{grid-template-columns:1fr 74px}
+  .ticket::before,.ticket::after{right:65px}
+  .trend-row{grid-template-columns:1fr}
+  .scale label{font-size:.74rem}
+  .sheet{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#" data-go="tiket" aria-label="Tiket Keluar & Refleksi, beranda">
+      <span class="logo-stub" aria-hidden="true">EXIT</span>
+      <span><b>Tiket Keluar &amp; Refleksi</b><small>Cek pemahaman · refleksi · tindak lanjut</small></span>
+    </a>
+    <nav class="tabs" aria-label="Menu utama">
+      <button data-go="tiket">Tiket</button>
+      <button data-go="riwayat">Riwayat &amp; Tren</button>
+      <button data-go="kelas">Kelas &amp; Murid</button>
+      <button data-go="atur">Pengaturan</button>
+    </nav>
+    <button class="icon-btn" id="themeBtn" aria-label="Ganti tema terang/gelap" title="Ganti tema" style="font-size:1.1rem">🌓</button>
+  </div>
+</header>
+<main><div class="wrap" id="view"></div></main>
+<footer>
+  <div class="wrap">
+    <h2>Dasar dan sumber</h2>
+    <ul>
+      <li><a href="https://www.detik.com/edu/sekolah/d-8021932/permendikdasmen-13-tahun-2025-isi-lengkap-dan-dampaknya-untuk-sekolah" target="_blank" rel="noopener">Permendikdasmen No. 13 Tahun 2025: pendekatan pembelajaran mendalam dalam kerangka kurikulum (detikEdu)</a></li>
+      <li><a href="https://guruinovatif.id/artikel/mengenal-pembelajaran-mendalam" target="_blank" rel="noopener">Mengenal Pembelajaran Mendalam: berkesadaran, bermakna, menggembirakan; memahami–mengaplikasi–merefleksi (Guru Inovatif)</a></li>
+      <li><a href="https://www.readingrockets.org/classroom/classroom-strategies/exit-slips" target="_blank" rel="noopener">Exit Slips: tiga jenis pertanyaan tiket keluar (Fisher &amp; Frey) (Reading Rockets)</a></li>
+      <li><a href="https://cteresources.bc.edu/documentation/exit-tickets/sample-questions-submission-options/" target="_blank" rel="noopener">Types of Exit Tickets and Example Questions (Boston College CTE)</a></li>
+    </ul>
+    <p>Data tersimpan hanya di perangkat ini (localStorage). Nama murid pada data contoh adalah fiktif. <a href="../">← Kembali ke koleksi aplikasi</a></p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+const KUNCI = 'tiketKeluar.v1', KUNCI_AI = 'tiketKeluar.ai', KUNCI_TEMA = 'tiketKeluar.tema';
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-3);
+function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+function lsDel(k) { try { localStorage.removeItem(k); } catch (e) { } }
+let toastT;
+function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+function unduh(nama, isi, tipe) { const b = new Blob([isi], { type: tipe }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = nama; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 400); }
+async function salin(teks) { try { await navigator.clipboard.writeText(teks); toast('Tersalin ke papan klip.'); } catch (e) { const ta = document.createElement('textarea'); ta.value = teks; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('Tersalin.'); } catch (_) { toast('Gagal menyalin.'); } ta.remove(); } }
+const tglID = d => { if (!d) return '-'; const x = new Date(d + (d.length === 10 ? 'T00:00:00' : '')); return isNaN(x) ? d : x.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); };
+const hariIni = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
+const pct = x => x == null || isNaN(x) ? '–' : Math.round(x * 100) + '%';
+const HURUF = 'ABCDE';
+
+/* ---------- referensi ---------- */
+const YAKIN = [null, { e: '🌱', t: 'Belum paham' }, { e: '🌿', t: 'Sedikit paham' }, { e: '🌳', t: 'Paham' }, { e: '🌟', t: 'Bisa menjelaskan ke teman' }];
+const MOOD = [null, { e: '😟', t: 'Kurang senang' }, { e: '😐', t: 'Biasa saja' }, { e: '🙂', t: 'Senang' }, { e: '🤩', t: 'Sangat senang' }];
+const KEL = {
+  g1: { n: 'Siap lanjut', saran: 'Beri tantangan pengayaan atau penerapan: soal HOTS, proyek mini, atau peran tutor sebaya untuk teman di kelompok lain.' },
+  g2: { n: 'Perlu penguatan', saran: 'Ulas 5–10 menit di awal pertemuan berikutnya dengan contoh yang berbeda, lalu latihan terbimbing berpasangan.' },
+  g3: { n: 'Perlu pendampingan', saran: 'Kelompok kecil bersama guru: cek prasyarat, pemodelan ulang dengan benda konkret/visual, dan umpan balik langsung.' }
+};
+const BANK = [
+  ['Berkesadaran', 'Apa tujuan belajar hari ini, dengan kata-kataku sendiri?'],
+  ['Berkesadaran', 'Strategi apa yang paling membantuku belajar hari ini?'],
+  ['Berkesadaran', 'Kapan aku paling fokus, dan kapan perhatianku teralihkan?'],
+  ['Bermakna', 'Di mana aku bisa memakai pelajaran ini dalam kehidupanku?'],
+  ['Bermakna', 'Pelajaran hari ini berhubungan dengan apa yang sudah kuketahui sebelumnya, yaitu …'],
+  ['Bermakna', 'Masalah nyata apa yang bisa diselesaikan dengan pengetahuan ini?'],
+  ['Menggembirakan', 'Bagian mana yang paling seru atau membuatku penasaran?'],
+  ['Menggembirakan', 'Apa yang ingin kucoba atau kupelajari lebih jauh?'],
+  ['Memahami', 'Jelaskan inti pelajaran hari ini dalam satu kalimat, seolah kepada adik kelas.'],
+  ['Memahami', 'Tuliskan 3 kata kunci dari pelajaran hari ini.'],
+  ['Mengaplikasi', 'Berikan satu contoh penerapan materi ini di rumah atau di sekolah.'],
+  ['Merefleksi', 'Satu hal yang masih membuatku bingung atau ingin kutanyakan:'],
+  ['Merefleksi', 'Apa yang akan kulakukan berbeda pada pertemuan berikutnya?'],
+  ['Merefleksi', 'Seberapa baik aku bekerja sama dengan teman hari ini? Mengapa?']
+];
+function refleksiBawaan() {
+  return [
+    { id: uid(), jenis: 'yakin', prinsip: 'Berkesadaran', teks: 'Seberapa yakin aku memahami pelajaran hari ini?' },
+    { id: uid(), jenis: 'mood', prinsip: 'Menggembirakan', teks: 'Bagaimana perasaanku selama belajar hari ini?' },
+    { id: uid(), jenis: 'teks', prinsip: 'Bermakna', teks: 'Di mana aku bisa memakai pelajaran ini dalam kehidupanku?' },
+    { id: uid(), jenis: 'teks', prinsip: 'Merefleksi', teks: 'Satu hal yang masih membuatku bingung atau ingin kutanyakan:' }
+  ];
+}
+
+/* ---------- data ---------- */
+let S = muat();
+function muat() {
+  const raw = lsGet(KUNCI);
+  if (raw) { try { const d = JSON.parse(raw); if (d && Array.isArray(d.kelas) && Array.isArray(d.tiket)) return d; } catch (e) { } }
+  return dataContoh();
+}
+function simpan() { if (!lsSet(KUNCI, JSON.stringify(S))) toast('Peringatan: gagal menyimpan di perangkat (penyimpanan penuh/diblokir).'); }
+
+function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function dataContoh() {
+  const mk = (nama, daftar) => ({ id: uid(), nama, contoh: true, siswa: daftar.map(n => ({ id: uid(), nama: n })) });
+  const k8 = mk('VIII A', ['Adinda Putri', 'Bagas Pratama', 'Citra Lestari', 'Dimas Saputra', 'Elsa Rahmawati', 'Fajar Nugroho', 'Gita Maharani', 'Hendra Wijaya', 'Intan Permata', 'Joko Susilo', 'Kirana Ayu', 'Laras Wulandari', 'Michael Hutapea', 'Nadia Safitri', 'Oki Ramadhan', 'Putu Ardana']);
+  const k7 = mk('VII B', ['Raka Aditya', 'Salsa Nabila', 'Taufik Hidayat', 'Umi Kalsum', 'Vino Firmansyah', 'Wulan Sari', 'Yoga Prasetyo', 'Zahra Amalia', 'Bima Sakti', 'Cahya Ningrum', 'Daffa Rizky', 'Eka Fitriani']);
+  const TEKS = {
+    IPA: [['Menjaga kebersihan udara di rumah, tidak dekat orang merokok.', 'Saat olahraga aku jadi tahu kenapa napas jadi cepat.', 'Bisa menjelaskan ke adik kenapa asap itu berbahaya.', 'Memakai masker saat jalanan berdebu.', 'Belum tahu, mungkin nanti saat ujian.'],
+      ['Kenapa CO₂ bisa keluar lewat alveolus?', 'Masih bingung bedanya bronkus dan bronkiolus.', 'Diafragma itu otot atau tulang?', 'Tidak ada, sudah jelas.', 'Kenapa orang di gunung lebih cepat lelah?', '']],
+    Matematika: [['Menghitung uang belanja di warung.', 'Membagi uang jajan supaya cukup seminggu.', 'Menghitung harga satu barang kalau tahu harga borongan.', 'Menghitung umur kakak dari teka-teki.', 'Belum tahu.'],
+      ['Kalau x-nya ada di kedua ruas bagaimana?', 'Kenapa harus dikurangi dulu, baru dibagi?', 'Bagaimana kalau hasilnya pecahan?', 'Tidak ada, sudah jelas.', 'Masih bingung membuat kalimat matematikanya dari soal cerita.', '']],
+    'Bahasa Indonesia': [[], ['Bedanya interpretasi dan pernyataan umum apa?', 'Apakah teks eksplanasi boleh berisi pendapat?', 'Masih ragu urutan prosesnya.', 'Tidak ada, sudah jelas.', 'Konjungsi kronologis itu contohnya apa saja?', '']]
+  };
+  const t1 = {
+    id: uid(), contoh: true, tanggal: '2026-11-10', kelasId: k8.id, mapel: 'IPA', topik: 'Sistem Pernapasan Manusia',
+    tujuan: 'Murid dapat menjelaskan proses pertukaran gas di alveolus dan kaitannya dengan kesehatan paru-paru.',
+    soal: [
+      { id: uid(), tipe: 'pg', teks: 'Pertukaran O₂ dan CO₂ di dalam paru-paru terjadi di …', opsi: ['Trakea', 'Bronkus', 'Alveolus', 'Laring'], kunci: 2 },
+      { id: uid(), tipe: 'bs', teks: 'Saat menarik napas (inspirasi), diafragma berkontraksi dan rongga dada membesar.', kunci: true },
+      { id: uid(), tipe: 'isian', teks: 'Sebutkan satu kebiasaan yang merusak kesehatan paru-paru.', kunci: 'merokok, rokok, vape, asap, polusi, debu' }
+    ], refleksi: refleksiBawaan(), jawaban: [], tindak: { rencana: 'Pertemuan 12/11: ulas mekanisme inspirasi–ekspirasi dengan model paru-paru botol untuk kelompok penguatan. Kelompok siap lanjut membuat poster kampanye udara bersih.', status: 'Dilaksanakan', tanggal: '2026-11-12' }
+  };
+  const t2 = {
+    id: uid(), contoh: true, tanggal: '2026-11-14', kelasId: k7.id, mapel: 'Matematika', topik: 'Persamaan Linear Satu Variabel',
+    tujuan: 'Murid dapat menyusun dan menyelesaikan PLSV dari masalah sehari-hari.',
+    soal: [
+      { id: uid(), tipe: 'pg', teks: 'Nilai x yang memenuhi 3x + 5 = 20 adalah …', opsi: ['3', '5', '15', '25/3'], kunci: 1 },
+      { id: uid(), tipe: 'pg', teks: 'Harga 4 buku Rp24.000. Jika harga satu buku = b, kalimat matematikanya …', opsi: ['b + 4 = 24.000', '4b = 24.000', 'b = 4 × 24.000', '24.000b = 4'], kunci: 1 },
+      { id: uid(), tipe: 'isian', teks: 'Tentukan nilai x jika 2x − 7 = 9.', kunci: '8, x=8, x = 8' }
+    ], refleksi: refleksiBawaan(), jawaban: [], tindak: { rencana: '', status: 'Belum', tanggal: '' }
+  };
+  const r3 = refleksiBawaan(); r3[2] = { id: uid(), jenis: 'teks', prinsip: 'Memahami', teks: 'Jelaskan inti pelajaran hari ini dalam satu kalimat, seolah kepada adik kelas.' };
+  const t3 = {
+    id: uid(), contoh: true, tanggal: '2026-11-18', kelasId: k8.id, mapel: 'Bahasa Indonesia', topik: 'Struktur Teks Eksplanasi',
+    tujuan: 'Murid dapat mengidentifikasi struktur dan ciri kebahasaan teks eksplanasi.',
+    soal: [
+      { id: uid(), tipe: 'pg', teks: 'Bagian teks eksplanasi yang berisi urutan proses terjadinya fenomena disebut …', opsi: ['Pernyataan umum', 'Deretan penjelas', 'Interpretasi', 'Orientasi'], kunci: 1 },
+      { id: uid(), tipe: 'bs', teks: 'Teks eksplanasi banyak memakai konjungsi kausalitas seperti "sehingga" dan "karena".', kunci: true }
+    ], refleksi: r3, jawaban: [], tindak: { rencana: 'Gunakan contoh teks banjir dan longsor; murid menandai deretan penjelas dengan stabilo.', status: 'Direncanakan', tanggal: '2026-11-25' }
+  };
+  const INTI = ['Teks eksplanasi menjelaskan bagaimana dan mengapa sesuatu terjadi.', 'Teks yang menerangkan proses alam secara berurutan.', 'Ada pernyataan umum, deretan penjelas, dan interpretasi.', 'Teks tentang kejadian, ada sebab akibatnya.', 'Pokoknya teks yang menjelaskan.'];
+  const isi = (t, kelas, seed, salahFav, bisaNaik) => {
+    const R = rng(seed);
+    kelas.siswa.forEach((s, i) => {
+      if (R() < .1) return; // sebagian belum mengisi
+      const kem = Math.min(1, R() * .8 + .25 + bisaNaik);
+      const j = {}, ov = {}, r = {};
+      let benar = 0;
+      t.soal.forEach(q => {
+        const ok = R() < kem;
+        if (ok) benar++;
+        if (q.tipe === 'pg') j[q.id] = ok ? q.kunci : (R() < .65 ? (salahFav[q.id] ?? (q.kunci + 1) % q.opsi.length) : Math.floor(R() * q.opsi.length));
+        else if (q.tipe === 'bs') j[q.id] = ok ? q.kunci : !q.kunci;
+        else j[q.id] = ok ? q.kunci.split(',')[0].trim() : (t.mapel === 'Matematika' ? (R() < .5 ? '1' : '16') : (R() < .5 ? 'makan pedas' : 'minum es'));
+        if (q.tipe === 'pg' && !ok && j[q.id] === q.kunci) j[q.id] = (q.kunci + 1) % q.opsi.length;
+      });
+      const sk = benar / t.soal.length;
+      let y = Math.max(1, Math.min(4, Math.round(sk * 3 + 1 + (R() - .5) * 1.6)));
+      if (i === 3 || i === 9) y = 4; // contoh "yakin tapi keliru"
+      r[t.refleksi[0].id] = y;
+      r[t.refleksi[1].id] = Math.max(1, Math.min(4, Math.round(2.4 + R() * 2 - (sk < .4 ? .8 : 0))));
+      const [BM, TY] = TEKS[t.mapel];
+      r[t.refleksi[2].id] = t.refleksi[2].prinsip === 'Memahami' ? INTI[Math.floor(R() * INTI.length)] : BM[Math.floor(R() * BM.length)];
+      const tanya = TY[Math.floor(R() * TY.length)]; if (tanya) r[t.refleksi[3].id] = tanya;
+      const jam = 9 + Math.floor(R() * 4), mnt = 10 + Math.floor(R() * 40);
+      t.jawaban.push({ id: uid(), siswaId: s.id, nama: s.nama, waktu: t.tanggal + 'T' + String(jam).padStart(2, '0') + ':' + mnt + ':00', sumber: R() < .7 ? 'siswa' : 'kertas', j, ov, r });
+    });
+  };
+  isi(t1, k8, 11, { [t1.soal[0].id]: 1 }, 0);
+  isi(t2, k7, 23, { [t2.soal[0].id]: 3, [t2.soal[1].id]: 0 }, -.08);
+  isi(t3, k8, 37, { [t3.soal[0].id]: 2 }, .08);
+  return { versi: 1, kelas: [k8, k7], tiket: [t3, t2, t1] };
+}
+
+/* ---------- analisis ---------- */
+const norm = s => String(s ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
+function nilai(q, jw, ov) {
+  if (ov && typeof ov[q.id] === 'boolean') return ov[q.id];
+  const v = jw ? jw[q.id] : undefined;
+  if (v === undefined || v === null || v === '') return false;
+  if (q.tipe === 'pg') return Number(v) === Number(q.kunci);
+  if (q.tipe === 'bs') return v === q.kunci;
+  const kk = String(q.kunci || '').split(/[,;]/).map(norm).filter(Boolean);
+  if (!kk.length) return null;
+  const a = norm(v), a2 = a.replace(/\s/g, '');
+  return kk.some(k => a === k || a2 === k.replace(/\s/g, '') || (k.length > 2 && a.includes(k)));
+}
+const kelasDari = id => S.kelas.find(k => k.id === id);
+const tiketDari = id => S.tiket.find(t => t.id === id);
+function analisis(t) {
+  const kelas = kelasDari(t.kelasId);
+  const ry = t.refleksi.find(r => r.jenis === 'yakin'), rm = t.refleksi.find(r => r.jenis === 'mood');
+  const perSiswa = t.jawaban.map(a => {
+    let n = 0, b = 0;
+    const hasil = {};
+    t.soal.forEach(q => { const v = nilai(q, a.j, a.ov); hasil[q.id] = v; if (v !== null) { n++; if (v) b++; } });
+    const skor = n ? b / n : null;
+    const yakin = ry ? Number(a.r[ry.id]) || null : null;
+    const mood = rm ? Number(a.r[rm.id]) || null : null;
+    let kel;
+    if (skor !== null) kel = skor >= .8 ? 'g1' : skor >= .4 ? 'g2' : 'g3';
+    else kel = yakin == null ? 'g2' : yakin >= 3 ? 'g1' : yakin === 2 ? 'g2' : 'g3';
+    const flags = [];
+    if (skor !== null && yakin != null && yakin >= 3 && skor < .5) flags.push('yk');
+    if (skor !== null && yakin != null && yakin <= 2 && skor >= .8) flags.push('rp');
+    return { a, hasil, skor, yakin, mood, kel, flags };
+  });
+  const perSoal = t.soal.map(q => {
+    let nB = 0, nN = 0; const dist = {};
+    perSiswa.forEach(p => { const v = p.hasil[q.id]; if (v !== null) { nN++; if (v) nB++; } const raw = p.a.j[q.id]; const key = q.tipe === 'pg' ? (raw === undefined || raw === '' ? '–' : HURUF[raw]) : q.tipe === 'bs' ? (raw === true ? 'Benar' : raw === false ? 'Salah' : '–') : null; if (key) dist[key] = (dist[key] || 0) + 1; });
+    return { q, nB, nN, p: nN ? nB / nN : null, dist };
+  });
+  const skorAda = perSiswa.filter(p => p.skor !== null);
+  const avg = (arr, f) => arr.length ? arr.reduce((s, x) => s + f(x), 0) / arr.length : null;
+  const yk = perSiswa.filter(p => p.yakin), md = perSiswa.filter(p => p.mood);
+  const moodDist = [0, 0, 0, 0, 0]; md.forEach(p => moodDist[p.mood]++);
+  const sudah = new Set(t.jawaban.map(a => a.siswaId).filter(Boolean));
+  const belum = kelas ? kelas.siswa.filter(s => !sudah.has(s.id)).map(s => s.nama) : [];
+  return {
+    kelas, perSiswa, perSoal, belum, total: kelas ? kelas.siswa.length : t.jawaban.length,
+    rataSkor: avg(skorAda, p => p.skor), rataYakin: avg(yk, p => p.yakin), moodDist, nMood: md.length,
+    moodPos: md.length ? (moodDist[3] + moodDist[4]) / md.length : null,
+    grup: { g1: perSiswa.filter(p => p.kel === 'g1'), g2: perSiswa.filter(p => p.kel === 'g2'), g3: perSiswa.filter(p => p.kel === 'g3') },
+    yk: perSiswa.filter(p => p.flags.includes('yk')), rp: perSiswa.filter(p => p.flags.includes('rp'))
+  };
+}
+function saranOtomatis(t, A) {
+  const s = [];
+  A.perSoal.forEach((x, i) => {
+    if (x.p !== null && x.p < .6) {
+      let salah = '';
+      if (x.q.tipe === 'pg') { const w = Object.entries(x.dist).filter(([k]) => k !== HURUF[x.q.kunci] && k !== '–').sort((a, b) => b[1] - a[1])[0]; if (w) salah = ` Jawaban keliru terbanyak: ${w[0]}. "${x.q.opsi[HURUF.indexOf(w[0])]}" (${w[1]} murid) — kemungkinan miskonsepsi yang perlu dibahas.`; }
+      s.push(`Soal ${i + 1} baru dijawab benar oleh ${pct(x.p)} murid.${salah}`);
+    }
+  });
+  if (A.yk.length) s.push(`${A.yk.length} murid merasa yakin tetapi jawabannya banyak keliru (${A.yk.map(p => p.a.nama).join(', ')}). Minta mereka menjelaskan alasan jawabannya dan berikan contoh tandingan.`);
+  if (A.rp.length) s.push(`${A.rp.length} murid menjawab benar tetapi masih ragu (${A.rp.map(p => p.a.nama).join(', ')}). Beri penguatan positif dan kesempatan menjelaskan ke teman.`);
+  if (A.moodPos !== null && A.moodPos < .6) s.push(`Hanya ${pct(A.moodPos)} murid merasa senang. Pertimbangkan variasi aktivitas yang lebih menggembirakan: kerja kelompok, gerak, permainan, atau tantangan nyata.`);
+  if (A.belum.length) s.push(`${A.belum.length} murid belum mengisi tiket: ${A.belum.join(', ')}.`);
+  if (!s.length) s.push('Pemahaman kelas baik dan suasana belajar positif. Lanjutkan ke materi berikutnya dan sediakan pengayaan bagi kelompok siap lanjut.');
+  return s;
+}
+function ringkasanTeks(t, A) {
+  const k = A.kelas ? A.kelas.nama : '-';
+  const L = [];
+  L.push(`TIKET KELUAR — ${t.mapel} | ${k} | ${tglID(t.tanggal)}`);
+  L.push(`Topik: ${t.topik}`);
+  if (t.tujuan) L.push(`Tujuan: ${t.tujuan}`);
+  L.push(`Respons: ${t.jawaban.length}/${A.total} murid · Pemahaman rata-rata: ${pct(A.rataSkor)} · Keyakinan: ${A.rataYakin ? A.rataYakin.toFixed(1) + '/4' : '–'} · Merasa senang: ${pct(A.moodPos)}`);
+  ['g1', 'g2', 'g3'].forEach(g => L.push(`${KEL[g].n} (${A.grup[g].length}): ${A.grup[g].map(p => p.a.nama).join(', ') || '-'}`));
+  L.push('Catatan analisis:'); saranOtomatis(t, A).forEach(x => L.push('- ' + x));
+  if (t.tindak && t.tindak.rencana) L.push(`Rencana tindak lanjut (${t.tindak.status}${t.tindak.tanggal ? ', ' + tglID(t.tindak.tanggal) : ''}): ${t.tindak.rencana}`);
+  return L.join('\n');
+}
+
+/* ---------- router ---------- */
+let R = { v: 'tiket', id: null };
+function pergi(v, id = null) { R = { v, id }; document.body.classList.toggle('kiosk', v === 'isi'); render(); window.scrollTo(0, 0); }
+function render() {
+  document.querySelectorAll('nav.tabs button').forEach(b => b.setAttribute('aria-current', (b.dataset.go === R.v || (b.dataset.go === 'tiket' && ['susun', 'rekap', 'input', 'cetak'].includes(R.v))) ? 'page' : 'false'));
+  const V = { tiket: vTiket, susun: vSusun, isi: vIsi, input: vInput, rekap: vRekap, cetak: vCetak, riwayat: vRiwayat, kelas: vKelas, atur: vAtur }[R.v] || vTiket;
+  $('#view').innerHTML = V();
+  const f = $('#view [autofocus]'); if (f) f.focus();
+}
+const adaContoh = () => S.kelas.some(k => k.contoh) || S.tiket.some(t => t.contoh);
+const bannerContoh = () => adaContoh() ? `<div class="banner"><span><span class="tag contoh">contoh</span> Aplikasi berisi data contoh (nama murid fiktif) agar Anda bisa langsung mencoba.</span><button class="btn sm" data-act="hapusContoh">Hapus data contoh</button></div>` : '';
+
+/* ---------- view: daftar tiket ---------- */
+function vTiket() {
+  const list = [...S.tiket].sort((a, b) => b.tanggal.localeCompare(a.tanggal));
+  return `${bannerContoh()}
+  <div class="head"><div><h2>Tiket keluar</h2><p>Tutup pelajaran dengan 3–5 menit cek pemahaman dan refleksi. Hasilnya langsung jadi peta kelas untuk pertemuan berikutnya.</p></div>
+  <button class="btn pri" data-act="baru">＋ Buat tiket</button></div>
+  ${list.length ? `<div class="tickets">${list.map(t => {
+    const k = kelasDari(t.kelasId), A = analisis(t);
+    return `<article class="ticket"><div class="main">
+      <div class="row"><span class="tag">${esc(t.mapel)}</span><span class="tag">${esc(k ? k.nama : 'kelas terhapus')}</span>${t.contoh ? '<span class="tag contoh">contoh</span>' : ''}</div>
+      <h3>${esc(t.topik)}</h3><div class="meta">${tglID(t.tanggal)} · ${t.soal.length} soal · ${t.refleksi.length} refleksi</div>
+      <div class="meta">Tindak lanjut: <b>${esc(t.tindak?.status || 'Belum')}</b></div>
+      <div class="actions">
+        <button class="btn sm acc" data-act="isi" data-id="${t.id}">▶ Mode murid</button>
+        <button class="btn sm" data-act="rekap" data-id="${t.id}">Rekap</button>
+        <button class="btn sm" data-act="input" data-id="${t.id}">Input dari kertas</button>
+        <button class="btn sm ghost" data-act="susun" data-id="${t.id}">Ubah</button>
+        <button class="btn sm ghost" data-act="cetak" data-id="${t.id}">Cetak</button>
+        <button class="btn sm ghost" data-act="duplikat" data-id="${t.id}">Gandakan</button>
+      </div></div>
+      <div class="stub" aria-label="Respons ${t.jawaban.length} dari ${A.total}, pemahaman ${pct(A.rataSkor)}"><b>${t.jawaban.length}<small style="font-size:.9rem">/${A.total}</small></b><span>respons</span><b style="font-size:1.15rem;margin-top:6px">${pct(A.rataSkor)}</b><span>paham</span></div>
+    </article>`;
+  }).join('')}</div>` : `<div class="empty"><p>Belum ada tiket. Buat tiket pertama Anda untuk akhir pelajaran hari ini.</p><button class="btn pri" data-act="baru">＋ Buat tiket</button></div>`}
+  <div class="card" style="margin-top:20px"><h3>Cara pakai singkat</h3>
+  <ol class="muted" style="margin:.5rem 0 0;padding-left:1.2rem">
+  <li><b>Susun tiket</b>: 1–3 soal cek pemahaman yang terkait tujuan pembelajaran, plus refleksi (keyakinan, perasaan, kebermaknaan, pertanyaan tersisa).</li>
+  <li><b>Murid mengisi</b> di 5 menit terakhir: bergiliran di HP/laptop/papan interaktif guru lewat <i>Mode murid</i>, atau di kertas (fitur Cetak) lalu guru memasukkan lewat <i>Input dari kertas</i>.</li>
+  <li><b>Baca rekap</b>: kelompok Siap lanjut / Perlu penguatan / Perlu pendampingan, soal yang paling banyak keliru, murid yang “yakin tapi keliru”, dan suara murid.</li>
+  <li><b>Tulis tindak lanjut</b> untuk pertemuan berikutnya, lalu pantau trennya di Riwayat.</li></ol></div>`;
+}
+
+/* ---------- view: susun ---------- */
+let draft = null;
+function mulaiSusun(id) {
+  if (id) draft = JSON.parse(JSON.stringify(tiketDari(id)));
+  else draft = { id: null, tanggal: hariIni(), kelasId: S.kelas[0]?.id || '', mapel: '', topik: '', tujuan: '', soal: [{ id: uid(), tipe: 'pg', teks: '', opsi: ['', '', '', ''], kunci: 0 }], refleksi: refleksiBawaan(), jawaban: [], tindak: { rencana: '', status: 'Belum', tanggal: '' } };
+  pergi('susun');
+}
+function vSusun() {
+  const d = draft; if (!d) return vTiket();
+  const ada = j => d.refleksi.some(r => r.jenis === j);
+  return `<div class="head"><div><h2>${d.id ? 'Ubah tiket' : 'Tiket baru'}</h2><p>Singkat saja: murid seharusnya selesai dalam 3–5 menit.</p></div>
+  <div class="row"><button class="btn" data-act="batalSusun">Batal</button><button class="btn pri" data-act="simpanSusun">Simpan tiket</button></div></div>
+  ${!S.kelas.length ? `<div class="banner">Belum ada kelas. <button class="btn sm" data-go="kelas">Tambah kelas dulu</button></div>` : ''}
+  <form id="fSusun" class="grid" onsubmit="return false">
+  <div class="card grid g2">
+    <label class="f">Kelas<select name="kelasId" data-d="kelasId">${S.kelas.map(k => `<option value="${k.id}" ${k.id === d.kelasId ? 'selected' : ''}>${esc(k.nama)}</option>`).join('')}</select></label>
+    <label class="f">Tanggal<input type="date" data-d="tanggal" value="${esc(d.tanggal)}"></label>
+    <label class="f">Mata pelajaran<input type="text" data-d="mapel" value="${esc(d.mapel)}" placeholder="mis. IPA" autofocus></label>
+    <label class="f">Topik pertemuan<input type="text" data-d="topik" value="${esc(d.topik)}" placeholder="mis. Sistem Pernapasan Manusia"></label>
+    <label class="f" style="grid-column:1/-1">Tujuan pembelajaran (opsional, tampil untuk murid)<textarea data-d="tujuan" rows="2">${esc(d.tujuan)}</textarea></label>
+  </div>
+  <div class="card grid"><div class="qh row" style="justify-content:space-between"><h3>Cek pemahaman</h3><span class="muted" style="font-size:.88rem">Disarankan 1–3 soal</span></div>
+  ${d.soal.map((q, i) => `<div class="q-item"><div class="qh"><b>Soal ${i + 1}</b>
+    <div class="row"><select aria-label="Jenis soal ${i + 1}" data-qt="${i}" style="width:auto">${[['pg', 'Pilihan ganda'], ['bs', 'Benar/Salah'], ['isian', 'Isian singkat']].map(([v, n]) => `<option value="${v}" ${q.tipe === v ? 'selected' : ''}>${n}</option>`).join('')}</select>
+    <button class="btn sm ghost" data-act="naik" data-i="${i}" aria-label="Naikkan soal ${i + 1}" ${i === 0 ? 'disabled' : ''}>↑</button>
+    <button class="btn sm danger ghost" data-act="hapusSoal" data-i="${i}" aria-label="Hapus soal ${i + 1}">Hapus</button></div></div>
+    <label class="f"><span class="sr">Teks soal ${i + 1}</span><textarea rows="2" data-q="${i}" data-k="teks" placeholder="Tulis pertanyaan…">${esc(q.teks)}</textarea></label>
+    ${q.tipe === 'pg' ? `<div class="opts" role="radiogroup" aria-label="Pilihan jawaban soal ${i + 1}; pilih kunci">${q.opsi.map((o, j) => `<div class="opt-row"><input type="radio" name="kunci${i}" data-kunci="${i}" value="${j}" ${q.kunci === j ? 'checked' : ''} aria-label="Jadikan ${HURUF[j]} kunci jawaban"><input type="text" data-o="${i}" data-j="${j}" value="${esc(o)}" placeholder="Pilihan ${HURUF[j]}"></div>`).join('')}
+      <div class="row">${q.opsi.length < 5 ? `<button class="btn sm ghost" data-act="tambahOpsi" data-i="${i}">＋ pilihan</button>` : ''}${q.opsi.length > 2 ? `<button class="btn sm ghost" data-act="kurangOpsi" data-i="${i}">− pilihan</button>` : ''}<span class="muted" style="font-size:.84rem">Bulatan = kunci jawaban.</span></div></div>`
+      : q.tipe === 'bs' ? `<div class="row" role="radiogroup" aria-label="Kunci soal ${i + 1}"><label class="row"><input type="radio" name="kunci${i}" data-kbs="${i}" value="1" ${q.kunci === true ? 'checked' : ''}> Benar</label><label class="row"><input type="radio" name="kunci${i}" data-kbs="${i}" value="0" ${q.kunci === false ? 'checked' : ''}> Salah</label><span class="muted" style="font-size:.84rem">= kunci</span></div>`
+      : `<label class="f">Kata kunci jawaban benar (pisahkan dengan koma; kosongkan bila guru menilai manual)<input type="text" data-q="${i}" data-k="kunci" value="${esc(q.kunci || '')}" placeholder="mis. merokok, asap, polusi"></label>`}
+  </div>`).join('')}
+  <div class="row"><button class="btn" data-act="tambahSoal">＋ Tambah soal</button></div></div>
+  <div class="card grid"><h3>Refleksi pembelajaran mendalam</h3>
+  <p class="muted" style="margin:0;font-size:.9rem">Berkesadaran (mengenali pemahaman diri), bermakna (terhubung ke kehidupan), menggembirakan (perasaan belajar), dan pengalaman memahami–mengaplikasi–merefleksi.</p>
+  ${d.refleksi.map((r, i) => `<div class="q-item"><div class="qh"><span class="prinsip">${esc(r.prinsip)} · ${r.jenis === 'yakin' ? 'skala keyakinan 1–4' : r.jenis === 'mood' ? 'skala perasaan (emoji)' : 'jawaban singkat'}</span><button class="btn sm danger ghost" data-act="hapusRefl" data-i="${i}" aria-label="Hapus refleksi ${i + 1}">Hapus</button></div>
+    <label class="f"><span class="sr">Teks refleksi ${i + 1}</span><input type="text" data-r="${i}" value="${esc(r.teks)}"></label></div>`).join('')}
+  <div class="row">${!ada('yakin') ? '<button class="btn sm" data-act="tambahYakin">＋ Skala keyakinan</button>' : ''}${!ada('mood') ? '<button class="btn sm" data-act="tambahMood">＋ Skala perasaan</button>' : ''}<button class="btn sm" data-act="tambahRefl">＋ Pertanyaan refleksi sendiri</button></div>
+  <details class="bank"><summary>Bank pertanyaan refleksi (klik untuk menambahkan)</summary><div class="bank-list">${BANK.map((b, i) => `<button type="button" data-act="ambilBank" data-i="${i}"><span class="prinsip">${b[0]}</span><br>${esc(b[1])}</button>`).join('')}</div></details>
+  </div></form>`;
+}
+function bacaDraft() {
+  const f = $('#fSusun'); if (!f || !draft) return;
+  f.querySelectorAll('[data-d]').forEach(el => draft[el.dataset.d] = el.value);
+  f.querySelectorAll('[data-q]').forEach(el => { const q = draft.soal[+el.dataset.q]; if (q) q[el.dataset.k] = el.value; });
+  f.querySelectorAll('[data-o]').forEach(el => { const q = draft.soal[+el.dataset.o]; if (q && q.opsi) q.opsi[+el.dataset.j] = el.value; });
+  f.querySelectorAll('[data-kunci]:checked').forEach(el => { const q = draft.soal[+el.dataset.kunci]; if (q) q.kunci = +el.value; });
+  f.querySelectorAll('[data-kbs]:checked').forEach(el => { const q = draft.soal[+el.dataset.kbs]; if (q) q.kunci = el.value === '1'; });
+  f.querySelectorAll('[data-r]').forEach(el => { const r = draft.refleksi[+el.dataset.r]; if (r) r.teks = el.value; });
+}
+function simpanSusun() {
+  bacaDraft(); const d = draft;
+  if (!d.kelasId) return toast('Pilih kelas terlebih dahulu.');
+  if (!d.topik.trim()) return toast('Isi topik pertemuan.');
+  d.soal = d.soal.filter(q => q.teks.trim());
+  for (const q of d.soal) { if (q.tipe === 'pg') { q.opsi = q.opsi.map(o => o.trim()); if (q.opsi.filter(Boolean).length < 2) return toast('Soal pilihan ganda perlu minimal 2 pilihan terisi.'); if (!q.opsi[q.kunci]) return toast('Kunci jawaban pilihan ganda belum terisi teksnya.'); } }
+  d.refleksi = d.refleksi.filter(r => r.teks.trim());
+  if (!d.soal.length && !d.refleksi.length) return toast('Tambahkan minimal satu soal atau refleksi.');
+  if (d.id) { const i = S.tiket.findIndex(t => t.id === d.id); S.tiket[i] = d; }
+  else { d.id = uid(); S.tiket.push(d); }
+  simpan(); toast('Tiket disimpan.'); const id = d.id; draft = null; pergi('tiket'); return id;
+}
+
+/* ---------- view: mode murid ---------- */
+let K = { tahap: 'nama', siswa: null, timer: null };
+function vIsi() {
+  const t = tiketDari(R.id); if (!t) return vTiket();
+  const k = kelasDari(t.kelasId);
+  const sudah = new Set(t.jawaban.map(a => a.siswaId));
+  const bar = `<div class="kiosk-bar"><span class="disp" style="font-weight:800">🎟️ ${esc(t.mapel)} · ${esc(t.topik)}</span><div class="row"><span class="tag">${t.jawaban.length}/${k ? k.siswa.length : '?'} sudah mengisi</span><button class="btn sm" data-act="keluarIsi">Selesai (guru)</button></div></div>`;
+  if (K.tahap === 'terima') return bar + `<div class="kiosk-card thanks"><div class="big">🎉</div><h2>Terima kasih, ${esc(K.siswa?.nama || '')}!</h2><p class="muted">Refleksimu membantu guru menyiapkan pelajaran berikutnya.</p><button class="btn pri" data-act="berikut" autofocus>Murid berikutnya →</button></div>`;
+  if (K.tahap === 'nama') return bar + `<div class="kiosk-card"><h2>Tiket keluar hari ini</h2>${t.tujuan ? `<p class="muted"><b>Tujuan belajar:</b> ${esc(t.tujuan)}</p>` : ''}<p>Ketuk namamu untuk mulai.</p>
+    <div class="name-grid">${(k ? k.siswa : []).map(s => `<button data-act="pilihNama" data-id="${s.id}" ${sudah.has(s.id) ? 'disabled aria-label="' + esc(s.nama) + ' sudah mengisi"' : ''}>${esc(s.nama)}${sudah.has(s.id) ? ' ✓' : ''}</button>`).join('')}</div>
+    <details style="margin-top:14px"><summary class="muted" style="cursor:pointer">Namaku tidak ada di daftar</summary><div class="row" style="margin-top:8px"><input type="text" id="namaLain" placeholder="Tulis namamu" style="flex:1;min-width:180px" aria-label="Nama murid"><button class="btn" data-act="namaLain">Mulai</button></div></details></div>`;
+  return bar + `<form class="kiosk-card" id="fIsi" onsubmit="return false"><p class="muted" style="margin:0">Halo,</p><h2>${esc(K.siswa.nama)}</h2>
+    ${t.soal.map((q, i) => `<fieldset class="sq" style="border:0;border-top:2px dashed var(--line);border-radius:0;padding:16px 0 0"><legend class="qt" style="padding:0">${i + 1}. ${esc(q.teks)}</legend>
+      ${q.tipe === 'pg' ? `<div class="choice">${q.opsi.map((o, j) => o ? `<label><input type="radio" name="s_${q.id}" value="${j}"> <span><b>${HURUF[j]}.</b> ${esc(o)}</span></label>` : '').join('')}</div>`
+      : q.tipe === 'bs' ? `<div class="choice" style="grid-template-columns:1fr 1fr"><label><input type="radio" name="s_${q.id}" value="1"> Benar</label><label><input type="radio" name="s_${q.id}" value="0"> Salah</label></div>`
+      : `<input type="text" name="s_${q.id}" aria-label="Jawaban soal ${i + 1}" placeholder="Jawabanmu…">`}</fieldset>`).join('')}
+    ${t.refleksi.map(r => `<fieldset class="sq" style="border:0;border-top:2px dashed var(--line);border-radius:0;padding:16px 0 0"><legend class="qt" style="padding:0"><span class="prinsip" style="display:block">${esc(r.prinsip)}</span>${esc(r.teks)}</legend>
+      ${r.jenis === 'yakin' || r.jenis === 'mood' ? `<div class="choice scale">${[1, 2, 3, 4].map(n => { const x = (r.jenis === 'yakin' ? YAKIN : MOOD)[n]; return `<label><input type="radio" name="r_${r.id}" value="${n}"><span class="em" aria-hidden="true">${x.e}</span>${x.t}</label>`; }).join('')}</div>`
+      : `<textarea name="r_${r.id}" rows="2" aria-label="${esc(r.teks)}" placeholder="Tulis dengan kata-katamu sendiri…"></textarea>`}</fieldset>`).join('')}
+    <div class="row" style="margin-top:18px;justify-content:space-between"><button class="btn" data-act="batalIsi">← Bukan aku</button><button class="btn pri" data-act="kirimIsi">Kirim tiket ✓</button></div></form>`;
+}
+function kirimIsi() {
+  const t = tiketDari(R.id), f = $('#fIsi'); if (!t || !f) return;
+  const fd = new FormData(f), j = {}, r = {};
+  t.soal.forEach(q => { const v = fd.get('s_' + q.id); if (v === null || v === '') return; j[q.id] = q.tipe === 'pg' ? +v : q.tipe === 'bs' ? v === '1' : String(v).trim(); });
+  t.refleksi.forEach(x => { const v = fd.get('r_' + x.id); if (v === null || v === '') return; r[x.id] = x.jenis === 'teks' ? String(v).trim() : +v; });
+  const kosong = t.soal.length - Object.keys(j).length;
+  if (kosong > 0 && !confirm(`Masih ada ${kosong} soal yang belum dijawab. Tetap kirim?`)) return;
+  t.jawaban = t.jawaban.filter(a => !(K.siswa.id && a.siswaId === K.siswa.id));
+  t.jawaban.push({ id: uid(), siswaId: K.siswa.id, nama: K.siswa.nama, waktu: new Date().toISOString(), sumber: 'siswa', j, ov: {}, r });
+  simpan(); K.tahap = 'terima'; render();
+  clearTimeout(K.timer); K.timer = setTimeout(() => { if (R.v === 'isi' && K.tahap === 'terima') { K = { tahap: 'nama', siswa: null }; render(); } }, 6000);
+}
+
+/* ---------- view: input dari kertas ---------- */
+function vInput() {
+  const t = tiketDari(R.id); if (!t) return vTiket();
+  const k = kelasDari(t.kelasId); const daftar = k ? k.siswa : [];
+  const teks = t.refleksi.filter(r => r.jenis === 'teks');
+  const ry = t.refleksi.find(r => r.jenis === 'yakin'), rm = t.refleksi.find(r => r.jenis === 'mood');
+  const sel = (attrs, opts, cur) => `<select ${attrs} style="min-width:64px;padding:4px 6px;min-height:34px">${opts.map(([v, n]) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${n}</option>`).join('')}</select>`;
+  return `<div class="head"><div><h2>Input dari kertas</h2><p>${esc(t.mapel)} · ${esc(t.topik)} · ${esc(k?.nama || '')}. Setiap perubahan langsung tersimpan.</p></div>
+  <div class="row"><button class="btn" data-act="rekap" data-id="${t.id}">Lihat rekap →</button></div></div>
+  <div class="tablewrap"><table><thead><tr><th>Murid</th>${t.soal.map((q, i) => `<th class="c" title="${esc(q.teks)}">S${i + 1}<br><small class="muted">${q.tipe === 'pg' ? 'kunci ' + HURUF[q.kunci] : q.tipe === 'bs' ? 'kunci ' + (q.kunci ? 'B' : 'S') : '✓/✗'}</small></th>`).join('')}${ry ? '<th class="c">Yakin</th>' : ''}${rm ? '<th class="c">Perasaan</th>' : ''}${teks.map((r, i) => `<th title="${esc(r.teks)}">${esc(r.prinsip)}</th>`).join('')}</tr></thead>
+  <tbody>${daftar.map(s => {
+    const a = t.jawaban.find(x => x.siswaId === s.id) || { j: {}, ov: {}, r: {} };
+    return `<tr><th scope="row" style="position:static;background:var(--surface)">${esc(s.nama)}</th>${t.soal.map(q => {
+      const at = `data-in="${s.id}" data-soal="${q.id}" aria-label="${esc(s.nama)} soal ${q.tipe}"`;
+      if (q.tipe === 'pg') return `<td class="c">${sel(at, [['', '–'], ...q.opsi.map((o, j) => [j, HURUF[j]]).filter((_, j) => q.opsi[j])], a.j[q.id] ?? '')}</td>`;
+      if (q.tipe === 'bs') return `<td class="c">${sel(at, [['', '–'], ['1', 'B'], ['0', 'S']], a.j[q.id] === true ? '1' : a.j[q.id] === false ? '0' : '')}</td>`;
+      const cur = typeof a.ov[q.id] === 'boolean' ? (a.ov[q.id] ? '1' : '0') : (a.j[q.id] ? (nilai(q, a.j, a.ov) ? '1' : '0') : '');
+      return `<td class="c">${sel(at + ' data-isian="1"', [['', '–'], ['1', '✓'], ['0', '✗']], cur)}</td>`;
+    }).join('')}${ry ? `<td class="c">${sel(`data-in="${s.id}" data-refl="${ry.id}" aria-label="${esc(s.nama)} keyakinan"`, [['', '–'], [1, '1'], [2, '2'], [3, '3'], [4, '4']], a.r[ry.id] ?? '')}</td>` : ''}${rm ? `<td class="c">${sel(`data-in="${s.id}" data-refl="${rm.id}" aria-label="${esc(s.nama)} perasaan"`, [['', '–'], ...[1, 2, 3, 4].map(n => [n, MOOD[n].e])], a.r[rm.id] ?? '')}</td>` : ''}${teks.map(r => `<td><input type="text" data-in="${s.id}" data-refl="${r.id}" value="${esc(a.r[r.id] || '')}" style="min-width:180px;min-height:34px;padding:4px 8px" aria-label="${esc(s.nama)}: ${esc(r.teks)}"></td>`).join('')}</tr>`;
+  }).join('')}</tbody></table></div>
+  <p class="muted" style="font-size:.88rem">Keyakinan: 1 belum paham · 2 sedikit · 3 paham · 4 bisa menjelaskan ke teman. Baris dengan semua isian kosong otomatis tidak dihitung.</p>`;
+}
+function ubahInput(el) {
+  const t = tiketDari(R.id); if (!t) return;
+  const s = kelasDari(t.kelasId)?.siswa.find(x => x.id === el.dataset.in); if (!s) return;
+  let a = t.jawaban.find(x => x.siswaId === s.id);
+  if (!a) { a = { id: uid(), siswaId: s.id, nama: s.nama, waktu: new Date().toISOString(), sumber: 'kertas', j: {}, ov: {}, r: {} }; t.jawaban.push(a); }
+  const v = el.value;
+  if (el.dataset.soal) {
+    const q = t.soal.find(x => x.id === el.dataset.soal);
+    if (el.dataset.isian) { if (v === '') { delete a.j[q.id]; delete a.ov[q.id]; } else { if (!a.j[q.id]) a.j[q.id] = '(dari kertas)'; a.ov[q.id] = v === '1'; } }
+    else if (v === '') delete a.j[q.id];
+    else a.j[q.id] = q.tipe === 'pg' ? +v : v === '1';
+  } else if (el.dataset.refl) {
+    const r = t.refleksi.find(x => x.id === el.dataset.refl);
+    if (v === '') delete a.r[r.id]; else a.r[r.id] = r.jenis === 'teks' ? v : +v;
+  }
+  if (!Object.keys(a.j).length && !Object.keys(a.r).length) t.jawaban = t.jawaban.filter(x => x !== a);
+  simpan();
+}
+
+/* ---------- view: rekap ---------- */
+let aiHasil = {};
+function vRekap() {
+  const t = tiketDari(R.id); if (!t) return vTiket();
+  const A = analisis(t), k = A.kelas;
+  const teks = t.refleksi.filter(r => r.jenis === 'teks');
+  const n = t.jawaban.length || 1;
+  return `<div class="head"><div><span class="tag">${esc(t.mapel)}</span> <span class="tag">${esc(k?.nama || '')}</span> ${t.contoh ? '<span class="tag contoh">contoh</span>' : ''}<h2 style="margin-top:6px">${esc(t.topik)}</h2><p>${tglID(t.tanggal)}${t.tujuan ? ' · ' + esc(t.tujuan) : ''}</p></div>
+  <div class="row"><button class="btn acc" data-act="isi" data-id="${t.id}">▶ Mode murid</button><button class="btn" data-act="salinRingkas">Salin ringkasan</button><button class="btn" data-act="csv">Unduh CSV</button></div></div>
+  <div class="grid g4" style="margin-bottom:14px">
+    <div class="stat"><b>${t.jawaban.length}<small style="font-size:1rem">/${A.total}</small></b><span>murid mengisi</span></div>
+    <div class="stat"><b>${pct(A.rataSkor)}</b><span>rata-rata jawaban benar</span></div>
+    <div class="stat"><b>${A.rataYakin ? A.rataYakin.toFixed(1) : '–'}<small style="font-size:1rem">/4</small></b><span>rata-rata keyakinan</span></div>
+    <div class="stat"><b>${pct(A.moodPos)}</b><span>merasa senang belajar</span></div>
+  </div>
+  ${t.jawaban.length ? `
+  <div class="card" style="margin-bottom:14px"><h3>Peta kelas untuk pertemuan berikutnya</h3>
+    <div class="bar" style="margin:10px 0 12px" role="img" aria-label="Siap lanjut ${A.grup.g1.length}, perlu penguatan ${A.grup.g2.length}, perlu pendampingan ${A.grup.g3.length}"><i class="b1" style="width:${A.grup.g1.length / n * 100}%"></i><i class="b2" style="width:${A.grup.g2.length / n * 100}%"></i><i class="b3" style="width:${A.grup.g3.length / n * 100}%"></i></div>
+    <div class="groups">${['g1', 'g2', 'g3'].map(g => `<div class="grp ${g}"><h3><span>${KEL[g].n}</span><span>${A.grup[g].length}</span></h3><p>${KEL[g].saran}</p><div class="names">${A.grup[g].map(p => `<span>${esc(p.a.nama)}${p.flags.includes('yk') ? ' ⚠️' : ''}${p.flags.includes('rp') ? ' 💬' : ''}</span>`).join('') || '<span>—</span>'}</div></div>`).join('')}</div>
+    <p class="muted" style="font-size:.84rem;margin-bottom:0">Kelompok: ≥80% benar = siap lanjut, 40–79% = penguatan, &lt;40% = pendampingan (bila tidak ada soal, memakai skala keyakinan). ⚠️ yakin tapi keliru (kemungkinan miskonsepsi) · 💬 benar tapi ragu.</p>
+  </div>
+  <div class="grid g2" style="margin-bottom:14px">
+    <div class="card"><h3>Analisis per soal</h3>${A.perSoal.length ? A.perSoal.map((x, i) => `<div class="soal-stat"><div><b>${i + 1}.</b> ${esc(x.q.teks)}</div>
+      <div class="row" style="gap:10px"><div class="bar" style="flex:1"><i class="${x.p >= .8 ? 'b1' : x.p >= .6 ? 'b2' : 'b3'}" style="width:${(x.p || 0) * 100}%"></i></div><b>${pct(x.p)}</b></div>
+      ${Object.keys(x.dist).length ? `<div class="dist">${Object.entries(x.dist).sort().map(([kk, v]) => { const ben = (x.q.tipe === 'pg' && kk === HURUF[x.q.kunci]) || (x.q.tipe === 'bs' && kk === (x.q.kunci ? 'Benar' : 'Salah')); return `<span class="${ben ? 'k' : kk !== '–' && v === Math.max(...Object.entries(x.dist).filter(([a]) => a !== '–' && !((x.q.tipe === 'pg' && a === HURUF[x.q.kunci]) || (x.q.tipe === 'bs' && a === (x.q.kunci ? 'Benar' : 'Salah')))).map(e => e[1])) ? 'w' : ''}">${esc(kk)}: ${v}</span>`; }).join('')}</div>` : '<span class="muted" style="font-size:.84rem">Isian singkat — koreksi manual di tabel bawah bila perlu.</span>'}</div>`).join('') : '<p class="muted">Tiket ini tanpa soal pemahaman.</p>'}</div>
+    <div class="card"><h3>Perasaan belajar</h3>${A.nMood ? `<div class="moods" style="margin:10px 0">${[4, 3, 2, 1].map(m => `<div><b aria-hidden="true">${MOOD[m].e}</b><span style="font-size:.8rem">${MOOD[m].t}</span><br><b style="font-size:1.1rem">${A.moodDist[m]}</b></div>`).join('')}</div>` : '<p class="muted">Tidak ada skala perasaan.</p>'}
+      <h3 style="margin-top:14px">Catatan analisis otomatis</h3><ul style="padding-left:1.1rem;margin:.4rem 0">${saranOtomatis(t, A).map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
+  </div>
+  ${teks.length ? `<div class="grid g2" style="margin-bottom:14px">${teks.map(r => { const ls = t.jawaban.filter(a => a.r[r.id]).map(a => `<li>“${esc(a.r[r.id])}” <small>— ${esc(a.nama)}</small></li>`); return `<div class="card"><span class="prinsip">${esc(r.prinsip)}</span><h3>${esc(r.teks)}</h3><ul class="quotes">${ls.join('') || '<li class="muted">Belum ada jawaban.</li>'}</ul></div>`; }).join('')}</div>` : ''}
+  <div class="card" style="margin-bottom:14px"><div class="row" style="justify-content:space-between"><h3>Ringkas suara murid dengan AI (opsional)</h3><button class="btn sm" data-act="ai">✨ Analisis dengan Gemini</button></div>
+    <p class="muted" style="font-size:.86rem;margin:.4rem 0 0">Mengirim statistik dan jawaban refleksi <b>tanpa nama murid</b> ke Gemini memakai kunci API Anda sendiri (atur di Pengaturan).</p>
+    ${aiHasil[t.id] ? `<div class="ai-out" style="margin-top:10px">${esc(aiHasil[t.id])}</div>` : ''}</div>
+  ` : `<div class="empty" style="margin-bottom:14px">Belum ada murid yang mengisi. Buka <b>Mode murid</b> di akhir pelajaran atau gunakan <b>Input dari kertas</b>.</div>`}
+  <div class="card" style="margin-bottom:14px"><h3>Rencana tindak lanjut guru</h3>
+    <div class="grid g2" style="margin-top:10px"><label class="f" style="grid-column:1/-1">Apa yang akan saya lakukan pada pertemuan berikutnya?<textarea id="tlRencana" rows="3" placeholder="mis. Kelompok pendampingan: pemodelan ulang dengan alat peraga; kelompok siap lanjut: tantangan proyek mini.">${esc(t.tindak?.rencana || '')}</textarea></label>
+    <label class="f">Status<select id="tlStatus">${['Belum', 'Direncanakan', 'Dilaksanakan'].map(s => `<option ${t.tindak?.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select></label>
+    <label class="f">Tanggal pelaksanaan<input type="date" id="tlTanggal" value="${esc(t.tindak?.tanggal || '')}"></label></div>
+    <div class="row" style="margin-top:10px"><button class="btn pri" data-act="simpanTL">Simpan tindak lanjut</button><button class="btn ghost" data-act="isiSaranTL">Isi dari saran otomatis</button></div></div>
+  ${t.jawaban.length ? `<div class="card"><h3>Jawaban per murid</h3><p class="muted" style="font-size:.86rem">Klik ✓/✗ pada soal isian untuk mengoreksi penilaian otomatis.</p>
+    <div class="tablewrap"><table><thead><tr><th>Murid</th>${t.soal.map((q, i) => `<th class="c">S${i + 1}</th>`).join('')}<th class="c">Skor</th><th class="c">Yakin</th><th class="c">Rasa</th><th>Kelompok</th><th>Sumber</th><th></th></tr></thead><tbody>
+    ${A.perSiswa.sort((a, b) => a.a.nama.localeCompare(b.a.nama)).map(p => `<tr><td>${esc(p.a.nama)}</td>${t.soal.map(q => { const v = p.hasil[q.id], raw = p.a.j[q.id]; const lbl = q.tipe === 'pg' ? (raw === undefined ? '–' : HURUF[raw]) : q.tipe === 'bs' ? (raw === undefined ? '–' : raw ? 'B' : 'S') : ''; return q.tipe === 'isian' ? `<td class="c"><button class="cell-toggle ${v ? 'okc' : 'noc'}" data-act="toggle" data-a="${p.a.id}" data-q="${q.id}" title="${esc(raw || '(kosong)')}" aria-label="${esc(p.a.nama)}: ${esc(raw || 'kosong')}, ${v ? 'benar' : 'salah'}; klik untuk mengubah">${v ? '✓' : '✗'}</button></td>` : `<td class="c ${v ? 'okc' : 'noc'}">${lbl}${v ? ' ✓' : ''}</td>`; }).join('')}
+    <td class="c">${pct(p.skor)}</td><td class="c">${p.yakin ?? '–'}</td><td class="c">${p.mood ? MOOD[p.mood].e : '–'}</td><td><span class="tag ${p.kel}">${KEL[p.kel].n}</span></td><td class="muted">${p.a.sumber === 'kertas' ? 'kertas' : 'perangkat'}</td><td><button class="btn sm ghost danger" data-act="hapusJawab" data-a="${p.a.id}" aria-label="Hapus jawaban ${esc(p.a.nama)}">Hapus</button></td></tr>`).join('')}
+    </tbody></table></div></div>` : ''}
+  <div class="row" style="margin-top:14px"><button class="btn ghost" data-go="tiket">← Semua tiket</button><button class="btn ghost danger" data-act="hapusTiket" data-id="${t.id}">Hapus tiket ini</button></div>`;
+}
+function csvTiket(t) {
+  const A = analisis(t), teks = t.refleksi.filter(r => r.jenis !== 'x');
+  const c = v => { const s = String(v ?? ''); return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const head = ['Nama', 'Waktu', 'Sumber', ...t.soal.flatMap((q, i) => [`S${i + 1} jawaban`, `S${i + 1} benar`]), 'Skor (%)', ...teks.map(r => r.prinsip + ': ' + r.teks), 'Kelompok', 'Catatan'];
+  const rows = A.perSiswa.map(p => [p.a.nama, p.a.waktu, p.a.sumber, ...t.soal.flatMap(q => { const raw = p.a.j[q.id]; return [q.tipe === 'pg' ? (raw === undefined ? '' : HURUF[raw]) : q.tipe === 'bs' ? (raw === undefined ? '' : raw ? 'Benar' : 'Salah') : (raw || ''), p.hasil[q.id] === null ? '' : p.hasil[q.id] ? 1 : 0]; }), p.skor === null ? '' : Math.round(p.skor * 100), ...teks.map(r => p.a.r[r.id] ?? ''), KEL[p.kel].n, [p.flags.includes('yk') ? 'yakin tapi keliru' : '', p.flags.includes('rp') ? 'benar tapi ragu' : ''].filter(Boolean).join('; ')]);
+  return '﻿' + [head, ...rows].map(r => r.map(c).join(',')).join('\n');
+}
+async function analisisAI(t) {
+  let ai = {}; try { ai = JSON.parse(lsGet(KUNCI_AI) || '{}'); } catch (e) { }
+  if (!ai.key) { toast('Isi kunci API Gemini di Pengaturan terlebih dahulu.'); pergi('atur'); return; }
+  const A = analisis(t);
+  const teks = t.refleksi.filter(r => r.jenis === 'teks');
+  const data = [`Mapel: ${t.mapel}; Topik: ${t.topik}; Tujuan: ${t.tujuan || '-'}`, `Respons ${t.jawaban.length} murid; rata-rata benar ${pct(A.rataSkor)}; keyakinan rata-rata ${A.rataYakin ? A.rataYakin.toFixed(1) : '-'}/4; senang ${pct(A.moodPos)}.`,
+    ...A.perSoal.map((x, i) => `Soal ${i + 1} (${x.q.tipe}): ${x.q.teks}${x.q.tipe === 'pg' ? ' | opsi: ' + x.q.opsi.map((o, j) => HURUF[j] + '. ' + o).join('; ') + ' | kunci ' + HURUF[x.q.kunci] : ''} | benar ${pct(x.p)} | sebaran ${JSON.stringify(x.dist)}`),
+    `Kelompok: siap lanjut ${A.grup.g1.length}, penguatan ${A.grup.g2.length}, pendampingan ${A.grup.g3.length}; yakin-tapi-keliru ${A.yk.length}.`,
+    ...teks.map(r => `Refleksi "${r.teks}": ` + t.jawaban.map(a => a.r[r.id]).filter(Boolean).map(s => `"${String(s).slice(0, 200)}"`).join(' | '))].join('\n');
+  const prompt = `Anda pendamping guru SMP di Indonesia yang menerapkan pembelajaran mendalam (berkesadaran, bermakna, menggembirakan). Berikut hasil tiket keluar (exit ticket) satu kelas, tanpa nama murid.\n\n${data}\n\nTulis dalam bahasa Indonesia, ringkas, tanpa markdown tebal, format:\n1) Tema utama dari jawaban refleksi murid (3–4 butir).\n2) Kemungkinan miskonsepsi beserta buktinya.\n3) Tindak lanjut konkret untuk pertemuan berikutnya per kelompok (siap lanjut, perlu penguatan, perlu pendampingan), masing-masing 1–2 kegiatan 5–15 menit.\n4) Satu ide agar pembelajaran berikutnya lebih bermakna dan menggembirakan.`;
+  aiHasil[t.id] = 'Sedang menganalisis…'; render();
+  try {
+    const model = (ai.model || 'gemini-2.5-flash').trim();
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': ai.key }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: .6 } }) });
+    const j = await res.json();
+    if (!res.ok) throw new Error(j?.error?.message || res.status);
+    aiHasil[t.id] = (j.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('').replace(/\*\*/g, '') || 'AI tidak memberi jawaban.';
+  } catch (e) { aiHasil[t.id] = 'Gagal menghubungi Gemini: ' + e.message; }
+  if (R.v === 'rekap' && R.id === t.id) render();
+}
+
+/* ---------- view: cetak ---------- */
+function vCetak() {
+  const t = tiketDari(R.id); if (!t) return vTiket();
+  const k = kelasDari(t.kelasId);
+  const slip = () => `<div class="pslip"><h4>🎟️ Tiket Keluar — ${esc(t.mapel)}</h4><div>Topik: ${esc(t.topik)} · Kelas ${esc(k?.nama || '')} · ${tglID(t.tanggal)}</div><div>Nama: ______________________</div>
+    ${t.soal.map((q, i) => `<div style="margin-top:6px"><b>${i + 1}. ${esc(q.teks)}</b><br>${q.tipe === 'pg' ? q.opsi.map((o, j) => o ? `<span class="box"></span>${HURUF[j]}. ${esc(o)}&nbsp;&nbsp; ` : '').join('') : q.tipe === 'bs' ? '<span class="box"></span>Benar &nbsp; <span class="box"></span>Salah' : '<div class="ln"></div>'}</div>`).join('')}
+    ${t.refleksi.map(r => `<div style="margin-top:6px"><b>${esc(r.teks)}</b><br>${r.jenis === 'yakin' ? [1, 2, 3, 4].map(n => `<span class="box"></span>${n} ${YAKIN[n].t}&nbsp; `).join('') : r.jenis === 'mood' ? [1, 2, 3, 4].map(n => `<span class="box"></span>${MOOD[n].e} ${MOOD[n].t}&nbsp; `).join('') : '<div class="ln"></div><div class="ln"></div>'}</div>`).join('')}</div>`;
+  return `<div class="head"><div><h2>Cetak tiket</h2><p>4 tiket per lembar A4. Potong di garis putus-putus. Setelah terkumpul, masukkan lewat <i>Input dari kertas</i>.</p></div><div class="row noprint"><button class="btn" data-go="tiket">← Kembali</button><button class="btn pri" data-act="print">🖨️ Cetak</button></div></div>
+  <div class="sheet">${slip() + slip() + slip() + slip()}</div>`;
+}
+
+/* ---------- view: riwayat ---------- */
+let rwKelas = null;
+function vRiwayat() {
+  if (!S.kelas.length) return `<div class="empty">Belum ada kelas.</div>`;
+  if (!rwKelas || !kelasDari(rwKelas)) rwKelas = S.kelas[0].id;
+  const k = kelasDari(rwKelas);
+  const ts = S.tiket.filter(t => t.kelasId === rwKelas).sort((a, b) => a.tanggal.localeCompare(b.tanggal));
+  const hit = {};
+  ts.forEach(t => analisis(t).perSiswa.forEach(p => { const h = hit[p.a.nama] || (hit[p.a.nama] = { g3: 0, yk: 0, n: 0 }); h.n++; if (p.kel === 'g3') h.g3++; if (p.flags.includes('yk')) h.yk++; }));
+  const perhatian = Object.entries(hit).filter(([, h]) => h.g3 + h.yk >= 2).sort((a, b) => (b[1].g3 + b[1].yk) - (a[1].g3 + a[1].yk));
+  const belumIkut = k.siswa.filter(s => !hit[s.nama]).map(s => s.nama);
+  const tl = S.tiket.filter(t => (t.tindak?.status || 'Belum') !== 'Dilaksanakan').sort((a, b) => a.tanggal.localeCompare(b.tanggal));
+  const brs = (lbl, v, cls) => `<div><span>${lbl}</span><div class="bar"><i class="${cls}" style="width:${(v || 0) * 100}%"></i></div><b>${pct(v)}</b></div>`;
+  return `<div class="head"><div><h2>Riwayat &amp; tren kelas</h2><p>Pantau pemahaman, keyakinan, dan suasana belajar dari pertemuan ke pertemuan.</p></div>
+  <label class="f" style="min-width:180px">Kelas<select id="rwKelas">${S.kelas.map(x => `<option value="${x.id}" ${x.id === rwKelas ? 'selected' : ''}>${esc(x.nama)}</option>`).join('')}</select></label></div>
+  <div class="grid g2">
+  <div class="card"><h3>Tren per pertemuan</h3>${ts.length ? `<div class="trend">${ts.map(t => { const A = analisis(t); return `<div class="trend-row"><div><b>${esc(t.topik)}</b><br><small class="muted">${esc(t.mapel)} · ${tglID(t.tanggal)}</small><br><button class="btn sm ghost" data-act="rekap" data-id="${t.id}">Rekap</button></div><div class="bars">${brs('Paham', A.rataSkor, 'b1')}${brs('Yakin', A.rataYakin ? (A.rataYakin - 1) / 3 : null, 'bb')}${brs('Senang', A.moodPos, 'b2')}</div></div>`; }).join('')}</div>` : '<p class="muted">Belum ada tiket untuk kelas ini.</p>'}</div>
+  <div class="grid" style="align-content:start">
+  <div class="card"><h3>Murid yang perlu perhatian</h3><p class="muted" style="font-size:.86rem;margin:.3rem 0">Muncul ≥2 kali di kelompok pendampingan atau “yakin tapi keliru”.</p>
+    ${perhatian.length ? `<ul class="quotes">${perhatian.map(([n, h]) => `<li><b>${esc(n)}</b> <small>— pendampingan ${h.g3}×, yakin tapi keliru ${h.yk}× dari ${h.n} tiket</small></li>`).join('')}</ul>` : '<p class="muted">Tidak ada pola yang mengkhawatirkan.</p>'}
+    ${belumIkut.length ? `<p style="font-size:.88rem"><b>Belum pernah mengisi:</b> ${esc(belumIkut.join(', '))}</p>` : ''}</div>
+  <div class="card"><h3>Tindak lanjut yang belum dilaksanakan</h3>${tl.length ? `<ul class="quotes">${tl.map(t => `<li><b>${esc(t.topik)}</b> <small>(${esc(kelasDari(t.kelasId)?.nama || '')}, ${esc(t.tindak?.status || 'Belum')})</small><br>${esc(t.tindak?.rencana || 'Rencana belum ditulis.')} <button class="btn sm ghost" data-act="rekap" data-id="${t.id}">Buka</button></li>`).join('')}</ul>` : '<p class="muted">Semua tindak lanjut sudah dilaksanakan. 👍</p>'}</div>
+  </div></div>`;
+}
+
+/* ---------- view: kelas ---------- */
+function vKelas() {
+  return `${bannerContoh()}<div class="head"><div><h2>Kelas &amp; murid</h2><p>Satu nama per baris. Tidak perlu NIS atau data pribadi lain.</p></div><button class="btn pri" data-act="tambahKelas">＋ Tambah kelas</button></div>
+  <div class="grid g2">${S.kelas.map(k => `<div class="card grid"><div class="row" style="justify-content:space-between"><h3>${esc(k.nama)} ${k.contoh ? '<span class="tag contoh">contoh</span>' : ''}</h3><span class="tag">${k.siswa.length} murid</span></div>
+    <label class="f">Nama kelas<input type="text" data-kn="${k.id}" value="${esc(k.nama)}"></label>
+    <label class="f">Daftar murid<textarea rows="8" data-ks="${k.id}">${esc(k.siswa.map(s => s.nama).join('\n'))}</textarea></label>
+    <div class="row"><button class="btn sm pri" data-act="simpanKelas" data-id="${k.id}">Simpan</button><button class="btn sm ghost danger" data-act="hapusKelas" data-id="${k.id}">Hapus kelas</button></div></div>`).join('') || '<div class="empty">Belum ada kelas.</div>'}</div>`;
+}
+
+/* ---------- view: pengaturan ---------- */
+function vAtur() {
+  let ai = {}; try { ai = JSON.parse(lsGet(KUNCI_AI) || '{}'); } catch (e) { }
+  const tema = lsGet(KUNCI_TEMA) || 'auto';
+  return `<div class="head"><div><h2>Pengaturan</h2><p>Semua data disimpan di peramban perangkat ini saja.</p></div></div>
+  <div class="grid g2">
+  <form class="card grid" id="fAI" onsubmit="return false"><h3>AI Gemini (opsional)</h3>
+    <p class="muted" style="margin:0;font-size:.9rem">Kunci API milik Anda sendiri dari Google AI Studio. Disimpan hanya di perangkat ini dan dipakai langsung dari peramban.</p>
+    <label class="f">Kunci API<input type="password" name="key" value="${esc(ai.key || '')}" autocomplete="off" placeholder="Tempel kunci API"></label>
+    <label class="f">Model<input type="text" name="model" value="${esc(ai.model || 'gemini-2.5-flash')}"></label>
+    <div class="row"><button class="btn pri" data-act="simpanAI">Simpan</button><button class="btn ghost danger" data-act="hapusAI">Hapus kunci</button></div></form>
+  <div class="card grid"><h3>Tampilan</h3><label class="f">Tema<select id="tema">${[['auto', 'Ikuti perangkat'], ['light', 'Terang'], ['dark', 'Gelap']].map(([v, n]) => `<option value="${v}" ${tema === v ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+    <h3>Cadangan data</h3><div class="row"><button class="btn" data-act="ekspor">Unduh cadangan (JSON)</button><label class="btn" tabindex="0" id="lblImpor">Impor JSON<input type="file" id="impor" accept="application/json,.json" class="sr"></label></div>
+    <h3>Bersihkan</h3><div class="row">${adaContoh() ? '<button class="btn" data-act="hapusContoh">Hapus data contoh</button>' : ''}<button class="btn danger" data-act="hapusSemua">Hapus semua data</button><button class="btn ghost" data-act="muatContoh">Muat ulang data contoh</button></div></div>
+  </div>`;
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const go = e.target.closest('[data-go]');
+  if (go) { e.preventDefault(); if (go.dataset.go === 'susun') return; pergi(go.dataset.go); return; }
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const act = b.dataset.act, id = b.dataset.id, i = +b.dataset.i;
+  const ubahDraft = fn => { bacaDraft(); fn(); render(); };
+  switch (act) {
+    case 'baru': if (!S.kelas.length) { toast('Tambahkan kelas terlebih dahulu.'); pergi('kelas'); } else mulaiSusun(null); break;
+    case 'susun': mulaiSusun(id); break;
+    case 'duplikat': { const t = JSON.parse(JSON.stringify(tiketDari(id))); t.id = uid(); t.contoh = false; t.tanggal = hariIni(); t.jawaban = []; t.tindak = { rencana: '', status: 'Belum', tanggal: '' }; draft = t; draft.id = null; pergi('susun'); toast('Salinan tiket siap diubah (mis. untuk kelas lain).'); break; }
+    case 'batalSusun': draft = null; pergi('tiket'); break;
+    case 'simpanSusun': simpanSusun(); break;
+    case 'tambahSoal': ubahDraft(() => draft.soal.push({ id: uid(), tipe: 'pg', teks: '', opsi: ['', '', '', ''], kunci: 0 })); break;
+    case 'hapusSoal': ubahDraft(() => draft.soal.splice(i, 1)); break;
+    case 'naik': ubahDraft(() => { const s = draft.soal; [s[i - 1], s[i]] = [s[i], s[i - 1]]; }); break;
+    case 'tambahOpsi': ubahDraft(() => draft.soal[i].opsi.push('')); break;
+    case 'kurangOpsi': ubahDraft(() => { const q = draft.soal[i]; q.opsi.pop(); if (q.kunci >= q.opsi.length) q.kunci = 0; }); break;
+    case 'hapusRefl': ubahDraft(() => draft.refleksi.splice(i, 1)); break;
+    case 'tambahYakin': ubahDraft(() => draft.refleksi.unshift({ id: uid(), jenis: 'yakin', prinsip: 'Berkesadaran', teks: 'Seberapa yakin aku memahami pelajaran hari ini?' })); break;
+    case 'tambahMood': ubahDraft(() => draft.refleksi.push({ id: uid(), jenis: 'mood', prinsip: 'Menggembirakan', teks: 'Bagaimana perasaanku selama belajar hari ini?' })); break;
+    case 'tambahRefl': ubahDraft(() => draft.refleksi.push({ id: uid(), jenis: 'teks', prinsip: 'Merefleksi', teks: '' })); break;
+    case 'ambilBank': ubahDraft(() => draft.refleksi.push({ id: uid(), jenis: 'teks', prinsip: BANK[i][0], teks: BANK[i][1] })); toast('Pertanyaan refleksi ditambahkan.'); break;
+    case 'isi': K = { tahap: 'nama', siswa: null }; pergi('isi', id); break;
+    case 'pilihNama': { const t = tiketDari(R.id); const s = kelasDari(t.kelasId).siswa.find(x => x.id === id); K = { tahap: 'form', siswa: s }; render(); window.scrollTo(0, 0); break; }
+    case 'namaLain': { const n = ($('#namaLain').value || '').trim(); if (!n) return toast('Tulis namamu dulu.'); K = { tahap: 'form', siswa: { id: null, nama: n } }; render(); break; }
+    case 'batalIsi': case 'berikut': clearTimeout(K.timer); K = { tahap: 'nama', siswa: null }; render(); window.scrollTo(0, 0); break;
+    case 'kirimIsi': kirimIsi(); break;
+    case 'keluarIsi': if (confirm('Akhiri mode murid dan kembali ke tampilan guru?')) { clearTimeout(K.timer); const tid = R.id; pergi('rekap', tid); } break;
+    case 'input': pergi('input', id); break;
+    case 'rekap': pergi('rekap', id); break;
+    case 'cetak': pergi('cetak', id); break;
+    case 'print': window.print(); break;
+    case 'csv': { const t = tiketDari(R.id); unduh(`tiket-keluar_${t.tanggal}_${(kelasDari(t.kelasId)?.nama || '').replace(/\s+/g, '')}_${t.topik.replace(/[^\w]+/g, '-').slice(0, 30)}.csv`, csvTiket(t), 'text/csv;charset=utf-8'); break; }
+    case 'salinRingkas': { const t = tiketDari(R.id); salin(ringkasanTeks(t, analisis(t))); break; }
+    case 'simpanTL': { const t = tiketDari(R.id); t.tindak = { rencana: $('#tlRencana').value.trim(), status: $('#tlStatus').value, tanggal: $('#tlTanggal').value }; simpan(); toast('Tindak lanjut disimpan.'); break; }
+    case 'isiSaranTL': { const t = tiketDari(R.id), A = analisis(t); const s = ['g3', 'g2', 'g1'].filter(g => A.grup[g].length).map(g => `${KEL[g].n} (${A.grup[g].map(p => p.a.nama).join(', ')}): ${KEL[g].saran}`); A.perSoal.forEach((x, j) => { if (x.p !== null && x.p < .6) s.unshift(`Bahas ulang soal ${j + 1} (${pct(x.p)} benar).`); }); $('#tlRencana').value = s.join('\n'); if ($('#tlStatus').value === 'Belum') $('#tlStatus').value = 'Direncanakan'; toast('Saran dimasukkan—sesuaikan lalu simpan.'); break; }
+    case 'toggle': { const t = tiketDari(R.id); const a = t.jawaban.find(x => x.id === b.dataset.a); const q = t.soal.find(x => x.id === b.dataset.q); a.ov = a.ov || {}; a.ov[q.id] = !nilai(q, a.j, a.ov); simpan(); render(); break; }
+    case 'hapusJawab': { const t = tiketDari(R.id); if (confirm('Hapus jawaban murid ini?')) { t.jawaban = t.jawaban.filter(x => x.id !== b.dataset.a); simpan(); render(); } break; }
+    case 'hapusTiket': if (confirm('Hapus tiket beserta semua jawabannya?')) { S.tiket = S.tiket.filter(t => t.id !== id); simpan(); pergi('tiket'); } break;
+    case 'ai': analisisAI(tiketDari(R.id)); break;
+    case 'tambahKelas': { const n = prompt('Nama kelas (mis. IX C):'); if (n && n.trim()) { S.kelas.push({ id: uid(), nama: n.trim(), siswa: [] }); simpan(); render(); } break; }
+    case 'simpanKelas': { const k = kelasDari(id); k.nama = ($(`[data-kn="${id}"]`).value || '').trim() || k.nama; const lama = new Map(k.siswa.map(s => [s.nama, s.id])); const names = [...new Set($(`[data-ks="${id}"]`).value.split('\n').map(s => s.trim()).filter(Boolean))]; k.siswa = names.map(n => ({ id: lama.get(n) || uid(), nama: n })); simpan(); toast('Kelas disimpan.'); render(); break; }
+    case 'hapusKelas': if (confirm('Hapus kelas ini? Tiket untuk kelas ini ikut terhapus.')) { S.kelas = S.kelas.filter(k => k.id !== id); S.tiket = S.tiket.filter(t => t.kelasId !== id); simpan(); render(); } break;
+    case 'simpanAI': { const f = new FormData($('#fAI')); if (!lsSet(KUNCI_AI, JSON.stringify({ key: String(f.get('key')).trim(), model: String(f.get('model')).trim() || 'gemini-2.5-flash' }))) toast('Gagal menyimpan di perangkat.'); else toast('Pengaturan AI disimpan di perangkat ini.'); break; }
+    case 'hapusAI': lsDel(KUNCI_AI); render(); toast('Kunci API dihapus dari perangkat.'); break;
+    case 'ekspor': unduh(`tiket-keluar-cadangan_${hariIni()}.json`, JSON.stringify(S, null, 1), 'application/json'); break;
+    case 'hapusContoh': if (confirm('Hapus semua data berlabel contoh?')) { const ids = new Set(S.kelas.filter(k => k.contoh).map(k => k.id)); S.kelas = S.kelas.filter(k => !k.contoh); S.tiket = S.tiket.filter(t => !t.contoh && !ids.has(t.kelasId)); simpan(); toast('Data contoh dihapus.'); render(); } break;
+    case 'hapusSemua': if (confirm('Hapus SEMUA kelas, tiket, dan jawaban di perangkat ini? Tindakan ini tidak bisa dibatalkan.')) { S = { versi: 1, kelas: [], tiket: [] }; simpan(); toast('Semua data dihapus.'); pergi('tiket'); } break;
+    case 'muatContoh': if (confirm('Tambahkan kembali data contoh?')) { const c = dataContoh(); S.kelas.push(...c.kelas); S.tiket.push(...c.tiket); simpan(); toast('Data contoh dimuat.'); render(); } break;
+  }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.dataset.qt !== undefined) { bacaDraft(); const q = draft.soal[+el.dataset.qt]; q.tipe = el.value; if (q.tipe === 'pg') { q.opsi = q.opsi && q.opsi.length ? q.opsi : ['', '', '', '']; q.kunci = typeof q.kunci === 'number' ? q.kunci : 0; } else if (q.tipe === 'bs') q.kunci = true; else q.kunci = ''; render(); return; }
+  if (el.dataset.in && R.v === 'input') { ubahInput(el); return; }
+  if (el.id === 'rwKelas') { rwKelas = el.value; render(); return; }
+  if (el.id === 'tema') { lsSet(KUNCI_TEMA, el.value); terapkanTema(); return; }
+  if (el.id === 'impor' && el.files[0]) {
+    const r = new FileReader(); r.onload = () => { try { const d = JSON.parse(r.result); if (!Array.isArray(d.kelas) || !Array.isArray(d.tiket)) throw 0; if (confirm('Ganti data di perangkat ini dengan isi berkas cadangan?')) { S = d; simpan(); toast('Data berhasil diimpor.'); pergi('tiket'); } } catch (_) { toast('Berkas bukan cadangan Tiket Keluar yang valid.'); } }; r.readAsText(el.files[0]);
+  }
+});
+document.addEventListener('keydown', e => { if (e.target.id === 'lblImpor' && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); $('#impor').click(); } if (e.target.id === 'namaLain' && e.key === 'Enter') { e.preventDefault(); document.querySelector('[data-act="namaLain"]').click(); } });
+function terapkanTema() { const t = lsGet(KUNCI_TEMA) || 'auto'; if (t === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', t); }
+$('#themeBtn').addEventListener('click', () => { const gelap = document.documentElement.getAttribute('data-theme') === 'dark' || (!document.documentElement.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches); lsSet(KUNCI_TEMA, gelap ? 'light' : 'dark'); terapkanTema(); });
+terapkanTema();
+if (!lsGet(KUNCI)) simpan();
+render();
+</script>
+</body>
+</html>
