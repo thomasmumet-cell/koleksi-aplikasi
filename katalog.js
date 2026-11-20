@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Latihan TKA Bahasa Inggris",
+    kategori: "Persiapan TKA",
+    jenis: "HTML",
+    deskripsi: "Penguatan Bahasa Inggris SMP (bukan mata uji TKA SMP): 77 soal orisinal dari 16 teks fungsional pendek dan esai sederhana plus 8 rekaman menyimak bersuara (speechSynthesis), dengan pembahasan berbahasa Indonesia dan bukti yang disorot di teks. Peta lima keterampilan membaca (main idea, detail, inference, vocabulary, reference) per level kognitif, tes berwaktu bergaya CBT, dan soal tambahan AI Gemini opsional.",
+    tanggal: "2026-11-21",
+    tautan: "tka-bahasa-inggris/",
+    status: "aktif"
+  },
+  {
     nama: "Tiket Keluar & Refleksi",
     kategori: "Pembelajaran",
     jenis: "HTML",

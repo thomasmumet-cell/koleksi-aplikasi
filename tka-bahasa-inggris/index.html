@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Latihan TKA Bahasa Inggris SMP</title>
+<meta name="description" content="Latihan Bahasa Inggris SMP untuk penguatan TKA: membaca teks fungsional pendek dan esai sederhana, latihan menyimak bersuara, pembahasan berbahasa Indonesia, dan peta keterampilan membaca.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1e8;--paper:#fffdf7;--paper2:#f8f2e4;--ink:#13233f;--mut:#5b6577;--line:#e2d9c6;
+  --acc:#d9480f;--acc-bg:#fff0e4;--on-acc:#fff;--blue:#1c5bb8;--ok:#2b8a3e;--ok-bg:#e8f6eb;--bad:#c92a2a;--bad-bg:#fdecec;--warn:#9a5b00;--warn-bg:#fff3d6;
+  --s-main:#d9480f;--s-detail:#1c5bb8;--s-inference:#7048e8;--s-vocab:#2b8a3e;--s-reference:#c2255c;--listen:#0b7285;
+  --mark:#ffe08a;--shadow:3px 3px 0 var(--ink);--r:14px;color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1624;--paper:#18223a;--paper2:#1e2a45;--ink:#eef2f8;--mut:#a7b1c3;--line:#2f3c58;
+  --acc:#ff8a4c;--acc-bg:#3a2417;--on-acc:#1c0d03;--blue:#74a8ff;--ok:#62d47c;--ok-bg:#163020;--bad:#ff8080;--bad-bg:#3b1d20;--warn:#ffc65a;--warn-bg:#3a2d12;
+  --s-main:#ff9a5c;--s-detail:#74a8ff;--s-inference:#b197fc;--s-vocab:#69db7c;--s-reference:#f783ac;--listen:#4fd1e0;
+  --mark:#6b5310;--shadow:3px 3px 0 #000;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1624;--paper:#18223a;--paper2:#1e2a45;--ink:#eef2f8;--mut:#a7b1c3;--line:#2f3c58;
+  --acc:#ff8a4c;--acc-bg:#3a2417;--on-acc:#1c0d03;--blue:#74a8ff;--ok:#62d47c;--ok-bg:#163020;--bad:#ff8080;--bad-bg:#3b1d20;--warn:#ffc65a;--warn-bg:#3a2d12;
+  --s-main:#ff9a5c;--s-detail:#74a8ff;--s-inference:#b197fc;--s-vocab:#69db7c;--s-reference:#f783ac;--listen:#4fd1e0;
+  --mark:#6b5310;--shadow:3px 3px 0 #000;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.6 "Lexend",system-ui,sans-serif;min-height:100vh}
+body::before{content:"";display:block;height:7px;background:repeating-linear-gradient(135deg,var(--acc) 0 14px,var(--paper) 14px 22px,var(--blue) 22px 36px,var(--paper) 36px 44px)}
+h1,h2,h3,.disp{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0}
+a{color:var(--blue)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:2px solid var(--ink)}
+.hd{display:flex;align-items:center;gap:12px;padding:10px 0 6px}
+.logo{width:44px;height:44px;flex:none;position:relative;border-radius:12px 12px 12px 3px;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;font:800 19px "Bricolage Grotesque",system-ui,sans-serif;border:2px solid var(--ink);box-shadow:var(--shadow)}
+.hd h1{font-size:clamp(17px,4vw,23px);font-weight:800}
+.hd small{display:block;color:var(--mut);font-size:13px}
+.hd .sp{flex:1}
+.iconbtn{border:2px solid var(--ink);background:var(--paper);border-radius:10px;width:42px;height:42px;display:grid;place-items:center;cursor:pointer;flex:none}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:none;border:2px solid transparent;background:none;border-radius:999px;padding:5px 13px;cursor:pointer;font-weight:500;color:var(--mut);font-size:15px}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);font-weight:700}
+nav.tabs button:hover{border-color:var(--line)}
+main.wrap{padding:20px 16px 70px}
+section.view{display:none}section.view.on{display:block;animation:in .22s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.card{background:var(--paper);border:2px solid var(--ink);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.soft{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g5{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.kick{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--acc);font-weight:700}
+.mut{color:var(--mut)}.small{font-size:14px}.tiny{font-size:12.5px}
+h2.sec{font-size:clamp(24px,5vw,32px);font-weight:800;margin:4px 0 6px}
+.hero{display:grid;grid-template-columns:1.35fr 1fr;gap:18px}
+@media (max-width:780px){.hero{grid-template-columns:1fr}}
+.hero>.grid{align-content:start}
+.hero h2{font-size:clamp(30px,6.4vw,48px);font-weight:800;margin:6px 0 10px;letter-spacing:-.01em}
+.hero h2 em{font-style:normal;color:var(--acc)}
+.bubble{position:relative;background:var(--paper2);border:2px solid var(--ink);border-radius:16px;padding:12px 14px;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:600;font-size:18px}
+.bubble::after{content:"";position:absolute;left:22px;bottom:-12px;width:18px;height:18px;background:var(--paper2);border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:skewX(-30deg) rotate(45deg)}
+.status{border-left:5px solid var(--acc);background:var(--acc-bg);padding:12px 14px;border-radius:0 10px 10px 0;font-size:14.5px}
+.status b{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:12px;padding:9px 16px;font-weight:700;cursor:pointer;box-shadow:2px 2px 0 var(--ink);transition:transform .08s,box-shadow .08s;text-decoration:none;min-height:44px}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+.btn.pri{background:var(--acc);color:var(--on-acc)}
+.btn.blue{background:var(--listen);color:#fff}
+:root[data-theme="dark"] .btn.blue{color:#06262b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.blue{color:#06262b}}
+.btn.ghost{box-shadow:none;border-color:var(--line)}
+.btn.sm{padding:5px 12px;min-height:36px;font-size:14.5px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;border-radius:999px;padding:1px 10px;border:1.5px solid currentColor;line-height:1.7;white-space:nowrap}
+.chip.ai{color:var(--warn);background:var(--warn-bg)}
+.chip.ex{color:var(--mut)}
+.sk-main{--sc:var(--s-main)}.sk-detail{--sc:var(--s-detail)}.sk-inference{--sc:var(--s-inference)}.sk-vocab{--sc:var(--s-vocab)}.sk-reference{--sc:var(--s-reference)}
+.chip.sk{color:var(--sc)}
+.skc{border-top:6px solid var(--sc)}
+.skc h3{font-size:18px;color:var(--sc)}
+.skc .en{font-size:12.5px;color:var(--mut);font-weight:500}
+.bar{height:10px;border-radius:9px;background:var(--line);overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;background:var(--sc,var(--acc));border-radius:9px;transition:width .4s}
+.pct{font:800 30px "Bricolage Grotesque",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.lvl{display:inline-block;font-size:12.5px;font-weight:700;padding:1px 8px;border-radius:6px}
+.lvl.kuat{background:var(--ok-bg);color:var(--ok)}.lvl.kembang{background:var(--warn-bg);color:var(--warn)}.lvl.lemah{background:var(--bad-bg);color:var(--bad)}.lvl.na{background:var(--paper2);color:var(--mut)}
+.notice{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1.5px dashed var(--warn);background:var(--warn-bg);color:var(--ink);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:14.5px}
+.notice[hidden]{display:none}
+fieldset{border:1px solid var(--line);border-radius:12px;padding:10px 14px 12px;margin:0 0 12px}
+legend{font-weight:700;padding:0 6px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.tog{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:10px;padding:6px 12px;cursor:pointer;background:var(--paper);min-height:40px}
+.tog:has(input:checked){border-color:var(--ink);background:var(--paper2);font-weight:700}
+.tog input{accent-color:var(--acc);width:18px;height:18px;margin:0}
+label.f{display:block;font-weight:700;margin:10px 0 4px}
+input[type=text],input[type=password],input[type=number],select,textarea{width:100%;border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:9px 12px;min-height:42px}
+input[type=range]{width:100%;accent-color:var(--acc)}
+textarea{min-height:90px}
+/* Player */
+.ptop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.prog{flex:1;min-width:120px;height:12px;border:2px solid var(--ink);border-radius:9px;overflow:hidden;background:var(--paper)}
+.prog i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.timer{font:800 21px "Bricolage Grotesque",system-ui,sans-serif;font-variant-numeric:tabular-nums;border:2px solid var(--ink);border-radius:10px;padding:1px 12px;background:var(--paper)}
+.timer.low{background:var(--bad-bg);color:var(--bad)}
+.play{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:820px){.play{grid-template-columns:1fr}}
+.stim{background:var(--paper);border:2px solid var(--ink);border-radius:var(--r);padding:16px 18px;position:relative}
+@media (min-width:821px){.stim{position:sticky;top:120px;max-height:calc(100vh - 140px);overflow:auto}}
+.stim .tt{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.stim h3{font-size:20px}
+.stim .body{white-space:pre-line;font-size:16px;line-height:1.75}
+.stim.fn .body{background:var(--paper2);border:1.5px dashed var(--mut);border-radius:10px;padding:12px 14px;font-family:"Lexend",system-ui,sans-serif}
+mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 2px}
+table.tb{border-collapse:collapse;margin:8px 0;font-size:15px;width:100%}
+.tbwrap{overflow-x:auto}
+table.tb th,table.tb td{border:1.5px solid var(--ink);padding:5px 10px;text-align:center}
+table.tb th{background:var(--paper2)}
+table.tb td:first-child{text-align:left;font-weight:700}
+.audio{border-color:var(--listen)}
+.audio .bigplay{width:86px;height:86px;border-radius:50%;border:3px solid var(--ink);background:var(--listen);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);flex:none}
+.audio .bigplay svg{width:38px;height:38px}
+.audio .bigplay[aria-pressed="true"]{background:var(--acc)}
+.wave{display:flex;gap:3px;align-items:center;height:36px}
+.wave i{width:5px;border-radius:3px;background:var(--listen);height:30%;opacity:.5}
+.wave.on i{animation:wv .9s ease-in-out infinite;opacity:1}
+.wave i:nth-child(2n){animation-delay:.15s}.wave i:nth-child(3n){animation-delay:.3s}.wave i:nth-child(5n){animation-delay:.45s}
+@keyframes wv{0%,100%{height:25%}50%{height:100%}}
+.script{margin-top:12px;border-top:1.5px dashed var(--line);padding-top:10px}
+.script p{margin:4px 0}
+.script b{color:var(--listen)}
+.qbox{background:var(--paper);border:2px solid var(--ink);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow)}
+.qmeta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.qtext{font-size:18.5px;font-weight:700;margin:0 0 12px;line-height:1.45}
+.choice{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:10px 12px;margin:0 0 8px;cursor:pointer;min-height:48px}
+.choice:hover{border-color:var(--mut)}
+.choice .let{flex:none;width:30px;height:30px;border-radius:8px;border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:14px}
+.choice[aria-pressed="true"],.choice[aria-checked="true"]{border-color:var(--ink);background:var(--paper2)}
+.choice[aria-pressed="true"] .let,.choice[aria-checked="true"] .let{background:var(--ink);color:var(--bg)}
+.choice.ok{border-color:var(--ok);background:var(--ok-bg)}.choice.ok .let{background:var(--ok);color:#fff;border-color:var(--ok)}
+.choice.no{border-color:var(--bad);background:var(--bad-bg)}.choice.no .let{background:var(--bad);color:#fff;border-color:var(--bad)}
+.choice:disabled{cursor:default}
+table.bs{width:100%;border-collapse:collapse;font-size:15.5px}
+table.bs th,table.bs td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:middle}
+table.bs td.c{width:84px;text-align:center}
+table.bs th.c{text-align:center}
+.bsb{min-width:72px;min-height:40px;border:2px solid var(--line);border-radius:10px;background:var(--paper);cursor:pointer;font-weight:700}
+.bsb[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.bsb.ok{border-color:var(--ok);background:var(--ok-bg);color:var(--ok)}.bsb.no{border-color:var(--bad);background:var(--bad-bg);color:var(--bad)}
+.fb{border-radius:12px;padding:12px 14px;margin-top:12px;border:2px solid}
+.fb.ok{border-color:var(--ok);background:var(--ok-bg)}.fb.no{border-color:var(--bad);background:var(--bad-bg)}
+.fb h4{margin:0 0 4px;font-size:16px}
+.tip{font-size:14px;background:var(--paper2);border-radius:10px;padding:8px 12px;margin-top:8px}
+.aibox{margin-top:10px;border:1.5px dashed var(--warn);background:var(--warn-bg);border-radius:10px;padding:10px 12px;font-size:15px;white-space:pre-line}
+.navq{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:6px;margin-top:12px}
+.navq button{height:42px;border:2px solid var(--line);border-radius:9px;background:var(--paper);font-weight:700;cursor:pointer;position:relative}
+.navq button.ans{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.navq button.rg{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+.navq button.cur{outline:3px solid var(--acc);outline-offset:1px}
+.navq button.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}.navq button.no{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--mut);margin-top:8px}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:2px solid var(--line)}
+.legend .l1::before{background:var(--ink);border-color:var(--ink)}.legend .l2::before{background:var(--warn-bg);border-color:var(--warn)}
+.big{font:800 clamp(44px,10vw,72px) "Bricolage Grotesque",system-ui,sans-serif;line-height:1}
+table.mx{width:100%;border-collapse:collapse;font-size:15px}
+table.mx th,table.mx td{padding:8px;border-bottom:1px solid var(--line);text-align:center}
+table.mx th:first-child,table.mx td:first-child{text-align:left}
+.cell{display:inline-block;min-width:58px;padding:2px 8px;border-radius:7px;font-weight:700;font-variant-numeric:tabular-nums}
+.list{list-style:none;padding:0;margin:0}
+.list li{border-bottom:1px solid var(--line);padding:10px 0;display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.empty{padding:22px;text-align:center;color:var(--mut);border:2px dashed var(--line);border-radius:12px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-weight:700;z-index:60;transition:transform .25s,visibility .25s;visibility:hidden;max-width:calc(100% - 32px)}
+.toast.on{transform:translateX(-50%) translateY(0);visibility:visible}
+kbd{border:1.5px solid var(--line);border-bottom-width:3px;border-radius:6px;padding:0 6px;font-size:13px;background:var(--paper)}
+.src li{margin:6px 0}
+details.dd{border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--paper);margin-bottom:10px}
+details.dd summary{cursor:pointer;font-weight:700}
+footer{color:var(--mut);font-size:13px;text-align:center;padding:10px 16px 30px}
+@media print{header.top,nav,.btn,footer{display:none!important}body::before{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="hd">
+      <div class="logo" aria-hidden="true">EN</div>
+      <div><h1>Latihan TKA Bahasa Inggris</h1><small>Membaca &amp; menyimak · SMP kelas 7–9 · penguatan</small></div>
+      <div class="sp"></div>
+      <button class="iconbtn" id="themeBtn" type="button" aria-label="Ganti tema terang/gelap" title="Tema">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Menu utama">
+      <button role="tab" data-v="home" aria-selected="true">Beranda</button>
+      <button role="tab" data-v="latihan" aria-selected="false">Latihan Membaca</button>
+      <button role="tab" data-v="simak" aria-selected="false">Menyimak</button>
+      <button role="tab" data-v="tes" aria-selected="false">Tes Berwaktu</button>
+      <button role="tab" data-v="peta" aria-selected="false">Peta Keterampilan</button>
+      <button role="tab" data-v="riwayat" aria-selected="false">Riwayat &amp; Data</button>
+      <button role="tab" data-v="ai" aria-selected="false">Soal AI</button>
+      <button role="tab" data-v="set" aria-selected="false">Pengaturan</button>
+      <button role="tab" data-v="sumber" aria-selected="false">Dasar &amp; Sumber</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <div class="notice" id="contohBar" hidden>
+    <span>📌 Peta dan riwayat masih memuat <b>data contoh</b> (bukan hasilmu).</span>
+    <button class="btn sm" type="button" data-act="hapusContoh">Hapus data contoh</button>
+  </div>
+
+  <!-- BERANDA -->
+  <section class="view on" id="v-home" role="tabpanel">
+    <div class="hero">
+      <div class="card">
+        <span class="kick">Read · Listen · Think</span>
+        <h2>Baca cermat, simak teliti, <em>tahu letak kelemahanmu.</em></h2>
+        <p class="mut" style="margin:0 0 14px">Latihan teks fungsional pendek (pengumuman, pesan, label, iklan, jadwal) dan esai sederhana. Setiap soal ditandai jenis keterampilannya, jadi kamu tahu persis bagian mana yang perlu dilatih.</p>
+        <div class="row">
+          <button class="btn pri" type="button" data-go="latihan">Mulai latihan membaca</button>
+          <button class="btn blue" type="button" data-go="simak">Latihan menyimak</button>
+          <button class="btn" type="button" data-go="tes">Tes berwaktu</button>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="bubble" id="homeBubble">Hello! Let’s practise today.</div>
+        <div class="status" style="margin-top:6px"><b>Status mapel:</b> menurut Permendikdasmen No. 9 Tahun 2025, TKA jenjang SMP hanya menguji <b>Bahasa Indonesia dan Matematika</b>. Bahasa Inggris <b>bukan</b> mata uji TKA SMP (baru wajib di TKA SMA/SMK). Aplikasi ini adalah <b>penguatan</b> keterampilan membaca dan menyimak, sekaligus bekal TKA SMA. <a href="#" data-go="sumber">Lihat sumber</a></div>
+      </div>
+    </div>
+    <div class="grid g3" style="margin-top:18px" id="homeStats"></div>
+    <h2 class="sec" style="margin-top:26px">Lima keterampilan membaca</h2>
+    <p class="mut" style="margin-top:0">Persentase benar dari semua jawabanmu. Ketuk kartu untuk berlatih keterampilan itu saja.</p>
+    <div class="grid g5" id="homeSkills"></div>
+  </section>
+
+  <!-- LATIHAN -->
+  <section class="view" id="v-latihan" role="tabpanel">
+    <div id="latSetup">
+      <span class="kick">Mode latihan</span>
+      <h2 class="sec">Latihan membaca</h2>
+      <p class="mut" style="margin-top:0">Umpan balik langsung setelah setiap jawaban, lengkap dengan pembahasan dan bukti yang disorot di teks.</p>
+      <div class="card">
+        <fieldset><legend>Keterampilan</legend><div class="opts" id="latSk"></div></fieldset>
+        <fieldset><legend>Jenis teks</legend><div class="opts">
+          <label class="tog"><input type="radio" name="latGrp" value="semua" checked> Semua</label>
+          <label class="tog"><input type="radio" name="latGrp" value="fungsional"> Teks fungsional pendek</label>
+          <label class="tog"><input type="radio" name="latGrp" value="esai"> Esai sederhana</label>
+        </div></fieldset>
+        <fieldset><legend>Level kognitif</legend><div class="opts" id="latLv"></div></fieldset>
+        <fieldset><legend>Jumlah &amp; urutan</legend><div class="opts">
+          <label class="tog"><input type="radio" name="latN" value="10" checked> 10 soal</label>
+          <label class="tog"><input type="radio" name="latN" value="20"> 20 soal</label>
+          <label class="tog"><input type="radio" name="latN" value="999"> Semua yang cocok</label>
+          <label class="tog"><input type="checkbox" id="latPrior" checked> Utamakan soal yang belum/pernah salah</label>
+          <label class="tog"><input type="checkbox" id="latAI"> Sertakan soal AI</label>
+        </div></fieldset>
+        <div class="row"><button class="btn pri" type="button" data-act="startLat">Mulai</button><span class="mut small" id="latCount"></span></div>
+      </div>
+    </div>
+    <div id="latPlay" hidden></div>
+  </section>
+
+  <!-- MENYIMAK -->
+  <section class="view" id="v-simak" role="tabpanel">
+    <div id="simSetup">
+      <span class="kick" style="color:var(--listen)">Listening</span>
+      <h2 class="sec">Latihan menyimak</h2>
+      <p class="mut" style="margin-top:0">Pengumuman, dialog, dan monolog dibacakan suara bahasa Inggris dari perangkatmu. Dengarkan dulu, jawab, lalu baca naskahnya untuk mengecek.</p>
+      <div class="card" id="simCheck"></div>
+      <h3 style="margin:20px 0 10px">Pilih rekaman</h3>
+      <div class="grid g3" id="simList"></div>
+      <div class="row" style="margin-top:14px"><button class="btn blue" type="button" data-act="startSimAll">Latih semua rekaman berurutan</button></div>
+    </div>
+    <div id="simPlay" hidden></div>
+  </section>
+
+  <!-- TES -->
+  <section class="view" id="v-tes" role="tabpanel">
+    <div id="tesSetup">
+      <span class="kick">Mode tes</span>
+      <h2 class="sec">Tes berwaktu</h2>
+      <p class="mut" style="margin-top:0">Gaya ujian berbasis komputer: navigasi nomor soal, tanda ragu-ragu, waktu berjalan. Pembahasan muncul setelah tes selesai. Rekaman menyimak hanya bisa diputar 2 kali.</p>
+      <div class="card">
+        <fieldset><legend>Paket</legend><div class="opts">
+          <label class="tog"><input type="radio" name="tesPk" value="20|40" checked> 20 soal · 40 menit</label>
+          <label class="tog"><input type="radio" name="tesPk" value="30|60"> 30 soal · 60 menit</label>
+          <label class="tog"><input type="radio" name="tesPk" value="10|20"> Kilat 10 soal · 20 menit</label>
+        </div></fieldset>
+        <fieldset><legend>Isi</legend><div class="opts">
+          <label class="tog"><input type="checkbox" id="tesSimak" checked> Sertakan soal menyimak (±25%)</label>
+        </div></fieldset>
+        <button class="btn pri" type="button" data-act="startTes">Mulai tes</button>
+      </div>
+    </div>
+    <div id="tesPlay" hidden></div>
+  </section>
+
+  <!-- PETA -->
+  <section class="view" id="v-peta" role="tabpanel">
+    <span class="kick">Analisis</span>
+    <h2 class="sec">Peta keterampilan</h2>
+    <p class="mut" style="margin-top:0">Kuat ≥ 80% · Berkembang 60–79% · Perlu penguatan &lt; 60% · minimal 3 jawaban agar dinilai.</p>
+    <div id="petaBody"></div>
+  </section>
+
+  <!-- RIWAYAT -->
+  <section class="view" id="v-riwayat" role="tabpanel">
+    <span class="kick">Data di perangkat ini</span>
+    <h2 class="sec">Riwayat &amp; data</h2>
+    <div class="card" style="margin-bottom:16px">
+      <p class="small mut" style="margin-top:0">Semua jawaban tersimpan hanya di peramban perangkat ini (localStorage). Unduh cadangan bila ingin pindah perangkat atau menyerahkan rekap ke guru.</p>
+      <div class="row">
+        <button class="btn sm" type="button" data-act="csv">Unduh CSV jawaban</button>
+        <button class="btn sm" type="button" data-act="json">Unduh cadangan JSON</button>
+        <label class="btn sm" for="impFile">Impor JSON</label><input type="file" id="impFile" accept="application/json,.json" class="sr">
+        <button class="btn sm ghost" type="button" data-act="hapusContoh">Hapus data contoh</button>
+        <button class="btn sm ghost" type="button" data-act="reset">Hapus semua data</button>
+      </div>
+    </div>
+    <div id="riwBody"></div>
+  </section>
+
+  <!-- AI -->
+  <section class="view" id="v-ai" role="tabpanel">
+    <span class="kick" style="color:var(--warn)">Opsional · Gemini</span>
+    <h2 class="sec">Soal tambahan dari AI</h2>
+    <p class="mut" style="margin-top:0">Buat teks dan soal sejenis dengan kunci API Gemini milikmu (isi di Pengaturan). Soal AI selalu bertanda <span class="chip ai">AI · perlu dicek guru</span> dan tidak dihitung sama dengan soal bank.</p>
+    <div class="card" style="margin-bottom:16px">
+      <div class="grid g3">
+        <div><label class="f" for="aiSk">Keterampilan fokus</label><select id="aiSk"></select></div>
+        <div><label class="f" for="aiType">Jenis teks</label><select id="aiType"></select></div>
+        <div><label class="f" for="aiN">Jumlah soal</label><select id="aiN"><option>3</option><option selected>4</option><option>5</option></select></div>
+      </div>
+      <label class="f" for="aiTopic">Topik (opsional)</label>
+      <input type="text" id="aiTopic" placeholder="mis. kegiatan pramuka, kantin sehat, festival budaya">
+      <div class="row" style="margin-top:12px"><button class="btn pri" type="button" data-act="aiGen">Buat soal</button><span id="aiMsg" class="small mut" role="status"></span></div>
+    </div>
+    <div id="aiList"></div>
+  </section>
+
+  <!-- PENGATURAN -->
+  <section class="view" id="v-set" role="tabpanel">
+    <span class="kick">Pengaturan</span>
+    <h2 class="sec">Pengaturan</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Tampilan</h3>
+        <label class="f" for="setTheme">Tema</label>
+        <select id="setTheme"><option value="auto">Ikuti perangkat</option><option value="light">Terang</option><option value="dark">Gelap</option></select>
+        <h3 style="margin-top:18px">Suara menyimak</h3>
+        <label class="f" for="setVoice">Suara bahasa Inggris</label>
+        <select id="setVoice"><option value="">Otomatis</option></select>
+        <label class="f" for="setRate">Kecepatan bicara: <span id="rateLbl">0.9</span>×</label>
+        <input type="range" id="setRate" min="0.6" max="1.2" step="0.05" value="0.9">
+        <div class="row" style="margin-top:10px"><button class="btn sm" type="button" data-act="testVoice">Uji suara</button></div>
+      </div>
+      <div class="card">
+        <h3>AI Gemini (opsional)</h3>
+        <p class="small mut">Kunci API disimpan hanya di perangkat ini dan tidak ikut diekspor. Dapatkan kunci di Google AI Studio. Jangan pakai kunci milik orang lain.</p>
+        <label class="f" for="setKey">Kunci API Gemini</label>
+        <input type="password" id="setKey" autocomplete="off" placeholder="Tempel kunci API di sini">
+        <label class="f" for="setModel">Model</label>
+        <input type="text" id="setModel" value="gemini-2.5-flash">
+        <div class="row" style="margin-top:12px"><button class="btn sm pri" type="button" data-act="saveKey">Simpan</button><button class="btn sm ghost" type="button" data-act="delKey">Hapus kunci</button></div>
+      </div>
+    </div>
+    <div class="soft" style="margin-top:16px"><h3>Pintasan papan ketik</h3>
+      <p class="small" style="margin-bottom:0"><kbd>A</kbd>–<kbd>D</kbd> atau <kbd>1</kbd>–<kbd>4</kbd> pilih jawaban · <kbd>Enter</kbd> periksa/lanjut · <kbd>P</kbd> putar rekaman · <kbd>←</kbd> <kbd>→</kbd> pindah soal di mode tes · <kbd>R</kbd> tandai ragu-ragu</p></div>
+  </section>
+
+  <!-- SUMBER -->
+  <section class="view" id="v-sumber" role="tabpanel">
+    <span class="kick">Transparansi</span>
+    <h2 class="sec">Dasar dan sumber</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Status Bahasa Inggris dalam TKA SMP</h3>
+        <ul>
+          <li>Permendikdasmen No. 9 Tahun 2025 tentang TKA menetapkan mata uji jenjang SD dan SMP: <b>Bahasa Indonesia dan Matematika</b>. Bahasa Inggris menjadi mata uji wajib untuk SMA/SMK.</li>
+          <li>TKA SMP 2026 (April 2026): 30 soal, 75 menit untuk tiap mapel; bentuk soal objektif pilihan ganda dan pilihan ganda kompleks.</li>
+          <li>Jadi aplikasi ini <b>bukan latihan mata uji resmi TKA SMP</b>. Fungsinya menguatkan membaca dan menyimak bahasa Inggris kelas 7–9 (asesmen sekolah, tes daerah, persiapan TKA SMA), dan strategi bacanya ikut melatih literasi.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Cara aplikasi memakai kerangka</h3>
+        <ul>
+          <li>Jenis teks mengikuti kerangka TKA Bahasa Inggris SMA (descriptive, recount, narrative, procedure, report/exposition) pada tingkat lebih mudah (kira-kira A2), ditambah teks fungsional pendek khas SMP.</li>
+          <li>Lima keterampilan dipetakan ke tiga level kompetensi membaca: <i>pemahaman tekstual</i> (informasi rinci, rujukan), <i>pemahaman inferensial</i> (gagasan utama, inferensi, kosakata dalam konteks), dan <i>evaluasi</i> (soal penalaran).</li>
+          <li>Bentuk soal: pilihan ganda, pilihan ganda kompleks (pilih dua), dan benar/salah per pernyataan.</li>
+          <li>Semua teks, naskah, dan soal ditulis orisinal untuk aplikasi ini. Nama tokoh dan tempat fiktif.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>Tautan sumber</h3>
+      <ol class="src">
+        <li><a href="https://www.kemendikdasmen.go.id/siaran-pers/12999-kemendikdasmen-terbitkan-permendikdasmen-tes-kemampuan-akademik-tka" target="_blank" rel="noopener">Kemendikdasmen: Siaran pers Permendikdasmen No. 9 Tahun 2025 tentang TKA</a></li>
+        <li><a href="https://www.medcom.id/pendidikan/news-pendidikan/VNxl5vgN-resmi-ini-mata-pelajaran-yang-bakal-diujikan-dalam-tka-ada-di-permendikdasmen-terbaru" target="_blank" rel="noopener">Medcom.id: Mata pelajaran yang diujikan dalam TKA menurut Permendikdasmen terbaru (Pasal 9)</a></li>
+        <li><a href="https://www.medcom.id/pendidikan/news-pendidikan/xkEd8Z7b-tka-sd-smp-2026-ini-jadwal-harian-dan-waktu-pengerjaan-masing-masing-soal" target="_blank" rel="noopener">Medcom.id: TKA SD-SMP 2026, jadwal harian dan waktu pengerjaan</a></li>
+        <li><a href="https://pusmendik.kemdikbud.go.id/tka/tka/view/mata-pelajaran-wajib/sma/bahasa-inggris" target="_blank" rel="noopener">Pusmendik: Kerangka TKA Bahasa Inggris (jenjang SMA)</a></li>
+      </ol>
+      <p class="small mut">Kebijakan dapat berubah. Cek kembali laman resmi Kemendikdasmen/Pusmendik sebelum menyusun program sekolah.</p>
+    </div>
+    <div class="soft" style="margin-top:16px">
+      <h3>Beda dengan aplikasi bahasa Inggris lain di koleksi</h3>
+      <p class="small" style="margin-bottom:0"><b>Latihan TKAD Bahasa Inggris – Paket A</b> berisi satu paket soal bergaya ujian; <b>TKAD Bahasa Inggris – Bacaan Panjang</b> berfokus pada bacaan panjang. Aplikasi ini berfokus pada <b>teks pendek</b>, <b>analisis lima jenis keterampilan membaca</b> (dengan bukti yang disorot di teks), dan <b>latihan menyimak bersuara</b>.</p>
+    </div>
+  </section>
+</main>
+<footer>Latihan TKA Bahasa Inggris · semua soal orisinal · data hanya di perangkat ini · bagian dari Koleksi Aplikasi</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+/*BANK-START*/
+/* ================= BANK SOAL (semua orisinal) =================
+   TEXTS: teks bacaan. AUD: naskah menyimak (dibacakan speechSynthesis).
+   Q: soal. f: "pg" (pilihan ganda, k = indeks), "pgk" (pilihan ganda kompleks, k = array indeks),
+      "bs" (benar/salah per pernyataan, k = array boolean).
+   sk: main | detail | inference | vocab | reference ; lv: pemahaman | penerapan | penalaran
+   ev: kutipan bukti di teks/naskah (untuk disorot setelah menjawab). */
+var TEXTS = [
+ {id:"T01",type:"Notice",grp:"fungsional",title:"Library Notice",
+  body:"LIBRARY NOTICE\nStarting Monday, 3 March, the school library will open from 7.00 a.m. to 3.30 p.m. Students may borrow up to three books for one week. Please return books on time. A late book costs Rp500 per day. Food and drinks are not allowed inside the reading room. Thank you for keeping our library clean and quiet."},
+ {id:"T02",type:"Short message",grp:"fungsional",title:"A Message for Raka",
+  body:"Hi Raka, it’s Bima. I can’t join the football practice this afternoon because I have to take my grandmother to the clinic. Could you tell Coach Hendra for me? I’ll bring your science book tomorrow. Sorry I forgot it today!\n— Bima"},
+ {id:"T03",type:"Invitation",grp:"fungsional",title:"Class Market Day",
+  body:"Dear Class 8B,\nYou are invited to our Class Market Day!\nDay/Date: Saturday, 14 June\nTime: 08.00 – 11.00\nPlace: School Hall\nWe will sell homemade snacks, handicrafts, and second-hand books. All the money will go to the flood victims in our district. Bring your friends and family!\nOrganizer: Student Council of SMP Harapan"},
+ {id:"T04",type:"Label",grp:"fungsional",title:"Honey Lemon Drink",
+  body:"HONEY LEMON DRINK\nIngredients: water, lemon juice (10%), honey (5%), sugar, vitamin C.\nHow to serve: Shake well before drinking. Best served cold.\nStorage: Keep in a cool, dry place. After opening, keep in the refrigerator and finish within 3 days.\nBest before: 20 12 2027\nNot suitable for babies under 1 year old because it contains honey."},
+ {id:"T05",type:"Announcement",grp:"fungsional",title:"Clean and Green Day",
+  body:"ATTENTION, ALL STUDENTS!\nThe school will hold a Clean and Green Day on Friday, 25 July. Lessons will finish at 10.00. After that, every class will clean its own classroom and plant trees in the school garden. Please bring a small shovel, gloves, and a water bottle. Students do not need to wear the school uniform; wear sports clothes instead. The cleanest class will receive a prize from the principal."},
+ {id:"T06",type:"Email",grp:"fungsional",title:"Asking for Permission",
+  body:"From: Nadia\nTo: Ms. Ratna\nSubject: Permission\n\nDear Ms. Ratna,\nI am writing to ask for permission to submit my English project next Wednesday instead of this Friday. Last night, a strong wind broke our roof, and water damaged my poster. I have already started making a new one, but I need a few more days to finish it. I am very sorry for the inconvenience. Thank you for your understanding.\nBest regards,\nNadia, Class 9A"},
+ {id:"T07",type:"Advertisement",grp:"fungsional",title:"Learn to Swim",
+  body:"LEARN TO SWIM THIS HOLIDAY!\nTirta Swimming Club opens a two-week class for children aged 8–14.\n• Small groups: maximum 6 students per coach\n• Classes every Monday, Wednesday, and Friday, 3–4 p.m.\n• Fee: Rp300.000 (free swimming cap for early registration before 1 June)\nRegister at the club office near the city stadium."},
+ {id:"T08",type:"Schedule",grp:"fungsional",title:"Bus Timetable Route 4",
+  body:"BUS TIMETABLE — Route 4 (City Park → Museum)",
+  table:[["Bus stop","Bus 1","Bus 2","Bus 3"],["City Park","06.30","07.15","08.00"],["Central Market","06.45","07.30","08.15"],["Train Station","07.05","07.50","08.35"],["Museum","07.20","08.05","08.50"]]},
+ {id:"T09",type:"Descriptive",grp:"esai",title:"My Grandfather’s Garden",
+  body:"My grandfather has a small garden behind his house in Sleman. Although it is not large, it is full of life. On the left side, there are rows of chili and tomato plants. On the right side, he grows lemongrass, ginger, and turmeric, which he often uses to make warm herbal drinks. In the middle of the garden stands an old mango tree. Its wide branches give cool shade, so we like to sit under it in the afternoon. My grandfather never uses chemical fertilizer. Instead, he makes compost from kitchen waste and dry leaves. Because of his hard work, the garden produces fresh vegetables almost every week, and he often shares them with the neighbors."},
+ {id:"T10",type:"Recount",grp:"esai",title:"A Lesson from the Rain",
+  body:"Last Saturday, my classmates and I went on a field trip to a tea plantation. In the morning, the weather was sunny, so most of us did not bring raincoats. After lunch, we walked to the top of a hill to see the view. Suddenly, dark clouds came and heavy rain started to fall. We ran to a small hut, but our clothes were already wet. While we were waiting, a local farmer kindly offered us hot tea and told us how tea leaves are picked and dried. The rain stopped an hour later. We went home tired and wet, but we learned something important: always check the weather forecast before a trip."},
+ {id:"T11",type:"Narrative",grp:"esai",title:"The Proud Rooster and the Quiet Duck",
+  body:"Once upon a time, a rooster lived on a farm near a river. Every morning he crowed loudly and told the other animals that he was the most important animal on the farm. “Without me, nobody would wake up,” he said proudly. The duck, who was quiet and humble, just smiled.\nOne day, the rooster lost his voice because of a cold. He was worried that the farm would stop working. However, the next morning the farmer still woke up, the cows still gave milk, and the duck still swam in the river. The rooster finally realized that everyone on the farm had an important role. Since then, he crowed as usual but never boasted again."},
+ {id:"T12",type:"Procedure",grp:"esai",title:"How to Make a Simple Water Filter",
+  body:"Materials: a plastic bottle, cotton, charcoal, sand, small stones, and scissors.\nSteps:\n1. Cut the bottom of the plastic bottle and turn it upside down.\n2. Put a layer of cotton into the neck of the bottle.\n3. Add a layer of charcoal on top of the cotton.\n4. Pour a layer of sand over the charcoal.\n5. Finally, add a layer of small stones on the top.\n6. Slowly pour dirty water into the bottle and collect the water that comes out.\nNote: The filtered water looks cleaner, but it is still not safe to drink. Boil it first."},
+ {id:"T13",type:"Report",grp:"esai",title:"Komodo Dragons",
+  body:"The Komodo dragon is the largest lizard in the world. It lives only on a few islands in East Nusa Tenggara, such as Komodo, Rinca, and Flores. An adult Komodo can grow up to three meters long and weigh more than 70 kilograms. Komodos are carnivores. They eat deer, wild pigs, and even buffalo. Komodo dragons have a very good sense of smell; they use their long yellow tongue to detect food from several kilometers away. Female Komodos lay about 20 eggs at a time and bury them in the ground. Today, Komodo dragons are a protected species because their number in the wild is limited."},
+ {id:"T14",type:"Notice",grp:"fungsional",title:"Found!",
+  body:"FOUND!\nA blue water bottle with a cat sticker was found in the prayer room on Tuesday afternoon. The owner can take it from the Teachers’ Room. Please bring your student card and mention what is written on the bottom of the bottle."},
+ {id:"T15",type:"Exposition",grp:"esai",title:"Why Students Should Have Breakfast",
+  body:"Many students go to school without having breakfast. Some say they wake up late, while others are not hungry in the morning. However, breakfast is important for at least two reasons. First, it gives the body energy after a long night without food. With enough energy, students can pay attention in class and are less likely to feel sleepy. Second, a healthy breakfast helps students avoid buying unhealthy snacks during break time. A simple meal such as rice with eggs and vegetables, or bread with a banana, is enough. Therefore, students should make time for breakfast every morning."},
+ {id:"T16",type:"Short message",grp:"fungsional",title:"Class 9C Group Chat",
+  body:"Class 9C group chat\nMs. Dewi: Good evening, everyone. Tomorrow’s English test is moved to Thursday because the hall will be used for vaccination. The test will cover Units 3 and 4 only. Don’t forget to bring a pencil and an eraser.\nAndi: Thank you, Ma’am. Is Unit 2 not included?\nMs. Dewi: That’s right, Andi. Unit 2 was already tested last month."}
+];
+
+var AUD = [
+ {id:"L01",kind:"Monolog",title:"Station Announcement",lines:[["A","Attention, please. The train to Solo, which was scheduled to leave at ten fifteen, will be delayed for thirty minutes because of a technical problem. Passengers are asked to wait in the waiting room. We apologize for the inconvenience."]]},
+ {id:"L02",kind:"Dialog",title:"At the Shoe Shop",lines:[["A","Good morning. Can I help you?"],["B","Yes, please. I’m looking for a pair of running shoes, size thirty-nine."],["A","We have these in black and white. They’re two hundred and fifty thousand rupiah."],["B","Hmm, do you have something cheaper?"],["A","How about these grey ones? They’re one hundred and eighty thousand."],["B","Great, I’ll take the grey ones."]]},
+ {id:"L03",kind:"Dialog",title:"Sunday Plan",lines:[["A","Rina, are you free on Sunday morning?"],["B","I think so. Why?"],["A","Some of us are going to clean the beach at Parangtritis. Do you want to join?"],["B","Sounds great! What time are you leaving?"],["A","We’ll meet in front of the school at six. Don’t forget to bring a hat and sunscreen."],["B","Okay, I’ll be there."]]},
+ {id:"L04",kind:"Monolog",title:"Fajar’s Hobby",lines:[["A","Hi, my name is Fajar. I’m in grade nine. In my free time, I like taking photos of birds. Every weekend, I go to the rice fields near my house with my father’s old camera. I have taken pictures of more than twenty kinds of birds. My favorite is the kingfisher because of its bright blue feathers. Next year, I want to join a photography competition."]]},
+ {id:"L05",kind:"Dialog",title:"Feeling Dizzy",lines:[["A","You look pale, Dimas. What’s wrong?"],["B","I have a headache, and I feel dizzy."],["A","Did you have breakfast this morning?"],["B","No, I didn’t. I woke up late."],["A","That may be the reason. Eat this bread and drink some warm tea first. You can rest on the bed here. If you still feel sick after thirty minutes, I will call your parents."]]},
+ {id:"L06",kind:"Monolog",title:"Science Project Instructions",lines:[["A","Listen carefully, everyone. For your science project, you will work in groups of four. Each group must grow green beans in two cups. Put one cup near the window and the other cup in a dark cupboard. Water both cups every day with the same amount of water. Measure the plants every two days and write the results in a table. You will present your findings in two weeks."]]},
+ {id:"L07",kind:"Dialog",title:"A Phone Call",lines:[["A","Hello, Tika. Sorry, I can’t come to your birthday party tonight."],["B","Oh no, why not?"],["A","My cousin is getting married tomorrow morning, and my family has to leave for Magelang this evening."],["B","That’s okay. Have a safe trip!"],["A","Thanks. I’ll give you your present on Monday."]]},
+ {id:"L08",kind:"Monolog",title:"Weather Forecast",lines:[["A","Here is the weather forecast for Yogyakarta tomorrow. In the morning, it will be sunny with a temperature of about twenty-four degrees Celsius. In the afternoon, the sky will become cloudy, and there is a high chance of heavy rain from three o’clock. So, if you are going out in the afternoon, remember to bring an umbrella."]]}
+];
+
+var Q = [
+ /* ---------- T01 Library Notice ---------- */
+ {id:"R001",t:"T01",sk:"main",lv:"pemahaman",f:"pg",q:"What is the main purpose of the notice?",
+  o:["To invite students to a book fair","To inform students about the new opening hours and library rules","To ask students to donate their old books","To announce that the library will be closed"],k:1,
+  ex:"Pengumuman memuat jam buka baru (mulai 3 Maret) dan aturan: batas pinjam, denda, larangan makan-minum. Jadi tujuannya menginformasikan jam buka dan aturan perpustakaan.",ev:"the school library will open from 7.00 a.m. to 3.30 p.m."},
+ {id:"R002",t:"T01",sk:"detail",lv:"pemahaman",f:"pg",q:"How long can students keep the books they borrow?",
+  o:["Three days","Two weeks","One week","One month"],k:2,
+  ex:"Informasi tersurat: “Students may borrow up to three books for one week.” Angka tiga adalah jumlah buku, bukan lama peminjaman.",ev:"borrow up to three books for one week"},
+ {id:"R003",t:"T01",sk:"detail",lv:"penerapan",f:"pg",q:"Dina returns a book four days late. How much must she pay?",
+  o:["Rp500","Rp1.500","Rp4.000","Rp2.000"],k:3,
+  ex:"Denda Rp500 per hari × 4 hari = Rp2.000.",ev:"A late book costs Rp500 per day."},
+ /* ---------- T02 Message ---------- */
+ {id:"R004",t:"T02",sk:"detail",lv:"pemahaman",f:"pg",q:"Why can’t Bima join the football practice?",
+  o:["He has to take his grandmother to the clinic","He is sick and must stay at home","He forgot to bring his football shoes","The coach cancelled the practice"],k:0,
+  ex:"Alasan tertulis setelah kata “because”: he has to take his grandmother to the clinic.",ev:"because I have to take my grandmother to the clinic"},
+ {id:"R005",t:"T02",sk:"reference",lv:"pemahaman",f:"pg",q:"The word “it” in “Sorry I forgot it today!” refers to …",
+  o:["the football practice","the clinic","Raka’s science book","the message"],k:2,
+  ex:"Kata ganti “it” merujuk ke benda yang disebut tepat sebelumnya: “I’ll bring your science book tomorrow”. Jadi yang lupa dibawa adalah buku IPA milik Raka.",ev:"I’ll bring your science book tomorrow"},
+ {id:"R006",t:"T02",sk:"inference",lv:"penalaran",f:"pg",q:"From the message, we can conclude that Bima …",
+  o:["is the captain of the football team","borrowed a science book from Raka","will go to the clinic alone","does not like football"],k:1,
+  ex:"Bima berjanji membawa “your science book” (buku milik Raka) dan minta maaf karena lupa. Artinya Bima sedang meminjam buku itu. Pilihan lain tidak didukung teks; ke klinik pun bersama neneknya.",ev:"I’ll bring your science book tomorrow"},
+ /* ---------- T03 Invitation ---------- */
+ {id:"R007",t:"T03",sk:"main",lv:"pemahaman",f:"pg",q:"What is the text mainly about?",
+  o:["A report about a flood in the district","A list of snacks sold in the canteen","An invitation to a charity market day","A schedule of class meetings"],k:2,
+  ex:"Teks berbentuk undangan (“You are invited…”) ke Class Market Day yang hasilnya untuk korban banjir, jadi pasar amal.",ev:"You are invited to our Class Market Day!"},
+ {id:"R008",t:"T03",sk:"vocab",lv:"pemahaman",f:"pg",q:"The word “second-hand” in “second-hand books” is closest in meaning to …",
+  o:["used","new","expensive","broken"],k:0,
+  ex:"Second-hand = bekas, pernah dipakai orang lain (used). Bukan berarti rusak (broken).",ev:"second-hand books"},
+ {id:"R009",t:"T03",sk:"detail",lv:"penerapan",f:"bs",q:"Tentukan Benar atau Salah setiap pernyataan berdasarkan undangan.",
+  o:["The event lasts for three hours.","The event is held in a classroom.","Only students of Class 8B may come."],k:[true,false,false],
+  ex:"08.00–11.00 = 3 jam (Benar). Tempatnya School Hall, bukan kelas (Salah). Undangan meminta membawa teman dan keluarga, jadi bukan hanya kelas 8B (Salah).",ev:"Bring your friends and family!"},
+ /* ---------- T04 Label ---------- */
+ {id:"R010",t:"T04",sk:"detail",lv:"pemahaman",f:"pg",q:"What should you do after opening the bottle?",
+  o:["Keep it in a cool, dry place for a month","Shake it and drink it immediately","Add more honey and sugar","Keep it in the refrigerator and finish it within 3 days"],k:3,
+  ex:"Bagian Storage: “After opening, keep in the refrigerator and finish within 3 days.” Tempat sejuk dan kering berlaku sebelum dibuka.",ev:"After opening, keep in the refrigerator and finish within 3 days."},
+ {id:"R011",t:"T04",sk:"inference",lv:"penalaran",f:"pg",q:"Who should NOT drink this product?",
+  o:["A 13-year-old student","A ten-month-old baby","A grandmother who likes lemon","A teacher who likes cold drinks"],k:1,
+  ex:"Label: tidak cocok untuk bayi di bawah 1 tahun karena mengandung madu. Bayi 10 bulan berusia di bawah 1 tahun.",ev:"Not suitable for babies under 1 year old"},
+ {id:"R012",t:"T04",sk:"vocab",lv:"pemahaman",f:"pg",q:"The word “suitable” in the last line is closest in meaning to …",
+  o:["delicious","cheap","appropriate","available"],k:2,
+  ex:"Suitable = sesuai/cocok/layak (appropriate). Kalimatnya: tidak cocok untuk bayi di bawah 1 tahun.",ev:"Not suitable for babies"},
+ /* ---------- T05 Announcement ---------- */
+ {id:"R013",t:"T05",sk:"detail",lv:"pemahaman",f:"pg",q:"What should students wear on Clean and Green Day?",
+  o:["Sports clothes","The school uniform","Scout uniforms","Batik shirts"],k:0,
+  ex:"“Students do not need to wear the school uniform; wear sports clothes instead.”",ev:"wear sports clothes instead"},
+ {id:"R014",t:"T05",sk:"inference",lv:"penalaran",f:"pg",q:"Why do students probably need to bring gloves?",
+  o:["To keep their hands warm in the classroom","To play sports after the event","To protect their hands while cleaning and planting","Because gloves are part of the uniform"],k:2,
+  ex:"Kegiatannya membersihkan kelas dan menanam pohon dengan sekop. Sarung tangan paling masuk akal untuk melindungi tangan. Teks tidak menyebut alasannya, jadi ini simpulan.",ev:"clean its own classroom and plant trees"},
+ {id:"R015",t:"T05",sk:"reference",lv:"pemahaman",f:"pg",q:"The word “its” in “every class will clean its own classroom” refers to …",
+  o:["the school","every class","the principal","the school garden"],k:1,
+  ex:"“Its” adalah kata ganti kepemilikan untuk subjek kalimat yang sama: every class (setiap kelas membersihkan kelasnya sendiri).",ev:"every class will clean its own classroom"},
+ /* ---------- T06 Email ---------- */
+ {id:"R016",t:"T06",sk:"main",lv:"pemahaman",f:"pg",q:"Why did Nadia write the email?",
+  o:["To report that her house was broken","To ask for more time to submit her project","To invite Ms. Ratna to her house","To ask how to make a poster"],k:1,
+  ex:"Kalimat pertama menyatakan tujuan: “I am writing to ask for permission to submit my English project next Wednesday instead of this Friday.” Atap rusak hanyalah alasan.",ev:"I am writing to ask for permission"},
+ {id:"R017",t:"T06",sk:"detail",lv:"pemahaman",f:"pg",q:"What happened to Nadia’s poster?",
+  o:["She lost it at school","Her little brother tore it","It was damaged by water","She gave it to her friend"],k:2,
+  ex:"“…a strong wind broke our roof, and water damaged my poster.”",ev:"water damaged my poster"},
+ {id:"R018",t:"T06",sk:"vocab",lv:"pemahaman",f:"pg",q:"The word “inconvenience” in the email is closest in meaning to …",
+  o:["trouble","gift","success","promise"],k:0,
+  ex:"Inconvenience = ketidaknyamanan/kerepotan (trouble). Nadia meminta maaf karena merepotkan gurunya.",ev:"sorry for the inconvenience"},
+ {id:"R019",t:"T06",sk:"inference",lv:"penalaran",f:"pg",q:"We can conclude that Ms. Ratna is probably …",
+  o:["Nadia’s neighbor","the school principal","Nadia’s mother","Nadia’s English teacher"],k:3,
+  ex:"Nadia meminta izin kepada Ms. Ratna untuk mengumpulkan proyek Bahasa Inggris. Orang yang berwenang menerima proyek itu adalah guru Bahasa Inggrisnya.",ev:"submit my English project"},
+ /* ---------- T07 Advertisement ---------- */
+ {id:"R020",t:"T07",sk:"detail",lv:"penerapan",f:"pg",q:"How many meetings are there in the two-week swimming class?",
+  o:["2","3","14","6"],k:3,
+  ex:"Kelas tiap Senin, Rabu, Jumat = 3 kali seminggu. Dua minggu: 3 × 2 = 6 pertemuan.",ev:"every Monday, Wednesday, and Friday"},
+ {id:"R021",t:"T07",sk:"inference",lv:"penalaran",f:"pg",q:"Who can join the swimming class?",
+  o:["A 12-year-old student","A 6-year-old child","A 16-year-old student","Any adult who cannot swim"],k:0,
+  ex:"Kelas untuk anak usia 8–14 tahun. Hanya 12 tahun yang berada dalam rentang itu.",ev:"children aged 8–14"},
+ {id:"R022",t:"T07",sk:"detail",lv:"pemahaman",f:"pgk",q:"Which TWO benefits are mentioned in the advertisement? (Pilih dua jawaban.)",
+  o:["Small groups of at most 6 students per coach","A free swimming cap for early registration","Free transportation to the pool","A certificate at the end of the class"],k:[0,1],
+  ex:"Iklan menyebut kelompok kecil (maksimal 6 siswa per pelatih) dan topi renang gratis bila mendaftar sebelum 1 Juni. Transportasi dan sertifikat tidak disebut.",ev:"maximum 6 students per coach"},
+ /* ---------- T08 Schedule ---------- */
+ {id:"R023",t:"T08",sk:"detail",lv:"pemahaman",f:"pg",q:"What time does Bus 2 arrive at the Train Station?",
+  o:["07.05","07.30","07.50","08.35"],k:2,
+  ex:"Baris Train Station, kolom Bus 2: 07.50.",ev:""},
+ {id:"R024",t:"T08",sk:"detail",lv:"penerapan",f:"pg",q:"Sari is at Central Market at 07.20. She takes the next bus. What time will she arrive at the Museum?",
+  o:["07.20","08.05","07.50","08.50"],k:1,
+  ex:"Setelah 07.20, bus berikutnya di Central Market berangkat 07.30 (Bus 2). Bus 2 tiba di Museum pukul 08.05.",ev:""},
+ {id:"R025",t:"T08",sk:"inference",lv:"penalaran",f:"pg",q:"How long does the trip from City Park to the Museum take?",
+  o:["35 minutes","45 minutes","65 minutes","50 minutes"],k:3,
+  ex:"Bus 1: 06.30 → 07.20 = 50 menit. Bus 2 (07.15 → 08.05) dan Bus 3 (08.00 → 08.50) juga 50 menit.",ev:""},
+ /* ---------- T09 Descriptive ---------- */
+ {id:"R026",t:"T09",sk:"main",lv:"pemahaman",f:"pg",q:"What is the main idea of the text?",
+  o:["The writer’s grandfather has a small but productive garden","Herbal drinks are good for our health","Chemical fertilizer is very expensive","The writer likes sitting under trees"],k:0,
+  ex:"Seluruh paragraf mendeskripsikan kebun kecil kakek yang “full of life” dan menghasilkan sayur tiap minggu. Pilihan lain hanya detail kecil atau tidak ada di teks.",ev:"Although it is not large, it is full of life."},
+ {id:"R027",t:"T09",sk:"reference",lv:"pemahaman",f:"pg",q:"The word “Its” in “Its wide branches give cool shade” refers to …",
+  o:["the garden","the house","the old mango tree","the afternoon"],k:2,
+  ex:"Kalimat sebelumnya: “In the middle of the garden stands an old mango tree.” Yang punya dahan lebar adalah pohon mangga tua.",ev:"an old mango tree"},
+ {id:"R028",t:"T09",sk:"vocab",lv:"pemahaman",f:"pg",q:"What does “shade” mean in the text?",
+  o:["A kind of fruit","A cool area out of the sun","A strong wind","A garden tool"],k:1,
+  ex:"Shade = tempat teduh. Konteksnya: dahan lebar memberi tempat teduh yang sejuk sehingga mereka suka duduk di bawahnya.",ev:"give cool shade"},
+ {id:"R029",t:"T09",sk:"inference",lv:"penalaran",f:"pg",q:"What can we infer about the grandfather?",
+  o:["He sells vegetables at the market","He does not like his neighbors","He prefers natural ways of farming","He grows only fruit trees"],k:2,
+  ex:"Ia tidak pernah memakai pupuk kimia dan membuat kompos sendiri, tanda ia memilih cara bertani alami. Ia membagi sayur kepada tetangga, bukan menjual.",ev:"never uses chemical fertilizer"},
+ {id:"R030",t:"T09",sk:"detail",lv:"pemahaman",f:"bs",q:"Tentukan Benar atau Salah setiap pernyataan berdasarkan teks.",
+  o:["Herbal plants grow on the right side of the garden.","The grandfather buys chemical fertilizer.","He sells the vegetables to his neighbors."],k:[true,false,false],
+  ex:"Sisi kanan: serai, jahe, kunyit (Benar). Ia tidak pernah memakai pupuk kimia (Salah). Sayur dibagikan (shares), bukan dijual (Salah).",ev:"On the right side, he grows lemongrass, ginger, and turmeric"},
+ /* ---------- T10 Recount ---------- */
+ {id:"R031",t:"T10",sk:"main",lv:"pemahaman",f:"pg",q:"What is the purpose of the text?",
+  o:["To describe how tea is made in a factory","To retell the writer’s experience on a field trip","To persuade readers to visit a tea plantation","To explain how rain is formed"],k:1,
+  ex:"Teks recount menceritakan kembali pengalaman masa lalu (Last Saturday…) secara berurutan.",ev:"Last Saturday, my classmates and I went on a field trip"},
+ {id:"R032",t:"T10",sk:"detail",lv:"pemahaman",f:"pg",q:"Where did the students wait during the rain?",
+  o:["In a small hut","In the bus","In a tea factory","Under a big tree"],k:0,
+  ex:"“We ran to a small hut…”",ev:"We ran to a small hut"},
+ {id:"R033",t:"T10",sk:"vocab",lv:"pemahaman",f:"pg",q:"The word “kindly” in “a local farmer kindly offered us hot tea” shows that the farmer was …",
+  o:["angry","busy","friendly and helpful","tired and wet"],k:2,
+  ex:"Kindly = dengan baik hati. Petani menawarkan teh hangat dan bercerita, jadi ia ramah dan suka menolong.",ev:"kindly offered us hot tea"},
+ {id:"R034",t:"T10",sk:"inference",lv:"penalaran",f:"pg",q:"Which order of events is correct?",
+  o:["rain started → had lunch → ran to a hut → walked up the hill","walked up the hill → had lunch → rain started → drank tea","had lunch → walked up the hill → rain started → drank tea in a hut","drank tea → had lunch → walked up the hill → rain started"],k:2,
+  ex:"Urutan di teks: After lunch → walked to the top of a hill → suddenly heavy rain → ran to a hut → farmer offered hot tea.",ev:"After lunch, we walked to the top of a hill"},
+ /* ---------- T11 Narrative ---------- */
+ {id:"R035",t:"T11",sk:"main",lv:"penalaran",f:"pg",q:"What is the moral value of the story?",
+  o:["We should wake up early every day","Do not be arrogant, because everyone has an important role","Animals should live near a river","We must always keep our voice healthy"],k:1,
+  ex:"Ayam jantan sombong merasa paling penting, lalu sadar semua punya peran dan berhenti menyombongkan diri. Pesannya: jangan sombong.",ev:"everyone on the farm had an important role"},
+ {id:"R036",t:"T11",sk:"vocab",lv:"pemahaman",f:"pg",q:"The word “boasted” in the last sentence is closest in meaning to …",
+  o:["cried","slept","shouted for help","talked proudly about himself"],k:3,
+  ex:"Boast = membual, menyombongkan diri. Sesuai dengan sikap ayam di awal cerita.",ev:"never boasted again"},
+ {id:"R037",t:"T11",sk:"inference",lv:"penalaran",f:"pg",q:"How did the rooster change at the end of the story?",
+  o:["He became humble","He stopped crowing forever","He moved to another farm","He became friends with the farmer"],k:0,
+  ex:"Ia tetap berkokok seperti biasa (jadi tidak berhenti) tetapi tidak lagi sombong, artinya menjadi rendah hati.",ev:"he crowed as usual but never boasted again"},
+ {id:"R038",t:"T11",sk:"reference",lv:"pemahaman",f:"pg",q:"The word “He” in “He was worried that the farm would stop working” refers to …",
+  o:["the farmer","the duck","the rooster","the cow"],k:2,
+  ex:"Kalimat sebelumnya: ayam jantan kehilangan suara karena flu. Yang khawatir peternakan berhenti bekerja adalah ayam jantan itu, karena ia merasa paling penting.",ev:"the rooster lost his voice because of a cold"},
+ /* ---------- T12 Procedure ---------- */
+ {id:"R039",t:"T12",sk:"detail",lv:"pemahaman",f:"pg",q:"What is put directly on top of the cotton?",
+  o:["Sand","Small stones","Dirty water","Charcoal"],k:3,
+  ex:"Langkah 3: “Add a layer of charcoal on top of the cotton.”",ev:"Add a layer of charcoal on top of the cotton."},
+ {id:"R040",t:"T12",sk:"inference",lv:"penalaran",f:"pg",q:"Why does the writer add the note at the end of the text?",
+  o:["To explain how to cut the bottle","Because filtering alone does not make the water safe to drink","To show that the filter is very expensive","Because charcoal is dangerous"],k:1,
+  ex:"Catatan menegaskan air tampak lebih bersih tetapi belum aman diminum, jadi harus direbus. Penulis ingin mencegah pembaca langsung meminumnya.",ev:"it is still not safe to drink"},
+ {id:"R041",t:"T12",sk:"main",lv:"pemahaman",f:"pg",q:"The text is written to …",
+  o:["tell readers how to make a simple water filter","describe a plastic bottle","report the result of a science competition","persuade readers to buy bottled water"],k:0,
+  ex:"Teks prosedur berisi bahan dan langkah-langkah, tujuannya memberi tahu cara membuat sesuatu.",ev:"Steps:"},
+ /* ---------- T13 Report ---------- */
+ {id:"R042",t:"T13",sk:"main",lv:"pemahaman",f:"pg",q:"What does the text mainly discuss?",
+  o:["A trip to Komodo Island","Lizards that live in Java","General information about Komodo dragons","How to protect deer from Komodos"],k:2,
+  ex:"Teks laporan menjelaskan Komodo secara umum: habitat, ukuran, makanan, indra, telur, dan status perlindungan.",ev:"The Komodo dragon is the largest lizard in the world."},
+ {id:"R043",t:"T13",sk:"detail",lv:"pemahaman",f:"pg",q:"How do Komodo dragons find their food?",
+  o:["By climbing tall trees","By using their tongue to smell","By listening to sounds","By swimming in the sea"],k:1,
+  ex:"“…they use their long yellow tongue to detect food from several kilometers away.”",ev:"they use their long yellow tongue to detect food"},
+ {id:"R044",t:"T13",sk:"reference",lv:"pemahaman",f:"pg",q:"The word “them” in “bury them in the ground” refers to …",
+  o:["the eggs","the female Komodos","the islands","the buffalo"],k:0,
+  ex:"Yang dikubur adalah telur: “Female Komodos lay about 20 eggs at a time and bury them…”",ev:"lay about 20 eggs at a time and bury them"},
+ {id:"R045",t:"T13",sk:"vocab",lv:"pemahaman",f:"pg",q:"The word “protected” in the last sentence is closest in meaning to …",
+  o:["dangerous","hunted","kept safe","sold"],k:2,
+  ex:"Protected species = satwa dilindungi, dijaga agar aman (kept safe) karena jumlahnya terbatas.",ev:"a protected species"},
+ {id:"R046",t:"T13",sk:"detail",lv:"pemahaman",f:"bs",q:"Tentukan Benar atau Salah setiap pernyataan berdasarkan teks.",
+  o:["Komodo dragons live on every island in Indonesia.","Komodo dragons eat meat.","A female Komodo lays about 20 eggs at a time."],k:[false,true,true],
+  ex:"Komodo hanya hidup di beberapa pulau di NTT (Salah). Carnivores = pemakan daging (Benar). Betina bertelur sekitar 20 butir (Benar).",ev:"It lives only on a few islands"},
+ /* ---------- T14 Found ---------- */
+ {id:"R047",t:"T14",sk:"inference",lv:"penalaran",f:"pg",q:"Why should the owner mention what is written on the bottom of the bottle?",
+  o:["To clean the bottle","To prove that the bottle belongs to him or her","To pay for the bottle","To return the cat sticker"],k:1,
+  ex:"Hanya pemilik asli yang tahu tulisan di dasar botol. Itu cara membuktikan kepemilikan agar botol tidak diambil orang lain.",ev:"mention what is written on the bottom of the bottle"},
+ {id:"R048",t:"T14",sk:"detail",lv:"pemahaman",f:"pg",q:"Where can the owner get the bottle?",
+  o:["In the prayer room","In the library","In the canteen","In the Teachers’ Room"],k:3,
+  ex:"“The owner can take it from the Teachers’ Room.” Mushala adalah tempat botol ditemukan.",ev:"take it from the Teachers’ Room"},
+ /* ---------- T15 Exposition ---------- */
+ {id:"R049",t:"T15",sk:"main",lv:"pemahaman",f:"pg",q:"What is the writer’s main opinion?",
+  o:["Students should make time for breakfast every morning","Students often wake up late","Snacks at school are always unhealthy","Bread is better than rice"],k:0,
+  ex:"Pendapat utama (tesis) ditegaskan di kalimat simpulan: “Therefore, students should make time for breakfast every morning.”",ev:"Therefore, students should make time for breakfast every morning."},
+ {id:"R050",t:"T15",sk:"detail",lv:"pemahaman",f:"pg",q:"According to the text, how does breakfast help students in class?",
+  o:["It makes them buy more snacks","It helps them pay attention and feel less sleepy","It makes them come to school earlier","It helps them finish homework"],k:1,
+  ex:"“With enough energy, students can pay attention in class and are less likely to feel sleepy.”",ev:"students can pay attention in class"},
+ {id:"R051",t:"T15",sk:"reference",lv:"pemahaman",f:"pg",q:"The word “it” in “First, it gives the body energy” refers to …",
+  o:["the night","the body","school","breakfast"],k:3,
+  ex:"Kalimat sebelumnya: “breakfast is important for at least two reasons.” Alasan pertama: sarapan memberi energi.",ev:"breakfast is important for at least two reasons"},
+ {id:"R052",t:"T15",sk:"inference",lv:"penalaran",f:"pg",q:"Which statement would the writer most likely agree with?",
+  o:["A student who is not hungry may skip breakfast","Breakfast must be a big and expensive meal","A student who wakes up late should still eat a simple breakfast","Students should buy snacks instead of eating breakfast"],k:2,
+  ex:"Penulis menyebut menu sederhana (roti dan pisang) sudah cukup dan siswa harus meluangkan waktu sarapan. Jadi meski bangun kesiangan, sarapan sederhana tetap dianjurkan.",ev:"A simple meal such as rice with eggs and vegetables, or bread with a banana, is enough."},
+ {id:"R053",t:"T15",sk:"detail",lv:"pemahaman",f:"pgk",q:"Which TWO reasons for skipping breakfast are mentioned in the text? (Pilih dua jawaban.)",
+  o:["They wake up late","They do not have money","They are not hungry in the morning","Breakfast is boring"],k:[0,2],
+  ex:"“Some say they wake up late, while others are not hungry in the morning.” Alasan uang dan bosan tidak ada di teks.",ev:"Some say they wake up late, while others are not hungry in the morning."},
+ /* ---------- T16 Group chat ---------- */
+ {id:"R054",t:"T16",sk:"detail",lv:"pemahaman",f:"pg",q:"Why is the English test moved?",
+  o:["Ms. Dewi is sick","The students are not ready","The hall will be used for vaccination","Unit 2 has not been studied"],k:2,
+  ex:"Alasan setelah “because”: the hall will be used for vaccination.",ev:"because the hall will be used for vaccination"},
+ {id:"R055",t:"T16",sk:"inference",lv:"penalaran",f:"pg",q:"When Ms. Dewi says “That’s right, Andi,” she means that …",
+  o:["Unit 2 is not included in the test","the test is still held tomorrow","Andi must study Unit 2","Andi’s answer on the test is correct"],k:0,
+  ex:"Andi bertanya “Is Unit 2 not included?” dan Bu Dewi membenarkan, lalu memberi alasan Unit 2 sudah diujikan bulan lalu.",ev:"Unit 2 was already tested last month."},
+
+ /* ================= MENYIMAK ================= */
+ {id:"S001",a:"L01",sk:"main",lv:"pemahaman",f:"pg",q:"What is the announcement about?",
+  o:["A new train route to Solo","A delayed train","A lost passenger","A cancelled bus"],k:1,
+  ex:"Inti pengumuman: kereta ke Solo “will be delayed for thirty minutes”.",ev:"will be delayed for thirty minutes"},
+ {id:"S002",a:"L01",sk:"detail",lv:"penerapan",f:"pg",q:"What time will the train leave now?",
+  o:["10.15","10.30","11.15","10.45"],k:3,
+  ex:"Jadwal awal 10.15, terlambat 30 menit → 10.45.",ev:"scheduled to leave at ten fifteen"},
+ {id:"S003",a:"L02",sk:"detail",lv:"pemahaman",f:"pg",q:"What size of shoes does the customer need?",
+  o:["29","39","38","49"],k:1,
+  ex:"Pembeli berkata “size thirty-nine” = 39.",ev:"size thirty-nine"},
+ {id:"S004",a:"L02",sk:"inference",lv:"penalaran",f:"pg",q:"Why did the customer probably choose the grey shoes?",
+  o:["They were cheaper","They were more colorful","They were the only ones in size 39","The seller said they were stronger"],k:0,
+  ex:"Pembeli meminta yang lebih murah (“something cheaper”), lalu memilih yang abu-abu seharga 180 ribu, lebih murah dari 250 ribu.",ev:"do you have something cheaper?"},
+ {id:"S005",a:"L02",sk:"detail",lv:"penerapan",f:"pg",q:"How much does the customer pay?",
+  o:["Rp250.000","Rp430.000","Rp180.000","Rp70.000"],k:2,
+  ex:"Ia membeli sepatu abu-abu: one hundred and eighty thousand = Rp180.000.",ev:"They’re one hundred and eighty thousand."},
+ {id:"S006",a:"L03",sk:"main",lv:"pemahaman",f:"pg",q:"What are the speakers talking about?",
+  o:["A plan to clean a beach","A school holiday in Bali","A swimming competition","Buying a new hat"],k:0,
+  ex:"Mereka membahas rencana membersihkan pantai Parangtritis hari Minggu.",ev:"going to clean the beach at Parangtritis"},
+ {id:"S007",a:"L03",sk:"detail",lv:"pemahaman",f:"pg",q:"Where will they meet?",
+  o:["At the beach","At Rina’s house","At the bus station","In front of the school"],k:3,
+  ex:"“We’ll meet in front of the school at six.”",ev:"We’ll meet in front of the school at six."},
+ {id:"S008",a:"L03",sk:"inference",lv:"penalaran",f:"pg",q:"What does Rina’s answer “Sounds great!” show?",
+  o:["She is busy on Sunday","She agrees to join","She does not like the beach","She wants to leave earlier"],k:1,
+  ex:"“Sounds great!” adalah ungkapan menerima ajakan; ia juga bertanya jam berangkat dan berkata “I’ll be there”.",ev:"Sounds great!"},
+ {id:"S009",a:"L04",sk:"main",lv:"pemahaman",f:"pg",q:"What is the talk mainly about?",
+  o:["Fajar’s school","Fajar’s father","Fajar’s hobby of taking bird photos","A photography competition"],k:2,
+  ex:"Hampir seluruh monolog membahas hobi Fajar memotret burung.",ev:"I like taking photos of birds"},
+ {id:"S010",a:"L04",sk:"reference",lv:"pemahaman",f:"pg",q:"In “because of its bright blue feathers”, the word “its” refers to …",
+  o:["the camera","the rice field","the competition","the kingfisher"],k:3,
+  ex:"Kata sebelumnya: “My favorite is the kingfisher” (burung raja udang). Bulu biru itu milik burung tersebut.",ev:"My favorite is the kingfisher"},
+ {id:"S011",a:"L04",sk:"detail",lv:"pemahaman",f:"pg",q:"Whose camera does Fajar use?",
+  o:["His father’s","His teacher’s","His own new camera","His friend’s"],k:0,
+  ex:"“…with my father’s old camera.”",ev:"my father’s old camera"},
+ {id:"S012",a:"L05",sk:"inference",lv:"penalaran",f:"pg",q:"What is probably the cause of Dimas’s headache?",
+  o:["He played football too long","He did not have breakfast","He drank too much tea","He studied all night"],k:1,
+  ex:"Dimas tidak sarapan karena bangun kesiangan, dan pembicara berkata “That may be the reason.”",ev:"That may be the reason."},
+ {id:"S013",a:"L05",sk:"detail",lv:"pemahaman",f:"pg",q:"What will the speaker do if Dimas still feels sick after thirty minutes?",
+  o:["Take him to the hospital","Give him more bread","Call his parents","Send him back to class"],k:2,
+  ex:"“If you still feel sick after thirty minutes, I will call your parents.”",ev:"I will call your parents"},
+ {id:"S014",a:"L05",sk:"inference",lv:"penalaran",f:"pg",q:"Where does the conversation most likely take place?",
+  o:["In the school health room","In a restaurant","In a classroom during a test","At a bus stop"],k:0,
+  ex:"Ada siswa yang pusing, ditawari roti dan teh hangat, dan boleh berbaring di tempat tidur; petugas akan menghubungi orang tua. Paling mungkin di UKS.",ev:"You can rest on the bed here."},
+ {id:"S015",a:"L06",sk:"detail",lv:"pemahaman",f:"pg",q:"How many students are there in each group?",
+  o:["Two","Three","Four","Six"],k:2,
+  ex:"“…you will work in groups of four.”",ev:"groups of four"},
+ {id:"S016",a:"L06",sk:"inference",lv:"penalaran",f:"pg",q:"What is the project trying to find out?",
+  o:["How much water green beans need","The effect of light on plant growth","Which cup is the most beautiful","How fast students can write a table"],k:1,
+  ex:"Satu gelas dekat jendela (terang), satu di lemari gelap; air disamakan. Yang dibedakan hanya cahaya, jadi yang diselidiki pengaruh cahaya.",ev:"Put one cup near the window and the other cup in a dark cupboard."},
+ {id:"S017",a:"L06",sk:"detail",lv:"pemahaman",f:"pg",q:"How often should the students measure the plants?",
+  o:["Every day","Every week","Every two weeks","Every two days"],k:3,
+  ex:"“Measure the plants every two days.” Menyiram setiap hari; presentasi dua minggu lagi.",ev:"Measure the plants every two days"},
+ {id:"S018",a:"L07",sk:"detail",lv:"pemahaman",f:"pg",q:"Why can’t the speaker come to Tika’s party?",
+  o:["The speaker is sick","The speaker forgot the present","The speaker has an exam tomorrow","The speaker’s family is leaving for a cousin’s wedding"],k:3,
+  ex:"Sepupunya menikah besok pagi dan keluarganya berangkat ke Magelang malam ini.",ev:"My cousin is getting married tomorrow morning"},
+ {id:"S019",a:"L07",sk:"vocab",lv:"pemahaman",f:"pg",q:"Tika says “Have a safe trip!” This expression is used to …",
+  o:["give good wishes","ask for help","refuse an invitation","make an apology"],k:0,
+  ex:"“Have a safe trip!” adalah ungkapan harapan baik (semoga selamat di jalan).",ev:"Have a safe trip!"},
+ {id:"S020",a:"L07",sk:"detail",lv:"pemahaman",f:"pg",q:"When will Tika get her present?",
+  o:["Tonight","On Monday","Tomorrow morning","At the wedding"],k:1,
+  ex:"“I’ll give you your present on Monday.”",ev:"I’ll give you your present on Monday."},
+ {id:"S021",a:"L08",sk:"detail",lv:"pemahaman",f:"pg",q:"What will the weather be like tomorrow morning?",
+  o:["Rainy","Cloudy","Sunny","Windy"],k:2,
+  ex:"“In the morning, it will be sunny…”",ev:"In the morning, it will be sunny"},
+ {id:"S022",a:"L08",sk:"inference",lv:"penalaran",f:"pg",q:"Based on the forecast, when is the best time to dry clothes outside tomorrow?",
+  o:["In the morning","At three o’clock","In the late afternoon","At night"],k:0,
+  ex:"Pagi cerah, sore berawan dengan peluang hujan lebat mulai pukul tiga. Waktu terbaik menjemur pakaian adalah pagi.",ev:"there is a high chance of heavy rain from three o’clock"}
+];
+
+/*BANK-END*/
+
+/* ===================== APLIKASI ===================== */
+var SK = {
+  main:{n:"Gagasan utama & tujuan",en:"Main idea & purpose",
+    tip:["Baca judul, kalimat pertama, dan kalimat terakhir dulu: gagasan utama sering ada di sana.","Tanyakan: “Teks ini secara keseluruhan membicarakan apa?” Pilihan yang hanya menyebut satu detail biasanya salah.","Untuk tujuan teks, kenali jenisnya: pengumuman → memberi tahu; undangan → mengajak; prosedur → menjelaskan cara; recount → menceritakan pengalaman."]},
+  detail:{n:"Informasi rinci",en:"Specific detail",
+    tip:["Garis bawahi kata kunci di soal (angka, nama, waktu, tempat), lalu pindai teks untuk menemukannya.","Waspadai pengecoh: angka atau kata yang ada di teks tetapi untuk hal lain (mis. tiga buku vs satu minggu).","Untuk soal hitungan (denda, waktu, jumlah pertemuan), tulis dulu angka yang dipakai sebelum memilih."]},
+  inference:{n:"Inferensi",en:"Inference",
+    tip:["Jawaban inferensi tidak tertulis langsung, tetapi harus didukung bukti di teks. Cari kalimat buktinya.","Kata soal: probably, most likely, can be concluded, implied → artinya kamu harus menyimpulkan.","Coret pilihan yang terlalu jauh dari teks atau bertentangan dengan informasi tersurat."]},
+  vocab:{n:"Kosakata dalam konteks",en:"Vocabulary in context",
+    tip:["Baca kalimat di sekitar kata itu; maknanya ditentukan konteks, bukan hanya kamus.","Coba ganti kata di teks dengan setiap pilihan jawaban. Pilihan yang membuat kalimat tetap masuk akal adalah jawabannya.","Perhatikan imbuhan: un-, in- (tidak), -ful (penuh), -less (tanpa), -ly (dengan cara)."]},
+  reference:{n:"Rujukan",en:"Reference",
+    tip:["Kata ganti (it, its, they, them, he, she, this) biasanya merujuk ke kata benda yang disebut SEBELUMNYA.","Cocokkan jumlahnya: it/its → tunggal; they/them/their → jamak.","Ganti kata ganti dengan jawabanmu lalu baca ulang kalimatnya. Kalau maknanya tetap logis, jawabanmu tepat."]}
+};
+var SKS = ["main","detail","inference","vocab","reference"];
+var LV = {pemahaman:"Pemahaman",penerapan:"Penerapan",penalaran:"Penalaran"};
+var LVS = ["pemahaman","penerapan","penalaran"];
+var TYPE_ID = {"Notice":"Pemberitahuan","Short message":"Pesan singkat","Invitation":"Undangan","Label":"Label produk","Announcement":"Pengumuman","Email":"Surel","Advertisement":"Iklan","Schedule":"Jadwal","Descriptive":"Deskripsi","Recount":"Recount","Narrative":"Naratif","Procedure":"Prosedur","Report":"Laporan","Exposition":"Eksposisi"};
+var AI_TYPES = ["Notice","Announcement","Short message","Invitation","Email","Advertisement","Label","Descriptive","Recount","Narrative","Procedure","Report","Exposition"];
+var KEY = "tkaInggris.v1", SKEY = "tkaInggris.set";
+var LET = ["A","B","C","D","E"];
+
+function load(k, d){ try{ var s = localStorage.getItem(k); return s ? JSON.parse(s) : d; }catch(e){ return d; } }
+function store(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } }
+function save(){ if(!store(KEY, D)) toast("Penyimpanan perangkat tidak tersedia; data hanya bertahan selama halaman terbuka."); }
+function saveSet(){ store(SKEY, SET); }
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+function $(s, r){ return (r || document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function shuffle(a){ a = a.slice(); for(var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function pct(ok, n){ return n ? Math.round(ok / n * 100) : 0; }
+function fmtDate(ts){ try{ return new Date(ts).toLocaleString("id-ID", {day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}); }catch(e){ return String(ts); } }
+var toastT;
+function toast(m){ var t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove("on"); }, 2600); }
+
+var SET = load(SKEY, null) || {};
+SET.theme = SET.theme || "auto"; SET.rate = SET.rate || 0.9; SET.voice = SET.voice || ""; SET.key = SET.key || ""; SET.model = SET.model || "gemini-2.5-flash";
+var D = load(KEY, null);
+if(!D || !Array.isArray(D.att)){ D = {att:[], ses:[], ai:{texts:[], qs:[]}}; seedContoh(); save(); }
+D.ai = D.ai || {texts:[], qs:[]}; D.ses = D.ses || [];
+
+/* ---------- data contoh (berlabel) ---------- */
+function seedContoh(){
+  var rate = {main:.82, detail:.86, inference:.48, vocab:.7, reference:.5};
+  var now = Date.now(), day = 864e5, k = 0;
+  Q.forEach(function(q, i){
+    if(i % 3 === 2) return;
+    var h = 0; for(var c = 0; c < q.id.length; c++) h = (h * 31 + q.id.charCodeAt(c)) % 997;
+    var ok = (h % 100) / 100 < rate[q.sk];
+    D.att.push({id:q.id, ok:ok, ts:now - (6 - (k % 6)) * day - k * 60000, m:"L", c:1}); k++;
+  });
+  var s1 = D.att.slice(0, 10), s2 = D.att.slice(10, 30);
+  [[s1,"latihan"],[s2,"tes"]].forEach(function(p, j){
+    var per = {}; p[0].forEach(function(a){ var q = qById(a.id); per[q.sk] = per[q.sk] || [0,0]; per[q.sk][1]++; if(a.ok) per[q.sk][0]++; });
+    var ok = p[0].filter(function(a){ return a.ok; }).length;
+    D.ses.push({id:"contoh-" + j, ts:now - (5 - j * 3) * day, mode:p[1], n:p[0].length, ok:ok, dur:p[0].length * 75, per:per, c:1});
+  });
+}
+function hasContoh(){ return D.att.some(function(a){ return a.c; }) || D.ses.some(function(s){ return s.c; }); }
+function hapusContoh(){
+  D.att = D.att.filter(function(a){ return !a.c; }); D.ses = D.ses.filter(function(s){ return !s.c; });
+  save(); refreshAll(); toast("Data contoh dihapus.");
+}
+
+/* ---------- akses bank ---------- */
+function allQ(){ return Q.concat(D.ai.qs || []); }
+function qById(id){ for(var i = 0; i < Q.length; i++) if(Q[i].id === id) return Q[i]; var a = D.ai.qs || []; for(var j = 0; j < a.length; j++) if(a[j].id === id) return a[j]; return null; }
+function textById(id){ for(var i = 0; i < TEXTS.length; i++) if(TEXTS[i].id === id) return TEXTS[i]; var a = D.ai.texts || []; for(var j = 0; j < a.length; j++) if(a[j].id === id) return a[j]; return null; }
+function audById(id){ for(var i = 0; i < AUD.length; i++) if(AUD[i].id === id) return AUD[i]; return null; }
+function srcOf(q){ return q.t || q.a; }
+function grpOf(q){ if(q.a) return "simak"; var t = textById(q.t); return t ? (t.grp || "fungsional") : "fungsional"; }
+function typeOf(q){ if(q.a) return "Menyimak"; var t = textById(q.t); return t ? t.type : "?"; }
+
+function isCorrect(q, a){
+  if(a == null) return false;
+  if(q.f === "pg") return a === q.k;
+  if(q.f === "pgk"){ if(!Array.isArray(a) || a.length !== q.k.length) return false; return q.k.every(function(x){ return a.indexOf(x) > -1; }); }
+  if(q.f === "bs"){ if(!Array.isArray(a)) return false; return q.k.every(function(v, i){ return a[i] === v; }); }
+  return false;
+}
+function isAnswered(q, a){
+  if(a == null) return false;
+  if(q.f === "pg") return typeof a === "number";
+  if(q.f === "pgk") return Array.isArray(a) && a.length === q.k.length;
+  if(q.f === "bs") return Array.isArray(a) && q.o.every(function(_, i){ return typeof a[i] === "boolean"; });
+  return false;
+}
+function ansText(q, a){
+  if(a == null) return "—";
+  if(q.f === "pg") return LET[a];
+  if(q.f === "pgk") return a.slice().sort().map(function(x){ return LET[x]; }).join(", ");
+  if(q.f === "bs") return a.map(function(v){ return v === true ? "B" : v === false ? "S" : "–"; }).join(" ");
+  return "";
+}
+function keyText(q){
+  if(q.f === "pg") return LET[q.k];
+  if(q.f === "pgk") return q.k.map(function(x){ return LET[x]; }).join(", ");
+  return q.k.map(function(v){ return v ? "B" : "S"; }).join(" ");
+}
+
+/* ---------- statistik ---------- */
+function statBy(fnKey, filter){
+  var r = {};
+  D.att.forEach(function(a){
+    var q = qById(a.id); if(!q || (filter && !filter(q, a))) return;
+    var k = fnKey(q); r[k] = r[k] || {n:0, ok:0}; r[k].n++; if(a.ok) r[k].ok++;
+  });
+  return r;
+}
+function cat(s){
+  if(!s || s.n < 3) return {c:"na", t:"Belum cukup data"};
+  var p = pct(s.ok, s.n);
+  if(p >= 80) return {c:"kuat", t:"Kuat"};
+  if(p >= 60) return {c:"kembang", t:"Berkembang"};
+  return {c:"lemah", t:"Perlu penguatan"};
+}
+function weakest(){
+  var s = statBy(function(q){ return q.sk; }), best = null;
+  SKS.forEach(function(k){ var x = s[k]; if(!x || x.n < 3) return; var p = x.ok / x.n; if(!best || p < best.p) best = {k:k, p:p}; });
+  return best;
+}
+function lastResult(){ var m = {}; D.att.forEach(function(a){ var p = m[a.id]; if(!p || a.ts >= p.ts) m[a.id] = a; }); return m; }
+
+/* ---------- tema & tab ---------- */
+function applyTheme(){
+  var r = document.documentElement;
+  if(SET.theme === "auto") r.removeAttribute("data-theme"); else r.setAttribute("data-theme", SET.theme);
+}
+function isDark(){ return SET.theme === "dark" || (SET.theme === "auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches); }
+function go(v){
+  $$("nav.tabs button").forEach(function(b){ b.setAttribute("aria-selected", b.dataset.v === v ? "true" : "false"); });
+  $$("section.view").forEach(function(s){ s.classList.toggle("on", s.id === "v-" + v); });
+  if(v === "peta") renderPeta();
+  if(v === "riwayat") renderRiwayat();
+  if(v === "home") renderHome();
+  if(v === "ai") renderAI();
+  if(v === "simak") renderSimSetup();
+  window.scrollTo(0, 0);
+  try{ history.replaceState(null, "", "#" + v); }catch(e){}
+}
+function activeView(){ var s = $("section.view.on"); return s ? s.id.slice(2) : "home"; }
+function refreshAll(){ $("#contohBar").hidden = !hasContoh(); renderHome(); var v = activeView(); if(v === "peta") renderPeta(); if(v === "riwayat") renderRiwayat(); }
+
+/* ---------- BERANDA ---------- */
+var BUBBLES = ["Hello! Let’s practise today.","Tip: read the question first, then scan the text.","“It” usually points back to a noun before it.","Listen twice: once for the gist, once for details.","Find the evidence before you choose!"];
+function skillCard(k, s, click){
+  var x = s[k] || {n:0, ok:0}, c = cat(x), p = pct(x.ok, x.n);
+  return '<' + (click ? 'button type="button" data-skill="' + k + '"' : 'div') + ' class="card skc sk-' + k + '" style="text-align:left;cursor:' + (click ? 'pointer' : 'default') + ';font:inherit;color:inherit">' +
+    '<h3>' + esc(SK[k].n) + '</h3><div class="en">' + esc(SK[k].en) + '</div>' +
+    '<div class="pct">' + (x.n ? p + '%' : '–') + '</div><div class="bar"><i style="width:' + p + '%"></i></div>' +
+    '<div class="row" style="justify-content:space-between"><span class="lvl ' + c.c + '">' + c.t + '</span><span class="tiny mut">' + x.ok + '/' + x.n + ' benar</span></div></' + (click ? 'button' : 'div') + '>';
+}
+function renderHome(){
+  $("#contohBar").hidden = !hasContoh();
+  $("#homeBubble").textContent = BUBBLES[Math.floor(Math.random() * BUBBLES.length)];
+  var s = statBy(function(q){ return q.sk; });
+  var n = D.att.length, ok = D.att.filter(function(a){ return a.ok; }).length, w = weakest();
+  var bySrc = statBy(function(q){ return q.a ? "simak" : "baca"; });
+  $("#homeStats").innerHTML =
+    '<div class="soft"><div class="tiny mut">Jawaban tercatat</div><div class="pct">' + n + '</div><div class="small mut">dari bank ' + Q.length + ' soal + ' + (D.ai.qs || []).length + ' soal AI</div></div>' +
+    '<div class="soft"><div class="tiny mut">Akurasi keseluruhan</div><div class="pct">' + (n ? pct(ok, n) + '%' : '–') + '</div><div class="small mut">Membaca ' + (bySrc.baca ? pct(bySrc.baca.ok, bySrc.baca.n) + '%' : '–') + ' · Menyimak ' + (bySrc.simak ? pct(bySrc.simak.ok, bySrc.simak.n) + '%' : '–') + '</div></div>' +
+    '<div class="soft"><div class="tiny mut">Fokus berikutnya</div><div class="disp" style="font-size:22px;margin:6px 0">' + (w ? esc(SK[w.k].n) : 'Kerjakan 10 soal dulu') + '</div>' + (w ? '<button class="btn sm pri" type="button" data-skill="' + w.k + '">Latih sekarang</button>' : '<button class="btn sm pri" type="button" data-go="latihan">Mulai</button>') + '</div>';
+  $("#homeSkills").innerHTML = SKS.map(function(k){ return skillCard(k, s, true); }).join("");
+}
+
+/* ---------- SUARA (speechSynthesis) ---------- */
+var SY = window.speechSynthesis || null;
+var canSpeak = !!(SY && window.SpeechSynthesisUtterance);
+var speakingId = null;
+function enVoices(){ if(!canSpeak) return []; try{ return SY.getVoices().filter(function(v){ return /^en([-_]|$)/i.test(v.lang); }); }catch(e){ return []; } }
+function pickVoices(){
+  var vs = enVoices(), a = null, b = null;
+  if(SET.voice) a = vs.filter(function(v){ return v.name === SET.voice; })[0] || null;
+  if(!a) a = vs.filter(function(v){ return /en[-_](US|GB)/i.test(v.lang); })[0] || vs[0] || null;
+  b = vs.filter(function(v){ return a && v.name !== a.name && /en[-_](US|GB|AU)/i.test(v.lang); })[0] || null;
+  return {a:a, b:b};
+}
+function stopSpeak(){ if(canSpeak){ try{ SY.cancel(); }catch(e){} } speakingId = null; $$(".bigplay").forEach(function(b){ b.setAttribute("aria-pressed","false"); b.setAttribute("aria-label","Putar rekaman"); }); $$(".wave").forEach(function(w){ w.classList.remove("on"); }); }
+function speakLines(id, lines, onEnd){
+  if(!canSpeak) return false;
+  stopSpeak(); speakingId = id;
+  var v = pickVoices();
+  lines.forEach(function(l, ix){
+    var u = new SpeechSynthesisUtterance(l[1]);
+    var voice = (l[0] === "B" && v.b) ? v.b : v.a;
+    if(voice){ u.voice = voice; u.lang = voice.lang; } else u.lang = "en-US";
+    u.rate = SET.rate; u.pitch = (l[0] === "B" && !v.b) ? 1.3 : 1;
+    if(ix === lines.length - 1){ u.onend = function(){ if(speakingId === id){ speakingId = null; if(onEnd) onEnd(); } }; }
+    u.onerror = function(){ if(speakingId === id){ speakingId = null; if(onEnd) onEnd(); } };
+    SY.speak(u);
+  });
+  return true;
+}
+function fillVoices(){
+  var sel = $("#setVoice"); if(!sel) return;
+  var vs = enVoices();
+  sel.innerHTML = '<option value="">Otomatis</option>' + vs.map(function(v){ return '<option value="' + esc(v.name) + '"' + (v.name === SET.voice ? ' selected' : '') + '>' + esc(v.name + ' (' + v.lang + ')') + '</option>'; }).join("");
+}
+if(canSpeak){ try{ SY.onvoiceschanged = function(){ fillVoices(); if(activeView() === "simak") renderSimCheck(); }; }catch(e){} }
+
+/* ---------- PEMUTAR SOAL (dipakai latihan, menyimak, tes) ---------- */
+var PL = {};   // PL.lat, PL.sim, PL.tes
+var tesTimer = null;
+
+function newSession(kind, ids, minutes){
+  return {kind:kind, ids:ids, i:0, ans:{}, chk:{}, rg:{}, plays:{}, ai:{}, start:Date.now(), end: minutes ? Date.now() + minutes * 60000 : 0, minutes:minutes || 0, finished:false, showScript:{}};
+}
+function hostOf(kind){ return kind === "lat" ? $("#latPlay") : kind === "sim" ? $("#simPlay") : $("#tesPlay"); }
+function setupOf(kind){ return kind === "lat" ? $("#latSetup") : kind === "sim" ? $("#simSetup") : $("#tesSetup"); }
+function openSession(S){
+  PL[S.kind] = S; setupOf(S.kind).hidden = true; var h = hostOf(S.kind); h.hidden = false;
+  renderPlayer(S); window.scrollTo(0, 0);
+  if(S.kind === "tes"){ clearInterval(tesTimer); tesTimer = setInterval(tickTes, 1000); }
+}
+function closeSession(kind){
+  stopSpeak(); if(kind === "tes") clearInterval(tesTimer);
+  PL[kind] = null; hostOf(kind).hidden = true; hostOf(kind).innerHTML = ""; setupOf(kind).hidden = false;
+  if(kind === "sim") renderSimSetup();
+  window.scrollTo(0, 0);
+}
+function fmtTime(ms){ ms = Math.max(0, ms); var s = Math.ceil(ms / 1000), m = Math.floor(s / 60); s = s % 60; return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s; }
+function tickTes(){
+  var S = PL.tes; if(!S || S.finished){ clearInterval(tesTimer); return; }
+  var left = S.end - Date.now(), t = $("#tesTimerEl");
+  if(t){ t.textContent = fmtTime(left); t.classList.toggle("low", left < 5 * 60000); }
+  if(left <= 0){ toast("Waktu habis. Jawaban dikumpulkan otomatis."); finishTes(S); }
+}
+
+function highlight(body, ev){
+  var b = esc(body); if(!ev) return b;
+  var e = esc(ev), ix = b.indexOf(e);
+  if(ix < 0) return b;
+  return b.slice(0, ix) + '<mark>' + e + '</mark>' + b.slice(ix + e.length);
+}
+function stimHTML(S, q, reveal){
+  if(q.a){
+    var A = audById(q.a), sid = S.kind + ":" + A.id, plays = S.plays[A.id] || 0, limit = S.kind === "tes" && !S.finished ? 2 : 0;
+    var playing = speakingId === sid;
+    var showScript = reveal || S.showScript[A.id] || (!canSpeak);
+    var h = '<div class="stim audio"><div class="tt"><span class="chip" style="color:var(--listen)">🎧 ' + esc(A.kind) + '</span><h3>' + esc(A.title) + '</h3></div>';
+    h += '<div class="row" style="gap:16px;margin:8px 0">';
+    h += '<button type="button" class="bigplay" data-play="' + A.id + '" aria-pressed="' + (playing ? 'true' : 'false') + '" aria-label="' + (playing ? 'Hentikan' : 'Putar rekaman') + '"' + ((!canSpeak || (limit && plays >= limit && !playing)) ? ' disabled' : '') + '>' +
+      (playing ? '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>' : '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>') + '</button>';
+    h += '<div><div class="wave' + (playing ? ' on' : '') + '" aria-hidden="true">' + new Array(14).join('<i></i>') + '</div>';
+    h += '<div class="small mut">' + (canSpeak ? ('Diputar ' + plays + (limit ? ' dari ' + limit : '') + ' kali · tekan <kbd>P</kbd>') : 'Perangkat ini tidak mendukung suara; baca naskah sebagai gantinya.') + '</div></div></div>';
+    if(!canSpeak || enVoices().length === 0){ h += '<p class="tiny mut" style="margin:4px 0">' + (canSpeak ? 'Suara bahasa Inggris belum terdeteksi; perangkat akan memakai suara bawaan. Bila tidak terdengar, buka Pengaturan → Uji suara.' : '') + '</p>'; }
+    if(showScript){
+      h += '<div class="script"><div class="tiny mut" style="font-weight:700">NASKAH</div>' + A.lines.map(function(l){
+        var line = (reveal && q.ev && l[1].indexOf(q.ev) > -1) ? highlight(l[1], q.ev) : esc(l[1]);
+        return '<p>' + (A.lines.length > 1 ? '<b>' + (l[0] === "A" ? "Speaker 1" : "Speaker 2") + ':</b> ' : '') + line + '</p>';
+      }).join("") + '</div>';
+    } else if(S.kind !== "tes"){
+      h += '<button type="button" class="btn sm ghost" data-script="' + A.id + '">Tampilkan naskah (sebaiknya setelah menjawab)</button>';
+    }
+    return h + '</div>';
+  }
+  var T = textById(q.t);
+  if(!T) return '<div class="stim"><p>Teks tidak ditemukan.</p></div>';
+  var h2 = '<div class="stim' + (T.grp === "fungsional" ? ' fn' : '') + '"><div class="tt"><span class="chip ex">' + esc(T.type) + ' · ' + esc(TYPE_ID[T.type] || T.type) + '</span>' + (T.ai ? '<span class="chip ai">AI · perlu dicek guru</span>' : '') + '</div>';
+  h2 += '<h3 style="margin-bottom:8px">' + esc(T.title) + '</h3>';
+  h2 += '<div class="body">' + (reveal ? highlight(T.body, q.ev) : esc(T.body)) + '</div>';
+  if(T.table){
+    h2 += '<div class="tbwrap"><table class="tb"><thead><tr>' + T.table[0].map(function(c){ return '<th scope="col">' + esc(c) + '</th>'; }).join("") + '</tr></thead><tbody>' +
+      T.table.slice(1).map(function(r){ return '<tr>' + r.map(function(c){ return '<td>' + esc(c) + '</td>'; }).join("") + '</tr>'; }).join("") + '</tbody></table></div>';
+  }
+  return h2 + '</div>';
+}
+function choicesHTML(S, q, reveal){
+  var a = S.ans[q.id], h = "";
+  if(q.f === "bs"){
+    h += '<table class="bs"><thead><tr><th scope="col">Pernyataan</th><th class="c" scope="col">Benar</th><th class="c" scope="col">Salah</th></tr></thead><tbody>';
+    q.o.forEach(function(st, i){
+      var v = Array.isArray(a) ? a[i] : null;
+      h += '<tr><td>' + esc(st) + '</td>' + [true, false].map(function(val){
+        var cls = "bsb", pressed = v === val;
+        if(reveal){ if(q.k[i] === val) cls += " ok"; else if(pressed) cls += " no"; }
+        return '<td class="c"><button type="button" class="' + cls + '" data-bs="' + i + '|' + val + '" aria-pressed="' + pressed + '" aria-label="Pernyataan ' + (i + 1) + ' ' + (val ? 'Benar' : 'Salah') + '"' + (reveal ? ' disabled' : '') + '>' + (val ? 'B' : 'S') + '</button></td>';
+      }).join("") + '</tr>';
+    });
+    return h + '</tbody></table>';
+  }
+  var multi = q.f === "pgk";
+  q.o.forEach(function(op, i){
+    var sel = multi ? (Array.isArray(a) && a.indexOf(i) > -1) : a === i, cls = "choice";
+    if(reveal){ var isKey = multi ? q.k.indexOf(i) > -1 : q.k === i; if(isKey) cls += " ok"; else if(sel) cls += " no"; }
+    h += '<button type="button" class="' + cls + '" data-c="' + i + '" ' + (multi ? 'role="checkbox" aria-checked="' + sel + '"' : 'aria-pressed="' + sel + '"') + (reveal ? ' disabled' : '') + '><span class="let">' + LET[i] + '</span><span>' + esc(op) + '</span></button>';
+  });
+  return h;
+}
+function feedbackHTML(S, q){
+  var a = S.ans[q.id], ok = isCorrect(q, a);
+  var h = '<div class="fb ' + (ok ? 'ok' : 'no') + '" role="status"><h4>' + (ok ? '✔ Benar!' : (isAnswered(q, a) ? '✘ Belum tepat' : '✘ Tidak dijawab')) + ' <span class="small" style="font-weight:500">Kunci: ' + keyText(q) + (isAnswered(q, a) ? ' · Jawabanmu: ' + ansText(q, a) : '') + '</span></h4>';
+  h += '<div>' + esc(q.ex) + '</div>';
+  if(q.ev) h += '<div class="tiny mut" style="margin-top:6px">Bukti disorot <mark>kuning</mark> pada ' + (q.a ? 'naskah' : 'teks') + '.</div>';
+  if(!ok) h += '<div class="tip"><b>Strategi ' + esc(SK[q.sk].n) + ':</b> ' + esc(SK[q.sk].tip[0]) + '</div>';
+  h += '<div class="row" style="margin-top:8px"><button type="button" class="btn sm ghost" data-explain="' + q.id + '">✨ Jelaskan ulang (AI)</button></div>';
+  if(S.ai[q.id]) h += '<div class="aibox">' + esc(S.ai[q.id]) + '</div>';
+  return h + '</div>';
+}
+function renderPlayer(S){
+  var host = hostOf(S.kind), n = S.ids.length, q = qById(S.ids[S.i]);
+  if(!q){ host.innerHTML = '<div class="empty">Soal tidak ditemukan.</div>'; return; }
+  var reveal = S.kind === "tes" ? S.finished : !!S.chk[q.id];
+  var done = S.kind === "tes" ? S.ids.filter(function(id){ return isAnswered(qById(id), S.ans[id]); }).length : Object.keys(S.chk).length;
+  var h = '<div class="ptop"><button type="button" class="btn sm ghost" data-quit="1">' + (S.finished ? '← Selesai meninjau' : '✕ Keluar') + '</button>';
+  h += '<span class="small" style="font-weight:700">Soal ' + (S.i + 1) + '/' + n + '</span><div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="' + n + '" aria-valuenow="' + done + '" aria-label="Kemajuan"><i style="width:' + pct(done, n) + '%"></i></div>';
+  if(S.kind === "tes" && !S.finished) h += '<span class="timer" id="tesTimerEl" aria-live="off" title="Sisa waktu">' + fmtTime(S.end - Date.now()) + '</span>';
+  h += '</div>';
+  h += '<div class="play">' + stimHTML(S, q, reveal) + '<div><div class="qbox" id="qbox">';
+  h += '<div class="qmeta"><span class="chip sk sk-' + q.sk + '">' + esc(SK[q.sk].n) + '</span><span class="chip ex">' + LV[q.lv] + '</span><span class="chip ex">' + (q.f === "pg" ? "Pilihan ganda" : q.f === "pgk" ? "PG kompleks" : "Benar/Salah") + '</span>' + (q.ai ? '<span class="chip ai">AI · perlu dicek guru</span>' : '') + (S.rg[q.id] && !S.finished ? '<span class="chip" style="color:var(--warn)">Ragu-ragu</span>' : '') + '</div>';
+  h += '<p class="qtext" id="qtext"><span class="sr">Soal ' + (S.i + 1) + '. </span>' + esc(q.q) + '</p>';
+  h += '<div role="group" aria-labelledby="qtext">' + choicesHTML(S, q, reveal) + '</div>';
+  if(reveal) h += feedbackHTML(S, q);
+  h += '<div class="row" style="margin-top:14px">';
+  if(S.kind === "tes"){
+    h += '<button type="button" class="btn sm" data-nav="-1"' + (S.i === 0 ? ' disabled' : '') + '>← Sebelumnya</button>';
+    if(!S.finished) h += '<button type="button" class="btn sm" data-rg="1" aria-pressed="' + !!S.rg[q.id] + '" style="' + (S.rg[q.id] ? 'background:var(--warn-bg);border-color:var(--warn)' : '') + '">' + (S.rg[q.id] ? '★ Ragu-ragu' : '☆ Ragu-ragu') + '</button>';
+    h += '<button type="button" class="btn sm' + (S.i === n - 1 ? '' : ' pri') + '" data-nav="1"' + (S.i === n - 1 ? ' disabled' : '') + '>Berikutnya →</button>';
+    if(!S.finished) h += '<button type="button" class="btn sm pri" data-finish="1">Selesai &amp; kumpulkan</button>';
+  } else if(!reveal){
+    h += '<button type="button" class="btn pri" data-check="1"' + (isAnswered(q, S.ans[q.id]) ? '' : ' disabled') + '>Periksa jawaban</button><span class="tiny mut">' + (q.f === "pgk" ? 'Pilih ' + q.k.length + ' jawaban.' : q.f === "bs" ? 'Isi B atau S untuk setiap pernyataan.' : 'Tekan A–D lalu Enter.') + '</span>';
+  } else {
+    h += '<button type="button" class="btn pri" data-next="1">' + (S.i === n - 1 ? 'Lihat hasil' : 'Soal berikutnya →') + '</button>';
+  }
+  h += '</div></div>';
+  if(S.kind === "tes"){
+    h += '<div class="soft" style="margin-top:14px"><div class="small" style="font-weight:700">Nomor soal</div><div class="navq">' + S.ids.map(function(id, ix){
+      var qq = qById(id), cls = [];
+      if(S.finished) cls.push(isCorrect(qq, S.ans[id]) ? "ok" : "no");
+      else { if(S.rg[id]) cls.push("rg"); else if(isAnswered(qq, S.ans[id])) cls.push("ans"); }
+      if(ix === S.i) cls.push("cur");
+      return '<button type="button" class="' + cls.join(" ") + '" data-goto="' + ix + '" aria-label="Soal ' + (ix + 1) + '"' + (ix === S.i ? ' aria-current="true"' : '') + '>' + (ix + 1) + '</button>';
+    }).join("") + '</div>' + (S.finished ? '<div class="legend"><span style="color:var(--ok)">Hijau = benar</span><span style="color:var(--bad)">Merah = salah</span></div>' : '<div class="legend"><span class="l1">Sudah dijawab</span><span class="l2">Ragu-ragu</span><span>Belum</span></div>') + '</div>';
+    if(S.finished) h += resultHTML(S, true);
+  }
+  h += '</div></div>';
+  host.innerHTML = h;
+}
+
+/* interaksi pemutar */
+function sessionFromEvent(el){ var host = el.closest("#latPlay,#simPlay,#tesPlay"); if(!host) return null; return host.id === "latPlay" ? PL.lat : host.id === "simPlay" ? PL.sim : PL.tes; }
+function locked(S, q){ return S.kind === "tes" ? S.finished : !!S.chk[q.id]; }
+function choose(S, i){
+  var q = qById(S.ids[S.i]); if(locked(S, q) || i >= q.o.length || q.f === "bs") return;
+  if(q.f === "pg") S.ans[q.id] = i;
+  else { var a = (S.ans[q.id] || []).slice(), ix = a.indexOf(i); if(ix > -1) a.splice(ix, 1); else { a.push(i); if(a.length > q.k.length) a.shift(); } S.ans[q.id] = a; }
+  if(S.kind === "tes") save();
+  renderPlayer(S); var b = $('[data-c="' + i + '"]', hostOf(S.kind)); if(b) b.focus();
+}
+function checkAns(S){
+  var q = qById(S.ids[S.i]); if(S.chk[q.id] || !isAnswered(q, S.ans[q.id])) return;
+  S.chk[q.id] = true; S.showScript[q.a] = true;
+  D.att.push({id:q.id, ok:isCorrect(q, S.ans[q.id]), ts:Date.now(), m:S.kind === "sim" ? "S" : "L"}); save();
+  renderPlayer(S); var fb = $(".fb", hostOf(S.kind)); if(fb) fb.scrollIntoView({block:"nearest", behavior:"smooth"});
+  var nb = $("[data-next]", hostOf(S.kind)); if(nb) nb.focus({preventScroll:true});
+}
+function nextQ(S){
+  stopSpeak();
+  if(S.i < S.ids.length - 1){ S.i++; renderPlayer(S); window.scrollTo(0, 0); var f = $("#qtext", hostOf(S.kind)); if(f){ f.setAttribute("tabindex","-1"); f.focus({preventScroll:true}); } }
+  else finishPractice(S);
+}
+function sessionSummary(S){
+  var per = {}, ok = 0;
+  S.ids.forEach(function(id){ var q = qById(id), r = isCorrect(q, S.ans[id]); per[q.sk] = per[q.sk] || [0,0]; per[q.sk][1]++; if(r){ per[q.sk][0]++; ok++; } });
+  return {per:per, ok:ok};
+}
+function finishPractice(S){
+  stopSpeak();
+  var sm = sessionSummary(S);
+  D.ses.push({id:"s" + Date.now(), ts:Date.now(), mode:S.kind === "sim" ? "menyimak" : "latihan", n:S.ids.length, ok:sm.ok, dur:Math.round((Date.now() - S.start) / 1000), per:sm.per}); save();
+  S.finished = true;
+  var wrong = S.ids.filter(function(id){ return !isCorrect(qById(id), S.ans[id]); });
+  var host = hostOf(S.kind);
+  host.innerHTML = '<div class="card" style="max-width:760px;margin:0 auto"><span class="kick">Hasil ' + (S.kind === "sim" ? 'latihan menyimak' : 'latihan membaca') + '</span>' + resultHTML(S, false) +
+    '<div class="row" style="margin-top:16px">' + (wrong.length ? '<button class="btn pri" type="button" data-retry="' + wrong.join(",") + '">Ulangi ' + wrong.length + ' soal yang salah</button>' : '') +
+    '<button class="btn" type="button" data-quit="1">Kembali</button><button class="btn ghost" type="button" data-go="peta">Lihat peta keterampilan</button></div></div>';
+  refreshAll();
+}
+function resultHTML(S, tes){
+  var sm = sessionSummary(S), n = S.ids.length, sc = pct(sm.ok, n);
+  var msg = sc >= 80 ? "Hebat! Pertahankan." : sc >= 60 ? "Bagus, tinggal sedikit lagi." : "Tidak apa-apa. Pelajari pembahasan lalu ulangi.";
+  var h = '<div class="row" style="align-items:flex-end;gap:18px;margin:8px 0 10px"><div class="big">' + sc + '</div><div><div style="font-weight:700">' + sm.ok + ' dari ' + n + ' benar</div><div class="mut small">' + msg + '</div></div></div>';
+  h += '<table class="mx"><thead><tr><th scope="col">Keterampilan</th><th scope="col">Benar</th><th scope="col">%</th></tr></thead><tbody>' +
+    SKS.filter(function(k){ return sm.per[k]; }).map(function(k){ var p = sm.per[k]; return '<tr><td><span class="chip sk sk-' + k + '">' + esc(SK[k].n) + '</span></td><td>' + p[0] + '/' + p[1] + '</td><td>' + cellPct(p[0], p[1]) + '</td></tr>'; }).join("") + '</tbody></table>';
+  if(tes) h = '<div class="card" style="margin-top:14px"><span class="kick">Hasil tes</span>' + h + '<p class="small mut" style="margin-bottom:0">Ketuk nomor soal untuk melihat pembahasannya. Skor = persentase soal benar (PG kompleks dan Benar/Salah dinilai benar bila semua bagian tepat).</p></div>';
+  return h;
+}
+function cellPct(ok, n){
+  if(!n) return '<span class="cell lvl na">–</span>';
+  var c = cat({ok:ok, n:Math.max(n, 3)}); return '<span class="cell lvl ' + c.c + '">' + pct(ok, n) + '%</span>';
+}
+function finishTes(S){
+  if(S.finished) return;
+  clearInterval(tesTimer); stopSpeak();
+  S.finished = true; S.i = 0;
+  var now = Date.now();
+  S.ids.forEach(function(id){ var q = qById(id); D.att.push({id:id, ok:isCorrect(q, S.ans[id]), ts:now, m:"T"}); });
+  var sm = sessionSummary(S);
+  D.ses.push({id:"t" + now, ts:now, mode:"tes", n:S.ids.length, ok:sm.ok, dur:Math.round((now - S.start) / 1000), per:sm.per});
+  save(); renderPlayer(S); refreshAll(); window.scrollTo(0, 0);
+  var r = $(".big", hostOf("tes")); if(r) r.scrollIntoView({block:"center"});
+}
+
+/* klik global */
+document.addEventListener("click", function(e){
+  var t = e.target.closest("button,a,[data-go]"); if(!t) return;
+  var d = t.dataset;
+  if(t.closest("nav.tabs") && d.v){ go(d.v); return; }
+  if(d.go){ e.preventDefault(); go(d.go); return; }
+  if(d.skill){ go("latihan"); startLat({sk:[d.skill]}); return; }
+  if(d.act){ actions[d.act] && actions[d.act](t); return; }
+  if(d.simone){ startSim([d.simone]); return; }
+  if(d.aiprac){ go("latihan"); startLat({onlyAI:true}); return; }
+  if(d.aidel){ delAI(d.aidel); return; }
+  if(d.drill){ go("latihan"); startLat({ids:d.drill.split(",")}); return; }
+  var S = sessionFromEvent(t); if(!S) return;
+  var q = qById(S.ids[S.i]);
+  if(d.c != null){ choose(S, +d.c); return; }
+  if(d.bs){ if(locked(S, q)) return; var p = d.bs.split("|"), i = +p[0]; var a = Array.isArray(S.ans[q.id]) ? S.ans[q.id].slice() : q.o.map(function(){ return null; }); a[i] = p[1] === "true"; S.ans[q.id] = a; if(S.kind === "tes") save(); renderPlayer(S); var b = $('[data-bs="' + d.bs + '"]', hostOf(S.kind)); if(b) b.focus(); return; }
+  if(d.check){ checkAns(S); return; }
+  if(d.next){ nextQ(S); return; }
+  if(d.nav){ stopSpeak(); S.i = Math.min(S.ids.length - 1, Math.max(0, S.i + (+d.nav))); renderPlayer(S); return; }
+  if(d.goto != null){ stopSpeak(); S.i = +d.goto; renderPlayer(S); window.scrollTo(0, 0); return; }
+  if(d.rg){ S.rg[q.id] = !S.rg[q.id]; renderPlayer(S); return; }
+  if(d.finish){
+    var un = S.ids.filter(function(id){ return !isAnswered(qById(id), S.ans[id]); }).length, rg = S.ids.filter(function(id){ return S.rg[id]; }).length;
+    if(confirm("Kumpulkan tes sekarang?" + (un ? "\n" + un + " soal belum dijawab." : "") + (rg ? "\n" + rg + " soal masih ditandai ragu-ragu." : ""))) finishTes(S);
+    return;
+  }
+  if(d.quit){ if(S.kind === "tes" && !S.finished && !confirm("Keluar dari tes? Jawaban tes ini tidak akan dinilai.")) return; closeSession(S.kind); return; }
+  if(d.retry){ var ids = d.retry.split(","); var NS = newSession(S.kind, ids); openSession(NS); return; }
+  if(d.script){ S.showScript[d.script] = true; renderPlayer(S); return; }
+  if(d.play){ togglePlay(S, d.play); return; }
+  if(d.explain){ explainAI(S, d.explain, t); return; }
+});
+function togglePlay(S, aid){
+  var sid = S.kind + ":" + aid;
+  if(speakingId === sid){ stopSpeak(); renderPlayer(S); return; }
+  var limit = S.kind === "tes" && !S.finished ? 2 : 0, plays = S.plays[aid] || 0;
+  if(limit && plays >= limit){ toast("Batas putar rekaman di mode tes: 2 kali."); return; }
+  var A = audById(aid);
+  var ok = speakLines(sid, A.lines, function(){ if(PL[S.kind] === S) renderPlayer(S); });
+  if(!ok){ toast("Perangkat tidak mendukung suara."); return; }
+  S.plays[aid] = plays + 1; renderPlayer(S);
+  var b = $("[data-play]", hostOf(S.kind)); if(b) b.focus();
+}
+
+/* papan ketik */
+document.addEventListener("keydown", function(e){
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  var tg = e.target, tag = (tg.tagName || "").toLowerCase();
+  if(tag === "input" || tag === "textarea" || tag === "select") return;
+  var v = activeView(), S = v === "latihan" ? PL.lat : v === "simak" ? PL.sim : v === "tes" ? PL.tes : null;
+  if(!S || hostOf(S.kind).hidden || !S.ids) return;
+  if(S.finished && S.kind !== "tes") return;
+  var q = qById(S.ids[S.i]); if(!q) return;
+  var k = e.key.toLowerCase(), map = {a:0,b:1,c:2,d:3,"1":0,"2":1,"3":2,"4":3};
+  if(map[k] != null && q.f !== "bs"){ e.preventDefault(); choose(S, map[k]); return; }
+  if(k === "p" && q.a){ e.preventDefault(); togglePlay(S, q.a); return; }
+  if(S.kind === "tes"){
+    if(k === "arrowright"){ e.preventDefault(); stopSpeak(); if(S.i < S.ids.length - 1){ S.i++; renderPlayer(S); } }
+    else if(k === "arrowleft"){ e.preventDefault(); stopSpeak(); if(S.i > 0){ S.i--; renderPlayer(S); } }
+    else if(k === "r" && !S.finished){ e.preventDefault(); S.rg[q.id] = !S.rg[q.id]; renderPlayer(S); }
+    return;
+  }
+  if(k === "enter" && tag !== "button"){ e.preventDefault(); if(S.chk[q.id]) nextQ(S); else checkAns(S); }
+});
+
+/* ---------- LATIHAN MEMBACA ---------- */
+function renderLatSetup(){
+  $("#latSk").innerHTML = SKS.map(function(k){ return '<label class="tog"><input type="checkbox" name="latSk" value="' + k + '" checked> ' + esc(SK[k].n) + '</label>'; }).join("");
+  $("#latLv").innerHTML = LVS.map(function(k){ return '<label class="tog"><input type="checkbox" name="latLv" value="' + k + '" checked> ' + LV[k] + '</label>'; }).join("");
+  updLatCount();
+}
+function latFilter(){
+  var sk = $$('input[name="latSk"]:checked').map(function(i){ return i.value; });
+  var lv = $$('input[name="latLv"]:checked').map(function(i){ return i.value; });
+  var g = ($('input[name="latGrp"]:checked') || {}).value || "semua", ai = $("#latAI").checked;
+  return function(q){ return q.t && sk.indexOf(q.sk) > -1 && lv.indexOf(q.lv) > -1 && (g === "semua" || grpOf(q) === g) && (ai || !q.ai); };
+}
+function updLatCount(){ var n = allQ().filter(latFilter()).length; $("#latCount").textContent = n + " soal cocok dengan pilihanmu."; }
+function orderBySource(list){
+  var order = shuffle(Array.from(new Set(list.map(srcOf))));
+  var idx = {}; allQ().forEach(function(q, i){ idx[q.id] = i; });
+  return list.sort(function(a, b){ var d = order.indexOf(srcOf(a)) - order.indexOf(srcOf(b)); return d || idx[a.id] - idx[b.id]; });
+}
+function pickPrior(pool, n, prior){
+  var last = lastResult();
+  var scored = shuffle(pool).map(function(q){ var l = last[q.id]; var s = Math.random(); if(prior){ if(!l) s += 1; else if(!l.ok) s += 2; } return {q:q, s:s}; });
+  scored.sort(function(a, b){ return b.s - a.s; });
+  return orderBySource(scored.slice(0, n).map(function(x){ return x.q; })).map(function(q){ return q.id; });
+}
+function startLat(o){
+  o = o || {};
+  var ids;
+  if(o.ids) ids = o.ids.filter(qById);
+  else if(o.onlyAI) ids = orderBySource((D.ai.qs || []).slice()).map(function(q){ return q.id; });
+  else if(o.sk) ids = pickPrior(Q.filter(function(q){ return q.t && o.sk.indexOf(q.sk) > -1; }), 10, true);
+  else {
+    var n = +(($('input[name="latN"]:checked') || {}).value || 10);
+    ids = pickPrior(allQ().filter(latFilter()), n, $("#latPrior").checked);
+  }
+  if(!ids.length){ toast("Tidak ada soal yang cocok. Ubah pilihanmu."); return; }
+  openSession(newSession("lat", ids));
+}
+
+/* ---------- MENYIMAK ---------- */
+function renderSimCheck(){
+  var vs = enVoices(), el = $("#simCheck");
+  el.innerHTML = canSpeak ?
+    '<div class="row" style="justify-content:space-between"><div><b>Cek suara</b><div class="small mut">' + (vs.length ? vs.length + ' suara bahasa Inggris tersedia di perangkat ini.' : 'Suara bahasa Inggris sedang dimuat atau belum tersedia. Perangkat akan memakai suara bawaan.') + ' Kecepatan ' + SET.rate + '×.</div></div><div class="row"><button class="btn sm" type="button" data-act="testVoice">🔊 Uji suara</button><button class="btn sm ghost" type="button" data-go="set">Atur suara</button></div></div>' +
+    '<p class="tiny mut" style="margin:8px 0 0">Tips: dengarkan pertama kali untuk menangkap inti, kedua kali untuk detail. Pakai earphone bila berlatih di kelas.</p>'
+    : '<b>Perangkat ini tidak mendukung suara (speechSynthesis).</b><p class="small mut" style="margin:4px 0 0">Kamu tetap bisa berlatih: naskah akan ditampilkan sebagai teks. Untuk latihan menyimak sebenarnya, buka di Chrome/Edge/Safari terbaru.</p>';
+}
+function renderSimSetup(){
+  if(PL.sim) return;
+  renderSimCheck();
+  var st = statBy(function(q){ return q.a || "-"; }, function(q){ return !!q.a; });
+  $("#simList").innerHTML = AUD.map(function(A){
+    var n = Q.filter(function(q){ return q.a === A.id; }).length, s = st[A.id];
+    return '<div class="card audio" style="border-color:var(--listen)"><div class="row" style="justify-content:space-between"><span class="chip" style="color:var(--listen)">🎧 ' + esc(A.kind) + '</span><span class="tiny mut">' + n + ' soal</span></div><h3 style="margin:8px 0 4px;font-size:19px">' + esc(A.title) + '</h3><div class="small mut">' + (s ? 'Benar ' + s.ok + '/' + s.n : 'Belum dicoba') + '</div><button class="btn sm blue" type="button" data-simone="' + A.id + '" style="margin-top:10px">Mulai</button></div>';
+  }).join("");
+}
+function startSim(aids){
+  var ids = [];
+  aids.forEach(function(a){ Q.forEach(function(q){ if(q.a === a) ids.push(q.id); }); });
+  openSession(newSession("sim", ids));
+}
+
+/* ---------- TES ---------- */
+function startTes(){
+  var pk = (($('input[name="tesPk"]:checked') || {}).value || "20|40").split("|"), n = +pk[0], min = +pk[1];
+  var withSim = $("#tesSimak").checked, nS = withSim ? Math.round(n * 0.25) : 0, nR = n - nS;
+  function take(src, key, count){
+    var out = [];
+    shuffle(src).forEach(function(s){ if(out.length >= count) return; var qs = Q.filter(function(q){ return q[key] === s.id; }); if(out.length + qs.length > count) qs = shuffle(qs).slice(0, count - out.length).sort(function(a, b){ return Q.indexOf(a) - Q.indexOf(b); }); out = out.concat(qs); });
+    return out.map(function(q){ return q.id; });
+  }
+  var ids = take(TEXTS, "t", nR).concat(take(AUD, "a", nS));
+  if(withSim && !canSpeak) toast("Perangkat tidak mendukung suara; soal menyimak memakai naskah tertulis.");
+  openSession(newSession("tes", ids, min));
+}
+
+/* ---------- PETA ---------- */
+function renderPeta(){
+  var el = $("#petaBody");
+  if(!D.att.length){ el.innerHTML = '<div class="empty">Belum ada jawaban. Kerjakan latihan atau tes dulu, peta akan terisi otomatis.<br><br><button class="btn pri" type="button" data-go="latihan">Mulai latihan</button></div>'; return; }
+  var s = statBy(function(q){ return q.sk; });
+  var mx = statBy(function(q){ return q.sk + "|" + q.lv; });
+  var src = statBy(function(q){ return q.a ? "Menyimak" : grpOf(q) === "esai" ? "Esai sederhana" : "Teks fungsional pendek"; });
+  var ty = statBy(function(q){ return typeOf(q); }, function(q){ return !q.a; });
+  var h = '<div class="grid g5">' + SKS.map(function(k){ return skillCard(k, s, true); }).join("") + '</div>';
+  h += '<div class="grid g2" style="margin-top:16px"><div class="card"><h3>Keterampilan × level kognitif</h3><div class="tbwrap"><table class="mx"><thead><tr><th scope="col">Keterampilan</th>' + LVS.map(function(l){ return '<th scope="col">' + LV[l] + '</th>'; }).join("") + '</tr></thead><tbody>' +
+    SKS.map(function(k){ return '<tr><td>' + esc(SK[k].n) + '</td>' + LVS.map(function(l){ var x = mx[k + "|" + l]; return '<td>' + (x ? cellPct(x.ok, x.n) + '<div class="tiny mut">' + x.ok + '/' + x.n + '</div>' : '<span class="tiny mut">–</span>') + '</td>'; }).join("") + '</tr>'; }).join("") + '</tbody></table></div></div>';
+  h += '<div class="card"><h3>Menurut sumber</h3>' + ["Teks fungsional pendek","Esai sederhana","Menyimak"].map(function(k){ var x = src[k] || {n:0, ok:0}, p = pct(x.ok, x.n); return '<div style="margin:10px 0"><div class="row" style="justify-content:space-between"><b>' + k + '</b><span class="small mut">' + (x.n ? p + '% · ' + x.ok + '/' + x.n : 'belum ada') + '</span></div><div class="bar" style="--sc:' + (k === "Menyimak" ? 'var(--listen)' : 'var(--acc)') + '"><i style="width:' + p + '%"></i></div></div>'; }).join("") +
+    '<h3 style="margin-top:16px">Menurut jenis teks</h3>' + Object.keys(ty).sort(function(a, b){ return pct(ty[a].ok, ty[a].n) - pct(ty[b].ok, ty[b].n); }).map(function(k){ var x = ty[k]; return '<div class="row" style="justify-content:space-between;border-bottom:1px solid var(--line);padding:5px 0"><span>' + esc(k) + ' <span class="tiny mut">' + esc(TYPE_ID[k] || "") + '</span></span>' + cellPct(x.ok, x.n) + '</div>'; }).join("") + '</div></div>';
+  // rekomendasi
+  var rank = SKS.filter(function(k){ return s[k] && s[k].n >= 3; }).sort(function(a, b){ return s[a].ok / s[a].n - s[b].ok / s[b].n; });
+  h += '<div class="card" style="margin-top:16px"><h3>Rekomendasi latihan</h3>';
+  if(!rank.length) h += '<p class="mut">Jawab minimal 3 soal per keterampilan agar rekomendasi muncul.</p>';
+  rank.slice(0, 2).forEach(function(k){
+    h += '<div class="soft skc sk-' + k + '" style="margin-top:10px"><div class="row" style="justify-content:space-between"><h3>' + esc(SK[k].n) + ' · ' + pct(s[k].ok, s[k].n) + '%</h3><button class="btn sm pri" type="button" data-skill="' + k + '">Latih 10 soal</button></div><ul class="small" style="margin-bottom:0">' + SK[k].tip.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join("") + '</ul></div>';
+  });
+  h += '</div>';
+  // soal paling sering salah
+  var wr = {}; D.att.forEach(function(a){ if(!a.ok){ wr[a.id] = (wr[a.id] || 0) + 1; } });
+  var top = Object.keys(wr).filter(qById).sort(function(a, b){ return wr[b] - wr[a]; }).slice(0, 6);
+  h += '<div class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between"><h3>Soal yang paling sering salah</h3>' + (top.length ? '<button class="btn sm" type="button" data-drill="' + top.join(",") + '">Latih ulang semuanya</button>' : '') + '</div>';
+  h += top.length ? '<ul class="list">' + top.map(function(id){ var q = qById(id); return '<li><span><span class="chip sk sk-' + q.sk + '">' + esc(SK[q.sk].n) + '</span> ' + esc(q.q) + ' <span class="tiny mut">(' + esc(typeOf(q)) + ')</span></span><span class="small mut">salah ' + wr[id] + '×</span></li>'; }).join("") + '</ul>' : '<p class="mut">Belum ada soal yang salah. Mantap!</p>';
+  h += '</div>';
+  h += '<h3 style="margin:20px 0 10px">Klinik strategi (semua keterampilan)</h3>' + SKS.map(function(k){ return '<details class="dd"><summary>' + esc(SK[k].n) + ' <span class="tiny mut">' + esc(SK[k].en) + '</span></summary><ul class="small">' + SK[k].tip.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join("") + '</ul></details>'; }).join("");
+  el.innerHTML = h;
+}
+
+/* ---------- RIWAYAT & DATA ---------- */
+function renderRiwayat(){
+  var el = $("#riwBody"), ses = D.ses.slice().sort(function(a, b){ return b.ts - a.ts; });
+  if(!ses.length){ el.innerHTML = '<div class="empty">Belum ada sesi latihan.</div>'; return; }
+  el.innerHTML = '<div class="card"><h3>Sesi</h3><ul class="list">' + ses.map(function(s){
+    return '<li><span><b>' + (s.mode === "tes" ? "Tes berwaktu" : s.mode === "menyimak" ? "Latihan menyimak" : "Latihan membaca") + '</b> ' + (s.c ? '<span class="chip ex">contoh</span>' : '') + '<br><span class="small mut">' + fmtDate(s.ts) + ' · ' + Math.round((s.dur || 0) / 60) + ' menit</span><br>' +
+      SKS.filter(function(k){ return s.per && s.per[k]; }).map(function(k){ return '<span class="chip sk sk-' + k + '" style="margin:3px 3px 0 0">' + esc(SK[k].n.split(" ")[0]) + ' ' + s.per[k][0] + '/' + s.per[k][1] + '</span>'; }).join("") + '</span><span class="pct" style="font-size:26px">' + pct(s.ok, s.n) + '<span class="small mut"> · ' + s.ok + '/' + s.n + '</span></span></li>';
+  }).join("") + '</ul></div>';
+}
+function download(name, text, type){
+  try{
+    var blob = new Blob([text], {type:type}), a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }catch(e){ toast("Gagal mengunduh berkas."); }
+}
+function csvCell(v){ v = String(v == null ? "" : v); return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+var actions = {
+  hapusContoh: function(){ if(!hasContoh()){ toast("Tidak ada data contoh."); return; } hapusContoh(); },
+  reset: function(){ if(confirm("Hapus SEMUA jawaban, riwayat, dan soal AI di perangkat ini? Tindakan ini tidak bisa dibatalkan.")){ D = {att:[], ses:[], ai:{texts:[], qs:[]}}; save(); refreshAll(); renderRiwayat(); toast("Semua data dihapus."); } },
+  csv: function(){
+    var rows = [["waktu","mode","id_soal","sumber","jenis_teks","keterampilan","level","benar","contoh"]];
+    D.att.forEach(function(a){ var q = qById(a.id); if(!q) return; rows.push([new Date(a.ts).toISOString(), a.m === "T" ? "tes" : a.m === "S" ? "menyimak" : "latihan", a.id, q.a ? "menyimak" : "membaca", typeOf(q), SK[q.sk].n, LV[q.lv], a.ok ? 1 : 0, a.c ? "contoh" : ""]); });
+    download("jawaban-tka-inggris.csv", "﻿" + rows.map(function(r){ return r.map(csvCell).join(","); }).join("\n"), "text/csv;charset=utf-8");
+  },
+  json: function(){ download("cadangan-tka-inggris.json", JSON.stringify({app:"tka-bahasa-inggris", versi:1, diekspor:new Date().toISOString(), data:D}, null, 1), "application/json"); },
+  startLat: function(){ startLat(); },
+  startSimAll: function(){ startSim(AUD.map(function(a){ return a.id; })); },
+  startTes: function(){ startTes(); },
+  testVoice: function(){ if(!canSpeak){ toast("Perangkat tidak mendukung suara."); return; } speakLines("uji", [["A","Hello! This is your English listening practice."],["B","Great! Let’s start."]]); },
+  saveKey: function(){ SET.key = $("#setKey").value.trim(); SET.model = $("#setModel").value.trim() || "gemini-2.5-flash"; saveSet(); toast(SET.key ? "Kunci API disimpan di perangkat ini." : "Kunci API kosong."); },
+  delKey: function(){ SET.key = ""; $("#setKey").value = ""; saveSet(); toast("Kunci API dihapus."); },
+  aiGen: function(b){ aiGenerate(b); }
+};
+$("#impFile").addEventListener("change", function(e){
+  var f = e.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(){
+    try{
+      var o = JSON.parse(r.result), d = o.data || o;
+      if(!Array.isArray(d.att)) throw new Error("format");
+      var seen = {}; D.att.forEach(function(a){ seen[a.id + "@" + a.ts] = 1; });
+      d.att.forEach(function(a){ if(a && a.id && !seen[a.id + "@" + a.ts]) D.att.push({id:String(a.id), ok:!!a.ok, ts:+a.ts || Date.now(), m:a.m || "L", c:a.c ? 1 : undefined}); });
+      var ss = {}; D.ses.forEach(function(s){ ss[s.id] = 1; }); (d.ses || []).forEach(function(s){ if(s && s.id && !ss[s.id]) D.ses.push(s); });
+      if(d.ai){ var ti = {}; D.ai.texts.forEach(function(t){ ti[t.id] = 1; }); (d.ai.texts || []).forEach(function(t){ if(!ti[t.id]) D.ai.texts.push(t); }); var qi = {}; D.ai.qs.forEach(function(q){ qi[q.id] = 1; }); (d.ai.qs || []).forEach(function(q){ if(!qi[q.id] && validAIQ(q)) D.ai.qs.push(q); }); }
+      save(); refreshAll(); renderRiwayat(); toast("Impor berhasil.");
+    }catch(err){ toast("Berkas tidak dikenali. Gunakan cadangan JSON dari aplikasi ini."); }
+    e.target.value = "";
+  };
+  r.readAsText(f);
+});
+
+/* ---------- AI GEMINI (opsional) ---------- */
+function gemini(prompt, asJson){
+  if(!SET.key) return Promise.reject(new Error("Isi kunci API Gemini di Pengaturan dulu."));
+  var url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(SET.model || "gemini-2.5-flash") + ":generateContent";
+  return fetch(url, {method:"POST", headers:{"Content-Type":"application/json","x-goog-api-key":SET.key},
+    body:JSON.stringify({contents:[{parts:[{text:prompt}]}], generationConfig:asJson ? {responseMimeType:"application/json", temperature:0.8} : {temperature:0.5}})})
+  .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error((j.error && j.error.message) || ("HTTP " + r.status)); return j; }); })
+  .then(function(j){
+    var t = j && j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts ? j.candidates[0].content.parts.map(function(p){ return p.text || ""; }).join("") : "";
+    if(!t) throw new Error("Jawaban AI kosong.");
+    return t;
+  });
+}
+function validAIQ(q){ return q && typeof q.q === "string" && Array.isArray(q.o) && q.o.length === 4 && q.o.every(function(x){ return typeof x === "string" && x.trim(); }) && Number.isInteger(q.k) && q.k >= 0 && q.k < 4 && SKS.indexOf(q.sk) > -1 && LVS.indexOf(q.lv) > -1; }
+function renderAISetup(){
+  $("#aiSk").innerHTML = '<option value="campur">Campuran lima keterampilan</option>' + SKS.map(function(k){ return '<option value="' + k + '">' + esc(SK[k].n) + '</option>'; }).join("");
+  $("#aiType").innerHTML = AI_TYPES.map(function(t){ return '<option value="' + t + '">' + t + ' · ' + esc(TYPE_ID[t]) + '</option>'; }).join("");
+}
+function aiGenerate(btn){
+  var sk = $("#aiSk").value, type = $("#aiType").value, n = +$("#aiN").value, topic = $("#aiTopic").value.trim().slice(0, 120), msg = $("#aiMsg");
+  if(!SET.key){ msg.textContent = "Isi kunci API Gemini di Pengaturan dulu."; return; }
+  btn.disabled = true; msg.textContent = "Sedang membuat soal…";
+  var prompt = "Kamu penulis soal Bahasa Inggris untuk siswa SMP kelas 9 di Indonesia (tingkat CEFR A2). " +
+    "Buat SATU teks bahasa Inggris ORISINAL berjenis " + type + (topic ? " bertopik \"" + topic + "\"" : " dengan konteks kehidupan remaja Indonesia") + ", panjang 60–180 kata, tanpa nama orang atau merek sungguhan. " +
+    "Lalu buat " + n + " soal pilihan ganda (4 opsi, tepat satu jawaban benar) berdasarkan teks itu" + (sk === "campur" ? " dengan keterampilan beragam" : " dengan fokus keterampilan \"" + sk + "\"") + ". " +
+    "Keterampilan (sk) hanya boleh: main (gagasan utama/tujuan), detail, inference, vocab (kosakata dalam konteks), reference (rujukan kata ganti). Level (lv) hanya: pemahaman, penerapan, penalaran. " +
+    "Soal dan opsi dalam bahasa Inggris; pembahasan (ex) dalam bahasa Indonesia singkat (1–2 kalimat) dan menyebut bukti di teks. ev = kutipan persis (pendek) dari teks sebagai bukti. " +
+    "Kembalikan HANYA JSON: {\"title\":\"...\",\"body\":\"...\",\"questions\":[{\"q\":\"...\",\"o\":[\"...\",\"...\",\"...\",\"...\"],\"k\":0,\"sk\":\"detail\",\"lv\":\"pemahaman\",\"ex\":\"...\",\"ev\":\"...\"}]}";
+  gemini(prompt, true).then(function(txt){
+    var j = JSON.parse(txt.replace(/^```(json)?|```$/g, "").trim());
+    if(!j || typeof j.body !== "string" || !Array.isArray(j.questions)) throw new Error("Format jawaban AI tidak sesuai.");
+    var stamp = Date.now(), tid = "AT" + stamp;
+    var qs = j.questions.map(function(q, i){ return {id:"AQ" + stamp + "-" + i, t:tid, sk:q.sk, lv:q.lv, f:"pg", q:String(q.q || ""), o:(q.o || []).map(String), k:+q.k, ex:String(q.ex || ""), ev:(typeof q.ev === "string" && j.body.indexOf(q.ev) > -1) ? q.ev : "", ai:true}; }).filter(validAIQ);
+    if(!qs.length) throw new Error("Tidak ada soal AI yang lolos pemeriksaan format.");
+    D.ai.texts.push({id:tid, type:type, grp:["Descriptive","Recount","Narrative","Procedure","Report","Exposition"].indexOf(type) > -1 ? "esai" : "fungsional", title:String(j.title || "AI Text"), body:j.body, ai:true, ts:stamp});
+    D.ai.qs = D.ai.qs.concat(qs); save();
+    msg.textContent = qs.length + " soal AI ditambahkan. Mohon dicek guru sebelum dipakai."; renderAI(); refreshAll();
+  }).catch(function(e){ msg.textContent = "Gagal: " + e.message; }).then(function(){ btn.disabled = false; });
+}
+function renderAI(){
+  var el = $("#aiList"), ts = D.ai.texts || [];
+  if(!ts.length){ el.innerHTML = '<div class="empty">Belum ada soal AI. Soal bank (' + Q.length + ' soal) sudah cukup untuk berlatih; fitur ini hanya tambahan.</div>'; return; }
+  el.innerHTML = '<div class="row" style="margin-bottom:10px"><button class="btn pri" type="button" data-aiprac="1">Latih semua soal AI (' + D.ai.qs.length + ')</button></div>' + ts.slice().reverse().map(function(t){
+    var qs = D.ai.qs.filter(function(q){ return q.t === t.id; });
+    return '<details class="dd"><summary>' + esc(t.title) + ' <span class="chip ai">AI · perlu dicek guru</span> <span class="tiny mut">' + esc(t.type) + ' · ' + qs.length + ' soal</span></summary><div class="small" style="white-space:pre-line;margin:8px 0">' + esc(t.body) + '</div><ol class="small">' +
+      qs.map(function(q){ return '<li>' + esc(q.q) + '<br><span class="mut">Kunci ' + LET[q.k] + ': ' + esc(q.o[q.k]) + ' · ' + esc(SK[q.sk].n) + '</span></li>'; }).join("") + '</ol><button class="btn sm ghost" type="button" data-aidel="' + t.id + '">Hapus teks ini</button></details>';
+  }).join("");
+}
+function delAI(tid){
+  if(!confirm("Hapus teks AI ini beserta soalnya?")) return;
+  D.ai.texts = D.ai.texts.filter(function(t){ return t.id !== tid; });
+  var gone = {}; D.ai.qs.forEach(function(q){ if(q.t === tid) gone[q.id] = 1; });
+  D.ai.qs = D.ai.qs.filter(function(q){ return q.t !== tid; });
+  D.att = D.att.filter(function(a){ return !gone[a.id]; });
+  save(); renderAI(); refreshAll();
+}
+function explainAI(S, qid, btn){
+  var q = qById(qid);
+  if(!SET.key){ S.ai[qid] = "Fitur ini memerlukan kunci API Gemini milikmu. Isi di menu Pengaturan."; renderPlayer(S); return; }
+  btn.disabled = true; btn.textContent = "Meminta penjelasan…";
+  var src = q.a ? audById(q.a).lines.map(function(l){ return l[1]; }).join("\n") : (function(){ var T = textById(q.t); return T.body + (T.table ? "\n" + T.table.map(function(r){ return r.join(" | "); }).join("\n") : ""); })();
+  var prompt = "Jelaskan ulang pembahasan soal Bahasa Inggris ini untuk siswa SMP dengan bahasa Indonesia yang sederhana dan ramah (maksimal 120 kata). " +
+    "Sebutkan bukti di teks, mengapa jawaban benar tepat, dan mengapa jawaban siswa (jika salah) keliru. Beri satu tips singkat untuk keterampilan " + SK[q.sk].n + ". Jangan pakai format markdown.\n\n" +
+    (q.a ? "NASKAH MENYIMAK:\n" : "TEKS:\n") + src + "\n\nSOAL: " + q.q + "\nPILIHAN/PERNYATAAN:\n" + q.o.map(function(o, i){ return LET[i] + ". " + o; }).join("\n") +
+    "\nKUNCI: " + keyText(q) + "\nJAWABAN SISWA: " + ansText(q, S.ans[qid]) + "\nPEMBAHASAN AWAL: " + q.ex;
+  gemini(prompt, false).then(function(t){ S.ai[qid] = "Penjelasan AI (cek kembali bersama guru):\n" + t.trim(); })
+  .catch(function(e){ S.ai[qid] = "Gagal meminta penjelasan AI: " + e.message; })
+  .then(function(){ if(PL[S.kind] === S) renderPlayer(S); });
+}
+
+/* ---------- PENGATURAN ---------- */
+function initSettings(){
+  $("#setTheme").value = SET.theme;
+  $("#setTheme").addEventListener("change", function(){ SET.theme = this.value; saveSet(); applyTheme(); });
+  $("#themeBtn").addEventListener("click", function(){ SET.theme = isDark() ? "light" : "dark"; saveSet(); applyTheme(); $("#setTheme").value = SET.theme; });
+  $("#setRate").value = SET.rate; $("#rateLbl").textContent = SET.rate;
+  $("#setRate").addEventListener("input", function(){ SET.rate = +this.value; $("#rateLbl").textContent = SET.rate; saveSet(); });
+  $("#setVoice").addEventListener("change", function(){ SET.voice = this.value; saveSet(); });
+  $("#setKey").value = SET.key; $("#setModel").value = SET.model;
+  fillVoices();
+}
+
+/* ---------- MULAI ---------- */
+applyTheme();
+renderLatSetup();
+renderAISetup();
+initSettings();
+$("#v-latihan").addEventListener("change", function(e){ if(e.target.closest("#latSetup")) updLatCount(); });
+refreshAll();
+(function(){ var h = (location.hash || "").slice(1); if(h && $("#v-" + h)) go(h); else renderHome(); })();
+window.addEventListener("beforeunload", function(){ stopSpeak(); });
+</script>
+</body>
+</html>
