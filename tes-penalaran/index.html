@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tes Penalaran – Cek Kemampuan Bernalar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1ea;--paper:#fffdf8;--ink:#1b1d29;--ink2:#555a6e;--line:#e2dccf;--brand:#3b3bd6;--brand2:#2a2aa3;--soft:#e7e7ff;--ok:#0d8a5f;--okSoft:#dcf5ea;--bad:#c2343b;--badSoft:#fde4e5;--warn:#b7791f;--c1:#3b3bd6;--c2:#d9480f;--c3:#0d8a5f;--c4:#9c36b5;--c5:#1971c2;--btnInk:#fff}
+:root.dark{--bg:#12131a;--paper:#1b1d27;--ink:#eef0f7;--ink2:#a8adc2;--line:#2e3142;--brand:#8c8cff;--brand2:#b3b3ff;--soft:#26284a;--ok:#3dd598;--okSoft:#123a2b;--bad:#ff7b82;--badSoft:#40191c;--c1:#8c8cff;--c2:#ff8a4c;--c3:#3dd598;--c4:#d98cf0;--c5:#6cb6ff;--btnInk:#12131a}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--brand)}
+.wrap{max-width:980px;margin:0 auto;padding:0 18px}
+header.top{border-bottom:1px solid var(--line);background:var(--paper)}
+.bar{display:flex;align-items:center;gap:12px;padding:12px 0}
+.logo{width:40px;height:40px;border-radius:12px;background:var(--brand);display:grid;place-items:center;color:#fff;font-family:"Space Grotesk",system-ui,sans-serif;font-weight:700;font-size:18px}
+.brand b{display:block;font-family:"Space Grotesk",system-ui,sans-serif;font-size:19px;line-height:1.1}
+.brand small{color:var(--ink2);font-size:12.5px}
+.sp{flex:1}
+.ib{border:1px solid var(--line);background:transparent;border-radius:10px;padding:7px 11px;font-size:13.5px;font-weight:600}
+.ib:focus-visible,.btn:focus-visible,.opt:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+nav.tabs{display:flex;gap:4px;overflow:auto;padding-bottom:8px}
+nav.tabs button{border:0;background:transparent;padding:7px 12px;border-radius:99px;font-weight:600;font-size:14px;color:var(--ink2);white-space:nowrap}
+nav.tabs button[aria-current=true]{background:var(--ink);color:var(--paper)}
+main{padding:22px 0 40px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+h1{font-family:"Space Grotesk",system-ui,sans-serif;font-size:clamp(28px,4.4vw,44px);line-height:1.05;margin:4px 0 12px}
+h2{font-family:"Space Grotesk",system-ui,sans-serif;font-size:22px;margin:0 0 10px}
+h3{font-size:16px;margin:0 0 6px}
+.muted{color:var(--ink2)}
+.kick{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand)}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:700;background:var(--brand);color:var(--btnInk);display:inline-flex;align-items:center;gap:8px}
+.btn:hover{background:var(--brand2)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.sm{padding:7px 12px;font-size:13.5px;border-radius:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.sub{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--bg)}
+.sub .dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+.sub b{font-size:14px}
+.sub p{font-size:12.5px;margin:4px 0 0;color:var(--ink2)}
+.warn{border-left:5px solid var(--warn);background:var(--paper);border-radius:12px;padding:12px 14px;font-size:14px;border:1px solid var(--line);border-left-width:5px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+input[type=text]{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:var(--paper);color:var(--ink);font:inherit;min-width:220px}
+/* tes */
+.qhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.pill{font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:99px;background:var(--soft);color:var(--brand2)}
+.timer{font-variant-numeric:tabular-nums;font-weight:700;font-family:"Space Grotesk",system-ui,sans-serif;font-size:18px}
+.timer.low{color:var(--bad)}
+.prog{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin:6px 0 14px}
+.prog i{display:block;height:100%;background:var(--brand);width:0}
+.stem{font-size:18px;font-weight:600;margin:6px 0 14px}
+.seq{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 16px}
+.seq span{min-width:58px;text-align:center;padding:10px 12px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-family:"Space Grotesk",system-ui,sans-serif;font-size:22px;font-weight:700}
+.seq span.q{border:2px dashed var(--brand);color:var(--brand)}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.opts.fig{grid-template-columns:repeat(3,1fr)}
+.opts.fig4{grid-template-columns:repeat(4,1fr)}
+.opt{border:1.5px solid var(--line);background:var(--paper);border-radius:14px;padding:12px;text-align:left;font-size:16px;font-weight:600;display:flex;gap:10px;align-items:center;min-height:52px}
+.opt .k{flex:none;width:28px;height:28px;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-size:13px;font-weight:700;border:1px solid var(--line)}
+.opt:hover{border-color:var(--brand)}
+.opt.sel{border-color:var(--brand);background:var(--soft)}
+.opt.good{border-color:var(--ok);background:var(--okSoft)}
+.opt.wrong{border-color:var(--bad);background:var(--badSoft)}
+.opt svg{width:100%;height:auto;max-height:110px}
+.opts.fig .opt,.opts.fig4 .opt{flex-direction:column;align-items:center;justify-content:center}
+.mx{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:340px;margin:0 auto 16px}
+.mx div{aspect-ratio:1;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;display:grid;place-items:center;padding:4px}
+.mx div.q{border:2px dashed var(--brand);color:var(--brand);font-family:"Space Grotesk",system-ui,sans-serif;font-size:34px;font-weight:700}
+.mx svg{width:100%;height:100%}
+.target{max-width:180px;margin:0 auto 16px;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:10px}
+.expl{margin-top:14px;border-radius:12px;padding:12px 14px;font-size:14.5px}
+.expl.g{background:var(--okSoft)}.expl.b{background:var(--badSoft)}
+.nav2{display:flex;justify-content:space-between;gap:10px;margin-top:16px;flex-wrap:wrap}
+/* hasil */
+.big{font-family:"Space Grotesk",system-ui,sans-serif;font-size:64px;font-weight:700;line-height:1}
+.bars .r{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+.bars .t{height:14px;background:var(--line);border-radius:9px;overflow:hidden}
+.bars .t i{display:block;height:100%}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2)}
+.rev{border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;background:var(--bg)}
+.rev .h{display:flex;gap:8px;align-items:center;font-weight:700;font-size:14px}
+.tag{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:99px}
+.tag.g{background:var(--okSoft);color:var(--ok)}.tag.b{background:var(--badSoft);color:var(--bad)}
+footer{border-top:1px solid var(--line);padding:18px 0 30px;color:var(--ink2);font-size:13px}
+.hide{display:none!important}
+@media (max-width:760px){.grid5{grid-template-columns:repeat(2,1fr)}.opts.fig{grid-template-columns:repeat(3,1fr)}.opts.fig4{grid-template-columns:repeat(2,1fr)}.bars .r{grid-template-columns:110px 1fr 48px}.opts{grid-template-columns:1fr}.opts.fig,.opts.fig4{gap:8px}}
+@media print{header.top,nav,footer,.noprint{display:none!important}body{background:#fff}.card{border:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="bar">
+      <div class="logo" aria-hidden="true">Σ</div>
+      <div class="brand"><b>Tes Penalaran</b><small>Cek kemampuan bernalar · 5 bagian · 40 soal</small></div>
+      <div class="sp"></div>
+      <button class="ib" id="themeBtn" type="button" aria-label="Ganti mode terang/gelap">◐ Tema</button>
+    </div>
+    <nav class="tabs" aria-label="Menu">
+      <button data-v="home" aria-current="true">Beranda</button>
+      <button data-v="test">Tes</button>
+      <button data-v="result">Hasil</button>
+      <button data-v="history">Riwayat</button>
+      <button data-v="about">Tentang IQ &amp; Sumber</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="app"></main>
+
+<footer>
+  <div class="wrap">Dikembangkan oleh Edy Thomas · Tes Penalaran versi 1.0 (November 2026). Hasil hanya untuk latihan dan refleksi, bukan pemeriksaan psikologis. Data tersimpan di perangkat ini.</div>
+</footer>
+
+<script>
+'use strict';
+/* ========= util ========= */
+const $=s=>document.querySelector(s);
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const LETTERS='ABCDEF';
+
+/* ========= bagian ========= */
+const SECTIONS=[
+  {id:'deret',nama:'Deret Angka',warna:'var(--c1)',ket:'menemukan pola bilangan',tips:'Latih dengan mencari selisih, selisih dari selisih, dan perbandingan antarbilangan. Coba juga pisahkan suku ganjil dan genap.'},
+  {id:'matriks',nama:'Matriks Gambar',warna:'var(--c2)',ket:'pola bentuk, jumlah, dan isian',tips:'Periksa satu ciri dalam satu waktu: bentuk, jumlah, lalu isian. Lihat perubahan per baris, lalu per kolom.'},
+  {id:'analogi',nama:'Analogi Kata',warna:'var(--c3)',ket:'hubungan antarkonsep',tips:'Ucapkan hubungan pasangan pertama dalam satu kalimat ("A dipakai untuk B"), lalu uji kalimat yang sama pada pilihan jawaban.'},
+  {id:'logika',nama:'Logika',warna:'var(--c4)',ket:'menarik kesimpulan yang sah',tips:'Bedakan "pasti benar" dan "mungkin benar". Gambar urutan atau diagram kecil di kertas sebelum memilih.'},
+  {id:'spasial',nama:'Rotasi Bentuk',warna:'var(--c5)',ket:'membayangkan bentuk diputar',tips:'Pilih satu kotak sebagai patokan, lalu bayangkan bentuk diputar seperempat putaran demi seperempat putaran. Bentuk yang dicerminkan tidak pernah sama.'}
+];
+const PER=8, TOTAL_MIN=30;
+
+/* ========= 1. Deret angka ========= */
+function genDeret(level){
+  const types=level<3?['arit','arit2','geo','alt']:level<6?['naik','kuadrat','alt','selang','geo']:['fibo','kali','naik2','selang','kuadrat2'];
+  for(let tries=0;tries<50;tries++){
+    const t=pick(types);let s=[],ex='';
+    if(t==='arit'){const a=R(2,20),d=R(2,9);for(let i=0;i<6;i++)s.push(a+i*d);ex=`Setiap bilangan bertambah ${d}.`}
+    else if(t==='arit2'){const a=R(60,99),d=R(3,9);for(let i=0;i<6;i++)s.push(a-i*d);ex=`Setiap bilangan berkurang ${d}.`}
+    else if(t==='geo'){const a=R(1,5),r=pick([2,3]);for(let i=0;i<6;i++)s.push(a*Math.pow(r,i));ex=`Setiap bilangan dikali ${r}.`}
+    else if(t==='alt'){const a=R(1,15),p=R(2,8),q=R(1,6);if(p===q)continue;let x=a;for(let i=0;i<6;i++){s.push(x);x+= i%2===0?p:-q}ex=`Polanya bergantian: tambah ${p}, lalu kurang ${q}.`}
+    else if(t==='naik'){const a=R(1,10),d=R(1,4);let x=a,k=d;for(let i=0;i<6;i++){s.push(x);x+=k;k+=1}ex=`Selisihnya naik 1 setiap langkah (${d}, ${d+1}, ${d+2}, …).`}
+    else if(t==='kuadrat'){const n=R(1,6);for(let i=0;i<6;i++)s.push((n+i)*(n+i));ex=`Bilangan kuadrat berurutan: ${n}², ${n+1}², ${n+2}², …`}
+    else if(t==='selang'){const a=R(1,9),b=R(20,40),d=R(2,5),e=R(2,5);for(let i=0;i<6;i++)s.push(i%2===0?a+(i/2)*d:b-((i-1)/2)*e);ex=`Ada dua deret yang berselang-seling: suku ke-1, 3, 5 bertambah ${d}; suku ke-2, 4, 6 berkurang ${e}.`}
+    else if(t==='fibo'){let a=R(1,5),b=R(2,7);s=[a,b];for(let i=2;i<6;i++)s.push(s[i-1]+s[i-2]);ex='Setiap bilangan adalah jumlah dua bilangan sebelumnya.'}
+    else if(t==='kali'){const a=R(1,4),m=2,c=pick([1,-1,2]);let x=a;for(let i=0;i<6;i++){s.push(x);x=x*m+c}ex=`Setiap bilangan dikali 2 lalu ${c>0?'ditambah '+c:'dikurangi '+(-c)}.`}
+    else if(t==='naik2'){const a=R(2,8),d=R(1,3);let x=a,k=d;for(let i=0;i<6;i++){s.push(x);x+=k;k*=2}ex=`Selisihnya berlipat dua setiap langkah (${d}, ${d*2}, ${d*4}, …).`}
+    else if(t==='kuadrat2'){const n=R(1,5),c=pick([1,-1,2]);for(let i=0;i<6;i++)s.push((n+i)*(n+i)+c);ex=`Bilangan kuadrat berurutan ${c>0?'ditambah '+c:'dikurangi '+(-c)}: ${n}²${c>0?'+':''}${c}, ${n+1}²${c>0?'+':''}${c}, …`}
+    const ans=s[5];if(s.some(v=>v<0||v>2000))continue;
+    const cand=new Set();
+    const d1=s[4]-s[3];
+    [s[4]+d1, ans+1, ans-1, ans+2, ans-2, ans+(s[1]-s[0]), s[4]*2, ans+10, ans-10].forEach(v=>{if(v!==ans&&v>=0)cand.add(v)});
+    const wrong=shuffle([...cand]).slice(0,3);if(wrong.length<3)continue;
+    const opts=shuffle([ans,...wrong]);
+    return {sec:'deret',type:'deret',show:s.slice(0,5),opts:opts.map(String),key:opts.indexOf(ans),ex:`${ex} Jadi bilangan berikutnya adalah ${ans}.`};
+  }
+}
+
+/* ========= 2. Matriks gambar ========= */
+const SHAPES=['lingkaran','persegi','segitiga'], FILLS=['kosong','bergaris','penuh'];
+function shapeSVG(cell,uid){
+  const {shape,count,fill}=cell, w=100,h=100;
+  const pos={1:[[50,50]],2:[[30,50],[70,50]],3:[[50,28],[28,70],[72,70]]}[count];
+  const r=count===1?24:16;
+  const fillAttr=fill===0?'none':fill===2?'currentColor':`url(#p${uid})`;
+  let g='';
+  pos.forEach(([x,y])=>{
+    if(shape===0)g+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${fillAttr}" stroke="currentColor" stroke-width="3"/>`;
+    else if(shape===1)g+=`<rect x="${x-r}" y="${y-r}" width="${2*r}" height="${2*r}" fill="${fillAttr}" stroke="currentColor" stroke-width="3"/>`;
+    else g+=`<polygon points="${x},${y-r} ${x+r},${y+r*0.85} ${x-r},${y+r*0.85}" fill="${fillAttr}" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>`;
+  });
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${cell.count} ${SHAPES[shape]} ${FILLS[fill]}"><defs><pattern id="p${uid}" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="currentColor" stroke-width="2.4"/></pattern></defs>${g}</svg>`;
+}
+let UID=0;
+function ruleText(name,a,b,vals){
+  if(a===0&&b===0)return `${name} sama di semua kotak (${vals[0]})`;
+  if(a===0)return `${name} berubah dari kiri ke kanan (${vals.join(' → ')}), sama untuk setiap baris`;
+  if(b===0)return `${name} berubah dari atas ke bawah (${vals.join(' → ')}), sama dalam satu baris`;
+  return `setiap ${name.toLowerCase()} (${vals.join(', ')}) muncul tepat sekali di setiap baris dan setiap kolom`;
+}
+function genMatriks(level){
+  // tiap ciri: nilai = (a*baris + b*kolom + c) mod 3
+  const plans=level<3?[[[0,1],[1,0],[0,0]],[[1,0],[0,1],[0,0]]]
+    :level<6?[[[1,0],[0,1],[0,1]],[[0,1],[1,0],[1,1]],[[1,1],[0,1],[1,0]]]
+    :[[[1,1],[1,2],[0,1]],[[1,2],[1,1],[1,0]],[[1,1],[0,1],[1,2]]];
+  const plan=pick(plans).map(([a,b])=>[a,b,R(0,2)]);
+  const val=(p,r,c)=>((p[0]*r+p[1]*c+p[2])%3+3)%3;
+  const cell=(r,c)=>({shape:val(plan[0],r,c),count:val(plan[1],r,c)+1,fill:val(plan[2],r,c)});
+  const grid=[];for(let r=0;r<3;r++)for(let c=0;c<3;c++)grid.push(cell(r,c));
+  const ans=grid[8];
+  const keyOf=x=>x.shape+'-'+x.count+'-'+x.fill;
+  const seen=new Set([keyOf(ans)]),wrong=[];
+  const variants=[];
+  for(let s=0;s<3;s++)for(let n=1;n<=3;n++)for(let f=0;f<3;f++){const v={shape:s,count:n,fill:f};const diff=(s!==ans.shape)+(n!==ans.count)+(f!==ans.fill);if(diff>=1&&diff<=2)variants.push([diff,v])}
+  // prioritaskan pengecoh yang berbeda satu ciri, juga sel lain dari matriks
+  shuffle(variants).sort((x,y)=>x[0]-y[0]).forEach(([d,v])=>{if(wrong.length<5&&!seen.has(keyOf(v))){seen.add(keyOf(v));wrong.push(v)}});
+  const opts=shuffle([ans,...wrong]);
+  const nm=[['Bentuk',v=>SHAPES[v]],['Jumlah',v=>String(v+1)],['Isian',v=>FILLS[v]]];
+  const ex=nm.map(([n,f],k)=>{const p=plan[k];const vals=p[0]===0&&p[1]===0?[f(val(p,0,0))]:p[0]===0?[0,1,2].map(c=>f(val(p,0,c))):p[1]===0?[0,1,2].map(r=>f(val(p,r,0))):[0,1,2].map(c=>f(val(p,0,c)));return ruleText(n,p[0],p[1],vals)}).join('; ');
+  return {sec:'matriks',type:'matriks',grid:grid.slice(0,8),opts,key:opts.indexOf(ans),ex:`Aturannya: ${ex}. Kotak terakhir berisi ${ans.count} ${SHAPES[ans.shape]} ${FILLS[ans.fill]}.`};
+}
+
+/* ========= 3. Analogi kata (soal orisinal) ========= */
+const ANALOGI=[
+  ['Dokter : Stetoskop = Tukang kayu : ...',['Gergaji','Kayu','Lemari','Bengkel'],'Stetoskop adalah alat kerja dokter; gergaji adalah alat kerja tukang kayu.'],
+  ['Air : Haus = Makanan : ...',['Lapar','Kenyang','Piring','Dapur'],'Air menghilangkan haus; makanan menghilangkan lapar.'],
+  ['Pilot : Pesawat = Nakhoda : ...',['Kapal','Pelabuhan','Laut','Jangkar'],'Pilot mengemudikan pesawat; nakhoda memimpin kapal.'],
+  ['Benih : Pohon = Telur : ...',['Ayam','Sarang','Cangkang','Kuning telur'],'Benih tumbuh menjadi pohon; telur menetas menjadi ayam.'],
+  ['Panas : Dingin = Terang : ...',['Gelap','Lampu','Siang','Cahaya'],'Pasangan kata berlawanan arti (antonim).'],
+  ['Buku : Perpustakaan = Lukisan : ...',['Galeri','Kanvas','Pelukis','Kuas'],'Buku dikumpulkan dan dipajang di perpustakaan; lukisan di galeri.'],
+  ['Jari : Tangan = Daun : ...',['Pohon','Hijau','Klorofil','Embun'],'Jari bagian dari tangan; daun bagian dari pohon.'],
+  ['Termometer : Suhu = Barometer : ...',['Tekanan udara','Kecepatan angin','Kelembapan','Curah hujan'],'Termometer mengukur suhu; barometer mengukur tekanan udara.'],
+  ['Lambat : Siput = Cepat : ...',['Cheetah','Kura-kura','Gajah','Sapi'],'Siput terkenal lambat; cheetah terkenal cepat.'],
+  ['Kata : Kalimat = Kalimat : ...',['Paragraf','Huruf','Kata','Tanda baca'],'Kata menyusun kalimat; kalimat menyusun paragraf.'],
+  ['Petani : Sawah = Nelayan : ...',['Laut','Ikan','Jaring','Perahu'],'Tempat bekerja: petani di sawah, nelayan di laut.'],
+  ['Gula : Manis = Garam : ...',['Asin','Putih','Laut','Dapur'],'Rasa khas: gula manis, garam asin.'],
+  ['Bulan : Bumi = Bumi : ...',['Matahari','Mars','Bintang','Galaksi'],'Bulan mengelilingi Bumi; Bumi mengelilingi Matahari.'],
+  ['Pena : Menulis = Gunting : ...',['Memotong','Kertas','Tajam','Menjahit'],'Fungsi alat: pena untuk menulis, gunting untuk memotong.'],
+  ['Kemarau : Kering = Penghujan : ...',['Basah','Awan','Payung','Petir'],'Ciri keadaan musim: kemarau kering, penghujan basah.'],
+  ['Satu : Pertama = Tiga : ...',['Ketiga','Bertiga','Tiga kali','Sepertiga'],'Bilangan pokok dan bilangan tingkatnya.'],
+  ['Rajin : Malas = Jujur : ...',['Curang','Setia','Sopan','Tulus'],'Pasangan kata berlawanan arti (antonim).'],
+  ['Hakim : Pengadilan = Guru : ...',['Sekolah','Murid','Buku','Rapor'],'Tempat bertugas: hakim di pengadilan, guru di sekolah.'],
+  ['Mata : Melihat = Telinga : ...',['Mendengar','Suara','Anting','Kepala'],'Fungsi indra: mata untuk melihat, telinga untuk mendengar.'],
+  ['Roda : Sepeda = Sayap : ...',['Burung','Terbang','Bulu','Langit'],'Bagian yang membuat bergerak: roda pada sepeda, sayap pada burung.']
+];
+/* ========= 4. Logika (soal orisinal) ========= */
+const LOGIKA=[
+  ['Semua siswa kelas 8A memakai topi saat upacara. Rina adalah siswa kelas 8A. Kesimpulan yang pasti benar adalah ...',['Rina memakai topi saat upacara','Semua yang bertopi adalah siswa 8A','Rina tidak ikut upacara','Tidak dapat disimpulkan'],'Rina termasuk kelompok "semua siswa 8A", jadi pasti memakai topi.'],
+  ['Jika hujan turun, lapangan basah. Ternyata lapangan tidak basah. Kesimpulannya ...',['Hujan tidak turun','Hujan turun','Lapangan baru dijemur','Tidak dapat disimpulkan'],'Bila hujan pasti basah; karena tidak basah, berarti tidak hujan.'],
+  ['Jika hujan turun, lapangan basah. Ternyata lapangan basah. Kesimpulan yang tepat adalah ...',['Belum tentu hujan turun','Pasti hujan turun','Pasti tidak hujan','Lapangan akan kering'],'Lapangan bisa basah karena sebab lain (misalnya disiram), jadi belum tentu hujan.'],
+  ['Ani lebih tinggi daripada Budi. Budi lebih tinggi daripada Cici. Dodi lebih pendek daripada Cici. Siapa yang paling tinggi?',['Ani','Budi','Cici','Dodi'],'Urutan dari tinggi ke pendek: Ani, Budi, Cici, Dodi.'],
+  ['Gita datang paling awal. Dodi datang sebelum Eka. Fajar datang paling akhir. Siapa yang datang ketiga?',['Eka','Dodi','Gita','Fajar'],'Urutan: Gita, Dodi, Eka, Fajar.'],
+  ['Semua pelari adalah atlet. Sebagian atlet adalah perenang. Kesimpulan yang pasti benar adalah ...',['Belum tentu ada pelari yang perenang','Semua pelari perenang','Sebagian pelari perenang','Tidak ada pelari yang perenang'],'Perenang bisa saja atlet yang bukan pelari, jadi tidak ada yang pasti tentang pelari.'],
+  ['Di sebuah kotak, banyak bola merah dua kali banyak bola biru. Jumlah semua bola 18. Berapa bola biru?',['6','9','12','3'],'Biru = b, merah = 2b, maka 3b = 18 sehingga b = 6.'],
+  ['Jika lusa adalah hari Sabtu, maka kemarin adalah hari ...',['Rabu','Kamis','Selasa','Jumat'],'Lusa Sabtu berarti hari ini Kamis, jadi kemarin Rabu.'],
+  ['Jika KUCING ditulis LVDJOH (setiap huruf digeser satu ke depan), maka ANJING ditulis ...',['BOKJOH','BOKIOH','ZMIHMF','BPKJOH'],'A→B, N→O, J→K, I→J, N→O, G→H, jadi BOKJOH.'],
+  ['Semua guru di Sekolah X lulusan S1. Pak Dani lulusan S1. Kesimpulannya ...',['Pak Dani belum tentu guru di Sekolah X','Pak Dani guru di Sekolah X','Pak Dani bukan guru','Semua lulusan S1 adalah guru'],'Lulusan S1 tidak hanya guru Sekolah X, jadi belum tentu.'],
+  ['Rudi menghadap utara. Ia berputar 90° searah jarum jam dua kali, lalu 90° berlawanan arah jarum jam sekali. Sekarang ia menghadap ...',['Timur','Barat','Selatan','Utara'],'Utara → timur → selatan, lalu kembali ke timur.'],
+  ['Umur ayah sekarang 3 kali umur anaknya. Sepuluh tahun lagi umur ayah 2 kali umur anaknya. Berapa umur anak sekarang?',['10 tahun','5 tahun','15 tahun','20 tahun'],'3a + 10 = 2(a + 10), sehingga a = 10.'],
+  ['Tidak ada kucing yang bisa terbang. Si Belang adalah kucing. Kesimpulannya ...',['Si Belang tidak bisa terbang','Si Belang bisa terbang','Si Belang bukan kucing','Tidak dapat disimpulkan'],'Si Belang termasuk kucing, dan tidak ada kucing yang bisa terbang.'],
+  ['Lima buku disusun bertumpuk. Buku Merah di atas Buku Biru. Buku Hijau paling bawah. Buku Kuning langsung di atas Buku Hijau. Buku Putih paling atas. Buku yang berada di tengah adalah ...',['Buku Biru','Buku Merah','Buku Kuning','Buku Putih'],'Dari atas: Putih, Merah, Biru, Kuning, Hijau.']
+];
+function genBank(sec,bank,idx){
+  const [q,opts,ex]=bank[idx];const order=shuffle([0,1,2,3]);
+  return {sec,type:'teks',stem:q,opts:order.map(i=>opts[i]),key:order.indexOf(0),ex};
+}
+
+/* ========= 5. Rotasi bentuk ========= */
+function norm(cells){const mx=Math.min(...cells.map(c=>c[0])),my=Math.min(...cells.map(c=>c[1]));return cells.map(([x,y])=>[x-mx,y-my]).sort((a,b)=>a[0]-b[0]||a[1]-b[1])}
+const key=c=>norm(c).map(p=>p.join(',')).join(';');
+const rot=c=>c.map(([x,y])=>[-y,x]);
+const mir=c=>c.map(([x,y])=>[-x,y]);
+const rots=c=>{const out=[c];for(let i=0;i<3;i++)out.push(rot(out[out.length-1]));return out};
+function genPoly(n){
+  for(;;){const s=[[0,0]];const has=(x,y)=>s.some(p=>p[0]===x&&p[1]===y);
+    while(s.length<n){const [x,y]=pick(s);const [dx,dy]=pick([[1,0],[-1,0],[0,1],[0,-1]]);if(!has(x+dx,y+dy))s.push([x+dx,y+dy])}
+    const N=norm(s);if(Math.max(...N.map(p=>p[0]))>3||Math.max(...N.map(p=>p[1]))>3)continue;
+    const rk=rots(N).map(key);const mk=rots(mir(N)).map(key);
+    if(new Set(rk).size<4)continue;               // tidak boleh simetri putar
+    if(mk.some(k=>rk.includes(k)))continue;       // harus berbeda dengan cerminannya
+    return N;}
+}
+function genSpasial(level){
+  const n=level<3?4:level<6?5:6;
+  const P=genPoly(n);
+  const ri=R(1,3);const correct=rots(P)[ri];
+  const mirrors=rots(mir(P));const wrong=shuffle(mirrors).slice(0,3);
+  const mk=c=>{const mx=Math.min(...c.map(p=>p[0])),my=Math.min(...c.map(p=>p[1]));return c.map(([x,y])=>[x-mx,y-my])};
+  const opts0=[mk(correct),...wrong.map(mk)];
+  const order=shuffle([0,1,2,3]);
+  return {sec:'spasial',type:'spasial',target:mk(P),opts:order.map(i=>opts0[i]),key:order.indexOf(0),ex:`Jawaban yang benar adalah bentuk semula yang diputar ${ri*90}° searah jarum jam. Tiga pilihan lain adalah cerminan bentuk itu, sehingga tidak bisa didapat hanya dengan memutar.`};
+}
+function polySVGm(cells){ // kotak pertama diberi tanda
+  const xs=cells.map(p=>p[0]),ys=cells.map(p=>p[1]);const W=Math.max(...xs)+1,H=Math.max(...ys)+1,S=Math.max(W,H,3);
+  const u=84/S,ox=(100-W*u)/2,oy=(100-H*u)/2;
+  return `<svg viewBox="0 0 100 100" role="img" aria-label="bentuk dari ${cells.length} kotak">${cells.map(([x,y],i)=>`<rect x="${(ox+x*u+1.5).toFixed(1)}" y="${(oy+y*u+1.5).toFixed(1)}" width="${(u-3).toFixed(1)}" height="${(u-3).toFixed(1)}" rx="3" fill="currentColor" fill-opacity="${i===0?1:.55}"/>`).join('')}<circle cx="${(ox+cells[0][0]*u+u/2).toFixed(1)}" cy="${(oy+cells[0][1]*u+u/2).toFixed(1)}" r="${(u*0.18).toFixed(1)}" fill="var(--paper)"/></svg>`;
+}
+
+/* ========= susun tes ========= */
+function buildTest(){
+  const qs=[];
+  const an=shuffle([...ANALOGI.keys()]).slice(0,PER), lg=shuffle([...LOGIKA.keys()]).slice(0,PER);
+  for(let i=0;i<PER;i++)qs.push(genDeret(i));
+  for(let i=0;i<PER;i++)qs.push(genMatriks(i));
+  an.forEach(i=>qs.push(genBank('analogi',ANALOGI,i)));
+  lg.forEach(i=>qs.push(genBank('logika',LOGIKA,i)));
+  for(let i=0;i<PER;i++)qs.push(genSpasial(i));
+  return qs;
+}
+
+/* ========= state ========= */
+let S={view:'home',test:null};
+const savedTheme=LS.get('tp_theme',null);
+if(savedTheme==='dark'||(savedTheme===null&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');
+$('#themeBtn').onclick=()=>{const d=document.documentElement.classList.toggle('dark');LS.set('tp_theme',d?'dark':'light')};
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+function go(v){S.view=v;document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===v));render();window.scrollTo(0,0)}
+let timerId=null;
+
+function render(){
+  const app=$('#app');
+  if(S.view==='home')app.innerHTML=viewHome();
+  else if(S.view==='test')app.innerHTML=S.test&&!S.test.done?viewQuestion():viewStart();
+  else if(S.view==='result')app.innerHTML=viewResult(S.last||LS.get('tp_hist',[])[0]);
+  else if(S.view==='history')app.innerHTML=viewHistory();
+  else app.innerHTML=viewAbout();
+  bind();
+}
+function viewHome(){
+  return `<section class="card"><div class="kick">Latihan bernalar untuk remaja dan dewasa</div>
+  <h1>Seberapa tajam penalaranmu hari ini?</h1>
+  <p class="muted" style="max-width:680px">Kerjakan 40 soal dalam 5 bagian yang biasa dipakai untuk mengukur kemampuan berpikir. Hasilnya menunjukkan bagian mana yang sudah kuat dan mana yang perlu dilatih, lengkap dengan pembahasan. Soal dibuat otomatis sehingga setiap tes berbeda.</p>
+  <div class="row" style="margin:16px 0 18px"><button class="btn" data-act="start">Mulai tes lengkap · ${TOTAL_MIN} menit</button><button class="btn ghost" data-act="practice">Mode latihan (tanpa waktu)</button></div>
+  <div class="grid5">${SECTIONS.map(s=>`<div class="sub"><span class="dot" style="background:${s.warna}"></span><b>${s.nama}</b><p>${PER} soal · ${s.ket}</p></div>`).join('')}</div></section>
+  <section class="warn"><b>Ini bukan tes IQ.</b> Angka IQ hanya sah bila diperoleh dari tes baku yang diberikan dan ditafsirkan psikolog. Aplikasi ini sengaja tidak menampilkan angka IQ; hasilnya adalah skor latihan untuk refleksi diri. <a href="#" data-go="about">Baca penjelasannya.</a></section>`;
+}
+function viewStart(){
+  return `<section class="card"><h2>Sebelum mulai</h2>
+  <ul class="muted"><li>Siapkan kertas dan pensil untuk coretan.</li><li>Tes lengkap: 40 soal, ${TOTAL_MIN} menit. Kamu boleh kembali ke soal sebelumnya.</li><li>Mode latihan: tanpa batas waktu, pembahasan muncul setelah setiap jawaban.</li><li>Tombol keyboard: 1–6 atau A–F untuk memilih, Enter untuk lanjut.</li></ul>
+  <label class="f" style="margin:12px 0">Nama atau kode (opsional, hanya tersimpan di perangkat ini)<input type="text" id="nm" value="${esc(LS.get('tp_name',''))}" maxlength="40" placeholder="misalnya: Latihan 1"></label>
+  <div class="row"><button class="btn" data-act="start">Mulai tes lengkap</button><button class="btn ghost" data-act="practice">Mode latihan</button></div></section>`;
+}
+function startTest(practice){
+  const nm=$('#nm');if(nm)LS.set('tp_name',nm.value.trim());
+  S.test={qs:buildTest(),ans:Array(SECTIONS.length*PER).fill(null),time:Array(SECTIONS.length*PER).fill(0),i:0,practice,start:Date.now(),qStart:Date.now(),deadline:practice?null:Date.now()+TOTAL_MIN*60000,done:false,name:LS.get('tp_name','')};
+  go('test');
+  clearInterval(timerId);if(!practice)timerId=setInterval(tick,500);
+}
+function tick(){
+  const t=S.test;if(!t||t.done){clearInterval(timerId);return}
+  const left=Math.max(0,t.deadline-Date.now());const el=$('#timer');
+  if(el){const m=Math.floor(left/60000),s=Math.floor(left/1000)%60;el.textContent=`${m}:${String(s).padStart(2,'0')}`;el.classList.toggle('low',left<120000)}
+  if(left<=0)finish();
+}
+function qBody(q,uidBase){
+  if(q.type==='deret')return `<p class="stem">Bilangan berapa yang melanjutkan deret ini?</p><div class="seq">${q.show.map(v=>`<span>${v}</span>`).join('')}<span class="q">?</span></div>`;
+  if(q.type==='matriks')return `<p class="stem">Gambar mana yang tepat mengisi kotak bertanda tanya?</p><div class="mx">${q.grid.map(c=>`<div>${shapeSVG(c,uidBase+'g'+(UID++))}</div>`).join('')}<div class="q">?</div></div>`;
+  if(q.type==='spasial')return `<p class="stem">Bentuk mana yang sama dengan bentuk ini jika diputar (tanpa dibalik)?</p><div class="target">${polySVGm(q.target)}</div>`;
+  return `<p class="stem">${esc(q.stem)}</p>`;
+}
+function optHTML(q,j,uidBase){
+  if(q.type==='matriks')return shapeSVG(q.opts[j],uidBase+'o'+(UID++));
+  if(q.type==='spasial')return polySVGm(q.opts[j]);
+  return `<span>${esc(q.opts[j])}</span>`;
+}
+function viewQuestion(){
+  const t=S.test,q=t.qs[t.i],sec=SECTIONS.find(s=>s.id===q.sec),n=t.qs.length,a=t.ans[t.i];
+  const reveal=t.practice&&a!==null;
+  const cls=q.type==='matriks'?'opts fig':q.type==='spasial'?'opts fig4':'opts';
+  const ub='q'+t.i;
+  return `<section class="card">
+   <div class="qhead"><span class="pill" style="background:${sec.warna};color:var(--btnInk)">${sec.nama}</span><span class="muted">Soal ${t.i+1} dari ${n}</span><span class="sp" style="flex:1"></span>${t.practice?'<span class="pill">Mode latihan</span>':`<span class="timer" id="timer" aria-live="off">--:--</span>`}</div>
+   <div class="prog"><i style="width:${(t.ans.filter(x=>x!==null).length/n*100).toFixed(1)}%"></i></div>
+   ${qBody(q,ub)}
+   <div class="${cls}" role="radiogroup" aria-label="Pilihan jawaban">${q.opts.map((o,j)=>{let c='opt';if(reveal){if(j===q.key)c+=' good';else if(j===a)c+=' wrong'}else if(a===j)c+=' sel';return `<button class="${c}" role="radio" aria-checked="${a===j}" data-o="${j}" ${reveal?'disabled':''}><span class="k">${LETTERS[j]}</span>${optHTML(q,j,ub)}</button>`}).join('')}</div>
+   ${reveal?`<div class="expl ${a===q.key?'g':'b'}"><b>${a===q.key?'Benar!':'Belum tepat.'}</b> ${esc(q.ex)}</div>`:''}
+   <div class="nav2"><button class="btn ghost sm" data-act="prev" ${t.i===0?'disabled':''}>← Sebelumnya</button>
+   <div class="row">${t.i<n-1?`<button class="btn sm" data-act="next">${a===null&&!t.practice?'Lewati →':'Berikutnya →'}</button>`:''}<button class="btn sm ${t.i<n-1?'ghost':''}" data-act="finish">Selesai &amp; lihat hasil</button></div></div>
+  </section>`;
+}
+function choose(j){
+  const t=S.test;if(!t||t.done)return;if(t.practice&&t.ans[t.i]!==null)return;
+  t.ans[t.i]=j;t.time[t.i]+=Date.now()-t.qStart;t.qStart=Date.now();
+  if(t.practice){render();return}
+  if(t.i<t.qs.length-1){t.i++;render()}else render();
+}
+function move(d){const t=S.test;t.time[t.i]+=Date.now()-t.qStart;t.qStart=Date.now();t.i=Math.max(0,Math.min(t.qs.length-1,t.i+d));render()}
+function finish(){
+  const t=S.test;if(!t||t.done)return;
+  if(!t.practice&&Date.now()<t.deadline&&t.ans.includes(null)&&!confirmFinish())return;
+  t.done=true;clearInterval(timerId);
+  const per=SECTIONS.map(s=>{const idx=t.qs.map((q,i)=>q.sec===s.id?i:-1).filter(i=>i>=0);const b=idx.filter(i=>t.ans[i]===t.qs[i].key).length;return {id:s.id,benar:b,total:idx.length}});
+  const benar=per.reduce((a,b)=>a+b.benar,0);
+  const res={id:Date.now(),tanggal:new Date().toISOString(),nama:t.name||'',mode:t.practice?'latihan':'tes',benar,total:t.qs.length,skor:Math.round(benar/t.qs.length*100),detik:Math.round((Date.now()-t.start)/1000),per,qs:t.qs.map((q,i)=>({sec:q.sec,ok:t.ans[i]===q.key,jawab:t.ans[i]}))};
+  const hist=LS.get('tp_hist',[]);hist.unshift(res);LS.set('tp_hist',hist.slice(0,50));
+  S.last=res;S.lastFull=t;go('result');
+}
+let pendingConfirm=false;
+function confirmFinish(){const kosong=S.test.ans.filter(x=>x===null).length;if(pendingConfirm){pendingConfirm=false;return true}pendingConfirm=true;toast(`Masih ada ${kosong} soal kosong. Tekan "Selesai" sekali lagi untuk mengakhiri.`);setTimeout(()=>pendingConfirm=false,5000);return false}
+function kategori(p){return p>=85?['Sangat kuat','var(--ok)']:p>=70?['Kuat','var(--c5)']:p>=50?['Cukup','var(--warn)']:['Perlu latihan','var(--bad)']}
+function viewResult(r){
+  if(!r)return `<section class="card"><h2>Belum ada hasil</h2><p class="muted">Kerjakan tes terlebih dahulu.</p><button class="btn" data-go="test">Ke halaman tes</button></section>`;
+  const [kat,col]=kategori(r.skor);
+  const lemah=r.per.slice().sort((a,b)=>a.benar/a.total-b.benar/b.total)[0], kuat=r.per.slice().sort((a,b)=>b.benar/b.total-a.benar/a.total)[0];
+  const full=S.lastFull&&S.last&&S.last.id===r.id?S.lastFull:null;
+  return `<section class="card"><div class="kick">${r.mode==='tes'?'Hasil tes lengkap':'Hasil mode latihan'} · ${new Date(r.tanggal).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})}${r.nama?' · '+esc(r.nama):''}</div>
+   <div class="row" style="gap:24px;margin:10px 0 6px"><div><div class="big">${r.skor}</div><div class="muted">skor latihan dari 100</div></div>
+   <div><div style="font-family:'Space Grotesk',system-ui,sans-serif;font-size:26px;font-weight:700;color:${col}">${kat}</div><div class="muted">${r.benar} dari ${r.total} benar · ${Math.floor(r.detik/60)} menit ${r.detik%60} detik</div></div></div>
+   <div class="bars" style="margin-top:14px">${r.per.map(p=>{const s=SECTIONS.find(x=>x.id===p.id);const pct=Math.round(p.benar/p.total*100);return `<div class="r"><span>${s.nama}</span><span class="t"><i style="width:${pct}%;background:${s.warna}"></i></span><b>${p.benar}/${p.total}</b></div>`}).join('')}</div>
+   <div class="row noprint" style="margin-top:14px"><button class="btn sm" data-act="again">Tes lagi (soal baru)</button><button class="btn ghost sm" data-act="print">Cetak hasil</button></div></section>
+   <section class="card"><h2>Apa artinya?</h2>
+   <p>Bagian terkuatmu: <b>${SECTIONS.find(s=>s.id===kuat.id).nama}</b>. Bagian yang paling perlu dilatih: <b>${SECTIONS.find(s=>s.id===lemah.id).nama}</b>.</p>
+   <p class="muted">${SECTIONS.find(s=>s.id===lemah.id).tips}</p>
+   <p class="muted" style="font-size:13.5px">Skor ini menunjukkan hasil pada soal-soal di aplikasi ini saja. Skor dapat naik dengan latihan, dipengaruhi kondisi saat mengerjakan (lelah, terburu-buru, perangkat), dan tidak dibandingkan dengan kelompok usia mana pun. Jadi skor ini tidak bisa diubah menjadi angka IQ dan tidak boleh dipakai untuk melabeli seseorang.</p></section>
+   ${full?`<section class="card"><h2>Pembahasan</h2>${full.qs.map((q,i)=>{const ok=full.ans[i]===q.key;const s=SECTIONS.find(x=>x.id===q.sec);const ans=full.ans[i];const show=q.type==='deret'?`Deret: ${q.show.join(', ')}, … · `:q.type==='teks'?esc(q.stem)+' · ':'';const val=j=>j===null?'(kosong)':(q.type==='deret'||q.type==='teks')?LETTERS[j]+'. '+esc(q.opts[j]):LETTERS[j];return `<div class="rev"><div class="h"><span>${i+1}.</span><span>${s.nama}</span><span class="tag ${ok?'g':'b'}">${ok?'Benar':'Salah'}</span></div><div style="font-size:14px;margin-top:4px">${show}Jawabanmu: ${val(ans)} · Kunci: ${val(q.key)}</div><div class="muted" style="font-size:13.5px;margin-top:3px">${esc(q.ex)}</div></div>`}).join('')}</section>`:''}`;
+}
+function viewHistory(){
+  const h=LS.get('tp_hist',[]);
+  return `<section class="card"><h2>Riwayat</h2><p class="muted">Tersimpan di browser perangkat ini (maksimal 50 hasil terakhir).</p>
+  ${h.length?`<div style="overflow:auto"><table><thead><tr><th>Tanggal</th><th>Nama</th><th>Mode</th><th>Skor</th>${SECTIONS.map(s=>`<th>${s.nama}</th>`).join('')}</tr></thead><tbody>${h.map(r=>`<tr><td>${new Date(r.tanggal).toLocaleString('id-ID',{dateStyle:'short',timeStyle:'short'})}</td><td>${esc(r.nama||'-')}</td><td>${r.mode}</td><td><b>${r.skor}</b></td>${r.per.map(p=>`<td>${p.benar}/${p.total}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+  <div class="row" style="margin-top:12px"><button class="btn sm" data-act="csv">Unduh CSV</button><button class="btn ghost sm" data-act="json">Unduh cadangan JSON</button><button class="btn ghost sm" data-act="clear">Hapus semua riwayat</button></div>`:`<p>Belum ada riwayat.</p>`}
+  <div class="row" style="margin-top:10px"><label class="btn ghost sm" style="cursor:pointer">Impor cadangan JSON<input type="file" id="imp" accept=".json,application/json" hidden></label></div></section>`;
+}
+function viewAbout(){
+  return `<section class="card"><h2>Mengapa aplikasi ini tidak memberi angka IQ?</h2>
+  <p>Angka IQ diperoleh dengan membandingkan hasil seseorang dengan ribuan orang seusianya yang sudah dites dengan alat yang sama (norma). Alat tes inteligensi resmi juga diuji keandalan dan keabsahannya, diberikan dengan prosedur baku, dan ditafsirkan oleh tenaga yang berwenang.</p>
+  <p>Di Indonesia, pemeriksaan psikologi diatur dalam Kode Etik Psikologi Indonesia (HIMPSI); laporan hasil pemeriksaan psikologis hanya boleh dibuat oleh psikolog sesuai kompetensinya, dan tes inteligensi termasuk alat yang penggunaannya dibatasi.</p>
+  <p>Aplikasi ini tidak memiliki norma tersebut, sehingga setiap "angka IQ" yang ditampilkannya akan menyesatkan. Karena itu aplikasi hanya menampilkan skor latihan per bagian. Bila sekolah atau orang tua membutuhkan hasil IQ untuk penjurusan, layanan inklusi, atau keputusan penting lain, hubungi biro psikologi atau psikolog berizin.</p>
+  <h3 style="margin-top:14px">Tentang soal</h3>
+  <p class="muted">Semua soal disusun orisinal untuk aplikasi ini. Soal deret angka, matriks gambar, dan rotasi bentuk dibangkitkan otomatis dengan kunci yang dihitung program; soal analogi dan logika diambil acak dari bank soal yang ditulis khusus. Bentuk bagiannya meniru jenis tugas yang umum dalam tes penalaran (numerik, figural, verbal, logis, spasial), bukan salinan alat tes mana pun.</p>
+  <h3 style="margin-top:14px">Dasar dan sumber</h3>
+  <ul class="muted" style="font-size:14px">
+   <li><a href="https://core.ac.uk/download/235048971.pdf" target="_blank" rel="noopener">Kajian penggunaan tes psikologi di Indonesia dan Kode Etik HIMPSI 2010 (Bab Asesmen)</a></li>
+   <li><a href="https://lms-paralel.esaunggul.ac.id/mod/resource/view.php?id=285495" target="_blank" rel="noopener">Modul Kode Etik Psikologi: Asesmen, Pasal 62–67 (Universitas Esa Unggul)</a></li>
+   <li><a href="https://lms-paralel.esaunggul.ac.id/mod/resource/view.php?id=297398" target="_blank" rel="noopener">Modul Psikodiagnostik: tingkatan alat tes, termasuk tes inteligensi (Universitas Esa Unggul)</a></li>
+  </ul></section>`;
+}
+function dl(name,text,type){const b=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+function toast(m){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';t.setAttribute('role','status');t.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:14px;z-index:50;max-width:90vw';document.body.appendChild(t)}t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',3500)}
+function bind(){
+  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=e=>{e.preventDefault();go(b.dataset.go)});
+  document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>choose(+b.dataset.o));
+  document.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{
+    const a=b.dataset.act;
+    if(a==='start')startTest(false);else if(a==='practice')startTest(true);
+    else if(a==='next')move(1);else if(a==='prev')move(-1);else if(a==='finish')finish();
+    else if(a==='again'){S.test=null;go('test')}else if(a==='print')window.print();
+    else if(a==='csv'){const h=LS.get('tp_hist',[]);const head=['tanggal','nama','mode','skor','benar','total','detik',...SECTIONS.map(s=>s.id)];dl('riwayat-tes-penalaran.csv',[head.join(','),...h.map(r=>[r.tanggal,'"'+String(r.nama||'').replace(/"/g,'""')+'"',r.mode,r.skor,r.benar,r.total,r.detik,...r.per.map(p=>p.benar)].join(','))].join('\n'),'text/csv')}
+    else if(a==='json')dl('cadangan-tes-penalaran.json',JSON.stringify(LS.get('tp_hist',[]),null,1),'application/json');
+    else if(a==='clear'){if(b.dataset.c){LS.set('tp_hist',[]);S.last=null;render();toast('Riwayat dihapus.')}else{b.dataset.c=1;b.textContent='Yakin? Klik lagi untuk menghapus';}}
+  });
+  const imp=$('#imp');if(imp)imp.onchange=()=>{const f=imp.files[0];if(!f)return;f.text().then(t=>{try{const d=JSON.parse(t);if(!Array.isArray(d))throw 0;const h=LS.get('tp_hist',[]);const ids=new Set(h.map(x=>x.id));d.forEach(x=>{if(x&&x.id&&x.per&&!ids.has(x.id))h.push(x)});h.sort((a,b)=>b.id-a.id);LS.set('tp_hist',h.slice(0,50));render();toast('Cadangan diimpor.')}catch(e){toast('Berkas tidak dikenali.')}})};
+  if(S.view==='test'&&S.test&&!S.test.done&&!S.test.practice)tick();
+}
+document.addEventListener('keydown',e=>{
+  if(S.view!=='test'||!S.test||S.test.done||e.target.tagName==='INPUT')return;
+  const k=e.key.toUpperCase();const n=S.test.qs[S.test.i].opts.length;
+  let j=-1;if(/^[1-6]$/.test(k))j=+k-1;else if(/^[A-F]$/.test(k))j=LETTERS.indexOf(k);
+  if(j>=0&&j<n){choose(j);e.preventDefault()}
+  else if(e.key==='Enter'&&S.test.i<S.test.qs.length-1&&S.test.ans[S.test.i]!==null){move(1);e.preventDefault()}
+  else if(e.key==='ArrowRight'){move(1)}else if(e.key==='ArrowLeft'){move(-1)}
+});
+// ekspor untuk uji otomatis
+window.__TP={buildTest,genDeret,genMatriks,genSpasial,ANALOGI,LOGIKA,norm,key,rots,mir};
+render();
+</script>
+</body>
+</html>

@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Tes Penalaran – Cek Kemampuan Bernalar",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "40 soal dalam 5 bagian yang biasa ada di tes kecerdasan (deret angka, matriks gambar, analogi kata, logika, rotasi bentuk); soal deret, matriks, dan rotasi dibangkitkan otomatis sehingga setiap tes berbeda. Tes berwaktu 30 menit atau mode latihan, skor per bagian, pembahasan, saran latihan, riwayat dan ekspor. Sengaja tidak menampilkan angka IQ karena IQ sah hanya dari tes baku oleh psikolog.",
+    tanggal: "2026-11-22",
+    tautan: "tes-penalaran/",
+    status: "aktif"
+  },
+  {
     nama: "Sosiometri Kelas",
     kategori: "Bimbingan Konseling",
     jenis: "HTML",
