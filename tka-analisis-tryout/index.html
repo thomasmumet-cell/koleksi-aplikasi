@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Analisis Hasil Try Out TKA</title>
+<meta name="description" content="Analisis hasil try out TKA SMP: impor skor per siswa per mapel dan domain (CSV), statistik, kategori capaian, domain dan butir terlemah per kelas, kelompok remedial dan pengayaan, tren antar try out, serta rekomendasi program intervensi sekolah. Data hanya di perangkat.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f2e9;--grid:rgba(27,42,65,.05);--card:#fffdf8;--card2:#f7f1e6;--ink:#1b2a41;--mut:#566072;--line:#e0d8c8;
+  --acc:#c2410c;--acc2:#fff0e6;--on-acc:#fff;--ok:#2b8a3e;--ok-bg:#e9f7ec;--bad:#c92a2a;--bad-bg:#fdeceb;--warn:#8f4f00;--warn-bg:#fff4db;
+  --blue:#2a78d6;--track:#ebe4d6;--shadow:3px 3px 0 var(--ink);
+  --k0:#d03b3b;--k1:#fab219;--k2:#0ca30c;--k3:#2a78d6;
+  --r:14px;color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121822;--grid:rgba(255,255,255,.03);--card:#1b2331;--card2:#222c3d;--ink:#edf1f7;--mut:#a9b3c3;--line:#313d52;
+  --acc:#ff8c42;--acc2:#3a2618;--on-acc:#1a0f05;--ok:#5fd17a;--ok-bg:#16301f;--bad:#ff7b7b;--bad-bg:#3a1c1e;--warn:#ffc24d;--warn-bg:#3a2e14;
+  --blue:#3987e5;--track:#2a3446;--shadow:3px 3px 0 #000;--k3:#3987e5;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121822;--grid:rgba(255,255,255,.03);--card:#1b2331;--card2:#222c3d;--ink:#edf1f7;--mut:#a9b3c3;--line:#313d52;
+  --acc:#ff8c42;--acc2:#3a2618;--on-acc:#1a0f05;--ok:#5fd17a;--ok-bg:#16301f;--bad:#ff7b7b;--bad-bg:#3a1c1e;--warn:#ffc24d;--warn-bg:#3a2e14;
+  --blue:#3987e5;--track:#2a3446;--shadow:3px 3px 0 #000;--k3:#3987e5;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Atkinson Hyperlegible",system-ui,sans-serif;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;min-height:100vh;overflow-x:hidden}
+h1,h2,h3,h4,.disp{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0}
+h2{font-size:clamp(21px,4vw,26px);margin:0 0 10px}
+h3{font-size:18px;margin:0 0 8px}
+p{margin:.4em 0}
+a{color:var(--acc)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.num,td.n,th.n{font-variant-numeric:tabular-nums}
+/* Header */
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:2px solid var(--ink)}
+.hd{display:flex;align-items:center;gap:12px;padding:10px 0 6px}
+.logo{width:42px;height:42px;flex:none;border-radius:11px;background:var(--acc);color:var(--on-acc);display:grid;place-items:center;box-shadow:var(--shadow);border:2px solid var(--ink)}
+.hd h1{font-size:clamp(17px,4vw,23px);font-weight:800}
+.hd small{display:block;color:var(--mut);font-size:13px}
+.hd .sp{flex:1}
+.iconbtn{border:2px solid var(--ink);background:var(--card);border-radius:10px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:none}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:none;border:2px solid transparent;background:none;border-radius:999px;padding:5px 13px;cursor:pointer;font-weight:700;color:var(--mut);font-size:14.5px}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+nav.tabs button:hover{border-color:var(--line)}
+.filters{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:end;padding:10px 0 12px}
+.filters label{display:flex;flex-direction:column;font-size:12.5px;font-weight:700;color:var(--mut);gap:2px;min-width:0}
+.filters select{min-width:150px;max-width:100%}
+main.wrap{padding:18px 16px 70px}
+section.view{display:none}section.view.on{display:block;animation:in .25s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* Cards & layout */
+.card{background:var(--card);border:2px solid var(--ink);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);min-width:0}
+.soft{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;min-width:0}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
+.tiles{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tile b{display:block;font:800 28px/1.1 "Bricolage Grotesque",system-ui;font-variant-numeric:tabular-nums}
+.tile span{font-size:13px;color:var(--mut)}
+.tile small{display:block;font-size:12.5px;color:var(--mut);margin-top:4px}
+.kick{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);font-weight:700}
+.mut{color:var(--mut)}.small{font-size:14px}.xs{font-size:12.5px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sp{flex:1}
+.mt{margin-top:14px}.mt2{margin-top:22px}
+.btn{border:2px solid var(--ink);background:var(--card);border-radius:10px;padding:7px 14px;cursor:pointer;font-weight:700;font-size:14.5px;display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink)}
+.btn:hover{background:var(--card2)}
+.btn.pri{background:var(--acc);color:var(--on-acc);box-shadow:var(--shadow)}
+.btn.pri:hover{filter:brightness(1.06)}
+.btn.bad{border-color:var(--bad);color:var(--bad)}
+.btn.sm{padding:4px 10px;font-size:13px;border-width:1.5px}
+input[type=text],input[type=number],input[type=password],input[type=search],select,textarea{border:1.5px solid var(--line);background:var(--card);border-radius:9px;padding:7px 10px;max-width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{width:100%;min-height:150px;font:13.5px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+label.f{display:block;font-weight:700;font-size:14px;margin:10px 0 4px}
+.note{border-left:5px solid var(--acc);background:var(--acc2);padding:10px 14px;border-radius:0 10px 10px 0;font-size:14.5px}
+.note.ok{border-color:var(--ok);background:var(--ok-bg)}
+.note.warn{border-color:var(--warn);background:var(--warn-bg)}
+.note.bad{border-color:var(--bad);background:var(--bad-bg)}
+.badge{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700;border:1.5px solid var(--line);background:var(--card2);white-space:nowrap}
+.badge.contoh{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+.badge.ai{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.kat{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:13px;white-space:nowrap}
+.kat i{width:11px;height:11px;border-radius:3px;display:inline-block;flex:none}
+.k0 i{background:var(--k0)}.k1 i{background:var(--k1)}.k2 i{background:var(--k2)}.k3 i{background:var(--k3)}
+/* Tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--card2);font-weight:700;font-size:13px;position:sticky;top:0}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:color-mix(in srgb,var(--card2) 70%,transparent)}
+td.hm{text-align:center;font-weight:700;font-variant-numeric:tabular-nums;min-width:62px;border:2px solid var(--card)}
+td.hm.weak{outline:3px solid var(--bad);outline-offset:-4px}
+th button.sort{all:unset;cursor:pointer;font-weight:700}
+th button.sort:focus-visible{outline:2px solid var(--acc)}
+/* Bars */
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:minmax(90px,38%) 1fr 52px;gap:10px;align-items:center;font-size:14px}
+.bar .lb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .tr{position:relative;height:16px;background:var(--track);border-radius:4px}
+.bar .fi{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;background:var(--blue)}
+.bar .fi.weak{background:var(--acc)}
+.bar .th{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.55}
+.bar .v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.stack{display:flex;height:26px;border-radius:6px;overflow:hidden;gap:2px;background:var(--card)}
+.stack span{display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;min-width:0;overflow:hidden}
+.stack .s1{color:#2b1a00}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;margin:6px 0 8px}
+svg.ch{width:100%;height:auto;display:block;overflow:visible}
+svg.ch text{fill:var(--mut);font-size:11px;font-family:"Atkinson Hyperlegible",system-ui}
+svg.ch .ax{stroke:var(--line)}
+svg.ch .lbl{fill:var(--ink);font-weight:700}
+.tip{position:fixed;z-index:60;pointer-events:none;background:var(--ink);color:var(--bg);font-size:13px;padding:6px 9px;border-radius:8px;max-width:260px;display:none;line-height:1.35}
+/* Drop zone */
+.drop{border:2.5px dashed var(--line);border-radius:14px;padding:18px;text-align:center;background:var(--card2);cursor:pointer}
+.drop.on{border-color:var(--acc);background:var(--acc2)}
+.grp{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);break-inside:avoid}
+.grp h4{font-size:15px;margin-bottom:4px}
+.grp ol{margin:4px 0 0;padding-left:22px;font-size:14px}
+.cols3{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.prog h3{margin-top:18px}
+.prog ol,.prog ul{padding-left:22px}
+.prog li{margin:4px 0}
+.aiq{border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--card)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:70;display:none;max-width:calc(100% - 32px);text-align:center}
+.banner{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:14px}
+details summary{cursor:pointer;font-weight:700}
+footer{color:var(--mut);font-size:13px;text-align:center;padding:10px 16px 30px}
+@media (max-width:560px){
+  .filters select{min-width:0;width:100%}
+  .filters label{flex:1 1 140px}
+  .bar{grid-template-columns:minmax(80px,40%) 1fr 46px}
+  .card{padding:14px}
+  .hd small{display:none}
+}
+@media print{
+  body{background:#fff;color:#000;font-size:12px}
+  header.top,.noprint,.tip,.toast,footer{display:none!important}
+  section.view{display:none!important}section.view.on{display:block!important}
+  .card,.soft{box-shadow:none;border:1px solid #999}
+  a{color:#000}
+}
+</style>
+</head>
+<body>
+<header class="top noprint">
+  <div class="wrap">
+    <div class="hd">
+      <div class="logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+      <div><h1>Analisis Hasil Try Out TKA</h1><small>Peta capaian kelas, kelompok remedial–pengayaan, dan program intervensi sekolah</small></div>
+      <span class="sp"></span>
+      <button class="iconbtn" id="themeBtn" type="button" aria-label="Ganti mode terang/gelap" title="Mode terang/gelap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Menu utama">
+      <button role="tab" type="button" data-tab="ringkasan" aria-selected="true">Ringkasan</button>
+      <button role="tab" type="button" data-tab="kelas" aria-selected="false">Kelas &amp; Domain</button>
+      <button role="tab" type="button" data-tab="butir" aria-selected="false">Butir Soal</button>
+      <button role="tab" type="button" data-tab="kelompok" aria-selected="false">Remedial &amp; Pengayaan</button>
+      <button role="tab" type="button" data-tab="siswa" aria-selected="false">Siswa</button>
+      <button role="tab" type="button" data-tab="tren" aria-selected="false">Tren</button>
+      <button role="tab" type="button" data-tab="program" aria-selected="false">Program Intervensi</button>
+      <button role="tab" type="button" data-tab="data" aria-selected="false">Data</button>
+      <button role="tab" type="button" data-tab="pengaturan" aria-selected="false">Pengaturan</button>
+      <button role="tab" type="button" data-tab="sumber" aria-selected="false">Dasar &amp; Sumber</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <div class="filters noprint" id="filterBar" role="group" aria-label="Saring data">
+    <label>Try out<select id="fT"></select></label>
+    <label>Mata pelajaran<select id="fM"></select></label>
+    <label>Kelas<select id="fK"></select></label>
+    <span class="sp"></span>
+    <span id="dataBadge"></span>
+  </div>
+  <div id="banner"></div>
+
+  <section class="view on" id="v-ringkasan" role="tabpanel" aria-label="Ringkasan"></section>
+  <section class="view" id="v-kelas" role="tabpanel" aria-label="Kelas dan domain"></section>
+  <section class="view" id="v-butir" role="tabpanel" aria-label="Analisis butir soal"></section>
+  <section class="view" id="v-kelompok" role="tabpanel" aria-label="Kelompok remedial dan pengayaan"></section>
+  <section class="view" id="v-siswa" role="tabpanel" aria-label="Daftar siswa"></section>
+  <section class="view" id="v-tren" role="tabpanel" aria-label="Tren antar try out"></section>
+  <section class="view" id="v-program" role="tabpanel" aria-label="Program intervensi"></section>
+
+  <section class="view" id="v-data" role="tabpanel" aria-label="Kelola data">
+    <h2>Impor hasil try out</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>1. Pilih atau tempel data</h3>
+        <div class="drop" id="drop" tabindex="0" role="button" aria-label="Pilih berkas CSV atau seret ke sini">
+          <b>Seret berkas CSV ke sini</b> atau tekan untuk memilih berkas<br><span class="xs mut">CSV dari Excel/Google Sheets (pemisah koma, titik koma, atau tab)</span>
+        </div>
+        <input type="file" id="file" accept=".csv,.txt,.tsv,text/csv,text/plain" class="sr" tabindex="-1">
+        <label class="f" for="paste">…atau tempel isi tabel di sini</label>
+        <textarea id="paste" placeholder="nama,kelas,mapel,Bilangan,Aljabar,Geometri dan Pengukuran,Data dan Peluang&#10;Siswa A,9A,Matematika,70,55,60,80"></textarea>
+        <div class="row mt">
+          <span class="xs mut">Templat:</span>
+          <button class="btn sm" type="button" data-tpl="lebar">Skor per domain (lebar)</button>
+          <button class="btn sm" type="button" data-tpl="panjang">Skor per domain (panjang)</button>
+          <button class="btn sm" type="button" data-tpl="matriks">Skor per butir (matriks 0/1)</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>2. Lengkapi keterangan</h3>
+        <label class="f" for="impT">Nama try out <span class="mut xs">(dipakai bila CSV tidak punya kolom tryout)</span></label>
+        <input type="text" id="impT" placeholder="mis. Try Out 1 – Oktober 2026" style="width:100%">
+        <label class="f" for="impM">Mata pelajaran bawaan <span class="mut xs">(bila CSV tidak punya kolom mapel)</span></label>
+        <select id="impM"><option>Matematika</option><option>Bahasa Indonesia</option><option>IPA</option><option>Bahasa Inggris</option></select>
+        <label class="f" for="impK">Kelas bawaan <span class="mut xs">(bila CSV tidak punya kolom kelas)</span></label>
+        <input type="text" id="impK" placeholder="mis. 9A" style="max-width:160px">
+        <label class="f" for="impX">Skor maksimum tiap kolom domain (format lebar/panjang)</label>
+        <input type="number" id="impX" value="100" min="1" step="any" style="max-width:120px">
+        <label class="f" for="impMode">Jika try out + mapel yang sama sudah ada</label>
+        <select id="impMode"><option value="ganti">Ganti data lama</option><option value="tambah">Tambahkan (gabung)</option></select>
+        <div class="row mt"><button class="btn" type="button" id="btnCek">Periksa data</button><button class="btn pri" type="button" id="btnImp" disabled>Simpan ke aplikasi</button></div>
+        <div id="impOut" class="mt" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <details class="soft mt">
+      <summary>Format yang dikenali (baca bila ragu)</summary>
+      <div class="small mt">
+        <p><b>A. Skor per domain – lebar</b>: satu baris per siswa per mapel. Kolom wajib <code>nama</code>, <code>kelas</code>; kolom <code>mapel</code> dan <code>tryout</code> opsional; setiap kolom angka lain dianggap satu domain (skala 0–100 atau sesuai isian “skor maksimum”). Kolom bernama <code>total</code>/<code>nilai akhir</code> dipakai sebagai skor total.</p>
+        <p><b>B. Skor per domain – panjang</b>: kolom <code>nama, kelas, mapel, domain, skor</code> (opsional <code>maks</code>, <code>tryout</code>). Cocok untuk ekspor dari aplikasi lain.</p>
+        <p><b>C. Skor per butir</b>: (1) panjang: <code>nama, kelas, mapel, butir, domain, skor</code> (skor 1/0 atau sebagian, opsional <code>maks</code>); atau (2) matriks: <code>nama, kelas, 1, 2, 3, …</code> berisi 1/0. Domain tiap nomor diambil dari <b>Peta butir</b> di bawah. Data butir membuka analisis tingkat kesukaran dan daya beda.</p>
+        <p>Kolom <code>NIS/NISN/jenis kelamin</code> diabaikan dan tidak disimpan. Gunakan nama panggilan atau kode bila data akan ditampilkan di depan umum.</p>
+      </div>
+    </details>
+
+    <div class="card mt2">
+      <h3>Peta butir → domain (untuk format matriks)</h3>
+      <p class="small mut">Satu baris satu rentang, misalnya <code>1-8 Bilangan</code>. Disimpan per mata pelajaran.</p>
+      <div class="row"><label for="petaM" class="small"><b>Mapel</b></label><select id="petaM"></select></div>
+      <textarea id="petaTxt" style="min-height:110px" aria-label="Peta butir ke domain"></textarea>
+      <div class="row mt"><button class="btn" type="button" id="btnPeta">Simpan peta butir</button><button class="btn" type="button" id="btnPetaApply">Terapkan ulang ke data butir mapel ini</button></div>
+    </div>
+
+    <h2 class="mt2">Data tersimpan</h2>
+    <div id="dataList"></div>
+    <div class="card mt">
+      <h3>Ekspor dan cadangan</h3>
+      <div class="row">
+        <button class="btn" type="button" id="expCSV">Unduh semua data (CSV)</button>
+        <button class="btn" type="button" id="expRekap">Unduh rekap nilai siswa (CSV)</button>
+        <button class="btn" type="button" id="expJSON">Unduh cadangan (JSON)</button>
+        <button class="btn" type="button" id="impJSONbtn">Pulihkan dari cadangan</button>
+        <input type="file" id="impJSON" accept=".json,application/json" class="sr" tabindex="-1">
+      </div>
+      <p class="xs mut">Cadangan JSON tidak memuat kunci API. Semua data hanya tersimpan di peramban perangkat ini (localStorage).</p>
+      <div class="row mt"><button class="btn bad" type="button" id="btnWipe">Hapus semua data saya</button></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-pengaturan" role="tabpanel" aria-label="Pengaturan">
+    <h2>Pengaturan</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Kategori capaian</h3>
+        <p class="small mut">Bawaan mengikuti rentang kategori hasil TKA SMP 2026 yang diberitakan untuk Bahasa Indonesia (Kurang &lt; 50; Memadai 50–76,66; Baik 76,67–94,99; Istimewa ≥ 95). Ubah bila sekolah memakai acuan lain.</p>
+        <div class="row">
+          <label class="small">Memadai mulai<br><input type="number" id="cMem" step="0.01" style="width:100px"></label>
+          <label class="small">Baik mulai<br><input type="number" id="cBaik" step="0.01" style="width:100px"></label>
+          <label class="small">Istimewa mulai<br><input type="number" id="cIst" step="0.01" style="width:100px"></label>
+        </div>
+        <label class="f" for="cDom">Batas domain perlu penguatan (%)</label>
+        <input type="number" id="cDom" min="1" max="100" style="width:100px">
+        <label class="f" for="cGrp">Ukuran maksimal satu kelompok remedial</label>
+        <input type="number" id="cGrp" min="2" max="40" style="width:100px">
+        <label class="f"><input type="checkbox" id="cSamar"> Samarkan nama siswa di layar (untuk ditayangkan di rapat)</label>
+        <label class="f" for="cTema">Tema</label>
+        <select id="cTema"><option value="system">Ikuti perangkat</option><option value="light">Terang</option><option value="dark">Gelap</option></select>
+        <div class="row mt"><button class="btn pri" type="button" id="btnCfg">Simpan pengaturan</button><button class="btn" type="button" id="btnCfgReset">Kembalikan bawaan</button></div>
+      </div>
+      <div class="card">
+        <h3>AI Gemini (opsional)</h3>
+        <p class="small">Dipakai untuk menyusun narasi program intervensi dan membuat soal remedial sejenis. Yang dikirim ke Gemini hanya <b>angka ringkasan</b> (rata-rata, domain, persentase); <b>nama siswa tidak pernah dikirim</b>. Kunci API milik Anda sendiri, disimpan hanya di perangkat ini.</p>
+        <label class="f" for="cKey">Kunci API Gemini</label>
+        <input type="password" id="cKey" autocomplete="off" placeholder="tempel kunci dari Google AI Studio" style="width:100%">
+        <label class="f" for="cModel">Model</label>
+        <input type="text" id="cModel" style="width:100%">
+        <div class="row mt"><button class="btn pri" type="button" id="btnKey">Simpan kunci</button><button class="btn" type="button" id="btnKeyTest">Uji koneksi</button><button class="btn bad" type="button" id="btnKeyDel">Hapus kunci</button></div>
+        <p id="keyMsg" class="small mut" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-sumber" role="tabpanel" aria-label="Dasar dan sumber"></section>
+</main>
+<footer>Analisis Hasil Try Out TKA · bagian dari Koleksi Aplikasi Thomas · data hanya tersimpan di perangkat ini</footer>
+<div class="tip" id="tip" role="tooltip"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+"use strict";
+/* =====================================================================
+   Analisis Hasil Try Out TKA — satu berkas, tanpa server.
+   Data disimpan di localStorage perangkat. Data contoh dibuat otomatis
+   (nama fiktif) dan dapat dihapus kapan saja.
+   ===================================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const LS_KEY = "tkaAnalisisTryout.v1";
+const TOTAL = "__TOTAL__";
+const KAT = ["Kurang", "Memadai", "Baik", "Istimewa"];
+/* Rerata nasional TKA SMP 2026 (siaran pers Kemendikdasmen) — hanya acuan. */
+const NASIONAL = { "Matematika": 40.34, "Bahasa Indonesia": 60.83 };
+const MAPEL_TKA_SMP = ["Bahasa Indonesia", "Matematika"];
+const MAPEL_URUT = ["Matematika", "Bahasa Indonesia", "IPA", "Bahasa Inggris"];
+const DEF_CFG = {
+  batas: { memadai: 50, baik: 76.67, istimewa: 95 },
+  domMin: 50, grupMaks: 8, samar: false, tema: "system",
+  apiKey: "", model: "gemini-2.5-flash",
+  peta: {
+    "Matematika": "1-8 Bilangan\n9-16 Aljabar\n17-24 Geometri dan Pengukuran\n25-30 Data dan Peluang",
+    "Bahasa Indonesia": "1-10 Menemukan informasi\n11-22 Menafsirkan dan mengintegrasikan\n23-30 Mengevaluasi dan merefleksi"
+  }
+};
+const clone = o => JSON.parse(JSON.stringify(o));
+let S = { cfg: clone(DEF_CFG), data: [], contoh: true, ai: [] };
+const F = { t: "", m: "", k: "" };   // filter aktif ("" kelas = semua)
+let CONTOH = [];
+let pending = null;                   // hasil periksa impor
+let sortSiswa = { key: "pct", dir: -1 };
+let detailKey = "";
+
+/* ---------- utilitas ---------- */
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = (v, d = 1) => (v == null || isNaN(v)) ? "–" : Number(v).toLocaleString("id-ID", { minimumFractionDigits: d, maximumFractionDigits: d });
+const pctTxt = (a, b) => b ? fmt(a / b * 100, 0) + "%" : "–";
+const natSort = (a, b) => String(a).localeCompare(String(b), "id", { numeric: true, sensitivity: "base" });
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.style.display = "block"; clearTimeout(toast._h); toast._h = setTimeout(() => t.style.display = "none", 3200); }
+function download(name, text, type = "text/csv;charset=utf-8") {
+  const blob = new Blob([type.indexOf("csv") > -1 ? "﻿" + text : text], { type });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+const csvCell = v => { const s = String(v == null ? "" : v); return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+const toCSV = rows => rows.map(r => r.map(csvCell).join(",")).join("\n");
+function stats(arr) {
+  const a = arr.filter(v => v != null && !isNaN(v)).sort((x, y) => x - y), n = a.length;
+  if (!n) return { n: 0 };
+  const mean = a.reduce((s, v) => s + v, 0) / n;
+  const q = p => { const i = (n - 1) * p, lo = Math.floor(i), hi = Math.ceil(i); return a[lo] + (a[hi] - a[lo]) * (i - lo); };
+  const sd = n > 1 ? Math.sqrt(a.reduce((s, v) => s + (v - mean) ** 2, 0) / (n - 1)) : 0;
+  return { n, mean, median: q(.5), q1: q(.25), q3: q(.75), sd, min: a[0], max: a[n - 1] };
+}
+function kat(p) { const b = S.cfg.batas; return p >= b.istimewa ? 3 : p >= b.baik ? 2 : p >= b.memadai ? 1 : 0; }
+const katHTML = k => `<span class="kat k${k}"><i aria-hidden="true"></i>${KAT[k]}</span>`;
+function nm(st) {
+  if (!S.cfg.samar) return st.n;
+  const ini = st.n.split(/\s+/).filter(Boolean).map(w => w[0].toUpperCase()).join("").slice(0, 3);
+  let h = 0; for (const c of st.k + st.n) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return ini + "-" + String(h % 1000).padStart(3, "0");
+}
+
+/* ---------- penyimpanan ---------- */
+function save() {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      v: 1, cfg: S.cfg, contoh: S.contoh, ai: S.ai,
+      data: S.data.map(r => [r.t, r.k, r.n, r.m, r.d, r.b, r.s, r.x])
+    }));
+  } catch (e) { toast("Tidak bisa menyimpan di perangkat (penyimpanan penuh atau diblokir). Unduh cadangan JSON."); }
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(LS_KEY); if (!raw) return;
+    const o = JSON.parse(raw);
+    S.cfg = Object.assign(clone(DEF_CFG), o.cfg || {});
+    S.cfg.batas = Object.assign(clone(DEF_CFG.batas), (o.cfg || {}).batas || {});
+    S.cfg.peta = Object.assign(clone(DEF_CFG.peta), (o.cfg || {}).peta || {});
+    S.contoh = o.contoh !== false;
+    S.ai = Array.isArray(o.ai) ? o.ai : [];
+    S.data = (o.data || []).map(a => ({ t: a[0], k: a[1], n: a[2], m: a[3], d: a[4], b: a[5], s: +a[6], x: +a[7] }));
+  } catch (e) { console.warn("Gagal membaca data tersimpan", e); }
+}
+
+/* ---------- data contoh (nama fiktif, deterministik) ---------- */
+function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function buatContoh() {
+  const R = rng(20261122);
+  const gauss = () => { let u = 0, v = 0; while (!u) u = R(); while (!v) v = R(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+  const sig = z => 1 / (1 + Math.exp(-z));
+  const depan = ["Adit", "Bima", "Citra", "Dinda", "Eka", "Fajar", "Gita", "Hana", "Ilham", "Jihan", "Kevin", "Laras", "Maya", "Nadia", "Oki", "Putri", "Raka", "Sekar", "Tegar", "Umi", "Vino", "Wulan", "Yoga", "Zahra", "Arya", "Bunga", "Cahya", "Dimas", "Elsa", "Farel", "Galih", "Intan", "Joko", "Kirana", "Lintang", "Nanda", "Rara", "Satria", "Tiara", "Yusuf"];
+  const belakang = ["Pratama", "Lestari", "Wibowo", "Saputra", "Anggraini", "Nugroho", "Rahmawati", "Kurniawan", "Permata", "Hidayat", "Puspita", "Setiawan", "Wardani", "Santoso", "Maharani", "Susanto", "Utami", "Prasetyo"];
+  const kelas = ["9A", "9B", "9C"];
+  const efekKelas = { "9A": .35, "9B": 0, "9C": -.3 };
+  const efekDom = { "9B|Geometri dan Pengukuran": -.7, "9C|Data dan Peluang": -.6, "9A|Mengevaluasi dan merefleksi": -.6, "9C|Menemukan informasi": -.4 };
+  const MAT = [["Bilangan", 8, -.2], ["Aljabar", 8, .45], ["Geometri dan Pengukuran", 8, .55], ["Data dan Peluang", 6, .05]];
+  const BI = [["Menemukan informasi", 10, -1.0], ["Menafsirkan dan mengintegrasikan", 12, -.3], ["Mengevaluasi dan merefleksi", 8, .3]];
+  const IPA = [["Zat dan perubahannya", .1], ["Gerak dan gaya", .5], ["Energi", .3], ["Makhluk hidup dan sistem organ", -.3], ["Ekologi", -.5], ["Bumi dan tata surya", .2]];
+  const items = (spec) => { const out = []; let no = 1; for (const [d, n, b] of spec) for (let i = 0; i < n; i++) out.push({ no: no++, d, b: b + gauss() * .55, a: 1.05 }); return out; };
+  const itMat = items(MAT), itBI = items(BI);
+  itMat[16].a = .12; itMat[16].b = .2;      // butir 17: daya beda rendah (contoh butir perlu ditelaah)
+  itMat[22].b = 2.4;                        // butir 23: sangat sulit
+  itBI[25].a = .15;                         // butir 26: daya beda rendah
+  const used = new Set(), siswa = [];
+  for (const k of kelas) for (let i = 0; i < 24; i++) {
+    let n; do { n = depan[Math.floor(R() * depan.length)] + " " + belakang[Math.floor(R() * belakang.length)]; } while (used.has(n));
+    used.add(n);
+    siswa.push({ k, n, mat: gauss() * .85 + efekKelas[k], bi: gauss() * .8 + efekKelas[k] * .6, ipa: gauss() * .9 + efekKelas[k] * .8 });
+  }
+  const out = [];
+  const TO = [["Try Out 1 (contoh)", 0], ["Try Out 2 (contoh)", 1]];
+  for (const [t, j] of TO) {
+    for (const st of siswa) {
+      const thM = st.mat + j * .3 + gauss() * .12, thB = st.bi + j * .18 + gauss() * .12;
+      for (const it of itMat) { const th = thM + (efekDom[st.k + "|" + it.d] || 0); out.push({ t, k: st.k, n: st.n, m: "Matematika", d: it.d, b: String(it.no), s: R() < sig(it.a * (th - it.b)) ? 1 : 0, x: 1 }); }
+      for (const it of itBI) { const th = thB + (efekDom[st.k + "|" + it.d] || 0); out.push({ t, k: st.k, n: st.n, m: "Bahasa Indonesia", d: it.d, b: String(it.no), s: R() < sig(it.a * (th - it.b)) ? 1 : 0, x: 1 }); }
+      if (j === 1) for (const [d, b] of IPA) {
+        const v = Math.max(0, Math.min(100, Math.round(100 * sig(1.1 * (st.ipa - b)) + gauss() * 7)));
+        out.push({ t, k: st.k, n: st.n, m: "IPA", d, b: "", s: v, x: 100 });
+      }
+    }
+  }
+  return out;
+}
+const allRows = () => S.contoh ? CONTOH.concat(S.data) : S.data;
+const isContohT = t => /\(contoh\)$/.test(t);
+
+/* ---------- agregasi ---------- */
+function uniq(rows, key) { const s = []; const seen = new Set(); for (const r of rows) if (!seen.has(r[key])) { seen.add(r[key]); s.push(r[key]); } return s; }
+function daftarTryout() { return uniq(allRows(), "t"); }
+function daftarMapel(t) { const m = uniq(allRows().filter(r => !t || r.t === t), "m"); return m.sort((a, b) => { const ia = MAPEL_URUT.indexOf(a), ib = MAPEL_URUT.indexOf(b); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || natSort(a, b); }); }
+function daftarKelas(t, m) { return uniq(allRows().filter(r => (!t || r.t === t) && (!m || r.m === m)), "k").sort(natSort); }
+function rowsOf(t, m, k) { return allRows().filter(r => (!t || r.t === t) && (!m || r.m === m) && (!k || r.k === k)); }
+function agg(rows) {
+  const M = new Map();
+  for (const r of rows) {
+    const key = r.k + "\u0001" + r.n; let st = M.get(key);
+    if (!st) { st = { key, k: r.k, n: r.n, s: 0, x: 0, dom: {}, tot: null, items: {} }; M.set(key, st); }
+    if (r.d === TOTAL) { st.tot = r.x ? r.s / r.x * 100 : null; continue; }
+    st.s += r.s; st.x += r.x;
+    const d = r.d || "Tanpa domain"; const D = st.dom[d] || (st.dom[d] = { s: 0, x: 0 }); D.s += r.s; D.x += r.x;
+    if (r.b) st.items[r.b] = { v: r.x ? r.s / r.x : 0, d };
+  }
+  const out = [];
+  for (const st of M.values()) {
+    st.pct = st.tot != null ? st.tot : (st.x ? st.s / st.x * 100 : null);
+    if (st.pct == null) continue;
+    st.domPct = {}; for (const d in st.dom) st.domPct[d] = st.dom[d].x ? st.dom[d].s / st.dom[d].x * 100 : null;
+    st.kat = kat(st.pct);
+    const ds = Object.keys(st.domPct).filter(d => st.domPct[d] != null).sort((a, b) => st.domPct[a] - st.domPct[b]);
+    st.lemah = ds[0] || "";
+    out.push(st);
+  }
+  return out;
+}
+function siswaOf(t, m, k) { return agg(rowsOf(t, m, k)); }
+function domainList(list) { const s = []; for (const st of list) for (const d in st.domPct) if (s.indexOf(d) < 0) s.push(d); return s; }
+function domainMeans(list) { const ds = domainList(list), o = {}; for (const d of ds) o[d] = stats(list.map(st => st.domPct[d])).mean; return o; }
+function butirStats(list) {
+  const nos = []; for (const st of list) for (const b in st.items) if (nos.indexOf(b) < 0) nos.push(b);
+  if (!nos.length) return [];
+  nos.sort(natSort);
+  const sorted = list.slice().sort((a, b) => b.pct - a.pct), g = Math.max(1, Math.round(list.length * .27));
+  const up = sorted.slice(0, g), lo = sorted.slice(-g);
+  const pOf = (arr, b) => { const v = arr.map(st => st.items[b] && st.items[b].v).filter(x => x != null); return v.length ? v.reduce((s, x) => s + x, 0) / v.length : null; };
+  return nos.map(b => {
+    const any = list.find(st => st.items[b]);
+    const p = pOf(list, b), D = list.length >= 10 ? pOf(up, b) - pOf(lo, b) : null;
+    return { b, d: any ? any.items[b].d : "", p, D };
+  });
+}
+function labelP(p) { return p == null ? "" : p < .3 ? "Sulit" : p > .85 ? "Mudah" : "Sedang"; }
+
+/* ---------- strategi per domain ---------- */
+const STRAT = [
+  [/bilangan/i, "pecahan–desimal–persen dengan garis bilangan dan konteks belanja/diskon; operasi bilangan bulat dengan model suhu; perbandingan senilai dan berbalik nilai memakai tabel rasio"],
+  [/aljabar|fungsi|persamaan/i, "pola bilangan → bentuk aljabar (tabel–grafik–persamaan); persamaan linear dengan model timbangan; fungsi linear dan gradien dari situasi tarif ojek/pulsa"],
+  [/geometri|pengukuran|bangun/i, "luas, keliling, dan volume dengan benda nyata; teorema Pythagoras lewat pengukuran; transformasi di kertas berpetak; skala peta dan konversi satuan"],
+  [/data|peluang|statistik/i, "membaca tabel dan diagram dari data kelas sendiri; rata-rata, median, modus dengan data nyata; peluang empirik lewat percobaan dadu/koin lalu dibandingkan dengan peluang teoretik"],
+  [/menemukan|tersurat|mengakses|mencari/i, "membaca memindai (scanning) berdasar kata kunci pertanyaan; menandai bukti tersurat; lembar \"pertanyaan – bukti – paragraf ke-\""],
+  [/menafsir|integrasi|mengintegrasikan|memahami/i, "peta pikiran antarparagraf; menyimpulkan ide pokok dan hubungan sebab-akibat; membandingkan dua teks atau teks dengan grafik/tabel"],
+  [/evaluasi|mengevaluasi|refleksi|merefleksi/i, "menilai ketepatan dan kecukupan bukti; membedakan fakta dan opini; menanggapi nilai/amanat cerita dengan alasan dari teks"],
+  [/sastra|cerpen|puisi|fabel|drama/i, "membaca bersama cerpen/fabel pendek; tabel tokoh–watak–bukti; diskusi amanat dengan kutipan"],
+  [/zat|materi|campuran/i, "praktikum sederhana perubahan fisika–kimia; tabel sifat zat; membaca grafik perubahan suhu saat melebur/mendidih"],
+  [/gerak|gaya/i, "percobaan kereta dorong dan stopwatch HP; membaca grafik jarak–waktu; diagram gaya pada benda sehari-hari"],
+  [/energi|listrik|kalor/i, "rantai perubahan energi pada alat rumah tangga; menghitung biaya listrik dari tabel daya; percobaan perpindahan kalor"],
+  [/makhluk|organ|sistem/i, "model organ dari bahan bekas; tabel fungsi organ–gangguan–pencegahan; membaca data kesehatan sederhana"],
+  [/ekologi|lingkungan|ekosistem/i, "pengamatan ekosistem halaman sekolah; jaring-jaring makanan dari data pengamatan; grafik populasi"],
+  [/bumi|tata surya|antariksa/i, "model rotasi–revolusi dengan senter dan bola; tabel data planet; membaca grafik suhu/curah hujan"],
+  [/main idea|gagasan/i, "menebak judul dan kalimat utama paragraf; ringkasan satu kalimat"],
+  [/detail/i, "scanning angka, nama, waktu pada teks fungsional (pengumuman, jadwal, label)"],
+  [/inference|simpul/i, "pertanyaan \"mengapa kamu berpikir begitu?\" dengan bukti dari teks"],
+  [/vocab|kosakata/i, "menebak arti kata dari konteks; kartu kata bergambar"],
+  [/reference|rujukan/i, "melingkari kata ganti (it, they, this) dan menarik panah ke rujukannya"]
+];
+function strategi(d) { for (const [re, s] of STRAT) if (re.test(d)) return s; return "pembelajaran ulang konsep kunci dengan contoh konkret, latihan bertahap dari mudah ke sulit, dan umpan balik segera"; }
+
+/* ---------- grafik (SVG) ---------- */
+function histogram(list, mapel) {
+  const W = 520, H = 210, L = 34, B = 30, T = 14, bins = new Array(10).fill(0);
+  for (const st of list) bins[Math.min(9, Math.floor(st.pct / 10))]++;
+  const mx = Math.max(1, ...bins), bw = (W - L - 8) / 10, y = v => T + (H - T - B) * (1 - v / mx);
+  let s = `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="Histogram sebaran skor"><line class="ax" x1="${L}" x2="${W - 8}" y1="${H - B}" y2="${H - B}"/>`;
+  const ticks = mx <= 5 ? mx : 4;
+  for (let i = 0; i <= ticks; i++) { const v = Math.round(mx * i / ticks); s += `<line class="ax" x1="${L}" x2="${W - 8}" y1="${y(v)}" y2="${y(v)}" stroke-dasharray="2 4" opacity=".7"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`; }
+  bins.forEach((v, i) => {
+    const x = L + i * bw + 1, h = (H - T - B) - (y(v) - T);
+    s += `<g tabindex="0" data-tip="Skor ${i * 10}–${i === 9 ? 100 : i * 10 + 9}: ${v} siswa"><rect x="${x - 1}" y="${T}" width="${bw}" height="${H - T - B}" fill="transparent"/>`;
+    if (v) s += `<path d="M${x},${H - B} V${y(v) + 4} q0,-4 4,-4 h${bw - 10} q4,0 4,4 V${H - B}Z" fill="var(--blue)"/><text class="lbl" x="${x + (bw - 2) / 2}" y="${y(v) - 4}" text-anchor="middle">${v}</text>`;
+    s += `</g><text x="${x + (bw - 2) / 2}" y="${H - B + 14}" text-anchor="middle">${i * 10}</text>`;
+  });
+  const xv = v => L + (W - L - 8) * v / 100;
+  const b = S.cfg.batas;
+  [[b.memadai, "Memadai"], [b.baik, "Baik"]].forEach(([v, t]) => { s += `<line x1="${xv(v)}" x2="${xv(v)}" y1="${T - 6}" y2="${H - B}" stroke="var(--ink)" stroke-dasharray="4 3" opacity=".6"/><text x="${xv(v) + 3}" y="${T - 1}" class="lbl">${t} ≥${fmt(v, v % 1 ? 2 : 0)}</text>`; });
+  if (NASIONAL[mapel] != null) { const v = NASIONAL[mapel]; s += `<line x1="${xv(v)}" x2="${xv(v)}" y1="${T + 12}" y2="${H - B}" stroke="var(--acc)" stroke-width="2"/><text x="${xv(v) - 4}" y="${H - B - 8}" text-anchor="end" style="fill:var(--acc);font-weight:700;paint-order:stroke;stroke:var(--card);stroke-width:4px">Nasional ${fmt(v, 2)}</text>`; }
+  s += `<text x="${W - 8}" y="${H - 2}" text-anchor="end">skor (0–100)</text></svg>`;
+  return s;
+}
+function stackBar(list, label) {
+  const c = [0, 0, 0, 0]; list.forEach(st => c[st.kat]++); const n = list.length || 1;
+  return `<div class="stack" role="img" aria-label="${esc(label)}: ${KAT.map((k, i) => k + " " + c[i]).join(", ")}">` +
+    c.map((v, i) => v ? `<span class="s${i}" style="flex:${v};background:var(--k${i})" data-tip="${KAT[i]}: ${v} siswa (${pctTxt(v, n)})">${v / n >= .09 ? pctTxt(v, n) : ""}</span>` : "").join("") + `</div>`;
+}
+const legendKat = () => `<div class="legend">${KAT.map((k, i) => katHTML(i)).join("")}</div>`;
+function domBars(means, thr) {
+  const ds = Object.keys(means).sort((a, b) => means[a] - means[b]);
+  if (!ds.length) return `<p class="mut small">Belum ada data domain.</p>`;
+  const weakest = ds[0];
+  return `<div class="bars">` + ds.map(d => `<div class="bar" tabindex="0" data-tip="${esc(d)}: rata-rata ${fmt(means[d])}%"><span class="lb" title="${esc(d)}">${d === weakest ? "▼ " : ""}${esc(d)}</span><span class="tr"><span class="fi${d === weakest ? " weak" : ""}" style="width:${Math.max(0, Math.min(100, means[d]))}%"></span><span class="th" style="left:${thr}%" aria-hidden="true"></span></span><span class="v">${fmt(means[d], 0)}</span></div>`).join("") +
+    `</div><p class="xs mut mt">Garis tegak = batas penguatan domain (${thr}%). ▼ = domain terlemah.</p>`;
+}
+const RAMP = ["#e8f1fd", "#cde2fb", "#b7d3f6", "#9ec5f4", "#86b6ef", "#6da7ec", "#5598e7", "#3987e5", "#2a78d6", "#256abf", "#1c5cab"];
+function hmStyle(v) { if (v == null) return ""; const i = Math.max(0, Math.min(10, Math.round(v / 10))); return `background:${RAMP[i]};color:${i >= 7 ? "#fff" : "#10233d"}`; }
+function lineChart(series, xs) {
+  // series: [{name, vals:[..]}]; xs: label sumbu x
+  const W = 560, H = 230, L = 34, R = 110, T = 12, B = 34;
+  const all = series.flatMap(s => s.vals).filter(v => v != null);
+  if (!all.length) return "";
+  let lo = Math.max(0, Math.floor((Math.min(...all) - 5) / 10) * 10), hi = Math.min(100, Math.ceil((Math.max(...all) + 5) / 10) * 10); if (hi - lo < 20) hi = Math.min(100, lo + 20);
+  const x = i => xs.length === 1 ? (L + W - R) / 2 : L + 10 + (W - R - L - 20) * i / (xs.length - 1), y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
+  const COL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"];
+  let s = `<svg class="ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafik tren rata-rata per kelas">`;
+  for (let v = lo; v <= hi; v += 10) s += `<line class="ax" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" ${v === lo ? "" : 'stroke-dasharray="2 4"'}/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`;
+  xs.forEach((t, i) => { s += `<text x="${x(i)}" y="${H - B + 16}" text-anchor="middle">${esc(t.length > 22 ? t.slice(0, 21) + "…" : t)}</text>`; });
+  const lastY = [];
+  series.slice(0, 8).forEach((se, si) => {
+    const c = COL[si], pts = se.vals.map((v, i) => v == null ? null : [x(i), y(v)]);
+    const d = pts.filter(Boolean).map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join("");
+    if (d) s += `<path d="${d}" fill="none" stroke="${c}" stroke-width="2"/>`;
+    pts.forEach((p, i) => { if (p) s += `<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="${c}" stroke="var(--card)" stroke-width="2" tabindex="0" data-tip="${esc(se.name)} · ${esc(xs[i])}: ${fmt(se.vals[i])}"/>`; });
+    const lp = pts.filter(Boolean).pop(); if (lp) { let ly = lp[1]; while (lastY.some(v => Math.abs(v - ly) < 13)) ly += 13; lastY.push(ly); s += `<text x="${W - R + 10}" y="${ly + 4}" class="lbl">${esc(se.name)} ${fmt(se.vals[se.vals.length - 1] != null ? se.vals[se.vals.length - 1] : null, 0)}</text>`; }
+  });
+  return s + `</svg>`;
+}
+
+/* ---------- filter & navigasi ---------- */
+function opt(v, t, sel) { return `<option value="${esc(v)}"${v === sel ? " selected" : ""}>${esc(t)}</option>`; }
+function refreshFilters() {
+  const ts = daftarTryout();
+  if (ts.indexOf(F.t) < 0) F.t = ts[ts.length - 1] || "";
+  $("#fT").innerHTML = ts.length ? ts.map(t => opt(t, t, F.t)).join("") : opt("", "(belum ada data)", "");
+  const ms = daftarMapel(F.t);
+  if (ms.indexOf(F.m) < 0) F.m = ms[0] || "";
+  $("#fM").innerHTML = ms.length ? ms.map(m => opt(m, m + (MAPEL_TKA_SMP.indexOf(m) < 0 ? " (penguatan)" : ""), F.m)).join("") : opt("", "–", "");
+  const ks = daftarKelas(F.t, F.m);
+  if (F.k && ks.indexOf(F.k) < 0) F.k = "";
+  $("#fK").innerHTML = opt("", "Semua kelas", F.k) + ks.map(k => opt(k, k, F.k)).join("");
+  const nU = S.data.length, nC = S.contoh ? CONTOH.length : 0;
+  $("#dataBadge").innerHTML = (nC ? `<span class="badge contoh">Data contoh aktif</span> ` : "") + (nU ? `<span class="badge">${uniq(S.data, "t").length} try out milik Anda</span>` : "");
+  const ban = $("#banner");
+  if (S.contoh && nU) ban.innerHTML = `<div class="note warn banner noprint"><span><b>Data contoh masih tampil</b> bersama data Anda. Try out berlabel “(contoh)” berisi nama fiktif.</span><button class="btn sm" type="button" data-act="hapusContoh">Hapus data contoh</button></div>`;
+  else if (S.contoh) ban.innerHTML = `<div class="note banner noprint"><span><b>Anda sedang melihat data contoh</b> (72 siswa fiktif, 3 kelas, 2 try out). Impor hasil try out sekolah di menu <b>Data</b>.</span><button class="btn sm" type="button" data-go="data">Impor data saya</button><button class="btn sm" type="button" data-act="hapusContoh">Sembunyikan contoh</button></div>`;
+  else if (!nU) ban.innerHTML = `<div class="note banner noprint"><span>Belum ada data. Impor CSV di menu <b>Data</b> atau tampilkan lagi data contoh.</span><button class="btn sm" type="button" data-go="data">Impor data</button><button class="btn sm" type="button" data-act="tampilContoh">Tampilkan data contoh</button></div>`;
+  else ban.innerHTML = "";
+}
+let TAB = "ringkasan";
+function go(tab) {
+  TAB = tab;
+  $$("nav.tabs button").forEach(b => { const on = b.dataset.tab === tab; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; });
+  $$("section.view").forEach(v => v.classList.toggle("on", v.id === "v-" + tab));
+  $("#filterBar").style.display = ["data", "pengaturan", "sumber"].indexOf(tab) > -1 ? "none" : "";
+  render();
+  window.scrollTo({ top: 0 });
+}
+function render() {
+  refreshFilters();
+  const f = { ringkasan: rRingkasan, kelas: rKelas, butir: rButir, kelompok: rKelompok, siswa: rSiswa, tren: rTren, program: rProgram, data: rData, pengaturan: rCfg, sumber: rSumber }[TAB];
+  if (f) f();
+}
+function kosong(el) { el.innerHTML = `<div class="card"><h2>Belum ada data untuk pilihan ini</h2><p>Pilih try out dan mata pelajaran lain, atau impor data di menu <b>Data</b>.</p><button class="btn pri" type="button" data-go="data">Ke menu Data</button></div>`; }
+function statusMapel(m) {
+  if (MAPEL_TKA_SMP.indexOf(m) > -1) return "";
+  return `<div class="note warn mt"><b>${esc(m)} bukan mata uji TKA SMP</b> menurut Permendikdasmen No. 9 Tahun 2025 (TKA SMP menguji Bahasa Indonesia dan Matematika). Hasil try out mapel ini dianalisis sebagai <b>penguatan</b> pembelajaran.</div>`;
+}
+
+/* ---------- RINGKASAN ---------- */
+function rRingkasan() {
+  const el = $("#v-ringkasan"), list = siswaOf(F.t, F.m, F.k);
+  if (!list.length) return kosong(el);
+  const st = stats(list.map(s => s.pct)), c = [0, 0, 0, 0]; list.forEach(s => c[s.kat]++);
+  const nat = NASIONAL[F.m], dm = domainMeans(list);
+  const ds = Object.keys(dm).sort((a, b) => dm[a] - dm[b]);
+  const kelasList = daftarKelas(F.t, F.m);
+  const scope = F.k ? "Kelas " + F.k : "Semua kelas";
+  let h = `<div class="row"><div><span class="kick">${esc(F.t)} · ${esc(F.m)} · ${esc(scope)}</span><h2>Ringkasan capaian</h2></div><span class="sp"></span><button class="btn noprint" type="button" onclick="window.print()">Cetak</button></div>${statusMapel(F.m)}
+  <div class="tiles mt">
+    <div class="tile"><span>Peserta</span><b>${st.n}</b><small>${kelasList.length} kelas</small></div>
+    <div class="tile"><span>Rata-rata</span><b>${fmt(st.mean)}</b><small>${nat != null ? `Nasional TKA SMP 2026: ${fmt(nat, 2)} (${st.mean >= nat ? "+" : ""}${fmt(st.mean - nat)})` : "skala 0–100"}</small></div>
+    <div class="tile"><span>Median</span><b>${fmt(st.median)}</b><small>Q1 ${fmt(st.q1, 0)} · Q3 ${fmt(st.q3, 0)}</small></div>
+    <div class="tile"><span>Simpangan baku</span><b>${fmt(st.sd)}</b><small>${st.sd > 18 ? "sebaran lebar: diferensiasi perlu" : "sebaran relatif rapat"}</small></div>
+    <div class="tile"><span>Terendah–tertinggi</span><b>${fmt(st.min, 0)}–${fmt(st.max, 0)}</b><small>rentang ${fmt(st.max - st.min, 0)}</small></div>
+    <div class="tile"><span>Minimal Memadai</span><b>${pctTxt(c[1] + c[2] + c[3], st.n)}</b><small>${c[0]} siswa kategori Kurang</small></div>
+  </div>
+  <div class="grid g2 mt">
+    <div class="card"><h3>Sebaran skor</h3>${histogram(list, F.m)}
+      <p class="xs mut">Rerata nasional hanya acuan pembanding hasil TKA sesungguhnya; skor try out sekolah belum tentu setara.</p></div>
+    <div class="card"><h3>Kategori capaian</h3>${legendKat()}${stackBar(list, "Kategori capaian")}
+      <div class="tbl mt"><table><thead><tr><th>Kategori</th><th class="n">Rentang</th><th class="n">Siswa</th><th class="n">%</th></tr></thead><tbody>
+      ${KAT.map((k, i) => { const b = S.cfg.batas, lo = [0, b.memadai, b.baik, b.istimewa][i], hi = [b.memadai, b.baik, b.istimewa, null][i]; return `<tr><td>${katHTML(i)}</td><td class="n">${fmt(lo, lo % 1 ? 2 : 0)}${hi != null ? "–<" + fmt(hi, hi % 1 ? 2 : 0) : "–100"}</td><td class="n">${c[i]}</td><td class="n">${pctTxt(c[i], st.n)}</td></tr>`; }).join("")}
+      </tbody></table></div></div>
+  </div>
+  <div class="grid g2 mt">
+    <div class="card"><h3>Rata-rata per domain</h3>${domBars(dm, S.cfg.domMin)}
+      ${ds.length ? `<div class="note mt small"><b>Domain terlemah: ${esc(ds[0])}</b> (${fmt(dm[ds[0]])}%). Ide penguatan: ${esc(strategi(ds[0]))}.</div>` : ""}</div>
+  </div>
+  <div class="card mt"><h3>Perbandingan kelas</h3>
+      <div class="tbl"><table><thead><tr><th>Kelas</th><th class="n">n</th><th class="n">Rata-rata</th><th class="n">Median</th><th class="n">SD</th><th class="n">% Kurang</th><th class="n">% Baik+</th><th>Domain terlemah</th></tr></thead><tbody>
+      ${kelasList.map(k => { const l = siswaOf(F.t, F.m, k), s2 = stats(l.map(x => x.pct)), dmk = domainMeans(l), w = Object.keys(dmk).sort((a, b) => dmk[a] - dmk[b])[0]; const cc = [0, 0, 0, 0]; l.forEach(x => cc[x.kat]++); return `<tr${k === F.k ? ' style="font-weight:700"' : ""}><td>${esc(k)}</td><td class="n">${s2.n}</td><td class="n">${fmt(s2.mean)}</td><td class="n">${fmt(s2.median)}</td><td class="n">${fmt(s2.sd)}</td><td class="n">${pctTxt(cc[0], s2.n)}</td><td class="n">${pctTxt(cc[2] + cc[3], s2.n)}</td><td>${w ? esc(w) + ` <span class="mut">(${fmt(dmk[w], 0)})</span>` : "–"}</td></tr>`; }).join("")}
+      </tbody></table></div>
+      <p class="xs mut mt">Pilih kelas di saringan atas untuk melihat ringkasan satu kelas.</p></div>`;
+  el.innerHTML = h;
+}
+
+/* ---------- KELAS & DOMAIN ---------- */
+function rKelas() {
+  const el = $("#v-kelas"), all = siswaOf(F.t, F.m, "");
+  if (!all.length) return kosong(el);
+  const ks = daftarKelas(F.t, F.m), ds = domainList(all);
+  const sekolah = domainMeans(all);
+  ds.sort((a, b) => sekolah[a] - sekolah[b]);
+  let rows = ks.map(k => { const l = all.filter(s => s.k === k), m = domainMeans(l); const w = ds.slice().sort((a, b) => (m[a] == null ? 999 : m[a]) - (m[b] == null ? 999 : m[b]))[0]; return { k, l, m, w, mean: stats(l.map(s => s.pct)).mean }; });
+  const mapelAll = daftarMapel(F.t);
+  let h = `<span class="kick">${esc(F.t)} · ${esc(F.m)}</span><h2>Peta kelas × domain</h2>${statusMapel(F.m)}
+  <div class="card mt"><p class="small mut" style="margin-top:0">Angka = rata-rata persentase skor domain. Warna makin gelap = makin tinggi. Kotak merah = domain terlemah di kelas itu.</p>
+  <div class="tbl"><table><thead><tr><th>Kelas</th><th class="n">Rata-rata</th>${ds.map(d => `<th class="n" style="white-space:normal;min-width:90px">${esc(d)}</th>`).join("")}</tr></thead><tbody>
+  ${rows.map(r => `<tr><th scope="row">${esc(r.k)} <span class="mut xs">(${r.l.length})</span></th><td class="n">${fmt(r.mean)}</td>${ds.map(d => `<td class="hm${d === r.w ? " weak" : ""}" style="${hmStyle(r.m[d])}" ${r.m[d] != null ? `data-tip="${esc(r.k)} · ${esc(d)}: ${fmt(r.m[d])}%${d === r.w ? " (terlemah)" : ""}"` : ""}>${fmt(r.m[d], 0)}</td>`).join("")}</tr>`).join("")}
+  <tr><th scope="row">Sekolah</th><td class="n"><b>${fmt(stats(all.map(s => s.pct)).mean)}</b></td>${ds.map(d => `<td class="hm" style="${hmStyle(sekolah[d])}">${fmt(sekolah[d], 0)}</td>`).join("")}</tr>
+  </tbody></table></div></div>
+  <div class="grid g2 mt">
+    <div class="card"><h3>Kategori capaian per kelas</h3>${legendKat()}
+      ${ks.map(k => `<div style="margin:8px 0"><div class="row small"><b>${esc(k)}</b><span class="sp"></span><span class="mut">${all.filter(s => s.k === k).length} siswa</span></div>${stackBar(all.filter(s => s.k === k), "Kelas " + k)}</div>`).join("")}</div>
+    <div class="card"><h3>Prioritas penguatan per kelas</h3><ol class="small" style="padding-left:20px;margin:0">
+      ${rows.map(r => { const lemah = ds.filter(d => r.m[d] != null && r.m[d] < S.cfg.domMin); return `<li style="margin:6px 0"><b>${esc(r.k)}</b>: ${r.w ? `fokus <b>${esc(r.w)}</b> (${fmt(r.m[r.w], 0)}%)` : "–"}${lemah.length > 1 ? `; juga ${lemah.filter(d => d !== r.w).map(esc).join(", ")}` : ""}.<br><span class="mut">${esc(strategi(r.w || ""))}.</span></li>`; }).join("")}
+    </ol></div>
+  </div>
+  ${mapelAll.length > 1 ? `<div class="card mt"><h3>Rata-rata kelas × mata pelajaran (${esc(F.t)})</h3><div class="tbl"><table><thead><tr><th>Kelas</th>${mapelAll.map(m => `<th class="n">${esc(m)}</th>`).join("")}</tr></thead><tbody>
+    ${daftarKelas(F.t, "").map(k => `<tr><th scope="row">${esc(k)}</th>${mapelAll.map(m => { const v = stats(siswaOf(F.t, m, k).map(s => s.pct)).mean; return `<td class="hm" style="${hmStyle(v)}">${fmt(v, 0)}</td>`; }).join("")}</tr>`).join("")}
+    </tbody></table></div></div>` : ""}`;
+  el.innerHTML = h;
+}
+
+/* ---------- BUTIR ---------- */
+function rButir() {
+  const el = $("#v-butir"), all = siswaOf(F.t, F.m, "");
+  if (!all.length) return kosong(el);
+  const bs = butirStats(all);
+  if (!bs.length) { el.innerHTML = `<h2>Analisis butir soal</h2><div class="card"><p>Data <b>${esc(F.t)} – ${esc(F.m)}</b> berupa skor per domain, sehingga analisis butir tidak tersedia.</p><p class="small">Impor skor per butir (format matriks 1/0 atau panjang dengan kolom <code>butir</code>) untuk melihat tingkat kesukaran dan daya beda tiap nomor soal.</p><button class="btn" type="button" data-go="data">Ke menu Data</button></div>`; return; }
+  const ks = daftarKelas(F.t, F.m), perK = {};
+  ks.forEach(k => { perK[k] = {}; butirStats(all.filter(s => s.k === k)).forEach(x => perK[k][x.b] = x.p); });
+  const urut = $("#bSort") ? $("#bSort").value : "no";
+  const list = bs.slice(); if (urut === "p") list.sort((a, b) => a.p - b.p); else if (urut === "D") list.sort((a, b) => (a.D == null ? 9 : a.D) - (b.D == null ? 9 : b.D));
+  const masalah = bs.filter(x => x.D != null && x.D < .2), sulit = bs.filter(x => x.p < .3);
+  const fokusK = F.k || "";
+  const ref = fokusK ? Object.keys(perK[fokusK] || {}).map(b => ({ b, p: perK[fokusK][b], d: (bs.find(x => x.b === b) || {}).d })) : bs;
+  const top = ref.slice().sort((a, b) => a.p - b.p).slice(0, 6);
+  el.innerHTML = `<span class="kick">${esc(F.t)} · ${esc(F.m)}</span><h2>Analisis butir soal</h2>${statusMapel(F.m)}
+  <div class="tiles mt">
+    <div class="tile"><span>Jumlah butir</span><b>${bs.length}</b></div>
+    <div class="tile"><span>Butir sulit (p &lt; 0,30)</span><b>${sulit.length}</b></div>
+    <div class="tile"><span>Daya beda rendah (D &lt; 0,20)</span><b>${masalah.length}</b><small>perlu ditelaah: kunci, redaksi, atau materi</small></div>
+    <div class="tile"><span>Rata-rata p</span><b>${fmt(stats(bs.map(x => x.p)).mean, 2)}</b></div>
+  </div>
+  <div class="grid g2 mt">
+    <div class="card"><h3>Butir terlemah ${fokusK ? "kelas " + esc(fokusK) : "(semua kelas)"}</h3>
+      <div class="bars">${top.map(x => `<div class="bar" tabindex="0" data-tip="Butir ${esc(x.b)} · ${esc(x.d)}: ${fmt(x.p * 100, 0)}% menjawab benar"><span class="lb">No. ${esc(x.b)} · <span class="mut">${esc(x.d)}</span></span><span class="tr"><span class="fi weak" style="width:${x.p * 100}%"></span></span><span class="v">${fmt(x.p * 100, 0)}%</span></div>`).join("")}</div>
+      <p class="xs mut mt">Persentase siswa yang menjawab benar. Pilih kelas di saringan atas untuk melihat butir terlemah per kelas.</p></div>
+    <div class="card"><h3>Butir yang perlu ditelaah guru</h3>
+      ${masalah.length ? `<ul class="small" style="padding-left:20px;margin:0">${masalah.map(x => `<li>No. <b>${esc(x.b)}</b> (${esc(x.d)}): p = ${fmt(x.p, 2)}, D = ${fmt(x.D, 2)}${x.D < 0 ? " — <b>negatif</b>: siswa berkemampuan rendah lebih banyak benar; cek kunci!" : " — kurang membedakan siswa pandai dan kurang"}</li>`).join("")}</ul>` : `<p class="small">Tidak ada butir dengan daya beda di bawah 0,20.</p>`}
+      <p class="xs mut mt">p = proporsi menjawab benar (tingkat kesukaran). D = p kelompok atas 27% − p kelompok bawah 27% (daya beda). D dihitung bila peserta ≥ 10.</p></div>
+  </div>
+  <div class="card mt"><div class="row"><h3 style="margin:0">Tabel butir</h3><span class="sp"></span><label class="small noprint">Urutkan <select id="bSort"><option value="no"${urut === "no" ? " selected" : ""}>Nomor</option><option value="p"${urut === "p" ? " selected" : ""}>Tersulit dulu</option><option value="D"${urut === "D" ? " selected" : ""}>Daya beda terendah</option></select></label></div>
+  <div class="tbl mt"><table><thead><tr><th>No.</th><th>Domain</th><th class="n">p</th><th>Kesukaran</th><th class="n">D</th>${ks.map(k => `<th class="n">${esc(k)}</th>`).join("")}</tr></thead><tbody>
+  ${list.map(x => `<tr><td>${esc(x.b)}</td><td>${esc(x.d)}</td><td class="n">${fmt(x.p, 2)}</td><td>${labelP(x.p)}</td><td class="n"${x.D != null && x.D < .2 ? ' style="color:var(--bad);font-weight:700"' : ""}>${fmt(x.D, 2)}</td>${ks.map(k => `<td class="hm" style="${hmStyle(perK[k][x.b] != null ? perK[k][x.b] * 100 : null)}">${perK[k][x.b] != null ? fmt(perK[k][x.b] * 100, 0) : "–"}</td>`).join("")}</tr>`).join("")}
+  </tbody></table></div><p class="xs mut">Kolom kelas = % siswa kelas itu yang menjawab benar.</p></div>`;
+  $("#bSort").addEventListener("change", rButir);
+}
+
+/* ---------- KELOMPOK ---------- */
+function kelompok(t, m, k) {
+  const list = siswaOf(t, m, k).sort((a, b) => a.pct - b.pct), b = S.cfg.batas;
+  const rem = list.filter(s => s.pct < b.memadai), peng = list.filter(s => s.pct >= b.baik).sort((a, c) => c.pct - a.pct);
+  const ds = domainList(list), perDom = {};
+  ds.forEach(d => perDom[d] = list.filter(s => s.domPct[d] != null && s.domPct[d] < S.cfg.domMin).sort((a, c) => a.domPct[d] - c.domPct[d]));
+  return { list, rem, peng, perDom };
+}
+function pecah(arr, n) { const g = Math.max(1, Math.ceil(arr.length / n)), size = Math.ceil(arr.length / g), out = []; for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size)); return out; }
+function rKelompok() {
+  const el = $("#v-kelompok"), K = kelompok(F.t, F.m, F.k);
+  if (!K.list.length) return kosong(el);
+  const b = S.cfg.batas, gm = S.cfg.grupMaks;
+  const li = (s, extra) => `<li>${esc(nm(s))} <span class="mut">· ${esc(s.k)} · ${fmt(s.pct, 0)}${extra ? " · " + extra : ""}</span></li>`;
+  const remG = pecah(K.rem, gm);
+  const doms = Object.keys(K.perDom).sort((a, c) => K.perDom[c].length - K.perDom[a].length);
+  el.innerHTML = `<div class="row"><div><span class="kick">${esc(F.t)} · ${esc(F.m)} · ${F.k ? "Kelas " + esc(F.k) : "Semua kelas"}</span><h2>Kelompok remedial &amp; pengayaan</h2></div><span class="sp"></span>
+    <button class="btn noprint" type="button" id="kCSV">Unduh daftar (CSV)</button><button class="btn noprint" type="button" onclick="window.print()">Cetak</button></div>${statusMapel(F.m)}
+  <div class="tiles mt">
+    <div class="tile"><span>Remedial (skor &lt; ${fmt(b.memadai, 0)})</span><b>${K.rem.length}</b><small>${remG.length} kelompok, maks ${gm} siswa</small></div>
+    <div class="tile"><span>Penguatan domain (&lt; ${S.cfg.domMin}%)</span><b>${new Set(doms.flatMap(d => K.perDom[d].map(s => s.key))).size}</b><small>siswa dengan ≥1 domain lemah</small></div>
+    <div class="tile"><span>Pengayaan (skor ≥ ${fmt(b.baik, 2)})</span><b>${K.peng.length}</b><small>calon tutor sebaya</small></div>
+  </div>
+  <h3 class="mt2">1. Remedial terstruktur</h3>
+  <p class="small mut">Diurutkan dari skor terendah; kelompok dibentuk berurutan agar kebutuhan anggota mirip. Fokus utama = domain terlemah masing-masing siswa.</p>
+  <div class="cols3">${remG.length ? remG.map((g, i) => { const dc = {}; g.forEach(s => dc[s.lemah] = (dc[s.lemah] || 0) + 1); const fokus = Object.keys(dc).sort((a, c) => dc[c] - dc[a])[0]; return `<div class="grp"><h4>Kelompok R${i + 1} <span class="mut xs">(${g.length} siswa)</span></h4><div class="xs mut">Fokus bersama: <b>${esc(fokus)}</b></div><ol>${g.map(s => li(s, "lemah: " + esc(s.lemah))).join("")}</ol></div>`; }).join("") : `<p class="small">Tidak ada siswa di bawah batas Memadai.</p>`}</div>
+  <h3 class="mt2">2. Penguatan per domain</h3>
+  <p class="small mut">Siswa dengan skor domain di bawah ${S.cfg.domMin}% (termasuk yang skor totalnya sudah memadai). Cocok untuk kelompok kecil 2–3 pertemuan per domain.</p>
+  <div class="cols3">${doms.filter(d => K.perDom[d].length).map(d => `<div class="grp"><h4>${esc(d)} <span class="mut xs">(${K.perDom[d].length} siswa)</span></h4><div class="xs mut">Strategi: ${esc(strategi(d))}.</div><ol>${K.perDom[d].map(s => li(s, "domain " + fmt(s.domPct[d], 0) + "%")).join("")}</ol></div>`).join("") || `<p class="small">Tidak ada domain di bawah batas.</p>`}</div>
+  <h3 class="mt2">3. Pengayaan</h3>
+  <p class="small mut">Soal penalaran tingkat tinggi, proyek pemecahan masalah, dan peran tutor sebaya (1 tutor : 3 teman) untuk kelompok remedial.</p>
+  <div class="cols3">${K.peng.length ? pecah(K.peng, gm).map((g, i) => `<div class="grp"><h4>Kelompok P${i + 1} <span class="mut xs">(${g.length} siswa)</span></h4><ol>${g.map(s => li(s, KAT[s.kat])).join("")}</ol></div>`).join("") : `<p class="small">Belum ada siswa kategori Baik/Istimewa.</p>`}</div>`;
+  $("#kCSV").addEventListener("click", () => {
+    const rows = [["tryout", "mapel", "kelompok", "kelas", "nama", "skor", "kategori", "domain_terlemah", "skor_domain_terlemah"]];
+    remG.forEach((g, i) => g.forEach(s => rows.push([F.t, F.m, "Remedial R" + (i + 1), s.k, s.n, fmt(s.pct), KAT[s.kat], s.lemah, fmt(s.domPct[s.lemah])])));
+    doms.forEach(d => K.perDom[d].forEach(s => rows.push([F.t, F.m, "Penguatan " + d, s.k, s.n, fmt(s.pct), KAT[s.kat], d, fmt(s.domPct[d])])));
+    pecah(K.peng, gm).forEach((g, i) => g.forEach(s => rows.push([F.t, F.m, "Pengayaan P" + (i + 1), s.k, s.n, fmt(s.pct), KAT[s.kat], s.lemah, fmt(s.domPct[s.lemah])])));
+    download(`kelompok-${F.m}-${F.t}.csv`.replace(/[^\w.\-]+/g, "_"), toCSV(rows));
+  });
+}
+
+/* ---------- SISWA ---------- */
+function rSiswa() {
+  const el = $("#v-siswa"), list = siswaOf(F.t, F.m, F.k);
+  if (!list.length) return kosong(el);
+  const ts = daftarTryout(), iT = ts.indexOf(F.t), prevT = ts.slice(0, iT).reverse().find(t => rowsOf(t, F.m, "").length);
+  const prev = {}; if (prevT) siswaOf(prevT, F.m, F.k).forEach(s => prev[s.key] = s.pct);
+  const mapelAll = daftarMapel(F.t), other = {};
+  mapelAll.forEach(m => { other[m] = {}; siswaOf(F.t, m, F.k).forEach(s => other[m][s.key] = s.pct); });
+  const q = ($("#sQ") && $("#sQ").value || "").trim().toLowerCase();
+  let rows = list.filter(s => !q || (s.n + " " + s.k).toLowerCase().indexOf(q) > -1);
+  const sk = sortSiswa.key, dir = sortSiswa.dir;
+  rows.sort((a, b) => { let va, vb; if (sk === "nama") { va = nm(a); vb = nm(b); return natSort(va, vb) * dir; } if (sk === "kelas") return (natSort(a.k, b.k) || natSort(nm(a), nm(b))) * dir; if (sk === "delta") { va = prev[a.key] != null ? a.pct - prev[a.key] : -999; vb = prev[b.key] != null ? b.pct - prev[b.key] : -999; return (va - vb) * dir; } return (a.pct - b.pct) * dir; });
+  const sb = (k, t) => `<button type="button" class="sort" data-sort="${k}" aria-label="Urutkan menurut ${t}">${t}${sk === k ? (dir > 0 ? " ▲" : " ▼") : ""}</button>`;
+  el.innerHTML = `<span class="kick">${esc(F.t)} · ${esc(F.m)} · ${F.k ? "Kelas " + esc(F.k) : "Semua kelas"}</span><h2>Daftar siswa</h2>
+  <div class="row noprint"><input type="search" id="sQ" placeholder="Cari nama atau kelas" value="${esc(q)}" aria-label="Cari siswa" style="min-width:min(100%,260px)"><span class="sp"></span><span class="small mut">${rows.length} siswa${prevT ? ` · pembanding: ${esc(prevT)}` : ""}</span></div>
+  <div id="detail"></div>
+  <div class="tbl mt"><table><thead><tr><th>${sb("kelas", "Kelas")}</th><th>${sb("nama", "Nama")}</th><th class="n">${sb("pct", esc(F.m))}</th><th>Kategori</th>${prevT ? `<th class="n">${sb("delta", "Perubahan")}</th>` : ""}<th>Domain terlemah</th>${mapelAll.filter(m => m !== F.m).map(m => `<th class="n">${esc(m)}</th>`).join("")}<th class="noprint"><span class="sr">Aksi</span></th></tr></thead><tbody>
+  ${rows.map(s => { const d = prev[s.key] != null ? s.pct - prev[s.key] : null; return `<tr><td>${esc(s.k)}</td><td>${esc(nm(s))}</td><td class="n"><b>${fmt(s.pct)}</b></td><td>${katHTML(s.kat)}</td>${prevT ? `<td class="n" style="color:${d == null ? "inherit" : d >= 0 ? "var(--ok)" : "var(--bad)"}">${d == null ? "–" : (d >= 0 ? "▲ +" : "▼ ") + fmt(d)}</td>` : ""}<td>${esc(s.lemah)} <span class="mut">${fmt(s.domPct[s.lemah], 0)}</span></td>${mapelAll.filter(m => m !== F.m).map(m => `<td class="n">${fmt(other[m][s.key])}</td>`).join("")}<td class="noprint"><button class="btn sm" type="button" data-detail="${esc(s.key)}">Profil</button></td></tr>`; }).join("")}
+  </tbody></table></div>`;
+  const inp = $("#sQ"); inp.addEventListener("input", () => { const pos = inp.selectionStart; rSiswa(); const i2 = $("#sQ"); i2.focus(); try { i2.setSelectionRange(pos, pos); } catch (e) { } });
+  if (detailKey) showDetail(detailKey, false);
+}
+function showDetail(key, scroll = true) {
+  detailKey = key;
+  const box = $("#detail"); if (!box) return;
+  const ms = daftarMapel(F.t);
+  const blocks = ms.map(m => { const st = siswaOf(F.t, m, "").find(s => s.key === key); return st ? { m, st } : null; }).filter(Boolean);
+  if (!blocks.length) { box.innerHTML = ""; return; }
+  const s0 = blocks[0].st;
+  const ts = daftarTryout();
+  box.innerHTML = `<div class="card mt"><div class="row"><h3 style="margin:0">Profil: ${esc(nm(s0))} <span class="mut">· ${esc(s0.k)}</span></h3><span class="sp"></span><button class="btn sm noprint" type="button" data-act="tutupDetail">Tutup</button></div>
+  <div class="grid g3 mt">${blocks.map(({ m, st }) => { const ds = Object.keys(st.domPct).sort((a, b) => st.domPct[a] - st.domPct[b]); const riw = ts.map(t => { const x = siswaOf(t, m, s0.k).find(s => s.key === key); return x ? fmt(x.pct, 0) : null; }).filter(Boolean); return `<div class="soft"><div class="row"><b>${esc(m)}</b><span class="sp"></span>${katHTML(st.kat)}</div><div class="disp" style="font-size:30px;font-weight:800">${fmt(st.pct)}</div>${riw.length > 1 ? `<div class="xs mut">Riwayat: ${riw.join(" → ")}</div>` : ""}
+    <div class="bars mt">${ds.map(d => `<div class="bar"><span class="lb" title="${esc(d)}">${esc(d)}</span><span class="tr"><span class="fi${st.domPct[d] < S.cfg.domMin ? " weak" : ""}" style="width:${st.domPct[d]}%"></span></span><span class="v">${fmt(st.domPct[d], 0)}</span></div>`).join("")}</div>
+    ${ds[0] && st.domPct[ds[0]] < S.cfg.domMin ? `<p class="xs mt">Saran: ${esc(strategi(ds[0]))}.</p>` : ""}</div>`; }).join("")}</div>
+  <p class="xs mut mt">Gunakan profil ini untuk umpan balik pribadi, bukan untuk membandingkan atau memberi label siswa.</p></div>`;
+  if (scroll) box.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* ---------- TREN ---------- */
+function rTren() {
+  const el = $("#v-tren");
+  const ts = daftarTryout().filter(t => rowsOf(t, F.m, "").length);
+  if (!ts.length) return kosong(el);
+  const ks = daftarKelas("", F.m);
+  const series = ks.map(k => ({ name: k, vals: ts.map(t => { const l = siswaOf(t, F.m, k); return l.length ? stats(l.map(s => s.pct)).mean : null; }) }));
+  const sek = ts.map(t => { const l = siswaOf(t, F.m, F.k); return l.length ? stats(l.map(s => s.pct)) : { n: 0 }; });
+  let h = `<span class="kick">${esc(F.m)} · ${F.k ? "Kelas " + esc(F.k) : "Semua kelas"}</span><h2>Tren antar try out</h2>${statusMapel(F.m)}`;
+  if (ts.length < 2) { el.innerHTML = h + `<div class="card mt"><p>Baru ada satu try out untuk ${esc(F.m)}. Impor try out berikutnya dengan nama siswa dan kelas yang sama agar perkembangan bisa dibandingkan.</p></div>`; return; }
+  const a = $("#trA") ? $("#trA").value : ts[ts.length - 2], b = $("#trB") ? $("#trB").value : ts[ts.length - 1];
+  const A = {}, Bm = {}; siswaOf(a, F.m, F.k).forEach(s => A[s.key] = s); siswaOf(b, F.m, F.k).forEach(s => Bm[s.key] = s);
+  const both = Object.keys(Bm).filter(k => A[k]);
+  const mv = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]; let naik = 0, turun = 0;
+  both.forEach(k => { mv[A[k].kat][Bm[k].kat]++; const d = Bm[k].pct - A[k].pct; if (d >= 5) naik++; else if (d <= -5) turun++; });
+  const turunBanyak = both.map(k => ({ s: Bm[k], d: Bm[k].pct - A[k].pct })).filter(x => x.d <= -10).sort((x, y) => x.d - y.d);
+  h += `<div class="grid g2 mt"><div class="card"><h3>Rata-rata per kelas</h3>${lineChart(series, ts)}</div>
+  <div class="card"><h3>Ringkasan ${F.k ? "kelas " + esc(F.k) : "sekolah"}</h3><div class="tbl"><table><thead><tr><th>Try out</th><th class="n">n</th><th class="n">Rata-rata</th><th class="n">Median</th><th class="n">SD</th></tr></thead><tbody>
+  ${ts.map((t, i) => `<tr><td>${esc(t)}</td><td class="n">${sek[i].n}</td><td class="n">${fmt(sek[i].mean)}</td><td class="n">${fmt(sek[i].median)}</td><td class="n">${fmt(sek[i].sd)}</td></tr>`).join("")}</tbody></table></div>
+  <div class="tbl mt"><table><thead><tr><th>Kelas</th>${ts.map(t => `<th class="n">${esc(t)}</th>`).join("")}</tr></thead><tbody>${series.map(s => `<tr><th scope="row">${esc(s.name)}</th>${s.vals.map(v => `<td class="n">${fmt(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div></div></div>
+  <div class="card mt"><div class="row"><h3 style="margin:0">Perpindahan kategori</h3><span class="sp"></span>
+  <label class="small">Dari <select id="trA">${ts.map(t => opt(t, t, a)).join("")}</select></label><label class="small">ke <select id="trB">${ts.map(t => opt(t, t, b)).join("")}</select></label></div>
+  <p class="small mut">${both.length} siswa ada di kedua try out (dicocokkan dari kelas + nama). Naik ≥ 5 poin: <b style="color:var(--ok)">${naik}</b> · turun ≥ 5 poin: <b style="color:var(--bad)">${turun}</b>.</p>
+  <div class="tbl"><table><thead><tr><th>Kategori awal ↓ / akhir →</th>${KAT.map((k, i) => `<th class="n">${katHTML(i)}</th>`).join("")}</tr></thead><tbody>
+  ${KAT.map((k, i) => `<tr><th scope="row">${katHTML(i)}</th>${mv[i].map((v, j) => `<td class="n" style="${v ? (j > i ? "color:var(--ok);font-weight:700" : j < i ? "color:var(--bad);font-weight:700" : "") : "opacity:.5"}">${v}</td>`).join("")}</tr>`).join("")}
+  </tbody></table></div><p class="xs mut">Hijau = naik kategori, merah = turun kategori.</p>
+  ${turunBanyak.length ? `<h4 class="mt">Perlu perhatian: turun ≥ 10 poin</h4><ul class="small">${turunBanyak.map(x => `<li>${esc(nm(x.s))} (${esc(x.s.k)}): ${fmt(A[x.s.key].pct, 0)} → ${fmt(x.s.pct, 0)} (${fmt(x.d)})</li>`).join("")}</ul>` : ""}</div>`;
+  el.innerHTML = h;
+  $("#trA").addEventListener("change", rTren); $("#trB").addEventListener("change", rTren);
+}
+
+/* ---------- PROGRAM INTERVENSI ---------- */
+function ringkasMapel(t) {
+  return daftarMapel(t).map(m => {
+    const all = siswaOf(t, m, ""); if (!all.length) return null;
+    const st = stats(all.map(s => s.pct)), c = [0, 0, 0, 0]; all.forEach(s => c[s.kat]++);
+    const dm = domainMeans(all), ds = Object.keys(dm).sort((a, b) => dm[a] - dm[b]);
+    const ks = daftarKelas(t, m).map(k => { const l = all.filter(s => s.k === k), dmk = domainMeans(l); return { k, n: l.length, mean: stats(l.map(s => s.pct)).mean, lemah: Object.keys(dmk).sort((a, b) => dmk[a] - dmk[b])[0] || "", kurang: l.filter(s => s.kat === 0).length }; }).sort((a, b) => a.mean - b.mean);
+    const bs = butirStats(all);
+    return { m, n: st.n, st, c, dm, ds, ks, nat: NASIONAL[m], tka: MAPEL_TKA_SMP.indexOf(m) > -1, sulit: bs.filter(x => x.p < .3).map(x => x.b), telaah: bs.filter(x => x.D != null && x.D < .2).map(x => x.b), nb: bs.length, peng: c[2] + c[3] };
+  }).filter(Boolean).sort((a, b) => (b.tka - a.tka) || (b.c[0] / b.n - a.c[0] / a.n));
+}
+function programTeks(t) {
+  const R = ringkasMapel(t), gm = S.cfg.grupMaks, b = S.cfg.batas;
+  if (!R.length) return null;
+  const temuan = [];
+  R.forEach(r => {
+    temuan.push(`<li><b>${esc(r.m)}</b>${r.tka ? "" : " (penguatan)"}: rata-rata <b>${fmt(r.st.mean)}</b>${r.nat != null ? ` (nasional TKA SMP 2026: ${fmt(r.nat, 2)})` : ""}; ${pctTxt(r.c[0], r.n)} siswa Kurang, ${pctTxt(r.peng, r.n)} Baik/Istimewa. Domain terlemah: <b>${esc(r.ds[0] || "–")}</b>${r.ds[0] ? ` (${fmt(r.dm[r.ds[0]], 0)}%)` : ""}${r.ds[1] ? `, disusul ${esc(r.ds[1])} (${fmt(r.dm[r.ds[1]], 0)}%)` : ""}. Kelas dengan rata-rata terendah: ${esc(r.ks[0].k)} (${fmt(r.ks[0].mean)}).${r.telaah.length ? ` Butir perlu ditelaah: no. ${r.telaah.join(", ")}.` : ""}</li>`);
+  });
+  const prog = [];
+  R.forEach(r => {
+    if (!r.c[0]) return;
+    const g = Math.ceil(r.c[0] / gm);
+    prog.push(`<li><b>Klinik ${esc(r.m)} (remedial terstruktur)</b> — ${r.c[0]} siswa kategori Kurang dibagi ${g} kelompok (maks ${gm} siswa), 2 × 40 menit per minggu selama 4 minggu di luar jam inti. Fokus: ${esc(r.ds.slice(0, 2).join(" dan "))}. Strategi: ${esc(strategi(r.ds[0] || ""))}. Setiap pertemuan ditutup kuis 5 soal untuk memantau kemajuan.</li>`);
+  });
+  R.forEach(r => {
+    prog.push(`<li><b>Penguatan domain di kelas reguler – ${esc(r.m)}</b> — guru menyisipkan 10–15 menit pemanasan atau tiket keluar pada domain terlemah tiap kelas: ${r.ks.map(k => `${esc(k.k)}: ${esc(k.lemah)}`).join("; ")}.</li>`);
+  });
+  const pengTot = R.reduce((s, r) => s + r.peng, 0);
+  if (pengTot) prog.push(`<li><b>Pengayaan dan tutor sebaya</b> — siswa kategori Baik/Istimewa (${R.map(r => `${esc(r.m)}: ${r.peng}`).join(", ")}) mendapat soal penalaran tingkat tinggi dan dilatih menjadi tutor sebaya (1 tutor : 3 teman) dalam klinik.</li>`);
+  const telaah = R.filter(r => r.telaah.length || r.sulit.length);
+  prog.push(`<li><b>MGMP sekolah dan telaah butir</b> — rapat guru mapel tiap 2 minggu: membahas peta domain per kelas, ${telaah.length ? telaah.map(r => `menelaah butir ${esc(r.m)} no. ${r.telaah.concat(r.sulit.filter(x => r.telaah.indexOf(x) < 0)).slice(0, 8).join(", ")}`).join("; ") + "; " : ""}menyusun soal setara untuk try out berikutnya, dan lesson study pada domain terlemah.</li>`);
+  prog.push(`<li><b>Kemitraan orang tua</b> — kartu capaian pribadi (tanpa peringkat) dikirim melalui wali kelas, berisi domain yang perlu dilatih dan ajakan belajar rutin 20–30 menit per hari di rumah.</li>`);
+  prog.push(`<li><b>Pemantauan</b> — try out berikutnya 5–6 minggu lagi dengan kisi-kisi setara; hasil dibandingkan di menu Tren. Tim: kepala sekolah, wakasek kurikulum, koordinator MGMP, wali kelas kelas 9.</li>`);
+  const target = R.map(r => `<li>${esc(r.m)}: rata-rata naik minimal 5 poin (dari ${fmt(r.st.mean)} ke ≥ ${fmt(r.st.mean + 5)}); siswa Kurang turun minimal seperempat (dari ${r.c[0]} ke ≤ ${Math.floor(r.c[0] * .75)}); domain ${esc(r.ds[0] || "-")} naik ke ≥ ${S.cfg.domMin}%.</li>`).join("");
+  const jadwal = [
+    ["1", "Rapat analisis hasil bersama guru; bentuk kelompok remedial dan pengayaan; kirim kartu capaian ke orang tua"],
+    ["2–3", "Klinik remedial 2×/minggu; penguatan domain 10–15 menit di kelas; MGMP menelaah butir"],
+    ["4", "Kuis kemajuan per kelompok; atur ulang anggota kelompok yang sudah tuntas; tutor sebaya mulai"],
+    ["5", "Latihan bergaya CBT (pilihan ganda, PG kompleks, benar/salah) dengan waktu nyata"],
+    ["6", "Try out berikutnya; analisis ulang di aplikasi; laporan ke rapat dewan guru dan komite"]
+  ];
+  return { R, html: `<h3>A. Temuan utama</h3><ul>${temuan.join("")}</ul>
+    <h3>B. Program prioritas</h3><ol>${prog.join("")}</ol>
+    <h3>C. Jadwal 6 minggu</h3><div class="tbl"><table><thead><tr><th>Minggu</th><th>Kegiatan</th></tr></thead><tbody>${jadwal.map(j => `<tr><td>${j[0]}</td><td>${j[1]}</td></tr>`).join("")}</tbody></table></div>
+    <h3>D. Indikator keberhasilan</h3><ul>${target}</ul>
+    <h3>E. Rambu</h3><ul><li>Hasil try out dipakai untuk memperbaiki pembelajaran, bukan untuk memberi label atau memeringkat siswa di depan umum.</li><li>Kategori capaian pada aplikasi ini mengacu rentang yang diberitakan untuk TKA SMP 2026 (Kurang &lt; ${fmt(b.memadai, 0)}; Memadai; Baik ≥ ${fmt(b.baik, 2)}; Istimewa ≥ ${fmt(b.istimewa, 0)}); skor try out sekolah tidak otomatis setara dengan skor TKA resmi.</li></ul>` };
+}
+function rProgram() {
+  const el = $("#v-program"), P = programTeks(F.t);
+  if (!P) return kosong(el);
+  const aiList = S.ai.filter(x => x.type === "soal");
+  const narasi = S.ai.filter(x => x.type === "narasi" && x.t === F.t).pop();
+  const mapelOpts = daftarMapel(F.t);
+  el.innerHTML = `<div class="row"><div><span class="kick">${esc(F.t)} · semua kelas</span><h2>Rekomendasi program intervensi sekolah</h2></div><span class="sp"></span>
+    <button class="btn noprint" type="button" id="pCopy">Salin teks</button><button class="btn noprint" type="button" onclick="window.print()">Cetak</button></div>
+  <p class="small mut noprint">Disusun otomatis dari data try out ${esc(F.t)} (semua mapel dan kelas). Sesuaikan dengan sumber daya sekolah sebelum ditetapkan.</p>
+  <div class="card prog mt" id="progBody">${P.html}</div>
+  <div class="grid g2 mt noprint">
+    <div class="card"><h3>Narasi program dengan AI <span class="badge ai">opsional</span></h3>
+      <p class="small">Gemini menyusun narasi program dari angka ringkasan di atas (tanpa nama siswa). Hasil AI wajib dibaca dan disunting kepala sekolah.</p>
+      <button class="btn pri" type="button" id="aiNar">Susun narasi</button><span id="aiNarMsg" class="small mut" role="status" aria-live="polite"></span>
+      <div id="aiNarOut">${narasi ? `<div class="aiq"><span class="badge ai">Buatan AI – perlu dicek</span><div style="white-space:pre-wrap" class="small mt">${esc(narasi.text)}</div></div>` : ""}</div></div>
+    <div class="card"><h3>Soal remedial sejenis dengan AI <span class="badge ai">opsional</span></h3>
+      <p class="small">Buat 5 soal pilihan ganda orisinal untuk domain terlemah sebagai bahan klinik. Soal buatan AI ditandai <b>perlu dicek guru</b>.</p>
+      <div class="row"><label class="small">Mapel <select id="aiM">${mapelOpts.map(m => opt(m, m, F.m)).join("")}</select></label><label class="small">Domain <select id="aiD"></select></label></div>
+      <div class="row mt"><button class="btn pri" type="button" id="aiSoal">Buat 5 soal</button>${aiList.length ? `<button class="btn" type="button" id="aiExp">Unduh soal AI (JSON)</button><button class="btn bad" type="button" id="aiDel">Hapus semua soal AI</button>` : ""}<span id="aiSoalMsg" class="small mut" role="status" aria-live="polite"></span></div>
+      <div id="aiSoalOut">${aiList.slice(-10).reverse().map(soalHTML).join("")}</div></div>
+  </div>`;
+  const fillDom = () => { const m = $("#aiM").value, R = P.R.find(r => r.m === m); $("#aiD").innerHTML = (R ? R.ds : []).map(d => opt(d, d + (R ? ` (${fmt(R.dm[d], 0)}%)` : ""), "")).join(""); };
+  fillDom(); $("#aiM").addEventListener("change", fillDom);
+  $("#pCopy").addEventListener("click", () => { const txt = $("#progBody").innerText; (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => toast("Teks program disalin."), () => { download("program-intervensi.txt", txt, "text/plain;charset=utf-8"); }); });
+  $("#aiNar").addEventListener("click", () => aiNarasi(P));
+  $("#aiSoal").addEventListener("click", aiSoal);
+  if ($("#aiExp")) $("#aiExp").addEventListener("click", () => download("soal-remedial-ai.json", JSON.stringify(S.ai.filter(x => x.type === "soal"), null, 2), "application/json"));
+  if ($("#aiDel")) $("#aiDel").addEventListener("click", () => { if (confirm("Hapus semua soal buatan AI?")) { S.ai = S.ai.filter(x => x.type !== "soal"); save(); rProgram(); } });
+}
+function soalHTML(x) {
+  return `<div class="aiq"><div class="row"><span class="badge ai">Buatan AI – perlu dicek guru</span><span class="xs mut">${esc(x.m)} · ${esc(x.d)}</span></div>
+  <p class="small mt"><b>${esc(x.q)}</b></p><ol type="A" class="small" style="margin:4px 0;padding-left:22px">${(x.o || []).map((o, i) => `<li${i === x.k ? ' style="font-weight:700"' : ""}>${esc(o)}${i === x.k ? " ✔" : ""}</li>`).join("")}</ol>
+  <p class="xs mut">Pembahasan: ${esc(x.p || "")}</p></div>`;
+}
+async function gemini(prompt, json) {
+  if (!S.cfg.apiKey) throw new Error("Isi kunci API Gemini di menu Pengaturan terlebih dahulu.");
+  const url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(S.cfg.model || "gemini-2.5-flash") + ":generateContent";
+  const body = { contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { temperature: .6 } };
+  if (json) body.generationConfig.responseMimeType = "application/json";
+  const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": S.cfg.apiKey }, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error((j.error && j.error.message) || ("HTTP " + r.status));
+  const parts = (((j.candidates || [])[0] || {}).content || {}).parts || [];
+  return parts.map(p => p.text || "").join("");
+}
+async function aiNarasi(P) {
+  const msg = $("#aiNarMsg"); msg.textContent = " Menyusun…";
+  const data = P.R.map(r => ({ mapel: r.m, mata_uji_TKA_SMP: r.tka, peserta: r.n, rata: +r.st.mean.toFixed(1), sd: +r.st.sd.toFixed(1), rerata_nasional_TKA_SMP_2026: r.nat, kategori: { Kurang: r.c[0], Memadai: r.c[1], Baik: r.c[2], Istimewa: r.c[3] }, domain: Object.fromEntries(r.ds.map(d => [d, +r.dm[d].toFixed(1)])), kelas: r.ks.map(k => ({ kelas: k.k, rata: +k.mean.toFixed(1), domain_terlemah: k.lemah, jumlah_kurang: k.kurang })), butir_perlu_telaah: r.telaah }));
+  const prompt = `Anda konsultan mutu pendidikan SMP di Indonesia. Susun narasi singkat (maksimal 350 kata, bahasa Indonesia baku, tanpa markdown tebal) program intervensi sekolah untuk meningkatkan hasil Tes Kemampuan Akademik (TKA) berdasarkan ringkasan try out berikut. Struktur: 1) Diagnosis singkat, 2) Tiga program prioritas yang konkret (siapa, kapan, berapa lama), 3) Cara memantau. Jangan memberi label negatif pada siswa atau kelas. Data (tanpa nama siswa): ${JSON.stringify(data)}`;
+  try {
+    const text = await gemini(prompt, false);
+    S.ai.push({ type: "narasi", t: F.t, text, at: new Date().toISOString() }); save();
+    $("#aiNarOut").innerHTML = `<div class="aiq"><span class="badge ai">Buatan AI – perlu dicek</span><div style="white-space:pre-wrap" class="small mt">${esc(text)}</div></div>`;
+    msg.textContent = " Selesai.";
+  } catch (e) { msg.textContent = " Gagal: " + e.message; }
+}
+async function aiSoal() {
+  const m = $("#aiM").value, d = $("#aiD").value, msg = $("#aiSoalMsg");
+  if (!d) { msg.textContent = " Pilih domain."; return; }
+  msg.textContent = " Membuat soal…";
+  const bhs = m === "Bahasa Inggris" ? "Soal dan pilihan dalam bahasa Inggris, pembahasan dalam bahasa Indonesia." : "Bahasa Indonesia.";
+  const prompt = `Buat 5 soal pilihan ganda ORISINAL untuk remedial siswa SMP kelas 9 persiapan Tes Kemampuan Akademik (TKA), mata pelajaran ${m}, domain "${d}". Gunakan stimulus konteks sehari-hari Indonesia yang pendek, tingkat kesulitan bertahap (pemahaman, penerapan, penalaran). Tepat satu jawaban benar, 4 pilihan. ${bhs} Periksa ulang hitungan. Keluarkan JSON array: [{"q":"stimulus dan pertanyaan","o":["A","B","C","D"],"k":indeks_jawaban_benar_0_sampai_3,"p":"pembahasan singkat","level":"pemahaman|penerapan|penalaran"}]`;
+  try {
+    const txt = await gemini(prompt, true);
+    let arr = JSON.parse(txt.replace(/^```(json)?|```$/g, "").trim());
+    if (!Array.isArray(arr)) arr = arr.soal || [];
+    const ok = arr.filter(x => x && x.q && Array.isArray(x.o) && x.o.length >= 2 && Number.isInteger(+x.k) && +x.k >= 0 && +x.k < x.o.length)
+      .map(x => ({ type: "soal", m, d, q: String(x.q), o: x.o.map(String), k: +x.k, p: String(x.p || ""), level: String(x.level || ""), at: new Date().toISOString(), cek: "perlu dicek guru" }));
+    if (!ok.length) throw new Error("format jawaban AI tidak dikenali");
+    S.ai = S.ai.concat(ok); save(); rProgram(); toast(ok.length + " soal AI ditambahkan (perlu dicek guru).");
+  } catch (e) { msg.textContent = " Gagal: " + e.message; }
+}
+
+/* ---------- DATA: impor ---------- */
+const ALIAS = {
+  nama: ["nama", "nama siswa", "nama murid", "nama peserta", "siswa", "murid", "peserta", "kode", "kode siswa", "kode peserta"],
+  kelas: ["kelas", "rombel", "rombongan belajar"],
+  mapel: ["mapel", "mata pelajaran", "pelajaran", "mata uji", "subjek"],
+  tryout: ["tryout", "try out", "try-out", "to", "nama tryout", "nama try out", "tes"],
+  domain: ["domain", "elemen", "lingkup", "lingkup materi", "proses kognitif", "materi", "keterampilan", "skill"],
+  butir: ["butir", "no soal", "nomor soal", "no. soal", "no butir", "nomor butir"],
+  skor: ["skor", "nilai", "benar", "poin", "score", "skor siswa"],
+  maks: ["maks", "skor maks", "skor maksimal", "maksimal", "max", "skor maksimum"]
+};
+const ABAIKAN = /^(no\.?|nomor|nis|nisn|nik|jenis kelamin|jk|l\/p|gender|tanggal lahir|ttl|alamat|absen|no absen|no\. absen)$/i;
+const TOTALCOL = /^(total|skor total|nilai total|nilai akhir|skor akhir|jumlah|rata-rata|rerata)$/i;
+function parseCSV(text) {
+  text = text.replace(/^﻿/, "").replace(/\r\n?/g, "\n");
+  const first = text.split("\n").find(l => l.trim()) || "";
+  let sep = ",", best = 0;
+  for (const c of ["\t", ";", ","]) { const n = first.split(c).length; if (n > best) { best = n; sep = c; } }
+  const rows = []; let row = [], cur = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === sep) { row.push(cur); cur = ""; }
+    else if (ch === "\n") { row.push(cur); rows.push(row); row = []; cur = ""; }
+    else cur += ch;
+  }
+  if (cur !== "" || row.length) { row.push(cur); rows.push(row); }
+  return { sep, rows: rows.filter(r => r.some(c => c.trim() !== "")) };
+}
+function num(v) {
+  let s = String(v == null ? "" : v).trim().replace(/\s|%/g, "");
+  if (!s) return NaN;
+  if (/^-?\d{1,3}(\.\d{3})+,\d+$/.test(s)) s = s.replace(/\./g, "").replace(",", ".");
+  else if (/^-?\d+,\d+$/.test(s)) s = s.replace(",", ".");
+  return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN;
+}
+function parsePeta(txt) {
+  const map = {};
+  String(txt || "").split("\n").forEach(l => {
+    const m = l.trim().match(/^(\d+)\s*(?:[-–]\s*(\d+))?\s*[:=]?\s*(.+)$/);
+    if (!m) return; const a = +m[1], b = m[2] ? +m[2] : a;
+    for (let i = Math.min(a, b); i <= Math.max(a, b); i++) map[String(i)] = m[3].trim();
+  });
+  return map;
+}
+function periksa(text) {
+  const { rows } = parseCSV(text);
+  if (rows.length < 2) return { err: "Data kosong atau hanya berisi judul kolom." };
+  const head = rows[0].map(h => h.trim()), low = head.map(h => h.toLowerCase().replace(/\s+/g, " "));
+  const col = {}; for (const k in ALIAS) col[k] = low.findIndex(h => ALIAS[k].indexOf(h) > -1);
+  const warn = [];
+  const ignored = head.filter((h, i) => ABAIKAN.test(low[i]) && i !== col.nama && i !== col.kelas);
+  if (ignored.length) warn.push("Kolom diabaikan dan tidak disimpan: " + ignored.join(", ") + ".");
+  if (col.nama < 0) return { err: "Kolom nama tidak ditemukan. Beri judul kolom “nama” (atau “kode”)." };
+  const defT = $("#impT").value.trim() || "Try Out " + (uniq(S.data, "t").length + 1);
+  const defM = $("#impM").value, defK = $("#impK").value.trim(), defX = num($("#impX").value) || 100;
+  if (col.kelas < 0 && !defK) return { err: "Kolom kelas tidak ditemukan. Tambahkan kolom “kelas” atau isi “Kelas bawaan”." };
+  const out = []; let fmtName, skip = 0;
+  const base = r => ({ t: col.tryout > -1 && (r[col.tryout] || "").trim() ? r[col.tryout].trim() : defT, k: col.kelas > -1 && (r[col.kelas] || "").trim() ? r[col.kelas].trim() : defK, n: (r[col.nama] || "").trim().replace(/\s+/g, " "), m: col.mapel > -1 && (r[col.mapel] || "").trim() ? normMapel(r[col.mapel]) : defM });
+  const body = rows.slice(1);
+  if (col.butir > -1 && col.skor > -1) {
+    fmtName = "Skor per butir (panjang)";
+    for (const r of body) { const b0 = base(r), s = num(r[col.skor]); if (!b0.n || isNaN(s)) { skip++; continue; } const peta = parsePeta(S.cfg.peta[b0.m]); const bt = String(r[col.butir] || "").trim(); const x = col.maks > -1 && !isNaN(num(r[col.maks])) ? num(r[col.maks]) : Math.max(1, s); out.push(Object.assign(b0, { d: col.domain > -1 && (r[col.domain] || "").trim() ? r[col.domain].trim() : (peta[bt] || "Tanpa domain"), b: bt, s, x })); }
+  } else if (col.domain > -1 && col.skor > -1) {
+    fmtName = "Skor per domain (panjang)";
+    for (const r of body) { const b0 = base(r), s = num(r[col.skor]); if (!b0.n || isNaN(s)) { skip++; continue; } const d = (r[col.domain] || "").trim(); out.push(Object.assign(b0, { d: TOTALCOL.test(d) ? TOTAL : (d || "Tanpa domain"), b: "", s, x: col.maks > -1 && !isNaN(num(r[col.maks])) ? num(r[col.maks]) : defX })); }
+  } else {
+    const used = new Set(Object.values(col).filter(i => i > -1));
+    const numCols = head.map((h, i) => i).filter(i => !used.has(i) && !ABAIKAN.test(low[i]) && head[i] !== "");
+    if (!numCols.length) return { err: "Tidak ada kolom skor. Lihat templat di atas." };
+    const itemLike = numCols.filter(i => /^(no\.?\s*|butir\s*|soal\s*|b|s|q)?\s*\d+$/i.test(head[i]));
+    if (itemLike.length >= 5 && itemLike.length >= numCols.length - 1) {
+      fmtName = "Skor per butir (matriks)";
+      const maxCol = {}; itemLike.forEach(i => { maxCol[i] = Math.max(1, ...body.map(r => num(r[i])).filter(v => !isNaN(v))); });
+      for (const r of body) { const b0 = base(r); if (!b0.n) { skip++; continue; } const peta = parsePeta(S.cfg.peta[b0.m]); for (const i of itemLike) { const s = num(r[i]); if (isNaN(s)) continue; const bt = head[i].replace(/\D+/g, ""); out.push(Object.assign({}, b0, { d: peta[bt] || "Tanpa domain", b: bt, s, x: maxCol[i] })); } }
+      if (!Object.keys(parsePeta(S.cfg.peta[defM])).length) warn.push("Peta butir untuk " + defM + " belum diisi, domain akan tercatat “Tanpa domain”.");
+    } else {
+      fmtName = "Skor per domain (lebar)";
+      for (const r of body) { const b0 = base(r); if (!b0.n) { skip++; continue; } let any = false; for (const i of numCols) { const s = num(r[i]); if (isNaN(s)) continue; any = true; out.push(Object.assign({}, b0, { d: TOTALCOL.test(low[i]) ? TOTAL : head[i], b: "", s, x: defX })); } if (!any) skip++; }
+      const over = out.filter(r => r.s > r.x).length; if (over) warn.push(over + " nilai melebihi skor maksimum " + defX + ". Periksa isian “skor maksimum”.");
+    }
+  }
+  if (!out.length) return { err: "Tidak ada baris yang bisa dibaca. Periksa judul kolom dan angka." };
+  if (skip) warn.push(skip + " baris dilewati (nama kosong atau skor bukan angka).");
+  const pairs = uniq(out.map(r => ({ p: r.t + " – " + r.m })), "p");
+  if (pairs.some(p => /\(contoh\)$/.test(p.split(" – ")[0]))) warn.push("Nama try out berakhiran “(contoh)” disarankan diganti agar tidak tertukar dengan data contoh.");
+  return { rows: out, fmtName, warn, pairs, nSiswa: new Set(out.map(r => r.k + "|" + r.n)).size, kelas: uniq(out, "k").sort(natSort) };
+}
+function normMapel(s) {
+  const v = String(s).trim(), l = v.toLowerCase();
+  if (/^(mat|mtk|matematika|math)/.test(l)) return "Matematika";
+  if (/^(b\.?\s*indo|bahasa indonesia|bind|bi$)/.test(l)) return "Bahasa Indonesia";
+  if (/^(b\.?\s*ing|bahasa inggris|bing|english)/.test(l)) return "Bahasa Inggris";
+  if (/^(ipa|sains|science)/.test(l)) return "IPA";
+  return v;
+}
+function rData() {
+  const mp = $("#petaM"), ms = Array.from(new Set(MAPEL_URUT.concat(uniq(S.data, "m"))));
+  if (!mp.options.length || mp.options.length !== ms.length) { const cur = mp.value || "Matematika"; mp.innerHTML = ms.map(m => opt(m, m, cur)).join(""); }
+  $("#petaTxt").value = S.cfg.peta[mp.value] || "";
+  const pairs = {};
+  S.data.forEach(r => { const k = r.t + "\u0001" + r.m; (pairs[k] || (pairs[k] = { t: r.t, m: r.m, siswa: new Set(), butir: false })); pairs[k].siswa.add(r.k + "|" + r.n); if (r.b) pairs[k].butir = true; });
+  const list = Object.values(pairs);
+  $("#dataList").innerHTML = `${S.contoh ? `<div class="note warn"><b>Data contoh aktif</b>: “Try Out 1 (contoh)” dan “Try Out 2 (contoh)”, 72 siswa fiktif. <button class="btn sm" type="button" data-act="hapusContoh">Hapus data contoh</button></div>` : `<div class="note"><span>Data contoh disembunyikan.</span> <button class="btn sm" type="button" data-act="tampilContoh">Tampilkan lagi</button></div>`}
+  ${list.length ? `<div class="tbl mt"><table><thead><tr><th>Try out</th><th>Mapel</th><th class="n">Siswa</th><th>Jenis</th><th><span class="sr">Aksi</span></th></tr></thead><tbody>${list.map((p, i) => `<tr><td>${esc(p.t)}</td><td>${esc(p.m)}</td><td class="n">${p.siswa.size}</td><td>${p.butir ? "per butir" : "per domain"}</td><td><div class="row"><button class="btn sm" type="button" data-ren="${i}">Ganti nama try out</button><button class="btn sm bad" type="button" data-del="${i}">Hapus</button></div></td></tr>`).join("")}</tbody></table></div>` : `<p class="small mut mt">Belum ada data milik Anda.</p>`}`;
+  $$("[data-del]").forEach(b => b.addEventListener("click", () => { const p = list[+b.dataset.del]; if (!confirm(`Hapus data ${p.t} – ${p.m}?`)) return; S.data = S.data.filter(r => !(r.t === p.t && r.m === p.m)); save(); render(); toast("Data dihapus."); }));
+  $$("[data-ren]").forEach(b => b.addEventListener("click", () => { const p = list[+b.dataset.ren]; const nv = (prompt("Nama baru untuk try out “" + p.t + "” (semua mapel):", p.t) || "").trim(); if (!nv || nv === p.t) return; S.data.forEach(r => { if (r.t === p.t) r.t = nv; }); save(); render(); toast("Nama try out diganti."); }));
+}
+function tampilPeriksa(res) {
+  const out = $("#impOut");
+  if (res.err) { pending = null; $("#btnImp").disabled = true; out.innerHTML = `<div class="note bad">${esc(res.err)}</div>`; return; }
+  pending = res; $("#btnImp").disabled = false;
+  out.innerHTML = `<div class="note ok"><b>Siap disimpan.</b> Format: ${esc(res.fmtName)} · ${res.nSiswa} siswa · ${res.rows.length} sel skor · kelas: ${res.kelas.map(esc).join(", ")}<br>Try out – mapel: ${res.pairs.map(p => esc(p)).join("; ")}</div>${res.warn.map(w => `<div class="note warn mt small">${esc(w)}</div>`).join("")}`;
+}
+function simpanImpor() {
+  if (!pending) return;
+  const rows = pending.rows;
+  if ($("#impMode").value === "ganti") { const keys = new Set(rows.map(r => r.t + "\u0001" + r.m)); S.data = S.data.filter(r => !keys.has(r.t + "\u0001" + r.m)); }
+  S.data = S.data.concat(rows.map(r => ({ t: r.t, k: r.k, n: r.n, m: r.m, d: r.d, b: r.b, s: r.s, x: r.x })));
+  save(); F.t = rows[0].t; F.m = rows[0].m; F.k = "";
+  pending = null; $("#btnImp").disabled = true; $("#paste").value = "";
+  $("#impOut").innerHTML = `<div class="note ok">Tersimpan. ${S.contoh ? "Data contoh masih tampil; hapus bila tidak diperlukan." : ""}</div>`;
+  toast("Data try out tersimpan di perangkat.");
+  render();
+}
+const TPL = {
+  lebar: "nama,kelas,mapel,Bilangan,Aljabar,Geometri dan Pengukuran,Data dan Peluang\nSiswa Satu,9A,Matematika,75,60,55,80\nSiswa Dua,9A,Matematika,50,35,40,65\nSiswa Satu,9A,Bahasa Indonesia,85,70,60,\nSiswa Dua,9A,Bahasa Indonesia,70,55,45,\n",
+  panjang: "tryout,nama,kelas,mapel,domain,skor,maks\nTry Out 1,Siswa Satu,9A,Matematika,Bilangan,6,8\nTry Out 1,Siswa Satu,9A,Matematika,Aljabar,4,8\nTry Out 1,Siswa Satu,9A,Bahasa Indonesia,Menemukan informasi,9,10\n",
+  matriks: "nama,kelas," + Array.from({ length: 30 }, (_, i) => i + 1).join(",") + "\nSiswa Satu,9A," + Array.from({ length: 30 }, (_, i) => (i * 7 % 3 ? 1 : 0)).join(",") + "\nSiswa Dua,9A," + Array.from({ length: 30 }, (_, i) => (i * 5 % 4 ? 0 : 1)).join(",") + "\n"
+};
+
+/* ---------- PENGATURAN ---------- */
+function rCfg() {
+  const c = S.cfg;
+  $("#cMem").value = c.batas.memadai; $("#cBaik").value = c.batas.baik; $("#cIst").value = c.batas.istimewa;
+  $("#cDom").value = c.domMin; $("#cGrp").value = c.grupMaks; $("#cSamar").checked = !!c.samar; $("#cTema").value = c.tema;
+  $("#cKey").value = c.apiKey ? "••••••••" + c.apiKey.slice(-4) : ""; $("#cModel").value = c.model;
+}
+function applyTheme() { const t = S.cfg.tema; if (t === "system") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", t); }
+
+/* ---------- SUMBER ---------- */
+function rSumber() {
+  $("#v-sumber").innerHTML = `<h2>Dasar dan sumber</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Status mata pelajaran</h3>
+      <p class="small">Menurut <b>Permendikdasmen No. 9 Tahun 2025</b> tentang Tes Kemampuan Akademik, TKA jenjang SMP/sederajat menguji <b>Bahasa Indonesia dan Matematika</b>. <b>IPA dan Bahasa Inggris bukan mata uji TKA SMP</b>; aplikasi tetap dapat menganalisis try out kedua mapel itu sebagai <b>penguatan</b> (ditandai “penguatan”).</p>
+      <p class="small">TKA SMP 2026 dilaksanakan 6–16 April 2026 berbasis komputer; Matematika dan Bahasa Indonesia masing-masing 30 soal dalam 75 menit, bentuk pilihan ganda, pilihan ganda kompleks, dan benar/salah. Hasil memakai penskoran klasik skala 0–100 beserta kategori capaian dan deskripsi kemampuan.</p>
+      <p class="small">Rerata nasional TKA SMP 2026: Bahasa Indonesia 60,83 dan Matematika 40,34 (siaran pers Kemendikdasmen). Dipakai hanya sebagai garis pembanding.</p></div>
+    <div class="card"><h3>Cara aplikasi menghitung</h3><ul class="small" style="padding-left:20px;margin:0">
+      <li><b>Skor mapel</b> = jumlah skor ÷ jumlah skor maksimum × 100 (atau kolom total bila ada).</li>
+      <li><b>Skor domain</b> = skor domain ÷ maksimum domain × 100.</li>
+      <li><b>Kategori</b>: Kurang &lt; 50; Memadai 50–76,66; Baik 76,67–94,99; Istimewa ≥ 95 (bawaan, mengacu kategori TKA Bahasa Indonesia SMP 2026 yang diberitakan; bisa diubah).</li>
+      <li><b>Tingkat kesukaran (p)</b> = proporsi siswa menjawab benar; &lt; 0,30 sulit, &gt; 0,85 mudah.</li>
+      <li><b>Daya beda (D)</b> = p kelompok atas 27% − p kelompok bawah 27%; &lt; 0,20 perlu ditelaah, negatif = cek kunci.</li>
+      <li><b>Remedial</b> = skor &lt; batas Memadai; <b>penguatan domain</b> = skor domain &lt; batas domain; <b>pengayaan</b> = skor ≥ batas Baik.</li></ul></div>
+  </div>
+  <div class="card mt"><h3>Sumber riset</h3><ol class="small" style="padding-left:20px;margin:0">
+    <li><a href="https://peraturan.bpk.go.id/Details/321171" target="_blank" rel="noopener">Permendikdasmen Nomor 9 Tahun 2025 tentang Tes Kemampuan Akademik – JDIH BPK</a></li>
+    <li><a href="https://pusmendik.kemdikbud.go.id/tka/tka/view/mata-pelajaran-wajib/smp" target="_blank" rel="noopener">Mata pelajaran wajib TKA SMP – Pusat Asesmen Pendidikan</a></li>
+    <li><a href="https://www.kemendikdasmen.go.id/siaran-pers/15444-hasil-tka-2026-resmi-dirilis-kemendikdasmen-dorong-evaluasi-pembelajaran-yang-lebih-presisi" target="_blank" rel="noopener">Hasil TKA 2026 Resmi Dirilis, Kemendikdasmen Dorong Evaluasi Pembelajaran yang Lebih Presisi – Kemendikdasmen</a></li>
+    <li><a href="https://www.medcom.id/pendidikan/news-pendidikan/9K5ywVaK-4-kategori-nilai-tka-bahasa-indonesia-kamu-masuk-yang-mana" target="_blank" rel="noopener">4 Kategori Nilai TKA Bahasa Indonesia – Medcom.id</a></li>
+    <li><a href="https://www.jpnn.com/news/jadwal-tka-2026-jenjang-sd-dan-smp-jumlah-soal-durasinya" target="_blank" rel="noopener">Jadwal TKA 2026 Jenjang SD dan SMP, Jumlah Soal dan Durasinya – JPNN</a></li>
+  </ol></div>
+  <div class="note mt small"><b>Privasi:</b> data siswa hanya tersimpan di peramban perangkat ini. Data contoh memakai nama fiktif. Fitur AI hanya mengirim angka ringkasan, tidak pernah nama siswa.</div>`;
+}
+
+/* ---------- ekspor ---------- */
+function exportCSV() {
+  const rows = [["tryout", "kelas", "nama", "mapel", "domain", "butir", "skor", "maks"]].concat(S.data.map(r => [r.t, r.k, r.n, r.m, r.d === TOTAL ? "total" : r.d, r.b, r.s, r.x]));
+  if (rows.length < 2) return toast("Belum ada data milik Anda untuk diunduh.");
+  download("data-tryout-tka.csv", toCSV(rows));
+}
+function exportRekap() {
+  const rows = [["tryout", "mapel", "kelas", "nama", "skor", "kategori", "domain_terlemah", "domain", "skor_domain"]];
+  daftarTryout().forEach(t => daftarMapel(t).forEach(m => siswaOf(t, m, "").sort((a, b) => natSort(a.k, b.k) || natSort(a.n, b.n)).forEach(s => Object.keys(s.domPct).forEach(d => rows.push([t, m, s.k, s.n, fmt(s.pct), KAT[s.kat], s.lemah, d, fmt(s.domPct[d])])))));
+  download("rekap-nilai-tryout.csv", toCSV(rows));
+}
+
+/* ---------- event global ---------- */
+document.addEventListener("click", e => {
+  const g = e.target.closest("[data-go]"); if (g) { e.preventDefault(); go(g.dataset.go); return; }
+  const a = e.target.closest("[data-act]");
+  if (a) {
+    const act = a.dataset.act;
+    if (act === "hapusContoh") { S.contoh = false; save(); render(); toast("Data contoh disembunyikan."); }
+    if (act === "tampilContoh") { S.contoh = true; save(); render(); }
+    if (act === "tutupDetail") { detailKey = ""; $("#detail").innerHTML = ""; }
+    return;
+  }
+  const d = e.target.closest("[data-detail]"); if (d) { showDetail(d.dataset.detail); return; }
+  const s = e.target.closest("[data-sort]"); if (s) { const k = s.dataset.sort; sortSiswa = { key: k, dir: sortSiswa.key === k ? -sortSiswa.dir : (k === "nama" || k === "kelas" ? 1 : -1) }; rSiswa(); const b = $(`[data-sort="${k}"]`); if (b) b.focus(); return; }
+  const tp = e.target.closest("[data-tpl]"); if (tp) { download("templat-" + tp.dataset.tpl + ".csv", TPL[tp.dataset.tpl]); }
+});
+$$("nav.tabs button").forEach(b => b.addEventListener("click", () => go(b.dataset.tab)));
+$("nav.tabs").addEventListener("keydown", e => {
+  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+  const bs = $$("nav.tabs button"); let i = bs.indexOf(document.activeElement); if (i < 0) return;
+  i = (i + (e.key === "ArrowRight" ? 1 : -1) + bs.length) % bs.length; bs[i].focus(); go(bs[i].dataset.tab); bs[i].focus();
+});
+$("#fT").addEventListener("change", e => { F.t = e.target.value; render(); });
+$("#fM").addEventListener("change", e => { F.m = e.target.value; render(); });
+$("#fK").addEventListener("change", e => { F.k = e.target.value; render(); });
+$("#themeBtn").addEventListener("click", () => {
+  const dark = document.documentElement.getAttribute("data-theme") === "dark" || (S.cfg.tema === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+  S.cfg.tema = dark ? "light" : "dark"; applyTheme(); save(); if (TAB === "pengaturan") rCfg();
+});
+/* impor */
+const drop = $("#drop"), file = $("#file");
+drop.addEventListener("click", () => file.click());
+drop.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); file.click(); } });
+["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("on"); }));
+["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("on"); }));
+drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) bacaBerkas(f); });
+file.addEventListener("change", () => { if (file.files[0]) bacaBerkas(file.files[0]); file.value = ""; });
+function bacaBerkas(f) {
+  if (/\.xlsx?$/i.test(f.name)) { tampilPeriksa({ err: "Berkas Excel belum didukung langsung. Di Excel/Google Sheets pilih Simpan sebagai / Unduh → CSV, lalu pilih berkas CSV itu." }); return; }
+  const r = new FileReader(); r.onload = () => { $("#paste").value = r.result; if (!$("#impT").value.trim()) $("#impT").value = f.name.replace(/\.[^.]+$/, "").replace(/[_-]+/g, " "); tampilPeriksa(periksa(r.result)); }; r.readAsText(f);
+}
+$("#btnCek").addEventListener("click", () => tampilPeriksa(periksa($("#paste").value)));
+$("#paste").addEventListener("input", () => { pending = null; $("#btnImp").disabled = true; });
+$("#btnImp").addEventListener("click", simpanImpor);
+$("#petaM").addEventListener("change", () => { $("#petaTxt").value = S.cfg.peta[$("#petaM").value] || ""; });
+$("#btnPeta").addEventListener("click", () => { S.cfg.peta[$("#petaM").value] = $("#petaTxt").value.trim(); save(); toast("Peta butir disimpan."); });
+$("#btnPetaApply").addEventListener("click", () => {
+  const m = $("#petaM").value, p = parsePeta($("#petaTxt").value); S.cfg.peta[m] = $("#petaTxt").value.trim();
+  let n = 0; S.data.forEach(r => { if (r.m === m && r.b && p[r.b]) { r.d = p[r.b]; n++; } }); save(); render(); toast(n + " skor butir " + m + " diperbarui domainnya.");
+});
+$("#expCSV").addEventListener("click", exportCSV);
+$("#expRekap").addEventListener("click", exportRekap);
+$("#expJSON").addEventListener("click", () => { const cfg = Object.assign({}, S.cfg, { apiKey: "" }); download("cadangan-analisis-tryout-tka.json", JSON.stringify({ aplikasi: "Analisis Hasil Try Out TKA", v: 1, dibuat: new Date().toISOString(), cfg, data: S.data, ai: S.ai }, null, 1), "application/json"); });
+$("#impJSONbtn").addEventListener("click", () => $("#impJSON").click());
+$("#impJSON").addEventListener("change", () => {
+  const f = $("#impJSON").files[0]; if (!f) return;
+  const r = new FileReader(); r.onload = () => {
+    try {
+      const o = JSON.parse(r.result); if (!Array.isArray(o.data)) throw new Error("bukan berkas cadangan aplikasi ini");
+      if (!confirm("Pulihkan cadangan? Data Anda saat ini akan diganti.")) return;
+      const key = S.cfg.apiKey;
+      S.data = o.data.filter(x => x && x.n && x.t).map(x => ({ t: String(x.t), k: String(x.k || ""), n: String(x.n), m: String(x.m || ""), d: String(x.d || ""), b: String(x.b || ""), s: +x.s || 0, x: +x.x || 0 }));
+      if (o.cfg) { S.cfg = Object.assign(clone(DEF_CFG), o.cfg); S.cfg.batas = Object.assign(clone(DEF_CFG.batas), o.cfg.batas || {}); S.cfg.apiKey = key; }
+      S.ai = Array.isArray(o.ai) ? o.ai : S.ai; save(); applyTheme(); render(); toast("Cadangan dipulihkan.");
+    } catch (e) { toast("Gagal memulihkan: " + e.message); }
+  }; r.readAsText(f); $("#impJSON").value = "";
+});
+$("#btnWipe").addEventListener("click", () => { if (!S.data.length) return toast("Belum ada data milik Anda."); if (confirm("Hapus SEMUA data try out milik Anda dari perangkat ini? Unduh cadangan dulu bila perlu.")) { S.data = []; save(); render(); toast("Data Anda dihapus."); } });
+/* pengaturan */
+$("#btnCfg").addEventListener("click", () => {
+  const m = num($("#cMem").value), b = num($("#cBaik").value), i = num($("#cIst").value);
+  if (!(m > 0 && b > m && i > b && i <= 100)) return toast("Batas harus naik: Memadai < Baik < Istimewa ≤ 100.");
+  S.cfg.batas = { memadai: m, baik: b, istimewa: i };
+  S.cfg.domMin = Math.min(100, Math.max(1, num($("#cDom").value) || 50));
+  S.cfg.grupMaks = Math.min(40, Math.max(2, Math.round(num($("#cGrp").value) || 8)));
+  S.cfg.samar = $("#cSamar").checked; S.cfg.tema = $("#cTema").value;
+  applyTheme(); save(); toast("Pengaturan disimpan.");
+});
+$("#btnCfgReset").addEventListener("click", () => { const keep = { apiKey: S.cfg.apiKey, model: S.cfg.model, peta: S.cfg.peta }; S.cfg = Object.assign(clone(DEF_CFG), keep); applyTheme(); save(); rCfg(); toast("Pengaturan bawaan dipulihkan."); });
+$("#btnKey").addEventListener("click", () => { const v = $("#cKey").value.trim(); if (v && v.indexOf("••") !== 0) S.cfg.apiKey = v; S.cfg.model = $("#cModel").value.trim() || "gemini-2.5-flash"; save(); rCfg(); $("#keyMsg").textContent = S.cfg.apiKey ? "Kunci tersimpan di perangkat ini." : "Belum ada kunci."; });
+$("#btnKeyDel").addEventListener("click", () => { S.cfg.apiKey = ""; save(); rCfg(); $("#keyMsg").textContent = "Kunci dihapus dari perangkat."; });
+$("#btnKeyTest").addEventListener("click", async () => { $("#keyMsg").textContent = "Menguji…"; try { const t = await gemini("Jawab satu kata: siap", false); $("#keyMsg").textContent = "Terhubung. Jawaban: " + t.trim().slice(0, 40); } catch (e) { $("#keyMsg").textContent = "Gagal: " + e.message; } });
+/* tooltip */
+const tip = $("#tip");
+function showTip(el, x, y) { tip.textContent = el.getAttribute("data-tip"); tip.style.display = "block"; const w = tip.offsetWidth, h = tip.offsetHeight; tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, x + 12)) + "px"; tip.style.top = Math.max(8, y - h - 12) + "px"; }
+document.addEventListener("mousemove", e => { const el = e.target.closest && e.target.closest("[data-tip]"); if (el) showTip(el, e.clientX, e.clientY); else tip.style.display = "none"; });
+document.addEventListener("focusin", e => { const el = e.target.closest && e.target.closest("[data-tip]"); if (el) { const r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top); } else tip.style.display = "none"; });
+document.addEventListener("scroll", () => tip.style.display = "none", { passive: true });
+
+/* ---------- mulai ---------- */
+load();
+CONTOH = buatContoh();
+applyTheme();
+render();
+</script>
+</body>
+</html>

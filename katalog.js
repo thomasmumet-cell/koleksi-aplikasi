@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Analisis Hasil Try Out TKA",
+    kategori: "Persiapan TKA",
+    jenis: "HTML",
+    deskripsi: "Guru menempel atau mengimpor skor try out (CSV per domain atau per butir); aplikasi menghitung rata-rata, sebaran, kategori capaian, domain dan butir terlemah per kelas, kelompok remedial–penguatan–pengayaan, tren antar try out, dan menyusun rekomendasi program intervensi sekolah (narasi dan soal remedial AI Gemini opsional). Data contoh fiktif; data hanya di perangkat.",
+    tanggal: "2026-11-22",
+    tautan: "tka-analisis-tryout/",
+    status: "aktif"
+  },
+  {
     nama: "Buku Penghubung Digital",
     kategori: "Sekolah",
     jenis: "HTML",
