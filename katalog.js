@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Sosiometri Kelas",
+    kategori: "Bimbingan Konseling",
+    jenis: "HTML",
+    deskripsi: "Guru BK memasukkan pilihan teman (dan opsional penolakan) tiap murid lewat salinan lembar angket, tempel cepat, atau mode isi oleh murid; aplikasi menggambar sosiogram interaktif, menghitung indeks pemilihan/penolakan dan status sosiometri, menandai murid terisolasi, klik, dan pasangan saling memilih, menyusun kelompok belajar inklusif, serta menyarankan tindak lanjut pencegahan perundungan. Data hanya di perangkat, dikunci PIN.",
+    tanggal: "2026-11-22",
+    tautan: "bk-sosiometri/",
+    status: "aktif"
+  },
+  {
     nama: "Analisis Hasil Try Out TKA",
     kategori: "Persiapan TKA",
     jenis: "HTML",
