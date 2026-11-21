@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LKBH PGRI DIY</title>
+<style>
+:root{--merah:#c8102e;--merah2:#9d0c24;--biru:#14325c;--abu:#f3f4f7;--garis:#dde1e8;--teks:#1d2433}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--abu);color:var(--teks);line-height:1.5}
+header{background:linear-gradient(135deg,var(--merah),var(--merah2));color:#fff;padding:22px 16px 16px;text-align:center}
+header h1{margin:0;font-size:1.4rem;letter-spacing:.3px}
+header p{margin:4px 0 0;opacity:.92;font-size:.9rem}
+nav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;background:var(--biru);padding:8px}
+nav button{background:transparent;border:0;color:#cfd8ea;padding:9px 16px;border-radius:8px;font-size:.92rem;cursor:pointer}
+nav button.aktif{background:#fff;color:var(--biru);font-weight:600}
+main{max-width:980px;margin:18px auto;padding:0 14px}
+.kartu{background:#fff;border:1px solid var(--garis);border-radius:12px;padding:18px;margin-bottom:16px}
+h2{margin:0 0 10px;font-size:1.15rem;color:var(--biru)}
+label{display:block;font-weight:600;font-size:.88rem;margin:12px 0 4px}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--garis);border-radius:8px;font:inherit;background:#fff}
+textarea{min-height:130px;resize:vertical}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.btn{background:var(--merah);color:#fff;border:0;padding:11px 20px;border-radius:8px;font-weight:600;cursor:pointer;margin-top:16px;font-size:.95rem}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn.sek{background:var(--biru)}
+.btn.kecil{padding:6px 12px;margin:0;font-size:.82rem}
+.tip{background:#fff7e6;border-left:4px solid #f2a900;padding:10px 12px;border-radius:6px;font-size:.88rem;margin-top:12px}
+.ok{background:#e8f6ec;border-left:4px solid #1f9d4c;padding:14px;border-radius:6px}
+.err{background:#fdeaea;border-left:4px solid var(--merah);padding:10px 12px;border-radius:6px;margin-top:12px;font-size:.9rem}
+.kode{font-size:1.5rem;font-weight:700;letter-spacing:2px;color:var(--merah);user-select:all}
+.lencana{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.78rem;font-weight:600;background:#e6ebf5;color:var(--biru)}
+.s-Baru{background:#fde8e8;color:#b00020}.s-Selesai{background:#e0f4e6;color:#1a7f3c}.s-Ditutup{background:#eceff1;color:#555}
+.s-Mediasi{background:#fff1d6;color:#9a6500}.s-Dalam-Pendampingan{background:#e3ecff;color:#1c4fb3}
+.u-Mendesak{background:#c8102e;color:#fff}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.stat div{background:var(--abu);border-radius:10px;padding:12px;text-align:center}
+.stat b{display:block;font-size:1.6rem;color:var(--merah)}
+.bar{display:flex;align-items:center;gap:8px;font-size:.84rem;margin:4px 0}
+.bar span.n{width:130px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar i{display:block;height:12px;background:var(--biru);border-radius:6px;min-width:2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--garis);vertical-align:top}
+th{background:var(--abu);position:sticky;top:0}
+tr.klik{cursor:pointer}tr.klik:hover{background:#fafbff}
+.scroll{overflow-x:auto}
+.tl{border-left:3px solid var(--garis);margin:10px 0 0 6px;padding-left:14px}
+.tl div{margin-bottom:12px;position:relative}
+.tl div:before{content:"";position:absolute;left:-21px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--merah)}
+.tl small{color:#667}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:20px 10px;z-index:9}
+.modal.buka{display:flex}
+.modal .isi{background:#fff;border-radius:12px;max-width:720px;width:100%;padding:18px}
+.baris{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sembunyi{display:none}
+footer{text-align:center;color:#778;font-size:.8rem;padding:18px 10px 30px}
+.pre{white-space:pre-wrap;background:var(--abu);padding:10px;border-radius:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>LKBH PGRI DIY</h1>
+  <p>Lembaga Konsultasi dan Bantuan Hukum &middot; Persatuan Guru Republik Indonesia Daerah Istimewa Yogyakarta</p>
+</header>
+<nav>
+  <button data-t="beranda" class="aktif">Beranda</button>
+  <button data-t="ajukan">Ajukan Pengaduan</button>
+  <button data-t="cek">Cek Status</button>
+  <button data-t="admin">Pengurus</button>
+</nav>
+
+<main>
+<!-- BERANDA -->
+<section id="t-beranda">
+  <div class="kartu">
+    <h2>Guru tidak berjalan sendiri</h2>
+    <p>LKBH PGRI DIY memberi konsultasi dan pendampingan hukum bagi guru dan tenaga kependidikan: sengketa ketenagakerjaan, tuduhan kekerasan atau pelanggaran etik, perlindungan profesi, hingga persoalan administrasi kepegawaian.</p>
+    <div class="stat" style="margin-top:12px">
+      <div><b>1</b>Ajukan pengaduan</div><div><b>2</b>Simpan kode tiket</div>
+      <div><b>3</b>Diverifikasi pengurus</div><div><b>4</b>Didampingi LKBH</div>
+    </div>
+    <button class="btn" onclick="buka('ajukan')">Ajukan Pengaduan Sekarang</button>
+    <button class="btn sek" onclick="buka('cek')">Cek Status Tiket</button>
+  </div>
+  <div class="kartu">
+    <h2>Yang perlu diketahui</h2>
+    <ul>
+      <li>Data Anda hanya dapat dilihat pengurus LKBH yang berwenang.</li>
+      <li>Layanan konsultasi awal bersifat informasi hukum, bukan jaminan hasil perkara.</li>
+      <li>Untuk keadaan darurat (penahanan, ancaman keselamatan), segera hubungi pengurus melalui telepon dan tandai urgensi <b>Mendesak</b>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- AJUKAN -->
+<section id="t-ajukan" class="sembunyi">
+  <div class="kartu" id="formWrap">
+    <h2>Formulir Pengaduan / Konsultasi</h2>
+    <form id="form" onsubmit="return kirim(event)">
+      <div class="grid">
+        <div><label>Nama lengkap *</label><input id="nama" required maxlength="100"></div>
+        <div><label>Nomor WhatsApp *</label><input id="wa" required inputmode="tel" placeholder="08xxxxxxxxxx"></div>
+        <div><label>Asal sekolah / instansi</label><input id="sekolah" maxlength="150"></div>
+        <div><label>Kabupaten / Kota</label>
+          <select id="kabkota"><option value="">- pilih -</option><option>Kota Yogyakarta</option><option>Sleman</option><option>Bantul</option><option>Kulon Progo</option><option>Gunungkidul</option><option>Luar DIY</option></select></div>
+        <div><label>Status keanggotaan PGRI</label>
+          <select id="keanggotaan"><option>Anggota PGRI</option><option>Belum anggota</option></select></div>
+        <div><label>Kategori masalah *</label>
+          <select id="kategori" required><option value="">- pilih -</option>
+            <option>Ketenagakerjaan / status kepegawaian</option><option>Tuduhan kekerasan / pelanggaran etik</option>
+            <option>Pemberhentian / mutasi / sanksi</option><option>Gaji, tunjangan, sertifikasi</option>
+            <option>Sengketa dengan orang tua / siswa</option><option>Pelaporan ke polisi / proses hukum</option>
+            <option>Perlindungan profesi guru</option><option>Konsultasi hukum umum</option><option>Lainnya</option></select></div>
+      </div>
+      <label>Judul singkat *</label><input id="judul" required maxlength="150">
+      <label>Kronologi *</label>
+      <textarea id="kronologi" required maxlength="4000" placeholder="Ceritakan apa yang terjadi, kapan, siapa pihak yang terlibat, dan bantuan apa yang Anda harapkan."></textarea>
+      <div class="grid">
+        <div><label>Tingkat urgensi</label><select id="urgensi"><option>Biasa</option><option>Segera</option><option>Mendesak</option></select></div>
+        <div><label>Bukti pendukung (maks 3 berkas, 5 MB/berkas)</label><input type="file" id="files" multiple accept="image/*,.pdf,.doc,.docx"></div>
+      </div>
+      <label style="font-weight:400"><input type="checkbox" id="rahasia" style="width:auto"> Mohon identitas dirahasiakan dari pihak lain di luar tim LKBH</label>
+      <div class="tip">Dengan mengirim, Anda menyetujui data digunakan LKBH PGRI DIY untuk menindaklanjuti pengaduan ini.</div>
+      <div id="errKirim" class="err sembunyi"></div>
+      <button class="btn" id="btnKirim">Kirim Pengaduan</button>
+    </form>
+  </div>
+  <div class="kartu sembunyi" id="sukses">
+    <div class="ok">
+      <b>Pengaduan diterima.</b> Simpan kode tiket berikut:
+      <div class="kode" id="kodeOut"></div>
+      Gunakan kode ini dan nomor WhatsApp Anda di menu <b>Cek Status</b>.
+    </div>
+    <button class="btn sek" onclick="salinKode()">Salin Kode</button>
+    <button class="btn" onclick="resetForm()">Buat Pengaduan Lain</button>
+  </div>
+</section>
+
+<!-- CEK -->
+<section id="t-cek" class="sembunyi">
+  <div class="kartu">
+    <h2>Cek Status Pengaduan</h2>
+    <div class="grid">
+      <div><label>Kode tiket</label><input id="cKode" placeholder="LKBH-261121-AB3K"></div>
+      <div><label>Nomor WhatsApp terdaftar</label><input id="cWa" inputmode="tel"></div>
+    </div>
+    <div id="errCek" class="err sembunyi"></div>
+    <button class="btn" id="btnCek" onclick="cek()">Cek Status</button>
+  </div>
+  <div class="kartu sembunyi" id="hasilCek"></div>
+</section>
+
+<!-- ADMIN -->
+<section id="t-admin" class="sembunyi">
+  <div class="kartu" id="loginBox">
+    <h2>Masuk Pengurus LKBH</h2>
+    <label>PIN pengurus</label><input type="password" id="pin" autocomplete="off">
+    <div id="errLogin" class="err sembunyi"></div>
+    <button class="btn" id="btnLogin" onclick="masuk()">Masuk</button>
+  </div>
+  <div id="dash" class="sembunyi">
+    <div class="kartu"><div class="baris" style="justify-content:space-between"><h2 style="margin:0">Ringkasan</h2>
+      <span><button class="btn kecil sek" onclick="muatAdmin()">Muat ulang</button> <button class="btn kecil" onclick="unduhCSV()">Unduh CSV</button> <button class="btn kecil sek" onclick="keluar()">Keluar</button></span></div>
+      <div class="stat" id="stat" style="margin-top:12px"></div>
+      <div class="grid" style="margin-top:14px"><div><b>Per kategori</b><div id="gKat"></div></div><div><b>Per kabupaten/kota</b><div id="gKab"></div></div></div>
+    </div>
+    <div class="kartu">
+      <h2>Daftar Pengaduan</h2>
+      <div class="grid">
+        <div><input id="cari" placeholder="Cari nama, sekolah, kode, judul..." oninput="render()"></div>
+        <div class="baris"><select id="fStatus" onchange="render()" style="flex:1"></select><select id="fUrg" onchange="render()" style="flex:1"><option value="">Semua urgensi</option><option>Mendesak</option><option>Segera</option><option>Biasa</option></select></div>
+      </div>
+      <div class="scroll" style="margin-top:10px"><table><thead><tr><th>Kode</th><th>Pelapor</th><th>Kategori</th><th>Urgensi</th><th>Status</th><th>Update</th></tr></thead><tbody id="tbody"></tbody></table></div>
+      <p id="kosong" class="sembunyi" style="text-align:center;color:#778">Belum ada data.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="modal" id="modal"><div class="isi" id="isiModal"></div></div>
+<footer>Dikembangkan oleh Edy Thomas &middot; PGRI DIY</footer>
+
+<script>
+var $=function(i){return document.getElementById(i)};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var token=null, DATA=[], STATUS=[];
+
+function buka(t){
+  ['beranda','ajukan','cek','admin'].forEach(function(x){$('t-'+x).classList.toggle('sembunyi',x!==t)});
+  document.querySelectorAll('nav button').forEach(function(b){b.classList.toggle('aktif',b.dataset.t===t)});
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){buka(b.dataset.t)}});
+function slug(s){return String(s).replace(/\s+/g,'-')}
+function tampilErr(id,m){var e=$(id);e.textContent=m;e.classList.remove('sembunyi')}
+function sembunyiErr(id){$(id).classList.add('sembunyi')}
+function pesan(e){return (e&&e.message?e.message:String(e)).replace(/^Error:\s*/,'')}
+
+/* ---- Pengaduan ---- */
+function bacaFile(f){return new Promise(function(res,rej){
+  var r=new FileReader();
+  r.onload=function(){res({name:f.name,type:f.type,data:String(r.result).split(',')[1]})};
+  r.onerror=function(){rej(new Error('Gagal membaca berkas.'))};
+  r.readAsDataURL(f)})}
+
+async function kirim(ev){
+  ev.preventDefault(); sembunyiErr('errKirim');
+  var fs=Array.prototype.slice.call($('files').files);
+  if(fs.length>3) return tampilErr('errKirim','Maksimal 3 berkas.');
+  for(var i=0;i<fs.length;i++) if(fs[i].size>5*1024*1024) return tampilErr('errKirim','Berkas '+fs[i].name+' melebihi 5 MB.');
+  $('btnKirim').disabled=true; $('btnKirim').textContent='Mengirim...';
+  try{
+    var files=await Promise.all(fs.map(bacaFile));
+    var d={nama:$('nama').value,wa:$('wa').value,sekolah:$('sekolah').value,kabkota:$('kabkota').value,
+      keanggotaan:$('keanggotaan').value,kategori:$('kategori').value,judul:$('judul').value,
+      kronologi:$('kronologi').value,urgensi:$('urgensi').value,rahasia:$('rahasia').checked,files:files};
+    google.script.run.withSuccessHandler(function(r){
+      $('kodeOut').textContent=r.kode; $('formWrap').classList.add('sembunyi'); $('sukses').classList.remove('sembunyi');
+      $('btnKirim').disabled=false; $('btnKirim').textContent='Kirim Pengaduan';
+    }).withFailureHandler(function(e){
+      tampilErr('errKirim',pesan(e)); $('btnKirim').disabled=false; $('btnKirim').textContent='Kirim Pengaduan';
+    }).kirimPengaduan(d);
+  }catch(e){tampilErr('errKirim',pesan(e));$('btnKirim').disabled=false;$('btnKirim').textContent='Kirim Pengaduan'}
+  return false;
+}
+function salinKode(){var t=$('kodeOut').textContent;if(navigator.clipboard)navigator.clipboard.writeText(t)}
+function resetForm(){$('form').reset();$('formWrap').classList.remove('sembunyi');$('sukses').classList.add('sembunyi')}
+
+/* ---- Cek status ---- */
+function cek(){
+  sembunyiErr('errCek'); $('hasilCek').classList.add('sembunyi');
+  $('btnCek').disabled=true;
+  google.script.run.withSuccessHandler(function(r){
+    $('btnCek').disabled=false;
+    var h='<h2>'+esc(r.judul)+'</h2><div class="baris"><span class="lencana s-'+slug(esc(r.status))+'">'+esc(r.status)+'</span><span style="color:#667;font-size:.86rem">'+esc(r.kode)+' &middot; '+esc(r.kategori)+'</span></div>'+
+      '<p style="font-size:.88rem">Diajukan: '+esc(r.waktu)+' &middot; Pembaruan terakhir: '+esc(r.update)+(r.pendamping?'<br>Pendamping: <b>'+esc(r.pendamping)+'</b>':'')+'</p><b>Riwayat</b><div class="tl">'+
+      r.riwayat.map(function(x){return '<div><small>'+esc(x.waktu)+' &middot; '+esc(x.status)+'</small><br>'+esc(x.catatan)+'</div>'}).join('')+'</div>';
+    $('hasilCek').innerHTML=h; $('hasilCek').classList.remove('sembunyi');
+  }).withFailureHandler(function(e){$('btnCek').disabled=false;tampilErr('errCek',pesan(e))}).cekStatus($('cKode').value,$('cWa').value);
+}
+
+/* ---- Admin ---- */
+function masuk(){
+  sembunyiErr('errLogin'); $('btnLogin').disabled=true;
+  google.script.run.withSuccessHandler(function(t){
+    token=t; $('pin').value=''; $('btnLogin').disabled=false;
+    $('loginBox').classList.add('sembunyi'); $('dash').classList.remove('sembunyi'); muatAdmin();
+  }).withFailureHandler(function(e){$('btnLogin').disabled=false;tampilErr('errLogin',pesan(e))}).adminLogin($('pin').value);
+}
+function keluar(){token=null;DATA=[];$('dash').classList.add('sembunyi');$('loginBox').classList.remove('sembunyi')}
+function sesiHabis(e){var m=pesan(e);alert(m);if(/Sesi/.test(m))keluar()}
+function muatAdmin(){
+  google.script.run.withSuccessHandler(function(r){
+    DATA=r.data;STATUS=r.status;
+    $('fStatus').innerHTML='<option value="">Semua status</option>'+STATUS.map(function(s){return '<option>'+esc(s)+'</option>'}).join('');
+    ringkas();render();
+  }).withFailureHandler(sesiHabis).adminData(token);
+}
+function hitung(f){var o={};DATA.forEach(function(d){var k=d[f]||'(kosong)';o[k]=(o[k]||0)+1});return Object.keys(o).map(function(k){return [k,o[k]]}).sort(function(a,b){return b[1]-a[1]})}
+function grafik(id,arr){var m=Math.max.apply(null,arr.map(function(a){return a[1]}).concat([1]));
+  $(id).innerHTML=arr.map(function(a){return '<div class="bar"><span class="n" title="'+esc(a[0])+'">'+esc(a[0])+'</span><i style="width:'+(a[1]/m*55)+'%"></i><span>'+a[1]+'</span></div>'}).join('')||'<small>-</small>'}
+function ringkas(){
+  var n=function(s){return DATA.filter(function(d){return d.status===s}).length};
+  $('stat').innerHTML='<div><b>'+DATA.length+'</b>Total</div><div><b>'+n('Baru')+'</b>Baru</div><div><b>'+(n('Dalam Pendampingan')+n('Mediasi'))+'</b>Ditangani</div><div><b>'+n('Selesai')+'</b>Selesai</div><div><b>'+DATA.filter(function(d){return d.urgensi==='Mendesak'&&d.status!=='Selesai'&&d.status!=='Ditutup'}).length+'</b>Mendesak aktif</div>';
+  grafik('gKat',hitung('kategori'));grafik('gKab',hitung('kabkota'));
+}
+function render(){
+  var q=$('cari').value.toLowerCase(),fs=$('fStatus').value,fu=$('fUrg').value;
+  var L=DATA.filter(function(d){
+    return (!fs||d.status===fs)&&(!fu||d.urgensi===fu)&&(!q||[d.kode,d.nama,d.sekolah,d.judul,d.kategori].join(' ').toLowerCase().indexOf(q)>=0)});
+  $('kosong').classList.toggle('sembunyi',L.length>0);
+  $('tbody').innerHTML=L.map(function(d){var i=DATA.indexOf(d);
+    return '<tr class="klik" onclick="detail('+i+')"><td>'+esc(d.kode)+'</td><td>'+esc(d.nama)+'<br><small>'+esc(d.sekolah)+'</small></td><td>'+esc(d.kategori)+'</td><td>'+(d.urgensi==='Mendesak'?'<span class="lencana u-Mendesak">Mendesak</span>':esc(d.urgensi))+'</td><td><span class="lencana s-'+slug(esc(d.status))+'">'+esc(d.status)+'</span></td><td>'+esc(d.update)+'</td></tr>'}).join('');
+}
+function detail(i){
+  var d=DATA[i];
+  var wa='62'+String(d.wa).replace(/\D/g,'').replace(/^62/,'').replace(/^0/,'');
+  var bukti=d.bukti.map(function(u,k){return /^https:\/\/(drive|docs)\.google\.com\//.test(u)?'<a href="'+esc(u)+'" target="_blank" rel="noopener">Berkas '+(k+1)+'</a>':''}).join(' &middot; ')||'-';
+  $('isiModal').innerHTML='<div class="baris" style="justify-content:space-between"><h2 style="margin:0">'+esc(d.judul)+'</h2><button class="btn kecil sek" onclick="tutup()">Tutup</button></div>'+
+   '<p style="font-size:.88rem"><b>'+esc(d.kode)+'</b> &middot; '+esc(d.waktu)+'<br>'+esc(d.nama)+' ('+esc(d.keanggotaan)+') &middot; '+esc(d.sekolah)+', '+esc(d.kabkota)+'<br>WA: <a href="https://wa.me/'+wa+'" target="_blank" rel="noopener">'+esc(d.wa)+'</a> &middot; Kategori: '+esc(d.kategori)+' &middot; Urgensi: '+esc(d.urgensi)+(d.rahasia==='Ya'?' &middot; <b>Identitas dirahasiakan</b>':'')+'</p>'+
+   '<div class="pre">'+esc(d.kronologi)+'</div><p>Bukti: '+bukti+'</p><hr>'+
+   '<div class="grid"><div><label>Status</label><select id="uStatus">'+STATUS.map(function(s){return '<option'+(s===d.status?' selected':'')+'>'+esc(s)+'</option>'}).join('')+'</select></div>'+
+   '<div><label>Pendamping LKBH</label><input id="uPend" value="'+esc(d.pendamping)+'" maxlength="100"></div></div>'+
+   '<label>Catatan tindak lanjut</label><textarea id="uCat" style="min-height:80px"></textarea>'+
+   '<label style="font-weight:400"><input type="checkbox" id="uPub" style="width:auto" checked> Tampilkan catatan ini kepada pelapor</label>'+
+   '<div id="errUp" class="err sembunyi"></div><button class="btn" id="btnUp" onclick="simpan(\''+esc(d.kode)+'\')">Simpan Pembaruan</button>'+
+   '<h2 style="margin-top:18px">Riwayat</h2><div class="tl">'+d.riwayat.map(function(x){return '<div><small>'+esc(x.waktu)+' &middot; '+esc(x.status)+' &middot; '+esc(x.oleh)+(x.publik==='Ya'?' &middot; tampil ke pelapor':' &middot; internal')+'</small><br>'+esc(x.catatan)+'</div>'}).join('')+'</div>';
+  $('modal').classList.add('buka');
+}
+function tutup(){$('modal').classList.remove('buka')}
+$('modal').addEventListener('click',function(e){if(e.target===this)tutup()});
+function simpan(kode){
+  $('btnUp').disabled=true;
+  google.script.run.withSuccessHandler(function(){tutup();muatAdmin()})
+   .withFailureHandler(function(e){$('btnUp').disabled=false;tampilErr('errUp',pesan(e))})
+   .adminUpdate(token,kode,$('uStatus').value,$('uPend').value,$('uCat').value,$('uPub').checked);
+}
+function unduhCSV(){
+  var h=['Kode','Waktu','Nama','Sekolah','Kab/Kota','WhatsApp','Kategori','Judul','Urgensi','Status','Pendamping'];
+  var c=function(v){v=String(v==null?'':v);if(/^[=+\-@]/.test(v))v="'"+v;return '"'+v.replace(/"/g,'""')+'"'};
+  var rows=[h.map(c).join(',')].concat(DATA.map(function(d){return [d.kode,d.waktu,d.nama,d.sekolah,d.kabkota,d.wa,d.kategori,d.judul,d.urgensi,d.status,d.pendamping].map(c).join(',')}));
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('\n')],{type:'text/csv'}));a.download='pengaduan_lkbh_pgri_diy.csv';a.click();
+}
+</script>
+</body>
+</html>
