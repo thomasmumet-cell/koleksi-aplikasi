@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Profil Potensi Siswa – Minat, Kekuatan, dan Cara Belajar",
+    kategori: "Bimbingan Konseling",
+    jenis: "HTML",
+    deskripsi: "Angket 60 butir untuk siswa SMP: minat (6 tipe RIASEC) dengan saran sekolah lanjutan dan profesi, 8 area kekuatan (kecerdasan majemuk), dan cara belajar yang disukai. Laporan berisi saran untuk siswa, guru, dan orang tua; rekap kelas, kelompok belajar beragam, pengamatan guru/orang tua, kode hasil via WhatsApp, mode isi bergiliran ber-PIN, cetak, dan ekspor CSV. Data hanya di perangkat.",
+    tanggal: "2026-11-22",
+    tautan: "profil-potensi-siswa/",
+    status: "aktif"
+  },
+  {
     nama: "Tes Penalaran – Cek Kemampuan Bernalar",
     kategori: "Pembelajaran",
     jenis: "HTML",
