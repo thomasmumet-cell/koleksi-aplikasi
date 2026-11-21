@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buku Penghubung Digital</title>
+<meta name="description" content="Buku penghubung digital wali kelas: catatan perkembangan murid untuk orang tua, templat pesan WhatsApp yang santun, pemeriksa kesantunan pesan, riwayat komunikasi, tindak lanjut, dan rekap. Data hanya di perangkat.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:ital,wght@0,400;0,600;0,700;1,400&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ece6d8; --paper:#fbf8f1; --paper2:#f3eee2; --ink:#1e2a2b; --muted:#566264; --line:#d8cfbd; --rule:#e6dfcf;
+  --teal:#0f5c60; --teal-ink:#ffffff; --teal-soft:#d9ecea; --margin:#c8493b;
+  --good:#22663f; --good-bg:#dcefe1; --info:#2a5585; --info-bg:#dee8f5; --warn:#8a5600; --warn-bg:#f8ebc9; --bad:#a3322a; --bad-bg:#f9dfda;
+  --shadow:0 1px 0 rgba(0,0,0,.04),0 12px 26px -18px rgba(30,42,43,.55);
+  --r:14px; color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101617; --paper:#182122; --paper2:#1f2a2b; --ink:#e7eeec; --muted:#a3b2b0; --line:#2f3d3e; --rule:#243031;
+    --teal:#7cd0cb; --teal-ink:#0b2a2b; --teal-soft:#183a3b; --margin:#ef8a7c;
+    --good:#86d9a5; --good-bg:#16301f; --info:#9cc0ef; --info-bg:#172839; --warn:#f0c463; --warn-bg:#33280f; --bad:#f5a197; --bad-bg:#3a1c19;
+    --shadow:0 1px 0 rgba(0,0,0,.3),0 12px 26px -16px rgba(0,0,0,.8); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101617; --paper:#182122; --paper2:#1f2a2b; --ink:#e7eeec; --muted:#a3b2b0; --line:#2f3d3e; --rule:#243031;
+  --teal:#7cd0cb; --teal-ink:#0b2a2b; --teal-soft:#183a3b; --margin:#ef8a7c;
+  --good:#86d9a5; --good-bg:#16301f; --info:#9cc0ef; --info-bg:#172839; --warn:#f0c463; --warn-bg:#33280f; --bad:#f5a197; --bad-bg:#3a1c19;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 12px 26px -16px rgba(0,0,0,.8); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Figtree",system-ui,sans-serif;min-height:100vh}
+h1,h2,h3{font-family:"Young Serif",Georgia,serif;font-weight:400;line-height:1.2;margin:0}
+h2{font-size:1.45rem} h3{font-size:1.1rem}
+a{color:var(--teal)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* header like a notebook cover */
+header.top{background:var(--teal);color:var(--teal-ink);position:relative;overflow:hidden}
+header.top::after{content:"";position:absolute;inset:auto 0 0 0;height:6px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 10px,transparent 10px 20px)}
+.top .wrap{display:flex;gap:14px;align-items:center;padding-top:16px;padding-bottom:18px;flex-wrap:wrap}
+.logo{width:46px;height:46px;flex:none;border-radius:10px;background:rgba(255,255,255,.14);display:grid;place-items:center}
+.top h1{font-size:1.5rem}
+.top .sub{opacity:.85;font-size:.92rem}
+.top .kls{margin-left:auto;font-family:"Caveat",cursive;font-size:1.45rem;background:rgba(255,255,255,.12);padding:2px 14px;border-radius:999px;white-space:nowrap}
+
+nav.tabs{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:0 6px 16px -14px rgba(0,0,0,.5)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+nav.tabs .wrap::-webkit-scrollbar{display:none}
+.tab{border:0;background:none;padding:12px 14px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--teal)}
+.tab .cnt{display:inline-block;min-width:20px;padding:0 6px;margin-left:4px;border-radius:999px;background:var(--bad-bg);color:var(--bad);font-size:.78rem;text-align:center}
+
+main{padding:20px 0 40px}
+section.view{display:none}
+section.view.on{display:block}
+
+/* paper card with margin line */
+.page{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 18px 18px 30px;position:relative;margin-bottom:16px}
+.page::before{content:"";position:absolute;left:16px;top:12px;bottom:12px;width:2px;background:var(--margin);opacity:.55;border-radius:2px}
+.page.plain{padding-left:18px}.page.plain::before{display:none}
+.page h2,.page h3{margin-bottom:10px}
+.lined{background-image:repeating-linear-gradient(transparent 0 27px,var(--rule) 27px 28px)}
+
+.banner{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--warn-bg);color:var(--warn);border:1px dashed currentColor;border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:.95rem}
+.banner b{color:var(--ink)}
+.banner .sp{flex:1}
+
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:16px;align-items:start}
+@media (max-width:860px){.g2,.split{grid-template-columns:1fr}.g3,.g4{grid-template-columns:1fr 1fr}}
+@media (max-width:420px){.g4{grid-template-columns:1fr 1fr}.top .kls{margin-left:0}}
+
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+.stat .n{font-family:"Young Serif",serif;font-size:2rem;line-height:1}
+.stat .l{color:var(--muted);font-size:.88rem;margin-top:4px}
+.stat.bad .n{color:var(--bad)} .stat.good .n{color:var(--good)} .stat.warn .n{color:var(--warn)}
+
+label{display:block;font-weight:600;font-size:.9rem;margin:10px 0 4px}
+.hint{color:var(--muted);font-size:.85rem;font-weight:400}
+input[type=text],input[type=date],input[type=time],input[type=tel],input[type=password],input[type=search],input[type=month],select,textarea{width:100%;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:9px 11px;min-height:42px}
+textarea{min-height:96px;resize:vertical;line-height:1.5}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.row>*{flex:1 1 150px}
+.chk{display:flex;gap:8px;align-items:center;font-weight:500;margin-top:10px}
+.chk input{width:18px;height:18px}
+
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper2);padding:9px 14px;border-radius:10px;font-weight:600;cursor:pointer;min-height:42px;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--teal)}
+.btn.pri{background:var(--teal);color:var(--teal-ink);border-color:var(--teal)}
+.btn.wa{background:#1f7a4d;color:#fff;border-color:#1f7a4d}
+:root[data-theme="dark"] .btn.wa{background:#2f9b64}
+.btn.ghost{background:none}
+.btn.danger{color:var(--bad);border-color:currentColor;background:none}
+.btn.sm{padding:5px 10px;min-height:34px;font-size:.88rem}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+.chip{display:inline-block;padding:1px 9px;border-radius:999px;font-size:.78rem;font-weight:700;letter-spacing:.01em;white-space:nowrap}
+.c-baik{background:var(--good-bg);color:var(--good)}
+.c-info{background:var(--info-bg);color:var(--info)}
+.c-perhatian{background:var(--warn-bg);color:var(--warn)}
+.c-telat{background:var(--bad-bg);color:var(--bad)}
+.c-netral{background:var(--paper2);color:var(--muted);border:1px solid var(--line)}
+.stamp{font-family:"Caveat",cursive;font-size:1.15rem;color:var(--margin);border:2px solid currentColor;border-radius:6px;padding:0 8px;transform:rotate(-4deg);display:inline-block;line-height:1.3}
+
+/* murid cards */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.mcard{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;width:100%}
+.mcard:hover{border-color:var(--teal)}
+.mcard .nm{font-weight:700;font-size:1.02rem}
+.mcard .or{color:var(--muted);font-size:.88rem}
+.bal{display:flex;height:7px;border-radius:999px;overflow:hidden;background:var(--paper2);border:1px solid var(--line)}
+.bal i{display:block;height:100%}
+.bal .b{background:var(--good)} .bal .n{background:var(--info)} .bal .p{background:var(--warn)}
+
+/* entries */
+.entry{border-top:1px dashed var(--line);padding:12px 0}
+.entry:first-child{border-top:0}
+.entry .meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:.85rem;color:var(--muted)}
+.entry .txt{margin:6px 0 0;white-space:pre-wrap}
+.entry .resp{margin:6px 0 0;padding:6px 10px;border-left:3px solid var(--teal);background:var(--paper2);border-radius:0 8px 8px 0;font-size:.94rem;white-space:pre-wrap}
+.entry .tl{margin-top:6px;font-size:.92rem}
+.entry .act{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.hand{font-family:"Caveat",cursive;font-size:1.3rem;color:var(--teal)}
+
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;gap:10px;align-items:center;padding:9px 0;border-top:1px dashed var(--line);flex-wrap:wrap}
+.list li:first-child{border-top:0}
+.list .grow{flex:1 1 180px;min-width:0}
+.empty{color:var(--muted);font-style:italic;padding:8px 0}
+
+/* message preview like a chat bubble */
+.bubble{background:#dcf5d0;color:#14241a;border-radius:14px 14px 4px 14px;padding:12px 14px;white-space:pre-wrap;box-shadow:0 1px 2px rgba(0,0,0,.15);font-size:.97rem;margin-left:auto;max-width:100%}
+:root[data-theme="dark"] .bubble{background:#1d4a32;color:#e6f6ea}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .bubble{background:#1d4a32;color:#e6f6ea}}
+.chat{background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:12px;background-image:radial-gradient(var(--rule) 1px,transparent 1px);background-size:14px 14px}
+.checks{list-style:none;padding:0;margin:8px 0 0;font-size:.92rem}
+.checks li{padding:4px 0 4px 26px;position:relative}
+.checks li::before{position:absolute;left:0;top:4px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:800}
+.checks li.ok::before{content:"✓";background:var(--good-bg);color:var(--good)}
+.checks li.no::before{content:"!";background:var(--warn-bg);color:var(--warn)}
+
+table{width:100%;border-collapse:collapse;font-size:.93rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700;color:var(--muted);font-size:.82rem;text-transform:uppercase;letter-spacing:.03em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+.bar{height:10px;border-radius:999px;background:var(--teal);min-width:2px}
+
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--paper);color:var(--ink);padding:0;width:min(720px,calc(100vw - 24px));max-height:calc(100vh - 32px);box-shadow:0 30px 60px -20px rgba(0,0,0,.6)}
+dialog::backdrop{background:rgba(10,20,20,.55)}
+dialog .dh{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:1}
+dialog .dh h2{flex:1;font-size:1.25rem}
+dialog .db{padding:14px 18px 18px}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(calc(100% + 40px));visibility:hidden;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-weight:600;transition:transform .25s,visibility .25s;z-index:99;max-width:calc(100vw - 32px)}
+.toast.on{transform:translateX(-50%) translateY(0);visibility:visible}
+
+footer{padding:10px 0 40px;color:var(--muted);font-size:.9rem}
+footer details{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+footer summary{cursor:pointer;font-weight:700;color:var(--ink)}
+footer ul{margin:8px 0 0;padding-left:20px}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+
+@media print{
+  header.top,nav.tabs,footer,.banner,.noprint,.btns,.act{display:none!important}
+  body{background:#fff;color:#000}
+  section.view{display:none!important}
+  section.view.print{display:block!important}
+  .page{box-shadow:none;border:0;padding-left:0}.page::before{display:none}
+  dialog{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="logo" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H19v15H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H19v-3"/><path d="M8 7h7M8 10.5h5"/><path d="M8 14l2 1.5 4-3.5"/></svg>
+    </div>
+    <div>
+      <h1>Buku Penghubung Digital</h1>
+      <div class="sub" id="subJudul">Catatan wali kelas untuk orang tua</div>
+    </div>
+    <div class="kls" id="labelKelas">Kelas –</div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Menu utama">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" data-v="beranda" aria-selected="true">Ringkasan</button>
+    <button class="tab" role="tab" data-v="murid" aria-selected="false">Murid</button>
+    <button class="tab" role="tab" data-v="catatan" aria-selected="false">Catatan</button>
+    <button class="tab" role="tab" data-v="pesan" aria-selected="false">Pesan WA</button>
+    <button class="tab" role="tab" data-v="tindak" aria-selected="false">Tindak lanjut<span class="cnt" id="cntTL" hidden>0</span></button>
+    <button class="tab" role="tab" data-v="rekap" aria-selected="false">Rekap</button>
+    <button class="tab" role="tab" data-v="setelan" aria-selected="false">Pengaturan</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="banner" id="bannerContoh" hidden>
+    <span class="stamp">contoh</span>
+    <span>Aplikasi sedang menampilkan <b>data contoh</b> (nama murid dan orang tua fiktif). Ganti dengan data kelas Anda.</span>
+    <span class="sp"></span>
+    <button class="btn sm" id="btnHapusContoh1">Hapus data contoh</button>
+  </div>
+
+  <!-- RINGKASAN -->
+  <section class="view on" id="v-beranda" aria-labelledby="h-beranda">
+    <h2 class="sr" id="h-beranda">Ringkasan</h2>
+    <div class="grid g4" id="statBox"></div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="page">
+        <h3>Perlu ditindaklanjuti</h3>
+        <ul class="list" id="ringTL"></ul>
+        <div class="btns"><button class="btn sm" data-goto="tindak">Lihat semua tindak lanjut</button></div>
+      </div>
+      <div class="page">
+        <h3>Belum tersapa <span class="hint" id="hintTersapa"></span></h3>
+        <p class="small muted" style="margin:0 0 6px">Orang tua yang belum dihubungi dalam rentang hari yang ditetapkan. Mulailah dengan kabar baik.</p>
+        <ul class="list" id="ringSapa"></ul>
+      </div>
+    </div>
+    <div class="page lined">
+      <h3>Keseimbangan kabar bulan ini</h3>
+      <div id="ringBal"></div>
+      <p class="small muted" style="margin:10px 0 0">Kebiasaan baik komunikasi sekolah–rumah: kabari orang tua saat anak berhasil, bukan hanya saat ada masalah. Usahakan kabar baik paling sedikit sebanyak kabar yang perlu perhatian.</p>
+    </div>
+    <div class="page plain">
+      <h3>Catatan terbaru</h3>
+      <div id="ringBaru"></div>
+    </div>
+  </section>
+
+  <!-- MURID -->
+  <section class="view" id="v-murid" aria-labelledby="h-murid">
+    <div class="row" style="margin-bottom:12px;align-items:center">
+      <h2 id="h-murid" style="flex:0 0 auto">Murid &amp; orang tua</h2>
+      <div style="flex:1 1 200px"><label class="sr" for="cariMurid">Cari murid</label><input type="search" id="cariMurid" placeholder="Cari nama murid atau orang tua…"></div>
+      <div style="flex:0 0 auto" class="btns" ><button class="btn pri" id="btnMuridBaru">+ Murid</button><button class="btn" id="btnImpor">Tempel daftar</button></div>
+    </div>
+    <div class="mgrid" id="gridMurid"></div>
+  </section>
+
+  <!-- CATATAN -->
+  <section class="view" id="v-catatan" aria-labelledby="h-catatan">
+    <div class="split">
+      <form class="page lined" id="formCatatan" autocomplete="off">
+        <h2 id="h-catatan">Tulis catatan</h2>
+        <input type="hidden" id="cId">
+        <label for="cMurid">Murid</label>
+        <select id="cMurid" required></select>
+        <div class="row">
+          <div><label for="cTgl">Tanggal</label><input type="date" id="cTgl" required></div>
+          <div><label for="cJenis">Jenis</label><select id="cJenis"></select></div>
+        </div>
+        <div class="row">
+          <div><label for="cNada">Nada</label><select id="cNada"><option value="baik">Kabar baik</option><option value="info">Informasi</option><option value="perhatian">Perlu perhatian</option></select></div>
+          <div><label for="cArah">Arah</label><select id="cArah"><option value="keluar">Sekolah → rumah</option><option value="masuk">Rumah → sekolah</option></select></div>
+          <div><label for="cSaluran">Saluran</label><select id="cSaluran"></select></div>
+        </div>
+        <label for="cIsi">Isi catatan <span class="hint">— tulis fakta yang teramati, bukan label</span></label>
+        <textarea id="cIsi" required placeholder="Contoh: Hari ini Adit memimpin diskusi kelompok IPA dan membantu teman yang tertinggal."></textarea>
+        <label for="cTanggapan">Tanggapan orang tua <span class="hint">(bila ada)</span></label>
+        <textarea id="cTanggapan" style="min-height:64px"></textarea>
+        <fieldset style="border:1px dashed var(--line);border-radius:12px;margin:12px 0 0;padding:4px 12px 12px">
+          <legend class="small" style="font-weight:700;padding:0 6px">Tindak lanjut</legend>
+          <label for="cTL">Rencana tindak lanjut <span class="hint">(kosongkan bila tidak perlu)</span></label>
+          <input type="text" id="cTL" placeholder="Contoh: Telepon ibu Jumat untuk kabar perkembangan tugas">
+          <div class="row">
+            <div><label for="cTenggat">Tenggat</label><input type="date" id="cTenggat"></div>
+            <div><label for="cStatus">Status</label><select id="cStatus"><option value="menunggu">Menunggu</option><option value="selesai">Selesai</option></select></div>
+          </div>
+        </fieldset>
+        <label class="chk"><input type="checkbox" id="cRahasia"> Bersifat pribadi (isi disembunyikan di rekap dan ekspor CSV)</label>
+        <div class="btns">
+          <button class="btn pri" type="submit" id="btnSimpanCatatan">Simpan catatan</button>
+          <button class="btn" type="button" id="btnKePesan">Jadikan pesan WA</button>
+          <button class="btn ghost" type="reset" id="btnBatalCatatan">Kosongkan</button>
+        </div>
+      </form>
+      <div class="page plain">
+        <div class="row" style="align-items:center">
+          <h2 style="flex:0 0 auto">Riwayat</h2>
+          <span class="muted small" id="infoRiwayat" style="flex:1 1 120px"></span>
+        </div>
+        <div class="row">
+          <div><label for="fMurid">Murid</label><select id="fMurid"></select></div>
+          <div><label for="fJenis">Jenis</label><select id="fJenis"></select></div>
+          <div><label for="fNada">Nada</label><select id="fNada"><option value="">Semua</option><option value="baik">Kabar baik</option><option value="info">Informasi</option><option value="perhatian">Perlu perhatian</option></select></div>
+          <div><label for="fCari">Cari</label><input type="search" id="fCari" placeholder="kata…"></div>
+        </div>
+        <div id="listRiwayat" style="margin-top:8px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PESAN -->
+  <section class="view" id="v-pesan" aria-labelledby="h-pesan">
+    <div class="split">
+      <div class="page">
+        <h2 id="h-pesan">Susun pesan WhatsApp</h2>
+        <label for="pTujuan">Kepada</label>
+        <select id="pTujuan"></select>
+        <label for="pTemplat">Templat</label>
+        <select id="pTemplat"></select>
+        <div id="pIsian"></div>
+        <div class="btns"><button class="btn" id="btnIsiTemplat" type="button">Terapkan templat ↓</button></div>
+        <label for="pTeks">Teks pesan <span class="hint">— boleh disunting bebas</span></label>
+        <textarea id="pTeks" style="min-height:220px"></textarea>
+        <div class="btns">
+          <button class="btn pri" id="btnSalin" type="button">Salin teks</button>
+          <a class="btn wa" id="btnWA" href="#" target="_blank" rel="noopener">Buka WhatsApp</a>
+          <button class="btn" id="btnCatatPesan" type="button">Catat ke riwayat</button>
+          <button class="btn" id="btnAI" type="button" title="Butuh kunci API Gemini di Pengaturan">Haluskan dengan AI</button>
+        </div>
+        <p class="small muted" id="pInfoWA" style="margin:8px 0 0"></p>
+      </div>
+      <div>
+        <div class="page plain">
+          <h3>Pratinjau</h3>
+          <div class="chat"><div class="bubble" id="pPratinjau"></div></div>
+          <h3 style="margin-top:14px">Cek kesantunan</h3>
+          <ul class="checks" id="pCek" aria-live="polite"></ul>
+        </div>
+        <div class="page plain">
+          <div class="row" style="align-items:center"><h3 style="flex:1 1 auto">Templat saya</h3><button class="btn sm" id="btnTemplatBaru" style="flex:0 0 auto">+ Templat baru</button></div>
+          <p class="small muted" style="margin:0">Penanda yang bisa dipakai: {salam} {sapaan} {ortu} {murid} {kelas} {wali} {sekolah} {isi} {tanggal} {waktu} {tempat} {tenggat}</p>
+          <ul class="list" id="listTemplat"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TINDAK LANJUT -->
+  <section class="view" id="v-tindak" aria-labelledby="h-tindak">
+    <div class="page plain">
+      <div class="row" style="align-items:center">
+        <h2 id="h-tindak" style="flex:1 1 auto">Agenda tindak lanjut</h2>
+        <div style="flex:0 0 200px"><label class="sr" for="tFilter">Saring</label><select id="tFilter"><option value="buka">Belum selesai</option><option value="selesai">Sudah selesai</option><option value="semua">Semua</option></select></div>
+      </div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Tenggat</th><th>Murid</th><th>Tindak lanjut</th><th>Asal catatan</th><th>Status</th><th><span class="sr">Aksi</span></th></tr></thead>
+        <tbody id="tbTL"></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- REKAP -->
+  <section class="view" id="v-rekap" aria-labelledby="h-rekap">
+    <div class="page plain">
+      <div class="row" style="align-items:end">
+        <h2 id="h-rekap" style="flex:1 1 auto">Rekap komunikasi</h2>
+        <div style="flex:0 0 190px"><label for="rBulan">Bulan</label><input type="month" id="rBulan"></div>
+      </div>
+      <div class="grid g4" id="rStat" style="margin-top:12px"></div>
+      <div class="grid g2" style="margin-top:16px">
+        <div><h3>Menurut jenis</h3><div class="tablewrap"><table><tbody id="rJenis"></tbody></table></div></div>
+        <div><h3>Menurut saluran</h3><div class="tablewrap"><table><tbody id="rSaluran"></tbody></table></div></div>
+      </div>
+      <h3 style="margin-top:18px">Per murid</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Murid</th><th>Orang tua</th><th class="num">Kontak</th><th class="num">Kabar baik</th><th class="num">Perhatian</th><th class="num">TL terbuka</th><th>Terakhir dihubungi</th></tr></thead>
+        <tbody id="rMurid"></tbody>
+      </table></div>
+      <div class="btns noprint">
+        <button class="btn pri" id="btnCetak">Cetak rekap</button>
+        <button class="btn" id="btnCsvCatatan">Unduh CSV catatan</button>
+        <button class="btn" id="btnCsvRekap">Unduh CSV rekap murid</button>
+      </div>
+      <p class="small muted">Rekap ini dapat menjadi bahan laporan wali kelas, pertemuan paguyuban orang tua per kelas, dan evaluasi pelibatan keluarga.</p>
+    </div>
+  </section>
+
+  <!-- PENGATURAN -->
+  <section class="view" id="v-setelan" aria-labelledby="h-setelan">
+    <div class="grid g2">
+      <form class="page" id="formSetelan" autocomplete="off">
+        <h2 id="h-setelan">Identitas kelas</h2>
+        <label for="sSekolah">Nama sekolah</label><input type="text" id="sSekolah">
+        <div class="row">
+          <div><label for="sKelas">Kelas</label><input type="text" id="sKelas"></div>
+          <div><label for="sTA">Tahun ajaran</label><input type="text" id="sTA"></div>
+        </div>
+        <label for="sWali">Nama wali kelas <span class="hint">(dipakai di tanda tangan pesan)</span></label><input type="text" id="sWali">
+        <div class="row">
+          <div><label for="sJam1">Jam kirim wajar mulai</label><input type="time" id="sJam1"></div>
+          <div><label for="sJam2">sampai</label><input type="time" id="sJam2"></div>
+        </div>
+        <label for="sSapa">Pengingat "belum tersapa" setelah … hari</label><input type="text" inputmode="numeric" id="sSapa">
+        <label for="sTema">Tampilan</label>
+        <select id="sTema"><option value="auto">Ikuti perangkat</option><option value="light">Terang</option><option value="dark">Gelap</option></select>
+        <div class="btns"><button class="btn pri" type="submit">Simpan pengaturan</button></div>
+      </form>
+      <div>
+        <form class="page" id="formAI" autocomplete="off">
+          <h3>AI Gemini (opsional)</h3>
+          <p class="small muted" style="margin:0">Dipakai hanya untuk tombol "Haluskan dengan AI". Kunci disimpan di perangkat ini saja. Sebelum dikirim, nama murid dan orang tua diganti penanda agar tidak ikut terkirim.</p>
+          <label for="aKey">Kunci API Gemini</label><input type="password" id="aKey" placeholder="Tempel kunci dari Google AI Studio">
+          <label for="aModel">Model</label><input type="text" id="aModel">
+          <div class="btns"><button class="btn pri" type="submit">Simpan</button><button class="btn danger" type="button" id="btnHapusKey">Hapus kunci</button></div>
+        </form>
+        <div class="page">
+          <h3>Cadangan &amp; data</h3>
+          <p class="small muted" style="margin:0">Semua data tersimpan di peramban perangkat ini. Unduh cadangan secara berkala, terutama sebelum berganti perangkat.</p>
+          <div class="btns">
+            <button class="btn" id="btnJson">Unduh cadangan (JSON)</button>
+            <label class="btn" for="fileJson" style="margin:0">Pulihkan dari JSON</label>
+            <input type="file" id="fileJson" accept=".json,application/json" class="sr">
+          </div>
+          <div class="btns">
+            <button class="btn" id="btnHapusContoh2">Hapus data contoh</button>
+            <button class="btn" id="btnMuatContoh">Muat data contoh</button>
+            <button class="btn danger" id="btnHapusSemua">Hapus semua data</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <details>
+    <summary>Dasar dan sumber</summary>
+    <ul>
+      <li><a href="https://peraturan.go.id/files/bn1378-2017.pdf" target="_blank" rel="noopener">Permendikbud No. 30 Tahun 2017 tentang Pelibatan Keluarga pada Penyelenggaraan Pendidikan</a> — sinergi sekolah–keluarga, koordinasi lewat paguyuban orang tua per kelas.</li>
+      <li><a href="https://www.kemendikdasmen.go.id/siaran-pers/12894-kemendikdasmen-dorong-peran-orang-tua-bentuk-7-kebiasaan-anak-indonesia-hebat" target="_blank" rel="noopener">Kemendikdasmen: Dorong Peran Orang Tua Bentuk 7 Kebiasaan Anak Indonesia Hebat</a> — keteladanan orang tua dan kerja sama guru–orang tua.</li>
+      <li><a href="https://www.detik.com/edu/sekolah/d-8225892/kemendikdasmen-bakal-luncurkan-guru-wali-apa-bedanya-dengan-wali-kelas" target="_blank" rel="noopener">detikEdu: Guru Wali dan wali kelas</a> — pendampingan murid SMP sesuai Permendikdasmen No. 11 Tahun 2025.</li>
+      <li><a href="https://s2dikdas.fip.unesa.ac.id/post/whatsapp-membawa-sekolah-lebih-dekat-ke-rumah" target="_blank" rel="noopener">UNESA: WhatsApp Membawa Sekolah Lebih Dekat ke Rumah</a> — praktik baik komunikasi guru–orang tua lewat WhatsApp.</li>
+    </ul>
+    <p style="margin:8px 0 0">Data tersimpan hanya di perangkat ini. Nama murid dan orang tua pada data contoh adalah fiktif. <a href="../">← Kembali ke koleksi aplikasi</a></p>
+  </details>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dlgJudul">
+  <div class="dh"><h2 id="dlgJudul">–</h2><button class="btn sm" id="dlgTutup" aria-label="Tutup">Tutup</button></div>
+  <div class="db" id="dlgIsi"></div>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+"use strict";
+/* ===== Buku Penghubung Digital — data hanya di perangkat (localStorage) ===== */
+const KEY = "bukuPenghubung.v1", KEY_AI = "bukuPenghubung.gemini";
+function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+function lsSet(k,v){ try { localStorage.setItem(k,v); return true; } catch(e){ return false; } }
+function lsDel(k){ try { localStorage.removeItem(k); } catch(e){} }
+
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const pad = n => String(n).padStart(2,"0");
+const isoDate = d => d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate());
+const today = () => isoDate(new Date());
+const addDays = (n) => { const d = new Date(); d.setDate(d.getDate()+n); return isoDate(d); };
+const BULAN = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const HARI = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+function fmtTgl(s, panjang){
+  if (!s) return "–";
+  const [y,m,d] = s.split("-").map(Number); const dt = new Date(y, m-1, d);
+  return (panjang ? HARI[dt.getDay()] + ", " : "") + d + " " + BULAN[m-1] + (panjang || y !== new Date().getFullYear() ? " " + y : "");
+}
+function selisihHari(s){ if(!s) return Infinity; const [y,m,d]=s.split("-").map(Number); const a=new Date(y,m-1,d); const b=new Date(); b.setHours(0,0,0,0); return Math.round((b-a)/864e5); }
+
+const JENIS = [
+  {k:"apresiasi", n:"Apresiasi & prestasi", nada:"baik"},
+  {k:"akademik", n:"Belajar & tugas", nada:"info"},
+  {k:"kehadiran", n:"Kehadiran", nada:"perhatian"},
+  {k:"karakter", n:"Karakter & perilaku", nada:"perhatian"},
+  {k:"kaih", n:"7 Kebiasaan (7 KAIH)", nada:"info"},
+  {k:"kesehatan", n:"Kesehatan & kesejahteraan", nada:"info"},
+  {k:"undangan", n:"Undangan & informasi", nada:"info"},
+  {k:"lainnya", n:"Lainnya", nada:"info"}
+];
+const SALURAN = ["WhatsApp","Telepon","Tatap muka","Buku tulis","Kunjungan rumah","Surat"];
+const NADA = {baik:["Kabar baik","c-baik"], info:["Informasi","c-info"], perhatian:["Perlu perhatian","c-perhatian"]};
+const jenisNama = k => (JENIS.find(j=>j.k===k)||{n:k}).n;
+
+const TEMPLAT_BAWAAN = [
+  {id:"t-baik", judul:"Kabar baik / apresiasi", jenis:"apresiasi", teks:"{salam}, {sapaan} {ortu}. Saya {wali}, wali kelas {kelas} {sekolah}.\n\nKami ingin berbagi kabar baik: {isi}\n\nTerima kasih atas dukungan {sapaan} di rumah. Mohon sampaikan apresiasi kami kepada {murid}, ya.\n\nSalam hormat,\n{wali}"},
+  {id:"t-absen", judul:"Belum hadir tanpa keterangan", jenis:"kehadiran", teks:"{salam}, {sapaan} {ortu}. Mohon maaf mengganggu waktunya. Saya {wali}, wali kelas {kelas}.\n\nHari ini, {tanggal}, {murid} tercatat belum hadir di sekolah dan kami belum menerima keterangan. Kami hanya ingin memastikan {murid} dalam keadaan baik.\n\nBila berkenan, mohon kabarnya. Terima kasih, {sapaan}.\n\n{wali}"},
+  {id:"t-tugas", judul:"Tugas belum dikumpulkan", jenis:"akademik", teks:"{salam}, {sapaan} {ortu}. Saya {wali}, wali kelas {kelas}.\n\nKami ingin mengabarkan bahwa {murid} belum mengumpulkan {isi}. Kami yakin {murid} mampu menyelesaikannya. Kesempatan mengumpulkan kami berikan sampai {tenggat}.\n\nMohon bantuan {sapaan} untuk mengingatkan dan menanyakan apakah ada kesulitan. {murid} juga dapat menemui saya atau guru mata pelajaran di sekolah.\n\nTerima kasih atas kerja samanya.\n{wali}"},
+  {id:"t-perilaku", judul:"Ajak diskusi perilaku (fakta–dampak–ajakan)", jenis:"karakter", teks:"{salam}, {sapaan} {ortu}. Saya {wali}, wali kelas {kelas}.\n\nKami ingin berdiskusi tentang {murid}. Pada {tanggal}, {isi}\n\nKami sudah berbicara dengan {murid} secara baik-baik. Agar {murid} terus berkembang, kami ingin bekerja sama dengan {sapaan}. Bila berkenan, kapan waktu yang nyaman untuk berbincang sebentar lewat telepon atau bertemu di sekolah?\n\nTerima kasih atas perhatiannya.\n{wali}"},
+  {id:"t-undang", judul:"Undangan bertemu wali kelas", jenis:"undangan", teks:"{salam}, {sapaan} {ortu}. Dengan hormat,\n\nkami mengundang {sapaan} untuk bertemu dengan wali kelas {kelas} pada {tanggal} pukul {waktu} di {tempat}, untuk membicarakan {isi}\n\nBila waktu tersebut kurang sesuai, mohon kabari kami agar dapat dicari waktu lain.\n\nAtas perhatian {sapaan}, kami ucapkan terima kasih.\n{wali}"},
+  {id:"t-sehat", judul:"Kondisi kesehatan di sekolah", jenis:"kesehatan", teks:"{salam}, {sapaan} {ortu}. Saya {wali}, wali kelas {kelas}.\n\nKami ingin mengabarkan kondisi {murid} hari ini: {isi}\n\n{murid} sudah kami dampingi di UKS. Mohon arahan {sapaan} apakah {murid} perlu dijemput lebih awal.\n\nTerima kasih.\n{wali}"},
+  {id:"t-kaih", judul:"Ajakan 7 Kebiasaan di rumah", jenis:"kaih", teks:"{salam}, {sapaan} {ortu}. Saya {wali}, wali kelas {kelas}.\n\nPekan ini kelas kami sedang menguatkan kebiasaan {isi} (bagian dari 7 Kebiasaan Anak Indonesia Hebat). Kami mohon dukungan {sapaan} untuk mengajak dan memberi teladan kepada {murid} di rumah.\n\nKami senang sekali bila {sapaan} berkenan berbagi cerita perkembangan baiknya.\n\nTerima kasih,\n{wali}"},
+  {id:"t-balas", judul:"Menanggapi pesan orang tua", jenis:"lainnya", teks:"Terima kasih atas pesannya, {sapaan} {ortu}. Pesan sudah kami terima.\n\n{isi}\n\nKami akan mengabari kembali paling lambat {tenggat}.\n\nSalam hormat,\n{wali}"},
+  {id:"t-terima", judul:"Terima kasih atas kerja sama", jenis:"lainnya", teks:"{salam}, {sapaan} {ortu}. Terima kasih atas tanggapan dan kerja samanya terkait {murid}.\n\n{isi}\n\nKami akan terus memantau dan mengabarkan perkembangannya.\n\nSalam hormat,\n{wali}"},
+  {id:"t-grup", judul:"Pengumuman grup paguyuban kelas", jenis:"undangan", grup:true, teks:"{salam}, Bapak/Ibu orang tua/wali murid kelas {kelas} yang kami hormati.\n\nKami sampaikan informasi: {isi}\n\nWaktu: {tanggal}, pukul {waktu}\nTempat: {tempat}\n\nBila ada pertanyaan, Bapak/Ibu dapat menghubungi saya melalui pesan pribadi. Terima kasih atas perhatian dan kerja samanya.\n\nSalam,\n{wali}\nWali kelas {kelas}"}
+];
+
+/* ===== state ===== */
+let S = null;
+function setelanAwal(){ return {sekolah:"SMP Harapan Nusantara", kelas:"8C", ta:"2026/2027", wali:"Ratna Wulandari", jam1:"06:00", jam2:"20:00", sapa:21, tema:"auto"}; }
+function kosong(){ return {setelan:setelanAwal(), murid:[], catatan:[], templat:[], versi:1}; }
+function simpan(){ if(!lsSet(KEY, JSON.stringify(S))) toast("Gagal menyimpan: penyimpanan peramban penuh atau diblokir"); }
+function muat(){
+  const raw = lsGet(KEY);
+  if (raw){ try { S = JSON.parse(raw); } catch(e){ S = null; } }
+  if (!S || !Array.isArray(S.murid)){ S = kosong(); isiContoh(); simpan(); }
+  S.setelan = Object.assign(setelanAwal(), S.setelan||{});
+  S.templat = S.templat || [];
+}
+
+function isiContoh(){
+  const M = [
+    ["Adit Pratama","Sugeng Riyadi","Bapak","Ayah"],["Bunga Lestari","Wahyuni","Ibu","Ibu"],["Candra Wijaya","Hendra Kusuma","Bapak","Ayah"],
+    ["Dewi Anggraini","Sri Mulyani","Ibu","Ibu"],["Eko Saputra","Lastri Handayani","Ibu","Ibu"],["Fajar Nugroho","Joko Santoso","Bapak","Ayah"],
+    ["Gita Permata","Ani Rahayu","Ibu","Ibu"],["Hana Salsabila","Rina Marlina","Ibu","Ibu"],["Ilham Maulana","Rudi Hartono","Bapak","Wali (paman)"],
+    ["Jihan Aulia","Yuni Astuti","Ibu","Ibu"],["Kevin Hartanto","Budi Setiawan","Bapak","Ayah"],["Laras Ayuningtyas","Endah Purwanti","Ibu","Ibu"]
+  ];
+  const ids = M.map(m => { const id = uid(); S.murid.push({id, nama:m[0], ortu:m[1], sapaan:m[2], hubungan:m[3], wa:"", ket:"", contoh:true}); return id; });
+  const C = (i, hari, jenis, nada, arah, saluran, isi, tanggapan, tl, tenggatHari, status, rahasia) => {
+    S.catatan.push({id:uid(), muridId:ids[i], tgl:addDays(-hari), jenis, nada, arah, saluran, isi, tanggapan:tanggapan||"",
+      tl: tl ? {teks:tl, tenggat: tenggatHari==null ? "" : addDays(tenggatHari), status:status||"menunggu"} : null, rahasia:!!rahasia, contoh:true});
+  };
+  C(0,1,"apresiasi","baik","keluar","WhatsApp","Adit memimpin diskusi kelompok IPA tentang sistem pernapasan dan sabar membantu dua teman yang tertinggal.","Alhamdulillah, terima kasih Bu. Nanti kami beri pujian di rumah.");
+  C(4,2,"kehadiran","perhatian","keluar","WhatsApp","Eko belum hadir hari ini tanpa keterangan (ketiga kalinya bulan ini).","Mohon maaf Bu, Eko mengantar neneknya berobat. Besok masuk.","Bicara empat mata dengan Eko tentang kendala berangkat pagi",2,"menunggu");
+  C(4,12,"kehadiran","perhatian","keluar","Telepon","Eko terlambat 25 menit dua hari berturut-turut.","Ibu menyampaikan Eko membantu berjualan pagi di pasar.","Koordinasi dengan guru BK untuk pendampingan",-3,"menunggu");
+  C(2,3,"akademik","perhatian","keluar","WhatsApp","Candra belum mengumpulkan proyek infografis IPS dan dua tugas Matematika.","","Cek pengumpulan tugas bersama guru IPS",1,"menunggu");
+  C(7,4,"kesehatan","info","masuk","WhatsApp","Ibu Rina mengabarkan Hana baru pulih dari demam berdarah dan masih perlu banyak istirahat; mohon tidak ikut olahraga berat sepekan.","Sudah kami teruskan ke guru PJOK.","Sampaikan ke guru PJOK",-1,"selesai");
+  C(1,6,"apresiasi","baik","keluar","WhatsApp","Bunga meraih juara 2 lomba baca puisi tingkat kota mewakili sekolah.","Terima kasih Bu Ratna, Bunga senang sekali.");
+  C(5,8,"karakter","perhatian","keluar","Tatap muka","Fajar beberapa kali memotong pembicaraan teman saat presentasi. Sudah berbincang dengan Fajar; ia mau mencoba menunggu giliran.","Bapak akan membiasakan di rumah juga.","Amati kembali saat presentasi Bahasa Indonesia",5,"menunggu",false);
+  C(8,9,"karakter","perhatian","keluar","Kunjungan rumah","Kunjungan rumah bersama guru BK terkait perubahan sikap Ilham yang lebih pendiam di kelas.","Paman menyampaikan situasi keluarga; disepakati pendampingan berkala.","Pertemuan lanjutan dengan guru BK",9,"menunggu",true);
+  C(3,10,"kaih","baik","masuk","WhatsApp","Ibu Sri mengirim cerita Dewi rutin bangun pagi dan menyiapkan sarapan sendiri selama sepekan.","Kami beri apresiasi di kelas saat refleksi Jumat.");
+  C(6,14,"akademik","info","keluar","WhatsApp","Gita menunjukkan kemajuan di numerasi: kuis pecahan kini tuntas setelah ikut kelompok bimbingan.","Terima kasih Bu, Gita jadi lebih percaya diri.");
+  C(9,16,"undangan","info","keluar","WhatsApp","Undangan bertemu wali kelas untuk membicarakan rencana pemilihan ekskul dan minat Jihan di jurnalistik.","Ibu Yuni bersedia datang Kamis pukul 13.00.","Pertemuan dengan Ibu Yuni",-10,"selesai");
+  C(10,20,"apresiasi","baik","keluar","Buku tulis","Kevin menjadi petugas upacara (pembaca UUD) dengan percaya diri.","");
+  C(0,26,"kaih","info","keluar","WhatsApp","Ajakan kebiasaan tidur cepat: kelas sedang mencatat jam tidur selama sepekan.","Siap Bu.");
+  C(11,5,"akademik","perhatian","masuk","Telepon","Ibu Endah menanyakan nilai sumatif Matematika Laras yang turun dan meminta saran belajar di rumah.","","Kirim jadwal remedial dan saran latihan dari guru Matematika",0,"menunggu");
+  C(6,30,"karakter","baik","keluar","WhatsApp","Gita mengembalikan dompet berisi uang yang ditemukannya di kantin kepada petugas.","Terima kasih Bu, kami bangga.");
+  C(2,33,"kehadiran","info","masuk","WhatsApp","Bapak Hendra mengirim surat izin: Candra mengikuti seleksi bola voli tingkat kabupaten.","Izin dicatat.");
+}
+
+/* ===== util UI ===== */
+let toastT;
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("on"),2600); }
+function unduh(nama, isi, tipe){
+  const b = new Blob([isi], {type:tipe||"text/plain"}); const a=document.createElement("a");
+  a.href=URL.createObjectURL(b); a.download=nama; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},400);
+}
+function csv(rows){ return "﻿" + rows.map(r => r.map(v => { const s=String(v==null?"":v); return /[",;\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s; }).join(",")).join("\r\n"); }
+async function salinTeks(t){
+  try { await navigator.clipboard.writeText(t); return true; }
+  catch(e){ const ta=document.createElement("textarea"); ta.value=t; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); let ok=false; try{ ok=document.execCommand("copy"); }catch(_){} ta.remove(); return ok; }
+}
+const muridById = id => S.murid.find(m => m.id === id);
+function terapkanTema(){ const t=S.setelan.tema; if(t==="auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", t); }
+
+/* ===== navigasi ===== */
+function buka(v){
+  $$(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.v===v)));
+  $$("section.view").forEach(s => s.classList.toggle("on", s.id === "v-"+v));
+  render(v); window.scrollTo({top:0});
+  try { history.replaceState(null,"","#"+v); } catch(e){}
+}
+$$(".tab").forEach(b => b.addEventListener("click", () => buka(b.dataset.v)));
+document.querySelector('nav.tabs [role=tablist]').addEventListener("keydown", e => {
+  if (e.key!=="ArrowRight" && e.key!=="ArrowLeft") return;
+  const t=$$(".tab"), i=t.indexOf(document.activeElement); if(i<0) return;
+  const n=t[(i + (e.key==="ArrowRight"?1:-1) + t.length) % t.length]; n.focus(); n.click();
+});
+document.addEventListener("click", e => { const g=e.target.closest("[data-goto]"); if(g) buka(g.dataset.goto); });
+
+/* ===== ringkasan ===== */
+function hitungMurid(m, bulan){
+  const cs = S.catatan.filter(c => c.muridId===m.id);
+  const cb = bulan ? cs.filter(c => c.tgl.slice(0,7)===bulan) : cs;
+  const terakhir = cs.reduce((a,c) => c.tgl>a ? c.tgl : a, "");
+  return { cs, n:cb.length, baik:cb.filter(c=>c.nada==="baik").length, info:cb.filter(c=>c.nada==="info").length,
+    perhatian:cb.filter(c=>c.nada==="perhatian").length, tl:cs.filter(c=>c.tl&&c.tl.teks&&c.tl.status!=="selesai").length, terakhir };
+}
+function tlTerbuka(){ return S.catatan.filter(c => c.tl && c.tl.teks && c.tl.status!=="selesai").sort((a,b)=>(a.tl.tenggat||"9999").localeCompare(b.tl.tenggat||"9999")); }
+function chipTenggat(t){
+  if (!t) return '<span class="chip c-netral">tanpa tenggat</span>';
+  const d = selisihHari(t);
+  if (d>0) return '<span class="chip c-telat">terlambat ' + d + ' hari</span>';
+  if (d===0) return '<span class="chip c-perhatian">hari ini</span>';
+  return '<span class="chip c-info">' + fmtTgl(t) + '</span>';
+}
+function renderBeranda(){
+  const bln = today().slice(0,7), cb = S.catatan.filter(c=>c.tgl.slice(0,7)===bln);
+  const tl = tlTerbuka(), telat = tl.filter(c=>c.tl.tenggat && selisihHari(c.tl.tenggat)>0);
+  const batas = Number(S.setelan.sapa)||21;
+  const belum = S.murid.map(m=>({m, h:hitungMurid(m)})).filter(x => selisihHari(x.h.terakhir) > batas).sort((a,b)=>(a.h.terakhir||"").localeCompare(b.h.terakhir||""));
+  $("#statBox").innerHTML =
+    '<div class="stat"><div class="n">'+cb.length+'</div><div class="l">catatan bulan ini</div></div>'+
+    '<div class="stat good"><div class="n">'+cb.filter(c=>c.nada==="baik").length+'</div><div class="l">kabar baik bulan ini</div></div>'+
+    '<div class="stat '+(telat.length?"bad":"warn")+'"><div class="n">'+tl.length+'</div><div class="l">tindak lanjut terbuka'+(telat.length? " ("+telat.length+" terlambat)":"")+'</div></div>'+
+    '<div class="stat"><div class="n">'+belum.length+'<span class="muted" style="font-size:1rem">/'+S.murid.length+'</span></div><div class="l">belum tersapa &gt; '+batas+' hari</div></div>';
+  $("#ringTL").innerHTML = tl.slice(0,6).map(c => { const m=muridById(c.muridId)||{nama:"?"};
+    return '<li><div class="grow"><b>'+esc(m.nama)+'</b> — '+esc(c.tl.teks)+'</div>'+chipTenggat(c.tl.tenggat)+'<button class="btn sm" data-selesai="'+c.id+'">Tandai selesai</button></li>'; }).join("") || '<li class="empty">Tidak ada tindak lanjut terbuka. Bagus!</li>';
+  $("#hintTersapa").textContent = "(> " + batas + " hari)";
+  $("#ringSapa").innerHTML = belum.slice(0,8).map(x => '<li><div class="grow"><b>'+esc(x.m.nama)+'</b><div class="small muted">'+esc(x.m.sapaan+" "+x.m.ortu)+' · '+(x.h.terakhir? "terakhir "+fmtTgl(x.h.terakhir) : "belum pernah")+'</div></div><button class="btn sm" data-kabar="'+x.m.id+'">Kirim kabar baik</button></li>').join("")
+    || '<li class="empty">Semua orang tua sudah tersapa dalam rentang ini.</li>';
+  const b=cb.filter(c=>c.nada==="baik").length, i=cb.filter(c=>c.nada==="info").length, p=cb.filter(c=>c.nada==="perhatian").length, t=b+i+p||1;
+  const saran = p > b ? "Kabar yang perlu perhatian lebih banyak daripada kabar baik. Coba kirim apresiasi kecil kepada murid yang jarang mendapat kabar baik." : "Keseimbangan baik. Pertahankan!";
+  $("#ringBal").innerHTML = '<div class="bal" style="height:16px" role="img" aria-label="Kabar baik '+b+', informasi '+i+', perlu perhatian '+p+'"><i class="b" style="width:'+(b/t*100)+'%"></i><i class="n" style="width:'+(i/t*100)+'%"></i><i class="p" style="width:'+(p/t*100)+'%"></i></div>'+
+    '<div class="row small" style="margin-top:8px"><span><span class="chip c-baik">Kabar baik '+b+'</span></span><span><span class="chip c-info">Informasi '+i+'</span></span><span><span class="chip c-perhatian">Perlu perhatian '+p+'</span></span></div><p class="hand" style="margin:6px 0 0">'+esc(saran)+'</p>';
+  const baru = S.catatan.slice().sort((a,b)=>b.tgl.localeCompare(a.tgl)).slice(0,5);
+  $("#ringBaru").innerHTML = baru.map(entriHTML).join("") || '<p class="empty">Belum ada catatan.</p>';
+}
+
+/* ===== entri ===== */
+function entriHTML(c, opsi){
+  const m = muridById(c.muridId) || {nama:"(murid terhapus)", ortu:"", sapaan:""};
+  const nd = NADA[c.nada] || NADA.info;
+  let tl = "";
+  if (c.tl && c.tl.teks) tl = '<div class="tl"><b>Tindak lanjut:</b> '+esc(c.tl.teks)+' '+(c.tl.status==="selesai" ? '<span class="chip c-baik">selesai</span>' : chipTenggat(c.tl.tenggat))+'</div>';
+  return '<div class="entry"><div class="meta"><b style="color:var(--ink)">'+esc(m.nama)+'</b> · '+fmtTgl(c.tgl)+' · <span class="chip '+nd[1]+'">'+nd[0]+'</span><span class="chip c-netral">'+esc(jenisNama(c.jenis))+'</span><span>'+(c.arah==="masuk"?"rumah → sekolah":"sekolah → rumah")+' · '+esc(c.saluran)+'</span>'+(c.rahasia?' <span class="chip c-telat">pribadi</span>':'')+(c.contoh?' <span class="stamp" style="font-size:.95rem">contoh</span>':'')+'</div>'+
+    '<p class="txt">'+esc(c.isi)+'</p>'+(c.tanggapan? '<div class="resp"><b>Tanggapan:</b> '+esc(c.tanggapan)+'</div>':'')+tl+
+    ((opsi&&opsi.aksi)? '<div class="act"><button class="btn sm" data-edit="'+c.id+'">Sunting</button><button class="btn sm" data-wa="'+c.id+'">Jadikan pesan</button><button class="btn sm danger" data-hapus="'+c.id+'">Hapus</button></div>' : '')+'</div>';
+}
+
+/* ===== murid ===== */
+function renderMurid(){
+  const q = $("#cariMurid").value.trim().toLowerCase();
+  const list = S.murid.filter(m => !q || (m.nama+" "+m.ortu).toLowerCase().includes(q)).sort((a,b)=>a.nama.localeCompare(b.nama));
+  $("#gridMurid").innerHTML = list.map(m => { const h=hitungMurid(m); const t=h.baik+h.info+h.perhatian||1;
+    return '<button class="mcard" data-murid="'+m.id+'"><span class="nm">'+esc(m.nama)+(m.contoh?' <span class="stamp" style="font-size:.9rem">contoh</span>':'')+'</span><span class="or">'+esc(m.sapaan+" "+m.ortu)+' · '+esc(m.hubungan||"")+'</span>'+
+      '<span class="bal" aria-hidden="true"><i class="b" style="width:'+(h.baik/t*100)+'%"></i><i class="n" style="width:'+(h.info/t*100)+'%"></i><i class="p" style="width:'+(h.perhatian/t*100)+'%"></i></span>'+
+      '<span class="small muted">'+h.n+' catatan · '+(h.terakhir? "terakhir "+fmtTgl(h.terakhir):"belum pernah dihubungi")+(h.tl? ' · <b style="color:var(--warn)">'+h.tl+' TL terbuka</b>':'')+'</span></button>'; }).join("")
+    || '<p class="empty">Belum ada murid. Tambahkan satu per satu atau tempel daftar dari spreadsheet.</p>';
+}
+function dialog(judul, html){ $("#dlgJudul").textContent=judul; $("#dlgIsi").innerHTML=html; const d=$("#dlg"); if(!d.open) d.showModal(); }
+$("#dlgTutup").addEventListener("click", () => $("#dlg").close());
+
+function detailMurid(id){
+  const m = muridById(id); if(!m) return;
+  const h = hitungMurid(m); const cs = h.cs.slice().sort((a,b)=>b.tgl.localeCompare(a.tgl));
+  dialog(m.nama,
+    '<p style="margin:0">'+esc(m.sapaan+" "+m.ortu)+' ('+esc(m.hubungan||"orang tua")+')'+(m.wa? ' · WA '+esc(m.wa):' · <span class="muted">nomor WA belum diisi</span>')+'</p>'+
+    (m.ket? '<p class="small muted" style="margin:4px 0 0">Catatan khusus: '+esc(m.ket)+'</p>':'')+
+    '<div class="btns"><button class="btn pri" data-catat="'+m.id+'">+ Catatan</button><button class="btn wa" data-kabar="'+m.id+'">Susun pesan</button><button class="btn" data-editmurid="'+m.id+'">Ubah data</button><button class="btn" data-cetakmurid="'+m.id+'">Cetak riwayat</button></div>'+
+    '<h3 style="margin-top:16px">Riwayat komunikasi ('+cs.length+')</h3>'+(cs.map(c=>entriHTML(c)).join("") || '<p class="empty">Belum ada catatan.</p>'));
+}
+function formMurid(id){
+  const m = id ? muridById(id) : {nama:"",ortu:"",sapaan:"Ibu",hubungan:"Ibu",wa:"",ket:""};
+  dialog(id? "Ubah data murid" : "Murid baru",
+    '<form id="fMuridForm" autocomplete="off"><label for="mNama">Nama murid</label><input type="text" id="mNama" required value="'+esc(m.nama)+'">'+
+    '<div class="row"><div><label for="mSapaan">Sapaan</label><select id="mSapaan">'+["Ibu","Bapak","Bapak/Ibu"].map(s=>'<option'+(s===m.sapaan?" selected":"")+'>'+s+'</option>').join("")+'</select></div>'+
+    '<div><label for="mOrtu">Nama orang tua/wali</label><input type="text" id="mOrtu" required value="'+esc(m.ortu)+'"></div></div>'+
+    '<div class="row"><div><label for="mHub">Hubungan</label><input type="text" id="mHub" value="'+esc(m.hubungan)+'" placeholder="Ayah / Ibu / Wali"></div>'+
+    '<div><label for="mWa">Nomor WhatsApp <span class="hint">(opsional)</span></label><input type="tel" id="mWa" value="'+esc(m.wa)+'" placeholder="08xxxxxxxxxx"></div></div>'+
+    '<label for="mKet">Catatan khusus <span class="hint">(mis. waktu terbaik dihubungi)</span></label><input type="text" id="mKet" value="'+esc(m.ket)+'">'+
+    '<div class="btns"><button class="btn pri" type="submit">Simpan</button>'+(id? '<button class="btn danger" type="button" id="mHapus">Hapus murid</button>':'')+'</div></form>');
+  $("#fMuridForm").addEventListener("submit", e => { e.preventDefault();
+    const d = {nama:$("#mNama").value.trim(), ortu:$("#mOrtu").value.trim(), sapaan:$("#mSapaan").value, hubungan:$("#mHub").value.trim(), wa:$("#mWa").value.trim(), ket:$("#mKet").value.trim()};
+    if(!d.nama || !d.ortu) return;
+    if (id) Object.assign(m, d, {contoh:false}); else S.murid.push(Object.assign({id:uid()}, d));
+    simpan(); $("#dlg").close(); toast("Data murid disimpan"); renderAll();
+  });
+  if (id) $("#mHapus").addEventListener("click", () => {
+    const n = S.catatan.filter(c=>c.muridId===id).length;
+    if (!confirm("Hapus "+m.nama+" beserta "+n+" catatannya?")) return;
+    S.murid = S.murid.filter(x=>x.id!==id); S.catatan = S.catatan.filter(c=>c.muridId!==id); simpan(); $("#dlg").close(); toast("Murid dihapus"); renderAll();
+  });
+}
+function formImpor(){
+  dialog("Tempel daftar murid",
+    '<p class="small" style="margin:0">Satu baris satu murid. Pisahkan kolom dengan titik koma atau tab (bisa langsung disalin dari spreadsheet):<br><code>Nama murid; Nama orang tua; Sapaan (Bapak/Ibu); Nomor WA</code></p>'+
+    '<label for="impTeks">Daftar</label><textarea id="impTeks" style="min-height:180px" placeholder="Nadia Putri; Siti Aminah; Ibu; 081234567890"></textarea>'+
+    '<div class="btns"><button class="btn pri" id="impOk">Tambahkan</button></div>');
+  $("#impOk").addEventListener("click", () => {
+    let n=0; $("#impTeks").value.split(/\r?\n/).forEach(l => { const p=l.split(/\t|;/).map(s=>s.trim()); if(!p[0]) return;
+      const sap = /^bap/i.test(p[2]||"") ? "Bapak" : (/^ibu/i.test(p[2]||"")||!p[2] ? "Ibu" : p[2]);
+      S.murid.push({id:uid(), nama:p[0], ortu:p[1]||"Orang tua "+p[0], sapaan:sap, hubungan:sap==="Bapak"?"Ayah":"Ibu", wa:p[3]||"", ket:""}); n++; });
+    simpan(); $("#dlg").close(); toast(n+" murid ditambahkan"); renderAll();
+  });
+}
+$("#cariMurid").addEventListener("input", renderMurid);
+$("#btnMuridBaru").addEventListener("click", () => formMurid());
+$("#btnImpor").addEventListener("click", formImpor);
+
+/* ===== catatan ===== */
+function isiSelect(sel, opsi, nilai){ sel.innerHTML = opsi.map(o => '<option value="'+esc(o[0])+'">'+esc(o[1])+'</option>').join(""); if(nilai!=null) sel.value=nilai; }
+function opsiMurid(semua){ const a = S.murid.slice().sort((x,y)=>x.nama.localeCompare(y.nama)).map(m=>[m.id,m.nama]); return semua ? [["", "Semua murid"]].concat(a) : a; }
+function siapkanForm(){
+  const cm=$("#cMurid").value; isiSelect($("#cMurid"), opsiMurid()); if(cm) $("#cMurid").value=cm;
+  if(!$("#cJenis").options.length){ isiSelect($("#cJenis"), JENIS.map(j=>[j.k,j.n])); isiSelect($("#cSaluran"), SALURAN.map(s=>[s,s])); }
+  if(!$("#cTgl").value) $("#cTgl").value = today();
+  const fm=$("#fMurid").value; isiSelect($("#fMurid"), opsiMurid(true)); $("#fMurid").value = fm && muridById(fm) ? fm : "";
+  if(!$("#fJenis").options.length) isiSelect($("#fJenis"), [["","Semua"]].concat(JENIS.map(j=>[j.k,j.n])));
+}
+$("#cJenis").addEventListener("change", () => { const j=JENIS.find(x=>x.k===$("#cJenis").value); if(j && !$("#cId").value) $("#cNada").value=j.nada; });
+function renderCatatan(){
+  siapkanForm();
+  const fm=$("#fMurid").value, fj=$("#fJenis").value, fn=$("#fNada").value, q=$("#fCari").value.trim().toLowerCase();
+  const list = S.catatan.filter(c => (!fm||c.muridId===fm) && (!fj||c.jenis===fj) && (!fn||c.nada===fn) && (!q || (c.isi+" "+c.tanggapan+" "+(c.tl?c.tl.teks:"")+" "+((muridById(c.muridId)||{}).nama||"")).toLowerCase().includes(q)))
+    .sort((a,b)=>b.tgl.localeCompare(a.tgl));
+  $("#infoRiwayat").textContent = list.length + " catatan";
+  $("#listRiwayat").innerHTML = list.slice(0,150).map(c=>entriHTML(c,{aksi:true})).join("") || '<p class="empty">Tidak ada catatan yang cocok.</p>';
+}
+["#fMurid","#fJenis","#fNada"].forEach(s => $(s).addEventListener("change", renderCatatan));
+$("#fCari").addEventListener("input", renderCatatan);
+function resetForm(){ $("#formCatatan").reset(); $("#cId").value=""; $("#cTgl").value=today(); $("#cNada").value=JENIS[0].nada; $("#btnSimpanCatatan").textContent="Simpan catatan"; }
+$("#btnBatalCatatan").addEventListener("click", e => { e.preventDefault(); resetForm(); });
+function bacaForm(){
+  const tl = $("#cTL").value.trim();
+  return { muridId:$("#cMurid").value, tgl:$("#cTgl").value||today(), jenis:$("#cJenis").value, nada:$("#cNada").value, arah:$("#cArah").value, saluran:$("#cSaluran").value,
+    isi:$("#cIsi").value.trim(), tanggapan:$("#cTanggapan").value.trim(), tl: tl ? {teks:tl, tenggat:$("#cTenggat").value, status:$("#cStatus").value} : null, rahasia:$("#cRahasia").checked };
+}
+$("#formCatatan").addEventListener("submit", e => { e.preventDefault();
+  if(!S.murid.length){ toast("Tambahkan murid terlebih dulu"); return; }
+  const d = bacaForm(); if(!d.isi) return;
+  const id = $("#cId").value;
+  if (id){ const c=S.catatan.find(x=>x.id===id); if(c) Object.assign(c, d, {contoh:false}); }
+  else S.catatan.push(Object.assign({id:uid()}, d));
+  simpan(); toast(id? "Catatan diperbarui" : "Catatan disimpan"); resetForm(); renderCatatan(); renderBadge();
+});
+function editCatatan(id){
+  const c = S.catatan.find(x=>x.id===id); if(!c) return;
+  buka("catatan");
+  $("#cId").value=c.id; $("#cMurid").value=c.muridId; $("#cTgl").value=c.tgl; $("#cJenis").value=c.jenis; $("#cNada").value=c.nada; $("#cArah").value=c.arah; $("#cSaluran").value=c.saluran;
+  $("#cIsi").value=c.isi; $("#cTanggapan").value=c.tanggapan||""; $("#cTL").value=c.tl?c.tl.teks:""; $("#cTenggat").value=c.tl?c.tl.tenggat:""; $("#cStatus").value=c.tl?c.tl.status:"menunggu"; $("#cRahasia").checked=!!c.rahasia;
+  $("#btnSimpanCatatan").textContent="Perbarui catatan"; $("#cIsi").focus();
+}
+$("#btnKePesan").addEventListener("click", () => { const d=bacaForm(); keKomposer(d.muridId, templatUntukJenis(d.jenis, d.nada), d.isi); });
+
+/* ===== tindak lanjut ===== */
+function renderTindak(){
+  const f=$("#tFilter").value;
+  const list = S.catatan.filter(c=>c.tl&&c.tl.teks&&(f==="semua"||(f==="selesai")===(c.tl.status==="selesai"))).sort((a,b)=>(a.tl.tenggat||"9999").localeCompare(b.tl.tenggat||"9999"));
+  $("#tbTL").innerHTML = list.map(c => { const m=muridById(c.muridId)||{nama:"?"};
+    return '<tr><td>'+(c.tl.status==="selesai"? fmtTgl(c.tl.tenggat) : chipTenggat(c.tl.tenggat))+'</td><td><b>'+esc(m.nama)+'</b></td><td>'+esc(c.tl.teks)+'</td><td class="small muted">'+fmtTgl(c.tgl)+' · '+esc(jenisNama(c.jenis))+'</td><td>'+(c.tl.status==="selesai"?'<span class="chip c-baik">Selesai</span>':'<span class="chip c-perhatian">Menunggu</span>')+'</td>'+
+      '<td style="white-space:nowrap">'+(c.tl.status==="selesai"? '<button class="btn sm" data-buka="'+c.id+'">Buka lagi</button>' : '<button class="btn sm" data-selesai="'+c.id+'">Selesai</button>')+' <button class="btn sm" data-edit="'+c.id+'">Sunting</button></td></tr>'; }).join("")
+    || '<tr><td colspan="6" class="empty">Tidak ada data.</td></tr>';
+}
+$("#tFilter").addEventListener("change", renderTindak);
+function renderBadge(){ const n=tlTerbuka().filter(c=>c.tl.tenggat && selisihHari(c.tl.tenggat)>=0).length; const b=$("#cntTL"); b.hidden=!n; b.textContent=n; b.title=n+" tindak lanjut jatuh tempo"; }
+
+/* ===== komposer pesan ===== */
+function semuaTemplat(){ return TEMPLAT_BAWAAN.concat(S.templat); }
+function templatUntukJenis(jenis, nada){
+  if (nada==="baik") return "t-baik";
+  const map = {kehadiran:"t-absen", akademik:"t-tugas", karakter:"t-perilaku", undangan:"t-undang", kesehatan:"t-sehat", kaih:"t-kaih", apresiasi:"t-baik"};
+  return map[jenis] || "t-terima";
+}
+function salamWaktu(){ const h=new Date().getHours(); return h<11?"Selamat pagi":h<15?"Selamat siang":h<18?"Selamat sore":"Selamat malam"; }
+const ISIAN = {isi:["Isi pokok", "textarea"], tanggal:["Tanggal","text"], waktu:["Pukul","text"], tempat:["Tempat","text"], tenggat:["Tenggat","text"]};
+function renderPesan(){
+  const tj=$("#pTujuan").value;
+  isiSelect($("#pTujuan"), [["__grup","Grup paguyuban orang tua kelas"]].concat(opsiMurid()));
+  $("#pTujuan").value = tj && (tj==="__grup"||muridById(tj)) ? tj : (S.murid.length? $("#pTujuan").options[1] ? $("#pTujuan").options[1].value : "__grup" : "__grup");
+  const tp=$("#pTemplat").value; isiSelect($("#pTemplat"), semuaTemplat().map(t=>[t.id, t.judul + (t.grup?" (grup)":"")])); if(tp && semuaTemplat().some(t=>t.id===tp)) $("#pTemplat").value=tp;
+  renderIsian(); renderTemplatSaya(); perbaruiPratinjau();
+}
+function renderIsian(){
+  const t = semuaTemplat().find(x=>x.id===$("#pTemplat").value); if(!t) { $("#pIsian").innerHTML=""; return; }
+  const lama = {}; $$("#pIsian [data-isian]").forEach(el => lama[el.dataset.isian]=el.value);
+  const ks = Object.keys(ISIAN).filter(k => t.teks.includes("{"+k+"}"));
+  $("#pIsian").innerHTML = ks.map(k => { const v = lama[k]!=null ? lama[k] : (k==="tanggal"? fmtTgl(today(), true) : "");
+    return '<label for="pi-'+k+'">'+ISIAN[k][0]+'</label>'+(ISIAN[k][1]==="textarea" ? '<textarea id="pi-'+k+'" data-isian="'+k+'" style="min-height:70px">'+esc(v)+'</textarea>' : '<input type="text" id="pi-'+k+'" data-isian="'+k+'" value="'+esc(v)+'">'); }).join("");
+}
+function isiTemplat(){
+  const t = semuaTemplat().find(x=>x.id===$("#pTemplat").value); if(!t) return;
+  const tj=$("#pTujuan").value, m = tj==="__grup" ? null : muridById(tj), st=S.setelan;
+  const v = {salam:salamWaktu(), sapaan:m?m.sapaan:"Bapak/Ibu", ortu:m?m.ortu:"", murid:m?m.nama.split(" ")[0]:"ananda", kelas:st.kelas, wali:st.wali, sekolah:st.sekolah};
+  $$("#pIsian [data-isian]").forEach(el => { v[el.dataset.isian] = el.value.trim() || "{"+el.dataset.isian+"}"; });
+  let teks = t.teks.replace(/\{(\w+)\}/g, (a,k) => v[k]!=null ? v[k] : a);
+  teks = teks.replace(/ +\./g,".").replace(/ {2,}/g," ").replace(/, \./g,".");
+  $("#pTeks").value = teks; perbaruiPratinjau();
+}
+function keKomposer(muridId, templatId, isi){
+  buka("pesan");
+  if (muridId) $("#pTujuan").value = muridId;
+  if (templatId) $("#pTemplat").value = templatId;
+  renderIsian();
+  const el = $("#pi-isi"); if (el && isi != null) el.value = isi;
+  isiTemplat(); $("#pTeks").focus();
+}
+function nomorWA(s){ let d=String(s||"").replace(/\D/g,""); if(!d) return ""; if(d.startsWith("0")) d="62"+d.slice(1); else if(d.startsWith("8")) d="62"+d; return d; }
+function cekSantun(teks, keGrup, m){
+  const r = []; const T = teks.trim();
+  if (!T) return [];
+  const ok = (b, ya, tidak) => r.push({ok:b, t: b ? ya : tidak});
+  ok(!/\{\w+\}/.test(T), "Semua isian sudah terisi.", "Masih ada isian kosong seperti {isi} atau {tanggal}.");
+  ok(/^(selamat|assalam|salam|halo|yth|dengan hormat|om swastyastu|shalom|terima kasih)/i.test(T), "Dibuka dengan salam.", "Awali dengan salam dan sapaan (misalnya \"Selamat pagi, Ibu …\").");
+  ok(/terima ?kasih|matur nuwun/i.test(T), "Ada ucapan terima kasih.", "Tambahkan ucapan terima kasih di akhir pesan.");
+  const kapital = (T.match(/\b[A-Z]{4,}\b/g)||[]).filter(w=>!/^(SMP|SMA|UKS|OSIS|PJOK|IPA|IPS|UUD|ANBK|TKA|KAIH|WIB|WITA|WIT|PKKS|BOSP|RKAS)$/.test(w));
+  ok(kapital.length<2, "Huruf kapital wajar.", "Kurangi huruf kapital semua (" + kapital.slice(0,3).join(", ") + "); terbaca seperti membentak.");
+  ok(!/!{2,}/.test(T) && (T.match(/!/g)||[]).length<=2, "Tanda seru tidak berlebihan.", "Kurangi tanda seru agar nada tetap tenang.");
+  const label = T.match(/\b(nakal|bodoh|malas|bandel|goblok|bebal|susah diatur|tidak tahu diri|kurang ajar|biang|parah|lelet|lemot)\b/gi);
+  ok(!label, "Tidak memakai label negatif.", "Ganti label \"" + (label||[]).slice(0,3).join("\", \"") + "\" dengan uraian perilaku yang teramati.");
+  ok(!/\b(selalu|tidak pernah|terus-terusan)\b/i.test(T) || /(selalu (siap|berusaha|semangat|membantu))/i.test(T), "Tidak menggeneralisasi.", "Hindari \"selalu\"/\"tidak pernah\" untuk perilaku negatif; sebutkan kejadian dan tanggalnya.");
+  ok(!/(dibanding(kan)?|daripada) (dengan )?(teman|kakak|adik|anak lain|murid lain)/i.test(T), "Tidak membandingkan dengan anak lain.", "Hindari membandingkan dengan murid lain.");
+  ok(T.length<=900, "Panjang pesan wajar (" + T.length + " karakter).", "Pesan cukup panjang (" + T.length + " karakter). Untuk hal pelik, pertimbangkan telepon atau tatap muka.");
+  if (keGrup){
+    const sebut = S.murid.filter(x => x.nama.split(" ")[0].length>2 && new RegExp("\\b"+x.nama.split(" ")[0]+"\\b","i").test(T)).map(x=>x.nama.split(" ")[0]);
+    ok(!sebut.length, "Pesan grup tidak menyebut nama murid tertentu.", "Pesan grup menyebut " + sebut.slice(0,3).join(", ") + ". Masalah perorangan sebaiknya lewat pesan pribadi.");
+  }
+  const now = new Date(), hm = pad(now.getHours())+":"+pad(now.getMinutes()), j1=S.setelan.jam1||"06:00", j2=S.setelan.jam2||"20:00";
+  ok(hm>=j1 && hm<=j2, "Waktu kirim wajar (" + hm + ").", "Sekarang pukul " + hm + ". Pertimbangkan mengirim antara " + j1 + "–" + j2 + "; simpan dulu teksnya.");
+  if (m && !keGrup) ok(!!m.wa, "Nomor WhatsApp tersedia.", "Nomor WhatsApp " + m.sapaan + " " + m.ortu + " belum diisi; tombol WhatsApp akan membuka pilihan kontak.");
+  return r;
+}
+function perbaruiPratinjau(){
+  const teks = $("#pTeks").value, tj=$("#pTujuan").value, m = tj==="__grup"?null:muridById(tj);
+  $("#pPratinjau").textContent = teks || "Pilih tujuan dan templat, lalu tekan \"Terapkan templat\".";
+  const hasil = cekSantun(teks, tj==="__grup", m);
+  $("#pCek").innerHTML = hasil.map(h => '<li class="'+(h.ok?"ok":"no")+'">'+esc(h.t)+'</li>').join("") || '<li class="no">Belum ada teks untuk diperiksa.</li>';
+  const no = m ? nomorWA(m.wa) : "";
+  $("#btnWA").href = "https://wa.me/" + (no||"") + "?text=" + encodeURIComponent(teks);
+  $("#pInfoWA").textContent = tj==="__grup" ? "Tombol WhatsApp membuka pilihan obrolan; pilih grup paguyuban kelas." : (no ? "Akan dikirim ke +" + no + "." : "Nomor belum diisi: WhatsApp akan meminta Anda memilih kontak.");
+}
+$("#pTujuan").addEventListener("change", () => { const t=semuaTemplat().find(x=>x.id===$("#pTemplat").value); if($("#pTujuan").value==="__grup" && t && !t.grup) $("#pTemplat").value="t-grup"; renderIsian(); if($("#pTeks").value) isiTemplat(); else perbaruiPratinjau(); });
+$("#pTemplat").addEventListener("change", () => { renderIsian(); isiTemplat(); });
+$("#btnIsiTemplat").addEventListener("click", isiTemplat);
+$("#pTeks").addEventListener("input", perbaruiPratinjau);
+$("#btnSalin").addEventListener("click", async () => { if(!$("#pTeks").value.trim()) return toast("Teks masih kosong"); toast(await salinTeks($("#pTeks").value) ? "Teks disalin. Tempel di WhatsApp." : "Gagal menyalin; pilih teks lalu salin manual"); });
+$("#btnWA").addEventListener("click", e => { if(!$("#pTeks").value.trim()){ e.preventDefault(); toast("Teks masih kosong"); } });
+$("#btnCatatPesan").addEventListener("click", () => {
+  const tj=$("#pTujuan").value, teks=$("#pTeks").value.trim(); if(!teks) return toast("Teks masih kosong");
+  const t = semuaTemplat().find(x=>x.id===$("#pTemplat").value) || {jenis:"lainnya"};
+  const isi = ($("#pi-isi") && $("#pi-isi").value.trim()) || teks.slice(0,400);
+  const nada = t.id==="t-baik" ? "baik" : (JENIS.find(j=>j.k===t.jenis)||{nada:"info"}).nada;
+  const ids = tj==="__grup" ? S.murid.map(m=>m.id) : [tj];
+  if (tj==="__grup" && !confirm("Catat pesan grup ini ke riwayat semua " + ids.length + " murid?")) return;
+  ids.forEach(id => S.catatan.push({id:uid(), muridId:id, tgl:today(), jenis:t.jenis||"lainnya", nada, arah:"keluar", saluran:"WhatsApp", isi:(tj==="__grup"?"[Grup] ":"") + isi, tanggapan:"", tl:null, rahasia:false}));
+  simpan(); renderBadge(); toast("Tercatat di riwayat " + (ids.length>1? ids.length+" murid":"murid"));
+});
+
+/* templat saya */
+function renderTemplatSaya(){
+  $("#listTemplat").innerHTML = S.templat.map(t => '<li><div class="grow"><b>'+esc(t.judul)+'</b><div class="small muted">'+esc(jenisNama(t.jenis))+(t.grup?" · grup":"")+'</div></div><button class="btn sm" data-tedit="'+t.id+'">Ubah</button><button class="btn sm danger" data-thapus="'+t.id+'">Hapus</button></li>').join("")
+    || '<li class="empty">Belum ada templat sendiri. Tersedia ' + TEMPLAT_BAWAAN.length + ' templat bawaan.</li>';
+}
+function formTemplat(id){
+  const t = id ? S.templat.find(x=>x.id===id) : {judul:"", jenis:"lainnya", grup:false, teks:"{salam}, {sapaan} {ortu}. Saya {wali}, wali kelas {kelas}.\n\n{isi}\n\nTerima kasih.\n{wali}"};
+  dialog(id? "Ubah templat" : "Templat baru",
+    '<form id="fTpl"><label for="tJudul">Judul</label><input type="text" id="tJudul" required value="'+esc(t.judul)+'">'+
+    '<div class="row"><div><label for="tJenis">Jenis</label><select id="tJenis">'+JENIS.map(j=>'<option value="'+j.k+'"'+(j.k===t.jenis?" selected":"")+'>'+j.n+'</option>').join("")+'</select></div>'+
+    '<div><label class="chk"><input type="checkbox" id="tGrup"'+(t.grup?" checked":"")+'> Untuk grup</label></div></div>'+
+    '<label for="tTeks">Teks templat</label><textarea id="tTeks" style="min-height:200px">'+esc(t.teks)+'</textarea>'+
+    '<p class="small muted">Penanda: {salam} {sapaan} {ortu} {murid} {kelas} {wali} {sekolah} {isi} {tanggal} {waktu} {tempat} {tenggat}</p>'+
+    '<div class="btns"><button class="btn pri" type="submit">Simpan templat</button></div></form>');
+  $("#fTpl").addEventListener("submit", e => { e.preventDefault();
+    const d = {judul:$("#tJudul").value.trim(), jenis:$("#tJenis").value, grup:$("#tGrup").checked, teks:$("#tTeks").value};
+    if(!d.judul||!d.teks.trim()) return;
+    if (id) Object.assign(t, d); else S.templat.push(Object.assign({id:"u-"+uid()}, d));
+    simpan(); $("#dlg").close(); renderPesan(); toast("Templat disimpan");
+  });
+}
+$("#btnTemplatBaru").addEventListener("click", () => formTemplat());
+
+/* AI Gemini (opsional) */
+function aiSetelan(){ try { return JSON.parse(lsGet(KEY_AI)||"{}"); } catch(e){ return {}; } }
+$("#btnAI").addEventListener("click", async () => {
+  const ai = aiSetelan(); let teks = $("#pTeks").value.trim();
+  if (!teks) return toast("Teks masih kosong");
+  if (!ai.key){ toast("Isi kunci API Gemini di Pengaturan terlebih dulu"); buka("setelan"); $("#aKey").focus(); return; }
+  const tj=$("#pTujuan").value, m = tj==="__grup"?null:muridById(tj);
+  const ganti = [];
+  if (m){ ganti.push([m.nama, "[NAMA_MURID]"], [m.nama.split(" ")[0], "[PANGGILAN_MURID]"], [m.ortu, "[NAMA_ORTU]"]); }
+  if (S.setelan.wali) ganti.push([S.setelan.wali, "[NAMA_WALI]"]);
+  ganti.filter(g=>g[0]).forEach(g => { teks = teks.split(g[0]).join(g[1]); });
+  const prompt = "Anda membantu wali kelas SMP di Indonesia. Rapikan pesan WhatsApp untuk orang tua murid berikut agar sopan, hangat, jelas, dan ringkas dalam bahasa Indonesia yang santun. Gunakan uraian perilaku, bukan label negatif. Pertahankan semua fakta, tanggal, dan penanda dalam kurung siku seperti [NAMA_MURID] persis apa adanya. Jangan menambahkan informasi baru. Keluarkan hanya teks pesan akhir tanpa penjelasan.\n\nPESAN:\n" + teks;
+  const b = $("#btnAI"); b.disabled = true; b.textContent = "Memproses…";
+  try {
+    const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(ai.model||"gemini-2.5-flash") + ":generateContent", {
+      method:"POST", headers:{"Content-Type":"application/json","x-goog-api-key":ai.key},
+      body: JSON.stringify({contents:[{role:"user", parts:[{text:prompt}]}], generationConfig:{temperature:0.4}})
+    });
+    const j = await res.json();
+    if (!res.ok) throw new Error((j.error && j.error.message) || ("HTTP " + res.status));
+    let out = ((j.candidates||[])[0]||{}).content; out = out && out.parts ? out.parts.map(p=>p.text||"").join("").trim() : "";
+    if (!out) throw new Error("Jawaban kosong");
+    ganti.slice().reverse().forEach(g => { out = out.split(g[1]).join(g[0]); });
+    $("#pTeks").value = out; perbaruiPratinjau(); toast("Pesan dihaluskan. Periksa kembali sebelum dikirim.");
+  } catch(e){ toast("AI gagal: " + e.message); }
+  finally { b.disabled=false; b.textContent="Haluskan dengan AI"; }
+});
+
+/* ===== rekap ===== */
+function dataRekap(){
+  const bln = $("#rBulan").value || today().slice(0,7);
+  const cs = S.catatan.filter(c=>c.tgl.slice(0,7)===bln);
+  return {bln, cs};
+}
+function tabelHitung(el, pasangan){
+  const max = Math.max(1, ...pasangan.map(p=>p[1]));
+  el.innerHTML = pasangan.map(p => '<tr><td>'+esc(p[0])+'</td><td style="width:45%"><div class="bar" style="width:'+(p[1]/max*100)+'%"></div></td><td class="num">'+p[1]+'</td></tr>').join("");
+}
+function renderRekap(){
+  if(!$("#rBulan").value) $("#rBulan").value = today().slice(0,7);
+  const {bln, cs} = dataRekap();
+  const tersapa = new Set(cs.map(c=>c.muridId)).size;
+  const masuk = cs.filter(c=>c.arah==="masuk").length;
+  $("#rStat").innerHTML =
+    '<div class="stat"><div class="n">'+cs.length+'</div><div class="l">catatan '+BULAN[Number(bln.slice(5))-1]+'</div></div>'+
+    '<div class="stat good"><div class="n">'+(S.murid.length? Math.round(tersapa/S.murid.length*100):0)+'%</div><div class="l">orang tua tersapa ('+tersapa+'/'+S.murid.length+')</div></div>'+
+    '<div class="stat"><div class="n">'+masuk+'</div><div class="l">pesan dari orang tua</div></div>'+
+    '<div class="stat warn"><div class="n">'+cs.filter(c=>c.tl&&c.tl.teks&&c.tl.status!=="selesai").length+'</div><div class="l">tindak lanjut belum selesai</div></div>';
+  tabelHitung($("#rJenis"), JENIS.map(j=>[j.n, cs.filter(c=>c.jenis===j.k).length]));
+  tabelHitung($("#rSaluran"), SALURAN.map(s=>[s, cs.filter(c=>c.saluran===s).length]));
+  $("#rMurid").innerHTML = S.murid.slice().sort((a,b)=>a.nama.localeCompare(b.nama)).map(m => { const h=hitungMurid(m,bln);
+    return '<tr><td><b>'+esc(m.nama)+'</b></td><td>'+esc(m.sapaan+" "+m.ortu)+'</td><td class="num">'+h.n+'</td><td class="num">'+h.baik+'</td><td class="num">'+h.perhatian+'</td><td class="num">'+h.tl+'</td><td>'+(h.terakhir? fmtTgl(h.terakhir) : '<span class="chip c-telat">belum pernah</span>')+'</td></tr>'; }).join("")
+    || '<tr><td colspan="7" class="empty">Belum ada murid.</td></tr>';
+}
+$("#rBulan").addEventListener("change", renderRekap);
+$("#btnCetak").addEventListener("click", () => { $("#v-rekap").classList.add("print"); window.print(); setTimeout(()=>$("#v-rekap").classList.remove("print"),500); });
+$("#btnCsvCatatan").addEventListener("click", () => {
+  const rows = [["Tanggal","Murid","Orang tua","Jenis","Nada","Arah","Saluran","Isi","Tanggapan","Tindak lanjut","Tenggat","Status TL"]];
+  S.catatan.slice().sort((a,b)=>a.tgl.localeCompare(b.tgl)).forEach(c => { const m=muridById(c.muridId)||{};
+    rows.push([c.tgl, m.nama, (m.sapaan||"")+" "+(m.ortu||""), jenisNama(c.jenis), NADA[c.nada][0], c.arah==="masuk"?"Rumah ke sekolah":"Sekolah ke rumah", c.saluran,
+      c.rahasia? "(pribadi)" : c.isi, c.rahasia? "" : c.tanggapan, c.tl? c.tl.teks:"", c.tl? c.tl.tenggat:"", c.tl? c.tl.status:""]); });
+  unduh("buku-penghubung-"+S.setelan.kelas.replace(/\W+/g,"")+"-catatan.csv", csv(rows), "text/csv;charset=utf-8");
+});
+$("#btnCsvRekap").addEventListener("click", () => {
+  const {bln} = dataRekap(); const rows=[["Bulan","Murid","Orang tua","Kontak","Kabar baik","Informasi","Perlu perhatian","TL terbuka","Terakhir dihubungi"]];
+  S.murid.forEach(m => { const h=hitungMurid(m,bln); rows.push([bln, m.nama, m.sapaan+" "+m.ortu, h.n, h.baik, h.info, h.perhatian, h.tl, h.terakhir]); });
+  unduh("rekap-buku-penghubung-"+bln+".csv", csv(rows), "text/csv;charset=utf-8");
+});
+function cetakMurid(id){
+  const m = muridById(id); if(!m) return;
+  const cs = S.catatan.filter(c=>c.muridId===id).sort((a,b)=>a.tgl.localeCompare(b.tgl));
+  const w = window.open("", "_blank"); if(!w) return toast("Izinkan jendela munculan untuk mencetak");
+  w.document.write('<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Riwayat '+esc(m.nama)+'</title><style>body{font:14px/1.5 system-ui,sans-serif;margin:24px;color:#111}h1{font-size:18px;margin:0}table{width:100%;border-collapse:collapse;margin-top:12px}td,th{border:1px solid #999;padding:6px;text-align:left;vertical-align:top}th{background:#eee}</style></head><body>'+
+    '<h1>Riwayat Buku Penghubung</h1><p>'+esc(S.setelan.sekolah)+' · Kelas '+esc(S.setelan.kelas)+' · TA '+esc(S.setelan.ta)+'<br>Murid: <b>'+esc(m.nama)+'</b> · Orang tua/wali: '+esc(m.sapaan+" "+m.ortu)+'</p>'+
+    '<table><tr><th>Tanggal</th><th>Jenis</th><th>Catatan</th><th>Tanggapan</th><th>Tindak lanjut</th></tr>'+
+    cs.map(c=>'<tr><td>'+fmtTgl(c.tgl)+'</td><td>'+esc(jenisNama(c.jenis))+'<br>'+NADA[c.nada][0]+'<br>'+esc(c.saluran)+'</td><td>'+esc(c.isi)+'</td><td>'+esc(c.tanggapan)+'</td><td>'+(c.tl? esc(c.tl.teks)+" ("+(c.tl.status==="selesai"?"selesai":"menunggu")+")":"")+'</td></tr>').join("")+
+    '</table><p style="margin-top:28px">Wali kelas,<br><br><br>'+esc(S.setelan.wali)+'</p><script>window.onload=function(){window.print()}<\/script></body></html>');
+  w.document.close();
+}
+
+/* ===== pengaturan ===== */
+function renderSetelan(){
+  const s=S.setelan; $("#sSekolah").value=s.sekolah; $("#sKelas").value=s.kelas; $("#sTA").value=s.ta; $("#sWali").value=s.wali; $("#sJam1").value=s.jam1; $("#sJam2").value=s.jam2; $("#sSapa").value=s.sapa; $("#sTema").value=s.tema;
+  const ai=aiSetelan(); $("#aKey").value = ai.key ? ai.key : ""; $("#aModel").value = ai.model || "gemini-2.5-flash";
+}
+$("#formSetelan").addEventListener("submit", e => { e.preventDefault();
+  Object.assign(S.setelan, {sekolah:$("#sSekolah").value.trim(), kelas:$("#sKelas").value.trim()||"–", ta:$("#sTA").value.trim(), wali:$("#sWali").value.trim(), jam1:$("#sJam1").value||"06:00", jam2:$("#sJam2").value||"20:00", sapa:Math.max(1,parseInt($("#sSapa").value,10)||21), tema:$("#sTema").value});
+  simpan(); terapkanTema(); renderHeader(); toast("Pengaturan disimpan");
+});
+$("#sTema").addEventListener("change", () => { S.setelan.tema=$("#sTema").value; simpan(); terapkanTema(); });
+$("#formAI").addEventListener("submit", e => { e.preventDefault(); lsSet(KEY_AI, JSON.stringify({key:$("#aKey").value.trim(), model:$("#aModel").value.trim()||"gemini-2.5-flash"})); toast("Setelan AI disimpan di perangkat ini"); });
+$("#btnHapusKey").addEventListener("click", () => { lsDel(KEY_AI); $("#aKey").value=""; toast("Kunci API dihapus dari perangkat"); });
+$("#btnJson").addEventListener("click", () => unduh("cadangan-buku-penghubung-"+today()+".json", JSON.stringify(S,null,1), "application/json"));
+$("#fileJson").addEventListener("change", e => {
+  const f=e.target.files[0]; if(!f) return; const r=new FileReader();
+  r.onload = () => { try { const d=JSON.parse(r.result); if(!Array.isArray(d.murid)||!Array.isArray(d.catatan)) throw 0;
+      if(!confirm("Ganti seluruh data di perangkat ini dengan isi cadangan?")) return;
+      S=d; S.setelan=Object.assign(setelanAwal(), S.setelan||{}); S.templat=S.templat||[]; simpan(); terapkanTema(); renderAll(); toast("Data dipulihkan"); }
+    catch(_){ toast("Berkas cadangan tidak valid"); } e.target.value=""; };
+  r.readAsText(f);
+});
+function hapusContoh(){
+  if(!S.murid.some(m=>m.contoh) && !S.catatan.some(c=>c.contoh)) return toast("Tidak ada data contoh");
+  if(!confirm("Hapus semua murid dan catatan berlabel contoh?")) return;
+  const idc = new Set(S.murid.filter(m=>m.contoh).map(m=>m.id));
+  S.murid = S.murid.filter(m=>!m.contoh); S.catatan = S.catatan.filter(c=>!c.contoh && !idc.has(c.muridId));
+  simpan(); renderAll(); toast("Data contoh dihapus");
+}
+$("#btnHapusContoh1").addEventListener("click", hapusContoh);
+$("#btnHapusContoh2").addEventListener("click", hapusContoh);
+$("#btnMuatContoh").addEventListener("click", () => { if(S.murid.some(m=>m.contoh)) return toast("Data contoh sudah ada"); isiContoh(); simpan(); renderAll(); toast("Data contoh dimuat"); });
+$("#btnHapusSemua").addEventListener("click", () => { if(!confirm("Hapus SEMUA murid, catatan, dan templat sendiri? Unduh cadangan dulu bila perlu.")) return;
+  const st=S.setelan; S=kosong(); S.setelan=st; simpan(); renderAll(); toast("Semua data dihapus"); });
+
+/* ===== delegasi klik ===== */
+document.addEventListener("click", e => {
+  const t = e.target.closest("button,[data-murid]"); if(!t) return;
+  const d = t.dataset;
+  if (d.murid) detailMurid(d.murid);
+  else if (d.selesai){ const c=S.catatan.find(x=>x.id===d.selesai); if(c&&c.tl){ c.tl.status="selesai"; simpan(); toast("Tindak lanjut selesai"); renderAll(); } }
+  else if (d.buka){ const c=S.catatan.find(x=>x.id===d.buka); if(c&&c.tl){ c.tl.status="menunggu"; simpan(); renderAll(); } }
+  else if (d.edit){ if($("#dlg").open) $("#dlg").close(); editCatatan(d.edit); }
+  else if (d.hapus){ if(confirm("Hapus catatan ini?")){ S.catatan=S.catatan.filter(c=>c.id!==d.hapus); simpan(); renderAll(); toast("Catatan dihapus"); } }
+  else if (d.wa){ const c=S.catatan.find(x=>x.id===d.wa); if(c) keKomposer(c.muridId, templatUntukJenis(c.jenis,c.nada), c.isi); }
+  else if (d.kabar){ if($("#dlg").open) $("#dlg").close(); keKomposer(d.kabar, "t-baik", ""); }
+  else if (d.catat){ $("#dlg").close(); buka("catatan"); resetForm(); $("#cMurid").value=d.catat; $("#cIsi").focus(); }
+  else if (d.editmurid){ formMurid(d.editmurid); }
+  else if (d.cetakmurid){ cetakMurid(d.cetakmurid); }
+  else if (d.tedit){ formTemplat(d.tedit); }
+  else if (d.thapus){ if(confirm("Hapus templat ini?")){ S.templat=S.templat.filter(x=>x.id!==d.thapus); simpan(); renderPesan(); } }
+});
+
+/* ===== render ===== */
+function renderHeader(){
+  $("#labelKelas").textContent = "Kelas " + S.setelan.kelas;
+  $("#subJudul").textContent = (S.setelan.sekolah||"Catatan wali kelas") + (S.setelan.ta? " · TA " + S.setelan.ta : "");
+  $("#bannerContoh").hidden = !(S.murid.some(m=>m.contoh) || S.catatan.some(c=>c.contoh));
+}
+function aktif(){ const s=document.querySelector("section.view.on"); return s ? s.id.slice(2) : "beranda"; }
+function render(v){
+  renderHeader(); renderBadge();
+  ({beranda:renderBeranda, murid:renderMurid, catatan:renderCatatan, pesan:renderPesan, tindak:renderTindak, rekap:renderRekap, setelan:renderSetelan}[v]||renderBeranda)();
+}
+function renderAll(){ render(aktif()); }
+
+muat(); terapkanTema();
+const awal = (location.hash||"").slice(1);
+buka(["beranda","murid","catatan","pesan","tindak","rekap","setelan"].includes(awal) ? awal : "beranda");
+</script>
+</body>
+</html>

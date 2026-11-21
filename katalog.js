@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Buku Penghubung Digital",
+    kategori: "Sekolah",
+    jenis: "HTML",
+    deskripsi: "Buku penghubung wali kelas–orang tua: catatan per murid (kabar baik, belajar, kehadiran, karakter, 7 KAIH), 10 templat pesan WhatsApp santun yang bisa disalin atau langsung dibuka di WhatsApp, pemeriksa kesantunan pesan, agenda tindak lanjut, pengingat orang tua yang belum tersapa, serta rekap bulanan dan riwayat per murid siap cetak; data hanya di perangkat.",
+    tanggal: "2026-11-22",
+    tautan: "buku-penghubung/",
+    status: "aktif"
+  },
+  {
     nama: "LKBH PGRI DIY",
     kategori: "Organisasi",
     jenis: "Apps Script",
