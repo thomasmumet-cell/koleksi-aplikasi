@@ -13,9 +13,9 @@ const APLIKASI = [
     nama: "LKBH PGRI DIY",
     kategori: "Organisasi",
     jenis: "Apps Script",
-    deskripsi: "Layanan konsultasi dan pengaduan hukum untuk guru anggota PGRI DIY: formulir pengaduan dengan unggah bukti dan kode tiket, cek status oleh pelapor, serta dasbor pengurus LKBH (ringkasan, filter, pendamping, catatan tindak lanjut, unduh CSV). Data di Google Spreadsheet; salinan kode di folder ini tanpa PIN.",
+    deskripsi: "Layanan konsultasi dan pengaduan hukum untuk guru anggota PGRI DIY: formulir pengaduan dengan unggah bukti dan kode tiket, cek status oleh pelapor, serta dasbor pengurus LKBH (ringkasan, filter, pendamping, catatan tindak lanjut, unduh CSV). Diluncurkan sebagai tindak lanjut sosialisasi kerja sama Polda DIY dan PGRI. Data di Google Spreadsheet; salinan kode di folder lkbh-pgri-diy tanpa PIN.",
     tanggal: "2026-11-21",
-    tautan: "lkbh-pgri-diy/",
+    tautan: "https://pgridiy.or.id/berita/aplikasi-layanan-lkbh",
     status: "aktif"
   },
   {
