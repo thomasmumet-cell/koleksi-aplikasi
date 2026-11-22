@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Penjadwal Pelajaran Otomatis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f3ef;--paper:#fff;--ink:#1c1b22;--ink2:#5c5a66;--line:#e2dfd6;--brand:#4338ca;--brand2:#3730a3;--soft:#e8e7ff;--ok:#0f7b5f;--okSoft:#dcf3ea;--bad:#c2343b;--badSoft:#fde5e6;--warn:#b45309;--warnSoft:#fff3dc;--btnInk:#fff;--lock:#ece9e1}
+:root.dark{--bg:#121218;--paper:#1b1b24;--ink:#eeedf5;--ink2:#a9a7b8;--line:#2f2e3c;--brand:#a5a1ff;--brand2:#c4c1ff;--soft:#2a2850;--ok:#3dd598;--okSoft:#123a2b;--bad:#ff7b82;--badSoft:#40191c;--warn:#fbbf24;--warnSoft:#3a2a10;--btnInk:#121218;--lock:#26252f}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+header.top{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.bar{display:flex;align-items:center;gap:12px;padding:10px 0}
+.logo{width:42px;height:42px;border-radius:12px;background:var(--brand);color:var(--btnInk);display:grid;place-items:center;font-weight:800;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:20px}
+.brand b{display:block;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:20px;line-height:1.1}
+.brand small{color:var(--ink2);font-size:12.5px}
+.sp{flex:1}
+.ib{border:1px solid var(--line);background:transparent;border-radius:10px;padding:7px 11px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+nav.tabs{display:flex;gap:4px;overflow:auto;padding-bottom:8px}
+nav.tabs button{border:0;background:transparent;padding:7px 12px;border-radius:99px;font-weight:600;font-size:14px;color:var(--ink2);white-space:nowrap;cursor:pointer}
+nav.tabs button[aria-current=true]{background:var(--brand);color:var(--btnInk)}
+nav.tabs .n{font-size:11px;opacity:.75;margin-right:4px}
+main{padding:20px 0 40px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+h1{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:clamp(26px,4vw,40px);line-height:1.08;margin:4px 0 10px}
+h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:21px;margin:0 0 10px}
+h3{font-size:15px;margin:0 0 6px}
+.muted{color:var(--ink2)}.small{font-size:13px}
+.btn{border:0;border-radius:11px;padding:9px 14px;font-weight:700;background:var(--brand);color:var(--btnInk);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--brand2)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:9px}
+.btn.danger{background:transparent;color:var(--bad);border:1.5px solid var(--bad)}
+.btn:focus-visible,.ib:focus-visible,nav.tabs button:focus-visible,td.c:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
+input[type=text],input[type=number],input[type=time],select,textarea{border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:var(--paper);width:100%}
+input[type=number]{max-width:90px}
+textarea{min-height:110px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border-bottom:1px solid var(--line);padding:6px;text-align:left;vertical-align:middle}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2)}
+.scroll{overflow:auto}
+.note{border-radius:12px;padding:10px 14px;font-size:14px;background:var(--warnSoft)}
+.okbox{border-radius:12px;padding:10px 14px;font-size:14px;background:var(--okSoft)}
+.badbox{border-radius:12px;padding:10px 14px;font-size:14px;background:var(--badSoft)}
+.stat{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:26px;line-height:1.1}
+.stat span{font-size:12.5px;color:var(--ink2)}
+.tag{font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px;background:var(--warnSoft);color:var(--warn)}
+/* matriks tugas */
+table.mx select{min-width:110px;padding:5px 6px;font-size:12.5px}
+table.mx td,table.mx th{border:1px solid var(--line);padding:4px}
+table.mx td.miss select{border-color:var(--bad);background:var(--badSoft)}
+/* jadwal */
+table.tt{table-layout:fixed;min-width:640px}
+table.tt th,table.tt td{border:1px solid var(--line);text-align:center;padding:4px;height:46px}
+table.tt th.jp{width:90px;font-size:11.5px;text-transform:none;letter-spacing:0}
+table.tt td.c{cursor:pointer;line-height:1.15;font-size:12.5px}
+table.tt td.c b{display:block;font-size:13px}
+table.tt td.c small{opacity:.85;font-size:11px}
+table.tt td.lock{background:var(--lock);color:var(--ink2);font-weight:600;font-size:12px}
+table.tt td.na{background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 6px,var(--paper) 6px,var(--paper) 12px)}
+table.tt td.sel{outline:3px solid var(--brand);outline-offset:-3px}
+table.tt tr.brk td{height:auto;background:var(--bg);font-size:11.5px;color:var(--ink2);padding:2px}
+table.tt td.sub{box-shadow:inset 0 0 0 3px var(--warn)}
+table.induk td{font-size:10.5px;padding:2px;height:34px;border:1px solid var(--line);text-align:center;line-height:1.1}
+table.induk th{border:1px solid var(--line);text-align:center;padding:2px;font-size:10.5px}
+.prog{height:8px;background:var(--line);border-radius:9px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--brand);width:0}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;font-size:14px;z-index:60;display:none;max-width:90vw}
+footer{border-top:1px solid var(--line);padding:16px 0 26px;color:var(--ink2);font-size:13px}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.legend span{font-size:11.5px;padding:2px 8px;border-radius:99px;font-weight:600}
+.day-chk{display:inline-flex;gap:3px;align-items:center;font-size:12px;margin-right:6px}
+@media (max-width:820px){.g2,.g4{grid-template-columns:1fr 1fr}}
+@media print{header.top,footer,.noprint{display:none!important}body{background:#fff;color:#000}.card{border:0;padding:0;margin:0 0 10px}.pb{page-break-after:always}table.tt td.c{color:#000!important}}
+</style>
+</head>
+<body>
+<header class="top noprint">
+ <div class="wrap">
+  <div class="bar">
+   <div class="logo" aria-hidden="true">J</div>
+   <div class="brand"><b>Penjadwal Pelajaran Otomatis</b><small>Jadwal anti-bentrok untuk SMP · data di perangkat</small></div>
+   <div class="sp"></div>
+   <button class="ib" id="themeBtn" type="button">◐ Tema</button>
+  </div>
+  <nav class="tabs" aria-label="Langkah">
+   <button data-v="mulai">Mulai</button>
+   <button data-v="waktu"><span class="n">1</span>Waktu</button>
+   <button data-v="mapel"><span class="n">2</span>Mapel &amp; JP</button>
+   <button data-v="guru"><span class="n">3</span>Guru &amp; Tugas</button>
+   <button data-v="buat"><span class="n">4</span>Buat Jadwal</button>
+   <button data-v="lihat"><span class="n">5</span>Lihat &amp; Cetak</button>
+   <button data-v="pengganti">Guru Pengganti</button>
+   <button data-v="data">Data &amp; Panduan</button>
+  </nav>
+ </div>
+</header>
+<main class="wrap" id="app"></main>
+<footer class="noprint"><div class="wrap">Dikembangkan oleh Edy Thomas · Penjadwal Pelajaran Otomatis versi 1.0 (November 2026). Semua data tersimpan di browser perangkat ini; unduh cadangan secara berkala.</div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){toast('Penyimpanan perangkat penuh atau diblokir.');return false}}};
+function toast(m,ms){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',ms||3200)}
+function dl(name,text,type){const b=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},600)}
+const uid=()=>Math.random().toString(36).slice(2,9);
+const HARI=['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const PALET=['#e8590c','#1971c2','#2f9e44','#9c36b5','#c2255c','#0c8599','#f08c00','#5c940d','#6741d9','#d6336c','#1098ad','#862e9c','#a61e4d','#364fc7','#087f5b','#e67700'];
+
+/* ============ DATA CONTOH (fiktif) ============ */
+function dataContoh(){
+ const mp=[['PAI','Pendidikan Agama Islam',3,'',false],['PPKN','Pendidikan Pancasila',3,'',false],['BIN','Bahasa Indonesia',5,'',false],['MAT','Matematika',5,'',false],['IPA','IPA',5,'',false],['IPS','IPS',4,'',false],['BIG','Bahasa Inggris',4,'',false],['PJOK','PJOK',3,'',true],['INF','Informatika',2,'',false],['SBK','Seni Budaya',2,'',false],['BJW','Bahasa Jawa',2,'',false]]
+  .map((x,i)=>({id:'m'+i,kode:x[0],nama:x[1],jp:x[2],pola:x[3],pagi:x[4]}));
+ const kelas=['7A','7B','7C','8A','8B','8C','9A','9B','9C'];
+ const gs=[['Ust. Ahmad','AHM'],['Bu Fatimah','FTM'],['Pak Budi','BDI'],['Bu Citra','CTR'],['Pak Dedi','DDI'],['Pak Eko','EKO'],['Bu Fitri','FTR'],['Bu Gina','GNA'],['Pak Hendra','HDR'],['Pak Iwan','IWN'],['Bu Kartika','KTK'],['Bu Lina','LNA'],['Pak Made','MDE'],['Pak Nanang','NNG'],['Bu Sinta','SNT'],['Bu Okta','OKT'],['Pak Putu','PTU'],['Bu Ratna','RTN']]
+  .map((x,i)=>({id:'g'+i,nama:x[0],kode:x[1],maxHari:8,libur:[]}));
+ gs[1].libur=[4]; gs[12].libur=[3,4];
+ const G=k=>gs.find(g=>g.kode===k).id;
+ const t={};const set=(m,ks,g)=>ks.forEach(k=>t[k+'|'+m]=G(g));
+ const K=kelas;
+ set('m0',K.slice(0,6),'AHM');set('m0',K.slice(6),'FTM');
+ set('m1',K,'BDI');
+ set('m2',K.slice(0,5),'CTR');set('m2',K.slice(5),'DDI');
+ set('m3',K.slice(0,4),'EKO');set('m3',K.slice(4),'FTR');
+ set('m4',K.slice(0,5),'GNA');set('m4',K.slice(5),'HDR');
+ set('m5',K.slice(0,4),'IWN');set('m5',K.slice(4),'KTK');
+ set('m6',K.slice(0,6),'LNA');set('m6',K.slice(6),'MDE');
+ set('m7',K.slice(0,5),'NNG');set('m7',K.slice(5),'SNT');
+ set('m8',K,'OKT');set('m9',K,'PTU');set('m10',K,'RTN');
+ return {v:1,contoh:true,
+  days:[{on:true,jp:9},{on:true,jp:8},{on:true,jp:8},{on:true,jp:8},{on:true,jp:6},{on:false,jp:0}],
+  mulai:'07:00',durasi:40,istirahat:[{after:4,menit:15},{after:6,menit:30}],
+  kunci:[{d:0,s:0,label:'Upacara'}],pagiBatas:5,maxSama:1,noSplit:true,
+  mapel:mp,kelas,guru:gs,tugas:t,jadwal:null};
+}
+let DB=LS.get('pj_db',null)||dataContoh();
+const save=()=>LS.set('pj_db',DB);
+let S={view:'mulai',lihat:'kelas',pilih:null,swapSel:null,running:false};
+const th=LS.get('pj_theme',null);
+if(th==='dark'||(th===null&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');
+$('#themeBtn').onclick=()=>{const d=document.documentElement.classList.toggle('dark');LS.set('pj_theme',d?'dark':'light')};
+$$('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+function go(v){S.view=v;$$('nav.tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===v));render();window.scrollTo(0,0)}
+
+/* ============ UTIL WAKTU ============ */
+const toMin=t=>{const [h,m]=String(t||'07:00').split(':').map(Number);return h*60+(m||0)};
+const fmt=m=>String(Math.floor(m/60)).padStart(2,'0')+'.'+String(m%60).padStart(2,'0');
+function jam(s){let st=toMin(DB.mulai)+s*DB.durasi;DB.istirahat.forEach(b=>{if(b.after>0&&b.after<=s)st+=+b.menit||0});return fmt(st)+'–'+fmt(st+DB.durasi)}
+const activeDays=()=>DB.days.map((d,i)=>d.on&&d.jp>0?i:-1).filter(i=>i>=0);
+const isLocked=(d,s)=>DB.kunci.find(k=>k.d===d&&k.s===s);
+function capacity(){return activeDays().reduce((a,d)=>{let n=0;for(let s=0;s<DB.days[d].jp;s++)if(!isLocked(d,s))n++;return a+n},0)}
+const mapelOf=id=>DB.mapel.find(m=>m.id===id), guruOf=id=>DB.guru.find(g=>g.id===id);
+const colorOf=id=>PALET[DB.mapel.findIndex(m=>m.id===id)%PALET.length];
+function pola(m){
+ const p=String(m.pola||'').split('+').map(x=>parseInt(x,10)).filter(x=>x>0);
+ if(p.length&&p.reduce((a,b)=>a+b,0)===+m.jp)return p;
+ const out=[];let n=+m.jp;while(n>=2){out.push(2);n-=2}if(n)out.push(1);return out;
+}
+
+/* ============ VALIDASI ============ */
+function validasi(){
+ const err=[],warn=[];const cap=capacity();const days=activeDays();
+ const totalJP=DB.mapel.reduce((a,m)=>a+(+m.jp||0),0);
+ if(!days.length)err.push('Belum ada hari aktif.');
+ if(!DB.kelas.length)err.push('Belum ada kelas.');
+ if(totalJP>cap)err.push(`Total JP mapel (${totalJP}) lebih besar dari slot tersedia per kelas (${cap}). Tambah JP harian atau kurangi JP mapel.`);
+ else if(totalJP<cap)warn.push(`Setiap kelas akan memiliki ${cap-totalJP} jam kosong (total JP ${totalJP}, slot ${cap}).`);
+ const maxLen=Math.max(...days.map(d=>DB.days[d].jp),0);
+ DB.mapel.forEach(m=>{const p=pola(m);if(Math.max(...p)>maxLen)err.push(`Pola ${m.kode} memuat blok lebih panjang dari jumlah JP harian.`);if(p.length>days.length&&DB.maxSama<2)warn.push(`${m.kode} dibagi ${p.length} pertemuan, lebih banyak dari ${days.length} hari aktif; dua pertemuan bisa jatuh di hari yang sama.`)});
+ let kosong=0;DB.kelas.forEach(k=>DB.mapel.forEach(m=>{if(+m.jp>0&&!DB.tugas[k+'|'+m.id])kosong++}));
+ if(kosong)err.push(`${kosong} pasangan kelas–mapel belum ada gurunya (lihat sel merah di langkah 3).`);
+ const beban={};DB.kelas.forEach(k=>DB.mapel.forEach(m=>{const g=DB.tugas[k+'|'+m.id];if(g)beban[g]=(beban[g]||0)+(+m.jp||0)}));
+ DB.guru.forEach(g=>{const b=beban[g.id]||0;let avail=0;days.forEach(d=>{if(g.libur.includes(d))return;let n=0;for(let s=0;s<DB.days[d].jp;s++)if(!isLocked(d,s))n++;avail+=Math.min(n,+g.maxHari||99)});if(b>avail)err.push(`${g.nama} mendapat ${b} JP, padahal waktu tersedianya hanya ${avail} JP (cek hari tidak bisa / maks JP per hari).`)});
+ DB.mapel.filter(m=>m.pagi).forEach(m=>{const per={};DB.kelas.forEach(k=>{const g=DB.tugas[k+'|'+m.id];if(g)per[g]=(per[g]||0)+(+m.jp||0)});Object.entries(per).forEach(([g,b])=>{const avail=days.filter(d=>!guruOf(g).libur.includes(d)).length*Math.min(DB.pagiBatas,99);if(b>avail)err.push(`${guruOf(g).nama} mengajar ${m.kode} ${b} JP yang wajib pagi, tetapi slot pagi hanya ${avail} JP.`)})});
+ return {err,warn,beban,cap,totalJP};
+}
+
+/* ============ MESIN PENJADWAL ============ */
+async function solve(onProg,maxIter){
+ const days=activeDays(),D=DB.days.length;
+ const K=DB.kelas,M=DB.mapel,Gid=DB.guru.map(g=>g.id);
+ const gIndex=Object.fromEntries(Gid.map((g,i)=>[g,i]));
+ const blocks=[];
+ K.forEach((k,ki)=>M.forEach((m,mi)=>{if(!(+m.jp>0))return;const g=DB.tugas[k+'|'+m.id];if(g==null||gIndex[g]==null)return;pola(m).forEach(len=>blocks.push({ki,mi,gi:gIndex[g],len,pagi:!!m.pagi}))}));
+ const nB=blocks.length;
+ const nS=DB.days.map(d=>d.on?d.jp:0);
+ const lockArr=DB.days.map((d,di)=>Array.from({length:nS[di]},(_,s)=>!!isLocked(di,s)));
+ const gLibur=DB.guru.map(g=>new Set(g.libur));
+ const gMax=DB.guru.map(g=>+g.maxHari||99);
+ const kG=K.map(()=>DB.days.map((_,d)=>new Int32Array(nS[d]).fill(-1)));
+ const gG=Gid.map(()=>DB.days.map((_,d)=>new Int32Array(nS[d]).fill(-1)));
+ const gDay=Gid.map(()=>new Int32Array(D));
+ const kmDay=K.map(()=>M.map(()=>new Int32Array(D)));
+ const cntBlocksKM={};blocks.forEach(b=>{const key=b.ki+'_'+b.mi;cntBlocksKM[key]=(cntBlocksKM[key]||0)+1});
+ const maxSame=b=>Math.max(+DB.maxSama||1,Math.ceil(cntBlocksKM[b.ki+'_'+b.mi]/days.length));
+ const pos=new Array(nB).fill(null);
+ // posisi statis yang sah (tanpa memperhatikan blok lain)
+ const statics=blocks.map(b=>{const out=[];days.forEach(d=>{if(gLibur[b.gi].has(d))return;for(let s=0;s+b.len<=nS[d];s++){let ok=true;for(let t=s;t<s+b.len;t++){if(lockArr[d][t]){ok=false;break}}if(ok&&b.pagi&&s+b.len>DB.pagiBatas)ok=false;if(ok&&b.len>1&&DB.noSplit!==false&&DB.istirahat.some(x=>+x.after>s&&+x.after<s+b.len))ok=false;if(ok)out.push([d,s])}});return out});
+ const unplaceable=blocks.map((b,i)=>statics[i].length===0?i:-1).filter(i=>i>=0);
+ function place(i,d,s){const b=blocks[i];for(let t=s;t<s+b.len;t++){kG[b.ki][d][t]=i;gG[b.gi][d][t]=i}gDay[b.gi][d]+=b.len;kmDay[b.ki][b.mi][d]++;pos[i]=[d,s]}
+ function remove(i){const p=pos[i];if(!p)return;const b=blocks[i],[d,s]=p;for(let t=s;t<s+b.len;t++){kG[b.ki][d][t]=-1;gG[b.gi][d][t]=-1}gDay[b.gi][d]-=b.len;kmDay[b.ki][b.mi][d]--;pos[i]=null}
+ function conflicts(i,d,s){const b=blocks[i],set=new Set();for(let t=s;t<s+b.len;t++){const a=kG[b.ki][d][t];if(a>=0&&a!==i)set.add(a);const c=gG[b.gi][d][t];if(c>=0&&c!==i)set.add(c)}
+  if(kmDay[b.ki][b.mi][d]>=maxSame(b)){for(let t=0;t<nS[d];t++){const a=kG[b.ki][d][t];if(a>=0&&a!==i&&blocks[a].mi===b.mi)set.add(a)}}
+  return set}
+ function score(i,d,s){const b=blocks[i];let sc=gDay[b.gi][d]*0.6+Math.random()*1.2;
+  if(gDay[b.gi][d]+b.len>gMax[b.gi])sc+=50;
+  if(s>0&&gG[b.gi][d][s-1]>=0)sc-=0.8; if(s+b.len<nS[d]&&gG[b.gi][d][s+b.len]>=0)sc-=0.8;
+  return sc}
+ // 1. serakah
+ const order=[...blocks.keys()].sort((a,b)=>(statics[a].length-statics[b].length)||(blocks[b].len-blocks[a].len)||(Math.random()-.5));
+ const queue=[];
+ for(const i of order){if(!statics[i].length)continue;let best=null,bs=1e9;for(const [d,s] of statics[i]){if(conflicts(i,d,s).size)continue;const sc=score(i,d,s);if(sc<bs){bs=sc;best=[d,s]}}if(best&&bs<40)place(i,best[0],best[1]);else queue.push(i)}
+ // 2. perbaikan konflik minimum dengan tabu
+ const tabu=new Int32Array(nB).fill(-999);let it=0;const total=queue.length||1;let bestLeft=queue.length;
+ while(queue.length&&it<maxIter){
+  it++;const qi=Math.floor(Math.random()*queue.length);const i=queue[qi];
+  let best=null,bc=1e9;
+  for(const [d,s] of statics[i]){const c=conflicts(i,d,s);let tb=false;for(const x of c)if(it-tabu[x]<12){tb=true;break}
+   let cost=c.size*10+(tb?40:0)+(gDay[blocks[i].gi][d]+blocks[i].len>gMax[blocks[i].gi]?25:0)+Math.random()*3;
+   for(const x of c)cost+=blocks[x].len;
+   if(cost<bc){bc=cost;best=[d,s,c]}}
+  if(!best)break;
+  queue.splice(qi,1);
+  for(const x of best[2]){remove(x);queue.push(x)}
+  place(i,best[0],best[1]);tabu[i]=it;
+  if(queue.length<bestLeft)bestLeft=queue.length;
+  if(it%400===0){onProg&&onProg(it,maxIter,queue.length);await new Promise(r=>setTimeout(r,0))}
+ }
+ // hasil
+ const grid={};K.forEach((k,ki)=>{grid[k]=DB.days.map((_,d)=>Array.from({length:nS[d]},(_,s)=>{const i=kG[ki][d][s];return i>=0?{m:M[blocks[i].mi].id,g:Gid[blocks[i].gi],b:i}:null}))});
+ const tidak=[...queue,...unplaceable].map(i=>({kelas:K[blocks[i].ki],mapel:M[blocks[i].mi].kode,guru:DB.guru[blocks[i].gi].nama,len:blocks[i].len}));
+ return {grid,tidak,iter:it,nBlok:nB};
+}
+function checkGrid(grid){ // pemeriksaan independen
+ const errs=[];const seen={};
+ Object.entries(grid).forEach(([k,days])=>days.forEach((slots,d)=>slots.forEach((c,s)=>{if(!c)return;
+  if(isLocked(d,s))errs.push(`${k} ${HARI[d]} JP${s+1} jatuh di slot terkunci`);
+  const key=c.g+'|'+d+'|'+s;if(seen[key])errs.push(`${guruOf(c.g)?.nama} bentrok ${HARI[d]} JP${s+1} (${seen[key]} dan ${k})`);else seen[key]=k;
+  if(guruOf(c.g)?.libur.includes(d))errs.push(`${guruOf(c.g)?.nama} dijadwalkan di hari tidak bisa (${HARI[d]})`);
+  const m=mapelOf(c.m);if(m&&m.pagi&&s>=DB.pagiBatas)errs.push(`${k} ${m.kode} tidak di jam pagi`);
+ })));
+ return errs;
+}
+function stats(grid){
+ const gJP={},gGap={};DB.guru.forEach(g=>{gJP[g.id]=0;gGap[g.id]=0});
+ DB.days.forEach((dd,d)=>{if(!dd.on)return;DB.guru.forEach(g=>{const slots=[];for(let s=0;s<dd.jp;s++){if(Object.values(grid).some(days=>days[d]&&days[d][s]&&days[d][s].g===g.id))slots.push(s)}gJP[g.id]+=slots.length;if(slots.length>1){let gap=0;for(let s=slots[0];s<=slots[slots.length-1];s++)if(!slots.includes(s)&&!isLocked(d,s))gap++;gGap[g.id]+=gap}})});
+ return {gJP,gGap};
+}
+
+/* ============ TAMPILAN ============ */
+function render(){
+ const v=S.view,a=$('#app');
+ a.innerHTML=v==='mulai'?vMulai():v==='waktu'?vWaktu():v==='mapel'?vMapel():v==='guru'?vGuru():v==='buat'?vBuat():v==='lihat'?vLihat():v==='pengganti'?vPengganti():vData();
+ bind();
+}
+function vMulai(){
+ const val=validasi();
+ return `<section class="card"><div class="muted small" style="font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--brand)">Untuk wakasek kurikulum</div>
+ <h1>Jadwal pelajaran tanpa bentrok, dalam hitungan detik</h1>
+ <p class="muted" style="max-width:740px">Isi jam sekolah, JP tiap mapel, dan pembagian tugas mengajar. Mesin penjadwal menyusun jadwal semua kelas sekaligus: tidak ada guru mengajar di dua kelas pada jam yang sama, hari libur guru dihormati, mapel tersebar di beberapa hari, dan pelajaran tertentu bisa dikunci di jam pagi.</p>
+ ${DB.contoh?'<p class="note">Aplikasi sedang memuat <b>data contoh fiktif</b> (9 kelas, 18 guru). Coba langsung ke langkah 4, lalu ganti dengan data sekolah di langkah 1–3 atau tempel dari Excel di menu Data.</p>':''}
+ <div class="g4" style="margin:14px 0">
+  <div class="stat"><b>${DB.kelas.length}</b><span>kelas</span></div><div class="stat"><b>${DB.guru.length}</b><span>guru</span></div>
+  <div class="stat"><b>${val.totalJP}/${val.cap}</b><span>JP mapel / slot per kelas</span></div><div class="stat"><b>${DB.jadwal?'Sudah':'Belum'}</b><span>jadwal dibuat</span></div></div>
+ <div class="row"><button class="btn" data-go="buat">Buat jadwal sekarang</button><button class="btn ghost" data-go="waktu">Mulai dari langkah 1</button></div></section>
+ <section class="card"><h2>Alur kerja</h2><ol class="small" style="margin:0;padding-left:20px">
+ <li><b>Waktu:</b> hari sekolah, jumlah JP per hari, jam mulai, istirahat, dan jam terkunci (upacara, literasi).</li>
+ <li><b>Mapel &amp; JP:</b> JP per minggu dan cara membaginya (misalnya 5 JP = 2+2+1).</li>
+ <li><b>Guru &amp; Tugas:</b> daftar guru, hari tidak bisa, lalu isi siapa mengajar mapel apa di kelas mana.</li>
+ <li><b>Buat Jadwal:</b> periksa kesiapan data, lalu jalankan mesin. Bisa diulang untuk variasi lain.</li>
+ <li><b>Lihat &amp; Cetak:</b> jadwal per kelas, per guru, dan jadwal induk; tukar jam secara manual; cetak atau unduh CSV.</li></ol></section>`;
+}
+function vWaktu(){
+ return `<section class="card"><h2>1. Hari dan jam pelajaran</h2>
+ <div class="scroll"><table><thead><tr><th>Hari</th><th>Aktif</th><th>Jumlah JP</th></tr></thead><tbody>
+ ${DB.days.map((d,i)=>`<tr><td>${HARI[i]}</td><td><input type="checkbox" data-day-on="${i}" ${d.on?'checked':''} aria-label="${HARI[i]} aktif"></td><td><input type="number" min="0" max="14" data-day-jp="${i}" value="${d.jp}" aria-label="JP ${HARI[i]}"></td></tr>`).join('')}</tbody></table></div>
+ <div class="g4" style="margin-top:12px"><label class="f">Jam mulai<input type="time" id="mulai" value="${esc(DB.mulai)}"></label><label class="f">Durasi 1 JP (menit)<input type="number" id="durasi" min="20" max="90" value="${DB.durasi}"></label><label class="f">Batas "jam pagi" (sampai JP ke-)<input type="number" id="pagiBatas" min="1" max="12" value="${DB.pagiBatas}"></label><label class="f">Maks. pertemuan mapel sama per hari<input type="number" id="maxSama" min="1" max="3" value="${DB.maxSama}"></label></div>
+ <label class="f" style="flex-direction:row;align-items:center;gap:8px;margin-top:10px"><input type="checkbox" id="noSplit" ${DB.noSplit!==false?'checked':''}> Blok 2 JP tidak boleh terpotong istirahat</label></section>
+ <section class="card"><h2>Istirahat</h2><div id="ist">${DB.istirahat.map((b,i)=>`<div class="row" style="margin-bottom:6px"><label class="f">Setelah JP ke-<input type="number" min="1" max="13" data-ist-a="${i}" value="${b.after}"></label><label class="f">Lama (menit)<input type="number" min="5" max="90" data-ist-m="${i}" value="${b.menit}"></label><button class="btn sm danger" data-ist-del="${i}" style="align-self:flex-end">Hapus</button></div>`).join('')}</div><button class="btn sm ghost" data-act="addIst">+ Istirahat</button></section>
+ <section class="card"><h2>Jam terkunci</h2><p class="muted small">Untuk upacara, literasi pagi, kokurikuler, atau kegiatan bersama. Slot ini tidak diisi mapel.</p>
+ ${DB.kunci.map((k,i)=>`<div class="row" style="margin-bottom:6px"><label class="f">Hari<select data-k-d="${i}">${HARI.map((h,j)=>`<option value="${j}" ${k.d===j?'selected':''}>${h}</option>`).join('')}</select></label><label class="f">JP ke-<input type="number" min="1" max="14" data-k-s="${i}" value="${k.s+1}"></label><label class="f" style="flex:1;min-width:160px">Nama kegiatan<input type="text" data-k-l="${i}" value="${esc(k.label)}"></label><button class="btn sm danger" data-k-del="${i}" style="align-self:flex-end">Hapus</button></div>`).join('')}
+ <button class="btn sm ghost" data-act="addKunci">+ Jam terkunci</button>
+ <p class="small muted" style="margin-top:12px">Pratinjau jam: ${Array.from({length:Math.max(...DB.days.map(d=>d.jp))},(_,s)=>`JP${s+1} ${jam(s)}`).join(' · ')}</p>
+ <div class="row" style="margin-top:10px"><button class="btn" data-go="mapel">Lanjut ke langkah 2 →</button></div></section>`;
+}
+function vMapel(){
+ const val=validasi();
+ return `<section class="card"><h2>2. Mata pelajaran dan JP per minggu</h2>
+ <p class="muted small">Pola = cara membagi JP mingguan menjadi pertemuan, misalnya 5 JP = 2+2+1 (tiga pertemuan). Kosongkan untuk otomatis. Centang "pagi" untuk mapel yang harus di jam pagi (misalnya PJOK). JP di bawah ini adalah contoh; sesuaikan dengan struktur kurikulum sekolah.</p>
+ <div class="scroll"><table><thead><tr><th>Kode</th><th>Nama mapel</th><th>JP/minggu</th><th>Pola</th><th>Pagi</th><th></th></tr></thead><tbody>
+ ${DB.mapel.map((m,i)=>`<tr><td><input type="text" data-m-kode="${i}" value="${esc(m.kode)}" maxlength="6" style="max-width:80px;border-left:5px solid ${colorOf(m.id)}"></td><td><input type="text" data-m-nama="${i}" value="${esc(m.nama)}"></td><td><input type="number" min="0" max="12" data-m-jp="${i}" value="${m.jp}"></td><td><input type="text" data-m-pola="${i}" value="${esc(m.pola)}" placeholder="${pola(m).join('+')}" style="max-width:110px"></td><td><input type="checkbox" data-m-pagi="${i}" ${m.pagi?'checked':''} aria-label="${esc(m.kode)} wajib pagi"></td><td><button class="btn sm danger" data-m-del="${i}" aria-label="Hapus ${esc(m.kode)}">✕</button></td></tr>`).join('')}
+ </tbody><tfoot><tr><th colspan="2">Total</th><th>${val.totalJP} JP</th><th colspan="3">Slot tersedia per kelas: ${val.cap} JP</th></tr></tfoot></table></div>
+ <div class="row" style="margin-top:10px"><button class="btn sm ghost" data-act="addMapel">+ Mapel</button><span class="sp"></span><button class="btn" data-go="guru">Lanjut ke langkah 3 →</button></div>
+ ${val.totalJP!==val.cap?`<p class="${val.totalJP>val.cap?'badbox':'note'} small" style="margin-top:10px">${val.totalJP>val.cap?'Total JP melebihi slot tersedia.':'Total JP lebih kecil dari slot; sisa slot menjadi jam kosong.'}</p>`:''}</section>
+ <section class="card"><h2>Kelas</h2><p class="muted small">Tulis nama kelas dipisah koma. Semua kelas memakai daftar mapel dan JP yang sama.</p><textarea id="kelasTxt" style="min-height:60px">${esc(DB.kelas.join(', '))}</textarea><button class="btn sm" style="margin-top:8px" data-act="simpanKelas">Simpan daftar kelas</button></section>`;
+}
+function vGuru(){
+ const val=validasi();
+ return `<section class="card"><h2>3a. Daftar guru</h2><p class="muted small">Kode guru (2–4 huruf) tampil di jadwal kelas. Centang hari ketika guru tidak bisa mengajar (misalnya bertugas di sekolah lain).</p>
+ <div class="scroll"><table><thead><tr><th>Nama</th><th>Kode</th><th>Maks JP/hari</th><th>Hari tidak bisa</th><th>Beban</th><th></th></tr></thead><tbody>
+ ${DB.guru.map((g,i)=>`<tr><td><input type="text" data-g-nama="${i}" value="${esc(g.nama)}"></td><td><input type="text" data-g-kode="${i}" value="${esc(g.kode)}" maxlength="5" style="max-width:80px"></td><td><input type="number" min="1" max="14" data-g-max="${i}" value="${g.maxHari}"></td><td>${activeDays().map(d=>`<label class="day-chk"><input type="checkbox" data-g-lib="${i}" value="${d}" ${g.libur.includes(d)?'checked':''}>${HARI[d].slice(0,3)}</label>`).join('')}</td><td><b>${val.beban[g.id]||0}</b> JP</td><td><button class="btn sm danger" data-g-del="${i}" aria-label="Hapus ${esc(g.nama)}">✕</button></td></tr>`).join('')}
+ </tbody></table></div><button class="btn sm ghost" style="margin-top:8px" data-act="addGuru">+ Guru</button></section>
+ <section class="card"><h2>3b. Pembagian tugas mengajar</h2><p class="muted small">Pilih guru untuk setiap kelas dan mapel. Sel merah belum terisi. Tips: isi kelas pertama, lalu pakai tombol "Salin ke semua kelas" per mapel bila gurunya sama.</p>
+ <div class="scroll"><table class="mx"><thead><tr><th>Kelas</th>${DB.mapel.map(m=>`<th style="border-top:4px solid ${colorOf(m.id)}">${esc(m.kode)}<br><small>${m.jp} JP</small></th>`).join('')}</tr></thead><tbody>
+ ${DB.kelas.map(k=>`<tr><th>${esc(k)}</th>${DB.mapel.map(m=>{const g=DB.tugas[k+'|'+m.id]||'';return `<td class="${!g&&+m.jp>0?'miss':''}"><select data-t="${esc(k)}|${m.id}" aria-label="Guru ${esc(m.kode)} kelas ${esc(k)}"><option value="">—</option>${DB.guru.map(x=>`<option value="${x.id}" ${x.id===g?'selected':''}>${esc(x.kode)} · ${esc(x.nama)}</option>`).join('')}</select></td>`}).join('')}</tr>`).join('')}
+ <tr><th class="small">Salin baris pertama</th>${DB.mapel.map(m=>`<td><button class="btn sm ghost" data-copy="${m.id}">Salin ke semua</button></td>`).join('')}</tr>
+ </tbody></table></div><div class="row" style="margin-top:10px"><span class="sp"></span><button class="btn" data-go="buat">Lanjut ke langkah 4 →</button></div></section>`;
+}
+function vBuat(){
+ const val=validasi();
+ return `<section class="card"><h2>4. Buat jadwal</h2>
+ ${val.err.length?`<div class="badbox"><b>Perbaiki dulu:</b><ul style="margin:6px 0 0">${val.err.map(e=>`<li>${esc(e)}</li>`).join('')}</ul></div>`:'<div class="okbox"><b>Data siap.</b> Semua pasangan kelas–mapel sudah ada gurunya dan beban guru masih muat.</div>'}
+ ${val.warn.length?`<div class="note" style="margin-top:8px"><ul style="margin:0">${val.warn.map(e=>`<li>${esc(e)}</li>`).join('')}</ul></div>`:''}
+ <div class="row" style="margin-top:14px"><button class="btn" data-act="jalan" ${val.err.length||S.running?'disabled':''}>${DB.jadwal?'Buat ulang jadwal (variasi baru)':'Buat jadwal'}</button>${DB.jadwal?'<button class="btn ghost" data-go="lihat">Lihat jadwal saat ini</button>':''}</div>
+ <div id="prog" style="margin-top:14px;display:none"><div class="prog"><i></i></div><p class="small muted" id="progT"></p></div>
+ ${DB.jadwal?`<div style="margin-top:14px">${hasilRingkas()}</div>`:''}</section>
+ <section class="card"><h3>Aturan yang dipatuhi mesin</h3><ul class="small muted" style="margin:0">
+ <li>Satu guru hanya mengajar satu kelas pada satu jam; satu kelas hanya satu mapel pada satu jam.</li>
+ <li>Guru tidak dijadwalkan pada hari tidak bisa; jam terkunci tidak diisi.</li>
+ <li>Pertemuan mapel yang sama di satu kelas disebar ke hari berbeda (sesuai pengaturan maksimum per hari).</li>
+ <li>Mapel bertanda "pagi" hanya di JP 1–${DB.pagiBatas}. Blok 2 JP selalu berurutan${DB.noSplit!==false?' dan tidak terpotong istirahat':''}.</li>
+ <li>Diusahakan: beban harian guru tidak melebihi batas dan jam kosong di sela mengajar guru sesedikit mungkin.</li></ul></section>`;
+}
+function hasilRingkas(){
+ const J=DB.jadwal;const st=stats(J.grid);const errs=checkGrid(J.grid);
+ const gaps=Object.values(st.gGap).reduce((a,b)=>a+b,0);
+ const lebih=DB.guru.filter(g=>{return activeDays().some(d=>{let n=0;Object.values(J.grid).forEach(days=>days[d]&&days[d].forEach(c=>{if(c&&c.g===g.id)n++}));return n>g.maxHari})}).length;
+ return `<div class="g4"><div class="stat"><b>${J.tidak.length?J.tidak.reduce((a,x)=>a+x.len,0):0}</b><span>JP belum terjadwal</span></div><div class="stat"><b>${errs.length}</b><span>bentrok terdeteksi</span></div><div class="stat"><b>${gaps}</b><span>jam kosong di sela guru (total)</span></div><div class="stat"><b>${lebih}</b><span>guru melewati batas JP/hari</span></div></div>
+ ${J.tidak.length?`<div class="badbox" style="margin-top:10px"><b>Belum terjadwal:</b> ${J.tidak.map(x=>`${esc(x.kelas)} ${esc(x.mapel)} (${x.len} JP, ${esc(x.guru)})`).join('; ')}. Coba buat ulang, longgarkan hari tidak bisa guru, atau ubah pola JP.</div>`:'<div class="okbox" style="margin-top:10px">Semua JP terjadwal tanpa bentrok.</div>'}
+ <p class="small muted">Dibuat ${new Date(J.dibuat).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})} · ${J.iter} langkah perbaikan.</p>`;
+}
+function ttTable(kind,id){
+ const days=activeDays();const maxJP=Math.max(...days.map(d=>DB.days[d].jp));const J=DB.jadwal;
+ const cell=(d,s)=>{
+  if(s>=DB.days[d].jp)return `<td class="na"></td>`;
+  const lk=isLocked(d,s);if(lk)return `<td class="lock">${esc(lk.label)}</td>`;
+  if(kind==='kelas'){const c=J.grid[id]?.[d]?.[s];if(!c)return `<td class="c" tabindex="0" data-cell="${esc(id)}|${d}|${s}"></td>`;const m=mapelOf(c.m),g=guruOf(c.g);const sel=S.swapSel&&S.swapSel.k===id&&S.swapSel.d===d&&S.swapSel.s===s;return `<td class="c ${sel?'sel':''}" tabindex="0" data-cell="${esc(id)}|${d}|${s}" style="background:${colorOf(c.m)}22;border-left:4px solid ${colorOf(c.m)}"><b>${esc(m?.kode)}</b><small>${esc(g?.kode)}</small></td>`}
+  const hits=Object.entries(J.grid).filter(([k,dd])=>dd[d]&&dd[d][s]&&dd[d][s].g===id);
+  if(!hits.length)return `<td></td>`;const [k,dd]=hits[0];const c=dd[d][s];return `<td class="c" style="background:${colorOf(c.m)}22;border-left:4px solid ${colorOf(c.m)}"><b>${esc(k)}</b><small>${esc(mapelOf(c.m)?.kode)}</small></td>`;
+ };
+ let rows='';for(let s=0;s<maxJP;s++){const brk=DB.istirahat.filter(b=>+b.after===s&&s>0);brk.forEach(b=>rows+=`<tr class="brk"><td colspan="${days.length+1}">Istirahat ${b.menit} menit</td></tr>`);rows+=`<tr><th class="jp">JP ${s+1}<br><span class="muted">${jam(s)}</span></th>${days.map(d=>cell(d,s)).join('')}</tr>`}
+ return `<div class="scroll"><table class="tt"><thead><tr><th class="jp">Jam</th>${days.map(d=>`<th>${HARI[d]}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function legend(){return `<div class="legend">${DB.mapel.map(m=>`<span style="background:${colorOf(m.id)}22;border:1px solid ${colorOf(m.id)}">${esc(m.kode)} = ${esc(m.nama)}</span>`).join('')}</div>`}
+function vLihat(){
+ if(!DB.jadwal)return `<section class="card"><h2>Belum ada jadwal</h2><button class="btn" data-go="buat">Buat jadwal</button></section>`;
+ const L=S.lihat;const opts=L==='kelas'?DB.kelas:L==='guru'?DB.guru.map(g=>g.id):[];
+ if(L!=='induk'&&!opts.includes(S.pilih))S.pilih=opts[0];
+ const st=stats(DB.jadwal.grid);
+ let body='';
+ if(L==='kelas')body=`<h2>Jadwal kelas ${esc(S.pilih)}</h2>${ttTable('kelas',S.pilih)}${legend()}<p class="small muted noprint">Tukar jam: klik satu sel lalu klik sel lain di kelas yang sama. Penukaran ditolak bila membuat guru bentrok.</p>`;
+ else if(L==='guru'){const g=guruOf(S.pilih);body=`<h2>Jadwal ${esc(g.nama)} (${esc(g.kode)})</h2><p class="small muted">${st.gJP[g.id]} JP per minggu · ${st.gGap[g.id]} jam kosong di sela mengajar</p>${ttTable('guru',S.pilih)}`}
+ else body=induk();
+ return `<section class="card noprint"><div class="row"><div class="row" role="tablist">${['kelas','guru','induk'].map(x=>`<button class="btn sm ${L===x?'':'ghost'}" data-lv="${x}">${x==='kelas'?'Per kelas':x==='guru'?'Per guru':'Jadwal induk'}</button>`).join('')}</div><span class="sp"></span>
+ ${L!=='induk'?`<select id="pilih" style="max-width:240px" aria-label="Pilih">${opts.map(o=>`<option value="${esc(o)}" ${o===S.pilih?'selected':''}>${esc(L==='guru'?guruOf(o).nama:o)}</option>`).join('')}</select>`:''}
+ <button class="btn sm ghost" data-act="print1">Cetak tampilan ini</button><button class="btn sm ghost" data-act="printAll">Cetak semua ${L==='guru'?'guru':'kelas'}</button><button class="btn sm ghost" data-act="csv">Unduh CSV</button></div></section>
+ <section class="card" id="printArea">${body}</section>`;
+}
+function induk(){
+ const days=activeDays();
+ return `<h2>Jadwal induk</h2><div class="scroll"><table class="induk"><thead><tr><th rowspan="2">Kelas</th>${days.map(d=>`<th colspan="${DB.days[d].jp}">${HARI[d]}</th>`).join('')}</tr><tr>${days.map(d=>Array.from({length:DB.days[d].jp},(_,s)=>`<th>${s+1}</th>`).join('')).join('')}</tr></thead><tbody>
+ ${DB.kelas.map(k=>`<tr><th>${esc(k)}</th>${days.map(d=>Array.from({length:DB.days[d].jp},(_,s)=>{const lk=isLocked(d,s);if(lk)return `<td style="background:var(--lock)">${esc(lk.label.slice(0,4))}</td>`;const c=DB.jadwal.grid[k]?.[d]?.[s];return c?`<td style="background:${colorOf(c.m)}26"><b>${esc(mapelOf(c.m)?.kode)}</b><br>${esc(guruOf(c.g)?.kode)}</td>`:'<td></td>'}).join('')).join('')}</tr>`).join('')}
+ </tbody></table></div>${legend()}<p class="small muted">Kode guru: ${DB.guru.map(g=>`${esc(g.kode)} = ${esc(g.nama)}`).join(' · ')}</p>`;
+}
+function vPengganti(){
+ if(!DB.jadwal)return `<section class="card"><h2>Belum ada jadwal</h2><button class="btn" data-go="buat">Buat jadwal</button></section>`;
+ const days=activeDays();const today=(new Date().getDay()+6)%7;const d=S.pgDay??(days.includes(today)?today:days[0]);const gid=S.pgGuru||DB.guru[0].id;
+ const ajar=[];DB.kelas.forEach(k=>{const sl=DB.jadwal.grid[k]?.[d]||[];sl.forEach((c,s)=>{if(c&&c.g===gid)ajar.push({k,s,c})})});
+ ajar.sort((a,b)=>a.s-b.s);
+ const busy=(g,s)=>DB.kelas.some(k=>{const c=DB.jadwal.grid[k]?.[d]?.[s];return c&&c.g===g});
+ const jpHari=g=>DB.kelas.reduce((a,k)=>a+(DB.jadwal.grid[k]?.[d]||[]).filter(c=>c&&c.g===g).length,0);
+ return `<section class="card"><h2>Cari guru pengganti</h2><p class="muted small">Pilih hari dan guru yang izin. Aplikasi menampilkan jam mengajarnya dan guru yang sedang kosong pada jam itu, diurutkan dari yang mengajar mapel sama lalu yang paling sedikit jamnya hari itu.</p>
+ <div class="row"><label class="f">Hari<select id="pgDay">${days.map(x=>`<option value="${x}" ${x===d?'selected':''}>${HARI[x]}</option>`).join('')}</select></label><label class="f" style="min-width:240px">Guru yang izin<select id="pgGuru">${DB.guru.map(g=>`<option value="${g.id}" ${g.id===gid?'selected':''}>${esc(g.nama)}</option>`).join('')}</select></label></div>
+ ${ajar.length?`<div class="scroll" style="margin-top:12px"><table><thead><tr><th>Jam</th><th>Kelas</th><th>Mapel</th><th>Guru yang kosong (saran)</th></tr></thead><tbody>${ajar.map(x=>{const m=mapelOf(x.c.m);const cands=DB.guru.filter(g=>g.id!==gid&&!g.libur.includes(d)&&!busy(g.id,x.s)).map(g=>({g,same:Object.keys(DB.tugas).some(t=>t.endsWith('|'+m.id)&&DB.tugas[t]===g.id),n:jpHari(g.id)})).sort((a,b)=>(b.same-a.same)||(a.n-b.n)).slice(0,5);return `<tr><td>JP ${x.s+1}<br><span class="small muted">${jam(x.s)}</span></td><td><b>${esc(x.k)}</b></td><td>${esc(m?.nama)}</td><td>${cands.map(c=>`${esc(c.g.nama)} <span class="small muted">(${c.same?'mapel sama, ':''}${c.n} JP hari ini)</span>`).join('<br>')||'<span class="muted">Tidak ada guru kosong</span>'}</td></tr>`}).join('')}</tbody></table></div>
+ <button class="btn sm ghost noprint" style="margin-top:10px" data-act="waPengganti">Salin teks untuk grup WhatsApp</button>`:`<p class="okbox" style="margin-top:12px">${esc(guruOf(gid)?.nama)} tidak mengajar pada hari ${HARI[d]}.</p>`}</section>`;
+}
+function vData(){
+ return `<section class="card"><h2>Tempel pembagian tugas dari Excel atau Google Sheets</h2>
+ <p class="muted small">Salin tiga kolom: <b>Kelas</b>, <b>Mapel</b> (kode atau nama), <b>Nama guru</b>, satu baris per pasangan. Guru baru dibuat otomatis; kelas baru ditambahkan.</p>
+ <textarea id="tempel" placeholder="7A&#9;MAT&#9;Bu Sari&#10;7A&#9;IPA&#9;Pak Joko"></textarea>
+ <div class="row" style="margin-top:8px"><button class="btn sm" data-act="tempel">Masukkan</button><label class="f" style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" id="ganti"> Kosongkan pembagian tugas lama dulu</label></div></section>
+ <section class="card"><h2>Cadangan dan data contoh</h2><div class="row">
+ <button class="btn sm ghost" data-act="json">Unduh cadangan JSON</button><label class="btn sm ghost" style="cursor:pointer">Impor cadangan<input type="file" id="imp" accept=".json" hidden></label>
+ <button class="btn sm ghost" data-act="kosong">Mulai dari data kosong</button><button class="btn sm ghost" data-act="contoh">Muat ulang data contoh</button></div>
+ <p class="small muted" style="margin-top:8px">"Mulai dari data kosong" menghapus kelas, guru, tugas, dan jadwal; pengaturan waktu dan mapel tetap. Unduh cadangan dulu bila perlu.</p></section>
+ <section class="card"><h2>Panduan singkat</h2><ul class="small">
+ <li><b>Hasil belum lengkap?</b> Tekan "Buat ulang" beberapa kali; mesin memakai pilihan acak sehingga tiap percobaan berbeda. Bila tetap gagal, biasanya ada guru yang terlalu banyak "hari tidak bisa" atau mapel pagi dengan beban terlalu besar.</li>
+ <li><b>Jam kosong guru</b> diusahakan sedikit, tetapi tidak selalu nol, terutama bila beban guru sangat berbeda-beda.</li>
+ <li><b>Tukar manual:</b> di Lihat &amp; Cetak per kelas, klik dua sel untuk menukar jam. Penukaran dicek supaya guru tidak bentrok.</li>
+ <li><b>Pemakaian bersama:</b> data tersimpan di browser perangkat ini saja. Untuk dipakai di komputer lain, unduh cadangan JSON lalu impor.</li>
+ <li>Struktur JP mapel mengikuti kebijakan kurikulum yang berlaku di sekolah; angka bawaan hanya contoh.</li></ul></section>`;
+}
+
+/* ============ INTERAKSI ============ */
+function setJadwalStale(){if(DB.jadwal){DB.jadwal.stale=true}}
+function bind(){
+ $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+ const num=(sel,fn)=>$$(sel).forEach(e=>e.onchange=()=>{fn(e);DB.contoh=DB.contoh;setJadwalStale();save();render()});
+ num('[data-day-on]',e=>DB.days[+e.dataset.dayOn].on=e.checked);
+ num('[data-day-jp]',e=>DB.days[+e.dataset.dayJp].jp=Math.max(0,Math.min(14,+e.value||0)));
+ const ns=$('#noSplit');if(ns)ns.onchange=()=>{DB.noSplit=ns.checked;setJadwalStale();save();render()};
+ ['mulai','durasi','pagiBatas','maxSama'].forEach(id=>{const e=$('#'+id);if(e)e.onchange=()=>{DB[id]=id==='mulai'?e.value:+e.value;save();render()}});
+ num('[data-ist-a]',e=>DB.istirahat[+e.dataset.istA].after=+e.value);num('[data-ist-m]',e=>DB.istirahat[+e.dataset.istM].menit=+e.value);
+ $$('[data-ist-del]').forEach(b=>b.onclick=()=>{DB.istirahat.splice(+b.dataset.istDel,1);save();render()});
+ num('[data-k-d]',e=>DB.kunci[+e.dataset.kD].d=+e.value);num('[data-k-s]',e=>DB.kunci[+e.dataset.kS].s=Math.max(0,+e.value-1));num('[data-k-l]',e=>DB.kunci[+e.dataset.kL].label=e.value);
+ $$('[data-k-del]').forEach(b=>b.onclick=()=>{DB.kunci.splice(+b.dataset.kDel,1);setJadwalStale();save();render()});
+ num('[data-m-kode]',e=>DB.mapel[+e.dataset.mKode].kode=e.value.trim().toUpperCase());num('[data-m-nama]',e=>DB.mapel[+e.dataset.mNama].nama=e.value);
+ num('[data-m-jp]',e=>DB.mapel[+e.dataset.mJp].jp=Math.max(0,+e.value||0));num('[data-m-pola]',e=>DB.mapel[+e.dataset.mPola].pola=e.value.replace(/\s/g,''));num('[data-m-pagi]',e=>DB.mapel[+e.dataset.mPagi].pagi=e.checked);
+ $$('[data-m-del]').forEach(b=>b.onclick=()=>{if(!b.dataset.c){b.dataset.c=1;b.textContent='Yakin?';return}const m=DB.mapel.splice(+b.dataset.mDel,1)[0];Object.keys(DB.tugas).forEach(t=>{if(t.endsWith('|'+m.id))delete DB.tugas[t]});setJadwalStale();save();render()});
+ num('[data-g-nama]',e=>DB.guru[+e.dataset.gNama].nama=e.value);num('[data-g-kode]',e=>DB.guru[+e.dataset.gKode].kode=e.value.trim().toUpperCase());num('[data-g-max]',e=>DB.guru[+e.dataset.gMax].maxHari=Math.max(1,+e.value||8));
+ num('[data-g-lib]',e=>{const g=DB.guru[+e.dataset.gLib],d=+e.value;g.libur=e.checked?[...new Set([...g.libur,d])]:g.libur.filter(x=>x!==d)});
+ $$('[data-g-del]').forEach(b=>b.onclick=()=>{if(!b.dataset.c){b.dataset.c=1;b.textContent='Yakin?';return}const g=DB.guru.splice(+b.dataset.gDel,1)[0];Object.keys(DB.tugas).forEach(t=>{if(DB.tugas[t]===g.id)delete DB.tugas[t]});setJadwalStale();save();render()});
+ $$('[data-t]').forEach(e=>e.onchange=()=>{if(e.value)DB.tugas[e.dataset.t]=e.value;else delete DB.tugas[e.dataset.t];setJadwalStale();save();e.closest('td').classList.toggle('miss',!e.value)});
+ $$('[data-copy]').forEach(b=>b.onclick=()=>{const m=b.dataset.copy,g=DB.tugas[DB.kelas[0]+'|'+m];if(!g){toast('Isi dulu guru di kelas pertama.');return}DB.kelas.forEach(k=>DB.tugas[k+'|'+m]=g);setJadwalStale();save();render()});
+ $$('[data-lv]').forEach(b=>b.onclick=()=>{S.lihat=b.dataset.lv;S.pilih=null;S.swapSel=null;render()});
+ const pl=$('#pilih');if(pl)pl.onchange=()=>{S.pilih=pl.value;S.swapSel=null;render()};
+ const pd=$('#pgDay');if(pd)pd.onchange=()=>{S.pgDay=+pd.value;render()};const pg=$('#pgGuru');if(pg)pg.onchange=()=>{S.pgGuru=pg.value;render()};
+ $$('[data-cell]').forEach(td=>{const f=()=>swapClick(td.dataset.cell);td.onclick=f;td.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f()}}});
+ const imp=$('#imp');if(imp)imp.onchange=()=>{const f=imp.files[0];if(!f)return;f.text().then(t=>{try{const d=JSON.parse(t);if(!d||!Array.isArray(d.mapel)||!Array.isArray(d.guru)||!Array.isArray(d.kelas))throw 0;DB=d;save();toast('Cadangan diimpor.');go('mulai')}catch(e){toast('Berkas cadangan tidak dikenali.')}})};
+ $$('[data-act]').forEach(b=>b.onclick=()=>act(b.dataset.act,b));
+}
+function swapClick(key){
+ const [k,d,s]=[key.split('|')[0],+key.split('|')[1],+key.split('|')[2]];
+ if(!S.swapSel||S.swapSel.k!==k){S.swapSel={k,d,s};render();return}
+ const A=S.swapSel;if(A.d===d&&A.s===s){S.swapSel=null;render();return}
+ const G=DB.jadwal.grid;const ca=G[k][A.d][A.s],cb=G[k][d][s];
+ const busyElse=(g,dd,ss)=>DB.kelas.some(kk=>kk!==k&&G[kk]?.[dd]?.[ss]?.g===g);
+ if(ca&&(busyElse(ca.g,d,s)||guruOf(ca.g)?.libur.includes(d))){toast(`${guruOf(ca.g).nama} tidak bisa di jam tujuan (bentrok atau hari tidak bisa).`);S.swapSel=null;render();return}
+ if(cb&&(busyElse(cb.g,A.d,A.s)||guruOf(cb.g)?.libur.includes(A.d))){toast(`${guruOf(cb.g).nama} tidak bisa di jam asal (bentrok atau hari tidak bisa).`);S.swapSel=null;render();return}
+ G[k][A.d][A.s]=cb;G[k][d][s]=ca;S.swapSel=null;save();render();toast('Jam ditukar.');
+}
+async function act(a,b){
+ if(a==='addIst'){DB.istirahat.push({after:4,menit:15});save();render()}
+ else if(a==='addKunci'){DB.kunci.push({d:0,s:0,label:'Kegiatan'});save();render()}
+ else if(a==='addMapel'){DB.mapel.push({id:'m'+uid(),kode:'BARU',nama:'Mapel baru',jp:2,pola:'',pagi:false});save();render()}
+ else if(a==='addGuru'){DB.guru.push({id:'g'+uid(),nama:'Guru baru',kode:'GRB',maxHari:8,libur:[]});save();render()}
+ else if(a==='simpanKelas'){const ks=[...new Set($('#kelasTxt').value.split(/[,\n;]/).map(x=>x.trim()).filter(Boolean))];Object.keys(DB.tugas).forEach(t=>{if(!ks.includes(t.split('|')[0]))delete DB.tugas[t]});DB.kelas=ks;setJadwalStale();save();render();toast(`${ks.length} kelas disimpan.`)}
+ else if(a==='jalan')await jalankan();
+ else if(a==='print1'){window.print()}
+ else if(a==='printAll'){const L=S.lihat==='guru'?'guru':'kelas';const ids=L==='guru'?DB.guru.map(g=>g.id):DB.kelas;const w=window.open('','_blank');if(!w){toast('Izinkan jendela baru untuk mencetak.');return}const css=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');w.document.write(`<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><title>Jadwal</title><style>${css} body{background:#fff;color:#000;padding:12px}</style></head><body>${ids.map(id=>`<div class="pb"><h2>Jadwal ${L==='guru'?esc(guruOf(id).nama):'kelas '+esc(id)}</h2>${ttTable(L,id)}${L==='kelas'?legend():''}</div>`).join('')}<p class="small">Dikembangkan oleh Edy Thomas · Penjadwal Pelajaran Otomatis</p><script>setTimeout(()=>print(),400)<\/script></body></html>`);w.document.close()}
+ else if(a==='csv'){const days=activeDays();const q=s=>'"'+String(s??'').replace(/"/g,'""')+'"';const rows=[['Kelas','Hari','JP','Jam','Kode mapel','Mapel','Kode guru','Guru'].join(',')];DB.kelas.forEach(k=>days.forEach(d=>{for(let s=0;s<DB.days[d].jp;s++){const lk=isLocked(d,s);const c=DB.jadwal.grid[k]?.[d]?.[s];rows.push([q(k),HARI[d],s+1,jam(s),q(lk?'':mapelOf(c?.m)?.kode),q(lk?lk.label:mapelOf(c?.m)?.nama),q(guruOf(c?.g)?.kode),q(guruOf(c?.g)?.nama)].join(','))}}));dl('jadwal-pelajaran.csv','﻿'+rows.join('\n'),'text/csv')}
+ else if(a==='json')dl('cadangan-penjadwal.json',JSON.stringify(DB,null,1),'application/json');
+ else if(a==='kosong'){if(!b.dataset.c){b.dataset.c=1;b.textContent='Yakin? Klik lagi';return}DB.kelas=[];DB.guru=[];DB.tugas={};DB.jadwal=null;DB.contoh=false;save();toast('Data dikosongkan.');go('waktu')}
+ else if(a==='contoh'){if(!b.dataset.c){b.dataset.c=1;b.textContent='Yakin? Data sekarang diganti';return}DB=dataContoh();save();go('mulai')}
+ else if(a==='tempel'){const lines=$('#tempel').value.split(/\n/).map(l=>l.split(/\t|;|,/).map(x=>x.trim())).filter(x=>x.length>=3&&x[0]);if(!lines.length){toast('Tidak ada baris yang terbaca.');return}
+  if($('#ganti').checked)DB.tugas={};let n=0,miss=new Set();
+  lines.forEach(([k,mp,gn])=>{if(/^kelas$/i.test(k))return;const m=DB.mapel.find(x=>x.kode.toLowerCase()===mp.toLowerCase()||x.nama.toLowerCase()===mp.toLowerCase());if(!m){miss.add(mp);return}
+   let g=DB.guru.find(x=>x.nama.toLowerCase()===gn.toLowerCase()||x.kode.toLowerCase()===gn.toLowerCase());if(!g){const kode=(gn.replace(/^(pak|bu|ibu|bapak|ust\.?|ustadz|ustadzah)\s+/i,'').replace(/[^A-Za-z]/g,'').slice(0,3)||'GR').toUpperCase();g={id:'g'+uid(),nama:gn,kode,maxHari:8,libur:[]};DB.guru.push(g)}
+   if(!DB.kelas.includes(k))DB.kelas.push(k);DB.tugas[k+'|'+m.id]=g.id;n++});
+  DB.contoh=false;setJadwalStale();save();render();toast(`${n} baris masuk.${miss.size?' Mapel tidak dikenal: '+[...miss].join(', '):''}`,5000)}
+ else if(a==='waPengganti'){const d=S.pgDay??activeDays()[0];const gid=S.pgGuru||DB.guru[0].id;const rows=$$('#app tbody tr').map(tr=>[...tr.children].map(td=>td.innerText.replace(/\n/g,' ')).join(' | '));const t=`Guru pengganti hari ${HARI[d]} (${guruOf(gid).nama} izin):\n`+rows.join('\n');try{await navigator.clipboard.writeText(t);toast('Teks disalin.')}catch(e){toast('Gagal menyalin; blok tabel lalu salin manual.')}}
+}
+async function jalankan(){
+ S.running=true;const p=$('#prog');p.style.display='block';const bar=$('#prog i'),tx=$('#progT');$('[data-act="jalan"]').disabled=true;
+ const t0=Date.now();let res=null;
+ for(let attempt=1;attempt<=4;attempt++){
+  tx.textContent=`Percobaan ${attempt}: menyusun…`;
+  res=await solve((it,max,left)=>{bar.style.width=Math.min(100,it/max*100)+'%';tx.textContent=`Percobaan ${attempt}: memperbaiki bentrok… sisa ${left} pertemuan`},40000);
+  if(!res.tidak.length)break;
+ }
+ DB.jadwal={grid:res.grid,tidak:res.tidak,iter:res.iter,dibuat:Date.now()};save();S.running=false;
+ toast(res.tidak.length?`Selesai dengan ${res.tidak.length} pertemuan belum terjadwal.`:`Jadwal selesai dalam ${((Date.now()-t0)/1000).toFixed(1)} detik.`);
+ render();
+}
+window.__PJ={solve,checkGrid,stats,validasi,dataContoh,get DB(){return DB},set DB(v){DB=v}};
+go('mulai');
+</script>
+</body>
+</html>

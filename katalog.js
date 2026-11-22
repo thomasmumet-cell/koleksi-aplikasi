@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Penjadwal Pelajaran Otomatis",
+    kategori: "Sekolah",
+    jenis: "HTML",
+    deskripsi: "Menyusun jadwal pelajaran semua kelas tanpa bentrok dari pengaturan jam, JP mapel, dan pembagian tugas guru: menghormati hari tidak bisa guru, jam terkunci (upacara), mapel wajib pagi, blok 2 JP tidak terpotong istirahat, dan sebaran mapel antarhari. Tampilan per kelas, per guru, dan jadwal induk; tukar jam manual dengan cek bentrok; saran guru pengganti; tempel data dari Excel; cetak dan CSV.",
+    tanggal: "2026-11-22",
+    tautan: "penjadwal-otomatis/",
+    status: "aktif"
+  },
+  {
     nama: "Talenta10 – Asesmen Minat, Bakat & Potensi Siswa",
     kategori: "Bimbingan Konseling",
     jenis: "Apps Script",
