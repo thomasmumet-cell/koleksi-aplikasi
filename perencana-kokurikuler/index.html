@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perencana Kokurikuler</title>
+<meta name="description" content="Merancang kegiatan kokurikuler lintas mapel yang terhubung ke 8 dimensi profil lulusan: rancangan, jadwal, peran guru, rubrik, dan dokumentasi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5efe3; --paper2:#fbf8f2; --card:#ffffff; --ink:#1d2733; --muted:#5b6573; --line:#e1d7c5;
+  --accent:#a4441f; --accent-ink:#ffffff; --teal:#17605c; --warn:#8a5a00; --warn-bg:#fff2d6; --bad:#a32020; --bad-bg:#fde6e4; --ok:#1d6b37; --ok-bg:#e2f4e7;
+  --shadow:0 1px 2px rgba(40,30,10,.06),0 6px 18px rgba(40,30,10,.06);
+  --d-iman:#7a4fb3; --d-warga:#b23a3a; --d-nalar:#1d5fa8; --d-kreatif:#c2620f; --d-kolab:#1d7d58; --d-mandiri:#8a6d12; --d-sehat:#0f7f8c; --d-komun:#b03778;
+}
+:root[data-theme="dark"]{
+  --paper:#14181d; --paper2:#191e25; --card:#1f252d; --ink:#ece6da; --muted:#a9b1bc; --line:#333b46;
+  --accent:#e57b4f; --accent-ink:#1a1206; --teal:#5cc2b9; --warn:#f2c46b; --warn-bg:#3a2e14; --bad:#ff9a92; --bad-bg:#3d1b1b; --ok:#86d49f; --ok-bg:#16301f;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+  --d-iman:#b996ea; --d-warga:#f08a8a; --d-nalar:#7fb2f0; --d-kreatif:#f3a65f; --d-kolab:#6fd0a6; --d-mandiri:#dcc160; --d-sehat:#66cfda; --d-komun:#ef8cc0;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#14181d; --paper2:#191e25; --card:#1f252d; --ink:#ece6da; --muted:#a9b1bc; --line:#333b46;
+    --accent:#e57b4f; --accent-ink:#1a1206; --teal:#5cc2b9; --warn:#f2c46b; --warn-bg:#3a2e14; --bad:#ff9a92; --bad-bg:#3d1b1b; --ok:#86d49f; --ok-bg:#16301f;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);
+    --d-iman:#b996ea; --d-warga:#f08a8a; --d-nalar:#7fb2f0; --d-kreatif:#f3a65f; --d-kolab:#6fd0a6; --d-mandiri:#dcc160; --d-sehat:#66cfda; --d-komun:#ef8cc0;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 "Plus Jakarta Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.2;margin:0 0 .4em}
+h2{font-size:1.45rem} h3{font-size:1.1rem}
+a{color:var(--teal)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.top{background:var(--ink);color:var(--paper);position:relative;overflow:hidden}
+:root[data-theme="dark"] header.top{background:#0c0f13}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) header.top{background:#0c0f13}}
+header.top::after{content:"";position:absolute;inset:0;opacity:.13;pointer-events:none;
+  background-image:radial-gradient(circle at 25% 25%,transparent 9px,#f5efe3 10px,transparent 11px),radial-gradient(circle at 75% 75%,transparent 9px,#f5efe3 10px,transparent 11px);background-size:34px 34px}
+.top .wrap{display:flex;align-items:center;gap:12px;padding-top:14px;padding-bottom:10px;position:relative;z-index:1;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;flex:1;min-width:220px}
+.logo{width:40px;height:40px;border-radius:12px;background:var(--accent);display:grid;place-items:center;flex:none}
+.brand h1{font-size:1.25rem;margin:0;color:#fbf8f2}
+.brand small{display:block;color:#d9cfbd;font-size:.8rem}
+.top-actions{display:flex;gap:6px}
+.icon-btn{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fbf8f2;border-radius:10px;padding:6px 10px;cursor:pointer}
+.icon-btn:hover{background:rgba(255,255,255,.1)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;position:relative;z-index:1;padding:0 16px;max-width:1180px;margin:0 auto;scrollbar-width:none}
+nav.tabs button{background:transparent;border:0;color:#d9cfbd;padding:10px 14px;border-radius:10px 10px 0 0;cursor:pointer;white-space:nowrap;font-weight:600}
+nav.tabs button[aria-selected="true"]{background:var(--paper);color:var(--ink)}
+main{padding:20px 0 60px}
+.banner{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--warn-bg);color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);border-radius:12px;padding:10px 14px;margin-bottom:16px}
+.banner p{margin:0;flex:1;min-width:200px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+.grid>*{min-width:0}
+.g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:1fr 1fr} .g3{grid-template-columns:repeat(3,1fr)}
+@media (max-width:860px){.g4{grid-template-columns:1fr 1fr}.g2,.g3{grid-template-columns:1fr}}
+.stat b{display:block;font-family:Fraunces,serif;font-size:2rem;line-height:1}
+.stat span{color:var(--muted);font-size:.85rem}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper2);border-radius:10px;padding:7px 12px;cursor:pointer;font-weight:600;font-size:.9rem;min-height:38px}
+.btn:hover{border-color:var(--muted)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:4px 9px;min-height:32px;font-size:.82rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
+label.f{display:block;font-weight:600;font-size:.85rem;margin:10px 0 4px}
+.hint{color:var(--muted);font-size:.82rem;margin:2px 0 0}
+input[type=text],input[type=date],input[type=time],input[type=number],input[type=password],input[type=url],select,textarea{width:100%;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:38px}
+textarea{min-height:76px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:.78rem;font-weight:600;border:1px solid var(--line);background:var(--paper2);white-space:nowrap}
+.dchip{border-color:var(--dc);color:var(--dc);background:color-mix(in srgb,var(--dc) 10%,var(--card))}
+.badge-contoh{background:var(--warn-bg);color:var(--warn);border-color:color-mix(in srgb,var(--warn) 40%,transparent);text-transform:uppercase;letter-spacing:.04em;font-size:.68rem}
+.st-rancang{color:var(--muted)} .st-siap{color:var(--teal);border-color:var(--teal)} .st-berjalan{color:var(--accent);border-color:var(--accent)} .st-selesai{color:var(--ok);border-color:var(--ok)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.tscroll{overflow-x:auto}
+.heat td,.heat th{text-align:center}
+.heat td:first-child,.heat th:first-child{text-align:left}
+.cell{display:inline-grid;place-items:center;min-width:44px;height:34px;border-radius:9px;font-weight:700}
+.cell.z{background:var(--bad-bg);color:var(--bad);font-weight:600;font-size:.75rem}
+.bar{height:10px;background:var(--paper);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--teal)}
+.bar i.over{background:var(--accent)}
+.alerts{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.alerts li{padding:8px 10px;border-radius:10px;border-left:4px solid var(--warn);background:var(--warn-bg);color:var(--ink);font-size:.9rem}
+.alerts li.bad{border-color:var(--bad);background:var(--bad-bg)}
+.alerts li.ok{border-color:var(--ok);background:var(--ok-bg)}
+.klist{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.kcard{position:relative;cursor:pointer;text-align:left;width:100%;display:block}
+.kcard:hover{border-color:var(--accent)}
+.kcard h3{margin:4px 0 6px}
+.kcard .meta{color:var(--muted);font-size:.84rem}
+.dots{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.layout{display:grid;grid-template-columns:260px 1fr;gap:16px}
+@media (max-width:860px){.layout{grid-template-columns:1fr}}
+.side{display:grid;gap:6px;align-content:start}
+.side button{text-align:left;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:9px 11px;cursor:pointer}
+.side button[aria-current="true"]{border-color:var(--accent);box-shadow:inset 4px 0 0 var(--accent)}
+.side small{display:block;color:var(--muted)}
+.subtabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:8px 0 14px}
+.subtabs button{border:0;background:transparent;padding:8px 11px;border-bottom:3px solid transparent;cursor:pointer;font-weight:600;color:var(--muted)}
+.subtabs button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:5px 9px;cursor:pointer;background:var(--paper2);font-size:.88rem}
+.checks label:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--card))}
+.stage{border-left:4px solid var(--sc);padding:4px 0 4px 12px;margin:14px 0}
+.stage h3{color:var(--sc)}
+.steps{display:grid;gap:6px;margin:6px 0}
+.steps .row input{flex:1;min-width:180px}
+.week{margin:16px 0 4px;font-family:Fraunces,serif;font-size:1.05rem}
+.sess{display:grid;grid-template-columns:110px 1fr auto;gap:10px;align-items:start;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin:6px 0}
+.sess .d{font-weight:700} .sess .d small{display:block;color:var(--muted);font-weight:500}
+@media (max-width:600px){.sess{grid-template-columns:1fr}}
+.conf{color:var(--bad);font-weight:700;font-size:.8rem}
+.editlist{display:grid;gap:10px}
+.edititem{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--paper2)}
+.edititem .grid{gap:8px}
+.lv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+@media (max-width:700px){.lv{grid-template-columns:1fr 1fr}}
+.lv textarea{min-height:104px;font-size:.85rem}
+.dist{display:flex;height:14px;border-radius:99px;overflow:hidden;border:1px solid var(--line);margin-top:6px}
+.dist i{display:block;height:100%}
+.photo{width:100%;max-height:220px;object-fit:cover;border-radius:10px;border:1px solid var(--line);margin-top:6px}
+.empty{color:var(--muted);text-align:center;padding:24px;border:1px dashed var(--line);border-radius:12px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:12px;box-shadow:var(--shadow);z-index:50;max-width:90vw;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:640px;width:calc(100% - 32px);padding:18px}
+dialog::backdrop{background:rgba(10,12,16,.5)}
+.src li{margin:4px 0}
+.muted{color:var(--muted)}
+.mt{margin-top:14px}
+.kaih{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+#printArea{display:none}
+@media print{
+  body{background:#fff;color:#000;font-size:11pt}
+  header.top,main,.toast,dialog{display:none!important}
+  #printArea{display:block!important}
+  #printArea table{font-size:9.5pt} #printArea th,#printArea td{border:1px solid #999;padding:4px 6px;color:#000}
+  #printArea h1{font-size:16pt} #printArea h2{font-size:13pt;margin-top:14pt}
+  .chip{border:1px solid #777!important;color:#000!important;background:#fff!important}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="7" cy="7" r="3.2"/><circle cx="17" cy="7" r="3.2"/><circle cx="7" cy="17" r="3.2"/><circle cx="17" cy="17" r="3.2"/><path d="M10 7h4M7 10v4M17 10v4M10 17h4"/></svg></div>
+      <div><h1>Perencana Kokurikuler</h1><small id="hdrSekolah">Rancang · Jadwalkan · Nilai · Dokumentasikan</small></div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="btnTheme" type="button" aria-label="Ganti mode terang/gelap">☾ Tema</button>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Menu utama" id="mainTabs"></nav>
+</header>
+<main><div class="wrap" id="view" aria-live="polite"></div></main>
+<div id="printArea"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg"><div id="dlgBody"></div></dialog>
+
+<script>
+"use strict";
+/* ====================== KONSTANTA ====================== */
+const KEY = "perencana-kokurikuler-v1", KEY_SET = "perencana-kokurikuler-pengaturan";
+const DIM = [
+ {k:"iman",n:"Keimanan & Ketakwaan",full:"Keimanan dan Ketakwaan terhadap Tuhan YME",c:"--d-iman",def:"Meyakini Tuhan YME, menghayati nilai spiritual, dan berakhlak mulia kepada sesama dan alam.",kr:"Menghayati nilai iman dan akhlak mulia dalam kegiatan",lv:["Menjalankan nilai kebaikan bila diingatkan guru.","Menunjukkan sikap santun dan jujur pada sebagian besar kegiatan.","Konsisten jujur, santun, dan menghargai keragaman keyakinan teman.","Menjadi teladan, mengajak teman berbuat baik dan merefleksikan makna spiritual kegiatan."]},
+ {k:"warga",n:"Kewargaan",full:"Kewargaan",c:"--d-warga",def:"Cinta tanah air, taat aturan dan norma, peduli serta bertanggung jawab pada masyarakat dan lingkungan.",kr:"Peduli dan berkontribusi pada komunitas/lingkungan",lv:["Mengenali masalah di sekitar bila ditunjukkan.","Ikut serta dalam aksi bersama sesuai arahan.","Mengusulkan dan menjalankan aksi nyata untuk sekolah/kampung.","Menggerakkan orang lain dan menilai dampak aksi bagi komunitas."]},
+ {k:"nalar",n:"Penalaran Kritis",full:"Penalaran Kritis",c:"--d-nalar",def:"Berpikir logis, analitis, dan reflektif untuk memahami, mengevaluasi informasi, dan memecahkan masalah.",kr:"Mengolah data/informasi dan menarik kesimpulan",lv:["Mengumpulkan informasi dengan bantuan.","Membandingkan informasi dan menyebut alasan sederhana.","Menganalisis data dari beberapa sumber dan menyimpulkan dengan bukti.","Mengevaluasi kekuatan bukti, menemukan bias, dan mengusulkan solusi beralasan."]},
+ {k:"kreatif",n:"Kreativitas",full:"Kreativitas",c:"--d-kreatif",def:"Berpikir inovatif, luwes, dan orisinal untuk menghasilkan gagasan, karya, atau solusi.",kr:"Menghasilkan gagasan dan karya yang orisinal",lv:["Meniru contoh karya yang ada.","Memodifikasi contoh dengan sedikit ide sendiri.","Menghasilkan karya/solusi sendiri yang sesuai tujuan.","Menghasilkan beberapa alternatif orisinal dan menyempurnakannya berdasarkan umpan balik."]},
+ {k:"kolab",n:"Kolaborasi",full:"Kolaborasi",c:"--d-kolab",def:"Bekerja sama dan bergotong royong secara efektif dengan beragam pihak.",kr:"Berbagi peran dan bekerja sama dalam tim",lv:["Bekerja bila diberi tugas langsung oleh teman/guru.","Menyelesaikan bagian tugasnya dalam tim.","Membagi peran, membantu teman, dan menyelesaikan perbedaan pendapat.","Memimpin koordinasi tim dan memastikan semua anggota berkontribusi."]},
+ {k:"mandiri",n:"Kemandirian",full:"Kemandirian",c:"--d-mandiri",def:"Bertanggung jawab atas proses dan hasil belajar, mampu mengatur diri, dan mengembangkan diri.",kr:"Mengatur diri dan bertanggung jawab atas tugas",lv:["Perlu banyak pengingat untuk menyelesaikan tugas.","Menyelesaikan tugas dengan sesekali pengingat.","Merencanakan dan menyelesaikan tugas tepat waktu.","Menetapkan target sendiri, memantau kemajuan, dan memperbaiki strategi."]},
+ {k:"sehat",n:"Kesehatan",full:"Kesehatan",c:"--d-sehat",def:"Menjaga kesehatan fisik dan mental, kebugaran, kebersihan, serta kesejahteraan diri.",kr:"Menerapkan pola hidup sehat fisik dan mental",lv:["Mengetahui kebiasaan sehat namun belum menerapkan.","Menerapkan sebagian kebiasaan sehat bila diingatkan.","Menerapkan kebiasaan sehat secara rutin dan mengelola emosi.","Mengajak orang lain hidup sehat dan memantau kebiasaannya sendiri."]},
+ {k:"komun",n:"Komunikasi",full:"Komunikasi",c:"--d-komun",def:"Menyampaikan dan menerima gagasan secara efektif, santun, dan sesuai konteks.",kr:"Menyampaikan gagasan/hasil kepada audiens",lv:["Menyampaikan dengan ragu dan belum runtut.","Menyampaikan cukup jelas dengan bantuan catatan.","Menyampaikan runtut, jelas, dan menanggapi pertanyaan.","Menyampaikan meyakinkan, menyesuaikan audiens, dan memakai media yang tepat."]}
+];
+const DIMK = Object.fromEntries(DIM.map(d=>[d.k,d]));
+const LEVEL = ["Mulai Berkembang","Berkembang","Cakap","Mahir"];
+const LVCOL = ["#c0533a","#d99a2b","#2f8f8a","#2e6fb0"];
+const KAIH = ["Bangun pagi","Beribadah","Berolahraga","Makan sehat dan bergizi","Gemar belajar","Bermasyarakat","Tidur cepat"];
+const BENTUK = {lintas:"Kolaboratif lintas disiplin",kaih:"Gerakan 7 KAIH",lain:"Cara lainnya"};
+const POLA = {blok:"Blok (pekan/hari khusus)",reguler:"Reguler terjadwal",terintegrasi:"Terintegrasi di jam mapel",pembiasaan:"Pembiasaan rutin"};
+const STATUS = {rancang:"Dirancang",siap:"Siap",berjalan:"Berjalan",selesai:"Selesai"};
+const TAHAP = {memahami:"Memahami",mengaplikasi:"Mengaplikasi",merefleksi:"Merefleksi",lain:"Persiapan/Lainnya"};
+const TAHAPC = {memahami:"--d-nalar",mengaplikasi:"--d-kolab",merefleksi:"--d-iman",lain:"--muted"};
+const PERAN = ["Koordinator","Fasilitator kelas","Narasumber mapel","Pendamping","Dokumentasi","Penilai","Penghubung mitra"];
+const MAPEL = ["Pendidikan Agama","Pendidikan Pancasila","Bahasa Indonesia","Matematika","IPA","IPS","Bahasa Inggris","PJOK","Informatika","Seni Budaya","Prakarya","Bahasa Daerah","Koding & KA","BK"];
+const SUMBER = [
+ ["Siaran pers Kemendikdasmen: Permendikdasmen No. 13 Tahun 2025 menguatkan arah kebijakan melalui pembelajaran mendalam","https://www.kemendikdasmen.go.id/siaran-pers/13278-permendikdasmen-nomor-13-tahun-2025-menguatkan-arah-kebijakan-melalui-pembelajaran-mendalam"],
+ ["JDIH BPK: Permendikdasmen No. 13 Tahun 2025 (perubahan Permendikbudristek 12/2024 tentang Kurikulum)","https://peraturan.bpk.go.id/Details/322506/permendikdasmen-no-13-tahun-2025"],
+ ["detikEdu: Permendikdasmen 13 Tahun 2025, isi lengkap dan dampaknya untuk sekolah (bentuk kokurikuler, Pasal 16–19)","https://www.detik.com/edu/sekolah/d-8021932/permendikdasmen-13-tahun-2025-isi-lengkap-dan-dampaknya-untuk-sekolah"],
+ ["detikEdu: Profil Pelajar Pancasila kini menjadi Profil Lulusan (8 dimensi)","https://www.detik.com/edu/sekolah/d-8024208/profil-pelajar-pancasila-kini-ganti-istilah-jadi-profil-lulusan-apa-bedanya"],
+ ["Guru Inovatif: Perancangan kegiatan kokurikuler dalam penguatan 7 KAIH (tim kerja, analisis kebutuhan, refleksi berkala)","https://guruinovatif.id/artikel/gi-class-142-perancangan-kegiatan-kokurikuler-dalam-penguatan-program-7-kaih-7-kebiasaan-anak-indonesia-hebat"],
+ ["Komunitas Belajar: contoh perencanaan kokurikuler inkuiri kolaborasi SMP (sistem blok, pangan lokal)","https://www.komunitasbelajar.id/2025/07/modul-kokurikuler-inkuiri-kolaborasi.html"]
+];
+
+/* ====================== TEMPLAT ====================== */
+const TEMPLAT = [
+ {id:"pangan",judul:"Pangan Lokal Bergizi dari Kampung Kita",tema:"Gaya hidup berkelanjutan & pangan lokal",bentuk:"lintas",pola:"blok",kelas:[7],mapel:["IPA","IPS","Matematika","Bahasa Indonesia"],dimensi:["sehat","nalar","kolab"],
+  konteks:"Banyak murid jarang sarapan dan lebih memilih jajanan kemasan; potensi pangan lokal (singkong, ubi, kacang, daun kelor) di sekitar sekolah belum dimanfaatkan.",
+  tujuan:"Murid menganalisis kandungan gizi pangan lokal, menghitung kebutuhan gizi harian, lalu merancang dan mengampanyekan menu bekal sehat berbahan lokal.",
+  produk:"Buku resep bekal sehat pangan lokal + poster/video kampanye + bazar mini",
+  memahami:["Survei kebiasaan sarapan dan jajan teman sekelas (Matematika: mengolah data)","Kunjungan ke pasar/kebun warga untuk mendata pangan lokal (IPS)","Uji kandungan zat makanan sederhana: amilum, protein, lemak (IPA)"],
+  mengaplikasi:["Merancang menu bekal seimbang dan menghitung biaya per porsi","Praktik memasak berkelompok bersama orang tua relawan","Menulis teks prosedur resep dan naskah kampanye (Bahasa Indonesia)"],
+  merefleksi:["Pameran dan bazar mini: menerima umpan balik pengunjung","Jurnal refleksi: kebiasaan makan apa yang ingin kuubah?","Rencana tindak lanjut: Jumat Bekal Lokal setiap pekan"]},
+ {id:"sampah",judul:"Sekolah Bebas Sampah: Bank Sampah Kelas",tema:"Lingkungan & kewargaan",bentuk:"lintas",pola:"reguler",kelas:[8],mapel:["IPA","Seni Budaya","Informatika","Pendidikan Pancasila"],dimensi:["warga","kreatif","kolab"],
+  konteks:"Volume sampah plastik dari kantin tinggi dan tempat pilah belum dipakai dengan benar.",
+  tujuan:"Murid memetakan sumber sampah sekolah, membangun sistem bank sampah kelas berbasis spreadsheet, dan membuat karya daur ulang bernilai guna.",
+  produk:"Sistem bank sampah kelas + pameran karya daur ulang + laporan dampak",
+  memahami:["Audit sampah satu hari: timbang dan pilah per jenis (IPA)","Diskusi tanggung jawab warga sekolah terhadap lingkungan (Pendidikan Pancasila)"],
+  mengaplikasi:["Membuat lembar pencatatan setoran sampah di spreadsheet (Informatika)","Merancang karya ecobrick/kriya daur ulang (Seni Budaya)","Menjalankan setoran bank sampah tiap pekan"],
+  merefleksi:["Membandingkan data sampah sebelum–sesudah program","Presentasi kepada kepala sekolah dan komite"]},
+ {id:"kaih",judul:"Pagi Hebat: Gerakan 7 Kebiasaan Anak Indonesia Hebat",tema:"Pembiasaan karakter",bentuk:"kaih",pola:"pembiasaan",kelas:[7,8,9],mapel:["PJOK","Pendidikan Agama","BK"],dimensi:["sehat","mandiri","iman"],kaih:[0,1,2,3,4,5,6],
+  konteks:"Sebagian murid datang terlambat dan mengantuk; kebiasaan tidur larut karena gawai.",
+  tujuan:"Murid membangun dan memantau 7 kebiasaan baik melalui jurnal harian yang diketahui orang tua dan wali kelas.",
+  produk:"Jurnal kebiasaan 7 KAIH + grafik kemajuan kelas",
+  memahami:["Sosialisasi 7 KAIH kepada murid dan orang tua","Murid memotret kebiasaan awalnya (asesmen awal)"],
+  mengaplikasi:["Senam pagi, ibadah bersama, dan literasi 15 menit sebelum pelajaran","Mengisi jurnal kebiasaan harian di rumah"],
+  merefleksi:["Refleksi mingguan bersama wali kelas","Apresiasi kelas paling konsisten setiap bulan"]},
+ {id:"hoaks",judul:"Cek Fakta: Lawan Hoaks di Grup Kelas",tema:"Literasi digital & kewargaan",bentuk:"lintas",pola:"terintegrasi",kelas:[9],mapel:["Bahasa Indonesia","Informatika","Pendidikan Pancasila","IPS"],dimensi:["nalar","komun","warga"],
+  konteks:"Murid kerap meneruskan pesan berantai tanpa memeriksa kebenarannya.",
+  tujuan:"Murid menerapkan langkah cek fakta, menulis klarifikasi yang santun, dan mengedukasi warga sekolah tentang literasi digital.",
+  produk:"Kanal/papan cek fakta sekolah + infografis klarifikasi",
+  memahami:["Membedah contoh hoaks: ciri, motif, dampak","Belajar teknik cek fakta: sumber, tanggal, gambar terbalik"],
+  mengaplikasi:["Memverifikasi 3 pesan berantai nyata (tanpa data pribadi)","Menulis teks klarifikasi dan infografis"],
+  merefleksi:["Diskusi etika bermedia sosial","Kampanye ke kelas 7 dan orang tua"]},
+ {id:"budaya",judul:"Jelajah Warisan Budaya Kampung",tema:"Kearifan lokal",bentuk:"lintas",pola:"blok",kelas:[8],mapel:["Seni Budaya","Bahasa Daerah","IPS","Bahasa Indonesia"],dimensi:["warga","kreatif","komun"],
+  konteks:"Murid kurang mengenal sejarah dan tradisi di kampung sekitar sekolah.",
+  tujuan:"Murid mewawancarai tokoh setempat, mendokumentasikan tradisi, dan menyajikannya sebagai pameran atau pertunjukan.",
+  produk:"Video dokumenter pendek + pentas/pameran budaya",
+  memahami:["Napak tilas kampung dan wawancara sesepuh","Mengkaji makna tradisi (IPS & Bahasa Daerah)"],
+  mengaplikasi:["Menulis naskah dan memproduksi video/pertunjukan","Gladi bersama pelaku budaya"],
+  merefleksi:["Gelar karya untuk warga","Refleksi: nilai apa yang ingin kujaga?"]},
+ {id:"energi",judul:"Hemat Energi Sekolahku",tema:"Kelestarian energi",bentuk:"lintas",pola:"reguler",kelas:[9],mapel:["IPA","Matematika","IPS","Informatika"],dimensi:["nalar","kreatif","kolab"],
+  konteks:"Tagihan listrik sekolah tinggi; lampu dan kipas sering menyala di ruang kosong.",
+  tujuan:"Murid mengukur pemakaian energi, menganalisis pola boros, dan merancang aksi hemat energi yang terukur.",
+  produk:"Laporan audit energi + prototipe pengingat hemat energi",
+  memahami:["Membaca meteran dan tagihan listrik (Matematika)","Konsep energi dan dayanya (IPA)"],
+  mengaplikasi:["Audit energi per ruang dan visualisasi data (Informatika)","Merancang kampanye/alat pengingat"],
+  merefleksi:["Membandingkan pemakaian sebelum–sesudah","Rekomendasi kepada sekolah"]}
+];
+
+/* ====================== UTIL ====================== */
+const $ = s=>document.querySelector(s);
+const uid = ()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-3);
+const esc = s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtTgl = d=>{if(!d)return"–";const t=new Date(d+"T00:00:00");return isNaN(t)?d:t.toLocaleDateString("id-ID",{weekday:"short",day:"numeric",month:"short",year:"numeric"})};
+const fmtPendek = d=>{if(!d)return"–";const t=new Date(d+"T00:00:00");return isNaN(t)?d:t.toLocaleDateString("id-ID",{day:"numeric",month:"short"})};
+const todayStr = ()=>{const t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0")};
+const addDays = (d,n)=>{const t=new Date(d+"T00:00:00");t.setDate(t.getDate()+n);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0")};
+const toMin = t=>{if(!t)return null;const [h,m]=t.split(":").map(Number);return h*60+m};
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),2600)}
+function dchip(k){const d=DIMK[k];return d?`<span class="chip dchip" style="--dc:var(${d.c})">${esc(d.n)}</span>`:""}
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
+function download(name,text,type){const b=new Blob([text],{type:type||"text/plain"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+function csv(rows){return "﻿"+rows.map(r=>r.map(v=>{v=String(v==null?"":v);return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(",")).join("\n")}
+function weekStart(d){const t=new Date(d+"T00:00:00");const day=(t.getDay()+6)%7;t.setDate(t.getDate()-day);return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0")}
+
+/* ====================== DATA ====================== */
+let S, SET;
+function kosong(){return {v:1,sekolah:{nama:"",tahun:"",target:{7:"",8:"",9:""}},guru:[],kegiatan:[],contoh:false}}
+function dariTemplat(t,extra){
+  return Object.assign({id:uid(),contoh:false,judul:t.judul,tema:t.tema,bentuk:t.bentuk,pola:t.pola,kelas:[...t.kelas],mapel:[...t.mapel],dimensi:[...t.dimensi],kaih:[...(t.kaih||[])],
+    mulai:"",selesai:"",status:"rancang",
+    identifikasi:{konteks:t.konteks||"",data:"",kesiapan:""},
+    desain:{tujuan:t.tujuan||"",pedagogi:"",kemitraan:"",lingkungan:"",digital:""},
+    pengalaman:{memahami:[...(t.memahami||[])],mengaplikasi:[...(t.mengaplikasi||[])],merefleksi:[...(t.merefleksi||[])]},
+    asesmen:{awal:"",proses:"",akhir:""},produk:t.produk||"",
+    peran:[],sesi:[],rubrik:t.dimensi.map(k=>rubrikDari(k)),dok:[]},extra||{});
+}
+function rubrikDari(k){const d=DIMK[k];return {id:uid(),dimensi:k,kriteria:d.kr,lv:[...d.lv],jml:[0,0,0,0]}}
+function contoh(){
+  const g=[["Rina Prasetyani","IPA"],["Bambang Sulistyo","IPS"],["Endah Wulandari","Matematika"],["Yohanes Kurniawan","Bahasa Indonesia"],["Siti Marlina","Seni Budaya"],["Agus Setiawan","PJOK"],["Fajar Nugroho","Informatika"],["Maria Kristanti","Pendidikan Pancasila"],["Ahmad Fauzan","Pendidikan Agama"],["Lusiana Dewanti","BK"]].map(([n,m])=>({id:uid(),nama:n,mapel:m,contoh:true}));
+  const G=n=>g.find(x=>x.nama.startsWith(n)).id;
+  const base=todayStr();
+  const s=(off,jm,js,jp,tahap,akt,tempat,gs,kelas)=>({id:uid(),tanggal:addDays(base,off),jamMulai:jm,jamSelesai:js,jp,tahap,aktivitas:akt,tempat,guru:gs,ket:kelas||""});
+  const k1=dariTemplat(TEMPLAT[0],{contoh:true,mulai:addDays(base,-3),selesai:addDays(base,18),status:"berjalan"});
+  k1.identifikasi.data="Rapor Pendidikan: indikator literasi dan numerasi kelas 7 sedang; angket awal: 41% murid tidak sarapan (data contoh).";
+  k1.identifikasi.kesiapan="Sebagian murid belum terbiasa kerja kelompok heterogen; perlu pembagian peran yang jelas.";
+  k1.desain.pedagogi="Inkuiri kolaboratif berbasis proyek; kelompok heterogen 5 murid dengan peran (ketua, pencatat data, juru masak, desainer, juru bicara).";
+  k1.desain.kemitraan="Puskesmas (narasumber gizi), paguyuban orang tua (relawan memasak), pedagang pasar setempat.";
+  k1.desain.lingkungan="Kebun sekolah, laboratorium IPA, dapur kantin; suasana aman dan menggembirakan.";
+  k1.desain.digital="Formulir daring untuk survei, spreadsheet pengolahan data, aplikasi desain poster.";
+  k1.asesmen={awal:"Angket kebiasaan makan dan pertanyaan pemantik.",proses:"Observasi kolaborasi dengan rubrik, catatan anekdot, jurnal harian.",akhir:"Produk buku resep + presentasi bazar dinilai dengan rubrik 3 dimensi; refleksi diri."};
+  k1.peran=[{id:uid(),guru:G("Rina"),peran:"Koordinator",tugas:"Mengoordinasikan tim, uji zat makanan"},{id:uid(),guru:G("Bambang"),peran:"Narasumber mapel",tugas:"Kunjungan pasar, ekonomi pangan"},{id:uid(),guru:G("Endah"),peran:"Fasilitator kelas",tugas:"Pengolahan data survei, biaya menu"},{id:uid(),guru:G("Yohanes"),peran:"Penilai",tugas:"Teks prosedur dan presentasi"},{id:uid(),guru:G("Fajar"),peran:"Dokumentasi",tugas:"Foto/video kegiatan, unggah ke laman sekolah"}];
+  k1.sesi=[s(-3,"07:30","09:30",3,"memahami","Pemantik & survei kebiasaan sarapan","Kelas 7A–7D",[G("Endah"),G("Rina")]),s(-1,"07:30","10:10",4,"memahami","Kunjungan pasar tradisional","Pasar Kranggan",[G("Bambang"),G("Fajar")]),s(2,"07:30","09:30",3,"memahami","Uji zat makanan di laboratorium","Lab IPA",[G("Rina")]),s(6,"07:30","10:10",4,"mengaplikasi","Merancang menu & menghitung biaya","Kelas 7A–7D",[G("Endah"),G("Yohanes")]),s(9,"07:30","11:00",5,"mengaplikasi","Praktik memasak bersama orang tua","Dapur kantin",[G("Rina"),G("Bambang"),G("Fajar")]),s(16,"08:00","11:00",4,"merefleksi","Bazar mini & presentasi","Aula",[G("Rina"),G("Yohanes"),G("Fajar")])];
+  k1.rubrik[0].jml=[4,12,10,6];k1.rubrik[1].jml=[6,13,9,4];k1.rubrik[2].jml=[3,10,14,5];
+  k1.dok=[{id:uid(),tanggal:addDays(base,-1),judul:"Kunjungan pasar",catatan:"Murid antusias mewawancarai pedagang; kelompok 3 menemukan 14 jenis pangan lokal. Perlu waktu lebih untuk merapikan catatan.",tautan:"",foto:""}];
+  const k2=dariTemplat(TEMPLAT[1],{contoh:true,mulai:addDays(base,5),selesai:addDays(base,60),status:"siap"});
+  k2.peran=[{id:uid(),guru:G("Siti"),peran:"Koordinator",tugas:"Karya daur ulang"},{id:uid(),guru:G("Fajar"),peran:"Fasilitator kelas",tugas:"Spreadsheet bank sampah"},{id:uid(),guru:G("Maria"),peran:"Narasumber mapel",tugas:"Tanggung jawab warga"},{id:uid(),guru:G("Rina"),peran:"Pendamping",tugas:"Audit sampah"}];
+  k2.sesi=[s(6,"08:00","09:20",2,"memahami","Audit sampah satu hari","Halaman sekolah",[G("Rina"),G("Maria")]),s(9,"09:30","11:00",2,"mengaplikasi","Membuat lembar setoran di spreadsheet","Lab Komputer",[G("Fajar"),G("Siti")]),s(13,"08:00","09:20",2,"mengaplikasi","Merancang karya daur ulang","Ruang Seni",[G("Siti")])];
+  const k3=dariTemplat(TEMPLAT[2],{contoh:true,mulai:addDays(base,-20),selesai:addDays(base,120),status:"berjalan"});
+  k3.peran=[{id:uid(),guru:G("Lusiana"),peran:"Koordinator",tugas:"Jurnal kebiasaan & komunikasi orang tua"},{id:uid(),guru:G("Agus"),peran:"Fasilitator kelas",tugas:"Senam pagi"},{id:uid(),guru:G("Ahmad"),peran:"Fasilitator kelas",tugas:"Ibadah bersama"}];
+  k3.sesi=[s(0,"06:45","07:15",0,"mengaplikasi","Senam pagi & ibadah bersama","Lapangan",[G("Agus"),G("Ahmad")]),s(4,"06:45","07:15",0,"merefleksi","Refleksi mingguan jurnal kebiasaan","Kelas masing-masing",[G("Lusiana")]),s(7,"06:45","07:15",0,"mengaplikasi","Senam pagi & ibadah bersama","Lapangan",[G("Agus"),G("Ahmad")])];
+  return {v:1,contoh:true,sekolah:{nama:"SMP Contoh Nusantara",tahun:"2026/2027",target:{7:"60",8:"60",9:"60"}},guru:g,kegiatan:[k1,k2,k3]};
+}
+function load(){
+  const raw=lsGet(KEY);let ok=false;
+  if(raw){try{S=JSON.parse(raw);ok=S&&Array.isArray(S.kegiatan)}catch(e){ok=false}}
+  if(!ok)S=contoh();
+  try{SET=JSON.parse(lsGet(KEY_SET)||"{}")}catch(e){SET={}}
+  SET.model=SET.model||"gemini-2.5-flash";
+}
+let saveT;
+function save(){clearTimeout(saveT);saveT=setTimeout(()=>{if(!lsSet(KEY,JSON.stringify(S)))toast("Gagal menyimpan: memori perangkat penuh. Hapus beberapa foto dokumentasi atau ekspor data.")},250)}
+function saveSet(){lsSet(KEY_SET,JSON.stringify(SET))}
+const guruNama = id=>{const g=S.guru.find(x=>x.id===id);return g?g.nama:"(guru terhapus)"};
+const K = id=>S.kegiatan.find(k=>k.id===id);
+
+/* ====================== ANALISIS ====================== */
+function semuaSesi(){const out=[];S.kegiatan.forEach(k=>k.sesi.forEach(s=>out.push({k,s})));return out}
+function bentrok(){
+  const list=semuaSesi().filter(x=>x.s.tanggal&&x.s.jamMulai&&x.s.jamSelesai);const res=new Map();
+  for(let i=0;i<list.length;i++)for(let j=i+1;j<list.length;j++){
+    const a=list[i],b=list[j];if(a.s.tanggal!==b.s.tanggal)continue;
+    const a1=toMin(a.s.jamMulai),a2=toMin(a.s.jamSelesai),b1=toMin(b.s.jamMulai),b2=toMin(b.s.jamSelesai);
+    if(!(a1<b2&&b1<a2))continue;
+    const gs=a.s.guru.filter(g=>b.s.guru.includes(g));
+    const ks=a.k.id!==b.k.id?a.k.kelas.filter(c=>b.k.kelas.includes(c)):[];
+    if(gs.length||ks.length){
+      const msg=(gs.length?"guru "+gs.map(guruNama).join(", "):"")+(gs.length&&ks.length?" dan ":"")+(ks.length?"kelas "+ks.join(", "):"");
+      [[a,b],[b,a]].forEach(([x,y])=>{if(!res.has(x.s.id))res.set(x.s.id,[]);res.get(x.s.id).push(`Bentrok ${msg} dengan “${y.s.aktivitas||y.k.judul}”`)});
+    }
+  }
+  return res;
+}
+function jpKelas(){const r={7:0,8:0,9:0};S.kegiatan.forEach(k=>{const jp=k.sesi.reduce((a,s)=>a+(+s.jp||0),0);k.kelas.forEach(c=>r[c]=(r[c]||0)+jp)});return r}
+function peta(){const m={};DIM.forEach(d=>{m[d.k]={7:0,8:0,9:0}});S.kegiatan.forEach(k=>k.dimensi.forEach(d=>k.kelas.forEach(c=>{if(m[d])m[d][c]++})));return m}
+function bebanGuru(){
+  return S.guru.map(g=>{let sesi=0,jp=0;const keg=new Set(),peran=[];
+    S.kegiatan.forEach(k=>{k.peran.forEach(p=>{if(p.guru===g.id){keg.add(k.id);peran.push(p.peran+" – "+k.judul)}});k.sesi.forEach(s=>{if(s.guru.includes(g.id)){sesi++;jp+=(+s.jp||0);keg.add(k.id)}})});
+    return {g,sesi,jp,keg:keg.size,peran}});
+}
+function peringatan(){
+  const a=[];const b=bentrok();
+  S.kegiatan.forEach(k=>{
+    const nm=`<b>${esc(k.judul)}</b>`;
+    if(!k.dimensi.length)a.push(["bad",`${nm}: belum memilih dimensi profil lulusan.`,k.id]);
+    if(k.dimensi.length>3)a.push(["",`${nm}: membidik ${k.dimensi.length} dimensi. Fokuskan pada 2–3 dimensi agar asesmen bermakna.`,k.id]);
+    if(k.bentuk==="lintas"&&k.mapel.length<2)a.push(["",`${nm}: kegiatan lintas disiplin sebaiknya melibatkan minimal 2 mapel.`,k.id]);
+    if(!k.sesi.length)a.push(["",`${nm}: belum ada jadwal sesi.`,k.id]);
+    if(!k.peran.some(p=>p.peran==="Koordinator"))a.push(["",`${nm}: belum ada guru koordinator.`,k.id]);
+    if(!k.rubrik.length)a.push(["",`${nm}: belum ada rubrik asesmen.`,k.id]);
+    ["memahami","mengaplikasi","merefleksi"].forEach(t=>{if(!k.pengalaman[t].filter(x=>x.trim()).length)a.push(["",`${nm}: tahap <i>${TAHAP[t]}</i> belum diisi.`,k.id])});
+    k.sesi.forEach(s=>{if(s.tanggal&&k.mulai&&k.selesai&&(s.tanggal<k.mulai||s.tanggal>k.selesai))a.push(["",`${nm}: sesi “${esc(s.aktivitas)}” (${fmtPendek(s.tanggal)}) di luar periode kegiatan.`,k.id])});
+  });
+  const seen=new Set();semuaSesi().forEach(({k,s})=>{if(b.has(s.id)&&!seen.has(s.id)){seen.add(s.id);a.push(["bad",`${fmtPendek(s.tanggal)} ${esc(s.jamMulai)}: ${esc(b.get(s.id)[0])} (${esc(k.judul)}).`,k.id])}});
+  const p=peta();[7,8,9].forEach(c=>{const kosong=DIM.filter(d=>!p[d.k][c]).map(d=>d.n);if(kosong.length&&kosong.length<8)a.push(["",`Kelas ${c}: dimensi belum tersentuh tahun ini → ${kosong.join(", ")}.`]);if(kosong.length===8)a.push(["bad",`Kelas ${c}: belum ada kegiatan kokurikuler.`])});
+  const jp=jpKelas();[7,8,9].forEach(c=>{const t=+S.sekolah.target[c];if(t&&jp[c]>t)a.push(["",`Kelas ${c}: JP terjadwal (${jp[c]}) melebihi target alokasi (${t}).`])});
+  return a;
+}
+
+/* ====================== RENDER ====================== */
+const VIEWS=[["beranda","Beranda"],["kegiatan","Kegiatan"],["jadwal","Jadwal"],["guru","Peran Guru"],["pengaturan","Pengaturan & Sumber"]];
+const UI={view:"beranda",sel:null,sub:"ringkasan",fKelas:"",fKeg:""};
+function renderTabs(){
+  $("#mainTabs").innerHTML=VIEWS.map(([k,n])=>`<button role="tab" type="button" data-view="${k}" aria-selected="${UI.view===k}" tabindex="${UI.view===k?0:-1}">${n}</button>`).join("");
+}
+function render(){
+  renderTabs();
+  $("#hdrSekolah").textContent=(S.sekolah.nama||"Rancang · Jadwalkan · Nilai · Dokumentasikan")+(S.sekolah.tahun?" · TA "+S.sekolah.tahun:"");
+  const v=$("#view");
+  const banner=S.contoh?`<div class="banner" role="note"><p><b>Data contoh sedang ditampilkan.</b> Semua nama guru dan kegiatan fiktif, ditandai label CONTOH. Hapus bila sudah siap memakai data sekolah Anda.</p><button class="btn sm" type="button" data-act="hapusContoh">Hapus data contoh</button></div>`:"";
+  v.innerHTML=banner+({beranda:vBeranda,kegiatan:vKegiatan,jadwal:vJadwal,guru:vGuru,pengaturan:vPengaturan}[UI.view])();
+}
+function badgeContoh(x){return x&&x.contoh?` <span class="chip badge-contoh">contoh</span>`:""}
+
+function vBeranda(){
+  const n=S.kegiatan.length,ss=semuaSesi(),jp=jpKelas(),p=peta(),al=peringatan();
+  const totJP=S.kegiatan.reduce((a,k)=>a+k.sesi.reduce((b,s)=>b+(+s.jp||0),0),0);
+  const gTerlibat=bebanGuru().filter(x=>x.keg).length;
+  const t=todayStr(),t7=addDays(t,7);
+  const dekat=ss.filter(x=>x.s.tanggal>=t&&x.s.tanggal<=t7).sort((a,b)=>(a.s.tanggal+a.s.jamMulai).localeCompare(b.s.tanggal+b.s.jamMulai));
+  return `<div class="grid g4">
+   <div class="card stat"><b>${n}</b><span>kegiatan kokurikuler</span></div>
+   <div class="card stat"><b>${ss.length}</b><span>sesi terjadwal</span></div>
+   <div class="card stat"><b>${totJP}</b><span>JP terjadwal (semua kegiatan)</span></div>
+   <div class="card stat"><b>${gTerlibat}<small style="font-size:1rem">/${S.guru.length}</small></b><span>guru terlibat</span></div>
+  </div>
+  <div class="grid g2 mt">
+   <section class="card" aria-labelledby="hPeta"><h2 id="hPeta">Peta dimensi profil lulusan</h2>
+    <p class="hint">Jumlah kegiatan yang membidik tiap dimensi per jenjang kelas. Sel merah = belum tersentuh tahun ini.</p>
+    <div class="tscroll"><table class="heat"><thead><tr><th>Dimensi</th><th>Kelas 7</th><th>Kelas 8</th><th>Kelas 9</th></tr></thead><tbody>
+    ${DIM.map(d=>`<tr><td>${dchip(d.k)}</td>${[7,8,9].map(c=>{const v=p[d.k][c];return `<td>${v?`<span class="cell" style="background:color-mix(in srgb,var(${d.c}) ${Math.min(14+v*18,70)}%,var(--card));color:${v>2?"#fff":"var(--ink)"}">${v}</span>`:`<span class="cell z">belum</span>`}</td>`}).join("")}</tr>`).join("")}
+    </tbody></table></div>
+   </section>
+   <section class="card" aria-labelledby="hJP"><h2 id="hJP">Alokasi JP per kelas</h2>
+    <p class="hint">Target diisi di Pengaturan sesuai struktur kurikulum sekolah (beban kokurikuler dirumuskan per tahun ajaran).</p>
+    ${[7,8,9].map(c=>{const tg=+S.sekolah.target[c]||0,pct=tg?Math.min(100,jp[c]/tg*100):0;return `<div class="mt"><div class="row"><b>Kelas ${c}</b><span class="spacer"></span><span>${jp[c]} JP${tg?" / "+tg+" JP":" · target belum diisi"}</span></div><div class="bar" role="img" aria-label="Kelas ${c}: ${jp[c]} dari ${tg||"?"} JP"><i class="${tg&&jp[c]>tg?"over":""}" style="width:${tg?pct:0}%"></i></div></div>`}).join("")}
+    <h3 class="mt">Sesi 7 hari ke depan</h3>
+    ${dekat.length?`<ul class="alerts">${dekat.map(({k,s})=>`<li class="ok"><b>${fmtPendek(s.tanggal)} ${esc(s.jamMulai)}</b> · ${esc(s.aktivitas)} <span class="muted">— ${esc(k.judul)}</span></li>`).join("")}</ul>`:`<p class="muted">Tidak ada sesi dalam 7 hari ke depan.</p>`}
+   </section>
+  </div>
+  <section class="card mt" aria-labelledby="hAl"><div class="row"><h2 id="hAl" style="margin:0">Perlu perhatian</h2><span class="spacer"></span><button class="btn sm" type="button" data-act="cetakProgram">Cetak program tahunan</button></div>
+   ${al.length?`<ul class="alerts mt">${al.map(([c,m,id])=>`<li class="${c}">${m}${id?` <button class="btn sm ghost" type="button" data-open="${id}">Buka</button>`:""}</li>`).join("")}</ul>`:`<p class="mt">Semua kegiatan sudah lengkap. Selamat!</p>`}
+  </section>`;
+}
+
+function vKegiatan(){
+  if(UI.sel&&K(UI.sel))return vDetail(K(UI.sel));
+  return `<div class="row"><h2 style="margin:0">Kegiatan kokurikuler</h2><span class="spacer"></span><button class="btn pri" type="button" data-act="baru">+ Kegiatan baru</button></div>
+  <p class="hint">Bentuk kokurikuler: pembelajaran kolaboratif lintas disiplin, Gerakan 7 Kebiasaan Anak Indonesia Hebat, dan/atau cara lainnya.</p>
+  ${S.kegiatan.length?`<div class="klist mt">${S.kegiatan.map(k=>{const jp=k.sesi.reduce((a,s)=>a+(+s.jp||0),0);return `<button type="button" class="card kcard" data-open="${k.id}">
+   <div class="row"><span class="chip st-${k.status}">${STATUS[k.status]}</span><span class="chip">${esc(BENTUK[k.bentuk])}</span>${badgeContoh(k)}</div>
+   <h3>${esc(k.judul)}</h3>
+   <div class="meta">Kelas ${k.kelas.join(", ")||"–"} · ${esc(POLA[k.pola]||"")}<br>${fmtPendek(k.mulai)} – ${fmtPendek(k.selesai)} · ${k.sesi.length} sesi · ${jp} JP</div>
+   <div class="meta">${esc(k.mapel.join(" · "))}</div>
+   <div class="dots">${k.dimensi.map(dchip).join("")}</div></button>`}).join("")}</div>`:`<div class="empty mt">Belum ada kegiatan. Mulai dari templat agar cepat.</div>`}`;
+}
+
+const SUBS=[["ringkasan","Identitas"],["rancangan","Rancangan"],["jadwal","Jadwal"],["peran","Peran Guru"],["rubrik","Rubrik & Capaian"],["dok","Dokumentasi"]];
+function vDetail(k){
+  return `<div class="layout"><aside class="side" aria-label="Daftar kegiatan">
+    <button type="button" class="btn ghost" data-act="kembali">← Semua kegiatan</button>
+    ${S.kegiatan.map(x=>`<button type="button" data-open="${x.id}" aria-current="${x.id===k.id}">${esc(x.judul)}<small>Kelas ${x.kelas.join(", ")} · ${STATUS[x.status]}${x.contoh?" · contoh":""}</small></button>`).join("")}
+  </aside><section class="card">
+    <div class="row"><h2 style="margin:0">${esc(k.judul)}</h2>${badgeContoh(k)}<span class="spacer"></span>
+     <button class="btn sm" type="button" data-act="cetakKeg">Cetak rancangan</button>
+     <button class="btn sm" type="button" data-act="duplikat">Duplikat</button>
+     <button class="btn sm danger" type="button" data-act="hapusKeg">Hapus</button></div>
+    <div class="subtabs" role="tablist" aria-label="Bagian kegiatan">${SUBS.map(([s,n])=>`<button role="tab" type="button" data-sub="${s}" aria-selected="${UI.sub===s}">${n}</button>`).join("")}</div>
+    <div id="subBody">${({ringkasan:sRingkas,rancangan:sRancang,jadwal:sJadwal,peran:sPeran,rubrik:sRubrik,dok:sDok}[UI.sub])(k)}</div>
+  </section></div>`;
+}
+function fld(lbl,path,val,type,ph,hint){
+  const id="f_"+path.replace(/\W/g,"_");
+  const inp=type==="area"?`<textarea id="${id}" data-f="${path}" placeholder="${esc(ph||"")}">${esc(val)}</textarea>`:`<input id="${id}" type="${type||"text"}" data-f="${path}" value="${esc(val)}" placeholder="${esc(ph||"")}">`;
+  return `<label class="f" for="${id}">${lbl}</label>${inp}${hint?`<p class="hint">${hint}</p>`:""}`;
+}
+function sel(lbl,path,val,opts){const id="f_"+path.replace(/\W/g,"_");return `<label class="f" for="${id}">${lbl}</label><select id="${id}" data-f="${path}">${Object.entries(opts).map(([k,v])=>`<option value="${k}" ${k===val?"selected":""}>${esc(v)}</option>`).join("")}</select>`}
+function sRingkas(k){
+  return `<div class="grid g2"><div>${fld("Judul kegiatan","judul",k.judul)}${fld("Tema","tema",k.tema,"text","mis. Kearifan lokal, Gaya hidup berkelanjutan")}</div>
+   <div>${sel("Bentuk kokurikuler","bentuk",k.bentuk,BENTUK)}${sel("Pola pengorganisasian waktu","pola",k.pola,POLA)}</div></div>
+   <div class="grid g3"><div>${fld("Tanggal mulai","mulai",k.mulai,"date")}</div><div>${fld("Tanggal selesai","selesai",k.selesai,"date")}</div><div>${sel("Status","status",k.status,STATUS)}</div></div>
+   <fieldset style="border:0;padding:0;margin:10px 0 0"><legend class="f" style="font-weight:600;font-size:.85rem">Jenjang kelas</legend><div class="checks">${[7,8,9].map(c=>`<label><input type="checkbox" data-arr="kelas" value="${c}" ${k.kelas.includes(c)?"checked":""}> Kelas ${c}</label>`).join("")}</div></fieldset>
+   <fieldset style="border:0;padding:0;margin:10px 0 0"><legend class="f" style="font-weight:600;font-size:.85rem">Mata pelajaran yang berkolaborasi</legend><div class="checks">${[...new Set([...MAPEL,...k.mapel])].map(m=>`<label><input type="checkbox" data-arr="mapel" value="${esc(m)}" ${k.mapel.includes(m)?"checked":""}> ${esc(m)}</label>`).join("")}</div></fieldset>
+   <fieldset style="border:0;padding:0;margin:10px 0 0"><legend class="f" style="font-weight:600;font-size:.85rem">Dimensi profil lulusan yang dibidik <span class="muted" data-derived="dimcount">(${k.dimensi.length} dipilih · disarankan 2–3)</span></legend>
+   <div class="checks">${DIM.map(d=>`<label title="${esc(d.def)}"><input type="checkbox" data-arr="dimensi" value="${d.k}" ${k.dimensi.includes(d.k)?"checked":""}> <span style="color:var(${d.c});font-weight:700">●</span> ${esc(d.full)}</label>`).join("")}</div>
+   <p class="hint">Dimensi baru otomatis mendapat baris rubrik di tab Rubrik & Capaian.</p></fieldset>
+   ${k.bentuk==="kaih"||k.kaih.length?`<fieldset style="border:0;padding:0;margin:10px 0 0"><legend class="f" style="font-weight:600;font-size:.85rem">7 Kebiasaan Anak Indonesia Hebat yang dikuatkan</legend><div class="checks kaih">${KAIH.map((h,i)=>`<label><input type="checkbox" data-arr="kaih" value="${i}" ${k.kaih.includes(i)?"checked":""}> ${i+1}. ${h}</label>`).join("")}</div></fieldset>`:""}
+   ${fld("Produk / hasil akhir","produk",k.produk,"text","mis. pameran, kampanye, prototipe")}`;
+}
+function sRancang(k){
+  const st=(t,c,desc)=>`<div class="stage" style="--sc:var(${c})"><h3>${TAHAP[t]}</h3><p class="hint">${desc}</p><div class="steps">
+    ${k.pengalaman[t].map((x,i)=>`<div class="row"><label class="sr" for="st_${t}_${i}" style="position:absolute;left:-9999px">${TAHAP[t]} langkah ${i+1}</label><input id="st_${t}_${i}" type="text" data-step="${t}" data-i="${i}" value="${esc(x)}"><button class="btn sm ghost" type="button" data-act="hapusStep" data-t="${t}" data-i="${i}" aria-label="Hapus langkah ${i+1}">✕</button></div>`).join("")}
+    </div><button class="btn sm" type="button" data-act="tambahStep" data-t="${t}">+ Langkah</button></div>`;
+  return `<h3>1. Identifikasi</h3>
+   ${fld("Konteks / masalah nyata yang diangkat","identifikasi.konteks",k.identifikasi.konteks,"area")}
+   ${fld("Data pendukung","identifikasi.data",k.identifikasi.data,"area","Rapor Pendidikan, hasil asesmen awal, masukan orang tua…")}
+   ${fld("Kesiapan dan kebutuhan murid","identifikasi.kesiapan",k.identifikasi.kesiapan,"area","Termasuk murid berkebutuhan khusus dan penyesuaiannya")}
+   <h3 class="mt">2. Desain</h3>
+   ${fld("Tujuan kegiatan","desain.tujuan",k.desain.tujuan,"area")}
+   <div class="grid g2"><div>${fld("Praktik pedagogis","desain.pedagogi",k.desain.pedagogi,"area","Inkuiri, proyek, pemecahan masalah…")}</div><div>${fld("Kemitraan","desain.kemitraan",k.desain.kemitraan,"area","Orang tua, puskesmas, UMKM, komunitas…")}</div>
+   <div>${fld("Lingkungan belajar","desain.lingkungan",k.desain.lingkungan,"area")}</div><div>${fld("Pemanfaatan digital","desain.digital",k.desain.digital,"area")}</div></div>
+   <div class="row mt"><h3 style="margin:0">3. Pengalaman belajar</h3><span class="spacer"></span><button class="btn sm" type="button" data-act="ai">✦ Usulkan dengan Gemini</button></div>
+   <p class="hint">Rancang agar berkesadaran, bermakna, dan menggembirakan.</p>
+   ${st("memahami","--d-nalar","Murid membangun pengetahuan dari konteks nyata: pemantik, eksplorasi, observasi.")}
+   ${st("mengaplikasi","--d-kolab","Murid menerapkan pengetahuan lintas mapel untuk menghasilkan solusi/karya bersama.")}
+   ${st("merefleksi","--d-iman","Murid menilai proses dan dampak, lalu menyusun tindak lanjut.")}
+   <h3 class="mt">4. Asesmen</h3>
+   <div class="grid g3"><div>${fld("Asesmen awal","asesmen.awal",k.asesmen.awal,"area")}</div><div>${fld("Asesmen proses","asesmen.proses",k.asesmen.proses,"area")}</div><div>${fld("Asesmen akhir","asesmen.akhir",k.asesmen.akhir,"area")}</div></div>`;
+}
+function guruOpts(val){return `<option value="">— pilih guru —</option>`+S.guru.map(g=>`<option value="${g.id}" ${g.id===val?"selected":""}>${esc(g.nama)} (${esc(g.mapel)})</option>`).join("")}
+function sJadwal(k){
+  const b=bentrok();const pool=[...new Set([...k.peran.map(p=>p.guru),...k.sesi.flatMap(s=>s.guru)])].filter(Boolean);
+  const jp=k.sesi.reduce((a,s)=>a+(+s.jp||0),0);
+  const sorted=[...k.sesi].sort((a,c)=>(a.tanggal+a.jamMulai).localeCompare(c.tanggal+c.jamMulai));
+  return `<div class="row"><p class="muted" style="margin:0" data-derived="jpk">${k.sesi.length} sesi · ${jp} JP</p><span class="spacer"></span><button class="btn sm" type="button" data-act="urutSesi">Urutkan</button><button class="btn sm pri" type="button" data-act="tambahSesi">+ Sesi</button></div>
+  <p class="hint">Guru yang bisa dicentang = guru di tab Peran Guru. Untuk pembiasaan harian, isi JP 0 bila tidak dihitung sebagai beban JP.</p>
+  ${pool.length?"":`<p class="hint" style="color:var(--warn)">Tambahkan guru di tab Peran Guru agar bisa ditugaskan ke sesi.</p>`}
+  <div class="editlist mt">${k.sesi.length?sorted.map(s=>{const c=b.get(s.id);return `<div class="edititem" ${c?'style="border-color:var(--bad)"':""}>
+   <div class="grid g4"><div><label class="f" for="t_${s.id}">Tanggal</label><input id="t_${s.id}" type="date" data-l="sesi" data-id="${s.id}" data-k="tanggal" value="${esc(s.tanggal)}"></div>
+   <div><label class="f" for="m_${s.id}">Mulai</label><input id="m_${s.id}" type="time" data-l="sesi" data-id="${s.id}" data-k="jamMulai" value="${esc(s.jamMulai)}"></div>
+   <div><label class="f" for="s_${s.id}">Selesai</label><input id="s_${s.id}" type="time" data-l="sesi" data-id="${s.id}" data-k="jamSelesai" value="${esc(s.jamSelesai)}"></div>
+   <div><label class="f" for="j_${s.id}">JP</label><input id="j_${s.id}" type="number" min="0" max="20" data-l="sesi" data-id="${s.id}" data-k="jp" value="${esc(s.jp)}"></div></div>
+   <div class="grid g3"><div><label class="f" for="a_${s.id}">Aktivitas</label><input id="a_${s.id}" type="text" data-l="sesi" data-id="${s.id}" data-k="aktivitas" value="${esc(s.aktivitas)}"></div>
+   <div><label class="f" for="h_${s.id}">Tahap</label><select id="h_${s.id}" data-l="sesi" data-id="${s.id}" data-k="tahap">${Object.entries(TAHAP).map(([a,n])=>`<option value="${a}" ${a===s.tahap?"selected":""}>${n}</option>`).join("")}</select></div>
+   <div><label class="f" for="p_${s.id}">Tempat / rombel</label><input id="p_${s.id}" type="text" data-l="sesi" data-id="${s.id}" data-k="tempat" value="${esc(s.tempat)}"></div></div>
+   <div class="checks mt">${pool.map(g=>`<label><input type="checkbox" data-sg="${s.id}" value="${g}" ${s.guru.includes(g)?"checked":""}> ${esc(guruNama(g))}</label>`).join("")}</div>
+   <div class="row mt">${c?`<span class="conf">⚠ ${esc(c.join("; "))}</span>`:""}<span class="spacer"></span><button class="btn sm danger" type="button" data-act="hapusItem" data-l="sesi" data-id="${s.id}">Hapus sesi</button></div></div>`}).join(""):`<div class="empty">Belum ada sesi.</div>`}</div>`;
+}
+function sPeran(k){
+  return `<div class="row"><p class="muted" style="margin:0">${k.peran.length} guru dalam tim</p><span class="spacer"></span><button class="btn sm" type="button" data-act="guruBaru">+ Guru baru</button><button class="btn sm pri" type="button" data-act="tambahPeran">+ Peran</button></div>
+  <p class="hint">Tim kerja ideal: satu koordinator, fasilitator per kelas, narasumber mapel, dan pendamping/dokumentasi.</p>
+  <div class="editlist mt">${k.peran.length?k.peran.map(p=>`<div class="edititem"><div class="grid g3">
+   <div><label class="f" for="pg_${p.id}">Guru</label><select id="pg_${p.id}" data-l="peran" data-id="${p.id}" data-k="guru">${guruOpts(p.guru)}</select></div>
+   <div><label class="f" for="pp_${p.id}">Peran</label><select id="pp_${p.id}" data-l="peran" data-id="${p.id}" data-k="peran">${PERAN.map(r=>`<option ${r===p.peran?"selected":""}>${r}</option>`).join("")}</select></div>
+   <div><label class="f" for="pt_${p.id}">Tugas utama</label><input id="pt_${p.id}" type="text" data-l="peran" data-id="${p.id}" data-k="tugas" value="${esc(p.tugas)}"></div></div>
+   <div class="row mt"><span class="spacer"></span><button class="btn sm danger" type="button" data-act="hapusItem" data-l="peran" data-id="${p.id}">Hapus</button></div></div>`).join(""):`<div class="empty">Belum ada guru dalam tim.</div>`}</div>`;
+}
+function sRubrik(k){
+  return `<div class="row"><p class="muted" style="margin:0">Rubrik 4 tingkat per dimensi. Isi jumlah murid per tingkat untuk melihat capaian kelas (tanpa nama murid).</p><span class="spacer"></span>
+   <label class="sr" for="addDim" style="position:absolute;left:-9999px">Tambah baris rubrik untuk dimensi</label><select id="addDim" style="width:auto">${DIM.map(d=>`<option value="${d.k}">${esc(d.n)}</option>`).join("")}</select><button class="btn sm" type="button" data-act="tambahRubrik">+ Baris rubrik</button></div>
+  <div class="editlist mt">${k.rubrik.length?k.rubrik.map(r=>{const tot=r.jml.reduce((a,b)=>a+(+b||0),0);return `<div class="edititem">
+   <div class="row">${dchip(r.dimensi)}<span class="spacer"></span><button class="btn sm ghost" type="button" data-act="resetRubrik" data-id="${r.id}">Pakai deskriptor bawaan</button><button class="btn sm danger" type="button" data-act="hapusItem" data-l="rubrik" data-id="${r.id}">Hapus</button></div>
+   <label class="f" for="rk_${r.id}">Kriteria</label><input id="rk_${r.id}" type="text" data-l="rubrik" data-id="${r.id}" data-k="kriteria" value="${esc(r.kriteria)}">
+   <div class="lv mt">${LEVEL.map((L,i)=>`<div><label class="f" for="rl_${r.id}_${i}" style="color:${LVCOL[i]}">${L}</label><textarea id="rl_${r.id}_${i}" data-rl="${r.id}" data-i="${i}">${esc(r.lv[i])}</textarea>
+     <label class="f" for="rj_${r.id}_${i}">Jumlah murid</label><input id="rj_${r.id}_${i}" type="number" min="0" data-rj="${r.id}" data-i="${i}" value="${esc(r.jml[i])}"></div>`).join("")}</div>
+   <div class="dist" data-derived="dist_${r.id}" role="img" aria-label="Sebaran capaian">${distHTML(r)}</div><p class="hint" data-derived="distt_${r.id}">${distTeks(r,tot)}</p></div>`}).join(""):`<div class="empty">Belum ada rubrik.</div>`}</div>`;
+}
+function distHTML(r){const tot=r.jml.reduce((a,b)=>a+(+b||0),0);return tot?r.jml.map((v,i)=>`<i style="width:${(+v||0)/tot*100}%;background:${LVCOL[i]}" title="${LEVEL[i]}: ${v}"></i>`).join(""):""}
+function distTeks(r,tot){if(!tot)return "Belum ada data capaian.";const ck=(+r.jml[2]||0)+(+r.jml[3]||0);return `${tot} murid · ${Math.round(ck/tot*100)}% sudah Cakap/Mahir · ${r.jml[0]||0} murid perlu pendampingan khusus.`}
+function sDok(k){
+  return `<div class="row"><p class="muted" style="margin:0">Catatan pelaksanaan, refleksi guru, dan foto bukti (dikompres, tersimpan di perangkat ini).</p><span class="spacer"></span><button class="btn sm pri" type="button" data-act="tambahDok">+ Catatan</button></div>
+  <div class="editlist mt">${k.dok.length?[...k.dok].sort((a,b)=>(b.tanggal||"").localeCompare(a.tanggal||"")).map(d=>`<div class="edititem"><div class="grid g3">
+   <div><label class="f" for="dt_${d.id}">Tanggal</label><input id="dt_${d.id}" type="date" data-l="dok" data-id="${d.id}" data-k="tanggal" value="${esc(d.tanggal)}"></div>
+   <div><label class="f" for="dj_${d.id}">Judul</label><input id="dj_${d.id}" type="text" data-l="dok" data-id="${d.id}" data-k="judul" value="${esc(d.judul)}"></div>
+   <div><label class="f" for="du_${d.id}">Tautan (video/album/berita)</label><input id="du_${d.id}" type="url" data-l="dok" data-id="${d.id}" data-k="tautan" value="${esc(d.tautan)}" placeholder="https://"></div></div>
+   <label class="f" for="dc_${d.id}">Catatan & refleksi guru</label><textarea id="dc_${d.id}" data-l="dok" data-id="${d.id}" data-k="catatan" placeholder="Apa yang berjalan baik? Apa yang perlu diperbaiki? Murid mana yang perlu perhatian?">${esc(d.catatan)}</textarea>
+   ${d.foto?`<img class="photo" src="${d.foto}" alt="Foto dokumentasi: ${esc(d.judul)}">`:""}
+   <div class="row mt"><label class="btn sm" for="df_${d.id}">${d.foto?"Ganti foto":"+ Foto"}</label><input id="df_${d.id}" type="file" accept="image/*" data-foto="${d.id}" style="position:absolute;left:-9999px">
+   ${d.foto?`<button class="btn sm ghost" type="button" data-act="hapusFoto" data-id="${d.id}">Hapus foto</button>`:""}<span class="spacer"></span><button class="btn sm danger" type="button" data-act="hapusItem" data-l="dok" data-id="${d.id}">Hapus</button></div></div>`).join(""):`<div class="empty">Belum ada dokumentasi.</div>`}</div>`;
+}
+
+function vJadwal(){
+  const b=bentrok();
+  let list=semuaSesi().filter(x=>(!UI.fKelas||x.k.kelas.includes(+UI.fKelas))&&(!UI.fKeg||x.k.id===UI.fKeg)).sort((a,c)=>((a.s.tanggal||"9")+a.s.jamMulai).localeCompare((c.s.tanggal||"9")+c.s.jamMulai));
+  const groups={};list.forEach(x=>{const w=x.s.tanggal?weekStart(x.s.tanggal):"tanpa";(groups[w]=groups[w]||[]).push(x)});
+  return `<div class="row"><h2 style="margin:0">Jadwal semua kegiatan</h2><span class="spacer"></span><button class="btn sm" type="button" data-act="csvJadwal">Unduh CSV jadwal</button></div>
+  <div class="grid g3 mt"><div><label class="f" for="fKelas">Filter kelas</label><select id="fKelas" data-filter="fKelas"><option value="">Semua kelas</option>${[7,8,9].map(c=>`<option value="${c}" ${UI.fKelas==c?"selected":""}>Kelas ${c}</option>`).join("")}</select></div>
+  <div><label class="f" for="fKeg">Filter kegiatan</label><select id="fKeg" data-filter="fKeg"><option value="">Semua kegiatan</option>${S.kegiatan.map(k=>`<option value="${k.id}" ${UI.fKeg===k.id?"selected":""}>${esc(k.judul)}</option>`).join("")}</select></div>
+  <div><p class="hint" style="margin-top:34px">${list.length} sesi · ${[...b.keys()].length} sesi bentrok</p></div></div>
+  ${list.length?Object.entries(groups).map(([w,xs])=>`<div class="week">${w==="tanpa"?"Belum bertanggal":"Pekan "+fmtPendek(w)+" – "+fmtPendek(addDays(w,6))}</div>
+   ${xs.map(({k,s})=>{const c=b.get(s.id);return `<div class="sess" ${c?'style="border-color:var(--bad)"':""}><div class="d">${s.tanggal?fmtPendek(s.tanggal):"–"}<small>${esc(s.jamMulai)}–${esc(s.jamSelesai)} · ${+s.jp||0} JP</small></div>
+    <div><b>${esc(s.aktivitas||"(tanpa judul)")}</b> <span class="chip dchip" style="--dc:var(${TAHAPC[s.tahap]||"--muted"})">${TAHAP[s.tahap]||""}</span><br><span class="muted">${esc(k.judul)} · Kelas ${k.kelas.join(", ")} · ${esc(s.tempat)}</span><br><small>${s.guru.map(guruNama).map(esc).join(", ")||"<i>guru belum ditugaskan</i>"}</small>${c?`<br><span class="conf">⚠ ${esc(c.join("; "))}</span>`:""}</div>
+    <div><button class="btn sm" type="button" data-open="${k.id}" data-opensub="jadwal">Ubah</button></div></div>`}).join("")}`).join(""):`<div class="empty mt">Tidak ada sesi.</div>`}`;
+}
+
+function vGuru(){
+  const bg=bebanGuru().sort((a,b)=>b.jp-a.jp||b.sesi-a.sesi);
+  return `<div class="row"><h2 style="margin:0">Peran & beban guru</h2><span class="spacer"></span><button class="btn sm" type="button" data-act="csvGuru">Unduh CSV</button><button class="btn sm pri" type="button" data-act="guruBaru">+ Guru</button></div>
+  <p class="hint">Rekap untuk SK tim kokurikuler. JP kokurikuler dihitung dari sesi yang ditugaskan.</p>
+  <div class="tscroll card mt"><table><thead><tr><th>Guru</th><th>Mapel</th><th>Kegiatan</th><th>Sesi</th><th>JP</th><th>Peran</th><th><span style="position:absolute;left:-9999px">Aksi</span></th></tr></thead><tbody>
+  ${bg.map(({g,sesi,jp,keg,peran})=>`<tr><td><label class="sr" for="gn_${g.id}" style="position:absolute;left:-9999px">Nama guru</label><input id="gn_${g.id}" type="text" data-g="${g.id}" data-k="nama" value="${esc(g.nama)}">${badgeContoh(g)}</td>
+   <td><label class="sr" for="gm_${g.id}" style="position:absolute;left:-9999px">Mapel</label><input id="gm_${g.id}" type="text" data-g="${g.id}" data-k="mapel" value="${esc(g.mapel)}"></td>
+   <td>${keg}</td><td>${sesi}</td><td><b>${jp}</b></td><td><small>${peran.map(esc).join("<br>")||'<span class="muted">belum ada</span>'}</small></td>
+   <td><button class="btn sm danger" type="button" data-act="hapusGuru" data-id="${g.id}" aria-label="Hapus ${esc(g.nama)}">✕</button></td></tr>`).join("")||`<tr><td colspan="7" class="muted">Belum ada guru.</td></tr>`}
+  </tbody></table></div>
+  ${bg.length?`<p class="hint mt">Guru belum terlibat: ${bg.filter(x=>!x.keg).map(x=>esc(x.g.nama)).join(", ")||"tidak ada — semua guru sudah berperan."}</p>`:""}`;
+}
+
+function vPengaturan(){
+  return `<div class="grid g2"><section class="card"><h2>Identitas & target</h2>
+   ${fldS("Nama sekolah","nama",S.sekolah.nama)}${fldS("Tahun ajaran","tahun",S.sekolah.tahun,"2026/2027")}
+   <p class="f">Target alokasi JP kokurikuler per tahun ajaran</p><p class="hint">Isi sesuai struktur kurikulum dan keputusan sekolah. ${S.contoh?"Angka 60 JP pada data contoh hanya ilustrasi.":""}</p>
+   <div class="grid g3">${[7,8,9].map(c=>`<div><label class="f" for="tg${c}">Kelas ${c}</label><input id="tg${c}" type="number" min="0" data-target="${c}" value="${esc(S.sekolah.target[c])}"></div>`).join("")}</div>
+  </section>
+  <section class="card"><h2>Data</h2><p class="hint">Data tersimpan di peramban perangkat ini (localStorage). Ekspor secara berkala sebagai cadangan atau untuk dipindah ke perangkat lain.</p>
+   <div class="row mt"><button class="btn" type="button" data-act="ekspor">Unduh cadangan JSON</button><button class="btn" type="button" data-act="salin">Salin JSON</button>
+   <label class="btn" for="impor">Impor JSON</label><input id="impor" type="file" accept="application/json,.json" style="position:absolute;left:-9999px"></div>
+   <div class="row mt"><button class="btn" type="button" data-act="csvJadwal">CSV jadwal</button><button class="btn" type="button" data-act="csvGuru">CSV beban guru</button><button class="btn" type="button" data-act="csvRekap">CSV rekap kegiatan</button></div>
+   <div class="row mt">${S.contoh?`<button class="btn" type="button" data-act="hapusContoh">Hapus data contoh</button>`:`<button class="btn" type="button" data-act="muatContoh">Muat data contoh</button>`}<button class="btn danger" type="button" data-act="kosongkan">Kosongkan semua</button></div>
+  </section>
+  <section class="card"><h2>Asisten AI (opsional)</h2><p class="hint">Fitur “Usulkan dengan Gemini” memakai kunci API Google Gemini milik Anda sendiri. Kunci hanya disimpan di perangkat ini dan dikirim langsung ke Google saat Anda menekan tombol. Jangan masukkan data pribadi murid ke tema/konteks.</p>
+   <label class="f" for="apiKey">Kunci API Gemini</label><input id="apiKey" type="password" autocomplete="off" data-set="key" value="${esc(SET.key||"")}" placeholder="Tempel kunci dari Google AI Studio">
+   <label class="f" for="apiModel">Model</label><input id="apiModel" type="text" data-set="model" value="${esc(SET.model)}">
+   <div class="row mt"><button class="btn sm" type="button" data-act="hapusKey">Hapus kunci</button></div>
+  </section>
+  <section class="card"><h2>Dasar dan sumber</h2>
+   <p class="hint">Kokurikuler menurut Permendikdasmen 13/2025: pembelajaran kolaboratif lintas disiplin ilmu, Gerakan 7 Kebiasaan Anak Indonesia Hebat, dan/atau cara lainnya; tema dikembangkan sekolah; beban belajar dirumuskan dalam alokasi waktu satu tahun ajaran. Rancangan memakai alur pembelajaran mendalam (memahami–mengaplikasi–merefleksi). Deskriptor rubrik bawaan adalah contoh yang dapat diubah, bukan rumusan resmi.</p>
+   <ol class="src">${SUMBER.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join("")}</ol>
+   <h3>8 dimensi profil lulusan</h3><ul class="src">${DIM.map(d=>`<li>${dchip(d.k)} ${esc(d.def)}</li>`).join("")}</ul>
+  </section></div>`;
+}
+function fldS(l,k,v,ph){return `<label class="f" for="sk_${k}">${l}</label><input id="sk_${k}" type="text" data-sk="${k}" value="${esc(v)}" placeholder="${esc(ph||"")}">`}
+
+/* ====================== CETAK ====================== */
+function cetak(html){$("#printArea").innerHTML=html;setTimeout(()=>window.print(),60)}
+function htmlRancangan(k){
+  const tb=(h,rows)=>`<table><thead><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr></thead><tbody>${rows.join("")||`<tr><td colspan="${h.length}">–</td></tr>`}</tbody></table>`;
+  const ol=a=>`<ol>${a.filter(x=>x.trim()).map(x=>`<li>${esc(x)}</li>`).join("")||"<li>–</li>"}</ol>`;
+  return `<h1>Rancangan Kegiatan Kokurikuler</h1><p>${esc(S.sekolah.nama)} · Tahun Ajaran ${esc(S.sekolah.tahun)}</p>
+  <table><tbody><tr><th>Judul</th><td>${esc(k.judul)}</td></tr><tr><th>Tema</th><td>${esc(k.tema)}</td></tr><tr><th>Bentuk</th><td>${esc(BENTUK[k.bentuk])} · ${esc(POLA[k.pola])}</td></tr>
+  <tr><th>Kelas</th><td>${k.kelas.join(", ")}</td></tr><tr><th>Periode</th><td>${fmtTgl(k.mulai)} – ${fmtTgl(k.selesai)}</td></tr><tr><th>Mapel</th><td>${esc(k.mapel.join(", "))}</td></tr>
+  <tr><th>Dimensi profil lulusan</th><td>${k.dimensi.map(d=>esc(DIMK[d].full)).join("; ")}</td></tr>${k.kaih.length?`<tr><th>7 KAIH</th><td>${k.kaih.map(i=>KAIH[i]).join(", ")}</td></tr>`:""}<tr><th>Produk</th><td>${esc(k.produk)}</td></tr></tbody></table>
+  <h2>1. Identifikasi</h2><p><b>Konteks:</b> ${esc(k.identifikasi.konteks)}</p><p><b>Data pendukung:</b> ${esc(k.identifikasi.data)}</p><p><b>Kesiapan murid:</b> ${esc(k.identifikasi.kesiapan)}</p>
+  <h2>2. Desain</h2><p><b>Tujuan:</b> ${esc(k.desain.tujuan)}</p><p><b>Praktik pedagogis:</b> ${esc(k.desain.pedagogi)}</p><p><b>Kemitraan:</b> ${esc(k.desain.kemitraan)}</p><p><b>Lingkungan belajar:</b> ${esc(k.desain.lingkungan)}</p><p><b>Pemanfaatan digital:</b> ${esc(k.desain.digital)}</p>
+  <h2>3. Pengalaman belajar</h2><b>Memahami</b>${ol(k.pengalaman.memahami)}<b>Mengaplikasi</b>${ol(k.pengalaman.mengaplikasi)}<b>Merefleksi</b>${ol(k.pengalaman.merefleksi)}
+  <h2>4. Jadwal</h2>${tb(["Tanggal","Jam","JP","Tahap","Aktivitas","Tempat","Guru"],[...k.sesi].sort((a,b)=>(a.tanggal+a.jamMulai).localeCompare(b.tanggal+b.jamMulai)).map(s=>`<tr><td>${fmtTgl(s.tanggal)}</td><td>${esc(s.jamMulai)}–${esc(s.jamSelesai)}</td><td>${+s.jp||0}</td><td>${TAHAP[s.tahap]||""}</td><td>${esc(s.aktivitas)}</td><td>${esc(s.tempat)}</td><td>${s.guru.map(guruNama).map(esc).join(", ")}</td></tr>`))}
+  <h2>5. Tim guru</h2>${tb(["Guru","Mapel","Peran","Tugas"],k.peran.map(p=>{const g=S.guru.find(x=>x.id===p.guru);return `<tr><td>${esc(g?g.nama:"–")}</td><td>${esc(g?g.mapel:"")}</td><td>${esc(p.peran)}</td><td>${esc(p.tugas)}</td></tr>`}))}
+  <h2>6. Asesmen</h2><p><b>Awal:</b> ${esc(k.asesmen.awal)}</p><p><b>Proses:</b> ${esc(k.asesmen.proses)}</p><p><b>Akhir:</b> ${esc(k.asesmen.akhir)}</p>
+  ${tb(["Dimensi / kriteria",...LEVEL],k.rubrik.map(r=>`<tr><td><b>${esc(DIMK[r.dimensi].n)}</b><br>${esc(r.kriteria)}</td>${r.lv.map((x,i)=>`<td>${esc(x)}${(+r.jml[i])?`<br><i>(${r.jml[i]} murid)</i>`:""}</td>`).join("")}</tr>`))}
+  ${k.dok.length?`<h2>7. Dokumentasi & refleksi</h2>${k.dok.map(d=>`<p><b>${fmtTgl(d.tanggal)} – ${esc(d.judul)}</b><br>${esc(d.catatan)}${d.tautan?`<br>${esc(d.tautan)}`:""}</p>${d.foto?`<img src="${d.foto}" alt="" style="max-width:260px">`:""}`).join("")}`:""}
+  <p style="margin-top:28pt">Mengetahui, Kepala Sekolah<br><br><br>________________________</p>`;
+}
+function htmlProgram(){
+  const jp=jpKelas();
+  return `<h1>Program Kokurikuler Tahunan</h1><p>${esc(S.sekolah.nama)} · Tahun Ajaran ${esc(S.sekolah.tahun)}</p>
+  <table><thead><tr><th>No</th><th>Kegiatan</th><th>Bentuk</th><th>Kelas</th><th>Periode</th><th>Mapel</th><th>Dimensi</th><th>JP</th><th>Koordinator</th></tr></thead><tbody>
+  ${S.kegiatan.map((k,i)=>`<tr><td>${i+1}</td><td>${esc(k.judul)}</td><td>${esc(BENTUK[k.bentuk])}</td><td>${k.kelas.join(", ")}</td><td>${fmtPendek(k.mulai)}–${fmtPendek(k.selesai)}</td><td>${esc(k.mapel.join(", "))}</td><td>${k.dimensi.map(d=>esc(DIMK[d].n)).join(", ")}</td><td>${k.sesi.reduce((a,s)=>a+(+s.jp||0),0)}</td><td>${esc(k.peran.filter(p=>p.peran==="Koordinator").map(p=>guruNama(p.guru)).join(", "))}</td></tr>`).join("")}</tbody></table>
+  <h2>Rekap JP per kelas</h2><table><tbody>${[7,8,9].map(c=>`<tr><th>Kelas ${c}</th><td>${jp[c]} JP${S.sekolah.target[c]?" dari target "+esc(S.sekolah.target[c])+" JP":""}</td></tr>`).join("")}</tbody></table>
+  <h2>Sebaran dimensi profil lulusan</h2><table><thead><tr><th>Dimensi</th><th>Kelas 7</th><th>Kelas 8</th><th>Kelas 9</th></tr></thead><tbody>${(()=>{const p=peta();return DIM.map(d=>`<tr><td>${esc(d.full)}</td>${[7,8,9].map(c=>`<td>${p[d.k][c]||"–"}</td>`).join("")}</tr>`).join("")})()}</tbody></table>`;
+}
+
+/* ====================== GEMINI ====================== */
+async function usulAI(k){
+  if(!SET.key){toast("Isi kunci API Gemini di Pengaturan & Sumber terlebih dulu.");return}
+  const btn=document.querySelector('[data-act="ai"]');if(btn){btn.disabled=true;btn.textContent="Menyusun usulan…"}
+  const prompt=`Anda perancang kegiatan kokurikuler SMP di Indonesia (Permendikdasmen 13/2025, pembelajaran mendalam: berkesadaran, bermakna, menggembirakan).
+Judul: ${k.judul}\nTema: ${k.tema}\nKelas: ${k.kelas.join(", ")}\nMapel: ${k.mapel.join(", ")}\nDimensi profil lulusan: ${k.dimensi.map(d=>DIMK[d].full).join(", ")}\nKonteks: ${k.identifikasi.konteks}\nProduk: ${k.produk}
+Buat usulan ringkas dalam bahasa Indonesia. Balas HANYA JSON valid: {"tujuan":"1-2 kalimat","memahami":["3 langkah"],"mengaplikasi":["3 langkah"],"merefleksi":["2-3 langkah"],"asesmen":"1 kalimat"}. Sebut mapel yang berperan di tiap langkah.`;
+  try{
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(SET.model)}:generateContent`,{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":SET.key},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:"application/json",temperature:.7}})});
+    const j=await r.json();if(!r.ok)throw new Error(j.error&&j.error.message||("HTTP "+r.status));
+    const txt=j.candidates[0].content.parts.map(p=>p.text||"").join("");const o=JSON.parse(txt.replace(/^```json|```$/g,"").trim());
+    dialog(`<h2>Usulan Gemini</h2><p class="hint">Periksa dan sesuaikan sebelum dipakai.</p>
+     <p><b>Tujuan:</b> ${esc(o.tujuan||"")}</p>${["memahami","mengaplikasi","merefleksi"].map(t=>`<b>${TAHAP[t]}</b><ol>${(o[t]||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`).join("")}<p><b>Asesmen:</b> ${esc(o.asesmen||"")}</p>
+     <div class="row"><button class="btn pri" type="button" id="aiPakai">Tambahkan ke rancangan</button><button class="btn" type="button" data-close>Tutup</button></div>`);
+    $("#aiPakai").onclick=()=>{["memahami","mengaplikasi","merefleksi"].forEach(t=>k.pengalaman[t].push(...(o[t]||[]).map(String)));if(o.tujuan&&!k.desain.tujuan)k.desain.tujuan=o.tujuan;if(o.asesmen&&!k.asesmen.proses)k.asesmen.proses=o.asesmen;save();$("#dlg").close();render();toast("Usulan ditambahkan.")};
+  }catch(e){toast("Gagal memanggil Gemini: "+e.message)}
+  finally{if(btn){btn.disabled=false;btn.textContent="✦ Usulkan dengan Gemini"}}
+}
+
+/* ====================== DIALOG ====================== */
+function dialog(html){const d=$("#dlg");$("#dlgBody").innerHTML=html;if(!d.open){try{d.showModal()}catch(e){d.setAttribute("open","")}}const f=d.querySelector("button,input,select");if(f)f.focus()}
+function dlgBaru(){
+  dialog(`<h2>Kegiatan baru</h2><p class="hint">Pilih templat untuk mulai cepat (semua isian bisa diubah), atau mulai kosong.</p>
+  <div class="editlist">${TEMPLAT.map((t,i)=>`<button class="card kcard" type="button" data-tpl="${i}"><b>${esc(t.judul)}</b><div class="meta">${esc(BENTUK[t.bentuk])} · Kelas ${t.kelas.join(", ")} · ${esc(t.mapel.join(", "))}</div><div class="dots">${t.dimensi.map(dchip).join("")}</div></button>`).join("")}
+  <button class="btn" type="button" data-tpl="-1">Mulai dari kosong</button></div><div class="row mt"><span class="spacer"></span><button class="btn" type="button" data-close>Batal</button></div>`);
+}
+function dlgGuru(){
+  dialog(`<h2>Tambah guru</h2><label class="f" for="ng">Nama</label><input id="ng" type="text"><label class="f" for="nm">Mapel</label><input id="nm" type="text" list="mapelList"><datalist id="mapelList">${MAPEL.map(m=>`<option>${esc(m)}</option>`).join("")}</datalist>
+  <p class="hint">Bisa juga tempel banyak sekaligus, satu baris per guru: <i>Nama ; Mapel</i></p><label class="f" for="nbulk">Tempel daftar (opsional)</label><textarea id="nbulk"></textarea>
+  <div class="row mt"><button class="btn pri" type="button" id="ngOk">Simpan</button><button class="btn" type="button" data-close>Batal</button></div>`);
+  $("#ngOk").onclick=()=>{let n=0;const a=$("#ng").value.trim();if(a){S.guru.push({id:uid(),nama:a,mapel:$("#nm").value.trim()});n++}
+    $("#nbulk").value.split("\n").map(x=>x.trim()).filter(Boolean).forEach(l=>{const [nm,mp]=l.split(/[;\t]/);if(nm&&nm.trim()){S.guru.push({id:uid(),nama:nm.trim(),mapel:(mp||"").trim()});n++}});
+    save();$("#dlg").close();render();toast(n+" guru ditambahkan.")};
+}
+
+/* ====================== EVENT ====================== */
+function setPath(o,p,v){const a=p.split(".");let x=o;for(let i=0;i<a.length-1;i++)x=x[a[i]];x[a[a.length-1]]=v}
+function cur(){return K(UI.sel)}
+function openKeg(id,sub){UI.view="kegiatan";UI.sel=id;UI.sub=sub||"ringkasan";render();window.scrollTo(0,0)}
+function updateDerived(k){
+  const e=document.querySelector('[data-derived="jpk"]');if(e&&k)e.textContent=`${k.sesi.length} sesi · ${k.sesi.reduce((a,s)=>a+(+s.jp||0),0)} JP`;
+  const d=document.querySelector('[data-derived="dimcount"]');if(d&&k)d.textContent=`(${k.dimensi.length} dipilih · disarankan 2–3)`;
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button,[data-open]");if(!t)return;
+  if(t.dataset.view){UI.view=t.dataset.view;UI.sel=null;render();return}
+  if(t.dataset.open){openKeg(t.dataset.open,t.dataset.opensub);return}
+  if(t.dataset.sub){UI.sub=t.dataset.sub;render();return}
+  if(t.hasAttribute("data-close")){$("#dlg").close();return}
+  if(t.dataset.tpl!==undefined){const i=+t.dataset.tpl;const k=i>=0?dariTemplat(TEMPLAT[i]):dariTemplat({judul:"Kegiatan baru",tema:"",bentuk:"lintas",pola:"blok",kelas:[7],mapel:[],dimensi:[]});k.mulai=todayStr();k.selesai=addDays(todayStr(),21);S.kegiatan.unshift(k);save();$("#dlg").close();openKeg(k.id);toast("Kegiatan dibuat. Lengkapi rancangan dan jadwalnya.");return}
+  const act=t.dataset.act;if(!act)return;const k=cur();
+  const A={
+    hapusContoh(){if(!confirm("Hapus semua guru dan kegiatan berlabel contoh?"))return;S.kegiatan=S.kegiatan.filter(x=>!x.contoh);const ids=new Set(S.guru.filter(g=>g.contoh).map(g=>g.id));S.guru=S.guru.filter(g=>!g.contoh);S.kegiatan.forEach(x=>{x.peran=x.peran.filter(p=>!ids.has(p.guru));x.sesi.forEach(s=>s.guru=s.guru.filter(g=>!ids.has(g)))});if(S.sekolah.nama==="SMP Contoh Nusantara")S.sekolah={nama:"",tahun:S.sekolah.tahun,target:{7:"",8:"",9:""}};S.contoh=false;UI.sel=null;save();render();toast("Data contoh dihapus.")},
+    muatContoh(){const c=contoh();S.guru.push(...c.guru);S.kegiatan.push(...c.kegiatan);S.contoh=true;if(!S.sekolah.nama)S.sekolah=c.sekolah;save();render()},
+    kosongkan(){if(!confirm("Kosongkan SEMUA data? Unduh cadangan dulu bila perlu."))return;S=kosong();UI.sel=null;save();render()},
+    baru:dlgBaru,guruBaru:dlgGuru,
+    kembali(){UI.sel=null;render()},
+    duplikat(){const c=JSON.parse(JSON.stringify(k));c.id=uid();c.judul+=" (salinan)";c.contoh=false;c.status="rancang";c.sesi.forEach(s=>s.id=uid());c.peran.forEach(p=>p.id=uid());c.rubrik.forEach(r=>{r.id=uid();r.jml=[0,0,0,0]});c.dok=[];S.kegiatan.unshift(c);save();openKeg(c.id);toast("Kegiatan diduplikat.")},
+    hapusKeg(){if(!confirm("Hapus kegiatan “"+k.judul+"”?"))return;S.kegiatan=S.kegiatan.filter(x=>x!==k);UI.sel=null;save();render()},
+    tambahStep(){k.pengalaman[t.dataset.t].push("");save();render();const ins=document.querySelectorAll(`[data-step="${t.dataset.t}"]`);if(ins.length)ins[ins.length-1].focus()},
+    hapusStep(){k.pengalaman[t.dataset.t].splice(+t.dataset.i,1);save();render()},
+    tambahSesi(){const last=k.sesi[k.sesi.length-1];k.sesi.push({id:uid(),tanggal:last?addDays(last.tanggal,7):(k.mulai||todayStr()),jamMulai:last?last.jamMulai:"07:30",jamSelesai:last?last.jamSelesai:"09:30",jp:last?last.jp:2,tahap:"memahami",aktivitas:"",tempat:"",guru:[]});save();render()},
+    urutSesi(){k.sesi.sort((a,b)=>(a.tanggal+a.jamMulai).localeCompare(b.tanggal+b.jamMulai));save();render()},
+    tambahPeran(){k.peran.push({id:uid(),guru:"",peran:k.peran.some(p=>p.peran==="Koordinator")?"Fasilitator kelas":"Koordinator",tugas:""});save();render()},
+    tambahRubrik(){k.rubrik.push(rubrikDari($("#addDim").value));save();render()},
+    resetRubrik(){const r=k.rubrik.find(x=>x.id===t.dataset.id);const d=DIMK[r.dimensi];r.kriteria=d.kr;r.lv=[...d.lv];save();render()},
+    tambahDok(){k.dok.push({id:uid(),tanggal:todayStr(),judul:"",catatan:"",tautan:"",foto:""});save();render()},
+    hapusFoto(){k.dok.find(x=>x.id===t.dataset.id).foto="";save();render()},
+    hapusItem(){const l=t.dataset.l;if(!confirm("Hapus item ini?"))return;k[l]=k[l].filter(x=>x.id!==t.dataset.id);save();render()},
+    hapusGuru(){const id=t.dataset.id;if(!confirm("Hapus guru ini dari semua kegiatan?"))return;S.guru=S.guru.filter(g=>g.id!==id);S.kegiatan.forEach(x=>{x.peran=x.peran.filter(p=>p.guru!==id);x.sesi.forEach(s=>s.guru=s.guru.filter(g=>g!==id))});save();render()},
+    ai(){usulAI(k)},
+    cetakKeg(){cetak(htmlRancangan(k))},cetakProgram(){cetak(htmlProgram())},
+    ekspor(){download("kokurikuler-"+todayStr()+".json",JSON.stringify(S,null,1),"application/json")},
+    salin(){const s=JSON.stringify(S);(navigator.clipboard?navigator.clipboard.writeText(s):Promise.reject()).then(()=>toast("JSON disalin."),()=>toast("Tidak bisa menyalin; gunakan Unduh."))},
+    csvJadwal(){download("jadwal-kokurikuler.csv",csv([["Tanggal","Mulai","Selesai","JP","Tahap","Aktivitas","Tempat","Kegiatan","Kelas","Guru"],...semuaSesi().sort((a,b)=>(a.s.tanggal+a.s.jamMulai).localeCompare(b.s.tanggal+b.s.jamMulai)).map(({k,s})=>[s.tanggal,s.jamMulai,s.jamSelesai,s.jp,TAHAP[s.tahap],s.aktivitas,s.tempat,k.judul,k.kelas.join("/"),s.guru.map(guruNama).join("; ")])]),"text/csv")},
+    csvGuru(){download("beban-guru-kokurikuler.csv",csv([["Guru","Mapel","Jumlah kegiatan","Sesi","JP","Peran"],...bebanGuru().map(x=>[x.g.nama,x.g.mapel,x.keg,x.sesi,x.jp,x.peran.join(" | ")])]),"text/csv")},
+    csvRekap(){download("rekap-kokurikuler.csv",csv([["Kegiatan","Tema","Bentuk","Pola","Kelas","Mulai","Selesai","Status","Mapel","Dimensi","Sesi","JP","% Cakap/Mahir"],...S.kegiatan.map(k=>{const t=k.rubrik.reduce((a,r)=>a+r.jml.reduce((x,y)=>x+(+y||0),0),0),c=k.rubrik.reduce((a,r)=>a+(+r.jml[2]||0)+(+r.jml[3]||0),0);return [k.judul,k.tema,BENTUK[k.bentuk],POLA[k.pola],k.kelas.join("/"),k.mulai,k.selesai,STATUS[k.status],k.mapel.join("; "),k.dimensi.map(d=>DIMK[d].full).join("; "),k.sesi.length,k.sesi.reduce((a,s)=>a+(+s.jp||0),0),t?Math.round(c/t*100):""]})]),"text/csv")},
+    hapusKey(){SET.key="";saveSet();render();toast("Kunci API dihapus dari perangkat.")}
+  };
+  if(A[act])A[act]();
+});
+document.addEventListener("input",e=>{
+  const t=e.target,k=cur();
+  if(t.dataset.f&&k){setPath(k,t.dataset.f,t.value);save();return}
+  if(t.dataset.step&&k){k.pengalaman[t.dataset.step][+t.dataset.i]=t.value;save();return}
+  if(t.dataset.l&&k&&t.tagName!=="SELECT"){const it=k[t.dataset.l].find(x=>x.id===t.dataset.id);if(it){it[t.dataset.k]=t.type==="number"?(t.value===""?"":+t.value):t.value;save();updateDerived(k)}return}
+  if(t.dataset.rl&&k){k.rubrik.find(r=>r.id===t.dataset.rl).lv[+t.dataset.i]=t.value;save();return}
+  if(t.dataset.rj&&k){const r=k.rubrik.find(x=>x.id===t.dataset.rj);r.jml[+t.dataset.i]=Math.max(0,+t.value||0);save();const tot=r.jml.reduce((a,b)=>a+(+b||0),0);const d1=document.querySelector(`[data-derived="dist_${r.id}"]`),d2=document.querySelector(`[data-derived="distt_${r.id}"]`);if(d1)d1.innerHTML=distHTML(r);if(d2)d2.textContent=distTeks(r,tot);return}
+  if(t.dataset.g){const g=S.guru.find(x=>x.id===t.dataset.g);if(g){g[t.dataset.k]=t.value;save()}return}
+  if(t.dataset.sk){S.sekolah[t.dataset.sk]=t.value;save();$("#hdrSekolah").textContent=(S.sekolah.nama||"")+(S.sekolah.tahun?" · TA "+S.sekolah.tahun:"");return}
+  if(t.dataset.target){S.sekolah.target[t.dataset.target]=t.value;save();return}
+  if(t.dataset.set){SET[t.dataset.set]=t.value.trim();saveSet();return}
+});
+document.addEventListener("change",e=>{
+  const t=e.target,k=cur();
+  if(t.dataset.f&&k&&t.tagName==="SELECT"){setPath(k,t.dataset.f,t.value);save();if(t.dataset.f==="bentuk")render();return}
+  if(t.dataset.arr&&k){const arr=k[t.dataset.arr];let v=t.value;if(t.dataset.arr==="kelas"||t.dataset.arr==="kaih")v=+v;const i=arr.indexOf(v);if(t.checked&&i<0)arr.push(v);if(!t.checked&&i>=0)arr.splice(i,1);
+    if(t.dataset.arr==="kelas")arr.sort();
+    if(t.dataset.arr==="dimensi"&&t.checked&&!k.rubrik.some(r=>r.dimensi===v))k.rubrik.push(rubrikDari(v));
+    save();updateDerived(k);return}
+  if(t.dataset.l&&k&&t.tagName==="SELECT"){const it=k[t.dataset.l].find(x=>x.id===t.dataset.id);if(it){it[t.dataset.k]=t.value;save()}return}
+  if(t.dataset.l==="sesi"&&k&&(t.type==="date"||t.type==="time")){render();const el=document.getElementById(t.id);if(el)el.focus();return}
+  if(t.dataset.sg&&k){const s=k.sesi.find(x=>x.id===t.dataset.sg);const i=s.guru.indexOf(t.value);if(t.checked&&i<0)s.guru.push(t.value);if(!t.checked&&i>=0)s.guru.splice(i,1);save();return}
+  if(t.dataset.filter){UI[t.dataset.filter]=t.value;render();const el=document.getElementById(t.id);if(el)el.focus();return}
+  if(t.dataset.foto&&k&&t.files[0]){kompres(t.files[0]).then(url=>{k.dok.find(x=>x.id===t.dataset.foto).foto=url;save();render();toast("Foto disimpan (dikompres).")}).catch(()=>toast("Foto tidak bisa dibaca."));return}
+  if(t.id==="impor"&&t.files[0]){const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||!Array.isArray(o.kegiatan)||!Array.isArray(o.guru))throw 0;if(!confirm("Ganti semua data dengan isi file ini?"))return;S=o;S.sekolah=S.sekolah||{nama:"",tahun:"",target:{7:"",8:"",9:""}};UI.sel=null;save();render();toast("Data diimpor.")}catch(x){toast("File JSON tidak valid.")}};r.readAsText(t.files[0]);t.value=""}
+});
+document.addEventListener("keydown",e=>{
+  const t=e.target;if(!t.matches('[role="tab"]')||!["ArrowLeft","ArrowRight"].includes(e.key))return;
+  const tabs=[...t.parentElement.querySelectorAll('[role="tab"]')];const i=tabs.indexOf(t);const n=tabs[(i+(e.key==="ArrowRight"?1:-1)+tabs.length)%tabs.length];n.focus();n.click();
+  const again=document.querySelector(`[role="tab"][data-view="${n.dataset.view}"],[role="tab"][data-sub="${n.dataset.sub}"]`);if(again)again.focus();
+});
+function kompres(file){return new Promise((res,rej)=>{const img=new Image();const u=URL.createObjectURL(file);img.onload=()=>{const m=800,sc=Math.min(1,m/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.6))};img.onerror=rej;img.src=u})}
+$("#btnTheme").addEventListener("click",()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");const n=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=n;SET.theme=n;saveSet()});
+
+load();
+if(SET.theme)document.documentElement.dataset.theme=SET.theme;
+render();
+</script>
+</body>
+</html>

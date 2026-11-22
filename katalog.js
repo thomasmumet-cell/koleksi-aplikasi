@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Perencana Kokurikuler",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Merancang kegiatan kokurikuler lintas mapel, Gerakan 7 KAIH, atau cara lain yang terhubung ke 8 dimensi profil lulusan: rancangan identifikasi–desain–memahami/mengaplikasi/merefleksi–asesmen, 6 templat tema, jadwal dengan deteksi bentrok guru/kelas, tim dan beban guru, rubrik 4 tingkat dengan rekap capaian kelas, dokumentasi berfoto, peta sebaran dimensi per kelas, cetak rancangan, serta ekspor CSV/JSON. Usulan Gemini opsional dengan kunci sendiri.",
+    tanggal: "2026-11-23",
+    tautan: "perencana-kokurikuler/",
+    status: "aktif"
+  },
+  {
     nama: "Penjadwal Pelajaran Otomatis",
     kategori: "Sekolah",
     jenis: "HTML",
