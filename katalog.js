@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Kisi-kisi & Bank Soal Sumatif",
+    kategori: "Pembelajaran",
+    jenis: "HTML",
+    deskripsi: "Menyusun kisi-kisi asesmen sumatif per tujuan pembelajaran, level kognitif (pengetahuan-pemahaman, aplikasi, penalaran), dan bentuk soal dengan susun cepat otomatis dan pemeriksaan sebaran; bank soal 6 bentuk (PG, PG kompleks, Benar–Salah, menjodohkan, isian, uraian) dengan cek kaidah penulisan dan ceklis telaah; paket A/B/C acak; kartu soal, naskah, kunci, dan lembar jawaban siap cetak; analisis butir (kesukaran, daya beda, pengecoh, ketercapaian per TP). Draf soal Gemini opsional; data hanya di perangkat.",
+    tanggal: "2026-11-23",
+    tautan: "kisi-kisi-sumatif/",
+    status: "aktif"
+  },
+  {
     nama: "Perencana Belajar TKA Siswa",
     kategori: "Persiapan TKA",
     jenis: "HTML",

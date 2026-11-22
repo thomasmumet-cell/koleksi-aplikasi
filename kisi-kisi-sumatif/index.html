@@ -1,0 +1,1271 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kisi-kisi & Bank Soal Sumatif</title>
+<meta name="description" content="Menyusun kisi-kisi asesmen sumatif per tujuan pembelajaran, level kognitif, dan bentuk soal; bank soal dengan cek kaidah penulisan; paket soal acak; kartu soal, naskah, dan kunci siap cetak; analisis butir sederhana.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f3ea; --bg2:#ece6d6; --card:#fffdf8; --ink:#16233b; --ink2:#4b5870; --line:#d9d0bb; --grid:rgba(22,35,59,.045);
+  --biru:#1f4e8c; --biru-soft:#dde7f5; --merah:#c0392b; --merah-soft:#fbe3df;
+  --ok:#2b7a3d; --ok-soft:#dcf1e1; --warn:#9a5b00; --warn-soft:#fff0c7;
+  --L1:#2f74c0; --L2:#d07a12; --L3:#9b3cb5;
+  --shadow:0 1px 0 rgba(22,35,59,.06), 0 10px 26px -16px rgba(22,35,59,.35);
+  --r:14px; --focus:#1f4e8c; color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161f; --bg2:#19202c; --card:#1c2431; --ink:#edf0f5; --ink2:#aeb8c9; --line:#33405a; --grid:rgba(255,255,255,.035);
+    --biru:#7fb0ef; --biru-soft:#1b2b44; --merah:#ff8b7d; --merah-soft:#3d1f1b;
+    --ok:#74d48a; --ok-soft:#163521; --warn:#ffcf5c; --warn-soft:#3a3016;
+    --L1:#74b0f0; --L2:#f2a94a; --L3:#d18bea;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 12px 28px -16px rgba(0,0,0,.8); --focus:#7fb0ef; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161f; --bg2:#19202c; --card:#1c2431; --ink:#edf0f5; --ink2:#aeb8c9; --line:#33405a; --grid:rgba(255,255,255,.035);
+  --biru:#7fb0ef; --biru-soft:#1b2b44; --merah:#ff8b7d; --merah-soft:#3d1f1b;
+  --ok:#74d48a; --ok-soft:#163521; --warn:#ffcf5c; --warn-soft:#3a3016;
+  --L1:#74b0f0; --L2:#f2a94a; --L3:#d18bea;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 12px 28px -16px rgba(0,0,0,.8); --focus:#7fb0ef; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "IBM Plex Sans",system-ui,sans-serif;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;min-height:100vh}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0 0 .4em}
+h2{font-size:1.45rem} h3{font-size:1.1rem}
+a{color:var(--biru)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.top{background:var(--ink);color:var(--bg);position:relative;overflow:hidden}
+:root[data-theme="dark"] header.top{background:#0a0e15;color:var(--ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) header.top{background:#0a0e15;color:var(--ink)}}
+header.top .wrap{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-top:18px;padding-bottom:14px;flex-wrap:wrap}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:44px;height:44px;border-radius:10px;background:var(--merah);display:grid;place-items:center;color:#fff;flex:none;transform:rotate(-4deg)}
+.brand h1{font-size:1.35rem;margin:0}
+.brand small{display:block;opacity:.75;font-size:.82rem}
+.aktif-sel{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.aktif-sel label{font-size:.8rem;opacity:.8}
+.aktif-sel select{max-width:min(78vw,340px)}
+nav.tabs{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:12px 12px 9px;font:600 .92rem "IBM Plex Sans",sans-serif;color:var(--ink2);cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--merah)}
+nav.tabs button:hover{color:var(--ink)}
+main{padding:20px 0 60px}
+section.tab{display:none} section.tab.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat b{display:block;font:800 1.7rem Fraunces,serif}
+.stat span{font-size:.85rem;color:var(--ink2)}
+label.f{display:block;font-size:.85rem;font-weight:600;color:var(--ink2);margin-bottom:10px}
+label.f > input,label.f > select,label.f > textarea{margin-top:4px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+textarea{min-height:70px;resize:vertical}
+input[type=checkbox],input[type=radio]{width:auto;accent-color:var(--biru)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 13px;border-radius:9px;font:600 .9rem "IBM Plex Sans",sans-serif;cursor:pointer;text-decoration:none;line-height:1.2}
+.btn:hover{border-color:var(--ink2)}
+.btn.utama{background:var(--biru);border-color:var(--biru);color:#fff}
+:root[data-theme="dark"] .btn.utama{color:#0b1220}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.utama{color:#0b1220}}
+.btn.bahaya{color:var(--merah);border-color:var(--merah)}
+.btn.kecil{padding:5px 9px;font-size:.82rem}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.baris{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--ink2)} .kecil{font-size:.85rem}
+.pill{display:inline-block;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--bg2);color:var(--ink2);white-space:nowrap}
+.pill.L1{background:color-mix(in srgb,var(--L1) 18%,transparent);color:var(--L1)}
+.pill.L2{background:color-mix(in srgb,var(--L2) 18%,transparent);color:var(--L2)}
+.pill.L3{background:color-mix(in srgb,var(--L3) 18%,transparent);color:var(--L3)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--merah-soft);color:var(--merah)}
+.pill.contoh{background:var(--warn-soft);color:var(--warn)}
+.banner{border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.banner.contoh{background:var(--warn-soft);color:var(--ink);border:1px dashed var(--warn)}
+.peringatan{list-style:none;padding:0;margin:0}
+.peringatan li{padding:7px 10px;border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:6px;margin-bottom:6px;font-size:.9rem}
+.peringatan li.ok{border-color:var(--ok);background:var(--ok-soft)}
+.peringatan li.bad{border-color:var(--merah);background:var(--merah-soft)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{background:var(--bg2);font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.03em;color:var(--ink2);position:sticky;top:0}
+td input,td select,td textarea{padding:5px 7px;font-size:.88rem}
+td textarea{min-height:52px}
+.kisi td:nth-child(4){min-width:240px}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.alur{counter-reset:l;list-style:none;padding:0;margin:0;display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.alur li{counter-increment:l;padding:10px 12px 10px 46px;position:relative;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.alur li::before{content:counter(l);position:absolute;left:10px;top:10px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:800 .85rem Fraunces,serif;background:var(--bg2);color:var(--ink2)}
+.alur li.sudah::before{content:"✓";background:var(--ok);color:#fff}
+.alur li b{display:block}
+.soal-k{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--card)}
+.soal-k .meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
+.soal-k .isi{font-size:.95rem}
+.soal-k ol{margin:.3em 0 .3em 1.2em;padding:0}
+.soal-k ol li.kunci{font-weight:700;color:var(--ok)}
+.stimulus{background:var(--bg);border-left:3px solid var(--biru);padding:6px 10px;border-radius:6px;margin:4px 0 8px;font-size:.92rem;white-space:normal}
+.stimulus img,.isi img{max-width:100%;height:auto;border-radius:6px}
+.matriks td,.matriks th{text-align:center}
+.matriks td:first-child,.matriks th:first-child{text-align:left}
+.bar{height:10px;border-radius:5px;background:var(--bg2);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);padding:0;width:min(860px,96vw);max-height:92vh;box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(10,14,22,.55)}
+dialog .dh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card);z-index:2}
+dialog .db{padding:16px 18px;overflow:auto}
+dialog .df{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;position:sticky;bottom:0;background:var(--card)}
+.opsi-ed{display:grid;grid-template-columns:auto 1fr auto;gap:6px;align-items:center;margin-bottom:6px}
+.cek-list{list-style:none;padding:0;margin:0;columns:2 260px}
+.cek-list li{break-inside:avoid;margin-bottom:4px;font-size:.88rem}
+#toast{opacity:0;visibility:hidden;position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;transition:transform .25s;z-index:99;max-width:92vw}
+#toast.on{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible}
+#kunciLayar{display:none}
+.rahasia{font-size:.85rem}
+details.panel{border:1px dashed var(--line);border-radius:12px;padding:10px 14px;margin-bottom:14px;background:var(--bg)}
+details.panel summary{cursor:pointer;font-weight:700}
+.pratinjau-wrap{background:var(--bg2);padding:16px;border-radius:12px;overflow-x:auto}
+/* Lembar cetak */
+.lembar{background:#fff;color:#111;max-width:820px;margin:0 auto;padding:28px 34px;font:14px/1.5 "IBM Plex Sans",Arial,sans-serif;box-shadow:var(--shadow)}
+.lembar.lanskap{max-width:1100px}
+.lembar h2,.lembar h3{font-family:"IBM Plex Sans",Arial,sans-serif;color:#111}
+.lembar table{font-size:12.5px} .lembar th{background:#eee;color:#111;position:static;text-transform:none;letter-spacing:0;font-size:12px}
+.lembar th,.lembar td{border:1px solid #444}
+.lembar .kop{text-align:center;border-bottom:3px double #111;padding-bottom:8px;margin-bottom:12px}
+.lembar .kop h2{margin:0;font-size:17px;text-transform:uppercase}
+.lembar .ident td{border:0;padding:2px 6px}
+.lembar .butir{break-inside:avoid;margin:0 0 12px;display:grid;grid-template-columns:28px 1fr;gap:4px}
+.lembar .butir ol{margin:4px 0 0;padding-left:0;list-style:none}
+.lembar .butir ol li{display:grid;grid-template-columns:24px 1fr}
+.lembar .stimulus{background:#f4f4f4;border-left:3px solid #555;color:#111}
+.lembar .kartu{border:1.5px solid #222;margin-bottom:16px;break-inside:avoid}
+.lembar .kartu table td,.lembar .kartu table th{border:1px solid #444}
+.lembar .ttd{display:flex;justify-content:space-between;margin-top:28px;gap:20px}
+.lembar .ttd div{width:45%}
+.lembar .garis{border-bottom:1px dotted #777;height:24px}
+.lembar .bagian{font-weight:700;margin:14px 0 6px;border-bottom:1px solid #999}
+@media print{
+  @page{size:A4;margin:14mm}
+  body{background:#fff}
+  body>*:not(#areaCetak){display:none!important}
+  #areaCetak{display:block!important}
+  #areaCetak .lembar{box-shadow:none;max-width:none;padding:0}
+  .putus{break-after:page}
+}
+#areaCetak{display:none}
+@media (max-width:640px){
+  .card{padding:14px}
+  h2{font-size:1.25rem}
+  .brand h1{font-size:1.15rem}
+  .lembar{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a href="#utama" class="btn kecil" style="position:absolute;left:-999px" onfocus="this.style.left='8px'" onblur="this.style.left='-999px'">Lewati ke isi</a>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h10v16H5V8z"/><path d="M9 4v4H5"/><path d="M9 12l2 2 4-4"/><path d="M9 17h6"/></svg></div>
+      <div><h1>Kisi-kisi & Bank Soal Sumatif</h1><small>Kisi-kisi per TP · bank soal · paket acak · kartu soal · analisis butir</small></div>
+    </div>
+    <div class="aktif-sel">
+      <label for="pilihAsesmen">Asesmen aktif</label>
+      <select id="pilihAsesmen"></select>
+    </div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Menu utama"><div class="wrap" role="tablist" id="tabbar"></div></nav>
+<main id="utama" class="wrap">
+  <div id="bannerContoh"></div>
+  <section class="tab" id="t-beranda" role="tabpanel"></section>
+  <section class="tab" id="t-asesmen" role="tabpanel"></section>
+  <section class="tab" id="t-kisi" role="tabpanel"></section>
+  <section class="tab" id="t-bank" role="tabpanel"></section>
+  <section class="tab" id="t-paket" role="tabpanel"></section>
+  <section class="tab" id="t-analisis" role="tabpanel"></section>
+  <section class="tab" id="t-cetak" role="tabpanel"></section>
+  <section class="tab" id="t-setelan" role="tabpanel"></section>
+  <section class="tab" id="t-sumber" role="tabpanel"></section>
+</main>
+<dialog id="dlg" aria-labelledby="dlgJudul"><div class="dh"><h3 id="dlgJudul" style="margin:0"></h3><button class="btn kecil" data-act="tutup" aria-label="Tutup">✕</button></div><div class="db" id="dlgIsi"></div><div class="df" id="dlgKaki"></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="areaCetak"></div>
+<script>
+"use strict";
+/* ============ Kisi-kisi & Bank Soal Sumatif ============
+   Semua data tersimpan hanya di perangkat (localStorage).
+   Fitur AI (Gemini) opsional memakai kunci API milik pengguna sendiri. */
+var KUNCI_SIMPAN = "kisiSumatif.v1";
+var LEVEL = {
+  L1: { nama: "Pengetahuan & Pemahaman", kko: ["menyebutkan", "mengidentifikasi", "menentukan", "menunjukkan", "menjelaskan", "membedakan"] },
+  L2: { nama: "Aplikasi", kko: ["menghitung", "menerapkan", "menggunakan", "menyelesaikan", "menyajikan", "mendemonstrasikan"] },
+  L3: { nama: "Penalaran", kko: ["menganalisis", "menyimpulkan", "membandingkan", "mengevaluasi", "memecahkan masalah", "merancang", "memprediksi"] }
+};
+var BENTUK = {
+  PG: { nama: "Pilihan ganda", pendek: "PG", skor: 1 },
+  PGK: { nama: "PG kompleks (lebih dari satu jawaban)", pendek: "PG kompleks", skor: 2 },
+  BS: { nama: "PG kompleks kategori (Benar–Salah)", pendek: "Benar–Salah", skor: 2 },
+  JD: { nama: "Menjodohkan", pendek: "Menjodohkan", skor: 2 },
+  IS: { nama: "Isian singkat", pendek: "Isian", skor: 1 },
+  UR: { nama: "Uraian", pendek: "Uraian", skor: 4 }
+};
+var URUT_BENTUK = ["PG", "PGK", "BS", "JD", "IS", "UR"];
+var HURUF = "ABCDEFGH";
+var JENIS_AS = ["Sumatif lingkup materi", "Sumatif akhir semester", "Sumatif akhir tahun", "Sumatif akhir jenjang (latihan)"];
+
+function $(s, el) { return (el || document).querySelector(s); }
+function $$(s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function fmt(s) { // teks sederhana: **tebal**, _miring_, baris baru
+  return esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/(^|\s)_(.+?)_(?=\s|$|[.,;:])/g, "$1<i>$2</i>").replace(/\n/g, "<br>");
+}
+function uid(p) { return (p || "x") + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function salin(o) { return JSON.parse(JSON.stringify(o)); }
+function hariIni() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function tglIndo(s) {
+  if (!s) return "";
+  var b = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+  var p = s.split("-"); return +p[2] + " " + b[+p[1] - 1] + " " + p[0];
+}
+function persen(x) { return isFinite(x) ? Math.round(x * 100) + "%" : "–"; }
+function angka(x, d) { return isFinite(x) ? x.toFixed(d == null ? 2 : d).replace(".", ",") : "–"; }
+function toast(t) { var el = $("#toast"); el.textContent = t; el.classList.add("on"); clearTimeout(toast._t); toast._t = setTimeout(function () { el.classList.remove("on"); }, 2600); }
+function rng(seed) { var a = seed >>> 0; return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function acak(arr, r) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function unduh(nama, isi, tipe) {
+  var blob = new Blob([isi], { type: tipe || "text/plain;charset=utf-8" });
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = nama;
+  document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function csv(rows) { return "﻿" + rows.map(function (r) { return r.map(function (c) { c = String(c == null ? "" : c); return /[";\n,]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(";"); }).join("\r\n"); }
+
+/* ============ Data ============ */
+var S = null;
+function kosong() {
+  return { versi: 1, aktif: null, asesmen: [], soal: [], paket: [], hasil: [],
+    setelan: { tema: "auto", sekolah: "", kota: "", kepsek: "", penyusun: "", apiKey: "", model: "gemini-2.5-flash", kktp: 70 } };
+}
+function muat() {
+  try { var s = localStorage.getItem(KUNCI_SIMPAN); if (s) { var o = JSON.parse(s); if (o && o.asesmen) return o; } } catch (e) { }
+  return null;
+}
+function simpan() {
+  try { localStorage.setItem(KUNCI_SIMPAN, JSON.stringify(S)); }
+  catch (e) { toast("Penyimpanan perangkat penuh atau diblokir. Ekspor cadangan JSON sekarang."); }
+}
+function AS() { return S.asesmen.find(function (a) { return a.id === S.aktif; }) || S.asesmen[0] || null; }
+function soalById(id) { return S.soal.find(function (s) { return s.id === id; }); }
+function tpById(a, id) { return a ? a.tp.find(function (t) { return t.id === id; }) : null; }
+function adaContoh() { return S.asesmen.some(function (a) { return a.contoh; }) || S.soal.some(function (s) { return s.contoh; }) || S.hasil.some(function (h) { return h.contoh; }); }
+
+function dataContoh() {
+  var A = { id: "as-contoh", contoh: true, nama: "Sumatif Lingkup Materi: Pola Bilangan, Garis Lurus, SPLDV (contoh)",
+    mapel: "Matematika", kelas: "VIII", fase: "D", semester: "Ganjil", tahun: "2026/2027", jenis: JENIS_AS[0], durasi: 80, tanggal: "",
+    target: { L1: 40, L2: 35, L3: 25 }, tp: [], kisi: [] };
+  A.tp = [
+    { id: "tp1", kode: "TP 8.1", teks: "Peserta didik dapat mengenali, memprediksi, dan menggeneralisasi pola bilangan dalam bentuk susunan benda dan bilangan.", materi: "Pola bilangan", bobot: 4 },
+    { id: "tp2", kode: "TP 8.2", teks: "Peserta didik dapat menentukan gradien dan persamaan garis lurus serta menafsirkannya dalam konteks.", materi: "Persamaan garis lurus", bobot: 4 },
+    { id: "tp3", kode: "TP 8.3", teks: "Peserta didik dapat membuat dan menyelesaikan sistem persamaan linear dua variabel dari masalah sehari-hari.", materi: "SPLDV", bobot: 4 }
+  ];
+  function so(id, tp, level, bentuk, materi, indikator, extra) {
+    var o = { id: id, contoh: true, sumber: "contoh", mapel: "Matematika", kelas: "VIII", asesmenId: A.id, tpId: tp, level: level, bentuk: bentuk,
+      materi: materi, indikator: indikator, stimulus: "", gambar: "", pokok: "", opsi: [], pernyataan: [], pasangan: [], pengecoh: [], kunciIsian: "", rubrik: "",
+      skor: BENTUK[bentuk].skor, status: "siap", ceklis: {}, stat: null, dibuat: "2026-11-01" };
+    for (var k in extra) o[k] = extra[k];
+    return o;
+  }
+  function op(arr, k) { return arr.map(function (t, i) { return { t: t, k: Array.isArray(k) ? k.indexOf(i) > -1 : i === k }; }); }
+  var soal = [
+    so("sc01", "tp1", "L1", "PG", "Barisan aritmetika", "Disajikan barisan bilangan dengan beda tetap, peserta didik dapat menentukan suku tertentu.",
+      { pokok: "Suku ke-6 dari barisan 3, 7, 11, 15, ... adalah ....", opsi: op(["19", "21", "23", "25"], 2) }),
+    so("sc02", "tp1", "L2", "PG", "Barisan aritmetika dalam konteks", "Disajikan konteks susunan kursi bertambah tetap, peserta didik dapat menghitung banyak benda pada baris tertentu.",
+      { stimulus: "Kursi di aula sekolah disusun bertingkat. Baris pertama berisi 12 kursi dan setiap baris berikutnya bertambah 2 kursi.",
+        pokok: "Banyak kursi pada baris ke-10 adalah ....", opsi: op(["28 kursi", "30 kursi", "32 kursi", "20 kursi"], 1) }),
+    so("sc03", "tp1", "L3", "PGK", "Generalisasi pola susunan batang", "Disajikan pola susunan batang korek, peserta didik dapat menganalisis kebenaran beberapa pernyataan tentang pola tersebut.",
+      { stimulus: "Sebuah pola dibuat dari batang korek api: gambar ke-1 memerlukan 4 batang (satu persegi), gambar ke-2 memerlukan 7 batang (dua persegi berdampingan), gambar ke-3 memerlukan 10 batang, dan seterusnya.",
+        pokok: "Pilihlah **semua** pernyataan yang benar.", opsi: op(["Banyak batang pada gambar ke-n adalah 3n + 1.", "Gambar ke-10 memerlukan 31 batang.", "Dengan 50 batang dapat dibuat gambar ke-17 secara utuh.", "Selisih banyak batang dua gambar berurutan selalu 3."], [0, 1, 3]) }),
+    so("sc04", "tp1", "L1", "BS", "Jenis pola bilangan", "Disajikan beberapa pernyataan tentang barisan bilangan, peserta didik dapat menentukan benar atau salahnya.",
+      { pokok: "Tentukan **Benar** atau **Salah** untuk setiap pernyataan berikut.", pernyataan: [{ t: "Barisan 2, 4, 8, 16, ... adalah barisan aritmetika.", b: false }, { t: "Barisan 1, 4, 9, 16, ... adalah pola bilangan persegi.", b: true }, { t: "Barisan 5, 10, 15, 20, ... memiliki beda 5.", b: true }] }),
+    so("sc05", "tp2", "L1", "PG", "Gradien dua titik", "Diberikan dua titik pada bidang koordinat, peserta didik dapat menentukan gradien garis yang melalui keduanya.",
+      { pokok: "Gradien garis yang melalui titik (1, 2) dan (3, 8) adalah ....", opsi: op(["2", "3", "4", "6"], 1) }),
+    so("sc06", "tp2", "L2", "PG", "Persamaan garis", "Diketahui titik potong sumbu-y dan gradien, peserta didik dapat menentukan persamaan garis.",
+      { pokok: "Persamaan garis yang melalui titik (0, −1) dan bergradien 2 adalah ....", opsi: op(["y = 2x + 1", "y = 2x − 1", "y = −2x − 1", "y = x − 2"], 1) }),
+    so("sc07", "tp2", "L2", "IS", "Garis sejajar", "Diketahui persamaan sebuah garis, peserta didik dapat menentukan persamaan garis lain yang sejajar dan melalui titik tertentu.",
+      { pokok: "Persamaan garis yang sejajar dengan y = 3x + 5 dan melalui titik (0, −2) adalah ....", kunciIsian: "y = 3x − 2 | y=3x-2 | y = 3x - 2", rubrik: "Skor 1 bila persamaan benar (bentuk setara diterima)." }),
+    so("sc08", "tp2", "L3", "UR", "Fungsi linear dalam konteks tarif", "Disajikan konteks tarif taksi, peserta didik dapat memodelkan biaya sebagai persamaan garis, menafsirkan gradien, dan menentukan jarak maksimum.",
+      { stimulus: "Tarif sebuah taksi: Rp7.000 saat pintu dibuka, lalu Rp4.000 untuk setiap kilometer.",
+        pokok: "a. Nyatakan biaya B (rupiah) untuk perjalanan x km sebagai persamaan.\nb. Apa arti gradien persamaan itu dalam konteks ini?\nc. Dina membawa Rp45.000. Berapa kilometer terjauh yang dapat ditempuhnya? Jelaskan.",
+        rubrik: "a. B = 4.000x + 7.000 (skor 1)\nb. Gradien 4.000 = tambahan biaya setiap 1 km (skor 1)\nc. 4.000x + 7.000 ≤ 45.000 → x ≤ 9,5; jadi paling jauh 9,5 km (atau 9 km bila dihitung per km penuh) dengan alasan (skor 2; skor 1 bila hanya hasil tanpa alasan)" }),
+    so("sc09", "tp3", "L1", "JD", "Penyelesaian SPLDV", "Disajikan beberapa SPLDV, peserta didik dapat memasangkan sistem dengan penyelesaiannya.",
+      { pokok: "Pasangkan setiap sistem persamaan dengan penyelesaiannya.", pasangan: [{ kiri: "x + y = 5 dan x − y = 1", kanan: "(3, 2)" }, { kiri: "2x + y = 7 dan x − y = 2", kanan: "(3, 1)" }, { kiri: "x + 2y = 8 dan x = 2", kanan: "(2, 3)" }], pengecoh: ["(1, 3)"] }),
+    so("sc10", "tp3", "L2", "PG", "SPLDV harga barang", "Disajikan konteks harga dua jenis barang, peserta didik dapat menyelesaikan SPLDV untuk menentukan harga satuan.",
+      { stimulus: "Harga 2 buku dan 3 pensil Rp19.000. Harga 1 buku dan 2 pensil Rp11.000.",
+        pokok: "Harga 1 buku adalah ....", opsi: op(["Rp3.000", "Rp4.000", "Rp5.000", "Rp6.000"], 2) }),
+    so("sc11", "tp3", "L3", "PG", "SPLDV untuk mengambil keputusan", "Disajikan konteks harga tiket, peserta didik dapat menyimpulkan kecukupan uang berdasarkan penyelesaian SPLDV.",
+      { stimulus: "Harga tiket pameran: 3 tiket dewasa dan 2 tiket anak Rp80.000; 2 tiket dewasa dan 4 tiket anak juga Rp80.000. Keluarga Pak Darto (2 dewasa, 3 anak) membawa uang Rp70.000.",
+        pokok: "Pernyataan yang tepat tentang uang keluarga Pak Darto adalah ....", opsi: op(["Kurang Rp10.000", "Pas, tanpa kembalian", "Bersisa Rp10.000", "Kurang Rp5.000"], 1) }),
+    so("sc12", "tp3", "L1", "PG", "Penyelesaian SPLDV", "Diberikan SPLDV sederhana, peserta didik dapat menentukan penyelesaiannya.",
+      { pokok: "Penyelesaian dari x + y = 7 dan x − y = 3 adalah ....", opsi: op(["(5, 2)", "(2, 5)", "(4, 3)", "(3, 4)"], 0) })
+  ];
+  soal[2].status = "telaah";
+  var kisi = soal.map(function (s, i) { return { id: "k" + (i + 1), tpId: s.tpId, materi: s.materi, indikator: s.indikator, level: s.level, bentuk: s.bentuk, skor: s.skor, soalId: s.id }; });
+  A.kisi = kisi;
+  return { A: A, soal: soal };
+}
+function pasangContoh() {
+  var d = dataContoh();
+  S.asesmen.unshift(d.A); S.soal = d.soal.concat(S.soal); S.aktif = d.A.id;
+  var p = buatPaket(d.A, { jumlah: 2, acakSoal: true, acakOpsi: true, kelompok: true, variasi: false, seed: 20261123 }, true);
+  p.forEach(function (x) { x.contoh = true; });
+  var h = simulasiHasil(p[0]); h.contoh = true; S.hasil.push(h);
+}
+function hapusContoh() {
+  var asIds = S.asesmen.filter(function (a) { return a.contoh; }).map(function (a) { return a.id; });
+  S.asesmen = S.asesmen.filter(function (a) { return !a.contoh; });
+  S.soal = S.soal.filter(function (s) { return !s.contoh; });
+  S.paket = S.paket.filter(function (p) { return !p.contoh && asIds.indexOf(p.asesmenId) < 0; });
+  S.hasil = S.hasil.filter(function (h) { return !h.contoh; });
+  if (!S.asesmen.length) S.asesmen.push(asesmenBaru());
+  S.aktif = S.asesmen[0].id; simpan();
+}
+function asesmenBaru() {
+  return { id: uid("as"), nama: "Asesmen sumatif baru", mapel: "", kelas: "", fase: "D", semester: "Ganjil", tahun: "", jenis: JENIS_AS[0], durasi: 80, tanggal: "",
+    target: { L1: 30, L2: 45, L3: 25 }, tp: [{ id: uid("tp"), kode: "TP 1", teks: "", materi: "", bobot: 1 }], kisi: [] };
+}
+function soalBaru(dari) {
+  var a = AS();
+  var o = { id: uid("s"), sumber: "manual", mapel: a ? a.mapel : "", kelas: a ? a.kelas : "", asesmenId: a ? a.id : "", tpId: "", level: "L1", bentuk: "PG",
+    materi: "", indikator: "", stimulus: "", gambar: "", pokok: "", opsi: [{ t: "", k: true }, { t: "", k: false }, { t: "", k: false }, { t: "", k: false }],
+    pernyataan: [{ t: "", b: true }, { t: "", b: false }, { t: "", b: true }], pasangan: [{ kiri: "", kanan: "" }, { kiri: "", kanan: "" }, { kiri: "", kanan: "" }], pengecoh: [""],
+    kunciIsian: "", rubrik: "", skor: 1, status: "draf", ceklis: {}, stat: null, dibuat: hariIni() };
+  if (dari) { ["tpId", "level", "bentuk", "materi", "indikator", "skor"].forEach(function (k) { if (dari[k] != null) o[k] = dari[k]; }); }
+  return o;
+}
+
+/* ============ Cek kaidah penulisan soal ============ */
+var NEG = /\b(tidak|bukan|kecuali)\b/gi;
+function cekSoal(s) {
+  var c = [];
+  function bad(m) { c.push({ t: "bad", m: m }); } function warn(m) { c.push({ t: "warn", m: m }); }
+  if (!s.tpId) warn("Belum dikaitkan ke tujuan pembelajaran (TP).");
+  if (!s.indikator.trim()) warn("Indikator soal belum diisi.");
+  if (!s.pokok.trim()) bad("Pokok soal masih kosong.");
+  var pk = s.pokok || "";
+  var negs = pk.match(NEG) || [];
+  negs.forEach(function (w) { if (w !== w.toUpperCase() && pk.indexOf("**" + w) < 0) warn("Kata negatif “" + w + "” sebaiknya ditulis tebal (**" + w + "**) atau KAPITAL."); });
+  if (negs.length > 1) warn("Pokok soal memuat lebih dari satu kata negatif (hindari negatif ganda).");
+  if (s.bentuk === "PG" || s.bentuk === "PGK") {
+    var op = s.opsi.filter(function (o) { return o.t.trim(); });
+    var nk = op.filter(function (o) { return o.k; }).length;
+    if (op.length < s.opsi.length) bad("Ada pilihan jawaban yang kosong.");
+    if (op.length < 3) bad("Pilihan jawaban terlalu sedikit (SMP lazimnya 4 pilihan).");
+    if (s.bentuk === "PG" && nk !== 1) bad("Pilihan ganda harus memiliki tepat satu kunci (sekarang " + nk + ").");
+    if (s.bentuk === "PGK" && (nk < 2 || nk >= op.length)) bad("PG kompleks perlu minimal 2 kunci dan minimal 1 pengecoh.");
+    var teks = op.map(function (o) { return o.t.trim().toLowerCase(); });
+    if (teks.some(function (t, i) { return teks.indexOf(t) !== i; })) bad("Ada pilihan jawaban yang sama persis.");
+    if (teks.some(function (t) { return /semua (jawaban|pilihan)? ?(di atas )?(benar|salah)|semua benar|semua salah/.test(t); })) warn("Hindari pilihan “semua jawaban benar/salah”.");
+    var pj = op.map(function (o) { return o.t.trim().length; });
+    if (pj.length) {
+      var mx = Math.max.apply(null, pj), mn = Math.min.apply(null, pj);
+      if (mn >= 4 && mx / mn > 2.2) warn("Panjang pilihan jawaban tidak relatif sama.");
+      var kunciPj = op.filter(function (o) { return o.k; }).map(function (o) { return o.t.trim().length; });
+      if (s.bentuk === "PG" && kunciPj.length === 1 && kunciPj[0] === mx && pj.filter(function (x) { return x === mx; }).length === 1 && mx > 1.4 * (pj.reduce(function (a, b) { return a + b; }, 0) / pj.length)) warn("Kunci jawaban jauh lebih panjang dari pengecoh (bisa memberi petunjuk).");
+    }
+    var kata = op.map(function (o) { return (o.t.trim().split(/\s+/)[0] || "").toLowerCase(); });
+    if (op.length > 2 && kata[0].length > 3 && kata.every(function (k) { return k === kata[0]; }) && !/^[\d(rp]/i.test(kata[0])) warn("Semua pilihan diawali kata “" + kata[0] + "”; pindahkan ke pokok soal.");
+    var semuaAngka = op.length && op.every(function (o) { return /^[-−]?\s*(rp)?\s*[\d.,]+(\s*\S+)?$/i.test(o.t.trim()); });
+    if (semuaAngka) {
+      var nilai = op.map(function (o) { return parseFloat(o.t.replace(/rp/i, "").replace(/[.\s]/g, "").replace(",", ".").replace("−", "-")); });
+      var urut = nilai.slice().sort(function (a, b) { return a - b; }); var turun = urut.slice().reverse();
+      if (nilai.every(function (v) { return isFinite(v); }) && nilai.join() !== urut.join() && nilai.join() !== turun.join()) warn("Pilihan berupa angka sebaiknya diurutkan dari kecil ke besar (atau sebaliknya).");
+    }
+  }
+  if (s.bentuk === "BS") {
+    var pn = s.pernyataan.filter(function (p) { return p.t.trim(); });
+    if (pn.length < 3) warn("Benar–Salah sebaiknya memuat minimal 3 pernyataan.");
+    if (pn.length && (pn.every(function (p) { return p.b; }) || pn.every(function (p) { return !p.b; }))) warn("Semua pernyataan berkunci sama; campurkan Benar dan Salah.");
+  }
+  if (s.bentuk === "JD") {
+    var ps = s.pasangan.filter(function (p) { return p.kiri.trim() && p.kanan.trim(); });
+    if (ps.length < 3) warn("Menjodohkan sebaiknya memuat minimal 3 pasangan.");
+    if (!s.pengecoh.filter(function (x) { return x.trim(); }).length) warn("Tambahkan minimal satu pilihan pengecoh di lajur kanan agar pasangan terakhir tidak tertebak.");
+  }
+  if (s.bentuk === "IS" && !s.kunciIsian.trim()) bad("Kunci isian belum diisi.");
+  if (s.bentuk === "UR" && !s.rubrik.trim()) bad("Pedoman penskoran (rubrik) uraian belum diisi.");
+  if (s.level === "L3" && !s.stimulus.trim() && !s.gambar) warn("Soal penalaran biasanya memerlukan stimulus (teks, tabel, gambar, kasus).");
+  if (s.stimulus && s.stimulus.length > 1200) warn("Stimulus cukup panjang; pertimbangkan soal grup (satu stimulus untuk beberapa soal).");
+  return c;
+}
+var CEKLIS = {
+  "Materi": ["Soal sesuai indikator dan TP", "Materi sesuai jenjang/kelas", "Pilihan jawaban homogen dan logis", "Hanya ada satu kunci (PG) / kunci lengkap"],
+  "Konstruksi": ["Pokok soal dirumuskan jelas dan tegas", "Pokok soal tidak memberi petunjuk ke kunci", "Gambar/tabel/grafik jelas dan berfungsi", "Soal tidak bergantung pada jawaban soal lain"],
+  "Bahasa": ["Bahasa komunikatif dan sesuai kaidah bahasa Indonesia", "Tidak memakai bahasa setempat/tabu", "Tidak mengulang kata yang sama di setiap pilihan", "Konteks ramah keberagaman dan tidak bias"]
+};
+function nCeklis() { var n = 0; for (var k in CEKLIS) n += CEKLIS[k].length; return n; }
+
+/* ============ Kisi-kisi ============ */
+var MENIT = { PG: 1.5, PGK: 2.5, BS: 2, JD: 2.5, IS: 2, UR: 8 };
+function kandidat(row, kecuali) {
+  return S.soal.filter(function (s) { return s.tpId === row.tpId && s.level === row.level && s.bentuk === row.bentuk && (!kecuali || kecuali.indexOf(s.id) < 0); });
+}
+function soalBaris(row) { var s = row.soalId && soalById(row.soalId); return s || null; }
+function ringkasKisi(a) {
+  var r = { n: a.kisi.length, lv: { L1: 0, L2: 0, L3: 0 }, bt: {}, skor: 0, menit: 0, adaSoal: 0, siap: 0, perTP: {} };
+  a.tp.forEach(function (t) { r.perTP[t.id] = { L1: 0, L2: 0, L3: 0, n: 0 }; });
+  a.kisi.forEach(function (k) {
+    r.lv[k.level]++; r.bt[k.bentuk] = (r.bt[k.bentuk] || 0) + 1; r.skor += +k.skor || 0; r.menit += MENIT[k.bentuk] || 2;
+    var s = soalBaris(k); if (s) { r.adaSoal++; if (s.status === "siap") r.siap++; }
+    if (r.perTP[k.tpId]) { r.perTP[k.tpId][k.level]++; r.perTP[k.tpId].n++; }
+  });
+  return r;
+}
+function cekKisi(a) {
+  var w = []; if (!a) return w;
+  var r = ringkasKisi(a);
+  if (!a.mapel || !a.kelas) w.push({ t: "warn", m: "Identitas asesmen (mapel/kelas) belum lengkap." });
+  a.tp.forEach(function (t) {
+    if (!t.teks.trim()) w.push({ t: "warn", m: t.kode + ": rumusan TP masih kosong." });
+    else if (!r.perTP[t.id].n) w.push({ t: "bad", m: t.kode + " belum terwakili satu soal pun di kisi-kisi." });
+  });
+  if (!r.n) { w.push({ t: "warn", m: "Kisi-kisi masih kosong. Gunakan “Susun cepat” atau tambah baris." }); return w; }
+  ["L1", "L2", "L3"].forEach(function (l) {
+    var pr = r.lv[l] / r.n * 100, tg = (a.target || {})[l] || 0;
+    if (Math.abs(pr - tg) > 10) w.push({ t: "warn", m: "Proporsi " + l + " (" + LEVEL[l].nama + ") " + Math.round(pr) + "%, target " + tg + "%." });
+  });
+  if (!r.lv.L3) w.push({ t: "warn", m: "Belum ada soal level Penalaran (L3). Asesmen sumatif sebaiknya memuat soal bernalar." });
+  var tanpaInd = a.kisi.filter(function (k) { return !k.indikator.trim(); }).length;
+  if (tanpaInd) w.push({ t: "warn", m: tanpaInd + " baris kisi-kisi belum memiliki indikator soal." });
+  var tanpaSoal = a.kisi.filter(function (k) { return !soalBaris(k) && !kandidat(k).length; }).length;
+  if (tanpaSoal) w.push({ t: "warn", m: tanpaSoal + " baris belum memiliki soal di bank (tulis soal atau gunakan AI)." });
+  var ids = a.kisi.map(function (k) { return k.soalId; }).filter(Boolean);
+  if (ids.some(function (x, i) { return ids.indexOf(x) !== i; })) w.push({ t: "bad", m: "Ada soal yang dipakai di dua baris kisi-kisi." });
+  if (a.durasi && r.menit > a.durasi) w.push({ t: "warn", m: "Perkiraan waktu mengerjakan ±" + Math.round(r.menit) + " menit melebihi durasi " + a.durasi + " menit." });
+  if (Object.keys(r.bt).length === 1 && r.n >= 10) w.push({ t: "warn", m: "Semua soal berbentuk sama; variasikan bentuk soal (PG kompleks, isian, uraian)." });
+  if (!w.length) w.push({ t: "ok", m: "Kisi-kisi seimbang: semua TP terwakili, proporsi level sesuai target, waktu cukup." });
+  return w;
+}
+function sisaTerbesar(total, bobot) {
+  var jml = bobot.reduce(function (a, b) { return a + b; }, 0) || 1;
+  var raw = bobot.map(function (b) { return total * b / jml; });
+  var hasil = raw.map(Math.floor); var sisa = total - hasil.reduce(function (a, b) { return a + b; }, 0);
+  raw.map(function (x, i) { return { i: i, f: x - Math.floor(x) }; }).sort(function (a, b) { return b.f - a.f; }).slice(0, sisa).forEach(function (o) { hasil[o.i]++; });
+  return hasil;
+}
+function susunKisi(a, o) {
+  var total = Math.max(1, Math.min(80, +o.total || 20));
+  var tps = a.tp.filter(function (t) { return t.teks.trim() || t.kode; });
+  var perTP = sisaTerbesar(total, tps.map(function (t) { return +t.bobot || 1; }));
+  var rows = [];
+  tps.forEach(function (t, ti) {
+    var lv = sisaTerbesar(perTP[ti], [o.L1, o.L2, o.L3]);
+    ["L1", "L2", "L3"].forEach(function (l, li) { for (var j = 0; j < lv[li]; j++) rows.push({ id: uid("k"), tpId: t.id, materi: t.materi || "", indikator: "", level: l, bentuk: "PG", skor: 1, soalId: "" }); });
+  });
+  var pool = [];
+  ["UR", "PGK", "BS", "JD", "IS"].forEach(function (b) { for (var j = 0; j < (+o.bentuk[b] || 0); j++) pool.push(b); });
+  pool = pool.slice(0, rows.length);
+  var urutLv = rows.slice().sort(function (x, y) { return y.level.localeCompare(x.level); });
+  // sebar bentuk non-PG secara bergilir antar-TP, utamakan level tinggi untuk uraian
+  var dipakai = {};
+  pool.forEach(function (b) {
+    var pilihan = urutLv.filter(function (r) { return !dipakai[r.id]; });
+    if (b === "IS") pilihan = pilihan.slice().reverse();
+    var cnt = {}; rows.forEach(function (r) { if (dipakai[r.id]) cnt[r.tpId] = (cnt[r.tpId] || 0) + 1; });
+    pilihan.sort(function (x, y) { return (cnt[x.tpId] || 0) - (cnt[y.tpId] || 0); });
+    var r = b === "IS" ? pilihan.find(function (x) { return x.level !== "L3"; }) || pilihan[0] : b === "UR" ? pilihan.find(function (x) { return x.level === "L3"; }) || pilihan[0] : pilihan.find(function (x) { return x.level !== "L1"; }) || pilihan[0];
+    if (r) { r.bentuk = b; r.skor = BENTUK[b].skor; dipakai[r.id] = 1; }
+  });
+  rows.forEach(function (r) { var t = tpById(a, r.tpId); r.indikator = saranIndikator(r, t); });
+  return rows;
+}
+function saranIndikator(r, t) {
+  var kko = LEVEL[r.level].kko; var m = (r.materi || (t && t.materi) || "materi").toLowerCase();
+  var awal = r.level === "L1" ? "Diberikan " : r.level === "L2" ? "Disajikan konteks sehari-hari tentang " : "Disajikan data/kasus tentang ";
+  var kata = kko[Math.floor(Math.random() * kko.length)];
+  return awal + m + ", peserta didik dapat " + kata + " " + (r.level === "L3" ? "berdasarkan informasi yang disajikan" : m) + " dengan tepat.";
+}
+
+/* ============ Paket soal ============ */
+var AKHIR = /semua|tidak ada|bukan salah satu|^a, b,|^a dan b/i;
+function urutanOpsi(n, opsi, r, acakIya) {
+  var idx = []; for (var i = 0; i < n; i++) idx.push(i);
+  if (!acakIya) return idx;
+  if (opsi.length && opsi.every(function (o) { return /^[-−]?\s*(rp)?\s*[\d.,]+(\s*\S+)?$/i.test(String(o.t).trim()); })) return idx; // angka tetap berurutan
+  var tetap = idx.filter(function (i) { return AKHIR.test(opsi[i].t); });
+  var bebas = acak(idx.filter(function (i) { return tetap.indexOf(i) < 0; }), r);
+  return bebas.concat(tetap);
+}
+function kananJD(s) { return s.pasangan.map(function (p) { return p.kanan; }).concat(s.pengecoh.filter(function (x) { return x.trim(); })); }
+function buatPaket(a, o, simpanKe) {
+  var hasil = []; var jumlah = Math.max(1, Math.min(8, +o.jumlah || 1)); var dasar = o.seed || Date.now();
+  for (var i = 0; i < jumlah; i++) {
+    var r = rng(dasar + i * 7919); var butir = []; var dipakai = []; var hilang = 0;
+    a.kisi.forEach(function (k) {
+      var s = null;
+      var tetap = soalBaris(k);
+      if (o.variasi) {
+        var cs = kandidat(k, dipakai).filter(function (x) { return x !== tetap; });
+        if (tetap && dipakai.indexOf(tetap.id) < 0) cs.unshift(tetap);
+        s = cs.length ? cs[i % cs.length] : null;
+      } else s = tetap || kandidat(k, dipakai)[0] || null;
+      if (!s || dipakai.indexOf(s.id) > -1) { hilang++; return; }
+      dipakai.push(s.id);
+      var b = { soalId: s.id, kisiId: k.id };
+      if (s.bentuk === "PG" || s.bentuk === "PGK") b.urut = urutanOpsi(s.opsi.length, s.opsi, r, o.acakOpsi);
+      if (s.bentuk === "JD") { var kn = kananJD(s); b.urutKanan = acak(kn.map(function (_, j) { return j; }), r); }
+      butir.push(b);
+    });
+    if (o.acakSoal) butir = acak(butir, r);
+    if (o.kelompok) butir = butir.map(function (b, j) { return { b: b, j: j }; }).sort(function (x, y) {
+      var bx = URUT_BENTUK.indexOf(soalById(x.b.soalId).bentuk), by = URUT_BENTUK.indexOf(soalById(y.b.soalId).bentuk);
+      return bx - by || x.j - y.j;
+    }).map(function (x) { return x.b; });
+    var p = { id: uid("p"), asesmenId: a.id, kode: HURUF[i], dibuat: hariIni(), opsi: { acakSoal: !!o.acakSoal, acakOpsi: !!o.acakOpsi, kelompok: !!o.kelompok, variasi: !!o.variasi }, butir: butir, hilang: hilang };
+    hasil.push(p);
+  }
+  if (simpanKe) { S.paket = S.paket.filter(function (p) { return p.asesmenId !== a.id; }).concat(hasil); }
+  return hasil;
+}
+function kunciButir(b, s) {
+  if (s.bentuk === "PG") { var u = b.urut || s.opsi.map(function (_, i) { return i; }); for (var i = 0; i < u.length; i++) if (s.opsi[u[i]].k) return HURUF[i]; return "?"; }
+  if (s.bentuk === "PGK") { var u2 = b.urut || s.opsi.map(function (_, i) { return i; }); var h = ""; u2.forEach(function (oi, i) { if (s.opsi[oi].k) h += HURUF[i]; }); return h; }
+  if (s.bentuk === "BS") return s.pernyataan.map(function (p) { return p.b ? "B" : "S"; }).join("");
+  if (s.bentuk === "JD") { var uk = b.urutKanan || kananJD(s).map(function (_, j) { return j; }); return s.pasangan.map(function (_, pi) { return HURUF[uk.indexOf(pi)]; }).join(""); }
+  if (s.bentuk === "IS") return (s.kunciIsian.split("|")[0] || "").trim();
+  return "rubrik";
+}
+function kunciTeks(b, s) {
+  var k = kunciButir(b, s);
+  if (s.bentuk === "BS") return k.split("").map(function (x, i) { return (i + 1) + "-" + x; }).join(", ");
+  if (s.bentuk === "JD") return k.split("").map(function (x, i) { return (i + 1) + "–" + x; }).join(", ");
+  if (s.bentuk === "PGK") return k.split("").join(", ");
+  if (s.bentuk === "UR") return "Lihat pedoman penskoran";
+  return k;
+}
+function normal(t) { return String(t || "").toLowerCase().replace(/−/g, "-").replace(/\s+/g, ""); }
+function skorJawab(b, s, jw) {
+  var mx = +s.skor || 1; jw = String(jw == null ? "" : jw).trim();
+  if (!jw) return 0;
+  if (/^\d+([.,]\d+)?$/.test(jw) && s.bentuk !== "IS") return Math.min(mx, parseFloat(jw.replace(",", ".")));
+  var k = kunciButir(b, s); var J = jw.toUpperCase().replace(/[^A-Z]/g, "");
+  if (s.bentuk === "PG") return J === k ? mx : 0;
+  if (s.bentuk === "PGK") return J.split("").sort().join("") === k ? mx : 0;
+  if (s.bentuk === "BS" || s.bentuk === "JD") { var benar = 0; for (var i = 0; i < k.length; i++) if (J[i] === k[i]) benar++; return Math.round(mx * benar / k.length * 100) / 100; }
+  if (s.bentuk === "IS") { var alt = s.kunciIsian.split("|").map(normal); if (/^\d+([.,]\d+)?$/.test(jw) && alt.indexOf(normal(jw)) < 0) return Math.min(mx, parseFloat(jw.replace(",", "."))); return alt.indexOf(normal(jw)) > -1 ? mx : 0; }
+  return 0;
+}
+
+/* ============ Analisis butir ============ */
+function analisis(h) {
+  var p = S.paket.find(function (x) { return x.id === h.paketId; }); if (!p) return null;
+  var a = S.asesmen.find(function (x) { return x.id === p.asesmenId; });
+  var items = p.butir.map(function (b) { return { b: b, s: soalById(b.soalId) }; }).filter(function (x) { return x.s; });
+  var maxTot = items.reduce(function (t, x) { return t + (+x.s.skor || 1); }, 0);
+  var siswa = h.baris.map(function (row) {
+    var sk = items.map(function (x, i) { return skorJawab(x.b, x.s, row.jawab[i]); });
+    var tot = sk.reduce(function (t, v) { return t + v; }, 0);
+    return { kode: row.kode, jawab: row.jawab, skor: sk, total: tot, nilai: maxTot ? tot / maxTot * 100 : 0 };
+  });
+  var n = siswa.length; var urut = siswa.slice().sort(function (x, y) { return y.total - x.total; });
+  var g = Math.max(1, Math.round(n * 0.27)); var atas = urut.slice(0, g), bawah = urut.slice(-g);
+  var hasil = items.map(function (x, i) {
+    var mx = +x.s.skor || 1;
+    var rata = n ? siswa.reduce(function (t, si) { return t + si.skor[i]; }, 0) / n / mx : NaN;
+    var pa = atas.reduce(function (t, si) { return t + si.skor[i]; }, 0) / g / mx, pb = bawah.reduce(function (t, si) { return t + si.skor[i]; }, 0) / g / mx;
+    var d = n >= 4 ? pa - pb : NaN; var pil = null;
+    if (x.s.bentuk === "PG") {
+      pil = {}; var u = x.b.urut || x.s.opsi.map(function (_, j) { return j; });
+      u.forEach(function (_, j) { pil[HURUF[j]] = 0; });
+      siswa.forEach(function (si) { var j = String(si.jawab[i] || "").trim().toUpperCase(); if (pil[j] != null) pil[j]++; });
+    }
+    return { no: i + 1, s: x.s, b: x.b, p: rata, d: d, pil: pil, kunci: kunciButir(x.b, x.s) };
+  });
+  var perTP = {};
+  hasil.forEach(function (x, i) {
+    var t = x.s.tpId || "-"; perTP[t] = perTP[t] || { dapat: 0, maks: 0 };
+    siswa.forEach(function (si) { perTP[t].dapat += si.skor[i]; perTP[t].maks += +x.s.skor || 1; });
+  });
+  var kktp = +h.kktp || 70;
+  return { paket: p, a: a, items: hasil, siswa: siswa, maxTot: maxTot, perTP: perTP, kktp: kktp,
+    rata: n ? siswa.reduce(function (t, x) { return t + x.nilai; }, 0) / n : NaN, tuntas: siswa.filter(function (x) { return x.nilai >= kktp; }).length };
+}
+function urutTP(A) { var ks = Object.keys(A.perTP); var o = A.a ? A.a.tp.map(function (t) { return t.id; }).filter(function (id) { return ks.indexOf(id) > -1; }) : []; return o.concat(ks.filter(function (id) { return o.indexOf(id) < 0; })); }
+function katP(p) { return !isFinite(p) ? "–" : p < 0.3 ? "Sukar" : p <= 0.7 ? "Sedang" : "Mudah"; }
+function katD(d) { return !isFinite(d) ? "–" : d < 0 ? "Negatif" : d < 0.2 ? "Jelek" : d < 0.3 ? "Cukup" : d < 0.4 ? "Baik" : "Sangat baik"; }
+function saranButir(x, n) {
+  if (!isFinite(x.d)) return { t: "warn", m: "Data terlalu sedikit" };
+  if (x.d < 0) return { t: "bad", m: "Periksa kunci jawaban; siswa berkemampuan rendah lebih banyak benar" };
+  if (x.p > 0.9 || x.p < 0.15 || x.d < 0.2) return { t: "bad", m: x.p > 0.9 ? "Terlalu mudah; revisi agar membedakan" : x.p < 0.15 ? "Terlalu sukar; cek materi/kunci, beri penguatan" : "Daya beda rendah; revisi pokok soal/pengecoh" };
+  if (x.d >= 0.3) return { t: "ok", m: "Baik; simpan di bank" };
+  return { t: "warn", m: "Cukup; telaah ulang pengecoh" };
+}
+function simulasiHasil(p) {
+  var r = rng(77); var items = p.butir.map(function (b) { return { b: b, s: soalById(b.soalId) }; });
+  var baris = [];
+  for (var n = 1; n <= 28; n++) {
+    var th = (r() + r() + r() - 1.5) * 2.2;
+    var jw = items.map(function (x, i) {
+      var bb = ({ L1: -1.1, L2: 0, L3: 1 })[x.s.level] + (((i * 37) % 7) - 3) / 10;
+      if (x.s.id === "sc03") bb += 0.6;
+      var P = 1 / (1 + Math.exp(-1.5 * (th - bb))); var benar = r() < P; var k = kunciButir(x.b, x.s);
+      if (x.s.bentuk === "PG") { if (benar) return k; var sal = "ABCD".replace(k, ""); return sal[r() < 0.55 ? 0 : r() < 0.7 ? 1 : 2]; }
+      if (x.s.bentuk === "PGK") return benar ? k : (r() < 0.5 ? k.slice(0, 2) : k.slice(0, 1) + "C");
+      if (x.s.bentuk === "BS" || x.s.bentuk === "JD") return k.split("").map(function (c) { return r() < P + 0.15 ? c : (x.s.bentuk === "BS" ? (c === "B" ? "S" : "B") : "D"); }).join("");
+      if (x.s.bentuk === "IS") return benar ? k : "y = 3x + 2";
+      return String(Math.max(0, Math.min(+x.s.skor, Math.round(P * x.s.skor + (r() - 0.5)))));
+    });
+    baris.push({ kode: "Contoh-" + String(n).padStart(2, "0"), jawab: jw });
+  }
+  return { id: uid("h"), paketId: p.id, tgl: hariIni(), kktp: 70, baris: baris };
+}
+
+/* ============ Tampilan soal ============ */
+function htmlSoal(s, o) {
+  o = o || {}; var b = o.b || {}; var h = "";
+  if (s.stimulus || s.gambar) h += '<div class="stimulus">' + (s.stimulus ? fmt(s.stimulus) : "") + (s.gambar ? '<div><img src="' + esc(s.gambar) + '" alt="Gambar stimulus soal"></div>' : "") + "</div>";
+  h += "<div>" + fmt(s.pokok || "(pokok soal belum diisi)") + "</div>";
+  if (s.bentuk === "PG" || s.bentuk === "PGK") {
+    var u = b.urut || s.opsi.map(function (_, i) { return i; });
+    h += "<ol>" + u.map(function (oi, i) { var op = s.opsi[oi] || { t: "" };
+      return '<li' + (o.kunci && op.k ? ' class="kunci"' : "") + '><span>' + HURUF[i] + '.</span> <span>' + fmt(op.t) + (o.kunci && op.k ? " ✓" : "") + "</span></li>"; }).join("") + "</ol>";
+    if (s.bentuk === "PGK" && o.naskah) h += '<div class="kecil"><i>Jawaban benar lebih dari satu.</i></div>';
+  }
+  if (s.bentuk === "BS") {
+    h += '<table style="margin-top:6px"><thead><tr><th>No</th><th>Pernyataan</th><th>Benar</th><th>Salah</th></tr></thead><tbody>' + s.pernyataan.map(function (p, i) {
+      return "<tr><td>" + (i + 1) + "</td><td>" + fmt(p.t) + '</td><td style="text-align:center">' + (o.kunci && p.b ? "✓" : "☐") + '</td><td style="text-align:center">' + (o.kunci && !p.b ? "✓" : "☐") + "</td></tr>";
+    }).join("") + "</tbody></table>";
+  }
+  if (s.bentuk === "JD") {
+    var kn = kananJD(s); var uk = b.urutKanan || kn.map(function (_, j) { return j; });
+    h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px"><div>' + s.pasangan.map(function (p, i) { return "<div>" + (i + 1) + ". " + fmt(p.kiri) + " ……</div>"; }).join("") +
+      "</div><div>" + uk.map(function (ki, j) { return "<div>" + HURUF[j] + ". " + fmt(kn[ki]) + "</div>"; }).join("") + "</div></div>";
+    if (o.kunci) h += '<div class="kecil"><b>Kunci:</b> ' + esc(kunciTeks(b, s)) + "</div>";
+  }
+  if (s.bentuk === "IS") h += o.kunci ? '<div class="kecil"><b>Kunci:</b> ' + esc(s.kunciIsian.split("|").join(" / ")) + "</div>" : '<div style="margin-top:6px">Jawaban: ………………………………………</div>';
+  if (s.bentuk === "UR") h += o.kunci ? '<div class="kecil"><b>Pedoman penskoran:</b><br>' + fmt(s.rubrik) + "</div>" : '<div class="garis"></div><div class="garis"></div><div class="garis"></div>';
+  return h;
+}
+function namaTP(a, id) { var t = tpById(a, id) || S.asesmen.map(function (x) { return tpById(x, id); }).find(Boolean); return t ? t.kode : "–"; }
+
+/* ============ Navigasi ============ */
+var TABS = [["beranda", "Beranda"], ["asesmen", "Asesmen & TP"], ["kisi", "Kisi-kisi"], ["bank", "Bank soal"], ["paket", "Paket acak"], ["analisis", "Analisis butir"], ["cetak", "Cetak"], ["setelan", "Pengaturan & data"], ["sumber", "Dasar & sumber"]];
+var TAB = "beranda";
+function bukaTab(t) {
+  TAB = t;
+  $$("#tabbar button").forEach(function (b) { b.setAttribute("aria-selected", b.dataset.tab === t ? "true" : "false"); b.tabIndex = b.dataset.tab === t ? 0 : -1; });
+  $$("section.tab").forEach(function (s) { s.classList.toggle("on", s.id === "t-" + t); });
+  render();
+}
+function render() {
+  var sel = $("#pilihAsesmen"); var a = AS(); if (a) S.aktif = a.id;
+  sel.innerHTML = S.asesmen.map(function (x) { return '<option value="' + x.id + '"' + (a && x.id === a.id ? " selected" : "") + ">" + esc(x.nama || "(tanpa nama)") + (x.kelas ? " · " + esc(x.kelas) : "") + "</option>"; }).join("");
+  $("#bannerContoh").innerHTML = adaContoh() ? '<div class="banner contoh"><span><span class="pill contoh">contoh</span> Aplikasi berisi data <b>contoh</b> (Matematika kelas VIII, siswa fiktif). Pelajari alurnya, lalu hapus bila sudah siap memakai data sendiri.</span><button class="btn kecil" data-act="hapus-contoh">Hapus data contoh</button></div>' : "";
+  var f = { beranda: rBeranda, asesmen: rAsesmen, kisi: rKisi, bank: rBank, paket: rPaket, analisis: rAnalisis, cetak: rCetak, setelan: rSetelan, sumber: rSumber }[TAB];
+  f($("#t-" + TAB), a);
+}
+function listPeringatan(w) { return '<ul class="peringatan">' + w.map(function (x) { return '<li class="' + (x.t === "warn" ? "" : x.t) + '">' + esc(x.m) + "</li>"; }).join("") + "</ul>"; }
+function barLevel(lv, n) {
+  if (!n) return '<div class="bar"></div>';
+  return '<div class="bar" role="img" aria-label="Sebaran level: L1 ' + lv.L1 + ", L2 " + lv.L2 + ", L3 " + lv.L3 + '">' + ["L1", "L2", "L3"].map(function (l) { return '<i style="width:' + (lv[l] / n * 100) + "%;background:var(--" + l + ')"></i>'; }).join("") + "</div>";
+}
+
+/* ============ Beranda ============ */
+function rBeranda(el, a) {
+  var r = a ? ringkasKisi(a) : null;
+  var bank = S.soal.length, siap = S.soal.filter(function (s) { return s.status === "siap"; }).length;
+  var pk = a ? S.paket.filter(function (p) { return p.asesmenId === a.id; }) : [];
+  var hs = S.hasil.filter(function (h) { return pk.some(function (p) { return p.id === h.paketId; }); });
+  var langkah = [
+    ["Identitas & TP", "Isi mapel, kelas, dan tujuan pembelajaran yang diukur.", a && a.mapel && a.tp.some(function (t) { return t.teks.trim(); })],
+    ["Kisi-kisi", "Sebar soal per TP, level kognitif, dan bentuk soal.", r && r.n > 0],
+    ["Bank soal", "Tulis soal untuk setiap baris kisi-kisi.", r && r.n > 0 && r.adaSoal === r.n],
+    ["Telaah", "Cek kaidah otomatis + ceklis materi, konstruksi, bahasa.", r && r.n > 0 && r.siap === r.n],
+    ["Paket acak", "Buat paket A/B/C dengan urutan soal dan pilihan diacak.", pk.length > 0],
+    ["Cetak", "Kisi-kisi, kartu soal, naskah, kunci, lembar jawaban.", false],
+    ["Analisis butir", "Tempel jawaban siswa; lihat kesukaran dan daya beda.", hs.length > 0]
+  ];
+  el.innerHTML = '<div class="card"><h2>' + esc(a ? a.nama : "Belum ada asesmen") + '</h2><p class="muted">' + (a ? esc([a.mapel, a.kelas && "Kelas " + a.kelas, a.fase && "Fase " + a.fase, a.semester, a.tahun, a.jenis].filter(Boolean).join(" · ")) : "") + "</p>" +
+    '<div class="grid g4"><div class="stat"><b>' + (a ? a.tp.length : 0) + '</b><span>tujuan pembelajaran</span></div><div class="stat"><b>' + (r ? r.n : 0) + '</b><span>baris kisi-kisi</span></div><div class="stat"><b>' + (r ? r.adaSoal : 0) + "/" + (r ? r.n : 0) + '</b><span>baris sudah bersoal</span></div><div class="stat"><b>' + siap + "/" + bank + '</b><span>soal bank siap pakai</span></div><div class="stat"><b>' + pk.length + '</b><span>paket soal</span></div><div class="stat"><b>' + (r ? r.skor : 0) + '</b><span>skor maksimum</span></div></div>' +
+    (r && r.n ? '<div style="margin-top:14px"><div class="baris kecil" style="justify-content:space-between"><span><span class="pill L1">L1 ' + r.lv.L1 + '</span> <span class="pill L2">L2 ' + r.lv.L2 + '</span> <span class="pill L3">L3 ' + r.lv.L3 + '</span></span><span class="muted">target ' + a.target.L1 + "/" + a.target.L2 + "/" + a.target.L3 + "%</span></div>" + barLevel(r.lv, r.n) + "</div>" : "") +
+    '</div><div class="card"><h3>Alur kerja</h3><ol class="alur">' + langkah.map(function (l) { return '<li class="' + (l[2] ? "sudah" : "") + '"><b>' + l[0] + '</b><span class="kecil muted">' + l[1] + "</span></li>"; }).join("") + "</ol></div>" +
+    '<div class="card"><h3>Pemeriksaan kisi-kisi</h3>' + listPeringatan(cekKisi(a)) + '<div class="baris" style="margin-top:10px"><button class="btn utama" data-tab-go="kisi">Buka kisi-kisi</button><button class="btn" data-tab-go="bank">Bank soal</button><button class="btn" data-tab-go="paket">Buat paket</button></div></div>' +
+    '<div class="card rahasia"><b>Privasi.</b> Semua data tersimpan hanya di perangkat ini (penyimpanan peramban), tidak dikirim ke server. Fitur AI hanya berjalan bila Anda mengisi kunci API Gemini sendiri; yang dikirim hanya TP, indikator, dan materi. Pada analisis butir gunakan <b>kode/nomor absen</b>, bukan nama siswa. Ekspor cadangan JSON secara berkala.</div>';
+}
+
+/* ============ Asesmen & TP ============ */
+function rAsesmen(el, a) {
+  if (!a) { el.innerHTML = '<div class="card"><button class="btn utama" data-act="as-baru">+ Asesmen baru</button></div>'; return; }
+  function inp(k, lbl, type, extra) { return '<label class="f">' + lbl + '<input data-af="' + k + '" type="' + (type || "text") + '" value="' + esc(a[k]) + '"' + (extra || "") + "></label>"; }
+  el.innerHTML = '<div class="card"><div class="baris" style="justify-content:space-between"><h2 style="margin:0">Identitas asesmen</h2><div class="baris"><button class="btn" data-act="as-baru">+ Asesmen baru</button><button class="btn" data-act="as-dup">Duplikat</button><button class="btn bahaya" data-act="as-hapus">Hapus</button></div></div>' +
+    '<div class="grid g3" style="margin-top:12px">' + inp("nama", "Nama asesmen") +
+    '<label class="f">Jenis<select data-af="jenis">' + JENIS_AS.map(function (j) { return "<option" + (a.jenis === j ? " selected" : "") + ">" + j + "</option>"; }).join("") + "</select></label>" +
+    inp("mapel", "Mata pelajaran") + inp("kelas", "Kelas") + inp("fase", "Fase") +
+    '<label class="f">Semester<select data-af="semester">' + ["Ganjil", "Genap"].map(function (j) { return "<option" + (a.semester === j ? " selected" : "") + ">" + j + "</option>"; }).join("") + "</select></label>" +
+    inp("tahun", "Tahun ajaran", "text", ' placeholder="2026/2027"') + inp("tanggal", "Tanggal pelaksanaan", "date") + inp("durasi", "Durasi (menit)", "number", ' min="10" max="300"') +
+    "</div><fieldset style=\"border:1px solid var(--line);border-radius:10px;padding:10px 12px\"><legend class=\"kecil\"><b>Target proporsi level kognitif (%)</b></legend><div class=\"grid g3\">" +
+    ["L1", "L2", "L3"].map(function (l) { return '<label class="f">' + l + " · " + LEVEL[l].nama + '<input type="number" min="0" max="100" data-target="' + l + '" value="' + a.target[l] + '"></label>'; }).join("") +
+    '</div><p class="kecil muted" style="margin:0">Level mengikuti kerangka asesmen nasional: L1 mengetahui/memahami fakta, konsep, prosedur; L2 menerapkan konsep pada situasi yang dikenal; L3 bernalar pada situasi baru (menganalisis, menyimpulkan, mengevaluasi).</p></fieldset></div>' +
+    '<div class="card"><div class="baris" style="justify-content:space-between"><h2 style="margin:0">Tujuan pembelajaran yang diukur</h2><button class="btn" data-act="tp-tambah">+ Tambah TP</button></div><p class="kecil muted">Asesmen sumatif mengukur ketercapaian TP pada akhir lingkup materi atau semester. Bobot = perkiraan banyak soal relatif (dipakai “Susun cepat”).</p>' +
+    '<div class="tbl-wrap"><table><thead><tr><th style="width:110px">Kode</th><th>Rumusan TP</th><th style="width:190px">Lingkup materi</th><th style="width:80px">Bobot</th><th style="width:50px"></th></tr></thead><tbody>' +
+    a.tp.map(function (t) { return '<tr><td><input data-tp="' + t.id + '" data-k="kode" value="' + esc(t.kode) + '" aria-label="Kode TP"></td><td><textarea data-tp="' + t.id + '" data-k="teks" aria-label="Rumusan TP">' + esc(t.teks) + '</textarea></td><td><input data-tp="' + t.id + '" data-k="materi" value="' + esc(t.materi) + '" aria-label="Lingkup materi"></td><td><input type="number" min="1" max="20" data-tp="' + t.id + '" data-k="bobot" value="' + esc(t.bobot) + '" aria-label="Bobot"></td><td><button class="btn kecil bahaya" data-act="tp-hapus" data-id="' + t.id + '" aria-label="Hapus TP ' + esc(t.kode) + '">✕</button></td></tr>'; }).join("") +
+    "</tbody></table></div></div>";
+}
+
+/* ============ Kisi-kisi ============ */
+function rKisi(el, a) {
+  if (!a) { el.innerHTML = '<div class="card">Buat asesmen dulu.</div>'; return; }
+  var ai = !!S.setelan.apiKey;
+  el.innerHTML = '<div class="card"><div class="baris" style="justify-content:space-between"><h2 style="margin:0">Kisi-kisi</h2><div class="baris"><button class="btn" data-act="kisi-tambah">+ Baris</button><button class="btn" data-act="kisi-csv">Ekspor CSV</button><button class="btn utama" data-act="cetak-kisi">Cetak kisi-kisi</button></div></div>' +
+    '<details class="panel" style="margin-top:12px"><summary>Susun cepat otomatis</summary><p class="kecil muted">Membagi jumlah soal ke setiap TP sesuai bobot, lalu ke level kognitif sesuai target, dan menyebar bentuk soal (uraian diutamakan untuk penalaran). Indikator diisi rumusan awal yang perlu Anda sunting.</p><div class="grid g4">' +
+    '<label class="f">Jumlah soal<input id="sc-total" type="number" min="1" max="80" value="' + (a.kisi.length || 20) + '"></label>' +
+    ["L1", "L2", "L3"].map(function (l) { return '<label class="f">% ' + l + '<input id="sc-' + l + '" type="number" min="0" max="100" value="' + a.target[l] + '"></label>'; }).join("") +
+    ["PGK", "BS", "JD", "IS", "UR"].map(function (b) { return '<label class="f">' + BENTUK[b].nama + '<input id="sc-b-' + b + '" type="number" min="0" max="40" value="' + ({ PGK: 2, BS: 2, JD: 1, IS: 2, UR: 2 })[b] + '"></label>'; }).join("") +
+    '</div><p class="kecil muted">Sisa soal menjadi pilihan ganda.</p><label class="kecil"><input type="checkbox" id="sc-ganti" checked> Ganti kisi-kisi yang ada</label> <button class="btn utama kecil" data-act="kisi-susun">Susun</button></details>' +
+    '<div class="tbl-wrap"><table class="kisi"><thead><tr><th>No</th><th>TP</th><th>Materi</th><th>Indikator soal</th><th>Level</th><th>Bentuk</th><th>Skor</th><th>Soal</th><th></th></tr></thead><tbody id="kisiBody"></tbody></table></div></div>' +
+    '<div class="card" id="kisiRingkas"></div>';
+  rKisiBody(a, ai); rKisiRingkas(a);
+}
+function rKisiBody(a, ai) {
+  $("#kisiBody").innerHTML = a.kisi.map(function (k, i) {
+    var s = soalBaris(k); var cs = kandidat(k).filter(function (x) { return !s || x.id !== s.id; });
+    var sel = function (key, obj, val) { return '<select data-kisi="' + k.id + '" data-k="' + key + '" aria-label="' + key + '" style="min-width:' + (key === "level" ? 120 : 130) + 'px">' + Object.keys(obj).map(function (x) { return '<option value="' + x + '"' + (val === x ? " selected" : "") + ">" + (key === "level" ? x + " " + obj[x].nama.split(" ")[0] : obj[x].pendek) + "</option>"; }).join("") + "</select>"; };
+    var pk0 = (s && s.pokok || "").replace(/\*\*/g, ""); var soalSel = s ? '<div class="kecil">✓ ' + esc(pk0.slice(0, 60)) + (pk0.length > 60 ? "…" : "") + '</div><div class="baris" style="margin-top:4px"><span class="pill ' + (s.status === "siap" ? "ok" : "warn") + '">' + s.status + '</span><button class="btn kecil" data-act="soal-ubah" data-id="' + s.id + '">Ubah</button><button class="btn kecil" data-act="kisi-lepas" data-id="' + k.id + '">Lepas</button></div>'
+      : '<div class="baris">' + (cs.length ? '<button class="btn kecil" data-act="kisi-pilih" data-id="' + k.id + '">Pilih (' + cs.length + ")</button>" : "") + '<button class="btn kecil" data-act="kisi-tulis" data-id="' + k.id + '">Tulis</button>' + (ai ? '<button class="btn kecil" data-act="kisi-ai" data-id="' + k.id + '">AI</button>' : "") + "</div>";
+    return "<tr><td class=\"num\">" + (i + 1) + '</td><td><select data-kisi="' + k.id + '" data-k="tpId" aria-label="TP" style="min-width:96px">' + a.tp.map(function (t) { return '<option value="' + t.id + '"' + (t.id === k.tpId ? " selected" : "") + ">" + esc(t.kode) + "</option>"; }).join("") + "</select></td>" +
+      '<td><input data-kisi="' + k.id + '" data-k="materi" value="' + esc(k.materi) + '" aria-label="Materi" style="min-width:130px"></td>' +
+      '<td><textarea data-kisi="' + k.id + '" data-k="indikator" aria-label="Indikator soal">' + esc(k.indikator) + '</textarea><button class="btn kecil" data-act="kisi-saran" data-id="' + k.id + '" title="Rumuskan ulang indikator dengan kata kerja operasional sesuai level">Saran indikator</button></td>' +
+      "<td>" + sel("level", LEVEL, k.level) + "</td><td>" + sel("bentuk", BENTUK, k.bentuk) + '</td><td><input type="number" min="0" max="50" step="0.5" data-kisi="' + k.id + '" data-k="skor" value="' + k.skor + '" style="width:64px" aria-label="Skor"></td>' +
+      '<td style="min-width:170px">' + soalSel + '</td><td><div class="baris" style="flex-wrap:nowrap"><button class="btn kecil" data-act="kisi-naik" data-id="' + k.id + '" aria-label="Naikkan baris ' + (i + 1) + '">↑</button><button class="btn kecil" data-act="kisi-turun" data-id="' + k.id + '" aria-label="Turunkan baris ' + (i + 1) + '">↓</button><button class="btn kecil bahaya" data-act="kisi-hapus" data-id="' + k.id + '" aria-label="Hapus baris ' + (i + 1) + '">✕</button></div></td></tr>';
+  }).join("") || '<tr><td colspan="9" class="muted">Belum ada baris. Pakai “Susun cepat otomatis” atau “+ Baris”.</td></tr>';
+}
+function rKisiRingkas(a) {
+  var r = ringkasKisi(a); var el = $("#kisiRingkas"); if (!el) return;
+  el.innerHTML = '<h3>Ringkasan sebaran</h3><div class="grid g2"><div><div class="tbl-wrap"><table class="matriks"><thead><tr><th>TP</th><th>L1</th><th>L2</th><th>L3</th><th>Jumlah</th></tr></thead><tbody>' +
+    a.tp.map(function (t) { var x = r.perTP[t.id]; return "<tr><td>" + esc(t.kode) + '</td><td>' + x.L1 + "</td><td>" + x.L2 + "</td><td>" + x.L3 + "</td><td><b>" + x.n + "</b></td></tr>"; }).join("") +
+    "<tr><th>Total</th><th>" + r.lv.L1 + "</th><th>" + r.lv.L2 + "</th><th>" + r.lv.L3 + "</th><th>" + r.n + "</th></tr><tr><td>Proporsi</td><td>" + persen(r.lv.L1 / r.n) + "</td><td>" + persen(r.lv.L2 / r.n) + "</td><td>" + persen(r.lv.L3 / r.n) + "</td><td></td></tr></tbody></table></div>" +
+    '<div style="margin-top:10px">' + barLevel(r.lv, r.n) + '</div></div><div><p class="kecil" style="margin-top:0">' + Object.keys(r.bt).map(function (b) { return '<span class="pill">' + esc(BENTUK[b].nama) + ": " + r.bt[b] + "</span>"; }).join(" ") +
+    '</p><p class="kecil">Skor maksimum <b>' + r.skor + "</b> · perkiraan waktu <b>±" + Math.round(r.menit) + " menit</b> dari " + (a.durasi || "–") + " menit</p>" + listPeringatan(cekKisi(a)) + "</div></div>";
+}
+
+/* ============ Bank soal ============ */
+var F = { q: "", as: "aktif", tp: "", lv: "", bt: "", st: "" };
+function rBank(el, a) {
+  var tps = a ? a.tp : [];
+  function opt(arr, v) { return arr.map(function (x) { return '<option value="' + esc(x[0]) + '"' + (x[0] === v ? " selected" : "") + ">" + esc(x[1]) + "</option>"; }).join(""); }
+  el.innerHTML = '<div class="card"><div class="baris" style="justify-content:space-between"><h2 style="margin:0">Bank soal</h2><div class="baris"><button class="btn utama" data-act="soal-baru">+ Soal baru</button><button class="btn" data-act="bank-csv">Ekspor CSV</button><button class="btn" data-act="cetak-kartu-bank">Kartu soal (hasil saring)</button></div></div>' +
+    '<div class="grid g3" style="margin-top:12px"><label class="f">Cari<input id="fq" type="search" value="' + esc(F.q) + '" placeholder="pokok soal, materi, indikator"></label>' +
+    '<label class="f">Cakupan<select id="fas">' + opt([["aktif", "Asesmen aktif"], ["semua", "Semua soal di bank"]], F.as) + "</select></label>" +
+    '<label class="f">TP<select id="ftp">' + opt([["", "Semua TP"]].concat(tps.map(function (t) { return [t.id, t.kode]; })), F.tp) + "</select></label>" +
+    '<label class="f">Level<select id="flv">' + opt([["", "Semua level"]].concat(Object.keys(LEVEL).map(function (l) { return [l, l + " " + LEVEL[l].nama]; })), F.lv) + "</select></label>" +
+    '<label class="f">Bentuk<select id="fbt">' + opt([["", "Semua bentuk"]].concat(URUT_BENTUK.map(function (b) { return [b, BENTUK[b].nama]; })), F.bt) + "</select></label>" +
+    '<label class="f">Status<select id="fst">' + opt([["", "Semua status"], ["draf", "Draf"], ["telaah", "Sedang ditelaah"], ["siap", "Siap pakai"]], F.st) + "</select></label></div></div><div id=\"bankList\"></div>";
+  rBankList(a);
+}
+function soalTersaring(a) {
+  var q = F.q.toLowerCase();
+  return S.soal.filter(function (s) {
+    if (F.as === "aktif" && a && s.asesmenId !== a.id && !a.tp.some(function (t) { return t.id === s.tpId; })) return false;
+    if (F.tp && s.tpId !== F.tp) return false; if (F.lv && s.level !== F.lv) return false; if (F.bt && s.bentuk !== F.bt) return false; if (F.st && s.status !== F.st) return false;
+    if (q && [s.pokok, s.materi, s.indikator, s.stimulus, s.mapel].join(" ").toLowerCase().indexOf(q) < 0) return false;
+    return true;
+  });
+}
+function rBankList(a) {
+  var list = soalTersaring(a); var el = $("#bankList"); if (!el) return;
+  el.innerHTML = '<p class="kecil muted">' + list.length + " soal ditampilkan dari " + S.soal.length + " di bank.</p>" + list.map(function (s) {
+    var c = cekSoal(s); var nb = c.filter(function (x) { return x.t === "bad"; }).length;
+    var dipakai = a && a.kisi.some(function (k) { return k.soalId === s.id; });
+    return '<article class="soal-k"><div class="meta"><span class="pill">' + esc(namaTP(a, s.tpId)) + '</span><span class="pill ' + s.level + '">' + s.level + " " + LEVEL[s.level].nama + '</span><span class="pill">' + esc(BENTUK[s.bentuk].nama) + '</span><span class="pill">skor ' + s.skor + '</span><span class="pill ' + (s.status === "siap" ? "ok" : "warn") + '">' + s.status + "</span>" +
+      (s.sumber === "AI" ? '<span class="pill warn">draf AI</span>' : "") + (s.contoh ? '<span class="pill contoh">contoh</span>' : "") + (dipakai ? '<span class="pill ok">di kisi-kisi</span>' : "") +
+      (s.stat ? '<span class="pill">p=' + angka(s.stat.p) + " · D=" + angka(s.stat.d) + "</span>" : "") + "</div>" +
+      '<div class="kecil muted">' + esc(s.materi) + (s.indikator ? " — " + esc(s.indikator) : "") + '</div><div class="isi">' + htmlSoal(s, { kunci: true }) + "</div>" +
+      (c.length ? '<details style="margin-top:6px"><summary class="kecil">' + (nb ? "⚠ " + nb + " masalah, " : "") + c.length + " catatan cek kaidah</summary>" + listPeringatan(c) + "</details>" : '<p class="kecil" style="color:var(--ok)">✓ Lolos cek kaidah otomatis</p>') +
+      '<div class="baris" style="margin-top:8px"><button class="btn kecil" data-act="soal-ubah" data-id="' + s.id + '">Ubah</button><button class="btn kecil" data-act="soal-dup" data-id="' + s.id + '">Duplikat</button><button class="btn kecil" data-act="cetak-kartu-satu" data-id="' + s.id + '">Kartu soal</button><button class="btn kecil bahaya" data-act="soal-hapus" data-id="' + s.id + '">Hapus</button></div></article>';
+  }).join("");
+}
+
+/* ============ Editor soal ============ */
+var D = null, D_KISI = null;
+function bukaEditor(s, kisiId) {
+  D = salin(s); D_KISI = kisiId || null;
+  if (!D.opsi.length) D.opsi = [{ t: "", k: true }, { t: "", k: false }, { t: "", k: false }, { t: "", k: false }];
+  if (!D.pernyataan.length) D.pernyataan = [{ t: "", b: true }, { t: "", b: false }, { t: "", b: true }];
+  if (!D.pasangan.length) D.pasangan = [{ kiri: "", kanan: "" }, { kiri: "", kanan: "" }, { kiri: "", kanan: "" }];
+  if (!D.pengecoh.length) D.pengecoh = [""];
+  var a = AS(); var tps = a ? a.tp : [];
+  var adaTP = tps.some(function (t) { return t.id === D.tpId; });
+  $("#dlgJudul").textContent = soalById(D.id) ? "Ubah soal" : "Soal baru";
+  $("#dlgIsi").innerHTML = '<div class="grid g3"><label class="f">Tujuan pembelajaran<select data-e="tpId"><option value="">— pilih —</option>' + tps.map(function (t) { return '<option value="' + t.id + '"' + (t.id === D.tpId ? " selected" : "") + ">" + esc(t.kode + " " + t.teks.slice(0, 50)) + "</option>"; }).join("") + (D.tpId && !adaTP ? '<option value="' + esc(D.tpId) + '" selected>(TP asesmen lain)</option>' : "") + "</select></label>" +
+    '<label class="f">Level kognitif<select data-e="level">' + Object.keys(LEVEL).map(function (l) { return '<option value="' + l + '"' + (D.level === l ? " selected" : "") + ">" + l + " " + LEVEL[l].nama + "</option>"; }).join("") + "</select></label>" +
+    '<label class="f">Bentuk soal<select data-e="bentuk">' + URUT_BENTUK.map(function (b) { return '<option value="' + b + '"' + (D.bentuk === b ? " selected" : "") + ">" + BENTUK[b].nama + "</option>"; }).join("") + "</select></label>" +
+    '<label class="f">Materi<input data-e="materi" value="' + esc(D.materi) + '"></label><label class="f">Skor maksimum<input type="number" min="0" step="0.5" data-e="skor" value="' + D.skor + '"></label>' +
+    '<label class="f">Status<select data-e="status">' + [["draf", "Draf"], ["telaah", "Sedang ditelaah"], ["siap", "Siap pakai"]].map(function (x) { return '<option value="' + x[0] + '"' + (D.status === x[0] ? " selected" : "") + ">" + x[1] + "</option>"; }).join("") + "</select></label></div>" +
+    '<label class="f">Indikator soal<textarea data-e="indikator" placeholder="Disajikan …, peserta didik dapat … dengan tepat.">' + esc(D.indikator) + "</textarea></label>" +
+    '<label class="f">Stimulus (teks, data, kasus; opsional)<textarea data-e="stimulus">' + esc(D.stimulus) + "</textarea></label>" +
+    '<div class="baris kecil" style="margin:-4px 0 10px"><label class="btn kecil">Tambah gambar<input type="file" accept="image/*" id="edGambar" style="display:none"></label>' + (D.gambar ? '<img src="' + esc(D.gambar) + '" alt="" style="height:48px;border-radius:6px"><button class="btn kecil" data-act="ed-hapus-gambar">Hapus gambar</button>' : '<span class="muted">Gambar diperkecil otomatis dan disimpan di perangkat.</span>') + "</div>" +
+    '<label class="f">Pokok soal<textarea data-e="pokok" placeholder="Tulis **tebal** untuk kata penting (mis. **tidak**)">' + esc(D.pokok) + "</textarea></label>" +
+    '<div id="edBentuk"></div><details class="panel"><summary>Ceklis telaah (materi, konstruksi, bahasa)</summary><div id="edCeklis"></div></details><div id="edCek"></div>';
+  rEdBentuk(); rEdCeklis(); rEdCek();
+  $("#dlgKaki").innerHTML = '<button class="btn" data-act="tutup">Batal</button>' + (S.setelan.apiKey ? '<button class="btn" data-act="ed-ai-telaah">Telaah AI</button>' : "") + '<button class="btn utama" data-act="ed-simpan">Simpan' + (D_KISI ? " & tautkan ke kisi-kisi" : "") + "</button>";
+  var d = $("#dlg"); if (!d.open) d.showModal();
+}
+function rEdBentuk() {
+  var h = "";
+  if (D.bentuk === "PG" || D.bentuk === "PGK") {
+    h = '<fieldset style="border:1px solid var(--line);border-radius:10px;padding:10px"><legend class="kecil"><b>Pilihan jawaban</b> — tandai ' + (D.bentuk === "PG" ? "satu kunci" : "semua kunci") + "</legend>" + D.opsi.map(function (o, i) {
+      return '<div class="opsi-ed"><label class="kecil"><input type="' + (D.bentuk === "PG" ? "radio" : "checkbox") + '" name="edk" data-arr="opsi" data-i="' + i + '" data-k="k"' + (o.k ? " checked" : "") + "> " + HURUF[i] + '</label><input data-arr="opsi" data-i="' + i + '" data-k="t" value="' + esc(o.t) + '" aria-label="Pilihan ' + HURUF[i] + '"><button class="btn kecil" data-act="ed-hapus" data-arr="opsi" data-i="' + i + '" aria-label="Hapus pilihan ' + HURUF[i] + '">✕</button></div>';
+    }).join("") + (D.opsi.length < 6 ? '<button class="btn kecil" data-act="ed-tambah" data-arr="opsi">+ Pilihan</button>' : "") + "</fieldset>";
+  } else if (D.bentuk === "BS") {
+    h = '<fieldset style="border:1px solid var(--line);border-radius:10px;padding:10px"><legend class="kecil"><b>Pernyataan</b></legend>' + D.pernyataan.map(function (p, i) {
+      return '<div class="opsi-ed"><span class="kecil">' + (i + 1) + '</span><input data-arr="pernyataan" data-i="' + i + '" data-k="t" value="' + esc(p.t) + '" aria-label="Pernyataan ' + (i + 1) + '"><div class="baris" style="flex-wrap:nowrap"><select data-arr="pernyataan" data-i="' + i + '" data-k="b" aria-label="Kunci pernyataan ' + (i + 1) + '"><option value="1"' + (p.b ? " selected" : "") + '>Benar</option><option value="0"' + (!p.b ? " selected" : "") + '>Salah</option></select><button class="btn kecil" data-act="ed-hapus" data-arr="pernyataan" data-i="' + i + '" aria-label="Hapus">✕</button></div></div>';
+    }).join("") + '<button class="btn kecil" data-act="ed-tambah" data-arr="pernyataan">+ Pernyataan</button></fieldset>';
+  } else if (D.bentuk === "JD") {
+    h = '<fieldset style="border:1px solid var(--line);border-radius:10px;padding:10px"><legend class="kecil"><b>Pasangan (lajur kiri ↔ lajur kanan)</b></legend>' + D.pasangan.map(function (p, i) {
+      return '<div class="opsi-ed" style="grid-template-columns:1fr 1fr auto"><input data-arr="pasangan" data-i="' + i + '" data-k="kiri" value="' + esc(p.kiri) + '" aria-label="Kiri ' + (i + 1) + '" placeholder="Pernyataan ' + (i + 1) + '"><input data-arr="pasangan" data-i="' + i + '" data-k="kanan" value="' + esc(p.kanan) + '" aria-label="Pasangan kanan ' + (i + 1) + '" placeholder="Pasangannya"><button class="btn kecil" data-act="ed-hapus" data-arr="pasangan" data-i="' + i + '" aria-label="Hapus">✕</button></div>';
+    }).join("") + '<button class="btn kecil" data-act="ed-tambah" data-arr="pasangan">+ Pasangan</button><p class="kecil" style="margin:10px 0 4px"><b>Pengecoh lajur kanan</b></p>' + D.pengecoh.map(function (p, i) {
+      return '<div class="opsi-ed"><span></span><input data-arr="pengecoh" data-i="' + i + '" value="' + esc(p) + '" aria-label="Pengecoh ' + (i + 1) + '"><button class="btn kecil" data-act="ed-hapus" data-arr="pengecoh" data-i="' + i + '" aria-label="Hapus">✕</button></div>';
+    }).join("") + '<button class="btn kecil" data-act="ed-tambah" data-arr="pengecoh">+ Pengecoh</button></fieldset>';
+  } else if (D.bentuk === "IS") {
+    h = '<label class="f">Kunci isian (pisahkan jawaban setara dengan |)<input data-e="kunciIsian" value="' + esc(D.kunciIsian) + '"></label><label class="f">Pedoman penskoran (opsional)<textarea data-e="rubrik">' + esc(D.rubrik) + "</textarea></label>";
+  } else {
+    h = '<label class="f">Pedoman penskoran / rubrik<textarea data-e="rubrik" style="min-height:110px" placeholder="Langkah/jawaban yang diharapkan dan skornya">' + esc(D.rubrik) + "</textarea></label>";
+  }
+  $("#edBentuk").innerHTML = h;
+}
+function rEdCeklis() {
+  var h = ""; for (var g in CEKLIS) { h += '<p class="kecil" style="margin:6px 0 2px"><b>' + g + '</b></p><ul class="cek-list">' + CEKLIS[g].map(function (c) { var key = g + ":" + c; return '<li><label><input type="checkbox" data-ceklis="' + esc(key) + '"' + (D.ceklis[key] ? " checked" : "") + "> " + esc(c) + "</label></li>"; }).join("") + "</ul>"; }
+  $("#edCeklis").innerHTML = h + '<p class="kecil muted">Bila semua dicentang dan cek otomatis tanpa masalah merah, status dapat diubah menjadi “Siap pakai”.</p>';
+}
+function rEdCek() { var c = cekSoal(D); $("#edCek").innerHTML = '<p class="kecil" style="margin:10px 0 4px"><b>Cek kaidah otomatis</b></p>' + (c.length ? listPeringatan(c) : listPeringatan([{ t: "ok", m: "Tidak ada catatan." }])); }
+function simpanEditor() {
+  var c = cekSoal(D);
+  if (D.status === "siap" && c.some(function (x) { return x.t === "bad"; })) { toast("Masih ada masalah merah; status dikembalikan ke “Sedang ditelaah”."); D.status = "telaah"; }
+  if (D.bentuk !== "PG" && D.bentuk !== "PGK") D.opsi = D.opsi.filter(function (o) { return o.t.trim(); });
+  if (D.bentuk !== "JD") { D.pasangan = D.pasangan.filter(function (p) { return p.kiri.trim(); }); D.pengecoh = D.pengecoh.filter(function (p) { return p.trim(); }); }
+  if (D.bentuk !== "BS") D.pernyataan = D.pernyataan.filter(function (p) { return p.t.trim(); });
+  var i = S.soal.findIndex(function (s) { return s.id === D.id; });
+  if (i > -1) S.soal[i] = D; else S.soal.unshift(D);
+  if (D_KISI) { var a = AS(); var k = a && a.kisi.find(function (x) { return x.id === D_KISI; }); if (k) { k.soalId = D.id; k.level = D.level; k.bentuk = D.bentuk; k.tpId = D.tpId || k.tpId; k.skor = D.skor; if (!k.indikator) k.indikator = D.indikator; } }
+  simpan(); $("#dlg").close(); render(); toast("Soal tersimpan.");
+}
+function gambarKecil(file, cb) {
+  var fr = new FileReader();
+  fr.onload = function () { var img = new Image(); img.onload = function () { var w = Math.min(900, img.width), h = Math.round(img.height * w / img.width); var c = document.createElement("canvas"); c.width = w; c.height = h; var x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, w, h); x.drawImage(img, 0, 0, w, h); cb(c.toDataURL("image/jpeg", 0.8)); }; img.src = fr.result; };
+  fr.readAsDataURL(file);
+}
+
+/* ============ Paket acak ============ */
+function rPaket(el, a) {
+  if (!a) { el.innerHTML = ""; return; }
+  var r = ringkasKisi(a); var pk = S.paket.filter(function (p) { return p.asesmenId === a.id; });
+  el.innerHTML = '<div class="card"><h2>Paket soal acak</h2><p class="kecil muted">Setiap baris kisi-kisi diambil satu soal. Pengacakan memakai benih acak sehingga paket dapat dicetak ulang sama persis. Pilihan seperti “semua benar/tidak ada” tetap di urutan terakhir. ' + (r.n - r.adaSoal) + " dari " + r.n + " baris belum bertaut soal (akan diisi soal setara dari bank bila ada).</p>" +
+    '<div class="grid g4"><label class="f">Jumlah paket<input id="pk-n" type="number" min="1" max="8" value="' + Math.max(2, pk.length || 2) + '"></label></div><div class="baris kecil" style="margin-bottom:10px">' +
+    '<label><input type="checkbox" id="pk-as" checked> Acak urutan soal</label><label><input type="checkbox" id="pk-ao" checked> Acak urutan pilihan jawaban</label><label><input type="checkbox" id="pk-kb" checked> Kelompokkan per bentuk soal</label><label><input type="checkbox" id="pk-va"> Pakai soal setara berbeda dari bank bila ada</label></div>' +
+    '<button class="btn utama" data-act="paket-buat">Buat paket</button>' + (pk.length ? ' <span class="kecil muted">Membuat ulang akan mengganti ' + pk.length + " paket lama asesmen ini.</span>" : "") + "</div>" +
+    pk.map(function (p) {
+      var items = p.butir.map(function (b) { return { b: b, s: soalById(b.soalId) }; }).filter(function (x) { return x.s; });
+      var sk = items.reduce(function (t, x) { return t + (+x.s.skor || 0); }, 0);
+      var kpg = items.filter(function (x) { return x.s.bentuk === "PG"; }).map(function (x) { return kunciButir(x.b, x.s); });
+      var hit = {}; kpg.forEach(function (k) { hit[k] = (hit[k] || 0) + 1; });
+      var w = []; Object.keys(hit).forEach(function (k) { if (kpg.length >= 5 && hit[k] / kpg.length > 0.4) w.push("Kunci " + k + " terlalu sering (" + hit[k] + " dari " + kpg.length + ")."); });
+      for (var i = 2; i < kpg.length; i++) if (kpg[i] === kpg[i - 1] && kpg[i] === kpg[i - 2]) { w.push("Ada 3 kunci PG berurutan sama (" + kpg[i] + ")."); break; }
+      if (p.hilang) w.push(p.hilang + " baris kisi-kisi tidak terisi soal.");
+      return '<div class="card"><div class="baris" style="justify-content:space-between"><h3 style="margin:0">Paket ' + p.kode + (p.contoh ? ' <span class="pill contoh">contoh</span>' : "") + '</h3><span class="kecil muted">' + items.length + " soal · skor maks " + sk + " · dibuat " + tglIndo(p.dibuat) + '</span></div><p class="kecil">Sebaran kunci PG: ' + ("ABCDE".split("").filter(function (h) { return hit[h]; }).map(function (h) { return '<span class="pill">' + h + ": " + hit[h] + "</span>"; }).join(" ") || "–") + '</p><p class="kecil mono" style="word-break:break-all">Kunci: ' + items.map(function (x, i) { return (i + 1) + "." + esc(x.s.bentuk === "UR" ? "U" : kunciButir(x.b, x.s)); }).join("  ") + "</p>" +
+        (w.length ? listPeringatan(w.map(function (m) { return { t: "warn", m: m }; })) : "") +
+        '<div class="baris" style="margin-top:8px"><button class="btn kecil utama" data-act="cetak-naskah" data-id="' + p.id + '">Naskah soal</button><button class="btn kecil" data-act="cetak-kunci" data-id="' + p.id + '">Kunci & pedoman</button><button class="btn kecil" data-act="cetak-lj" data-id="' + p.id + '">Lembar jawaban</button><button class="btn kecil" data-act="paket-analisis" data-id="' + p.id + '">Analisis hasil</button><button class="btn kecil bahaya" data-act="paket-hapus" data-id="' + p.id + '">Hapus</button></div></div>';
+    }).join("");
+}
+
+/* ============ Analisis ============ */
+var H_AKTIF = null, PK_ANALISIS = null;
+function rAnalisis(el, a) {
+  var pk = a ? S.paket.filter(function (p) { return p.asesmenId === a.id; }) : [];
+  if (!pk.length) { el.innerHTML = '<div class="card"><h2>Analisis butir</h2><p>Buat paket soal terlebih dahulu di menu <b>Paket acak</b>, lalu tempel jawaban siswa per paket di sini.</p></div>'; return; }
+  var hs = S.hasil.filter(function (h) { return pk.some(function (p) { return p.id === h.paketId; }); });
+  if (!H_AKTIF || !hs.some(function (h) { return h.id === H_AKTIF; })) H_AKTIF = hs.length ? hs[hs.length - 1].id : null;
+  var pSel = PK_ANALISIS && pk.some(function (p) { return p.id === PK_ANALISIS; }) ? PK_ANALISIS : pk[0].id;
+  var pp = pk.find(function (p) { return p.id === pSel; });
+  el.innerHTML = '<div class="card"><h2>Analisis butir sederhana</h2><p class="kecil muted">Tempel satu baris per siswa: <b>kode</b> lalu jawaban setiap nomor, dipisah tab (salin dari Excel/Sheets) atau titik koma. PG: huruf (B). PG kompleks: gabungan huruf (ACD). Benar–Salah: urutan B/S (BSB). Menjodohkan: huruf tiap nomor kiri (CAB). Isian: teks jawaban. Uraian: angka skor. Angka pada bentuk lain dianggap skor langsung.</p>' +
+    '<div class="grid g3"><label class="f">Paket<select id="an-paket">' + pk.map(function (p) { return '<option value="' + p.id + '"' + (p.id === pSel ? " selected" : "") + ">Paket " + p.kode + " (" + p.butir.length + " soal)</option>"; }).join("") + '</select></label><label class="f">KKTP / batas ketercapaian (%)<input id="an-kktp" type="number" min="0" max="100" value="' + (S.setelan.kktp || 70) + '"></label></div>' +
+    '<label class="f">Jawaban siswa<textarea id="an-data" style="min-height:130px;font-family:IBM Plex Mono,monospace" placeholder="01;' + pp.butir.slice(0, 5).map(function (b) { var s = soalById(b.soalId); return s ? (s.bentuk === "UR" ? "3" : kunciButir(b, s)) : ""; }).join(";") + ';…"></textarea></label><div class="baris"><button class="btn utama" data-act="an-proses">Analisis & simpan</button><button class="btn" data-act="an-templat">Unduh templat CSV</button></div></div>' +
+    (hs.length ? '<div class="card"><div class="baris"><label class="f" style="margin:0;flex:1">Hasil tersimpan<select id="an-hasil">' + hs.map(function (h) { var p = S.paket.find(function (x) { return x.id === h.paketId; }); return '<option value="' + h.id + '"' + (h.id === H_AKTIF ? " selected" : "") + ">Paket " + (p ? p.kode : "?") + " · " + tglIndo(h.tgl) + " · " + h.baris.length + " siswa" + (h.contoh ? " (contoh)" : "") + "</option>"; }).join("") + '</select></label><button class="btn bahaya kecil" data-act="an-hapus">Hapus hasil</button></div></div><div id="anIsi"></div>' : "");
+  if (H_AKTIF) rAnIsi();
+}
+function rAnIsi() {
+  var h = S.hasil.find(function (x) { return x.id === H_AKTIF; }); var A = h && analisis(h); var el = $("#anIsi"); if (!A || !el) return;
+  var n = A.siswa.length;
+  el.innerHTML = '<div class="card"><div class="grid g4"><div class="stat"><b>' + n + '</b><span>siswa</span></div><div class="stat"><b>' + angka(A.rata, 1) + '</b><span>rata-rata nilai</span></div><div class="stat"><b>' + A.tuntas + "/" + n + '</b><span>mencapai KKTP ' + A.kktp + '%</span></div><div class="stat"><b>' + A.items.filter(function (x) { return saranButir(x, n).t === "ok"; }).length + "/" + A.items.length + '</b><span>butir berkualitas baik</span></div></div>' +
+    (n < 20 ? '<p class="kecil" style="color:var(--warn)">Siswa kurang dari 20: angka daya beda belum stabil; gunakan sebagai petunjuk awal.</p>' : "") +
+    '<div class="baris" style="margin-top:10px"><button class="btn utama kecil" data-act="an-simpan-stat">Simpan statistik ke bank soal</button><button class="btn kecil" data-act="an-csv">Ekspor CSV</button><button class="btn kecil" data-act="cetak-analisis">Cetak analisis</button></div></div>' +
+    '<div class="card"><h3>Kualitas butir</h3><p class="kecil muted">p = tingkat kesukaran (proporsi skor; &lt;0,30 sukar, 0,30–0,70 sedang, &gt;0,70 mudah). D = daya beda (selisih kelompok atas–bawah 27%; ≥0,40 sangat baik, 0,30–0,39 baik, 0,20–0,29 cukup, &lt;0,20 jelek). Pengecoh PG berfungsi bila dipilih ≥5% siswa.</p><div class="tbl-wrap"><table><thead><tr><th>No</th><th>TP</th><th>Level</th><th>Bentuk</th><th>Kunci</th><th>p</th><th>D</th><th>Sebaran pilihan</th><th>Saran</th></tr></thead><tbody>' +
+    A.items.map(function (x) {
+      var sr = saranButir(x, n);
+      var pil = x.pil ? Object.keys(x.pil).map(function (k) { var pr = x.pil[k] / n; var mati = k !== x.kunci && pr < 0.05; return '<span class="pill' + (k === x.kunci ? " ok" : mati ? " bad" : "") + '" title="' + (mati ? "Pengecoh tidak berfungsi" : "") + '">' + k + " " + persen(pr) + "</span>"; }).join(" ") : '<span class="muted kecil">–</span>';
+      return "<tr><td>" + x.no + "</td><td>" + esc(namaTP(A.a, x.s.tpId)) + '</td><td><span class="pill ' + x.s.level + '">' + x.s.level + "</span></td><td>" + x.s.bentuk + '</td><td class="mono">' + esc(x.kunci === "rubrik" ? "–" : x.kunci) + '</td><td class="num">' + angka(x.p) + '<br><span class="kecil muted">' + katP(x.p) + '</span></td><td class="num">' + angka(x.d) + '<br><span class="kecil muted">' + katD(x.d) + "</span></td><td>" + pil + '</td><td><span class="pill ' + sr.t + '">' + esc(sr.m) + "</span></td></tr>";
+    }).join("") + "</tbody></table></div></div>" +
+    '<div class="card"><h3>Ketercapaian per TP</h3><div class="tbl-wrap"><table><thead><tr><th>TP</th><th>Rumusan</th><th>Capaian kelas</th></tr></thead><tbody>' +
+    urutTP(A).map(function (id) { var t = tpById(A.a, id); var v = A.perTP[id].maks ? A.perTP[id].dapat / A.perTP[id].maks : NaN; return "<tr><td>" + esc(t ? t.kode : "–") + '</td><td class="kecil">' + esc(t ? t.teks : "") + '</td><td style="min-width:160px"><div class="bar"><i style="width:' + (v * 100) + "%;background:" + (v * 100 >= A.kktp ? "var(--ok)" : "var(--merah)") + '"></i></div><span class="kecil">' + persen(v) + (v * 100 < A.kktp ? " · perlu pembelajaran ulang/penguatan" : "") + "</span></td></tr>"; }).join("") +
+    '</tbody></table></div></div><div class="card"><h3>Hasil per siswa</h3><div class="tbl-wrap"><table><thead><tr><th>Kode</th><th>Skor</th><th>Nilai</th><th>Status</th><th>TP yang perlu penguatan</th></tr></thead><tbody>' +
+    A.siswa.map(function (si) {
+      var lemah = urutTP(A).filter(function (id) { var d = 0, m = 0; A.items.forEach(function (x, i) { if ((x.s.tpId || "-") === id) { d += si.skor[i]; m += +x.s.skor || 1; } }); return m && d / m * 100 < A.kktp; }).map(function (id) { var t = tpById(A.a, id); return t ? t.kode : "–"; });
+      return "<tr><td>" + esc(si.kode) + '</td><td class="num">' + angka(si.total, 1) + "/" + A.maxTot + '</td><td class="num">' + angka(si.nilai, 0) + '</td><td><span class="pill ' + (si.nilai >= A.kktp ? "ok" : "warn") + '">' + (si.nilai >= A.kktp ? "Tercapai" : "Remedial") + "</span></td><td>" + esc(lemah.join(", ") || "–") + "</td></tr>";
+    }).join("") + "</tbody></table></div></div>";
+}
+function prosesJawaban() {
+  var pid = $("#an-paket").value; var p = S.paket.find(function (x) { return x.id === pid; });
+  var t = $("#an-data").value.trim(); if (!t) { toast("Tempel jawaban siswa terlebih dahulu."); return; }
+  var lines = t.split(/\r?\n/).filter(function (l) { return l.trim(); });
+  var sep = /\t/.test(t) ? "\t" : /;/.test(t) ? ";" : ",";
+  var baris = [];
+  lines.forEach(function (l, i) { var c = l.split(sep).map(function (x) { return x.trim(); }); if (i === 0 && /^(kode|nama|no|absen)/i.test(c[0])) return; baris.push({ kode: c[0] || "S" + (i + 1), jawab: c.slice(1, p.butir.length + 1) }); });
+  if (!baris.length) { toast("Tidak ada baris jawaban yang terbaca."); return; }
+  S.setelan.kktp = +$("#an-kktp").value || 70;
+  var h = { id: uid("h"), paketId: pid, tgl: hariIni(), kktp: S.setelan.kktp, baris: baris }; S.hasil.push(h); H_AKTIF = h.id; PK_ANALISIS = pid; simpan(); render(); toast(baris.length + " baris jawaban dianalisis.");
+}
+
+/* ============ Cetak ============ */
+var PRATINJAU = "";
+function kop(a, judul) {
+  var st = S.setelan;
+  return '<div class="kop">' + (st.sekolah ? "<h2>" + esc(st.sekolah) + "</h2>" : "<h2>Nama Satuan Pendidikan</h2>") + "<div><b>" + esc(judul) + "</b></div><div>" + esc(a.jenis + " · Tahun Ajaran " + (a.tahun || "……")) + "</div></div>" +
+    '<table class="ident"><tr><td>Mata pelajaran</td><td>: ' + esc(a.mapel || "……") + "</td><td>Kelas/Fase</td><td>: " + esc((a.kelas || "…") + " / " + (a.fase || "…")) + "</td></tr><tr><td>Semester</td><td>: " + esc(a.semester) + "</td><td>Alokasi waktu</td><td>: " + esc(a.durasi || "…") + " menit</td></tr></table>";
+}
+function ttd() {
+  var st = S.setelan; var kt = (st.kota || "……………") + ", " + "……………………";
+  return '<div class="ttd"><div>Mengetahui,<br>Kepala Sekolah<br><br><br><br><b>' + esc(st.kepsek || "………………………………") + '</b></div><div>' + esc(kt) + "<br>Guru Mata Pelajaran<br><br><br><br><b>" + esc(st.penyusun || "………………………………") + "</b></div></div>";
+}
+function lembarKisi(a) {
+  var r = ringkasKisi(a);
+  return '<div class="lembar lanskap">' + kop(a, "KISI-KISI ASESMEN SUMATIF") + '<table style="margin-top:10px"><thead><tr><th>No</th><th>Tujuan pembelajaran</th><th>Materi</th><th>Indikator soal</th><th>Level kognitif</th><th>Bentuk soal</th><th>No. soal</th><th>Skor</th></tr></thead><tbody>' +
+    a.kisi.map(function (k, i) { var t = tpById(a, k.tpId); return "<tr><td>" + (i + 1) + "</td><td>" + esc(t ? t.kode + " " + t.teks : "") + "</td><td>" + esc(k.materi) + "</td><td>" + esc(k.indikator) + "</td><td>" + k.level + " " + LEVEL[k.level].nama + "</td><td>" + esc(BENTUK[k.bentuk].nama) + "</td><td>" + (i + 1) + "</td><td>" + k.skor + "</td></tr>"; }).join("") +
+    '</tbody></table><p style="font-size:12px">Sebaran: L1 ' + r.lv.L1 + " soal, L2 " + r.lv.L2 + " soal, L3 " + r.lv.L3 + " soal · skor maksimum " + r.skor + ". Nomor soal mengikuti urutan kisi-kisi; nomor pada tiap paket dapat berbeda karena diacak.</p>" + ttd() + "</div>";
+}
+function kartuHtml(s, a, no) {
+  var t = tpById(a, s.tpId) || S.asesmen.map(function (x) { return tpById(x, s.tpId); }).find(Boolean);
+  var kunci = s.bentuk === "UR" ? "Lihat pedoman penskoran" : kunciTeks({}, s);
+  return '<div class="kartu"><table><tr><th colspan="4" style="text-align:center">KARTU SOAL ' + (s.bentuk === "UR" ? "URAIAN" : "") + "</th></tr><tr><td style=\"width:22%\">Mata pelajaran</td><td>" + esc(s.mapel || a.mapel) + '</td><td style="width:18%">Kelas/Fase</td><td>' + esc((s.kelas || a.kelas) + " / " + (a.fase || "")) + "</td></tr><tr><td>Tujuan pembelajaran</td><td colspan=\"3\">" + esc(t ? t.kode + " " + t.teks : "–") + "</td></tr><tr><td>Materi</td><td colspan=\"3\">" + esc(s.materi) + "</td></tr><tr><td>Indikator soal</td><td colspan=\"3\">" + esc(s.indikator) + "</td></tr><tr><td>Level kognitif</td><td>" + s.level + " " + LEVEL[s.level].nama + "</td><td>Bentuk soal</td><td>" + esc(BENTUK[s.bentuk].nama) + "</td></tr><tr><td>Nomor soal</td><td>" + (no || "…") + "</td><td>Kunci / skor</td><td>" + esc(kunci) + " / " + s.skor + '</td></tr><tr><td colspan="4"><b>Rumusan soal:</b><div style="margin-top:4px">' + htmlSoal(s, { kunci: false }) + "</div>" + (s.bentuk === "UR" || (s.bentuk === "IS" && s.rubrik) ? "<div><b>Pedoman penskoran:</b><br>" + fmt(s.rubrik) + "</div>" : "") + "</td></tr>" +
+    (s.stat ? "<tr><td>Hasil uji</td><td colspan=\"3\">p = " + angka(s.stat.p) + " (" + katP(s.stat.p) + "), D = " + angka(s.stat.d) + " (" + katD(s.stat.d) + "), n = " + s.stat.n + "</td></tr>" : "") + "</table></div>";
+}
+function lembarKartu(list, a) { return '<div class="lembar">' + list.map(function (x, i) { return kartuHtml(x.s, a, x.no); }).join("") + "</div>"; }
+function itemsPaket(p) { return p.butir.map(function (b) { return { b: b, s: soalById(b.soalId) }; }).filter(function (x) { return x.s; }); }
+function lembarNaskah(p) {
+  var a = S.asesmen.find(function (x) { return x.id === p.asesmenId; }); var items = itemsPaket(p); var bagian = "";
+  var petunjuk = '<p style="font-size:12.5px"><b>Petunjuk:</b> Tulis nama dan nomor absen pada lembar jawaban. Bacalah setiap soal dengan teliti. Untuk soal pilihan ganda pilih satu jawaban; untuk pilihan ganda kompleks pilih lebih dari satu jawaban; untuk Benar–Salah tentukan setiap pernyataan; untuk menjodohkan pasangkan dengan huruf yang tepat. Kerjakan soal uraian dengan langkah lengkap.</p>';
+  return '<div class="lembar">' + kop(a, "NASKAH SOAL · PAKET " + p.kode) + petunjuk + items.map(function (x, i) {
+    var h = ""; if (p.opsi.kelompok && x.s.bentuk !== bagian) { bagian = x.s.bentuk; h += '<div class="bagian">' + esc(BENTUK[bagian].nama) + "</div>"; }
+    return h + '<div class="butir"><b>' + (i + 1) + ".</b><div>" + htmlSoal(x.s, { b: x.b, naskah: true }) + "</div></div>";
+  }).join("") + "</div>";
+}
+function lembarKunci(p) {
+  var a = S.asesmen.find(function (x) { return x.id === p.asesmenId; }); var items = itemsPaket(p);
+  return '<div class="lembar">' + kop(a, "KUNCI JAWABAN & PEDOMAN PENSKORAN · PAKET " + p.kode) + '<table><thead><tr><th>No</th><th>TP</th><th>Level</th><th>Bentuk</th><th>Kunci</th><th>Skor</th></tr></thead><tbody>' +
+    items.map(function (x, i) { return "<tr><td>" + (i + 1) + "</td><td>" + esc(namaTP(a, x.s.tpId)) + "</td><td>" + x.s.level + "</td><td>" + esc(BENTUK[x.s.bentuk].nama) + "</td><td>" + esc(kunciTeks(x.b, x.s)) + "</td><td>" + x.s.skor + "</td></tr>"; }).join("") +
+    "<tr><td colspan=\"5\"><b>Skor maksimum</b></td><td><b>" + items.reduce(function (t, x) { return t + (+x.s.skor || 0); }, 0) + "</b></td></tr></tbody></table>" +
+    items.filter(function (x) { return x.s.bentuk === "UR" || (x.s.bentuk === "IS" && x.s.rubrik); }).map(function (x) { return '<div class="bagian">Pedoman soal nomor ' + (items.indexOf(x) + 1) + "</div><div>" + fmt(x.s.rubrik) + "</div>"; }).join("") +
+    '<p style="font-size:12px">Nilai = (jumlah skor diperoleh ÷ skor maksimum) × 100. Benar–Salah dan menjodohkan diskor proporsional per pernyataan/pasangan; PG kompleks diskor penuh bila semua kunci tepat.</p></div>';
+}
+function lembarLJ(p) {
+  var a = S.asesmen.find(function (x) { return x.id === p.asesmenId; }); var items = itemsPaket(p);
+  return '<div class="lembar">' + kop(a, "LEMBAR JAWABAN · PAKET " + p.kode) + '<p>Nama: ……………………………………… No. absen: ……… Kelas: ………</p><table><thead><tr><th style="width:50px">No</th><th>Jawaban</th></tr></thead><tbody>' +
+    items.map(function (x, i) {
+      var s = x.s, h = "";
+      if (s.bentuk === "PG" || s.bentuk === "PGK") h = (x.b.urut || s.opsi).map(function (_, j) { return "◯ " + HURUF[j]; }).join("&nbsp;&nbsp;&nbsp;") + (s.bentuk === "PGK" ? " <i>(boleh lebih dari satu)</i>" : "");
+      else if (s.bentuk === "BS") h = s.pernyataan.map(function (_, j) { return (j + 1) + ") B / S"; }).join("&nbsp;&nbsp;&nbsp;");
+      else if (s.bentuk === "JD") h = s.pasangan.map(function (_, j) { return (j + 1) + ") ……"; }).join("&nbsp;&nbsp;&nbsp;");
+      else if (s.bentuk === "IS") h = "……………………………………………";
+      else h = "(dikerjakan di lembar uraian)";
+      return "<tr><td>" + (i + 1) + "</td><td>" + h + "</td></tr>";
+    }).join("") + "</tbody></table></div>";
+}
+function lembarAnalisis(A) {
+  return '<div class="lembar lanskap">' + kop(A.a, "ANALISIS BUTIR SOAL · PAKET " + A.paket.kode) + "<p>Jumlah siswa " + A.siswa.length + " · rata-rata " + angka(A.rata, 1) + " · mencapai KKTP (" + A.kktp + "%): " + A.tuntas + "</p>" +
+    '<table><thead><tr><th>No</th><th>TP</th><th>Level</th><th>Bentuk</th><th>p</th><th>Kategori</th><th>D</th><th>Kategori</th><th>Saran</th></tr></thead><tbody>' +
+    A.items.map(function (x) { return "<tr><td>" + x.no + "</td><td>" + esc(namaTP(A.a, x.s.tpId)) + "</td><td>" + x.s.level + "</td><td>" + x.s.bentuk + "</td><td>" + angka(x.p) + "</td><td>" + katP(x.p) + "</td><td>" + angka(x.d) + "</td><td>" + katD(x.d) + "</td><td>" + esc(saranButir(x, A.siswa.length).m) + "</td></tr>"; }).join("") + "</tbody></table>" + ttd() + "</div>";
+}
+function tampilCetak(html) { PRATINJAU = html; bukaTab("cetak"); window.scrollTo(0, 0); }
+function rCetak(el, a) {
+  var pk = a ? S.paket.filter(function (p) { return p.asesmenId === a.id; }) : [];
+  el.innerHTML = '<div class="card"><h2>Cetak</h2><p class="kecil muted">Pilih dokumen, periksa pratinjau, lalu tekan “Cetak / simpan PDF” (pilih “Simpan sebagai PDF” di dialog cetak). Kop dan tanda tangan diambil dari menu Pengaturan.</p><div class="baris">' +
+    '<button class="btn" data-act="cetak-kisi">Kisi-kisi</button><button class="btn" data-act="cetak-kartu">Kartu soal (urut kisi-kisi)</button>' +
+    pk.map(function (p) { return '<button class="btn" data-act="cetak-naskah" data-id="' + p.id + '">Naskah ' + p.kode + '</button><button class="btn" data-act="cetak-kunci" data-id="' + p.id + '">Kunci ' + p.kode + '</button><button class="btn" data-act="cetak-lj" data-id="' + p.id + '">LJ ' + p.kode + "</button>"; }).join("") +
+    '</div></div><div class="card"><div class="baris" style="justify-content:space-between;margin-bottom:10px"><h3 style="margin:0">Pratinjau</h3><button class="btn utama" data-act="cetak-sekarang"' + (PRATINJAU ? "" : " disabled") + '>Cetak / simpan PDF</button></div><div class="pratinjau-wrap">' + (PRATINJAU || '<p class="muted">Belum ada dokumen dipilih.</p>') + "</div></div>";
+}
+
+/* ============ Pengaturan ============ */
+function terapkanTema() { var t = S.setelan.tema; if (t === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", t); }
+function rSetelan(el) {
+  var st = S.setelan;
+  function inp(k, lbl, type, ph) { return '<label class="f">' + lbl + '<input data-set="' + k + '" type="' + (type || "text") + '" value="' + esc(st[k]) + '" placeholder="' + esc(ph || "") + '" autocomplete="off"></label>'; }
+  el.innerHTML = '<div class="card"><h2>Kop & tanda tangan</h2><p class="kecil muted">Diisi sendiri dan hanya disimpan di perangkat ini; dipakai pada dokumen cetak.</p><div class="grid g2">' + inp("sekolah", "Nama sekolah", "text", "SMP Negeri …") + inp("kota", "Kota (tempat tanda tangan)") + inp("kepsek", "Nama kepala sekolah") + inp("penyusun", "Nama guru penyusun") + "</div></div>" +
+    '<div class="card"><h2>Tampilan</h2><label class="f" style="max-width:260px">Tema<select data-set="tema"><option value="auto"' + (st.tema === "auto" ? " selected" : "") + '>Ikuti perangkat</option><option value="light"' + (st.tema === "light" ? " selected" : "") + '>Terang</option><option value="dark"' + (st.tema === "dark" ? " selected" : "") + ">Gelap</option></select></label></div>" +
+    '<div class="card"><h2>AI Gemini (opsional)</h2><p class="kecil muted">Isi kunci API Gemini milik Anda sendiri (Google AI Studio) untuk membuat draf soal dari baris kisi-kisi dan telaah otomatis. Kunci hanya disimpan di perangkat ini. Hasil AI selalu berstatus draf dan wajib ditelaah guru.</p><div class="grid g2">' + inp("apiKey", "Kunci API Gemini", "password", "tempel kunci di sini") + inp("model", "Model", "text", "gemini-2.5-flash") + "</div></div>" +
+    '<div class="card"><h2>Data & cadangan</h2><div class="baris"><button class="btn utama" data-act="ekspor-json">Ekspor cadangan JSON</button><label class="btn">Impor JSON<input type="file" accept="application/json,.json" id="imporJson" style="display:none"></label><button class="btn" data-act="bank-csv">Ekspor bank soal CSV</button>' +
+    (adaContoh() ? '<button class="btn" data-act="hapus-contoh">Hapus data contoh</button>' : '<button class="btn" data-act="muat-contoh">Muat data contoh</button>') + '<button class="btn bahaya" data-act="hapus-semua">Hapus semua data</button></div><p class="kecil muted">Cadangan JSON berisi asesmen, kisi-kisi, bank soal, paket, dan hasil analisis (tanpa kunci API). Bank soal dapat dibagikan ke rekan MGMP lewat berkas ini.</p></div>';
+}
+
+/* ============ Dasar & sumber ============ */
+function rSumber(el) {
+  el.innerHTML = '<div class="card"><h2>Dasar dan sumber</h2><p>Aplikasi ini membantu guru menyusun <b>asesmen sumatif tertulis</b> yang terhubung langsung ke tujuan pembelajaran (TP): TP → kisi-kisi → soal → telaah → paket → hasil dan tindak lanjut.</p><ul>' +
+    "<li>Asesmen sumatif dilakukan untuk menilai ketercapaian TP pada akhir lingkup materi, akhir semester, atau akhir fase; hasilnya menjadi dasar nilai rapor dan refleksi pembelajaran berikutnya. Sumatif juga dapat berupa praktik, produk, proyek, atau portofolio; aplikasi ini berfokus pada tes tertulis.</li>" +
+    "<li>Level kognitif mengikuti kerangka asesmen nasional (TKA): pengetahuan & pemahaman, aplikasi/penerapan, dan penalaran. Bentuk soal mengikuti pola PG sederhana, PG kompleks (lebih dari satu jawaban), dan PG kompleks kategori (Benar–Salah), ditambah menjodohkan, isian, dan uraian yang lazim di sekolah.</li>" +
+    "<li>Cek kaidah memakai kaidah umum penulisan soal (aspek materi, konstruksi, bahasa). Cek otomatis hanya pemeriksaan awal; telaah sejawat (MGMP) tetap diperlukan.</li>" +
+    "<li>Analisis butir memakai teori tes klasik: tingkat kesukaran (p) dan daya beda (kelompok atas–bawah 27%). Hasil dari kelas kecil bersifat petunjuk, bukan keputusan mutlak.</li>" +
+    "<li>Sejalan dengan pembelajaran mendalam (Permendikdasmen 13/2025): soal penalaran berkonteks nyata diberi porsi memadai.</li></ul>" +
+    '<h3>Tautan</h3><ol><li><a href="https://kurikulum.kemdikbud.go.id/wp-content/unduhan/arsip/PPA_2021.pdf" target="_blank" rel="noopener">Panduan Pembelajaran dan Asesmen — Kemendikbudristek (bagian asesmen formatif dan sumatif)</a></li>' +
+    '<li><a href="https://www.kemendikdasmen.go.id/siaran-pers/13278-permendikdasmen-nomor-13-tahun-2025-menguatkan-arah-kebijakan-melalui-pembelajaran-mendalam" target="_blank" rel="noopener">Permendikdasmen Nomor 13 Tahun 2025, Menguatkan Arah Kebijakan melalui Pembelajaran Mendalam — Kemendikdasmen</a></li>' +
+    '<li><a href="https://yunandra.com/kajian-peraturan-kerangka-asesmen-tka-sma-ma-smk-mak-pada-sk-bskap-no-045-tahun-2025/" target="_blank" rel="noopener">Kajian Kerangka Asesmen TKA pada SK BSKAP No. 045 Tahun 2025 (level kognitif dan bentuk soal)</a></li>' +
+    '<li><a href="https://pusmendik.kemdikbud.go.id/tka/tka/view/mata-pelajaran-wajib/smp" target="_blank" rel="noopener">Kerangka asesmen TKA SMP mata pelajaran wajib — Pusmendik</a></li></ol>' +
+    '<p class="kecil muted">Catatan: aplikasi ini alat bantu guru, bukan instrumen resmi. Penentuan nilai rapor mengikuti kebijakan satuan pendidikan.</p></div>';
+}
+
+/* ============ AI Gemini (opsional) ============ */
+function panggilGemini(prompt) {
+  var st = S.setelan; var model = (st.model || "gemini-2.5-flash").trim();
+  return fetch("https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":generateContent", {
+    method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": st.apiKey.trim() },
+    body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, responseMimeType: "application/json" } })
+  }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j.error && j.error.message) || ("HTTP " + r.status)); return j; }); })
+    .then(function (j) {
+      var t = (((j.candidates || [])[0] || {}).content || {}).parts; t = t ? t.map(function (p) { return p.text || ""; }).join("") : "";
+      try { return JSON.parse(t); } catch (e) { var m = t.match(/\{[\s\S]*\}/); if (m) return JSON.parse(m[0]); throw new Error("Jawaban AI tidak terbaca."); }
+    });
+}
+var DEF_LEVEL = { L1: "mengingat dan memahami fakta, konsep, prosedur", L2: "menerapkan konsep/prosedur pada situasi yang dikenal atau konteks sehari-hari", L3: "bernalar pada situasi baru: menganalisis, menyimpulkan, mengevaluasi, memecahkan masalah tidak rutin" };
+function aiSoal(kisiId) {
+  var a = AS(); var k = a.kisi.find(function (x) { return x.id === kisiId; }); if (!k) return;
+  var t = tpById(a, k.tpId);
+  var format = { PG: '"opsi":[{"t":"…","k":true},{"t":"…","k":false},{"t":"…","k":false},{"t":"…","k":false}] (tepat satu k=true)',
+    PGK: '"opsi":[4 atau 5 objek {"t":"…","k":true/false}] (2–3 kunci benar)', BS: '"pernyataan":[{"t":"…","b":true/false}] (3–4 pernyataan, campuran benar dan salah)',
+    JD: '"pasangan":[{"kiri":"…","kanan":"…"}] (3–4 pasangan), "pengecoh":["…"] (1 pengecoh lajur kanan)', IS: '"kunciIsian":"jawaban | bentuk setara", "rubrik":"…"', UR: '"rubrik":"langkah jawaban dan skor tiap langkah, total ' + k.skor + '"' }[k.bentuk];
+  var prompt = "Anda penulis soal asesmen sumatif SMP di Indonesia yang memahami kaidah penulisan soal (materi, konstruksi, bahasa).\n" +
+    "Buat SATU soal orisinal berbahasa Indonesia baku.\nMata pelajaran: " + (a.mapel || "-") + "\nKelas/fase: " + (a.kelas || "-") + " / " + (a.fase || "-") +
+    "\nTujuan pembelajaran: " + (t ? t.teks : "-") + "\nMateri: " + (k.materi || "-") + "\nIndikator soal: " + (k.indikator || "-") +
+    "\nLevel kognitif: " + k.level + " " + LEVEL[k.level].nama + " (" + DEF_LEVEL[k.level] + ")\nBentuk soal: " + BENTUK[k.bentuk].nama +
+    "\nAturan: pokok soal jelas dan tidak memberi petunjuk kunci; pilihan homogen dan panjangnya relatif sama; jangan memakai pilihan 'semua benar/salah'; tebalkan kata negatif dengan **; konteks dekat dengan kehidupan remaja Indonesia, ramah keberagaman, tanpa nama tokoh nyata atau merek; pastikan kunci benar secara keilmuan." +
+    (k.level === "L3" ? " Sertakan stimulus (data, kasus, tabel teks) yang perlu dianalisis." : "") +
+    '\nKeluarkan HANYA JSON: {"stimulus":"… (boleh kosong)","pokok":"…",' + format + "}";
+  toast("Meminta draf soal ke Gemini…");
+  panggilGemini(prompt).then(function (j) {
+    var s = soalBaru(k); s.sumber = "AI"; s.status = "draf"; s.skor = k.skor; s.tpId = k.tpId;
+    s.stimulus = String(j.stimulus || ""); s.pokok = String(j.pokok || "");
+    if (Array.isArray(j.opsi)) s.opsi = j.opsi.map(function (o) { return { t: String(o.t || ""), k: !!o.k }; });
+    if (Array.isArray(j.pernyataan)) s.pernyataan = j.pernyataan.map(function (o) { return { t: String(o.t || ""), b: !!o.b }; });
+    if (Array.isArray(j.pasangan)) s.pasangan = j.pasangan.map(function (o) { return { kiri: String(o.kiri || ""), kanan: String(o.kanan || "") }; });
+    if (Array.isArray(j.pengecoh)) s.pengecoh = j.pengecoh.map(String);
+    if (j.kunciIsian) s.kunciIsian = String(j.kunciIsian); if (j.rubrik) s.rubrik = String(j.rubrik);
+    bukaEditor(s, k.id); toast("Draf AI siap ditelaah. Periksa kebenaran kunci sebelum disimpan.");
+  }).catch(function (e) { toast("Gagal: " + e.message); });
+}
+function aiTelaah() {
+  var prompt = "Telaah soal asesmen SMP berikut berdasarkan kaidah penulisan soal (aspek materi, konstruksi, bahasa). Periksa juga apakah kunci benar dan apakah soal sesuai indikator dan level kognitif " + D.level + " " + LEVEL[D.level].nama + ".\n" +
+    JSON.stringify({ indikator: D.indikator, bentuk: BENTUK[D.bentuk].nama, stimulus: D.stimulus, pokok: D.pokok, opsi: D.opsi, pernyataan: D.pernyataan, pasangan: D.pasangan, pengecoh: D.pengecoh, kunciIsian: D.kunciIsian, rubrik: D.rubrik }) +
+    '\nKeluarkan HANYA JSON: {"catatan":["… maksimal 6 catatan singkat dan konkret"],"kunciBenar":true/false}';
+  toast("Meminta telaah AI…");
+  panggilGemini(prompt).then(function (j) {
+    var c = (j.catatan || []).map(function (m) { return { t: "warn", m: "AI: " + m }; });
+    if (j.kunciBenar === false) c.unshift({ t: "bad", m: "AI menilai kunci mungkin keliru. Periksa ulang." });
+    $("#edCek").insertAdjacentHTML("beforeend", '<p class="kecil" style="margin:10px 0 4px"><b>Telaah AI (saran, bukan keputusan)</b></p>' + listPeringatan(c.length ? c : [{ t: "ok", m: "AI tidak menemukan masalah berarti." }]));
+  }).catch(function (e) { toast("Gagal: " + e.message); });
+}
+
+/* ============ Aksi ============ */
+function dialogPilih(k) {
+  var cs = kandidat(k); D = null;
+  $("#dlgJudul").textContent = "Pilih soal dari bank";
+  $("#dlgIsi").innerHTML = cs.map(function (s) { return '<div class="soal-k"><div class="isi">' + htmlSoal(s, { kunci: true }) + '</div><button class="btn kecil utama" data-act="kisi-pakai" data-kisi="' + k.id + '" data-id="' + s.id + '">Pakai soal ini</button></div>'; }).join("") || "<p>Tidak ada soal yang cocok.</p>";
+  $("#dlgKaki").innerHTML = '<button class="btn" data-act="tutup">Tutup</button>';
+  $("#dlg").showModal();
+}
+function salinAsesmen(a) {
+  var b = salin(a); var map = {}; b.id = uid("as"); b.contoh = false; b.nama = a.nama.replace(/ \(contoh\)$/, "") + " (salinan)";
+  b.tp.forEach(function (t) { var n = uid("tp"); map[t.id] = n; t.id = n; });
+  b.kisi.forEach(function (k) { k.id = uid("k"); k.tpId = map[k.tpId] || k.tpId; k.soalId = ""; });
+  return b;
+}
+function aksi(act, el) {
+  var a = AS(); var id = el.dataset.id; var k;
+  switch (act) {
+    case "tutup": $("#dlg").close(); break;
+    case "hapus-contoh": if (confirm("Hapus semua data contoh (asesmen, soal, paket, dan hasil contoh)? Data buatan Anda tetap aman.")) { hapusContoh(); render(); toast("Data contoh dihapus."); } break;
+    case "muat-contoh": pasangContoh(); simpan(); render(); toast("Data contoh dimuat."); break;
+    case "as-baru": var nb = asesmenBaru(); S.asesmen.push(nb); S.aktif = nb.id; simpan(); bukaTab("asesmen"); break;
+    case "as-dup": var dp = salinAsesmen(a); S.asesmen.push(dp); S.aktif = dp.id; simpan(); render(); toast("Asesmen disalin (tanpa tautan soal)."); break;
+    case "as-hapus":
+      if (!confirm("Hapus asesmen “" + a.nama + "” beserta paket dan hasil analisisnya? Soal di bank tetap disimpan.")) break;
+      var pids = S.paket.filter(function (p) { return p.asesmenId === a.id; }).map(function (p) { return p.id; });
+      S.hasil = S.hasil.filter(function (h) { return pids.indexOf(h.paketId) < 0; }); S.paket = S.paket.filter(function (p) { return p.asesmenId !== a.id; });
+      S.asesmen = S.asesmen.filter(function (x) { return x.id !== a.id; }); if (!S.asesmen.length) S.asesmen.push(asesmenBaru()); S.aktif = S.asesmen[0].id; simpan(); render(); break;
+    case "tp-tambah": a.tp.push({ id: uid("tp"), kode: "TP " + (a.tp.length + 1), teks: "", materi: "", bobot: 1 }); simpan(); render(); break;
+    case "tp-hapus":
+      var dipakai = a.kisi.filter(function (x) { return x.tpId === id; }).length;
+      if (dipakai && !confirm("TP ini dipakai " + dipakai + " baris kisi-kisi. Hapus TP beserta baris tersebut?")) break;
+      a.tp = a.tp.filter(function (t) { return t.id !== id; }); a.kisi = a.kisi.filter(function (x) { return x.tpId !== id; }); simpan(); render(); break;
+    case "kisi-tambah": if (!a.tp.length) { toast("Tambahkan TP dulu."); break; } a.kisi.push({ id: uid("k"), tpId: a.tp[0].id, materi: a.tp[0].materi || "", indikator: "", level: "L1", bentuk: "PG", skor: 1, soalId: "" }); simpan(); render(); break;
+    case "kisi-susun":
+      if (!a.tp.length) { toast("Tambahkan TP dulu."); break; }
+      var o = { total: +$("#sc-total").value, L1: +$("#sc-L1").value, L2: +$("#sc-L2").value, L3: +$("#sc-L3").value, bentuk: {} };
+      ["PGK", "BS", "JD", "IS", "UR"].forEach(function (b) { o.bentuk[b] = +$("#sc-b-" + b).value || 0; });
+      if (o.L1 + o.L2 + o.L3 <= 0) { toast("Isi persentase level."); break; }
+      var ganti = $("#sc-ganti").checked; if (ganti && a.kisi.length && !confirm("Ganti " + a.kisi.length + " baris kisi-kisi yang ada?")) break;
+      var rows = susunKisi(a, o); a.kisi = ganti ? rows : a.kisi.concat(rows); a.target = { L1: o.L1, L2: o.L2, L3: o.L3 }; simpan(); render(); toast(rows.length + " baris kisi-kisi disusun. Sunting indikatornya."); break;
+    case "kisi-hapus": a.kisi = a.kisi.filter(function (x) { return x.id !== id; }); simpan(); render(); break;
+    case "kisi-naik": case "kisi-turun":
+      var i = a.kisi.findIndex(function (x) { return x.id === id; }); var j = act === "kisi-naik" ? i - 1 : i + 1;
+      if (j >= 0 && j < a.kisi.length) { var tmp = a.kisi[i]; a.kisi[i] = a.kisi[j]; a.kisi[j] = tmp; simpan(); rKisiBody(a, !!S.setelan.apiKey); var bt = $('[data-act="' + act + '"][data-id="' + id + '"]'); if (bt) bt.focus(); } break;
+    case "kisi-lepas": k = a.kisi.find(function (x) { return x.id === id; }); k.soalId = ""; simpan(); render(); break;
+    case "kisi-pilih": dialogPilih(a.kisi.find(function (x) { return x.id === id; })); break;
+    case "kisi-pakai": k = a.kisi.find(function (x) { return x.id === el.dataset.kisi; }); k.soalId = id; var sp = soalById(id); k.skor = sp.skor; simpan(); $("#dlg").close(); render(); break;
+    case "kisi-tulis": k = a.kisi.find(function (x) { return x.id === id; }); var sb = soalBaru(k); sb.skor = k.skor; bukaEditor(sb, k.id); break;
+    case "kisi-ai": aiSoal(id); break;
+    case "kisi-saran": k = a.kisi.find(function (x) { return x.id === id; }); k.indikator = saranIndikator(k, tpById(a, k.tpId)); simpan(); rKisiBody(a, !!S.setelan.apiKey); break;
+    case "kisi-csv":
+      unduh("kisi-kisi-" + (a.mapel || "asesmen").replace(/\W+/g, "-") + ".csv", csv([["No", "Kode TP", "Tujuan pembelajaran", "Materi", "Indikator soal", "Level", "Bentuk", "Skor", "Soal tertaut"]].concat(a.kisi.map(function (x, n) { var t = tpById(a, x.tpId); var s = soalBaris(x); return [n + 1, t ? t.kode : "", t ? t.teks : "", x.materi, x.indikator, x.level + " " + LEVEL[x.level].nama, BENTUK[x.bentuk].nama, x.skor, s ? s.pokok : ""]; }))), "text/csv;charset=utf-8"); break;
+    case "soal-baru": bukaEditor(soalBaru()); break;
+    case "soal-ubah": bukaEditor(soalById(id)); break;
+    case "soal-dup": var sd = salin(soalById(id)); sd.id = uid("s"); sd.contoh = false; sd.status = "draf"; sd.stat = null; sd.sumber = "manual"; sd.dibuat = hariIni(); S.soal.unshift(sd); simpan(); render(); toast("Soal diduplikat sebagai draf."); break;
+    case "soal-hapus":
+      var dipaket = S.paket.some(function (p) { return p.butir.some(function (b) { return b.soalId === id; }); });
+      if (!confirm("Hapus soal ini dari bank?" + (dipaket ? " Soal ini dipakai di paket; paket tersebut akan kehilangan satu butir." : ""))) break;
+      S.soal = S.soal.filter(function (s) { return s.id !== id; }); S.asesmen.forEach(function (x) { x.kisi.forEach(function (r) { if (r.soalId === id) r.soalId = ""; }); });
+      S.paket.forEach(function (p) { p.butir = p.butir.filter(function (b) { return b.soalId !== id; }); }); simpan(); render(); break;
+    case "ed-tambah": var arr = el.dataset.arr;
+      if (arr === "opsi") D.opsi.push({ t: "", k: false }); else if (arr === "pernyataan") D.pernyataan.push({ t: "", b: true }); else if (arr === "pasangan") D.pasangan.push({ kiri: "", kanan: "" }); else D.pengecoh.push("");
+      rEdBentuk(); rEdCek(); break;
+    case "ed-hapus": D[el.dataset.arr].splice(+el.dataset.i, 1); rEdBentuk(); rEdCek(); break;
+    case "ed-hapus-gambar": D.gambar = ""; bukaEditor(D, D_KISI); break;
+    case "ed-simpan": simpanEditor(); break;
+    case "ed-ai-telaah": aiTelaah(); break;
+    case "paket-buat":
+      var r0 = ringkasKisi(a); if (!r0.n) { toast("Kisi-kisi masih kosong."); break; }
+      var lama = S.paket.filter(function (p) { return p.asesmenId === a.id; });
+      if (lama.length && !confirm("Ganti " + lama.length + " paket lama? Hasil analisis paket lama ikut terhapus.")) break;
+      var lamaId = lama.map(function (p) { return p.id; }); S.hasil = S.hasil.filter(function (h) { return lamaId.indexOf(h.paketId) < 0; });
+      var ps = buatPaket(a, { jumlah: +$("#pk-n").value, acakSoal: $("#pk-as").checked, acakOpsi: $("#pk-ao").checked, kelompok: $("#pk-kb").checked, variasi: $("#pk-va").checked }, true);
+      simpan(); render(); toast(ps.length + " paket dibuat."); break;
+    case "paket-hapus": if (!confirm("Hapus paket ini beserta hasil analisisnya?")) break; S.paket = S.paket.filter(function (p) { return p.id !== id; }); S.hasil = S.hasil.filter(function (h) { return h.paketId !== id; }); simpan(); render(); break;
+    case "paket-analisis": PK_ANALISIS = id; var hp = S.hasil.filter(function (h) { return h.paketId === id; }); if (hp.length) H_AKTIF = hp[hp.length - 1].id; bukaTab("analisis"); break;
+    case "an-proses": prosesJawaban(); break;
+    case "an-templat": var pt = S.paket.find(function (p) { return p.id === $("#an-paket").value; }); var hd = ["Kode"]; pt.butir.forEach(function (_, n) { hd.push(String(n + 1)); });
+      unduh("templat-jawaban-paket-" + pt.kode + ".csv", csv([hd, ["01"], ["02"]]), "text/csv;charset=utf-8"); break;
+    case "an-hapus": if (!confirm("Hapus hasil analisis ini?")) break; S.hasil = S.hasil.filter(function (h) { return h.id !== H_AKTIF; }); H_AKTIF = null; simpan(); render(); break;
+    case "an-simpan-stat":
+      var A1 = analisis(S.hasil.find(function (h) { return h.id === H_AKTIF; }));
+      A1.items.forEach(function (x) { x.s.stat = { p: Math.round(x.p * 100) / 100, d: Math.round(x.d * 100) / 100, n: A1.siswa.length, tgl: hariIni() }; }); simpan(); toast("Statistik butir disimpan ke bank soal."); break;
+    case "an-csv":
+      var A2 = analisis(S.hasil.find(function (h) { return h.id === H_AKTIF; }));
+      var rws = [["Kode"].concat(A2.items.map(function (x) { return "No " + x.no; })).concat(["Total", "Nilai", "Status"])];
+      A2.siswa.forEach(function (si) { rws.push([si.kode].concat(si.skor).concat([si.total, Math.round(si.nilai), si.nilai >= A2.kktp ? "Tercapai" : "Remedial"])); });
+      rws.push([]); rws.push(["No", "TP", "Level", "Bentuk", "p", "D", "Saran"]);
+      A2.items.forEach(function (x) { rws.push([x.no, namaTP(A2.a, x.s.tpId), x.s.level, x.s.bentuk, angka(x.p), angka(x.d), saranButir(x, A2.siswa.length).m]); });
+      unduh("analisis-paket-" + A2.paket.kode + ".csv", csv(rws), "text/csv;charset=utf-8"); break;
+    case "cetak-kisi": tampilCetak(lembarKisi(a)); break;
+    case "cetak-kartu": tampilCetak(lembarKartu(a.kisi.map(function (x, n) { return { s: soalBaris(x), no: n + 1 }; }).filter(function (x) { return x.s; }), a)); break;
+    case "cetak-kartu-bank": tampilCetak(lembarKartu(soalTersaring(a).map(function (s) { return { s: s, no: "" }; }), a)); break;
+    case "cetak-kartu-satu": tampilCetak(lembarKartu([{ s: soalById(id), no: "" }], a)); break;
+    case "cetak-naskah": tampilCetak(lembarNaskah(S.paket.find(function (p) { return p.id === id; }))); break;
+    case "cetak-kunci": tampilCetak(lembarKunci(S.paket.find(function (p) { return p.id === id; }))); break;
+    case "cetak-lj": tampilCetak(lembarLJ(S.paket.find(function (p) { return p.id === id; }))); break;
+    case "cetak-analisis": tampilCetak(lembarAnalisis(analisis(S.hasil.find(function (h) { return h.id === H_AKTIF; })))); break;
+    case "cetak-sekarang": $("#areaCetak").innerHTML = PRATINJAU; window.print(); break;
+    case "ekspor-json": var cp = salin(S); cp.setelan.apiKey = ""; unduh("cadangan-kisi-bank-soal-" + hariIni() + ".json", JSON.stringify(cp, null, 1), "application/json"); break;
+    case "bank-csv":
+      unduh("bank-soal-" + hariIni() + ".csv", csv([["ID", "Mapel", "Kelas", "TP", "Materi", "Indikator", "Level", "Bentuk", "Stimulus", "Pokok soal", "Pilihan/pernyataan", "Kunci", "Skor", "Status", "p", "D"]].concat(S.soal.map(function (s) {
+        var isi = s.bentuk === "PG" || s.bentuk === "PGK" ? s.opsi.map(function (o, n) { return HURUF[n] + ". " + o.t; }).join(" | ") : s.bentuk === "BS" ? s.pernyataan.map(function (p) { return p.t; }).join(" | ") : s.bentuk === "JD" ? s.pasangan.map(function (p) { return p.kiri + " → " + p.kanan; }).join(" | ") : "";
+        return [s.id, s.mapel, s.kelas, namaTP(AS(), s.tpId), s.materi, s.indikator, s.level, BENTUK[s.bentuk].nama, s.stimulus, s.pokok, isi, s.bentuk === "UR" ? s.rubrik : kunciTeks({}, s), s.skor, s.status, s.stat ? s.stat.p : "", s.stat ? s.stat.d : ""];
+      }))), "text/csv;charset=utf-8"); break;
+    case "hapus-semua":
+      if (!confirm("Hapus SEMUA data aplikasi di perangkat ini? Ekspor cadangan dulu bila perlu.")) break;
+      if (!confirm("Yakin? Tindakan ini tidak dapat dibatalkan.")) break;
+      try { localStorage.removeItem(KUNCI_SIMPAN); } catch (e) { }
+      S = kosong(); S.asesmen.push(asesmenBaru()); S.aktif = S.asesmen[0].id; simpan(); PRATINJAU = ""; bukaTab("beranda"); toast("Semua data dihapus."); break;
+  }
+}
+
+/* ============ Peristiwa ============ */
+document.addEventListener("click", function (e) {
+  var t = e.target.closest("[data-act]"); if (t && !t.disabled) { if (t.tagName === "A") e.preventDefault(); aksi(t.dataset.act, t); return; }
+  var g = e.target.closest("[data-tab-go]"); if (g) { bukaTab(g.dataset.tabGo); return; }
+  var tb = e.target.closest("#tabbar button"); if (tb) bukaTab(tb.dataset.tab);
+});
+$("#tabbar").addEventListener("keydown", function (e) {
+  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+  var i = TABS.findIndex(function (x) { return x[0] === TAB; }); i = (i + (e.key === "ArrowRight" ? 1 : TABS.length - 1)) % TABS.length;
+  bukaTab(TABS[i][0]); $('#tabbar button[data-tab="' + TABS[i][0] + '"]').focus(); e.preventDefault();
+});
+function nilai(el) { return el.type === "checkbox" ? el.checked : el.type === "number" ? (el.value === "" ? "" : +el.value) : el.value; }
+function ubah(e) {
+  var el = e.target; var a = AS(); var d = el.dataset; var akhir = e.type === "change";
+  if (el.id === "pilihAsesmen") { S.aktif = el.value; F.tp = ""; PRATINJAU = ""; simpan(); render(); return; }
+  if (d.af) { a[d.af] = nilai(el); simpan(); if (akhir && d.af === "nama") render(); return; }
+  if (d.target) { a.target[d.target] = +el.value || 0; simpan(); return; }
+  if (d.tp) { var t = tpById(a, d.tp); t[d.k] = nilai(el); simpan(); return; }
+  if (d.kisi) {
+    var k = a.kisi.find(function (x) { return x.id === d.kisi; }); k[d.k] = nilai(el);
+    if (["tpId", "level", "bentuk"].indexOf(d.k) > -1) { if (d.k === "bentuk" && !k.soalId) k.skor = BENTUK[k.bentuk].skor; if (d.k === "tpId") { var tt = tpById(a, k.tpId); if (tt && !k.materi) k.materi = tt.materi; } var sb = soalBaris(k); if (sb && (sb.level !== k.level || sb.bentuk !== k.bentuk || sb.tpId !== k.tpId)) { k.soalId = ""; toast("Tautan soal dilepas karena TP/level/bentuk berubah."); } simpan(); rKisiBody(a, !!S.setelan.apiKey); rKisiRingkas(a); var f = $('[data-kisi="' + d.kisi + '"][data-k="' + d.k + '"]'); if (f) f.focus(); }
+    else { simpan(); if (akhir) rKisiRingkas(a); }
+    return;
+  }
+  if (["fq", "fas", "ftp", "flv", "fbt", "fst"].indexOf(el.id) > -1) { F[el.id.slice(1)] = el.value; rBankList(a); return; }
+  if (D && d.e) {
+    var lama = D.bentuk; D[d.e] = d.e === "skor" ? (+el.value || 0) : el.value;
+    if (d.e === "bentuk") { if (D.skor === BENTUK[lama].skor) D.skor = BENTUK[D.bentuk].skor; var sk = $('[data-e="skor"]'); if (sk) sk.value = D.skor; if (D.bentuk === "PG") { var f1 = D.opsi.findIndex(function (o) { return o.k; }); D.opsi.forEach(function (o, n) { o.k = n === (f1 < 0 ? 0 : f1); }); } rEdBentuk(); }
+    rEdCek(); return;
+  }
+  if (D && d.arr) {
+    var arr = D[d.arr], n = +d.i;
+    if (d.arr === "pengecoh") arr[n] = el.value;
+    else if (d.arr === "opsi" && d.k === "k") { if (D.bentuk === "PG") arr.forEach(function (o, m) { o.k = m === n; }); else arr[n].k = el.checked; }
+    else if (d.arr === "pernyataan" && d.k === "b") arr[n].b = el.value === "1";
+    else arr[n][d.k] = el.value;
+    rEdCek(); return;
+  }
+  if (D && d.ceklis) { D.ceklis[d.ceklis] = el.checked; return; }
+  if (d.set) { S.setelan[d.set] = el.value; simpan(); if (d.set === "tema") terapkanTema(); if (d.set === "apiKey" && akhir) toast(el.value ? "Kunci API disimpan di perangkat ini." : "Kunci API dihapus."); return; }
+  if (el.id === "an-paket") { PK_ANALISIS = el.value; return; }
+  if (el.id === "an-hasil") { H_AKTIF = el.value; rAnIsi(); return; }
+  if (el.id === "an-kktp") { S.setelan.kktp = +el.value || 70; simpan(); return; }
+  if (el.id === "edGambar" && el.files[0]) { gambarKecil(el.files[0], function (u) { D.gambar = u; bukaEditor(D, D_KISI); }); return; }
+  if (el.id === "imporJson" && el.files[0]) {
+    var fr = new FileReader();
+    fr.onload = function () {
+      try {
+        var o = JSON.parse(fr.result); if (!o || !Array.isArray(o.asesmen) || !Array.isArray(o.soal)) throw new Error("format");
+        if (!confirm("Gabungkan isi cadangan ke data sekarang? (" + o.asesmen.length + " asesmen, " + o.soal.length + " soal; data dengan ID sama akan ditimpa)")) return;
+        ["asesmen", "soal", "paket", "hasil"].forEach(function (key) { (o[key] || []).forEach(function (x) { var i = S[key].findIndex(function (y) { return y.id === x.id; }); if (i > -1) S[key][i] = x; else S[key].push(x); }); });
+        if (o.setelan) ["sekolah", "kota", "kepsek", "penyusun"].forEach(function (key) { if (o.setelan[key] && !S.setelan[key]) S.setelan[key] = o.setelan[key]; });
+        simpan(); render(); toast("Cadangan diimpor.");
+      } catch (err) { toast("Berkas bukan cadangan aplikasi ini."); }
+    };
+    fr.readAsText(el.files[0]); el.value = ""; return;
+  }
+}
+document.addEventListener("input", function (e) { if (e.target.type === "file" || e.target.tagName === "SELECT" || e.target.type === "checkbox" || e.target.type === "radio") return; ubah(e); });
+document.addEventListener("change", ubah);
+$("#dlg").addEventListener("close", function () { D = null; D_KISI = null; });
+window.addEventListener("afterprint", function () { $("#areaCetak").innerHTML = ""; });
+
+/* ============ Mulai ============ */
+(function mulai() {
+  S = muat();
+  if (!S) { S = kosong(); pasangContoh(); simpan(); }
+  S.setelan = Object.assign(kosong().setelan, S.setelan || {});
+  ["paket", "hasil"].forEach(function (k) { if (!Array.isArray(S[k])) S[k] = []; });
+  if (!S.asesmen.length) { S.asesmen.push(asesmenBaru()); S.aktif = S.asesmen[0].id; }
+  $("#tabbar").innerHTML = TABS.map(function (t) { return '<button role="tab" data-tab="' + t[0] + '" aria-controls="t-' + t[0] + '">' + t[1] + "</button>"; }).join("");
+  terapkanTema(); bukaTab("beranda");
+})();
+
+</script>
+</body>
+</html>
