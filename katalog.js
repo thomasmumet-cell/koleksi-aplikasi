@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Talenta10 – Asesmen Minat, Bakat & Potensi Siswa",
+    kategori: "Bimbingan Konseling",
+    jenis: "Apps Script",
+    deskripsi: "Asesmen 8 bagian (±150 butir) untuk siswa SMP: kognitif akademik 5 mapel dengan ketuntasan indikator, kecakapan berpikir, gaya belajar V/A/K, kecerdasan majemuk, minat karier RIASEC, ketahanan belajar, EQ, AQ, motivasi berprestasi, 8 Dimensi Profil Lulusan, serta minat dan cita-cita. Menghasilkan laporan 11 halaman A4 seperti PESAT/Halobakat dengan rekomendasi ekskul, arah SMA/SMK, karier, dan rencana aksi 4 minggu; panel Guru BK berisi rekap kelas, daftar siswa yang perlu perhatian, dan unduh CSV. Data di Google Spreadsheet; bisa dicoba dalam Mode Demo. Dikembangkan oleh Edy Thomas.",
+    tanggal: "2026-11-22",
+    tautan: "talenta10/",
+    status: "aktif"
+  },
+  {
     nama: "Profil Potensi Siswa – Minat, Kekuatan, dan Cara Belajar",
     kategori: "Bimbingan Konseling",
     jenis: "HTML",

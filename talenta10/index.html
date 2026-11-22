@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<base target="_top">
+<script>/* Di luar Google Apps Script (mis. GitHub), jalankan Mode Demo */if(typeof google==="undefined"||!google.script){document.write('<script src="demo.js"><\/script>')}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talenta10 — Asesmen Minat & Bakat</title>
+<style>
+:root{
+  --ungu:#3b2e83; --ungu2:#5b4bc4; --ungu-muda:#efedfb; --amber:#f5a524; --amber-muda:#fff4dc;
+  --teal:#12a39a; --teal-muda:#e3f6f4; --coral:#ef6f61; --abu:#f5f6fa; --garis:#e2e4ee; --teks:#22223b; --redup:#6b6f85;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;color:var(--teks);background:var(--abu);font-size:15px;line-height:1.5}
+button,input,select,textarea{font-family:inherit;font-size:15px}
+button{cursor:pointer}
+.hidden{display:none!important}
+.view{min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--ungu2)}
+
+/* header */
+.top{background:linear-gradient(110deg,var(--ungu),var(--ungu2));color:#fff;display:flex;align-items:center;gap:12px;padding:10px 18px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo .mk{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--amber),#ffd166);display:grid;place-items:center;font-weight:900;color:var(--ungu);font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.logo b{font-size:19px;letter-spacing:.3px}.logo b span{color:#ffd166}
+.logo small{display:block;font-size:11.5px;opacity:.85;margin-top:-2px}
+.top .sp{flex:1}
+.credit{font-size:12px;color:var(--redup);text-align:center;padding:12px}
+.credit b{color:var(--ungu)}
+.credit a{color:var(--redup);margin-left:8px}
+
+/* landing */
+.hero{flex:1;display:grid;grid-template-columns:1.15fr 1fr;gap:34px;align-items:center;max-width:1040px;width:100%;margin:0 auto;padding:30px 18px}
+.hero h1{font-size:38px;line-height:1.15;margin:0 0 10px;color:var(--ungu)}
+.hero h1 span{background:linear-gradient(90deg,var(--amber),var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--redup);margin:0 0 16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:#fff;border:1px solid var(--garis);border-radius:20px;padding:6px 12px;font-size:13px}
+.card{background:#fff;border-radius:16px;box-shadow:0 8px 28px rgba(34,34,59,.08);padding:22px}
+.card h2{margin:0 0 4px;color:var(--ungu);font-size:20px}
+.sub{color:var(--redup);font-size:13.5px;margin-bottom:14px}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:#3d405b}
+.fld input,.fld select,.fld textarea{width:100%;padding:10px 12px;border:1px solid var(--garis);border-radius:10px;background:#fff}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:2px solid #c9c2f5;border-color:var(--ungu2)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font-weight:700;display:inline-flex;gap:6px;align-items:center;justify-content:center}
+.btn-p{background:var(--ungu);color:#fff}.btn-p:hover{background:var(--ungu2)}
+.btn-a{background:var(--amber);color:#3a2600}
+.btn-t{background:var(--teal);color:#fff}
+.btn-l{background:#eceef5;color:#3d405b}
+.btn-o{background:#fff;color:var(--ungu);border:1.5px solid var(--ungu)}
+.btn-r{background:#fde7e4;color:#b42318}
+.btn-sm{padding:6px 11px;font-size:13px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.w100{width:100%}
+.err{background:#fdecea;color:#a1251b;border-radius:10px;padding:9px 12px;font-size:13.5px;margin-bottom:12px}
+.ok{background:#e6f6ec;color:#11703f;border-radius:10px;padding:9px 12px;font-size:13.5px;margin-bottom:12px}
+.lnk{background:none;border:0;color:var(--ungu2);text-decoration:underline;padding:0;font-size:13.5px}
+
+/* petunjuk */
+.wrap{max-width:900px;width:100%;margin:0 auto;padding:22px 16px;flex:1}
+.sekgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:14px 0}
+.sek{background:#fff;border:1px solid var(--garis);border-radius:12px;padding:12px}
+.sek .ik{font-size:24px}.sek b{display:block;margin:4px 0 2px}
+.sek small{color:var(--redup)}
+
+/* tes */
+.progbar{background:#fff;border-bottom:1px solid var(--garis);padding:10px 18px}
+.steps{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.step{flex:none;font-size:12px;padding:5px 10px;border-radius:20px;background:#eceef5;color:var(--redup);white-space:nowrap}
+.step.on{background:var(--ungu);color:#fff}.step.done{background:var(--teal-muda);color:#0b6e68}
+.pb{height:8px;background:#eceef5;border-radius:6px;overflow:hidden}.pb i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--amber));transition:width .3s}
+.pbtx{font-size:12px;color:var(--redup);margin-top:4px;display:flex;justify-content:space-between}
+.sekhead{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.sekhead .ik{font-size:34px;width:56px;height:56px;border-radius:14px;background:var(--ungu-muda);display:grid;place-items:center}
+.sekhead h2{margin:0;color:var(--ungu);font-size:21px}
+.petunjuk{background:var(--amber-muda);border-left:4px solid var(--amber);padding:9px 12px;border-radius:8px;font-size:14px;margin-bottom:14px}
+.item{background:#fff;border:1px solid var(--garis);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.item.miss{border-color:var(--coral);box-shadow:0 0 0 3px #fde3df}
+.item .no{display:inline-block;background:var(--ungu-muda);color:var(--ungu);font-weight:700;border-radius:8px;padding:1px 8px;font-size:12.5px;margin-right:6px}
+.item .grp{font-size:12px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.bacaan{background:#f7f7fc;border-radius:10px;padding:10px 12px;margin:6px 0 10px;font-size:14px;font-style:italic}
+.q{font-weight:600;margin:4px 0 10px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:center;border:1.5px solid var(--garis);border-radius:10px;padding:9px 12px;background:#fff;text-align:left;width:100%}
+.opt:hover{border-color:#b9b1ef}
+.opt .hf{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid #b8bccd;display:grid;place-items:center;font-weight:700;font-size:13px;color:#5a5e75}
+.opt.sel{border-color:var(--ungu);background:var(--ungu-muda)}
+.opt.sel .hf{background:var(--ungu);border-color:var(--ungu);color:#fff}
+.lik{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.lik button{border:1.5px solid var(--garis);background:#fff;border-radius:10px;padding:8px 4px;font-size:12px;line-height:1.25;color:#4a4e66}
+.lik button b{display:block;font-size:16px}
+.lik button.sel{background:var(--ungu);color:#fff;border-color:var(--ungu)}
+.ekgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.ek{display:flex;gap:8px;align-items:center;border:1.5px solid var(--garis);border-radius:10px;padding:8px 10px;background:#fff;text-align:left}
+.ek.sel{border-color:var(--teal);background:var(--teal-muda)}
+.navtes{display:flex;justify-content:space-between;gap:10px;margin-top:6px}
+
+/* laporan */
+.lap-bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--garis);padding:10px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.lap{padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.page{background:#fff;width:100%;max-width:820px;padding:30px 34px 46px;border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.08);position:relative;overflow:hidden}
+.page .pf{position:absolute;left:0;right:0;bottom:0;height:30px;background:linear-gradient(90deg,var(--ungu),var(--ungu2));color:#fff;font-size:10.5px;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.page .pf b{color:#ffd166}
+.page .ph{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ungu-muda);padding-bottom:8px;margin-bottom:16px;font-size:11.5px;color:var(--redup)}
+.page .ph .lg{font-weight:900;color:var(--ungu);font-size:14px}.page .ph .lg span{color:var(--amber)}
+.page h2{color:var(--ungu);margin:0 0 4px;font-size:23px;text-align:center}
+.page h3{color:var(--ungu);margin:16px 0 8px;font-size:16px}
+.page .lead{text-align:center;color:var(--redup);font-size:13px;margin:0 0 14px}
+.pill{display:inline-block;background:var(--coral);color:#fff;border-radius:20px;padding:3px 14px;font-weight:700;font-size:13px}
+.cover{background:radial-gradient(circle at 85% 10%,#ffd16655,transparent 40%),radial-gradient(circle at 10% 90%,#12a39a44,transparent 45%),linear-gradient(160deg,var(--ungu),#251c5c);color:#fff;min-height:1000px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.cover .big{font-size:58px;font-weight:900;letter-spacing:1px;margin:10px 0 0}.cover .big span{color:#ffd166}
+.cover .tag{font-size:15px;opacity:.9;margin-bottom:40px}
+.cover .nm{background:#ffffff1f;border:1px solid #ffffff44;border-radius:18px;padding:20px 30px;min-width:60%}
+.cover .nm b{font-size:24px;display:block}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--teal);color:#fff;padding:7px 8px;font-weight:600}
+.tbl td{padding:7px 8px;border-bottom:1px solid var(--garis);text-align:center}
+.tbl td:first-child{text-align:left;font-weight:600}
+.tbl tr:nth-child(even) td{background:#f7fbfb}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;background:var(--teal-muda);border-radius:14px;padding:14px 18px;font-size:13.5px}
+.kv span{color:var(--redup)}
+.box{background:var(--teal-muda);border-radius:12px;padding:12px 14px;font-size:13px}
+.box.ungu{background:var(--ungu-muda)}.box.amber{background:var(--amber-muda)}
+.box ul{margin:4px 0 0;padding-left:18px}
+.gr2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gr3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sum{border-radius:14px;padding:12px 14px;color:#fff}
+.sum small{opacity:.9;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+.sum b{display:block;font-size:17px;margin-top:2px;line-height:1.3}
+.lvl{display:inline-block;border-radius:6px;padding:1px 8px;font-size:11.5px;font-weight:700}
+.l4{background:#d8f3e3;color:#11703f}.l3{background:#e0ecff;color:#1d4ed8}.l2{background:#fff1c9;color:#8a5a00}.l1{background:#fde3df;color:#b42318}
+.indgrid{display:flex;flex-wrap:wrap;gap:8px}
+.indgrid .box{padding:8px 10px;flex:1 1 210px;break-inside:avoid}
+.ind{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--garis)}
+.ind i{font-style:normal;flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;color:#fff}
+.ind .y{background:var(--teal)}.ind .n{background:var(--coral)}
+.barrow{display:grid;grid-template-columns:150px 1fr 44px;gap:8px;align-items:center;font-size:12.5px;margin:5px 0}
+.barrow .bt{height:14px;background:#eceef5;border-radius:8px;overflow:hidden;position:relative}
+.barrow .bt i{display:block;height:100%;border-radius:8px}
+.barrow .bt em{position:absolute;top:-3px;bottom:-3px;width:2px;background:#22223b}
+.mi-card{display:flex;gap:10px;background:#fff;border:1px solid var(--garis);border-radius:12px;padding:10px 12px}
+.mi-card .rk{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:900;color:#fff}
+.mi-card b{font-size:14px}.mi-card p{margin:2px 0 0;font-size:12.5px;color:#4a4e66}
+.dpl-card{border:1px solid var(--garis);border-radius:12px;padding:9px 11px;font-size:12px}
+.dpl-card b{font-size:13px;color:var(--ungu)}
+.ttd{display:grid;grid-template-columns:1fr 1fr;gap:20px;text-align:center;font-size:13px;margin-top:30px}
+.ttd .sp{height:64px}
+.big-num{font-size:46px;font-weight:900;color:var(--coral);line-height:1}
+.rec{display:flex;gap:10px;align-items:center;background:var(--teal-muda);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.rec .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-weight:800}
+.rec b{display:block}.rec small{color:#3d6b67}
+.plan{border-left:4px solid var(--amber);background:#fffaf0;border-radius:0 10px 10px 0;padding:8px 12px;margin-bottom:8px;font-size:13px}
+.plan b{color:#8a5a00}
+
+/* BK */
+.bknav{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;background:#fff;border-bottom:1px solid var(--garis)}
+.bknav button{background:#eceef5;border:0;border-radius:20px;padding:7px 14px;font-weight:600;font-size:13.5px;color:#3d405b}
+.bknav button.on{background:var(--ungu);color:#fff}
+.bkmain{padding:16px;max-width:1200px;width:100%;margin:0 auto;flex:1}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid var(--garis);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:26px;color:var(--ungu)}.stat span{font-size:12.5px;color:var(--redup)}
+.tb{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;font-size:13px}
+.tb th{background:#eceef5;text-align:left;padding:8px;white-space:nowrap}
+.tb td{padding:8px;border-top:1px solid var(--garis);vertical-align:top}
+.tbwrap{overflow-x:auto;border-radius:12px;border:1px solid var(--garis)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.row select,.row input{padding:8px 10px;border:1px solid var(--garis);border-radius:8px}
+.panel{background:#fff;border:1px solid var(--garis);border-radius:14px;padding:14px;margin-bottom:12px}
+.panel h3{margin:0 0 10px;color:var(--ungu);font-size:16px}
+.flash{position:sticky;top:6px;z-index:9;margin-bottom:10px}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;padding:18px 14px}.hero h1{font-size:28px}
+  .lik button span{display:none}
+  .page{padding:20px 16px 44px}
+  .gr2,.gr3,.kv,.ttd{grid-template-columns:1fr}
+  .barrow{grid-template-columns:110px 1fr 38px}
+  .cover{min-height:640px}.cover .big{font-size:40px}
+}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  body *{visibility:hidden}
+  #lapIsi,#lapIsi *{visibility:visible}
+  #lapIsi{position:absolute;left:0;top:0;width:100%;padding:0;gap:0}
+  .page{box-shadow:none;border-radius:0;max-width:none;width:210mm;min-height:296mm;padding:12mm 13mm 18mm;page-break-after:always;break-after:page}
+  .cover{min-height:296mm}
+  .gr2,.gr3{display:flex!important;flex-wrap:wrap}.gr2>*{flex:1 1 45%}.gr3>*{flex:1 1 30%}.box,.mi-card,.dpl-card,.rec,.plan{break-inside:avoid}
+  .tbl td{padding:5px 8px}.ind{padding:3px 0}.page h3{margin:10px 0 6px}.page .ph{margin-bottom:10px}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<!-- ======================= LANDING / MASUK ======================= -->
+<section id="vMasuk" class="view">
+  <header class="top"><div class="logo"><div class="mk">T10</div><div><b>Talenta<span>10</span></b><small data-sekolah></small></div></div></header>
+  <div class="hero">
+    <div>
+      <h1>Kenali potensimu,<br><span>raih masa depanmu.</span></h1>
+      <p>Talenta10 memetakan kemampuan akademik, cara berpikir, gaya belajar, kecerdasan majemuk, minat karier, ketahanan belajar, kecerdasan emosi, dan 8 Dimensi Profil Lulusan. Hasilnya berupa laporan lengkap dengan rekomendasi ekstrakurikuler, jurusan, karier, dan rencana aksi.</p>
+      <div class="chips"><span class="chip">📚 Akademik</span><span class="chip">🧠 Kecakapan Berpikir</span><span class="chip">🎧 Gaya Belajar</span><span class="chip">🌈 Kecerdasan Majemuk</span><span class="chip">🧭 RIASEC</span><span class="chip">💪 EQ · AQ · Motivasi</span><span class="chip">🇮🇩 Profil Lulusan</span><span class="chip">⭐ Rekomendasi</span></div>
+    </div>
+    <div class="card">
+      <div id="fMasuk">
+        <h2>Mulai Asesmen</h2>
+        <div class="sub">Isi data dirimu dengan benar. Waktu pengerjaan sekitar 45–60 menit dan bisa dilanjutkan jika terputus.</div>
+        <div id="mErr" class="err hidden"></div>
+        <div class="fld"><label>NISN</label><input id="iNisn" inputmode="numeric" autocomplete="off" placeholder="10 digit NISN"></div>
+        <div class="fld"><label>Nama Lengkap</label><input id="iNama" autocomplete="off"></div>
+        <div class="g2">
+          <div class="fld"><label>Kelas</label><input id="iKelas" autocomplete="off" placeholder="mis. VII F"></div>
+          <div class="fld"><label>Jenis Kelamin</label><select id="iJk"><option value="">Pilih</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+        </div>
+        <div class="g2">
+          <div class="fld"><label>Tanggal Lahir</label><input id="iTgl" type="date"></div>
+          <div class="fld" id="fTok"><label>Kode Sesi</label><input id="iTok" autocomplete="off" style="text-transform:uppercase" placeholder="dari Guru BK"></div>
+        </div>
+        <button class="btn btn-p w100" onclick="masuk()">Mulai ➜</button>
+        <div style="text-align:center;margin-top:12px"><button class="lnk" onclick="tampilCari(true)">Sudah pernah tes? Lihat hasilku</button></div>
+      </div>
+      <div id="fCari" class="hidden">
+        <h2>Lihat Hasilku</h2>
+        <div class="sub">Masukkan NISN dan kode laporan yang kamu dapat setelah tes.</div>
+        <div id="cErr" class="err hidden"></div>
+        <div class="fld"><label>NISN</label><input id="cNisn" inputmode="numeric"></div>
+        <div class="fld"><label>Kode Laporan</label><input id="cKode" style="text-transform:uppercase" placeholder="T10-……"></div>
+        <button class="btn btn-p w100" onclick="cariHasil()">Tampilkan Laporan</button>
+        <div style="text-align:center;margin-top:12px"><button class="lnk" onclick="tampilCari(false)">← Kembali</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="credit">Talenta10 · Dikembangkan oleh <b>Edy Thomas</b> <a href="#" onclick="bukaBK();return false">🔐 Guru BK</a></div>
+</section>
+
+<!-- ======================= PETUNJUK ======================= -->
+<section id="vPetunjuk" class="view hidden">
+  <header class="top"><div class="logo"><div class="mk">T10</div><div><b>Talenta<span>10</span></b><small data-sekolah></small></div></div><div class="sp"></div><div style="font-size:13px;text-align:right"><b data-nama></b><br><span data-kelas></span></div></header>
+  <div class="wrap">
+    <div class="card">
+      <h2>Halo, <span data-nama></span>! 👋</h2>
+      <div class="sub">Talenta10 terdiri dari 8 bagian. Tidak ada jawaban benar atau salah untuk bagian kepribadian dan minat. Jawablah dengan jujur sesuai dirimu agar hasilnya akurat.</div>
+      <div class="sekgrid" id="pSek"></div>
+      <div class="box amber" style="margin-bottom:14px">💡 Jawabanmu tersimpan otomatis di perangkat ini. Jika koneksi terputus atau halaman tertutup, masuk lagi dengan NISN yang sama untuk melanjutkan.</div>
+      <div id="pLanjut" class="hidden ok"></div>
+      <button class="btn btn-p" onclick="mulaiSeksi()">Mulai Mengerjakan ➜</button>
+    </div>
+  </div>
+  <div class="credit">Talenta10 · Dikembangkan oleh <b>Edy Thomas</b></div>
+</section>
+
+<!-- ======================= TES ======================= -->
+<section id="vTes" class="view hidden">
+  <header class="top"><div class="logo"><div class="mk">T10</div><div><b>Talenta<span>10</span></b><small data-sekolah></small></div></div><div class="sp"></div><div style="font-size:13px;text-align:right"><b data-nama></b><br><span data-kelas></span></div></header>
+  <div class="progbar"><div class="steps" id="tSteps"></div><div class="pb"><i id="tPb" style="width:0"></i></div><div class="pbtx"><span id="tPbTx"></span><span id="tSave">💾 tersimpan</span></div></div>
+  <div class="wrap" id="tIsi"></div>
+  <div class="credit">Talenta10 · Dikembangkan oleh <b>Edy Thomas</b></div>
+</section>
+
+<!-- ======================= LAPORAN ======================= -->
+<section id="vLap" class="view hidden">
+  <div class="lap-bar">
+    <div class="logo" style="color:var(--ungu)"><div class="mk">T10</div><b>Laporan Talenta<span style="color:var(--amber)">10</span></b></div>
+    <div style="flex:1"></div>
+    <span id="lapKode" style="font-size:13px;color:var(--redup)"></span>
+    <button class="btn btn-a btn-sm" onclick="window.print()">🖨 Cetak / Simpan PDF</button>
+    <button class="btn btn-l btn-sm" id="lapTutup" onclick="tutupLaporan()">Selesai</button>
+  </div>
+  <div id="lapInfo" class="wrap hidden" style="flex:none;padding-bottom:0"></div>
+  <div class="lap" id="lapIsi"></div>
+</section>
+
+<!-- ======================= GURU BK ======================= -->
+<section id="vBKLogin" class="view hidden">
+  <header class="top"><div class="logo"><div class="mk">T10</div><div><b>Talenta<span>10</span> · Guru BK</b><small data-sekolah></small></div></div></header>
+  <div class="wrap" style="display:grid;place-items:center">
+    <div class="card" style="max-width:380px;width:100%">
+      <h2>Masuk Guru BK</h2>
+      <div class="sub">Kelola hasil asesmen, rekap kelas, dan pengaturan.</div>
+      <div id="bErr" class="err hidden"></div>
+      <div class="fld"><label>Password</label><input id="bPw" type="password" onkeydown="if(event.key==='Enter')bkMasuk()"></div>
+      <div style="display:flex;justify-content:space-between">
+        <button class="btn btn-l" onclick="show('vMasuk')">← Kembali</button>
+        <button class="btn btn-p" onclick="bkMasuk()">Masuk</button>
+      </div>
+    </div>
+  </div>
+  <div class="credit">Talenta10 · Dikembangkan oleh <b>Edy Thomas</b></div>
+</section>
+
+<section id="vBK" class="view hidden">
+  <header class="top"><div class="logo"><div class="mk">T10</div><div><b>Talenta<span>10</span> · Panel Guru BK</b><small data-sekolah></small></div></div><div class="sp"></div><button class="btn btn-sm" style="background:#ffffff22;color:#fff" onclick="bkKeluar()">Keluar</button></header>
+  <nav class="bknav" id="bkNav">
+    <button data-t="daftar" class="on">📋 Hasil Siswa</button>
+    <button data-t="rekap">📊 Rekap Kelas</button>
+    <button data-t="set">⚙️ Pengaturan</button>
+    <button data-t="ekskul">🏅 Daftar Ekskul</button>
+  </nav>
+  <main class="bkmain" id="bkMain"></main>
+  <div class="credit">Talenta10 · Dikembangkan oleh <b>Edy Thomas</b></div>
+</section>
+
+<script>
+/* ===================================================================
+   TALENTA10 — Dikembangkan oleh Edy Thomas
+   =================================================================== */
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function lsGet(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+function api(fn){var a=[].slice.call(arguments,1);return new Promise(function(res,rej){google.script.run.withSuccessHandler(res).withFailureHandler(function(e){rej(e&&e.message?e:new Error(String(e)))})[fn].apply(null,a)})}
+function show(id){$$('.view').forEach(function(v){v.classList.toggle('hidden',v.id!==id)});window.scrollTo(0,0)}
+function errBox(id,m){var e=$('#'+id);if(!m){e.classList.add('hidden');return}e.textContent=m;e.classList.remove('hidden');try{e.scrollIntoView({block:'nearest'})}catch(x){}}
+function sibuk(btn,on,teks){if(!btn)return;if(on){btn._t=btn.innerHTML;btn.disabled=true;btn.innerHTML='⏳ '+(teks||'Memproses…')}else{btn.disabled=false;if(btn._t)btn.innerHTML=btn._t}}
+/* pesan singkat ditaruh di dalam halaman (bukan pop-up) agar selalu terlihat walau aplikasi disematkan */
+function flash(wadah,msg,jenis){var el=document.createElement('div');el.className=(jenis||'ok')+' flash';el.textContent=msg;wadah.insertBefore(el,wadah.firstChild);try{el.scrollIntoView({block:'nearest'})}catch(e){}setTimeout(function(){el.remove()},3500)}
+
+var INFO={}, P=null, SEKSI=null, JW={}, POS={s:0,p:0};
+var PER={tes:5,pilih:4,likert:6,minat:1};
+var SKALA={
+  sesuai:['Sangat Tidak Sesuai','Tidak Sesuai','Ragu-ragu','Sesuai','Sangat Sesuai'],
+  suka:['Sangat Tidak Suka','Tidak Suka','Biasa Saja','Suka','Sangat Suka'],
+  sering:['Tidak Pernah','Jarang','Kadang-kadang','Sering','Selalu']
+};
+var HURUF=['A','B','C','D'];
+
+api('getInfo').then(function(r){INFO=r;$$('[data-sekolah]').forEach(function(e){e.textContent=r.nama_sekolah+(r.tahun_ajaran?' · '+r.tahun_ajaran:'')});$('#fTok').classList.toggle('hidden',!r.perlu_token)}).catch(function(e){errBox('mErr','Gagal memuat: '+e.message)});
+
+function tampilCari(on){$('#fMasuk').classList.toggle('hidden',on);$('#fCari').classList.toggle('hidden',!on)}
+
+/* --------------------------- Masuk & lanjutkan --------------------------- */
+function masuk(){
+  var p={nisn:$('#iNisn').value.trim(),nama:$('#iNama').value.trim(),kelas:$('#iKelas').value.trim().toUpperCase(),jk:$('#iJk').value,tgl_lahir:$('#iTgl').value,token:$('#iTok').value.trim()};
+  if(!p.nisn||!p.nama||!p.kelas)return errBox('mErr','NISN, nama, dan kelas wajib diisi.');
+  if(!p.jk)return errBox('mErr','Pilih jenis kelamin.');
+  errBox('mErr');
+  var b=event&&event.target;sibuk(b,true,'Menyiapkan tes…');
+  api('mulaiTes',p).then(function(r){
+    sibuk(b,false);P=p;
+    var lama=lsGet('t10_'+p.nisn);
+    if(lama&&lama.jw&&Object.keys(lama.jw).length){SEKSI=lama.seksi||r.seksi;JW=lama.jw;POS=lama.pos||{s:0,p:0};
+      $('#pLanjut').textContent='✔ Jawabanmu sebelumnya ditemukan ('+hitungTerjawab()+' butir). Kamu akan melanjutkan dari bagian terakhir.';$('#pLanjut').classList.remove('hidden')}
+    else{SEKSI=r.seksi;JW={};POS={s:0,p:0};$('#pLanjut').classList.add('hidden')}
+    $$('[data-nama]').forEach(function(e){e.textContent=p.nama});$$('[data-kelas]').forEach(function(e){e.textContent='Kelas '+p.kelas});
+    $('#pSek').innerHTML=SEKSI.map(function(s,i){var n=s.items?s.items.length:1;return '<div class="sek"><div class="ik">'+s.ikon+'</div><b>'+(i+1)+'. '+esc(s.judul)+'</b><small>'+(s.tipe==='minat'?'pilihan & isian':n+' butir')+'</small></div>'}).join('');
+    show('vPetunjuk');
+  }).catch(function(e){sibuk(b,false);errBox('mErr',e.message)});
+}
+function simpan(){var ok=lsSet('t10_'+P.nisn,{seksi:SEKSI,jw:JW,pos:POS,p:P,t:Date.now()});var s=$('#tSave');if(s)s.textContent=ok?'💾 tersimpan':'⚠ belum tersimpan di perangkat'}
+function totalButir(){return SEKSI.reduce(function(a,s){return a+(s.items?s.items.length:1)},0)}
+function hitungTerjawab(){var n=0;SEKSI.forEach(function(s){if(s.items)s.items.forEach(function(q){if(JW[q.id]!==undefined&&JW[q.id]!=='')n++});else if(JW._minat&&JW._minat.pilihan&&JW._minat.pilihan.length)n++});return n}
+function halSeksi(s){if(s.tipe==='minat')return 1;return Math.ceil(s.items.length/PER[s.tipe])}
+
+/* ------------------------------- Tes ------------------------------- */
+function mulaiSeksi(){show('vTes');render()}
+function render(){
+  var s=SEKSI[POS.s];
+  $('#tSteps').innerHTML=SEKSI.map(function(x,i){return '<span class="step '+(i===POS.s?'on':i<POS.s?'done':'')+'">'+x.ikon+' '+esc(x.judul)+'</span>'}).join('');
+  var tot=totalButir(),dj=hitungTerjawab();
+  $('#tPb').style.width=Math.round(dj/tot*100)+'%';
+  $('#tPbTx').textContent='Bagian '+(POS.s+1)+' dari '+SEKSI.length+' · '+dj+' / '+tot+' terjawab';
+  var h='<div class="sekhead"><div class="ik">'+s.ikon+'</div><div><h2>'+esc(s.judul)+'</h2><small style="color:var(--redup)">Halaman '+(POS.p+1)+' dari '+halSeksi(s)+'</small></div></div>';
+  if(POS.p===0)h+='<div class="petunjuk">'+esc(s.petunjuk)+'</div>';
+  if(s.tipe==='minat')h+=renderMinat(s);
+  else{
+    var per=PER[s.tipe],mulai=POS.p*per;
+    s.items.slice(mulai,mulai+per).forEach(function(q,k){h+=renderItem(s,q,mulai+k+1)});
+  }
+  var akhirSeksi=POS.p>=halSeksi(s)-1, akhirSemua=akhirSeksi&&POS.s===SEKSI.length-1;
+  h+='<div class="navtes"><button class="btn btn-l" onclick="mundur()" '+(POS.s===0&&POS.p===0?'disabled':'')+'>◀ Sebelumnya</button>'+
+     (akhirSemua?'<button class="btn btn-t" onclick="lanjut()">✔ Selesai & Lihat Hasil</button>':'<button class="btn btn-p" onclick="lanjut()">'+(akhirSeksi?'Bagian Berikutnya ▶':'Lanjut ▶')+'</button>')+'</div>';
+  $('#tIsi').innerHTML=h;
+  bindItem();
+  window.scrollTo(0,0);try{$('#vTes').scrollIntoView({block:'start'})}catch(e){}
+}
+function renderItem(s,q,no){
+  var v=JW[q.id],h='<div class="item" data-id="'+q.id+'">';
+  if(q.grup)h+='<div class="grp">'+esc(q.grup)+'</div>';
+  if(q.bacaan)h+='<div class="bacaan">'+esc(q.bacaan)+'</div>';
+  h+='<div class="q"><span class="no">'+no+'</span>'+esc(q.soal)+'</div>';
+  if(s.tipe==='tes'){
+    h+='<div class="opts">'+q.opsi.map(function(o,i){return '<button class="opt'+(v===HURUF[i]?' sel':'')+'" data-v="'+HURUF[i]+'"><span class="hf">'+HURUF[i]+'</span><span>'+esc(o)+'</span></button>'}).join('')+'</div>';
+  }else if(s.tipe==='pilih'){
+    h+='<div class="opts">'+q.opsi.map(function(o,i){return '<button class="opt'+(String(v)===String(i)?' sel':'')+'" data-v="'+i+'"><span class="hf">'+['a','b','c'][i]+'</span><span>'+esc(o)+'</span></button>'}).join('')+'</div>';
+  }else{
+    var lb=SKALA[s.skala||'sesuai'];
+    h+='<div class="lik">'+lb.map(function(l,i){return '<button class="'+(Number(v)===i+1?'sel':'')+'" data-v="'+(i+1)+'"><b>'+(i+1)+'</b><span>'+l+'</span></button>'}).join('')+'</div>';
+  }
+  return h+'</div>';
+}
+function bindItem(){
+  $$('#tIsi .item').forEach(function(it){
+    var id=it.getAttribute('data-id');
+    $$('button[data-v]',it).forEach(function(b){b.onclick=function(){
+      $$('button[data-v]',it).forEach(function(x){x.classList.remove('sel')});b.classList.add('sel');
+      JW[id]=b.getAttribute('data-v');it.classList.remove('miss');simpan();
+      var tot=totalButir(),dj=hitungTerjawab();$('#tPb').style.width=Math.round(dj/tot*100)+'%';
+      $('#tPbTx').textContent='Bagian '+(POS.s+1)+' dari '+SEKSI.length+' · '+dj+' / '+tot+' terjawab';
+    }});
+  });
+  var mg=$('#tIsi .ekgrid');
+  if(mg){
+    $$('.ek',mg).forEach(function(b){b.onclick=function(){
+      var m=JW._minat=JW._minat||{pilihan:[],hobi:'',cita:''},n=b.getAttribute('data-n'),i=m.pilihan.indexOf(n);
+      if(i>-1)m.pilihan.splice(i,1);else{if(m.pilihan.length>=5){$('#mkInfo').textContent='Maksimal 5 pilihan. Hapus salah satu dulu.';return}m.pilihan.push(n)}
+      b.classList.toggle('sel',i<0);$('.cb',b).textContent=i<0?'☑':'☐';$('#mkInfo').textContent=m.pilihan.length+' dari 5 dipilih';simpan();
+    }});
+    ['hobi','cita'].forEach(function(k){$('#mk_'+k).oninput=function(){JW._minat=JW._minat||{pilihan:[],hobi:'',cita:''};JW._minat[k]=this.value;simpan()}});
+  }
+}
+function renderMinat(s){
+  var m=JW._minat||{pilihan:[],hobi:'',cita:''};
+  return '<div class="item"><div class="q">Kegiatan / ekstrakurikuler yang ingin kamu ikuti <small style="color:var(--redup);font-weight:400">(pilih 1–5)</small></div><div class="ekgrid">'+
+    s.ekskul.map(function(e){var on=m.pilihan.indexOf(e)>-1;return '<button class="ek'+(on?' sel':'')+'" data-n="'+esc(e)+'"><span class="cb">'+(on?'☑':'☐')+'</span>'+esc(e)+'</button>'}).join('')+
+    '</div><div id="mkInfo" style="font-size:12.5px;color:var(--redup);margin-top:6px">'+m.pilihan.length+' dari 5 dipilih</div></div>'+
+    '<div class="item"><div class="fld"><label>Hobi atau kegiatan favoritmu di rumah</label><input id="mk_hobi" value="'+esc(m.hobi)+'" placeholder="mis. menggambar, main bola, memasak"></div>'+
+    '<div class="fld" style="margin:0"><label>Cita-citamu</label><input id="mk_cita" value="'+esc(m.cita)+'" placeholder="mis. dokter, desainer, guru, pengusaha"></div></div>';
+}
+function belumDijawab(){
+  var s=SEKSI[POS.s];
+  if(s.tipe==='minat'){var m=JW._minat;return m&&m.pilihan&&m.pilihan.length?[]:['_minat']}
+  var per=PER[s.tipe],mulai=POS.p*per;
+  return s.items.slice(mulai,mulai+per).filter(function(q){return JW[q.id]===undefined||JW[q.id]===''}).map(function(q){return q.id});
+}
+function lanjut(){
+  var b=belumDijawab();
+  if(b.length){
+    b.forEach(function(id){var it=$('#tIsi .item[data-id="'+id+'"]');if(it)it.classList.add('miss')});
+    var f=$('#tIsi .item.miss')||$('#tIsi .item');if(f)f.scrollIntoView({block:'center'});
+    var nav=$('#tIsi .navtes');var old=$('#tIsi .err');if(old)old.remove();
+    var e=document.createElement('div');e.className='err';e.textContent=b[0]==='_minat'?'Pilih minimal 1 kegiatan yang kamu minati.':'Masih ada '+b.length+' butir yang belum dijawab (ditandai merah).';nav.parentNode.insertBefore(e,nav);
+    return;
+  }
+  var s=SEKSI[POS.s];
+  if(POS.p<halSeksi(s)-1)POS.p++;
+  else if(POS.s<SEKSI.length-1){POS.s++;POS.p=0}
+  else return kirim();
+  simpan();render();
+}
+function mundur(){if(POS.p>0)POS.p--;else if(POS.s>0){POS.s--;POS.p=halSeksi(SEKSI[POS.s])-1}simpan();render()}
+function kirim(){
+  var tot=totalButir(),dj=hitungTerjawab();
+  $('#tIsi').innerHTML='<div class="card" style="text-align:center"><div style="font-size:46px">🎉</div><h2>Semua bagian selesai!</h2><p class="sub">'+dj+' dari '+tot+' butir terjawab. Kirim jawabanmu untuk melihat laporan Talenta10.</p><div id="kErr" class="err hidden"></div><button class="btn btn-t" id="bKirim" onclick="kirimNow()">📤 Kirim & Lihat Laporan</button><div style="margin-top:10px"><button class="lnk" onclick="POS.s=SEKSI.length-1;POS.p=0;render()">← Periksa jawaban lagi</button></div></div>';
+  window.scrollTo(0,0);
+}
+function kirimNow(){
+  var b=$('#bKirim');sibuk(b,true,'Mengirim & menyusun laporan…');
+  api('kirimJawaban',P,JW).then(function(r){
+    lsDel('t10_'+P.nisn);
+    if(r.tampil){tampilLaporan(r.laporan,'siswa',r.kode)}
+    else{$('#tIsi').innerHTML='<div class="card" style="text-align:center"><div style="font-size:46px">✅</div><h2>Terima kasih, '+esc(P.nama)+'!</h2><p class="sub">Jawabanmu sudah tersimpan. Laporan hasilmu akan dibagikan oleh Guru BK.</p><p>Kode laporan: <b>'+esc(r.kode)+'</b></p><button class="btn btn-p" onclick="location.reload()">Selesai</button></div>'}
+  }).catch(function(e){sibuk(b,false);errBox('kErr','Gagal mengirim: '+e.message+' Jawaban masih tersimpan, silakan coba lagi.')});
+}
+function cariHasil(){
+  var n=$('#cNisn').value.trim(),k=$('#cKode').value.trim();if(!n||!k)return errBox('cErr','Isi NISN dan kode laporan.');
+  var b=event&&event.target;sibuk(b,true);
+  api('lihatHasil',n,k).then(function(L){sibuk(b,false);errBox('cErr');tampilLaporan(L,'siswa',L.hasil.kode)}).catch(function(e){sibuk(b,false);errBox('cErr',e.message)});
+}
+
+/* ==================== TEKS INTERPRETASI LAPORAN ==================== */
+var WARNA_MI={ling:'#ef6f61',logis:'#3b82f6',visual:'#a855f7',kines:'#f59e0b',musik:'#ec4899',inter:'#12a39a',intra:'#6366f1',natur:'#22c55e'};
+var MI_DESC={
+  ling:{a:'Kemampuan menggunakan kata dengan baik, baik lisan maupun tulisan: membaca, menulis, bercerita, dan berdiskusi.',kembang:'Rutin membaca 15 menit sehari, menulis jurnal atau cerpen, ikut debat, pidato, atau jurnalistik.',profesi:'Penulis, jurnalis, guru bahasa, pengacara, penyiar'},
+  logis:{a:'Kemampuan bernalar, berhitung, melihat pola, serta memahami sebab dan akibat secara runtut.',kembang:'Kerjakan teka-teki logika, latihan soal olimpiade, belajar coding, dan percobaan sains sederhana.',profesi:'Ilmuwan, insinyur, programmer, akuntan, analis data'},
+  visual:{a:'Kemampuan membayangkan, memahami ruang, warna, bentuk, dan menuangkannya dalam gambar atau desain.',kembang:'Buat peta pikiran berwarna, belajar desain grafis, fotografi, menggambar, atau membuat maket.',profesi:'Arsitek, desainer, animator, fotografer, pilot'},
+  kines:{a:'Kemampuan menggunakan tubuh dan tangan secara terampil untuk bergerak, berolahraga, atau membuat sesuatu.',kembang:'Belajar sambil praktik, ikut olahraga/tari, membuat kerajinan, dan eksperimen langsung.',profesi:'Atlet, penari, dokter bedah, teknisi, chef'},
+  musik:{a:'Kepekaan terhadap nada, irama, dan bunyi; mudah mengingat lagu dan menikmati musik.',kembang:'Belajar alat musik, ikut paduan suara atau karawitan, belajar sambil memakai irama atau lagu.',profesi:'Musisi, komposer, penyanyi, sound engineer, guru musik'},
+  inter:{a:'Kemampuan memahami orang lain, bekerja sama, berempati, dan memimpin kelompok.',kembang:'Aktif di OSIS/organisasi, kerja kelompok, kegiatan sosial, dan latihan memimpin rapat.',profesi:'Guru, psikolog, diplomat, manajer, tenaga kesehatan'},
+  intra:{a:'Kemampuan memahami diri sendiri: perasaan, kelebihan, kekurangan, dan tujuan hidup.',kembang:'Menulis jurnal refleksi, membuat target pribadi mingguan, dan mengevaluasi diri secara rutin.',profesi:'Penulis, konselor, peneliti, wirausahawan, filsuf'},
+  natur:{a:'Kepekaan terhadap alam: tumbuhan, hewan, lingkungan, dan gejala alam.',kembang:'Ikut Adiwiyata, berkebun, mengamati alam, membuat proyek peduli lingkungan.',profesi:'Ahli biologi, dokter hewan, ahli lingkungan, petani modern, geolog'}
+};
+var RI_DESC={
+  R:{w:'#ef6f61',d:'Menyukai kegiatan praktis yang menggunakan tangan, alat, mesin, atau dilakukan di luar ruangan. Senang melihat hasil kerja yang nyata.',k:'Teknisi, insinyur mesin/sipil, pilot, mekanik, atlet, TNI/Polri, agronom',sma:'Fisika, Matematika Tingkat Lanjut, Prakarya',smk:'Teknik Mesin, Teknik Otomotif, Teknik Elektro, Agribisnis'},
+  I:{w:'#3b82f6',d:'Senang berpikir, meneliti, mengamati, dan memecahkan masalah. Ingin tahu cara kerja dan alasan di balik sesuatu.',k:'Dokter, peneliti, programmer, apoteker, ahli data, ilmuwan',sma:'Biologi, Kimia, Fisika, Informatika, Matematika Tingkat Lanjut',smk:'Rekayasa Perangkat Lunak, Farmasi, Kimia Analisis, Teknik Laboratorium'},
+  A:{w:'#a855f7',d:'Kreatif, ekspresif, dan menyukai kebebasan berkarya, seperti seni, musik, desain, tulisan, atau film.',k:'Desainer, arsitek, animator, musisi, penulis, konten kreator, fotografer',sma:'Seni Budaya, Bahasa & Sastra Indonesia/Inggris, Informatika',smk:'Desain Komunikasi Visual, Animasi, Broadcasting & Film, Seni Musik/Tari, Tata Busana'},
+  S:{w:'#12a39a',d:'Senang membantu, mengajar, merawat, dan bekerja bersama banyak orang. Peka terhadap perasaan orang lain.',k:'Guru, psikolog, perawat, bidan, konselor, pekerja sosial, dokter anak',sma:'Sosiologi, Biologi, Bahasa Indonesia, Antropologi',smk:'Keperawatan, Pekerjaan Sosial, Perhotelan, Layanan Kesehatan'},
+  E:{w:'#f59e0b',d:'Suka memimpin, memengaruhi, meyakinkan orang lain, berbisnis, dan mengambil keputusan.',k:'Pengusaha, manajer, pengacara, pemasar, diplomat, pemimpin organisasi',sma:'Ekonomi, Sosiologi, Bahasa Inggris, Geografi',smk:'Bisnis Digital & Pemasaran, Manajemen Perkantoran, Usaha Layanan Wisata'},
+  C:{w:'#64748b',d:'Menyukai pekerjaan yang teratur, rapi, teliti, dan memiliki prosedur jelas, seperti mengelola data dan keuangan.',k:'Akuntan, pegawai bank, auditor, administrator data, pustakawan, sekretaris',sma:'Ekonomi, Matematika, Informatika',smk:'Akuntansi & Keuangan Lembaga, Perbankan, Manajemen Perkantoran'}
+};
+var GAYA_DESC={
+  V:{n:'Visual',ik:'👀',c:'Lebih mudah menerima informasi melalui penglihatan: gambar, warna, diagram, peta pikiran, dan video.',s:['Gunakan stabilo warna dan peta pikiran saat mencatat.','Ubah materi menjadi diagram, tabel, atau gambar.','Tonton video pembelajaran lalu rangkum dengan sketsa.'],g:['Gunakan media visual: gambar, infografik, slide, dan papan tulis berwarna.','Berikan ringkasan tertulis atau skema materi.'],o:['Sediakan tempat belajar yang rapi dan terang.','Bantu anak membuat kartu belajar bergambar.']},
+  A:{n:'Auditori',ik:'🎧',c:'Lebih mudah menerima informasi melalui pendengaran: penjelasan lisan, diskusi, tanya jawab, dan irama.',s:['Belajar dengan membaca materi secara lisan atau merekam suara sendiri.','Diskusikan materi dengan teman atau jelaskan ulang kepada orang lain.','Buat jembatan keledai dalam bentuk lagu atau irama.'],g:['Perbanyak penjelasan lisan, diskusi, dan tanya jawab.','Izinkan siswa membaca materi dengan suara pelan.'],o:['Ajak anak bercerita tentang apa yang dipelajari hari ini.','Kurangi kebisingan saat anak belajar.']},
+  K:{n:'Kinestetik',ik:'🤸',c:'Lebih mudah menerima informasi melalui gerak, sentuhan, dan praktik langsung.',s:['Belajar sambil praktik, eksperimen, atau membuat model.','Beri jeda gerak singkat setiap 20–25 menit belajar.','Gunakan benda nyata atau kartu yang bisa disusun.'],g:['Gunakan metode praktik, simulasi, permainan peran, dan proyek.','Beri kesempatan siswa bergerak dalam kegiatan belajar.'],o:['Libatkan anak dalam kegiatan praktik di rumah (memasak, merakit, berkebun).','Izinkan anak belajar sambil bergerak dengan wajar.']}
+};
+var DPL_DESC={
+  iman:['Menjalankan ibadah dan nilai kejujuran dengan konsisten.','Perlu pembiasaan ibadah dan kejujuran dalam keseharian.'],
+  warga:['Taat aturan dan menghargai keberagaman.','Perlu dilatih menaati aturan dan menghargai perbedaan.'],
+  kritis:['Terbiasa memeriksa informasi dan bertanya kritis.','Perlu dilatih memeriksa kebenaran informasi dan bertanya "mengapa".'],
+  kreatif:['Kaya ide dan berani mencoba cara baru.','Perlu ruang untuk berlatih mencetuskan ide dan mencoba hal baru.'],
+  kolab:['Mampu bekerja sama dan menghargai pendapat teman.','Perlu dilatih berbagi peran dan mendengar pendapat orang lain.'],
+  mandiri:['Mampu mengatur diri dan menyelesaikan tugas sendiri.','Perlu dilatih mengatur waktu dan tanggung jawab pribadi.'],
+  sehat:['Menjaga kesehatan fisik dan mental dengan baik.','Perlu membiasakan olahraga, gizi seimbang, tidur cukup, dan bercerita saat ada masalah.'],
+  komun:['Percaya diri menyampaikan gagasan dengan jelas.','Perlu dilatih berbicara di depan umum dan menulis gagasan dengan runtut.']
+};
+var KAR_TIP={
+  motivasi:'Tetapkan satu target kecil setiap minggu dan rayakan saat tercapai.',
+  tekun:'Gunakan teknik Pomodoro (25 menit fokus, 5 menit istirahat) dan selesaikan satu tugas sebelum pindah ke tugas lain.',
+  sistem:'Buat jadwal belajar mingguan dan catatan rapi dengan format yang sama setiap pelajaran.',
+  mandiri:'Biasakan mencoba mengerjakan sendiri dulu, lalu bertanya hanya pada bagian yang sulit.',
+  adaptasi:'Latih diri berkenalan dengan satu orang baru setiap minggu dan terima perubahan sebagai tantangan.',
+  sadar:'Tuliskan perasaanmu setiap malam dalam satu kalimat beserta penyebabnya.',
+  empati:'Latih mendengarkan teman tanpa memotong dan tanyakan "apa yang kamu rasakan?".',
+  kendali:'Saat marah, tarik napas dalam 4 hitungan dan beri jeda sebelum berbicara.',
+  aq:'Saat gagal, tuliskan tiga hal yang bisa diperbaiki dan coba lagi dengan cara berbeda.'
+};
+var KC_DESC={analisa:'menarik kesimpulan logis dari informasi',fleksibel:'mengelompokkan dan melihat dari berbagai sudut',verbal:'memahami makna dan hubungan kata',praktis:'mengambil keputusan tepat dalam situasi nyata',numerik:'mengolah angka dan pola bilangan',abstrak:'mengenali pola gambar dan simbol',literasi:'memahami isi bacaan'};
+
+function lv(x){return x>=80?[4,'Sangat Baik']:x>=65?[3,'Baik']:x>=50?[2,'Cukup']:[1,'Perlu Dikembangkan']}
+function lvDPL(x){return x>=80?[4,'Mahir']:x>=65?[3,'Cakap']:x>=50?[2,'Berkembang']:[1,'Mulai Berkembang']}
+function lvAk(x){return x>=80?[4,'Sangat Baik']:x>=60?[3,'Baik']:x>=40?[2,'Cukup']:[1,'Kurang']}
+function lvTx(x){return x>=80?'SANGAT TINGGI':x>=65?'TINGGI':x>=50?'RATA-RATA':x>=35?'DI BAWAH RATA-RATA':'PERLU PENDAMPINGAN'}
+function badge(l){return '<span class="lvl l'+l[0]+'">'+l[1]+'</span>'}
+
+/* ------------------------------ GRAFIK SVG ------------------------------ */
+function donut(vals,cols,labels){
+  var tot=vals.reduce(function(a,b){return a+b},0)||1,a0=-Math.PI/2,s='<svg viewBox="0 0 220 220" width="200" height="200">';
+  vals.forEach(function(v,i){if(!v)return;var a1=a0+v/tot*Math.PI*2,big=a1-a0>Math.PI?1:0;
+    if(v>=tot){s+='<circle cx="110" cy="110" r="90" fill="'+cols[i]+'"/>'}else{
+    s+='<path d="M110 110 L'+(110+90*Math.cos(a0))+' '+(110+90*Math.sin(a0))+' A90 90 0 '+big+' 1 '+(110+90*Math.cos(a1))+' '+(110+90*Math.sin(a1))+' Z" fill="'+cols[i]+'"/>'}
+    var am=(a0+a1)/2;s+='<text x="'+(110+64*Math.cos(am))+'" y="'+(114+64*Math.sin(am))+'" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">'+Math.round(v)+'%</text>';a0=a1});
+  return s+'<circle cx="110" cy="110" r="42" fill="#fff"/><text x="110" y="106" text-anchor="middle" font-size="11" fill="#6b6f85">Gaya</text><text x="110" y="122" text-anchor="middle" font-size="11" fill="#6b6f85">Belajar</text></svg>';
+}
+function gauge(v,col,lbl){
+  var a=Math.PI*(1-v/100),x=100+80*Math.cos(a),y=100-80*Math.sin(a);
+  return '<svg viewBox="0 0 200 120" width="190"><path d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke="#eceef5" stroke-width="16" stroke-linecap="round"/>'+
+    '<path d="M20 100 A80 80 0 0 1 '+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="16" stroke-linecap="round"/>'+
+    '<text x="100" y="92" text-anchor="middle" font-size="28" font-weight="900" fill="#22223b">'+v+'</text><text x="100" y="114" text-anchor="middle" font-size="11" fill="#6b6f85">'+lbl+'</text></svg>';
+}
+function radar(lbls,vals,col){
+  var n=lbls.length,cx=170,cy=150,R=105,s='<svg viewBox="-45 0 430 300" width="100%" style="max-width:430px">';
+  [25,50,75,100].forEach(function(p){var pts=[];for(var i=0;i<n;i++){var a=-Math.PI/2+i*2*Math.PI/n;pts.push((cx+R*p/100*Math.cos(a)).toFixed(1)+','+(cy+R*p/100*Math.sin(a)).toFixed(1))}s+='<polygon points="'+pts.join(' ')+'" fill="none" stroke="#e2e4ee"/>'});
+  var pts=[];
+  for(var i=0;i<n;i++){var a=-Math.PI/2+i*2*Math.PI/n;s+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+R*Math.cos(a))+'" y2="'+(cy+R*Math.sin(a))+'" stroke="#e2e4ee"/>';
+    pts.push((cx+R*vals[i]/100*Math.cos(a)).toFixed(1)+','+(cy+R*vals[i]/100*Math.sin(a)).toFixed(1));
+    var lx=cx+(R+22)*Math.cos(a),ly=cy+(R+18)*Math.sin(a),an=Math.abs(Math.cos(a))<.3?'middle':Math.cos(a)>0?'start':'end';
+    s+='<text x="'+lx.toFixed(1)+'" y="'+(ly+4).toFixed(1)+'" text-anchor="'+an+'" font-size="10.5" fill="#3d405b">'+esc(lbls[i])+'</text>'}
+  s+='<polygon points="'+pts.join(' ')+'" fill="'+col+'33" stroke="'+col+'" stroke-width="2.5"/>';
+  pts.forEach(function(p){var c=p.split(',');s+='<circle cx="'+c[0]+'" cy="'+c[1]+'" r="3.5" fill="'+col+'"/>'});
+  return s+'</svg>';
+}
+function hexRiasec(r){
+  var ord=['R','I','A','S','E','C'],cx=150,cy=140,R=112,s='<svg viewBox="0 0 300 285" width="100%" style="max-width:330px">';
+  ord.forEach(function(k,i){var a0=-Math.PI/2+(i-0.5)*Math.PI/3,a1=a0+Math.PI/3;
+    s+='<path d="M'+cx+' '+cy+' L'+(cx+R*Math.cos(a0)).toFixed(1)+' '+(cy+R*Math.sin(a0)).toFixed(1)+' L'+(cx+R*Math.cos(a1)).toFixed(1)+' '+(cy+R*Math.sin(a1)).toFixed(1)+' Z" fill="'+RI_DESC[k].w+'" opacity="'+(0.35+0.65*(r[k]||0)/100).toFixed(2)+'" stroke="#fff" stroke-width="3"/>';
+    var am=-Math.PI/2+i*Math.PI/3,tx=cx+R*0.62*Math.cos(am),ty=cy+R*0.62*Math.sin(am);
+    s+='<text x="'+tx.toFixed(1)+'" y="'+(ty-4).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">'+{R:'Realistic',I:'Investigative',A:'Artistic',S:'Social',E:'Enterprising',C:'Conventional'}[k]+'</text>'+
+      '<text x="'+tx.toFixed(1)+'" y="'+(ty+14).toFixed(1)+'" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">'+(r[k]||0)+'%</text>'});
+  return s+'</svg>';
+}
+function bars(rows,opt){
+  opt=opt||{};
+  return rows.map(function(r){return '<div class="barrow"><span>'+esc(r[0])+'</span><div class="bt"><i style="width:'+Math.max(2,r[1])+'%;background:'+(r[2]||'var(--teal)')+'"></i>'+(r[3]!=null?'<em style="left:'+r[3]+'%" title="rata-rata"></em>':'')+'</div><b>'+r[1]+'</b></div>'}).join('');
+}
+
+/* ------------------------------ LAPORAN ------------------------------ */
+var LAP=null;
+function tampilLaporan(L,mode,kode){
+  LAP=L;$('#lapKode').textContent=kode||'';
+  $('#lapIsi').innerHTML=renderLaporan(L);
+  $('#lapTutup').textContent=mode==='bk'?'← Kembali ke Daftar':'Selesai';
+  $('#lapTutup').onclick=mode==='bk'?function(){show('vBK');bkRender()}:function(){location.reload()};
+  var inf=$('#lapInfo');
+  if(mode==='siswa'){inf.innerHTML='<div class="ok" style="margin:0">✅ Laporanmu siap. Simpan <b>kode laporan '+esc(kode)+'</b> untuk melihatnya lagi. Tekan <b>Cetak / Simpan PDF</b> lalu pilih "Simpan sebagai PDF".</div>';inf.classList.remove('hidden')}else inf.classList.add('hidden');
+  show('vLap');
+}
+function tutupLaporan(){location.reload()}
+
+function hal(isi,no,judul){
+  return '<div class="page"><div class="ph"><span class="lg">Talenta<span>10</span></span><span>'+esc(judul||'')+'</span><span>'+esc(LAP.hasil.kode)+'</span></div>'+isi+
+    '<div class="pf"><span>Talenta10 · Dikembangkan oleh <b>Edy Thomas</b></span><span>'+esc(LAP.sekolah.nama)+' · hal. '+no+'</span></div></div>';
+}
+function fmtTgl(s){if(!s)return '-';var d=new Date(s);if(isNaN(d))return s;return d.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}
+function usia(t){if(!t)return '-';var d=new Date(t);if(isNaN(d))return '-';var n=new Date(),u=n.getFullYear()-d.getFullYear();if(n<new Date(n.getFullYear(),d.getMonth(),d.getDate()))u--;return u+' tahun'}
+
+function renderLaporan(L){
+  var H=L.hasil,N=L.nama,p=H.peserta,S=L.sekolah,no=1,out=[];
+  var miTop=H.mi_urut.slice(0,3),riTop=H.riasec_urut.slice(0,3);
+  var gd=H.gaya_dominan[0],G=GAYA_DESC[gd];
+  var akSort=H.akademik.slice().sort(function(a,b){return b.nilai-a.nilai});
+  var karKeys=Object.keys(H.karakter),karSort=karKeys.slice().sort(function(a,b){return H.karakter[b]-H.karakter[a]});
+  var dplKeys=Object.keys(N.dpl),dplSort=dplKeys.slice().sort(function(a,b){return H.dpl[b]-H.dpl[a]});
+
+  /* 1. Sampul */
+  out.push('<div class="page cover"><div style="font-size:15px;letter-spacing:3px;opacity:.85">ASESMEN MINAT, BAKAT & POTENSI</div><div class="big">Talenta<span>10</span></div><div class="tag">Laporan Peta Potensi Siswa</div>'+
+    '<div class="nm"><b>'+esc(p.nama.toUpperCase())+'</b>Kelas '+esc(p.kelas)+' · '+esc(S.nama)+'</div>'+
+    '<div style="margin-top:28px;font-size:13px;opacity:.85">Kode laporan '+esc(H.kode)+' · '+fmtTgl(H.tanggal)+'</div>'+
+    '<div style="position:absolute;bottom:26px;left:0;right:0;font-size:12.5px;opacity:.85">Dikembangkan oleh <b style="color:#ffd166">Edy Thomas</b></div></div>');
+
+  /* 2. Biodata & ringkasan */
+  var ringkas=
+    '<div class="gr3" style="margin:12px 0">'+
+    '<div class="sum" style="background:linear-gradient(135deg,#3b2e83,#5b4bc4)"><small>Kecerdasan Menonjol</small><b>'+miTop.map(function(k){return N.mi[k]}).join(', ')+'</b></div>'+
+    '<div class="sum" style="background:linear-gradient(135deg,#12a39a,#2dd4bf)"><small>Kode Minat Karier</small><b>'+H.riasec_kode+' · '+riTop.slice(0,2).map(function(k){return N.riasec[k]}).join(' & ')+'</b></div>'+
+    '<div class="sum" style="background:linear-gradient(135deg,#f59e0b,#f5a524)"><small>Gaya Belajar</small><b>'+G.ik+' '+H.gaya_dominan.split('').map(function(x){return GAYA_DESC[x].n}).join(' & ')+'</b></div>'+
+    '<div class="sum" style="background:linear-gradient(135deg,#ef6f61,#f59e8b)"><small>Indeks Kecakapan Berpikir</small><b>'+H.iku+' · '+lv(H.iku)[1]+'</b></div>'+
+    '<div class="sum" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)"><small>Kekuatan Karakter</small><b>'+karSort.slice(0,2).map(function(k){return N.kar[k]}).join(', ')+'</b></div>'+
+    '<div class="sum" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)"><small>Ekskul Paling Cocok</small><b>'+esc((H.rek_ekskul[0]||{}).nama||'-')+'</b></div></div>';
+  out.push(hal('<div style="text-align:center;margin-bottom:12px"><span class="pill">Peta Talenta Ringkas</span></div>'+
+    '<div class="kv"><div><span>Nama</span><br><b>'+esc(p.nama)+'</b></div><div><span>Sekolah</span><br><b>'+esc(S.nama)+'</b></div>'+
+    '<div><span>NISN</span><br><b>'+esc(p.nisn)+'</b></div><div><span>Kelas</span><br><b>'+esc(p.kelas)+'</b></div>'+
+    '<div><span>Jenis Kelamin</span><br><b>'+esc(p.jk||'-')+'</b></div><div><span>Usia</span><br><b>'+usia(p.tgl_lahir)+'</b></div>'+
+    '<div><span>Tanggal Tes</span><br><b>'+fmtTgl(H.tanggal)+'</b></div><div><span>Cita-cita</span><br><b>'+esc(H.minat.cita||'-')+'</b></div></div>'+
+    ringkas+
+    '<div class="box ungu"><b>Kalimat potensi:</b> '+esc(p.nama.split(' ')[0])+' adalah pribadi dengan kekuatan '+N.mi[miTop[0]].toLowerCase()+' dan '+N.mi[miTop[1]].toLowerCase()+
+    ', berminat pada bidang '+N.riasec[riTop[0]]+' ('+RI_DESC[riTop[0]].k.split(',').slice(0,2).join(',').toLowerCase()+'), dan paling efektif belajar secara '+G.n.toLowerCase()+'. Potensi ini dapat berkembang optimal melalui '+esc((H.rek_ekskul[0]||{}).nama||'kegiatan yang sesuai minat')+' dan kebiasaan belajar yang konsisten.</div>'+
+    '<h3>Tentang Talenta10</h3><div class="box" style="font-size:12.5px"><ul>'+
+    '<li>Talenta10 memetakan <b>8 aspek</b>: kognitif akademik, kecakapan berpikir, gaya belajar, kecerdasan majemuk, minat karier (RIASEC), ketahanan belajar & kecerdasan emosi, daya juang, serta 8 Dimensi Profil Lulusan.</li>'+
+    '<li>Hasil menggambarkan kondisi saat tes dan dapat berubah seiring pengalaman, latihan, dan lingkungan belajar.</li>'+
+    '<li>Laporan ini adalah bahan bimbingan, bukan diagnosis psikologis. Diskusikan hasilnya bersama Guru BK dan orang tua.</li></ul></div>',no++,'Biodata & Ringkasan'));
+
+  /* 3. Kognitif akademik */
+  var ak='<h2>Kognitif Akademik</h2><p class="lead">Penguasaan mata pelajaran berdasarkan soal yang telah dikerjakan</p>'+
+    '<table class="tbl"><tr><th>Mata Pelajaran</th><th>Nilai</th><th>Rata-rata Angkatan</th><th>Tertinggi</th><th>Terendah</th><th>Kategori</th></tr>'+
+    H.akademik.map(function(a){var st=L.stat[a.mapel]||{};return '<tr><td>'+esc(a.mapel)+'</td><td><b>'+a.nilai+'</b></td><td>'+(st.rata!=null?st.rata:'-')+'</td><td>'+(st.max!=null?st.max:'-')+'</td><td>'+(st.min!=null?st.min:'-')+'</td><td>'+badge(lvAk(a.nilai))+'</td></tr>'}).join('')+'</table>'+
+    '<h3>Grafik Nilai <small style="font-weight:400;color:var(--redup)">(garis hitam = rata-rata angkatan)</small></h3>'+
+    bars(H.akademik.map(function(a,i){return [a.mapel,a.nilai,['#3b82f6','#ef6f61','#f5a524','#12a39a','#a855f7'][i%5],(L.stat[a.mapel]||{}).rata]}))+
+    '<h3>Ketuntasan Indikator</h3><div class="indgrid">'+H.akademik.map(function(a){return '<div class="box" style="background:#fff;border:1px solid var(--garis)"><b style="color:var(--teal)">'+esc(a.mapel)+'</b>'+
+      a.indikator.map(function(x){return '<div class="ind"><i class="'+(x.ok?'y':'n')+'">'+(x.ok?'✓':'✕')+'</i><span>'+esc(x.t)+'</span></div>'}).join('')+'</div>'}).join('')+'</div>'+
+    '<div class="box amber" style="margin-top:12px"><b>Catatan:</b> Mata pelajaran terkuat: <b>'+esc(akSort[0].mapel)+'</b>. Perlu penguatan: <b>'+esc(akSort[akSort.length-1].mapel)+'</b>, terutama pada indikator yang ditandai ✕.</div>';
+  out.push(hal(ak,no++,'Kognitif Akademik'));
+
+  /* 4. Gaya belajar */
+  var gb='<h2>Gaya Belajar</h2><p class="lead">Cara paling nyaman bagi siswa dalam menerima dan mengolah informasi</p>'+
+    '<div style="display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap">'+donut([H.gaya.V,H.gaya.A,H.gaya.K],['#3b82f6','#f5a524','#ef6f61'])+
+    '<div><table class="tbl" style="width:auto"><tr><td style="color:#3b82f6">VISUAL</td><td><b>'+H.gaya.V+'%</b></td></tr><tr><td style="color:#d48806">AUDITORI</td><td><b>'+H.gaya.A+'%</b></td></tr><tr><td style="color:#ef6f61">KINESTETIK</td><td><b>'+H.gaya.K+'%</b></td></tr></table></div></div>'+
+    '<div class="box ungu" style="margin:12px 0;text-align:center;font-size:15px">Karakteristik belajar yang menonjol: <b>'+G.ik+' '+H.gaya_dominan.split('').map(function(x){return GAYA_DESC[x].n}).join(' & ')+'</b><br><span style="font-size:13px">'+G.c+'</span></div>'+
+    '<h3>Untuk Cara Belajar Siswa</h3><div class="box"><ul>'+G.s.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div>'+
+    '<div class="gr2" style="margin-top:10px"><div><h3>Untuk Guru</h3><div class="box ungu"><ul>'+G.g.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div></div>'+
+    '<div><h3>Untuk Orang Tua</h3><div class="box amber"><ul>'+G.o.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul></div></div></div>'+
+    '<p style="font-size:12px;color:var(--redup);margin-top:12px">Setiap orang dapat menggunakan ketiga gaya belajar. Gaya yang menonjol adalah cara yang paling nyaman, bukan satu-satunya cara.</p>';
+  out.push(hal(gb,no++,'Gaya Belajar'));
+
+  /* 5. Potensi psikologis */
+  var ps='<h2>Potensi Psikologis</h2><p class="lead">Kecerdasan emosi, daya juang, dan motivasi berprestasi</p>'+
+    '<div class="gr3" style="text-align:center">'+
+    '<div class="box" style="background:#fff;border:1px solid var(--garis)">'+gauge(H.eq,'#12a39a','Emotional Quotient')+'<div><b>'+lvTx(H.eq)+'</b></div><small>Kemampuan mengenali, mengelola, dan mengekspresikan emosi serta memahami perasaan orang lain.</small></div>'+
+    '<div class="box" style="background:#fff;border:1px solid var(--garis)">'+gauge(H.aq,'#f5a524','Adversity Quotient')+'<div><b>'+lvTx(H.aq)+'</b></div><small>Daya juang: kemampuan bertahan, bangkit, dan mencari jalan keluar saat menghadapi kesulitan.</small></div>'+
+    '<div class="box" style="background:#fff;border:1px solid var(--garis)">'+gauge(H.am,'#ef6f61','Achievement Motivation')+'<div><b>'+lvTx(H.am)+'</b></div><small>Dorongan dari dalam diri untuk meraih prestasi terbaik dan menyukai tantangan.</small></div></div>'+
+    '<div class="gr2" style="margin-top:12px"><div><h3>Ketahanan Belajar</h3>'+bars(['motivasi','tekun','sistem','mandiri'].map(function(k){return [N.kar[k],H.karakter[k],'#3b2e83']}))+'</div>'+
+    '<div><h3>Kecerdasan Emosi</h3>'+bars(['adaptasi','sadar','empati','kendali'].map(function(k){return [N.kar[k],H.karakter[k],'#12a39a']}))+'</div></div>'+
+    '<h3>Saran Pengembangan Diri</h3>'+karSort.slice(-3).reverse().map(function(k){return '<div class="plan"><b>'+N.kar[k]+' ('+H.karakter[k]+')</b>: '+KAR_TIP[k]+'</div>'}).join('');
+  out.push(hal(ps,no++,'Potensi Psikologis'));
+
+  /* 6. Kecerdasan majemuk */
+  var miKeys=H.mi_urut;
+  var mi='<h2>Kecerdasan Majemuk</h2><p class="lead">Teori Multiple Intelligences (Howard Gardner): setiap orang memiliki 8 jenis kecerdasan dengan kekuatan yang berbeda-beda</p>'+
+    bars(miKeys.map(function(k){return [N.mi[k],H.mi[k],WARNA_MI[k]]}))+
+    '<h3>Tiga Kecerdasan Paling Menonjol</h3>'+miTop.map(function(k,i){var d=MI_DESC[k];return '<div class="mi-card" style="margin-bottom:8px"><div class="rk" style="background:'+WARNA_MI[k]+'">'+(i+1)+'</div><div><b>'+N.mi[k]+' · '+H.mi[k]+'</b><p>'+d.a+'</p><p><b style="font-size:12.5px">Cara mengembangkan:</b> '+d.kembang+'</p><p><b style="font-size:12.5px">Contoh profesi:</b> '+d.profesi+'</p></div></div>'}).join('')+
+    '<div class="box amber"><b>Perlu diasah:</b> '+miKeys.slice(-2).map(function(k){return N.mi[k]+' ('+H.mi[k]+')'}).join(' dan ')+'. '+MI_DESC[miKeys[miKeys.length-1]].kembang+'</div>';
+  out.push(hal(mi,no++,'Kecerdasan Majemuk'));
+
+  /* 7. Profil lulusan */
+  var dp='<h2>8 Dimensi Profil Lulusan</h2><p class="lead">Mengacu pada Standar Kompetensi Lulusan (Permendikdasmen No. 10 Tahun 2025) dalam kerangka Pembelajaran Mendalam</p>'+
+    '<div style="display:flex;justify-content:center">'+radar(dplKeys.map(function(k){return N.dpl[k]}),dplKeys.map(function(k){return H.dpl[k]}),'#3b2e83')+'</div>'+
+    '<div class="gr2" style="margin-top:8px">'+dplKeys.map(function(k){var l=lvDPL(H.dpl[k]);return '<div class="dpl-card"><b>'+N.dpl[k]+'</b> · '+H.dpl[k]+' '+badge(l)+'<div style="margin-top:3px;color:#4a4e66">'+DPL_DESC[k][H.dpl[k]>=65?0:1]+'</div></div>'}).join('')+'</div>';
+  out.push(hal(dp,no++,'Profil Lulusan'));
+
+  /* 8. Kecakapan berpikir */
+  var kcKeys=Object.keys(N.kc);
+  var kc='<h2>Tingkat Kecakapan Berpikir</h2><p class="lead">Kemampuan bernalar dalam tujuh aspek berpikir</p>'+
+    '<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap"><div style="flex:1;min-width:260px">'+
+    kcKeys.map(function(k){var v=H.kecakapan[k]||0;return '<div class="barrow"><span>'+N.kc[k]+'</span><div class="bt"><i style="width:'+Math.max(2,v)+'%;background:'+(v>=100?'#12a39a':v>=50?'#f5a524':'#ef6f61')+'"></i></div><b>'+(v>=100?'✔':v>=50?'±':'✕')+'</b></div>'}).join('')+
+    '</div><div style="text-align:center;background:var(--amber-muda);border-radius:16px;padding:16px 26px"><div style="font-size:12px;color:var(--redup)">INDEKS KECAKAPAN BERPIKIR</div><div class="big-num">'+H.iku+'</div><div>'+badge(lv(H.iku))+'</div></div></div>'+
+    '<div class="gr2" style="margin-top:12px"><div class="box"><b>Aspek terkuat</b><ul>'+kcKeys.filter(function(k){return H.kecakapan[k]>=100}).map(function(k){return '<li>'+N.kc[k]+': '+KC_DESC[k]+'</li>'}).join('')+(kcKeys.some(function(k){return H.kecakapan[k]>=100})?'':'<li>Belum ada aspek yang dikuasai penuh.</li>')+'</ul></div>'+
+    '<div class="box amber"><b>Perlu dilatih</b><ul>'+kcKeys.filter(function(k){return H.kecakapan[k]<100}).map(function(k){return '<li>'+N.kc[k]+': '+KC_DESC[k]+'</li>'}).join('')+(kcKeys.some(function(k){return H.kecakapan[k]<100})?'':'<li>Semua aspek sudah baik. Pertahankan!</li>')+'</ul></div></div>'+
+    '<p style="font-size:12px;color:var(--redup);margin-top:12px">Keterangan: ✔ dikuasai · ± sebagian · ✕ perlu latihan. Indeks Kecakapan Berpikir adalah skor 0–100 dari soal penalaran Talenta10, <b>bukan skor IQ</b>. Pengukuran IQ resmi hanya dapat dilakukan oleh psikolog.</p>';
+  out.push(hal(kc,no++,'Kecakapan Berpikir'));
+
+  /* 9. RIASEC */
+  var ri='<h2>Minat Karier · RIASEC</h2><p class="lead">Teori John Holland: enam tipe minat yang membantu memilih jurusan dan karier yang sesuai</p>'+
+    '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;justify-content:center">'+hexRiasec(H.riasec)+
+    '<div style="text-align:center"><div style="font-size:12px;color:var(--redup)">KODE HOLLAND</div><div class="big-num" style="color:var(--ungu)">'+H.riasec_kode+'</div><div style="font-size:12.5px;color:var(--redup)">'+riTop.map(function(k){return N.riasec[k]}).join(' · ')+'</div></div></div>'+
+    riTop.map(function(k,i){var d=RI_DESC[k];return '<div class="mi-card" style="margin-top:8px"><div class="rk" style="background:'+d.w+'">'+k+'</div><div><b>'+(i+1)+'. '+N.riasec[k]+' · '+H.riasec[k]+'%</b><p>'+d.d+'</p><p><b style="font-size:12.5px">Contoh karier:</b> '+d.k+'</p></div></div>'}).join('');
+  out.push(hal(ri,no++,'Minat Karier'));
+
+  /* 10. Rekomendasi */
+  var a0=RI_DESC[riTop[0]],a1=RI_DESC[riTop[1]];
+  var lemahAk=akSort[akSort.length-1],lemahKar=karSort[karSort.length-1],lemahDpl=dplSort[dplSort.length-1];
+  var rk='<h2>Rekomendasi Pengembangan</h2><p class="lead">Disusun dari gabungan hasil kecerdasan majemuk, minat karier, karakter, dan pilihan siswa</p>'+
+    '<h3>🏅 Ekstrakurikuler / Kegiatan Penunjang</h3>'+H.rek_ekskul.map(function(e,i){return '<div class="rec"><div class="n">'+(i+1)+'</div><div><b>'+esc(e.nama)+'</b><small>Kecocokan '+Math.min(100,e.skor)+'%'+(e.alasan.length?' · karena '+esc(e.alasan.join(', ')):'')+'</small></div></div>'}).join('')+
+    '<div class="gr2" style="margin-top:6px"><div><h3>🎓 Arah Studi Lanjut</h3><div class="box"><b>SMA, mata pelajaran pilihan:</b><br>'+a0.sma+'; '+a1.sma+'<br><br><b>SMK, program keahlian:</b><br>'+a0.smk+'; '+a1.smk+'</div></div>'+
+    '<div><h3>💼 Gambaran Karier</h3><div class="box ungu">'+a0.k+'<br><br>'+a1.k+'<br><br><small>Cita-cita siswa: <b>'+esc(H.minat.cita||'-')+'</b>. '+(H.minat.hobi?'Hobi: '+esc(H.minat.hobi)+'.':'')+'</small></div></div></div>'+
+    '<h3>🗓 Rencana Aksi 4 Minggu</h3>'+
+    '<div class="plan"><b>Minggu 1 · Kenali diri:</b> Diskusikan laporan ini bersama orang tua dan Guru BK. Tulis 3 kekuatan dan 1 target semester ini.</div>'+
+    '<div class="plan"><b>Minggu 2 · Akademik:</b> Latihan '+esc(lemahAk.mapel)+' 20 menit setiap hari dengan cara '+G.n.toLowerCase()+': '+G.s[0].toLowerCase()+'</div>'+
+    '<div class="plan"><b>Minggu 3 · Karakter:</b> Fokus pada '+N.kar[lemahKar].toLowerCase()+'. '+KAR_TIP[lemahKar]+'</div>'+
+    '<div class="plan"><b>Minggu 4 · Bakat:</b> Daftar atau coba ikuti '+esc((H.rek_ekskul[0]||{}).nama||'kegiatan pilihan')+', lalu latih dimensi '+N.dpl[lemahDpl].toLowerCase()+' melalui kegiatan tersebut.</div>';
+  out.push(hal(rk,no++,'Rekomendasi'));
+
+  /* 11. Penutup */
+  var pt='<h2>Untuk Diperhatikan</h2><p class="lead">Pesan untuk siswa, orang tua, dan guru</p>'+
+    '<div class="box ungu" style="font-size:13.5px"><ul>'+
+    '<li>Laporan Talenta10 menggambarkan peta potensi kognitif dan non-kognitif siswa pada saat tes. Potensi dapat berkembang melalui latihan, pengalaman, dan dukungan lingkungan.</li>'+
+    '<li>Hasil ini adalah bahan bimbingan dan diskusi, bukan diagnosis psikologis atau penentu masa depan. Untuk asesmen psikologis mendalam, hubungi psikolog.</li>'+
+    '<li>Orang tua dianjurkan menggunakan laporan ini untuk memahami cara belajar anak, mendukung minatnya, dan menghindari membandingkan anak dengan orang lain.</li>'+
+    '<li>Guru dapat memanfaatkan gaya belajar dan kecerdasan menonjol siswa untuk merancang pembelajaran berdiferensiasi.</li></ul></div>'+
+    '<div class="box amber" style="margin-top:12px;font-size:13.5px"><b>Pesan untuk '+esc(p.nama.split(' ')[0])+':</b> Setiap anak memiliki bakat yang unik. Kenali kekuatanmu, latih kelemahanmu, dan jangan takut mencoba hal baru. Masa depanmu kamu bangun mulai hari ini! 🌟</div>'+
+    '<div class="ttd"><div>Mengetahui,<br>Kepala Sekolah<div class="sp"></div><b><u>'+esc(S.ks||'..............................')+'</u></b><br>'+(S.nip_ks?'NIP. '+esc(S.nip_ks):'')+'</div>'+
+    '<div>Yogyakarta, '+fmtTgl(H.tanggal)+'<br>Guru Bimbingan dan Konseling<div class="sp"></div><b><u>'+esc(S.guru_bk||'..............................')+'</u></b><br>'+(S.nip_bk?'NIP. '+esc(S.nip_bk):'')+'</div></div>'+
+    '<div style="text-align:center;margin-top:34px;font-size:12.5px;color:var(--redup)">Talenta10 · Asesmen Minat, Bakat & Potensi Siswa<br>Dikembangkan oleh <b style="color:var(--ungu)">Edy Thomas</b></div>';
+  out.push(hal(pt,no++,'Penutup'));
+  return out.join('');
+}
+
+/* ================================ GURU BK ================================ */
+var TOK=null, DAFTAR=[], BKTAB='daftar', SET=null;
+function bukaBK(){try{TOK=sessionStorage.getItem('t10_bk')}catch(e){}if(TOK){show('vBK');bkMuat()}else{show('vBKLogin');setTimeout(function(){$('#bPw').focus()},50)}}
+function bkMasuk(){var b=event&&event.target;sibuk(b,true);api('bkLogin',$('#bPw').value).then(function(t){sibuk(b,false);TOK=t;try{sessionStorage.setItem('t10_bk',t)}catch(e){}errBox('bErr');show('vBK');bkMuat()}).catch(function(e){sibuk(b,false);errBox('bErr',e.message)})}
+function bkKeluar(){TOK=null;try{sessionStorage.removeItem('t10_bk')}catch(e){}show('vMasuk')}
+function bkErr(e){if(/Sesi Guru BK/.test(e.message)){TOK=null;try{sessionStorage.removeItem('t10_bk')}catch(x){}show('vBKLogin');errBox('bErr',e.message)}else flash($('#bkMain'),e.message,'err')}
+function bkMuat(){$('#bkMain').innerHTML='<p style="color:var(--redup)">⏳ Memuat data…</p>';Promise.all([api('bkDaftar',TOK),api('bkSetting',TOK)]).then(function(r){DAFTAR=r[0];SET=r[1];bkRender()}).catch(bkErr)}
+$$('#bkNav button').forEach(function(b){b.onclick=function(){BKTAB=b.getAttribute('data-t');bkRender()}});
+function bkRender(){$$('#bkNav button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-t')===BKTAB)});({daftar:bkDaftarUI,rekap:bkRekap,set:bkSetUI,ekskul:bkEkskulUI})[BKTAB]()}
+var FK='',FQ='';
+function kelasList(){var k={};DAFTAR.forEach(function(d){k[d.kelas]=1});return Object.keys(k).sort()}
+function filtered(){return DAFTAR.filter(function(d){return (!FK||d.kelas===FK)&&(!FQ||String(d.nama).toLowerCase().indexOf(FQ.toLowerCase())>-1||String(d.nisn).indexOf(FQ)>-1)})}
+function bkDaftarUI(){
+  var L=filtered();
+  var h='<div class="stats"><div class="stat"><b>'+DAFTAR.length+'</b><span>Total siswa dites</span></div><div class="stat"><b>'+kelasList().length+'</b><span>Kelas</span></div><div class="stat"><b>'+L.length+'</b><span>Tampil (filter)</span></div></div>'+
+    '<div class="row"><select id="fK"><option value="">Semua kelas</option>'+kelasList().map(function(k){return '<option'+(k===FK?' selected':'')+'>'+esc(k)+'</option>'}).join('')+'</select>'+
+    '<input id="fQ" placeholder="Cari nama / NISN" value="'+esc(FQ)+'"><button class="btn btn-l btn-sm" onclick="bkMuat()">⟳ Muat ulang</button><button class="btn btn-l btn-sm" onclick="unduhCSV()">⬇ Unduh CSV</button></div>'+
+    '<div class="tbwrap"><table class="tb"><tr><th>Aksi</th><th>Tanggal</th><th>Nama</th><th>Kelas</th><th>Gaya</th><th>Kecerdasan Menonjol</th><th>RIASEC</th><th>Kecakapan</th><th>Akademik</th><th>Ekskul Disarankan</th></tr>'+
+    L.map(function(d){return '<tr><td style="white-space:nowrap"><button class="btn btn-p btn-sm" onclick="bkLap(\''+esc(d.kode)+'\',this)">📄 Laporan</button> <span><button class="btn btn-r btn-sm" onclick="tanyaHapus(this,\''+esc(d.kode)+'\')">🗑</button></span></td>'+
+      '<td>'+esc(d.waktu)+'</td><td><b>'+esc(d.nama)+'</b><br><small style="color:var(--redup)">'+esc(d.nisn)+' · '+esc(d.kode)+'</small></td><td>'+esc(d.kelas)+'</td><td>'+esc(d.gaya)+'</td><td>'+esc(d.mi_1)+', '+esc(d.mi_2)+'</td><td><b>'+esc(d.riasec)+'</b></td><td>'+esc(d.iku)+'</td><td>'+esc(d.akademik)+'</td><td style="font-size:12px">'+esc(d.ekskul)+'</td></tr>'}).join('')+
+    '</table></div>'+(L.length?'':'<p style="color:var(--redup)">Belum ada data.</p>');
+  $('#bkMain').innerHTML=h;
+  $('#fK').onchange=function(){FK=this.value;bkRender()};
+  $('#fQ').oninput=function(){FQ=this.value;clearTimeout(window._fq);window._fq=setTimeout(function(){bkRender();var i=$('#fQ');i.focus();i.setSelectionRange(i.value.length,i.value.length)},300)};
+}
+function bkLap(kode,b){sibuk(b,true,'Membuka…');api('bkLaporan',TOK,kode).then(function(L){sibuk(b,false);tampilLaporan(L,'bk',kode)}).catch(function(e){sibuk(b,false);bkErr(e)})}
+function tanyaHapus(btn,kode){var sp=btn.parentNode;sp.innerHTML='';var y=document.createElement('button');y.className='btn btn-r btn-sm';y.textContent='Yakin hapus?';y.onclick=function(){bkHapusNow(kode)};var n=document.createElement('button');n.className='btn btn-l btn-sm';n.textContent='Batal';n.onclick=bkRender;sp.appendChild(y);sp.appendChild(document.createTextNode(' '));sp.appendChild(n)}
+function bkHapusNow(kode){api('bkHapus',TOK,kode).then(function(r){DAFTAR=r;bkRender();flash($('#bkMain'),'Data dihapus.')}).catch(bkErr)}
+function unduhCSV(){
+  var L=filtered(),hd=['waktu','kode','nisn','nama','kelas','jk','gaya','mi_1','mi_2','mi_3','riasec','iku','akademik','eq','aq','am','ekskul','cita_cita'];
+  var csv=hd.join(';')+'\n'+L.map(function(d){return hd.map(function(h){return '"'+String(d[h]==null?'':d[h]).replace(/"/g,'""')+'"'}).join(';')}).join('\n');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'}));a.download='talenta10_'+(FK||'semua')+'.csv';document.body.appendChild(a);a.click();a.remove();
+  flash($('#bkMain'),'CSV diunduh. Data lengkap juga ada di sheet "Hasil".');
+}
+function bkRekap(){
+  var L=filtered();
+  var h='<div class="row"><select id="fK2"><option value="">Semua kelas</option>'+kelasList().map(function(k){return '<option'+(k===FK?' selected':'')+'>'+esc(k)+'</option>'}).join('')+'</select><span style="color:var(--redup);font-size:13px">'+L.length+' siswa</span></div>';
+  if(!L.length){$('#bkMain').innerHTML=h+'<p style="color:var(--redup)">Belum ada data.</p>';$('#fK2').onchange=function(){FK=this.value;bkRender()};return}
+  var cnt=function(f){var o={};L.forEach(function(d){var k=f(d);if(k)o[k]=(o[k]||0)+1});return o};
+  var g=cnt(function(d){return d.gaya}),mi=cnt(function(d){return d.mi_1}),ri=cnt(function(d){return String(d.riasec||'')[0]});
+  var row=function(o,col,nama){var ks=Object.keys(o).sort(function(a,b){return o[b]-o[a]});return ks.map(function(k){return '<div class="barrow"><span>'+esc(nama?nama(k):k)+'</span><div class="bt"><i style="width:'+Math.round(o[k]/L.length*100)+'%;background:'+col+'"></i></div><b>'+o[k]+'</b></div>'}).join('')};
+  var gnama=function(k){return k.split('').map(function(x){return (GAYA_DESC[x]||{n:x}).n}).join(' & ')};
+  var avg=function(f){var v=L.map(f).filter(function(x){return x!=null&&x!==''});return v.length?Math.round(v.reduce(function(a,b){return a+Number(b)},0)/v.length):0};
+  var mp={};L.forEach(function(d){(d.akad||[]).forEach(function(a){mp[a[0]]=mp[a[0]]||[];mp[a[0]].push(a[1])})});
+  var dplK=['iman','warga','kritis','kreatif','kolab','mandiri','sehat','komun'],dplN=['Iman & Takwa','Kewargaan','Penalaran Kritis','Kreativitas','Kolaborasi','Kemandirian','Kesehatan','Komunikasi'];
+  var perhatian=L.filter(function(d){return Number(d.eq)<50||Number(d.aq)<50||Number(d.ketahanan)<50});
+  h+='<div class="stats"><div class="stat"><b>'+avg(function(d){return d.akademik})+'</b><span>Rata-rata akademik</span></div><div class="stat"><b>'+avg(function(d){return d.iku})+'</b><span>Rata-rata kecakapan berpikir</span></div><div class="stat"><b>'+avg(function(d){return d.eq})+'</b><span>Rata-rata EQ</span></div><div class="stat"><b>'+avg(function(d){return d.aq})+'</b><span>Rata-rata AQ</span></div><div class="stat"><b>'+perhatian.length+'</b><span>Perlu perhatian BK</span></div></div>'+
+    '<div class="gr2"><div class="panel"><h3>🎧 Sebaran Gaya Belajar</h3>'+row(g,'#f5a524',gnama)+'</div><div class="panel"><h3>🌈 Kecerdasan Paling Menonjol</h3>'+row(mi,'#5b4bc4')+'</div>'+
+    '<div class="panel"><h3>🧭 Tipe Minat Utama (RIASEC)</h3>'+row(ri,'#12a39a',function(k){return {R:'Realistic',I:'Investigative',A:'Artistic',S:'Social',E:'Enterprising',C:'Conventional'}[k]||k})+'</div>'+
+    '<div class="panel"><h3>📚 Rata-rata Nilai per Mapel</h3>'+Object.keys(mp).map(function(k){var v=Math.round(mp[k].reduce(function(a,b){return a+b},0)/mp[k].length);return '<div class="barrow"><span>'+esc(k)+'</span><div class="bt"><i style="width:'+v+'%;background:#ef6f61"></i></div><b>'+v+'</b></div>'}).join('')+'</div></div>'+
+    '<div class="gr2"><div class="panel"><h3>🇮🇩 Rata-rata 8 Dimensi Profil Lulusan</h3><div style="text-align:center">'+radar(dplN,dplK.map(function(k){return avg(function(d){return d.dpl?d.dpl[k]:null})}),'#3b2e83')+'</div></div>'+
+    '<div class="panel"><h3>⚠️ Siswa Perlu Perhatian BK</h3><p style="font-size:12.5px;color:var(--redup);margin-top:0">Skor EQ, daya juang (AQ), atau ketahanan belajar di bawah 50.</p>'+
+    (perhatian.length?'<table class="tb"><tr><th>Nama</th><th>Kelas</th><th>EQ</th><th>AQ</th><th>Ketahanan</th></tr>'+perhatian.map(function(d){var c=function(v){return '<td style="color:'+(Number(v)<50?'#b42318;font-weight:700':'inherit')+'">'+esc(v)+'</td>'};return '<tr><td>'+esc(d.nama)+'</td><td>'+esc(d.kelas)+'</td>'+c(d.eq)+c(d.aq)+c(d.ketahanan)+'</tr>'}).join('')+'</table>':'<p>Tidak ada. 👍</p>')+'</div></div>';
+  $('#bkMain').innerHTML=h;
+  $('#fK2').onchange=function(){FK=this.value;bkRender()};
+}
+function bkSetUI(){
+  var s=SET.setting,f=function(k,l,ph,t){return '<div class="fld"><label>'+l+'</label><input id="s_'+k+'" type="'+(t||'text')+'" value="'+esc(t==='password'?'':s[k]||'')+'" placeholder="'+esc(ph||'')+'"></div>'};
+  $('#bkMain').innerHTML='<div class="panel" style="max-width:720px"><h3>⚙️ Pengaturan</h3>'+
+    '<div class="g2">'+f('nama_sekolah','Nama Sekolah')+f('tahun_ajaran','Tahun Ajaran')+f('guru_bk','Nama Guru BK')+f('nip_bk','NIP Guru BK')+f('kepala_sekolah','Nama Kepala Sekolah')+f('nip_ks','NIP Kepala Sekolah')+
+    f('token','Kode Sesi (kosongkan jika tanpa kode)','mis. BAKAT7')+
+    '<div class="fld"><label>Siswa langsung melihat laporan?</label><select id="s_tampil_hasil"><option value="Y"'+(/^y/i.test(s.tampil_hasil||'Y')?' selected':'')+'>Ya, tampilkan setelah tes</option><option value="N"'+(/^y/i.test(s.tampil_hasil||'Y')?'':' selected')+'>Tidak, dibagikan Guru BK</option></select></div>'+
+    f('password_bk','Password Baru (kosongkan jika tidak diganti)','','password')+'</div>'+
+    '<button class="btn btn-p" id="bSimpanSet">💾 Simpan</button></div>'+
+    '<div class="panel" style="max-width:720px"><h3>📚 Soal Akademik</h3><p style="font-size:13.5px;margin-top:0">Soal mata pelajaran (Matematika, Bahasa Indonesia, Bahasa Inggris, IPA, IPS) tersimpan di sheet <b>SoalAkademik</b>. Guru dapat menambah, mengubah, atau menonaktifkan soal (kolom <b>aktif</b> = N) langsung di spreadsheet.</p>'+
+    '<a class="btn btn-o btn-sm" href="'+esc(SET.url_sheet)+'" target="_blank">📄 Buka Spreadsheet Database</a></div>'+
+    '<p style="font-size:12px;color:var(--redup)">'+esc(SET.versi)+' · Dikembangkan oleh Edy Thomas</p>';
+  $('#bSimpanSet').onclick=function(){var b=this,o={};['nama_sekolah','tahun_ajaran','guru_bk','nip_bk','kepala_sekolah','nip_ks','token','tampil_hasil','password_bk'].forEach(function(k){o[k]=$('#s_'+k).value.trim()});
+    sibuk(b,true);api('bkSimpanSetting',TOK,o).then(function(r){sibuk(b,false);SET=r;bkRender();flash($('#bkMain'),'Pengaturan tersimpan.')}).catch(function(e){sibuk(b,false);bkErr(e)})};
+}
+function bkEkskulUI(){
+  var E=SET.ekskul.slice();
+  var draw=function(){
+    $('#bkMain').innerHTML='<div class="panel"><h3>🏅 Daftar Ekstrakurikuler Sekolah</h3><p style="font-size:13px;margin-top:0;color:var(--redup)">Daftar ini muncul di bagian <b>Minat</b> dan dipakai untuk rekomendasi. Kolom tag menghubungkan ekskul dengan kecerdasan (<code>ling, logis, visual, kines, musik, inter, intra, natur</code>) dan minat RIASEC (<code>R, I, A, S, E, C</code>), pisahkan dengan koma.</p>'+
+      '<div class="tbwrap"><table class="tb"><tr><th>Nama Ekskul</th><th>Tag</th><th>Aktif</th><th></th></tr>'+E.map(function(e,i){return '<tr><td><input data-i="'+i+'" data-k="nama" value="'+esc(e.nama)+'" style="width:100%;padding:6px;border:1px solid var(--garis);border-radius:6px"></td><td><input data-i="'+i+'" data-k="tag" value="'+esc(e.tag)+'" style="width:100%;padding:6px;border:1px solid var(--garis);border-radius:6px"></td><td><select data-i="'+i+'" data-k="aktif"><option'+(e.aktif!=='N'?' selected':'')+'>Y</option><option'+(e.aktif==='N'?' selected':'')+'>N</option></select></td><td><button class="btn btn-r btn-sm" data-del="'+i+'">✕</button></td></tr>'}).join('')+
+      '</table></div><div class="row" style="margin-top:10px"><button class="btn btn-o btn-sm" id="eTambah">+ Tambah Ekskul</button><button class="btn btn-p" id="eSimpan">💾 Simpan Daftar</button></div></div>';
+    $$('#bkMain [data-k]').forEach(function(x){x.oninput=x.onchange=function(){E[+x.getAttribute('data-i')][x.getAttribute('data-k')]=x.value}});
+    $$('#bkMain [data-del]').forEach(function(x){x.onclick=function(){E.splice(+x.getAttribute('data-del'),1);draw()}});
+    $('#eTambah').onclick=function(){E.push({nama:'',tag:'',aktif:'Y'});draw()};
+    $('#eSimpan').onclick=function(){var b=this;sibuk(b,true);api('bkSimpanEkskul',TOK,E).then(function(r){sibuk(b,false);SET=r;bkRender();flash($('#bkMain'),'Daftar ekskul tersimpan.')}).catch(function(e){sibuk(b,false);bkErr(e)})};
+  };
+  draw();
+}
+</script>
+</body>
+</html>
