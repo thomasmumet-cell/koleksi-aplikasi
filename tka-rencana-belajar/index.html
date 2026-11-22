@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perencana Belajar TKA Siswa</title>
+<meta name="description" content="Perencana belajar TKA untuk siswa SMP: tanggal tes dan target per mapel, jadwal mundur mingguan, pelacak kebiasaan, kuis kilat 5 soal per hari, refleksi, dan kartu target yang bisa dicetak.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf6ee; --bg2:#f3ebdd; --card:#ffffff; --ink:#1d2433; --ink2:#4a5468; --line:#e2d8c6;
+  --accent:#c2410c; --accent-soft:#fde7d6; --teal:#0f766e; --teal-soft:#d5f1ec;
+  --ok:#2b8a3e; --ok-soft:#dcf3e1; --bad:#c92a2a; --bad-soft:#fde2e2; --warn:#a15c00; --warn-soft:#fff1cc;
+  --MAT:#d9480f; --BIN:#1864ab; --IPA:#2b8a3e; --ING:#862e9c;
+  --shadow:0 1px 0 rgba(29,36,51,.06), 0 8px 24px -12px rgba(29,36,51,.25);
+  --r:16px; --focus:#1864ab;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141821; --bg2:#1b2130; --card:#1f2636; --ink:#eef1f6; --ink2:#b3bccd; --line:#33405a;
+    --accent:#ff8a4c; --accent-soft:#3d2618; --teal:#4fd1c1; --teal-soft:#123a36;
+    --ok:#69db7c; --ok-soft:#173a22; --bad:#ff8787; --bad-soft:#3f1d1d; --warn:#ffd43b; --warn-soft:#3a3216;
+    --MAT:#ff8a4c; --BIN:#74c0fc; --IPA:#69db7c; --ING:#e599f7;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.7); --focus:#74c0fc;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141821; --bg2:#1b2130; --card:#1f2636; --ink:#eef1f6; --ink2:#b3bccd; --line:#33405a;
+  --accent:#ff8a4c; --accent-soft:#3d2618; --teal:#4fd1c1; --teal-soft:#123a36;
+  --ok:#69db7c; --ok-soft:#173a22; --bad:#ff8787; --bad-soft:#3f1d1d; --warn:#ffd43b; --warn-soft:#3a3216;
+  --MAT:#ff8a4c; --BIN:#74c0fc; --IPA:#69db7c; --ING:#e599f7;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 10px 28px -14px rgba(0,0,0,.7); --focus:#74c0fc;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Atkinson Hyperlegible",system-ui,sans-serif;min-height:100vh}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0 0 .5em}
+h2{font-size:1.45rem} h3{font-size:1.1rem}
+a{color:var(--teal)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--bg);padding:8px 12px;border-radius:8px;z-index:9}
+.skip:focus{left:8px}
+
+/* header */
+header.top{background:linear-gradient(135deg,#1d2433 0%,#2b3550 60%,#3b2a2a 100%);color:#fff;padding:18px 0 0;position:relative;overflow:hidden}
+header.top::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;border:28px solid rgba(255,138,76,.18)}
+.toprow{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;position:relative;z-index:1}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:46px;height:46px;border-radius:14px;background:#ff8a4c;display:grid;place-items:center;flex:none}
+.logo svg{width:28px;height:28px;stroke:#1d2433;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.brand h1{font-size:1.35rem;margin:0}
+.brand p{margin:0;color:#c9d1e3;font-size:.9rem}
+.count{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:8px 14px;border-radius:14px}
+.count b{font-family:"Bricolage Grotesque";font-size:1.9rem;line-height:1;color:#ffb787}
+.count span{font-size:.85rem;color:#dfe5f1;line-height:1.25}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;margin-top:16px;padding-bottom:0;position:relative;z-index:1;scrollbar-width:thin}
+nav.tabs button{background:none;border:0;color:#dfe5f1;padding:10px 14px;border-radius:12px 12px 0 0;cursor:pointer;white-space:nowrap;font-weight:700;font-size:.95rem}
+nav.tabs button[aria-selected="true"]{background:var(--bg);color:var(--ink)}
+nav.tabs button:hover:not([aria-selected="true"]){background:rgba(255,255,255,.08)}
+
+main{padding:20px 0 48px}
+section.tab[hidden],.banner[hidden],[hidden]{display:none!important}
+.banner{background:var(--warn-soft);border:1px solid var(--warn);color:var(--ink);padding:10px 14px;border-radius:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
+.banner p{margin:0}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);min-width:0}
+.card h3{display:flex;align-items:center;gap:8px}
+.muted{color:var(--ink2)}
+.small{font-size:.88rem}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:700;border:1px solid currentColor;line-height:1.5}
+.pill.w{color:var(--teal);background:var(--teal-soft)}
+.pill.p{color:var(--warn);background:var(--warn-soft)}
+.pill.ai{color:var(--bad);background:var(--bad-soft)}
+.pill.c{color:var(--ink2)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);padding:9px 14px;border-radius:12px;cursor:pointer;font-weight:700;text-decoration:none;color:var(--ink)}
+.btn:hover{border-color:var(--ink2)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.pri{color:#1d2433}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.pri{color:#1d2433}}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.stat{font-family:"Bricolage Grotesque";font-size:2rem;font-weight:800;line-height:1}
+label{font-weight:700;font-size:.92rem;display:block;margin-bottom:4px}
+input[type=text],input[type=date],input[type=number],input[type=password],select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--bg);}
+textarea{min-height:70px;resize:vertical}
+.field{margin-bottom:12px}
+.hint{font-size:.82rem;color:var(--ink2);margin-top:3px}
+
+/* mapel */
+.mp{border-left:6px solid var(--c);}
+.mp-dot{width:12px;height:12px;border-radius:50%;background:var(--c);display:inline-block;flex:none}
+.bar{height:12px;background:var(--bg2);border-radius:999px;position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--c,var(--accent));border-radius:999px}
+.bar .tgt{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--ink);border-radius:2px}
+.mrow{display:grid;grid-template-columns:minmax(110px,150px) 1fr auto;gap:10px;align-items:center;margin:8px 0}
+.tgtgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px}
+.tgtgrid .card{padding:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* minggu */
+.week{border:1px solid var(--line);border-radius:14px;margin-bottom:12px;background:var(--card);overflow:hidden}
+.week summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.week summary::-webkit-details-marker{display:none}
+.week[open] summary{border-bottom:1px solid var(--line)}
+.week.now{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.phase{font-size:.78rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--bg2)}
+.wbody{padding:12px 14px;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.task{display:flex;gap:8px;align-items:flex-start;padding:4px 0}
+.task input{margin-top:4px;width:18px;height:18px;flex:none;accent-color:var(--accent)}
+.task.done span{text-decoration:line-through;color:var(--ink2)}
+.prog{font-weight:700;font-size:.9rem}
+.agenda{border-left:4px dashed var(--teal);padding:6px 10px;margin:6px 0;background:var(--teal-soft);border-radius:0 10px 10px 0;font-size:.9rem}
+
+/* kebiasaan */
+.habits{display:grid;gap:8px}
+.habit{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer;background:var(--bg)}
+.habit input{width:20px;height:20px;accent-color:var(--ok)}
+.habit.on{background:var(--ok-soft);border-color:var(--ok)}
+.heat{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;max-width:420px}
+.heat div{aspect-ratio:1;border-radius:6px;background:var(--bg2);display:grid;place-items:center;font-size:.72rem;color:var(--ink2);border:1px solid transparent}
+.heat .l1{background:color-mix(in srgb,var(--ok) 30%,var(--bg2))}
+.heat .l2{background:color-mix(in srgb,var(--ok) 55%,var(--bg2));color:var(--ink)}
+.heat .l3{background:var(--ok);color:#fff}
+.heat .today{border-color:var(--accent)}
+.heat .hd{background:none;font-weight:700;aspect-ratio:auto}
+
+/* kuis */
+.qcard{max-width:760px}
+.qmeta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.stim{background:var(--bg2);border-radius:12px;padding:10px 12px;margin:8px 0;font-size:.95rem;white-space:pre-line}
+.stim table{border-collapse:collapse;margin:4px 0}
+.stim td,.stim th{border:1px solid var(--line);padding:3px 10px;text-align:center}
+.opts{display:grid;gap:8px;margin:12px 0}
+.opt{text-align:left;border:2px solid var(--line);background:var(--card);padding:10px 12px;border-radius:12px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.opt b{width:26px;height:26px;border-radius:8px;background:var(--bg2);display:grid;place-items:center;flex:none;font-size:.9rem}
+.opt:hover:not(:disabled){border-color:var(--ink2)}
+.opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+.opt.no{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default;color:var(--ink)}
+.fb{border-radius:12px;padding:10px 12px;margin-top:8px}
+.fb.ok{background:var(--ok-soft);border:1px solid var(--ok)}
+.fb.no{background:var(--bad-soft);border:1px solid var(--bad)}
+.dots{display:flex;gap:6px;margin:6px 0 12px}
+.dots span{width:28px;height:8px;border-radius:999px;background:var(--bg2)}
+.dots span.ok{background:var(--ok)} .dots span.no{background:var(--bad)} .dots span.cur{background:var(--accent)}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.85em;line-height:1.05;margin:0 2px}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 2px}
+
+/* refleksi */
+.scale{display:flex;gap:6px;flex-wrap:wrap}
+.scale label{font-weight:400;display:flex;gap:6px;align-items:center;border:1px solid var(--line);padding:6px 10px;border-radius:10px;cursor:pointer;margin:0}
+.scale input{accent-color:var(--accent)}
+.rlist article{border-top:1px solid var(--line);padding:10px 0}
+
+/* kartu */
+.kartu{max-width:620px;margin:0 auto;background:#fffdf8;color:#1d2433;border:2px solid #1d2433;border-radius:18px;padding:22px;position:relative;font-family:"Atkinson Hyperlegible",sans-serif}
+.kartu::before{content:"";position:absolute;inset:8px;border:1px dashed #c2410c;border-radius:12px;pointer-events:none}
+.kartu h2{font-size:1.6rem;margin:0}
+.ktop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.kbig{text-align:center;background:#1d2433;color:#fff;border-radius:14px;padding:8px 14px}
+.kbig b{display:block;font-family:"Bricolage Grotesque";font-size:2rem;line-height:1;color:#ffb787}
+.ktab{width:100%;border-collapse:collapse;margin:14px 0}
+.ktab th,.ktab td{border:1px solid #1d2433;padding:6px 8px;text-align:left}
+.ktab th{background:#fde7d6}
+.ksign{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px;font-size:.85rem;text-align:center}
+.ksign div{border-top:1px solid #1d2433;padding-top:4px;margin-top:36px}
+
+/* tabel */
+.tbl{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.tscroll{overflow-x:auto}
+footer{border-top:1px solid var(--line);padding:18px 0;color:var(--ink2);font-size:.88rem}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;max-width:90vw}
+.toast.show{opacity:1}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:560px){
+  .two{grid-template-columns:1fr}
+  .mrow{grid-template-columns:1fr auto}
+  .mrow .bar{grid-column:1/-1;grid-row:2}
+  .count b{font-size:1.5rem}
+  .ksign{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff}
+  body *{visibility:hidden}
+  #kartuCetak,#kartuCetak *{visibility:visible}
+  #kartuCetak{position:absolute;left:0;top:0;width:100%;max-width:none;box-shadow:none}
+  header.top,nav{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#isi">Lewati ke isi</a>
+<header class="top">
+  <div class="wrap">
+    <div class="toprow">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4M16 2v4M4 10h16M8 15l2.5 2.5L16 13"/></svg></div>
+        <div>
+          <h1>Perencana Belajar TKA</h1>
+          <p>Target, jadwal mundur, kebiasaan, kuis kilat, dan refleksi untuk siswa SMP</p>
+        </div>
+      </div>
+      <div class="count" aria-live="polite"><b id="hCount">–</b><span id="hCountTxt">hari menuju<br>TKA</span></div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Menu utama" id="tabs"></nav>
+  </div>
+</header>
+
+<main id="isi" class="wrap" tabindex="-1">
+  <div id="bannerContoh" class="banner" hidden>
+    <p><b>Data contoh.</b> Kamu sedang melihat rencana milik siswa fiktif “Raka (contoh)”. Hapus data contoh untuk mulai menyusun rencanamu sendiri.</p>
+    <button class="btn" id="btnHapusContoh1" type="button">Hapus data contoh</button>
+  </div>
+
+  <!-- BERANDA -->
+  <section class="tab" id="tab-beranda" role="tabpanel" aria-labelledby="t-beranda">
+    <div class="grid g2">
+      <div class="card">
+        <h2 id="sapa">Halo!</h2>
+        <p class="muted" id="ringkasTes"></p>
+        <div class="row" style="margin-top:8px">
+          <button class="btn pri" type="button" data-go="kuis">Kuis kilat hari ini</button>
+          <button class="btn" type="button" data-go="kebiasaan">Isi kebiasaan</button>
+          <button class="btn" type="button" data-go="jadwal">Lihat minggu ini</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Hari ini</h3>
+        <div class="grid g4" style="gap:10px" id="statHari"></div>
+      </div>
+    </div>
+    <div class="grid g2" style="margin-top:16px">
+      <div class="card">
+        <h3>Posisi kamu terhadap target</h3>
+        <p class="small muted">Batang = perkiraan skor terkini (skor awal yang kamu isi, diperbarui oleh hasil kuis kilat bila sudah ≥ 5 soal). Garis hitam = target.</p>
+        <div id="posisi"></div>
+      </div>
+      <div class="card">
+        <h3>Fokus minggu ini</h3>
+        <div id="fokusMinggu"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3>Domain yang perlu diulang</h3>
+      <p class="small muted">Dihitung dari semua jawaban kuis kilat. Domain dengan ketepatan terendah muncul paling atas dan otomatis didahulukan di jadwal mingguan.</p>
+      <div id="lemah"></div>
+    </div>
+  </section>
+
+  <!-- TARGET -->
+  <section class="tab" id="tab-target" role="tabpanel" aria-labelledby="t-target" hidden>
+    <div class="card">
+      <h2>Tanggal tes dan target</h2>
+      <p class="muted small">Isi sekali, lalu jadwal mingguan dibuat otomatis. Kamu bisa mengubahnya kapan saja.</p>
+      <form id="fProfil" autocomplete="off">
+        <div class="grid g4">
+          <div class="field"><label for="pNama">Nama panggilan</label><input type="text" id="pNama" maxlength="30" placeholder="mis. Dinda"><div class="hint">Cukup nama panggilan. Data hanya tersimpan di perangkat ini.</div></div>
+          <div class="field"><label for="pKelas">Kelas</label><input type="text" id="pKelas" maxlength="12" placeholder="mis. 9B"></div>
+          <div class="field"><label for="pTgl">Tanggal tes TKA</label><input type="date" id="pTgl"><div class="hint">Perkiraan TKA SMP 2027: 29 Maret–4 April 2027. Pastikan dengan jadwal dari sekolahmu.</div></div>
+          <div class="field"><label for="pMulai">Mulai rencana</label><input type="date" id="pMulai"></div>
+        </div>
+        <div class="grid g4">
+          <div class="field"><label for="pMenit">Menit belajar per hari</label><input type="number" id="pMenit" min="15" max="240" step="5"><div class="hint">Saran: 45–90 menit pada hari sekolah.</div></div>
+          <div class="field" style="grid-column:span 2;min-width:0">
+            <span style="font-weight:700;font-size:.92rem;display:block;margin-bottom:4px" id="lblHari">Hari belajar dalam seminggu</span>
+            <div class="row" role="group" aria-labelledby="lblHari" id="pHari"></div>
+          </div>
+          <div class="field"><label for="pFokus">Prioritas</label>
+            <select id="pFokus"><option value="wajib">Utamakan 2 mapel TKA SMP</option><option value="rata">Bagi menurut selisih target saja</option></select>
+          </div>
+        </div>
+        <h3 style="margin-top:6px">Target per mapel (skala 0–100)</h3>
+        <div class="tgtgrid" id="tgtGrid"></div>
+        <div class="row" style="margin-top:14px">
+          <button class="btn pri" type="submit">Simpan dan buat jadwal</button>
+          <span class="small muted" id="profilInfo"></span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- JADWAL -->
+  <section class="tab" id="tab-jadwal" role="tabpanel" aria-labelledby="t-jadwal" hidden>
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <div>
+        <h2 style="margin:0">Jadwal mundur mingguan</h2>
+        <p class="muted small" id="jadwalInfo" style="margin:0"></p>
+      </div>
+      <div class="row">
+        <button class="btn" type="button" id="btnBukaSemua">Buka semua minggu</button>
+        <button class="btn" type="button" id="btnCsvJadwal">Unduh jadwal (CSV)</button>
+      </div>
+    </div>
+    <div id="mingguan"></div>
+  </section>
+
+  <!-- KEBIASAAN -->
+  <section class="tab" id="tab-kebiasaan" role="tabpanel" aria-labelledby="t-kebiasaan" hidden>
+    <div class="grid g2">
+      <div class="card">
+        <h2>Kebiasaan belajar</h2>
+        <div class="row" style="margin-bottom:10px">
+          <label for="kTgl" style="margin:0">Tanggal</label>
+          <input type="date" id="kTgl" style="width:auto">
+        </div>
+        <div class="habits" id="habitList"></div>
+        <div class="field" style="margin-top:12px"><label for="kMenit">Menit belajar hari itu</label><input type="number" id="kMenit" min="0" max="600" step="5"></div>
+        <p class="small muted">Centang otomatis tersimpan. “Kuis kilat” tercentang sendiri setelah kamu menyelesaikan kuis hari itu.</p>
+      </div>
+      <div class="card">
+        <h3>Rantai kebiasaan</h3>
+        <div class="row" style="gap:18px;margin-bottom:10px">
+          <div><div class="stat" id="streak">0</div><div class="small muted">hari beruntun</div></div>
+          <div><div class="stat" id="menit7">0</div><div class="small muted">menit, 7 hari terakhir</div></div>
+          <div><div class="stat" id="aktif28">0</div><div class="small muted">hari aktif dari 28</div></div>
+        </div>
+        <p class="small muted" style="margin:0 0 6px">4 minggu terakhir (warna makin pekat = makin banyak kebiasaan tercentang)</p>
+        <div class="heat" id="heat" aria-label="Peta kebiasaan 28 hari terakhir"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KUIS -->
+  <section class="tab" id="tab-kuis" role="tabpanel" aria-labelledby="t-kuis" hidden>
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <div>
+        <h2 style="margin:0">Kuis kilat 5 soal</h2>
+        <p class="muted small" style="margin:0">Soal campuran berganti setiap hari. Percobaan pertama yang dicatat; sesudahnya boleh diulang sebagai latihan.</p>
+      </div>
+      <span class="pill c" id="bankInfo"></span>
+    </div>
+    <div class="card qcard" id="kuisBox" aria-live="polite"></div>
+    <div class="card" style="margin-top:16px">
+      <h3>Riwayat kuis</h3>
+      <div class="tscroll"><table class="tbl" id="tblKuis"></table></div>
+    </div>
+  </section>
+
+  <!-- REFLEKSI -->
+  <section class="tab" id="tab-refleksi" role="tabpanel" aria-labelledby="t-refleksi" hidden>
+    <div class="grid g2">
+      <div class="card">
+        <h2>Refleksi singkat</h2>
+        <form id="fRefleksi">
+          <div class="field"><label for="rTgl">Tanggal</label><input type="date" id="rTgl"></div>
+          <fieldset class="field" style="border:0;padding:0;margin:0 0 12px">
+            <legend style="font-weight:700;font-size:.92rem;margin-bottom:4px">Seberapa yakin kamu dengan belajarmu hari ini?</legend>
+            <div class="scale" id="rRasa"></div>
+          </fieldset>
+          <div class="field"><label for="rBelajar">Hal yang kupelajari atau berhasil kupahami</label><textarea id="rBelajar" maxlength="400"></textarea></div>
+          <div class="field"><label for="rSulit">Yang masih sulit</label><textarea id="rSulit" maxlength="400"></textarea></div>
+          <div class="field"><label for="rBesok">Langkah kecil besok</label><textarea id="rBesok" maxlength="300"></textarea></div>
+          <button class="btn pri" type="submit">Simpan refleksi</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Catatan refleksi</h3>
+        <p class="small muted">Pertanyaan pemantik: Strategi apa yang paling membantu? Kesalahan apa yang terulang? Kapan waktu belajarku paling fokus?</p>
+        <div class="rlist" id="rList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KARTU -->
+  <section class="tab" id="tab-kartu" role="tabpanel" aria-labelledby="t-kartu" hidden>
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <div><h2 style="margin:0">Kartu target</h2><p class="small muted" style="margin:0">Cetak, tempel di meja belajar, dan minta tanda tangan orang tua dan wali kelas.</p></div>
+      <button class="btn pri" type="button" id="btnCetak">Cetak kartu</button>
+    </div>
+    <div class="kartu" id="kartuCetak"></div>
+  </section>
+
+  <!-- PENGATURAN -->
+  <section class="tab" id="tab-atur" role="tabpanel" aria-labelledby="t-atur" hidden>
+    <div class="grid g2">
+      <div class="card">
+        <h2>Tampilan</h2>
+        <div class="field"><label for="sTema">Tema</label>
+          <select id="sTema"><option value="system">Ikuti perangkat</option><option value="light">Terang</option><option value="dark">Gelap</option></select></div>
+        <h3 style="margin-top:16px">Data</h3>
+        <p class="small muted">Semua data tersimpan di peramban perangkat ini (localStorage). Unduh cadangan secara berkala.</p>
+        <div class="row">
+          <button class="btn" type="button" id="btnJson">Ekspor JSON</button>
+          <button class="btn" type="button" id="btnCsv">Ekspor kebiasaan &amp; kuis (CSV)</button>
+          <label class="btn" for="fImpor" style="margin:0">Impor JSON</label>
+          <input type="file" id="fImpor" accept="application/json,.json" class="sr">
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" type="button" id="btnHapusContoh2">Hapus data contoh</button>
+          <button class="btn danger" type="button" id="btnReset">Hapus semua data</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>AI opsional (Gemini)</h2>
+        <p class="small muted">Pakai kunci API Gemini milikmu sendiri. Kunci hanya disimpan di perangkat ini, tidak ikut diekspor, dan dikirim langsung ke Google saat kamu menekan tombol AI. Soal buatan AI ditandai <span class="pill ai">perlu dicek guru</span>.</p>
+        <div class="field"><label for="sKey">Kunci API Gemini</label><input type="password" id="sKey" autocomplete="off" placeholder="tempel kunci API"></div>
+        <div class="field"><label for="sModel">Model</label><input type="text" id="sModel" placeholder="gemini-2.5-flash"></div>
+        <div class="field"><label class="row" style="font-weight:400;gap:8px"><input type="checkbox" id="sPakaiAI"> Sertakan soal buatan AI di kuis kilat</label></div>
+        <h3>Buat soal tambahan</h3>
+        <div class="two">
+          <div class="field"><label for="aiMapel">Mapel</label><select id="aiMapel"></select></div>
+          <div class="field"><label for="aiDomain">Domain</label><select id="aiDomain"></select></div>
+        </div>
+        <div class="row"><button class="btn pri" type="button" id="btnAI">Buat 3 soal</button><span class="small muted" id="aiStatus" aria-live="polite"></span></div>
+        <div id="aiList" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMBER -->
+  <section class="tab" id="tab-sumber" role="tabpanel" aria-labelledby="t-sumber" hidden>
+    <div class="grid g2">
+      <div class="card">
+        <h2>Dasar dan sumber</h2>
+        <h3>Status mapel dalam TKA SMP</h3>
+        <p>Menurut Permendikdasmen Nomor 9 Tahun 2025, mata uji TKA jenjang SMP adalah <b>Bahasa Indonesia</b> dan <b>Matematika</b>. Untuk TKA SMP 2027 diberitakan tetap dua mapel (Matematika dan Numerasi; Bahasa Indonesia dan Literasi), masing-masing <b>30 soal dalam 75 menit</b>, ditambah latihan dan survei. Jadwal yang beredar: pendaftaran 6 Januari–7 Februari 2027, simulasi 1–4 Februari, gladi bersih SMP 15–18 Februari, pelaksanaan 29 Maret–1 April dan 3–4 April 2027, susulan 19–22 April, pengumuman 14 Mei 2027 (dari paparan BSKAP 9 November 2026 yang dikutip media; tunggu POS resmi).</p>
+        <p><b>IPA dan Bahasa Inggris bukan mata uji TKA SMP.</b> Keduanya tetap ada di perencana ini sebagai <span class="pill p">penguatan</span> (asesmen sekolah dan bekal SMA/SMK). Siswa bisa mematikannya di menu Target, dan pilihan “Utamakan 2 mapel TKA SMP” memberi porsi waktu lebih besar untuk Matematika dan Bahasa Indonesia.</p>
+        <p>Bentuk soal TKA SD/SMP yang diumumkan: pilihan ganda, pilihan ganda kompleks, dan benar/salah. Kuis kilat di sini sengaja memakai pilihan ganda agar singkat; latihan bentuk lain ada di aplikasi latihan per mapel.</p>
+        <h3>Cara aplikasi menyusun rencana</h3>
+        <ul>
+          <li><b>Jadwal mundur:</b> waktu dihitung dari tanggal tes ke belakang dan dibagi menjadi fase Pemetaan → Penguatan per domain → Latihan campuran berwaktu → Pemantapan (minggu terakhir lebih ringan).</li>
+          <li><b>Porsi waktu</b> sebanding dengan selisih target dan skor saat ini; mapel TKA wajib diberi bobot 1,5×.</li>
+          <li><b>Latihan berjarak dan mengingat kembali</b> (spaced &amp; retrieval practice): kuis 5 soal setiap hari dengan topik yang bergilir lebih membantu daripada belajar borongan menjelang tes.</li>
+          <li><b>Domain terlemah</b> dari kuis didahulukan dalam rotasi topik.</li>
+        </ul>
+        <p class="small muted">Semua soal di aplikasi ini ditulis orisinal; nama tokoh dan tempat dalam soal fiktif atau umum. Kebijakan dapat berubah, jadi cek kembali laman resmi Kemendikdasmen dan informasi dari sekolah.</p>
+      </div>
+      <div class="card">
+        <h3>Tautan sumber</h3>
+        <ul>
+          <li><a href="https://www.kemendikdasmen.go.id/siaran-pers/12999-kemendikdasmen-terbitkan-permendikdasmen-tes-kemampuan-akademik-tka" target="_blank" rel="noopener">Kemendikdasmen: Siaran pers Permendikdasmen No. 9 Tahun 2025 tentang TKA</a></li>
+          <li><a href="https://www.komunitasbelajar.id/2026/11/jadwal-tka-sd-dan-smp-tahun-2027.html" target="_blank" rel="noopener">Komunitas Belajar: Jadwal TKA SD dan SMP Tahun 2027 (mengutip paparan BSKAP, 9 November 2026)</a></li>
+          <li><a href="https://pojoksatu.id/edugov/tka-sd-smp-2027-hanya-uji-2-mata-pelajaran-ini-daftar-mapel-jadwal-dan-sesi-ujiannya" target="_blank" rel="noopener">Pojoksatu: TKA SD–SMP 2027 hanya menguji 2 mata pelajaran</a></li>
+          <li><a href="https://www.kompas.tv/info-publik/644753/3-bentuk-soal-tka-sd-mi-dan-smp-mts-bukan-hafalan-tapi-mengukur-pemahaman" target="_blank" rel="noopener">Kompas TV: 3 bentuk soal TKA SD/MI dan SMP/MTs</a></li>
+          <li><a href="https://www.cmu.edu/teaching/resources/instructionalstrategies/activelearningstrategies/spacedopractice/index.html" target="_blank" rel="noopener">Carnegie Mellon University Eberly Center: Spaced Practice</a></li>
+        </ul>
+        <h3>Aplikasi latihan lain di koleksi</h3>
+        <ul>
+          <li><a href="../tka-matematika/">Latihan TKA Matematika</a></li>
+          <li><a href="../tka-bahasa-indonesia/">Latihan TKA Bahasa Indonesia</a></li>
+          <li><a href="../tka-bahasa-inggris/">Latihan TKA Bahasa Inggris</a> (penguatan)</li>
+          <li><a href="../tka-analisis-tryout/">Analisis Hasil Try Out TKA</a> (untuk guru)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">Perencana Belajar TKA Siswa · bagian dari Koleksi Aplikasi Thomas · data hanya tersimpan di perangkat ini</div></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   Perencana Belajar TKA Siswa — satu berkas, tanpa server.
+   Data di localStorage perangkat. Data contoh (fiktif) bisa dihapus.
+   ===================================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const LS = "tkaRencanaBelajar.v1";
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const F = (a, b) => `<span class="frac"><span>${a}</span><span>${b}</span></span>`;
+
+const MAPEL = [
+  { id: "MAT", nama: "Matematika", wajib: true, domain: ["Bilangan", "Aljabar", "Geometri dan Pengukuran", "Data dan Peluang"] },
+  { id: "BIN", nama: "Bahasa Indonesia", wajib: true, domain: ["Menemukan informasi", "Menafsirkan dan mengintegrasikan", "Mengevaluasi dan merefleksi"] },
+  { id: "IPA", nama: "IPA", wajib: false, domain: ["Zat dan perubahannya", "Gerak dan gaya", "Energi", "Makhluk hidup dan sistem organ", "Ekologi", "Bumi dan tata surya"] },
+  { id: "ING", nama: "Bahasa Inggris", wajib: false, domain: ["Main idea", "Detail", "Inference", "Vocabulary in context", "Reference"] }
+];
+const MP = Object.fromEntries(MAPEL.map(m => [m.id, m]));
+const HARI = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
+const BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+const AGENDA_2027 = [
+  { a: "2027-01-06", b: "2027-02-07", t: "Pendaftaran TKA (diurus sekolah)" },
+  { a: "2027-02-01", b: "2027-02-04", t: "Simulasi TKA SD/SMP" },
+  { a: "2027-02-15", b: "2027-02-18", t: "Gladi bersih TKA SMP" },
+  { a: "2027-03-29", b: "2027-04-04", t: "Pelaksanaan TKA SMP (29 Mar–1 Apr dan 3–4 Apr)" }
+];
+
+/* ---------------- BANK SOAL (orisinal) ----------------
+   k = indeks kunci (0–3); lv = level kognitif.                    */
+const BANK = [
+  // ===== MATEMATIKA =====
+  { id: "M01", m: "MAT", d: "Bilangan", lv: "Pemahaman", s: "", q: "Suhu pagi hari di sebuah dataran tinggi −3 °C. Menjelang siang suhu naik 11 °C. Berapa suhu siang hari itu?", o: ["−14 °C", "8 °C", "14 °C", "−8 °C"], k: 1, p: "Naik berarti ditambah: −3 + 11 = 8. Jadi suhu siang 8 °C." },
+  { id: "M02", m: "MAT", d: "Bilangan", lv: "Penerapan", s: "", q: "Harga sebuah buku Rp24.000. Toko memberi diskon 15%. Berapa yang harus dibayar?", o: ["Rp20.400", "Rp21.600", "Rp3.600", "Rp20.000"], k: 0, p: "Diskon = 15% × 24.000 = 3.600. Bayar = 24.000 − 3.600 = Rp20.400 (atau 85% × 24.000)." },
+  { id: "M03", m: "MAT", d: "Bilangan", lv: "Penalaran", s: "", q: "Perbandingan uang Ani dan Budi 3 : 5. Selisih uang mereka Rp18.000. Berapa jumlah uang mereka berdua?", o: ["Rp45.000", "Rp27.000", "Rp72.000", "Rp48.000"], k: 2, p: "Selisih bagian = 5 − 3 = 2 bagian = 18.000, jadi 1 bagian = 9.000. Jumlah = 8 bagian = Rp72.000." },
+  { id: "M04", m: "MAT", d: "Aljabar", lv: "Pemahaman", s: "", q: "Bentuk paling sederhana dari 3(2x − 4) − 2(x − 5) adalah …", o: ["4x − 22", "4x − 2", "4x + 2", "8x − 2"], k: 1, p: "3(2x − 4) = 6x − 12; −2(x − 5) = −2x + 10. Hasil: 6x − 2x − 12 + 10 = 4x − 2. Perhatikan tanda minus kali minus menjadi plus." },
+  { id: "M05", m: "MAT", d: "Aljabar", lv: "Penerapan", s: "Tarif ojek daring: Rp5.000 biaya awal ditambah Rp2.500 setiap kilometer.", q: "Sinta membayar Rp20.000. Berapa kilometer jarak perjalanannya?", o: ["5 km", "6 km", "7 km", "8 km"], k: 1, p: "5.000 + 2.500x = 20.000 → 2.500x = 15.000 → x = 6 km." },
+  { id: "M06", m: "MAT", d: "Aljabar", lv: "Penalaran", s: "Di aula, baris pertama berisi 12 kursi. Setiap baris berikutnya bertambah 3 kursi.", q: "Berapa banyak kursi pada baris ke-10?", o: ["42", "30", "36", "39"], k: 3, p: "Barisan aritmetika: U₁₀ = 12 + (10 − 1) × 3 = 12 + 27 = 39 kursi." },
+  { id: "M07", m: "MAT", d: "Geometri dan Pengukuran", lv: "Pemahaman", s: "", q: "Sebuah segitiga siku-siku memiliki sisi tegak 9 cm dan 12 cm. Panjang sisi miringnya …", o: ["13 cm", "15 cm", "17 cm", "21 cm"], k: 1, p: "Teorema Pythagoras: √(9² + 12²) = √(81 + 144) = √225 = 15 cm." },
+  { id: "M08", m: "MAT", d: "Geometri dan Pengukuran", lv: "Penerapan", s: "Kolam berbentuk balok berukuran panjang 4 m, lebar 2 m, dan dalam 1 m.", q: "Kolam diisi air sampai " + F(3, 4) + " bagiannya. Berapa liter air di kolam? (1 m³ = 1.000 liter)", o: ["4.500 liter", "8.000 liter", "6.000 liter", "600 liter"], k: 2, p: "Volume kolam = 4 × 2 × 1 = 8 m³. Air = ¾ × 8 = 6 m³ = 6.000 liter." },
+  { id: "M09", m: "MAT", d: "Geometri dan Pengukuran", lv: "Penalaran", s: "Taman berbentuk lingkaran berjari-jari 7 m. Di sepanjang tepinya dipasang lampu setiap 2 m, mengelilingi taman.", q: "Berapa banyak lampu yang dibutuhkan? (π = " + F(22, 7) + ")", o: ["22", "23", "44", "21"], k: 0, p: "Keliling = 2 × 22/7 × 7 = 44 m. Karena lintasannya tertutup (melingkar), banyak lampu = 44 : 2 = 22, tidak perlu ditambah 1." },
+  { id: "M10", m: "MAT", d: "Data dan Peluang", lv: "Pemahaman", s: "Nilai kuis tujuh siswa: 5, 7, 8, 6, 9, 7, 10.", q: "Median data tersebut adalah …", o: ["6", "7", "7,5", "8"], k: 1, p: "Urutkan: 5, 6, 7, 7, 8, 9, 10. Data ke-4 (tengah) adalah 7." },
+  { id: "M11", m: "MAT", d: "Data dan Peluang", lv: "Penerapan", s: "Sebuah kantong berisi 4 kelereng merah, 5 biru, dan 3 hijau.", q: "Satu kelereng diambil acak. Peluang terambil kelereng yang BUKAN biru adalah …", o: [F(5, 12), F(1, 3), F(3, 4), F(7, 12)], k: 3, p: "Jumlah kelereng 12. Bukan biru = 4 + 3 = 7. Peluang = 7/12." },
+  { id: "M12", m: "MAT", d: "Data dan Peluang", lv: "Penalaran", s: "Rata-rata nilai 30 siswa adalah 72. Setelah 2 siswa baru ikut ujian, rata-rata 32 siswa menjadi 73.", q: "Berapa rata-rata nilai 2 siswa baru tersebut?", o: ["73", "80", "88", "176"], k: 2, p: "Jumlah awal = 30 × 72 = 2.160. Jumlah baru = 32 × 73 = 2.336. Dua siswa baru = 176, rata-ratanya 176 : 2 = 88." },
+
+  // ===== BAHASA INDONESIA =====
+  { id: "B01", m: "BIN", d: "Menemukan informasi", lv: "Pemahaman", s: "Bank Sampah Sidomulyo buka setiap Sabtu pukul 08.00–11.00. Warga menyetor sampah plastik yang sudah dicuci dan dipilah menurut jenisnya. Setiap kilogram botol plastik dihargai Rp3.000, sedangkan kardus Rp1.500. Tabungan dapat diambil setiap akhir bulan.", q: "Syarat sampah plastik yang diterima bank sampah adalah …", o: ["sudah ditimbang di rumah", "sudah dicuci dan dipilah", "dipotong kecil-kecil", "dibawa pada hari Minggu"], k: 1, p: "Kalimat kedua menyebut sampah plastik harus sudah dicuci dan dipilah menurut jenisnya." },
+  { id: "B02", m: "BIN", d: "Menafsirkan dan mengintegrasikan", lv: "Penerapan", s: "Bank Sampah Sidomulyo buka setiap Sabtu pukul 08.00–11.00. Warga menyetor sampah plastik yang sudah dicuci dan dipilah menurut jenisnya. Setiap kilogram botol plastik dihargai Rp3.000, sedangkan kardus Rp1.500. Tabungan dapat diambil setiap akhir bulan.", q: "Tujuan utama teks tersebut adalah …", o: ["mengajak warga membeli botol plastik", "menceritakan sejarah bank sampah", "memberi informasi cara dan ketentuan menabung sampah", "membandingkan harga sampah di beberapa kota"], k: 2, p: "Isi teks berupa jadwal, syarat, harga, dan waktu pengambilan tabungan, yaitu informasi ketentuan menabung sampah." },
+  { id: "B03", m: "BIN", d: "Mengevaluasi dan merefleksi", lv: "Penalaran", s: "Bank Sampah Sidomulyo buka setiap Sabtu pukul 08.00–11.00. Warga menyetor sampah plastik yang sudah dicuci dan dipilah menurut jenisnya. Setiap kilogram botol plastik dihargai Rp3.000, sedangkan kardus Rp1.500. Tabungan dapat diambil setiap akhir bulan.", q: "Informasi penting yang BELUM ada dalam teks bagi warga yang baru pertama kali ingin menabung adalah …", o: ["harga botol plastik per kilogram", "hari dan jam buka", "lokasi bank sampah dan cara mendaftar", "waktu pengambilan tabungan"], k: 2, p: "Harga, jadwal, dan waktu pengambilan sudah disebut. Lokasi dan cara mendaftar belum ada, padahal dibutuhkan warga baru." },
+  { id: "B04", m: "BIN", d: "Menemukan informasi", lv: "Pemahaman", s: "Dita menatap sepatu lamanya yang solnya mulai menganga. Lomba lari antarsekolah tinggal dua hari lagi. Dari ruang tengah terdengar mesin jahit Ibu yang masih berbunyi meski malam sudah larut. Dita tahu uang pesanan seragam itu belum cukup untuk membeli sepatu baru. Ia mengambil lem, jarum, dan benang, lalu duduk di teras.", q: "Masalah yang dihadapi Dita dalam kutipan tersebut adalah …", o: ["Dita tidak terpilih ikut lomba lari", "sepatu Dita rusak menjelang lomba", "Ibu Dita sakit karena bekerja", "Dita lupa jadwal lomba"], k: 1, p: "Sol sepatu Dita menganga (rusak) dan lomba tinggal dua hari lagi." },
+  { id: "B05", m: "BIN", d: "Menafsirkan dan mengintegrasikan", lv: "Penerapan", s: "Dita menatap sepatu lamanya yang solnya mulai menganga. Lomba lari antarsekolah tinggal dua hari lagi. Dari ruang tengah terdengar mesin jahit Ibu yang masih berbunyi meski malam sudah larut. Dita tahu uang pesanan seragam itu belum cukup untuk membeli sepatu baru. Ia mengambil lem, jarum, dan benang, lalu duduk di teras.", q: "Watak Dita yang paling tepat berdasarkan kutipan adalah …", o: ["mudah putus asa", "manja dan suka menuntut", "pengertian dan mandiri", "ceroboh dan pelupa"], k: 2, p: "Dita memahami keadaan ibunya (pengertian) dan memilih memperbaiki sepatunya sendiri (mandiri)." },
+  { id: "B06", m: "BIN", d: "Mengevaluasi dan merefleksi", lv: "Penalaran", s: "Dita menatap sepatu lamanya yang solnya mulai menganga. Lomba lari antarsekolah tinggal dua hari lagi. Dari ruang tengah terdengar mesin jahit Ibu yang masih berbunyi meski malam sudah larut. Dita tahu uang pesanan seragam itu belum cukup untuk membeli sepatu baru. Ia mengambil lem, jarum, dan benang, lalu duduk di teras.", q: "Sikap Dita yang paling layak diteladani dalam kehidupan sehari-hari adalah …", o: ["mencari jalan keluar sendiri sebelum mengeluh", "menunda pekerjaan sampai malam", "meminta barang baru setiap ada lomba", "menyembunyikan masalah dari semua orang"], k: 0, p: "Dita tidak merengek meminta sepatu baru; ia berusaha memperbaiki sendiri. Itulah sikap yang patut diteladani." },
+  { id: "B07", m: "BIN", d: "Menafsirkan dan mengintegrasikan", lv: "Penalaran", s: "Survei OSIS kepada 120 siswa tentang fasilitas yang paling diinginkan:\n• kantin sehat: 54 siswa\n• taman baca: 36 siswa\n• lapangan futsal: 30 siswa", q: "Simpulan yang tepat berdasarkan data survei adalah …", o: ["Lebih dari separuh siswa memilih kantin sehat.", "Taman baca paling sedikit dipilih.", "Kantin sehat paling banyak dipilih, tetapi kurang dari separuh siswa memilihnya.", "Jumlah pemilih lapangan futsal sama dengan taman baca."], k: 2, p: "54 dari 120 = 45%, terbanyak tetapi di bawah 50%. Yang paling sedikit adalah lapangan futsal (30), bukan taman baca." },
+  { id: "B08", m: "BIN", d: "Mengevaluasi dan merefleksi", lv: "Pemahaman", s: "(1) Pasar Sendangrejo buka sejak pukul empat pagi. (2) Sebagian besar pedagang sayur datang dari desa di lereng gunung. (3) Menurut saya, pasar ini adalah tempat terbaik untuk mengenal kehidupan warga. (4) Setiap Minggu ada penjual jajanan tradisional di sisi timur pasar.", q: "Kalimat yang berisi opini adalah …", o: ["kalimat (1)", "kalimat (2)", "kalimat (3)", "kalimat (4)"], k: 2, p: "Kalimat (3) memuat pendapat pribadi (“menurut saya”, “terbaik”) yang tidak dapat dibuktikan secara pasti. Kalimat lain berisi fakta." },
+  { id: "B09", m: "BIN", d: "Menafsirkan dan mengintegrasikan", lv: "Pemahaman", s: "Hujan turun di atap seng\nmengetuk pelan seperti tamu\nyang lupa jalan pulang", q: "Kata “seperti” pada larik kedua menandai majas …", o: ["metafora", "perumpamaan (simile)", "hiperbola", "ironi"], k: 1, p: "Perumpamaan membandingkan dua hal secara langsung dengan kata pembanding seperti, bagai, atau laksana." },
+  { id: "B10", m: "BIN", d: "Menemukan informasi", lv: "Pemahaman", s: "Cara membuat kompos sederhana:\n1) Siapkan wadah berlubang.\n2) Masukkan sisa sayur dan daun kering secara berselang-seling.\n3) Siram sedikit air agar tetap lembap.\n4) Aduk setiap tiga hari.\n5) Kompos siap dipakai setelah 4–6 minggu.", q: "Kegiatan yang harus dilakukan secara berkala adalah …", o: ["menyiapkan wadah berlubang", "mengaduk bahan setiap tiga hari", "membeli daun kering", "menjual kompos setiap minggu"], k: 1, p: "Langkah 4 menyebut mengaduk setiap tiga hari, artinya dilakukan berulang secara berkala." },
+  { id: "B11", m: "BIN", d: "Menafsirkan dan mengintegrasikan", lv: "Penalaran", s: "Cara membuat kompos sederhana:\n1) Siapkan wadah berlubang.\n2) Masukkan sisa sayur dan daun kering secara berselang-seling.\n3) Siram sedikit air agar tetap lembap.\n4) Aduk setiap tiga hari.\n5) Kompos siap dipakai setelah 4–6 minggu.", q: "Jika langkah 3 dilewati, akibat yang paling mungkin adalah …", o: ["kompos jadi dalam satu hari", "wadah menjadi berlubang", "bahan terlalu kering sehingga pembusukan berjalan lambat", "sisa sayur berubah menjadi daun kering"], k: 2, p: "Langkah 3 bertujuan menjaga kelembapan. Tanpa air, bahan kering dan proses pengomposan melambat." },
+  { id: "B12", m: "BIN", d: "Mengevaluasi dan merefleksi", lv: "Penalaran", s: "PENGUMUMAN\nLomba Poster Hemat Energi untuk siswa kelas 7–9.\nTema: “Matikan yang Tak Dipakai”.\nKarya dikumpulkan paling lambat Jumat, 12 Maret.", q: "Kekurangan pengumuman tersebut adalah …", o: ["tidak menyebut sasaran peserta", "tidak menyebut tema lomba", "tidak menyebut batas waktu", "tidak menyebut tempat atau cara mengumpulkan karya"], k: 3, p: "Peserta, tema, dan tenggat sudah ada. Yang belum ada: ke mana/bagaimana karya dikumpulkan." },
+
+  // ===== IPA =====
+  { id: "I01", m: "IPA", d: "Zat dan perubahannya", lv: "Pemahaman", s: "", q: "Peristiwa berikut yang termasuk perubahan kimia adalah …", o: ["es batu mencair", "besi berkarat", "gula larut dalam teh", "kapur barus menyublim"], k: 1, p: "Karat adalah zat baru (oksida besi) hasil reaksi besi dengan oksigen dan air. Tiga peristiwa lain hanya mengubah wujud atau bercampur." },
+  { id: "I02", m: "IPA", d: "Zat dan perubahannya", lv: "Penerapan", s: "Sebuah batu bermassa 60 g dimasukkan ke gelas ukur. Permukaan air naik dari 50 mL menjadi 70 mL.", q: "Massa jenis batu tersebut adalah …", o: ["0,33 g/cm³", "1,2 g/cm³", "3 g/cm³", "40 g/cm³"], k: 2, p: "Volume batu = 70 − 50 = 20 mL = 20 cm³. ρ = m/V = 60/20 = 3 g/cm³." },
+  { id: "I03", m: "IPA", d: "Gerak dan gaya", lv: "Penerapan", s: "", q: "Raka bersepeda menempuh 1,8 km dalam 6 menit dengan kelajuan tetap. Kelajuannya adalah …", o: ["0,3 m/s", "5 m/s", "10 m/s", "300 m/s"], k: 1, p: "1,8 km = 1.800 m; 6 menit = 360 s. v = 1.800/360 = 5 m/s." },
+  { id: "I04", m: "IPA", d: "Gerak dan gaya", lv: "Penalaran", s: "Posisi mobil mainan dicatat setiap detik:\n<table><tr><th>t (s)</th><td>0</td><td>1</td><td>2</td><td>3</td></tr><tr><th>s (m)</th><td>0</td><td>2</td><td>4</td><td>6</td></tr></table>", q: "Simpulan yang tepat tentang gerak mobil mainan adalah …", o: ["bergerak dipercepat", "bergerak diperlambat", "bergerak lurus dengan kecepatan tetap 2 m/s", "diam lalu bergerak"], k: 2, p: "Setiap 1 detik posisi bertambah 2 m secara tetap → gerak lurus beraturan, v = 2 m/s." },
+  { id: "I05", m: "IPA", d: "Energi", lv: "Pemahaman", s: "", q: "Perubahan energi utama pada senter yang memakai baterai adalah …", o: ["listrik → kimia → cahaya", "kimia → listrik → cahaya", "cahaya → listrik → kimia", "gerak → listrik → cahaya"], k: 1, p: "Baterai menyimpan energi kimia, diubah menjadi energi listrik, lalu lampu mengubahnya menjadi cahaya (dan sedikit kalor)." },
+  { id: "I06", m: "IPA", d: "Energi", lv: "Penerapan", s: "", q: "Sebuah pot bunga bermassa 2 kg berada di rak setinggi 5 m. Jika g = 10 m/s², energi potensialnya adalah …", o: ["10 J", "50 J", "100 J", "1.000 J"], k: 2, p: "Ep = m × g × h = 2 × 10 × 5 = 100 J." },
+  { id: "I07", m: "IPA", d: "Makhluk hidup dan sistem organ", lv: "Pemahaman", s: "", q: "Enzim di dalam mulut yang membantu mengubah amilum menjadi gula sederhana adalah …", o: ["pepsin", "lipase", "amilase (ptialin)", "tripsin"], k: 2, p: "Air liur mengandung amilase (ptialin) yang mencerna amilum. Pepsin bekerja di lambung; lipase dan tripsin dari pankreas." },
+  { id: "I08", m: "IPA", d: "Makhluk hidup dan sistem organ", lv: "Penalaran", s: "Denyut nadi seorang siswa:\n• sebelum berlari: 72 kali/menit\n• setelah lari 2 menit: 120 kali/menit\n• setelah istirahat 5 menit: 84 kali/menit", q: "Simpulan yang paling tepat dari data tersebut adalah …", o: ["berlari menurunkan denyut nadi", "denyut nadi naik saat aktivitas untuk memenuhi kebutuhan oksigen otot, lalu turun saat istirahat", "istirahat membuat denyut nadi lebih tinggi daripada sebelum berlari secara permanen", "denyut nadi tidak dipengaruhi aktivitas"], k: 1, p: "Data naik saat berlari (otot butuh lebih banyak oksigen) dan turun mendekati semula saat istirahat." },
+  { id: "I09", m: "IPA", d: "Ekologi", lv: "Pemahaman", s: "Rantai makanan di sawah: padi → tikus → ular → elang", q: "Organisme yang berperan sebagai konsumen tingkat II adalah …", o: ["padi", "tikus", "ular", "elang"], k: 2, p: "Padi produsen, tikus konsumen I, ular konsumen II, elang konsumen III." },
+  { id: "I10", m: "IPA", d: "Ekologi", lv: "Penalaran", s: "Rantai makanan di sawah: padi → tikus → ular → elang", q: "Jika ular di sawah itu diburu hingga habis, akibat yang paling mungkin dalam waktu dekat adalah …", o: ["populasi tikus naik dan hasil padi turun", "populasi elang bertambah", "populasi tikus turun", "padi tumbuh lebih subur"], k: 0, p: "Pemangsa tikus hilang → tikus bertambah → padi yang dimakan tikus makin banyak. Elang justru kekurangan makanan." },
+  { id: "I11", m: "IPA", d: "Bumi dan tata surya", lv: "Pemahaman", s: "", q: "Terjadinya siang dan malam disebabkan oleh …", o: ["revolusi Bumi mengelilingi Matahari", "rotasi Bumi pada porosnya", "revolusi Bulan mengelilingi Bumi", "kemiringan sumbu Bumi"], k: 1, p: "Bumi berputar pada porosnya (rotasi) sekitar 24 jam sehingga bagian yang menghadap Matahari mengalami siang." },
+  { id: "I12", m: "IPA", d: "Bumi dan tata surya", lv: "Penerapan", s: "", q: "Gerhana bulan terjadi ketika …", o: ["Bulan berada di antara Matahari dan Bumi", "Bumi berada di antara Matahari dan Bulan sehingga Bulan masuk bayangan Bumi", "Matahari berada di antara Bumi dan Bulan", "Bulan berada paling jauh dari Bumi"], k: 1, p: "Pada gerhana bulan, susunannya Matahari–Bumi–Bulan segaris dan bayangan Bumi menutupi Bulan. Jika Bulan di tengah, itu gerhana matahari." },
+
+  // ===== BAHASA INGGRIS (penguatan) =====
+  { id: "E01", m: "ING", d: "Detail", lv: "Pemahaman", s: "NOTICE\nThe school library will be closed on Friday for book inventory. Students who want to return books may put them in the box in front of the teachers' room.", q: "Where can students return books on Friday?", o: ["At the library counter", "In the box in front of the teachers' room", "In their classroom", "At the school gate"], k: 1, p: "Kalimat kedua menyebut buku dimasukkan ke kotak di depan ruang guru (in the box in front of the teachers' room)." },
+  { id: "E02", m: "ING", d: "Main idea", lv: "Penerapan", s: "NOTICE\nThe school library will be closed on Friday for book inventory. Students who want to return books may put them in the box in front of the teachers' room.", q: "What is the purpose of the notice?", o: ["To invite students to a book fair", "To ask students to buy new books", "To inform students that the library is closed and how to return books", "To announce a new librarian"], k: 2, p: "Tujuan pengumuman: memberi tahu perpustakaan tutup hari Jumat dan cara mengembalikan buku." },
+  { id: "E03", m: "ING", d: "Detail", lv: "Pemahaman", s: "Hi Nadia,\nI can't join the study group this afternoon because I have to take my grandmother to the clinic. Could you send me the notes tonight?\nThanks,\nBima", q: "Why can't Bima join the study group?", o: ["He is sick", "He has to accompany his grandmother to the clinic", "He forgot the schedule", "He has to finish his notes"], k: 1, p: "Bima menulis “I have to take my grandmother to the clinic” — ia harus mengantar neneknya ke klinik." },
+  { id: "E04", m: "ING", d: "Reference", lv: "Pemahaman", s: "My uncle owns a small bakery near the station. It opens at five in the morning, and the smell of fresh bread fills the street. His best-seller is pandan bread, which is soft and green. Every Sunday, he gives the unsold bread to a nearby orphanage.", q: "The word “It” in the second sentence refers to …", o: ["the station", "the bakery", "the bread", "the street"], k: 1, p: "Yang buka pukul lima pagi adalah toko roti (the bakery), yang disebut pada kalimat sebelumnya." },
+  { id: "E05", m: "ING", d: "Vocabulary in context", lv: "Penerapan", s: "My uncle owns a small bakery near the station. It opens at five in the morning, and the smell of fresh bread fills the street. His best-seller is pandan bread, which is soft and green. Every Sunday, he gives the unsold bread to a nearby orphanage.", q: "The word “best-seller” is closest in meaning to …", o: ["the most expensive product", "the product that is bought most often", "the newest product", "the product that is never sold"], k: 1, p: "Best-seller = barang yang paling laris (paling banyak dibeli)." },
+  { id: "E06", m: "ING", d: "Inference", lv: "Penalaran", s: "My uncle owns a small bakery near the station. It opens at five in the morning, and the smell of fresh bread fills the street. His best-seller is pandan bread, which is soft and green. Every Sunday, he gives the unsold bread to a nearby orphanage.", q: "What can we infer about the uncle?", o: ["He cares about people around him", "He wants to close the bakery", "He does not like pandan bread", "He works only on Sundays"], k: 0, p: "Ia memberikan roti yang tidak terjual ke panti asuhan setiap Minggu → ia peduli kepada sesama (kesimpulan tersirat)." },
+  { id: "E07", m: "ING", d: "Main idea", lv: "Pemahaman", s: "My uncle owns a small bakery near the station. It opens at five in the morning, and the smell of fresh bread fills the street. His best-seller is pandan bread, which is soft and green. Every Sunday, he gives the unsold bread to a nearby orphanage.", q: "The text mainly tells us about …", o: ["the writer's uncle's bakery", "how to make pandan bread", "the history of the station", "a trip to an orphanage"], k: 0, p: "Semua kalimat menggambarkan toko roti milik paman penulis: jam buka, produk laris, dan kebiasaannya." },
+  { id: "E08", m: "ING", d: "Detail", lv: "Pemahaman", s: "Last Saturday, our class cleaned a beach near our school. We collected more than forty bags of rubbish, mostly plastic bottles. In the afternoon it rained heavily, so we finished earlier than planned. Although we were tired and wet, we felt proud.", q: "What kind of rubbish did they collect the most?", o: ["Paper", "Food waste", "Plastic bottles", "Glass"], k: 2, p: "“mostly plastic bottles” = kebanyakan botol plastik." },
+  { id: "E09", m: "ING", d: "Inference", lv: "Penalaran", s: "Last Saturday, our class cleaned a beach near our school. We collected more than forty bags of rubbish, mostly plastic bottles. In the afternoon it rained heavily, so we finished earlier than planned. Although we were tired and wet, we felt proud.", q: "How did the students most likely feel about the activity?", o: ["Bored and angry", "Satisfied even though they were tired", "Afraid of the rain", "Disappointed with the result"], k: 1, p: "“Although we were tired and wet, we felt proud” → meski lelah, mereka merasa puas/bangga." },
+  { id: "E10", m: "ING", d: "Vocabulary in context", lv: "Penerapan", s: "Last Saturday, our class cleaned a beach near our school. We collected more than forty bags of rubbish, mostly plastic bottles. In the afternoon it rained heavily, so we finished earlier than planned. Although we were tired and wet, we felt proud.", q: "The word “Although” in the last sentence shows …", o: ["a reason", "a contrast", "a time order", "an example"], k: 1, p: "Although (meskipun) menunjukkan pertentangan: lelah dan basah, tetapi bangga." },
+  { id: "E11", m: "ING", d: "Reference", lv: "Penerapan", s: "How to make iced lemon tea\n1. Boil water and put in a tea bag.\n2. Wait five minutes, then remove the tea bag.\n3. Add sugar and lemon juice, then stir.\n4. Pour it into a glass full of ice.", q: "The word “it” in step 4 refers to …", o: ["the ice", "the tea bag", "the tea mixture", "the glass"], k: 2, p: "Yang dituang ke gelas berisi es adalah campuran teh yang sudah diberi gula dan lemon." },
+  { id: "E12", m: "ING", d: "Detail", lv: "Pemahaman", s: "How to make iced lemon tea\n1. Boil water and put in a tea bag.\n2. Wait five minutes, then remove the tea bag.\n3. Add sugar and lemon juice, then stir.\n4. Pour it into a glass full of ice.", q: "What should you do after waiting five minutes?", o: ["Add ice to the water", "Remove the tea bag", "Boil the water again", "Drink the tea"], k: 1, p: "Langkah 2: “Wait five minutes, then remove the tea bag.”" }
+];
+
+/* ---------------- STATE ---------------- */
+const pad = n => String(n).padStart(2, "0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parse = s => { const [y, m, d] = String(s).split("-").map(Number); return new Date(y, (m || 1) - 1, d || 1); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const today = () => ymd(new Date());
+const monday = d => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); const w = (x.getDay() + 6) % 7; return addDays(x, -w); };
+const fmt = s => { const d = parse(s); return `${d.getDate()} ${BULAN[d.getMonth()]} ${d.getFullYear()}`; };
+const fmtS = s => { const d = parse(s); return `${d.getDate()} ${BULAN[d.getMonth()].slice(0, 3)}`; };
+const daysBetween = (a, b) => Math.round((parse(b) - parse(a)) / 864e5);
+
+function defState() {
+  return {
+    v: 1, contoh: false,
+    profil: { nama: "", kelas: "", tglTes: "2027-03-29", mulai: today(), menit: 60, hari: [1, 1, 1, 1, 1, 0, 1], fokus: "wajib" },
+    mapel: { MAT: { aktif: true, awal: 50, target: 75 }, BIN: { aktif: true, awal: 60, target: 80 }, IPA: { aktif: true, awal: 55, target: 70 }, ING: { aktif: true, awal: 55, target: 70 } },
+    cek: {}, kebiasaan: {}, kuis: {}, refleksi: [], aiSoal: [],
+    cfg: { tema: "system", apiKey: "", model: "gemini-2.5-flash", pakaiAI: false }
+  };
+}
+let S = defState();
+let storageOK = true;
+function save() {
+  try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) { if (storageOK) toast("Penyimpanan perangkat tidak tersedia; data hanya bertahan selama halaman dibuka."); storageOK = false; }
+}
+function load() {
+  let raw = null;
+  try { raw = localStorage.getItem(LS); } catch (e) { storageOK = false; }
+  if (raw) {
+    try { const o = JSON.parse(raw); S = merge(defState(), o); return; } catch (e) { /* abaikan */ }
+  }
+  S = buatContoh();
+  save();
+}
+function merge(base, o) {
+  const r = Object.assign(base, o || {});
+  r.profil = Object.assign(defState().profil, (o || {}).profil || {});
+  r.mapel = Object.assign(defState().mapel, (o || {}).mapel || {});
+  r.cfg = Object.assign(defState().cfg, (o || {}).cfg || {});
+  ["cek", "kebiasaan", "kuis"].forEach(k => { if (!r[k] || typeof r[k] !== "object") r[k] = {}; });
+  ["refleksi", "aiSoal"].forEach(k => { if (!Array.isArray(r[k])) r[k] = []; });
+  return r;
+}
+
+/* PRNG deterministik */
+function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+/* ---------------- DATA CONTOH ---------------- */
+function buatContoh() {
+  const s = defState();
+  s.contoh = true;
+  s.profil = Object.assign(s.profil, { nama: "Raka (contoh)", kelas: "9C", mulai: ymd(addDays(new Date(), -14)) });
+  s.mapel = { MAT: { aktif: true, awal: 48, target: 75 }, BIN: { aktif: true, awal: 62, target: 82 }, IPA: { aktif: true, awal: 58, target: 70 }, ING: { aktif: true, awal: 50, target: 68 } };
+  const r = rng(20261123);
+  for (let i = 13; i >= 1; i--) {
+    const d = ymd(addDays(new Date(), -i));
+    if (r() < 0.2) continue;
+    s.kebiasaan[d] = { menit: 30 + Math.round(r() * 8) * 5, jadwal: r() > 0.25, kuis: false, baca: r() > 0.45, ulang: r() > 0.6, contoh: true };
+    if (r() < 0.75) {
+      const ids = pilihKuis(d, s);
+      const benar = ids.map(id => { const q = BANK.find(b => b.id === id); const p = q.m === "MAT" ? 0.5 : q.m === "BIN" ? 0.7 : 0.62; return r() < p; });
+      s.kuis[d] = { ids, jawab: ids.map((id, j) => { const q = BANK.find(b => b.id === id); return benar[j] ? q.k : (q.k + 1) % 4; }), selesai: true, contoh: true };
+      s.kebiasaan[d].kuis = true;
+    }
+  }
+  s.refleksi = [
+    { tgl: ymd(addDays(new Date(), -6)), rasa: 3, belajar: "Sudah paham cara mencari median kalau datanya diurutkan dulu.", sulit: "Soal peluang “bukan” masih sering terbalik.", besok: "Kerjakan 5 soal peluang dan cek pembahasannya.", contoh: true },
+    { tgl: ymd(addDays(new Date(), -2)), rasa: 4, belajar: "Bisa membedakan fakta dan opini dari kata “menurut saya”.", sulit: "Membaca teks panjang cepat lelah.", besok: "Baca satu artikel 15 menit sebelum tidur.", contoh: true }
+  ];
+  // tandai sebagian tugas minggu lalu selesai
+  const wk = ymd(monday(addDays(new Date(), -7)));
+  ["MAT", "BIN", "IPA"].forEach(m => { s.cek[`${wk}|${m}|0`] = true; s.cek[`${wk}|${m}|1`] = true; });
+  s.cek[`${wk}|contoh`] = true;
+  return s;
+}
+function hapusContoh() {
+  if (!confirm("Hapus semua data contoh dan mulai rencanamu sendiri?")) return;
+  const cfg = S.cfg;
+  const keep = defState();
+  // simpan catatan buatan pengguna (tanpa label contoh)
+  Object.entries(S.kebiasaan).forEach(([k, v]) => { if (!v.contoh) keep.kebiasaan[k] = v; });
+  Object.entries(S.kuis).forEach(([k, v]) => { if (!v.contoh) keep.kuis[k] = v; });
+  keep.refleksi = S.refleksi.filter(x => !x.contoh);
+  keep.aiSoal = S.aiSoal;
+  if (!S.contoh) { keep.profil = S.profil; keep.mapel = S.mapel; keep.cek = S.cek; }
+  keep.cfg = cfg; keep.contoh = false;
+  S = keep; save(); renderAll(); go("target"); toast("Data contoh dihapus. Isi tanggal tes dan targetmu.");
+}
+
+/* ---------------- ANALISIS ---------------- */
+function pool(st = S) {
+  const ai = st.cfg.pakaiAI ? st.aiSoal : [];
+  return BANK.concat(ai);
+}
+function soalById(id) { return BANK.find(b => b.id === id) || S.aiSoal.find(b => b.id === id); }
+function riwayatJawab(st = S) {
+  const out = [];
+  Object.entries(st.kuis).forEach(([tgl, k]) => {
+    if (!k.selesai) return;
+    k.ids.forEach((id, i) => { const q = BANK.find(b => b.id === id) || st.aiSoal.find(b => b.id === id); if (q) out.push({ tgl, q, benar: k.jawab[i] === q.k }); });
+  });
+  return out;
+}
+function statDomain() {
+  const m = {};
+  riwayatJawab().forEach(({ q, benar }) => {
+    const key = q.m + "|" + q.d; m[key] = m[key] || { m: q.m, d: q.d, n: 0, b: 0 }; m[key].n++; if (benar) m[key].b++;
+  });
+  return Object.values(m).map(x => Object.assign(x, { p: x.b / x.n }));
+}
+function statMapel() {
+  const m = {};
+  riwayatJawab().forEach(({ q, benar }) => { m[q.m] = m[q.m] || { n: 0, b: 0 }; m[q.m].n++; if (benar) m[q.m].b++; });
+  return m;
+}
+function skorKini(id) {
+  const st = statMapel()[id]; const awal = +S.mapel[id].awal || 0;
+  if (!st || st.n < 5) return { v: awal, sumber: "skor awal" };
+  const kuis = 100 * st.b / st.n;
+  const w = Math.min(0.6, st.n / 40); // makin banyak data, makin berbobot
+  return { v: Math.round(awal * (1 - w) + kuis * w), sumber: `awal + kuis (${st.n} soal)` };
+}
+function urutDomain(mid) {
+  const sd = statDomain().filter(x => x.m === mid);
+  return MP[mid].domain.slice().map((d, i) => { const s = sd.find(x => x.d === d); return { d, i, p: s && s.n >= 2 ? s.p : 0.6 }; })
+    .sort((a, b) => a.p - b.p || a.i - b.i).map(x => x.d);
+}
+function mapelAktif() { return MAPEL.filter(m => S.mapel[m.id].aktif); }
+
+/* ---------------- KUIS: pemilihan soal ---------------- */
+function pilihKuis(tgl, st = S) {
+  const r = rng(hash("kuis" + tgl));
+  const aktif = MAPEL.filter(m => st.mapel[m.id].aktif).map(m => m.id);
+  let slot = [];
+  const wajib = aktif.filter(x => MP[x].wajib), lain = aktif.filter(x => !MP[x].wajib);
+  if (!aktif.length) slot = ["MAT", "MAT", "BIN", "BIN", "MAT"];
+  else if (!lain.length) slot = wajib.length === 2 ? ["MAT", "MAT", "BIN", "BIN", r() < .5 ? "MAT" : "BIN"] : [wajib[0], wajib[0], wajib[0], wajib[0], wajib[0]];
+  else if (!wajib.length) { slot = []; for (let i = 0; i < 5; i++) slot.push(lain[i % lain.length]); }
+  else { slot = []; if (wajib.includes("MAT")) slot.push("MAT", "MAT"); if (wajib.includes("BIN")) slot.push("BIN"); lain.forEach(x => slot.push(x)); while (slot.length < 5) slot.push(wajib[slot.length % wajib.length]); slot = slot.slice(0, 5); }
+  const sudahBenar = new Set(); const pernah = new Set();
+  Object.entries(st.kuis).forEach(([t, k]) => { if (t >= tgl || !k.selesai) return; k.ids.forEach((id, i) => { pernah.add(id); const q = BANK.find(b => b.id === id); if (q && k.jawab[i] === q.k) sudahBenar.add(id); }); });
+  const all = BANK.concat(st.cfg.pakaiAI ? st.aiSoal : []);
+  const dipakai = new Set(); const ids = [];
+  slot.forEach(mid => {
+    const kand = all.filter(q => q.m === mid && !dipakai.has(q.id));
+    if (!kand.length) return;
+    // bobot: belum pernah 3, pernah salah 2, sudah benar 0.5
+    const w = kand.map(q => !pernah.has(q.id) ? 3 : sudahBenar.has(q.id) ? 0.5 : 2);
+    let tot = w.reduce((a, b) => a + b, 0), x = r() * tot, j = 0;
+    while (x > w[j] && j < w.length - 1) { x -= w[j]; j++; }
+    dipakai.add(kand[j].id); ids.push(kand[j].id);
+  });
+  return ids;
+}
+
+/* ---------------- JADWAL MINGGUAN ---------------- */
+function bobotMapel() {
+  const out = {}; let tot = 0;
+  mapelAktif().forEach(m => {
+    const kini = skorKini(m.id).v; const gap = Math.max(8, (+S.mapel[m.id].target || 0) - kini);
+    let w = gap * (S.profil.fokus === "wajib" && m.wajib ? 1.5 : 1);
+    out[m.id] = w; tot += w;
+  });
+  Object.keys(out).forEach(k => out[k] = tot ? out[k] / tot : 0);
+  return out;
+}
+function buatJadwal() {
+  const p = S.profil;
+  if (!p.tglTes) return [];
+  const mulai = monday(parse(p.mulai || today()));
+  const tes = parse(p.tglTes);
+  const minggu = [];
+  for (let d = new Date(mulai); d <= tes && minggu.length < 60; d = addDays(d, 7)) minggu.push(ymd(d));
+  const n = minggu.length; if (!n) return [];
+  const hariAktif = p.hari.reduce((a, b) => a + (b ? 1 : 0), 0) || 1;
+  const menitMinggu = hariAktif * (+p.menit || 45);
+  const bobot = bobotMapel();
+  const nCampur = n >= 4 ? Math.max(1, Math.round(n * 0.25)) : (n >= 2 ? 1 : 0);
+  const order = {}; mapelAktif().forEach(m => order[m.id] = urutDomain(m.id));
+  return minggu.map((w, i) => {
+    let fase;
+    if (i === n - 1) fase = "Pemantapan";
+    else if (i === 0 && n > 3) fase = "Pemetaan";
+    else if (i >= n - 1 - nCampur) fase = "Latihan campuran";
+    else fase = "Penguatan";
+    const faktor = fase === "Pemantapan" ? 0.6 : 1;
+    const idxPenguatan = i - (n > 3 ? 1 : 0);
+    const isi = mapelAktif().map(m => {
+      const menit = Math.max(15, Math.round(menitMinggu * faktor * bobot[m.id] / 5) * 5);
+      const dom = order[m.id][((idxPenguatan % order[m.id].length) + order[m.id].length) % order[m.id].length];
+      return { m: m.id, menit, dom, tugas: tugasUntuk(m, fase, dom, order[m.id][0], menit) };
+    });
+    const akhir = ymd(addDays(parse(w), 6));
+    const agenda = AGENDA_2027.filter(a => a.a <= akhir && a.b >= w);
+    return { w, akhir, fase, isi, agenda, menitMinggu: Math.round(menitMinggu * faktor) };
+  });
+}
+function tugasUntuk(m, fase, dom, terlemah, menit) {
+  const sesi = Math.max(1, Math.round(menit / 40));
+  const bacaan = m.id === "BIN" ? "teks informasi dan teks sastra" : m.id === "ING" ? "teks pendek (notice, message, descriptive, recount)" : "soal berstimulus";
+  if (fase === "Pemetaan") return [
+    `Kerjakan kuis kilat setiap hari dan catat soal ${m.nama} yang salah`,
+    `Kerjakan 10 soal campuran ${m.nama} untuk memetakan domain sulit`,
+    `Tulis 3 materi yang belum kamu kuasai`
+  ];
+  if (fase === "Penguatan") return [
+    `Pelajari ulang konsep: ${dom} (${sesi} sesi)`,
+    `Kerjakan 10–15 ${bacaan} untuk domain ${dom}`,
+    `Catat 3 kesalahan dan tulis cara yang benar`
+  ];
+  if (fase === "Latihan campuran") return [
+    m.wajib ? `Kerjakan 1 paket ${m.nama} berwaktu: 30 soal dalam 75 menit` : `Kerjakan 1 paket campuran ${m.nama} (20 soal, 45 menit)`,
+    `Bahas semua soal yang salah atau ragu-ragu`,
+    `Ulang domain terlemah: ${terlemah}`
+  ];
+  return [
+    `Baca ulang catatan kesalahan ${m.nama}`,
+    `Latihan ringan 10–15 soal, jangan begadang`,
+    `Siapkan perlengkapan dan cek jadwal sesi tes`
+  ];
+}
+
+/* ---------------- UI DASAR ---------------- */
+const TABS = [["beranda", "Beranda"], ["target", "Target"], ["jadwal", "Jadwal"], ["kebiasaan", "Kebiasaan"], ["kuis", "Kuis kilat"], ["refleksi", "Refleksi"], ["kartu", "Kartu target"], ["atur", "Pengaturan"], ["sumber", "Dasar & sumber"]];
+function buildTabs() {
+  $("#tabs").innerHTML = TABS.map(([id, t], i) => `<button role="tab" id="t-${id}" aria-controls="tab-${id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-tab="${id}" type="button">${t}</button>`).join("");
+  $("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) go(b.dataset.tab); });
+  $("#tabs").addEventListener("keydown", e => {
+    const bs = $$("#tabs [role=tab]"); const i = bs.indexOf(document.activeElement); if (i < 0) return;
+    let j = null; if (e.key === "ArrowRight") j = (i + 1) % bs.length; if (e.key === "ArrowLeft") j = (i - 1 + bs.length) % bs.length; if (e.key === "Home") j = 0; if (e.key === "End") j = bs.length - 1;
+    if (j !== null) { e.preventDefault(); go(bs[j].dataset.tab); bs[j].focus(); }
+  });
+}
+let curTab = "beranda";
+function go(id) {
+  curTab = id;
+  $$("#tabs [role=tab]").forEach(b => { const on = b.dataset.tab === id; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; if (on) b.scrollIntoView({ block: "nearest", inline: "nearest" }); });
+  $$("section.tab").forEach(s => s.hidden = s.id !== "tab-" + id);
+  try { sessionStorage.setItem(LS + ".tab", id); } catch (e) { }
+  if (id === "kuis") renderKuis();
+}
+let toastT;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2800); }
+function applyTheme() { const t = S.cfg.tema; if (t === "system") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", t); }
+function cvar(m) { return `var(--${m})`; }
+function pillStatus(m) { return MP[m].wajib ? `<span class="pill w">Mapel TKA SMP</span>` : `<span class="pill p">Penguatan</span>`; }
+function download(name, text, type) {
+  const blob = new Blob([text], { type }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+const csvCell = v => { const s = String(v == null ? "" : v); return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+
+/* ---------------- RENDER: HEADER & BERANDA ---------------- */
+function adaContoh() { return S.contoh || Object.values(S.kebiasaan).some(x => x.contoh) || Object.values(S.kuis).some(x => x.contoh) || S.refleksi.some(x => x.contoh); }
+function renderHeader() {
+  const sisa = daysBetween(today(), S.profil.tglTes || today());
+  $("#hCount").textContent = S.profil.tglTes ? (sisa >= 0 ? sisa : "✓") : "–";
+  $("#hCountTxt").innerHTML = S.profil.tglTes ? (sisa >= 0 ? `hari menuju TKA<br>${esc(fmtS(S.profil.tglTes))}` : "tes sudah lewat<br>atur tanggal baru") : "atur tanggal<br>tes";
+  $("#bannerContoh").hidden = !adaContoh();
+}
+function renderBeranda() {
+  const p = S.profil; const t = today();
+  $("#sapa").textContent = `Halo${p.nama ? ", " + p.nama : ""}!`;
+  const sisa = daysBetween(t, p.tglTes);
+  const jad = buatJadwal(); const mgg = jad.find(w => w.w <= t && w.akhir >= t);
+  $("#ringkasTes").innerHTML = p.tglTes
+    ? `TKA tanggal <b>${esc(fmt(p.tglTes))}</b> — sisa <b>${Math.max(0, sisa)} hari</b> (${Math.max(0, Math.ceil(sisa / 7))} minggu). ${mgg ? `Minggu ini fase <b>${mgg.fase}</b>, target ${mgg.menitMinggu} menit belajar.` : ""}`
+    : "Atur tanggal tes di menu Target.";
+  const kb = S.kebiasaan[t] || {}; const kq = S.kuis[t];
+  const nCek = ["jadwal", "kuis", "baca", "ulang"].filter(k => kb[k]).length;
+  const skorQ = kq && kq.selesai ? kq.ids.filter((id, i) => { const q = soalById(id); return q && kq.jawab[i] === q.k; }).length : null;
+  let tugasMg = 0, tugasOk = 0; if (mgg) mgg.isi.forEach(x => x.tugas.forEach((_, i) => { tugasMg++; if (S.cek[`${mgg.w}|${x.m}|${i}`]) tugasOk++; }));
+  $("#statHari").innerHTML = [
+    [skorQ === null ? "–" : `${skorQ}/5`, "kuis kilat"],
+    [`${nCek}/4`, "kebiasaan"],
+    [streak(), "hari beruntun"],
+    [mgg ? `${tugasOk}/${tugasMg}` : "–", "tugas minggu ini"]
+  ].map(([a, b]) => `<div><div class="stat">${a}</div><div class="small muted">${b}</div></div>`).join("");
+  $("#posisi").innerHTML = mapelAktif().map(m => {
+    const k = skorKini(m.id); const tg = +S.mapel[m.id].target || 0;
+    return `<div class="mrow" style="--c:${cvar(m.id)}"><div><b>${m.nama}</b><div class="small muted">${pillStatus(m.id)}</div></div>
+      <div class="bar" role="img" aria-label="${m.nama}: ${k.v} dari target ${tg}"><i style="width:${Math.min(100, k.v)}%"></i><span class="tgt" style="left:calc(${Math.min(100, tg)}% - 1px)"></span></div>
+      <div class="small" style="text-align:right"><b>${k.v}</b> / ${tg}<div class="muted" style="font-size:.75rem">${k.sumber}</div></div></div>`;
+  }).join("") || `<p class="muted">Belum ada mapel aktif. Atur di menu Target.</p>`;
+  $("#fokusMinggu").innerHTML = mgg ? `<p class="small muted" style="margin-top:0">${fmtS(mgg.w)} – ${fmtS(mgg.akhir)} · fase <b>${mgg.fase}</b></p>` + mgg.isi.map(x => `<div class="row" style="margin:6px 0;--c:${cvar(x.m)}"><span class="mp-dot"></span><b>${MP[x.m].nama}</b><span class="muted small">${x.menit} menit · ${esc(mgg.fase === "Penguatan" ? x.dom : mgg.fase)}</span></div>`).join("") + mgg.agenda.map(a => `<div class="agenda">${esc(a.t)}: ${fmtS(a.a)}–${fmtS(a.b)}</div>`).join("")
+    : `<p class="muted">Minggu ini berada di luar rentang rencana. Periksa tanggal mulai dan tanggal tes.</p>`;
+  const sd = statDomain().filter(x => S.mapel[x.m].aktif && x.n >= 2).sort((a, b) => a.p - b.p).slice(0, 5);
+  $("#lemah").innerHTML = sd.length ? sd.map(x => `<div class="mrow" style="--c:${cvar(x.m)}"><div><b>${esc(x.d)}</b><div class="small muted">${MP[x.m].nama}</div></div><div class="bar"><i style="width:${Math.round(x.p * 100)}%"></i></div><div class="small">${x.b}/${x.n} benar</div></div>`).join("")
+    : `<p class="muted">Belum cukup data. Kerjakan kuis kilat beberapa hari dulu.</p>`;
+}
+
+/* ---------------- RENDER: TARGET ---------------- */
+function renderTarget() {
+  const p = S.profil;
+  $("#pNama").value = p.nama; $("#pKelas").value = p.kelas; $("#pTgl").value = p.tglTes; $("#pMulai").value = p.mulai; $("#pMenit").value = p.menit; $("#pFokus").value = p.fokus;
+  $("#pHari").innerHTML = HARI.map((h, i) => `<label class="btn ghost" style="margin:0;padding:6px 10px;font-weight:700"><input type="checkbox" data-hari="${i}" ${p.hari[i] ? "checked" : ""} style="accent-color:var(--accent)"> ${h}</label>`).join("");
+  $("#tgtGrid").innerHTML = MAPEL.map(m => {
+    const x = S.mapel[m.id];
+    return `<div class="card mp" style="--c:${cvar(m.id)}">
+      <div class="row" style="justify-content:space-between"><b>${m.nama}</b>${pillStatus(m.id)}</div>
+      <label class="row" style="font-weight:400;gap:6px;margin:8px 0"><input type="checkbox" data-aktif="${m.id}" ${x.aktif ? "checked" : ""}> Ikut direncanakan</label>
+      <div class="two"><div><label for="aw-${m.id}">Skor saat ini</label><input type="number" id="aw-${m.id}" min="0" max="100" value="${+x.awal}"></div>
+      <div><label for="tg-${m.id}">Target</label><input type="number" id="tg-${m.id}" min="0" max="100" value="${+x.target}"></div></div>
+      ${m.wajib ? "" : `<p class="hint">Bukan mata uji TKA SMP; dipakai sebagai penguatan.</p>`}
+    </div>`;
+  }).join("");
+  $("#profilInfo").textContent = "Skor saat ini bisa dari try out atau nilai ulangan terakhir.";
+}
+function simpanProfil(e) {
+  e.preventDefault();
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, Math.round(+v || 0)));
+  const tgl = $("#pTgl").value, mulai = $("#pMulai").value || today();
+  if (!tgl) { toast("Isi tanggal tes dulu."); $("#pTgl").focus(); return; }
+  if (tgl <= mulai) { toast("Tanggal tes harus setelah tanggal mulai."); $("#pTgl").focus(); return; }
+  const hari = HARI.map((_, i) => $(`#pHari [data-hari="${i}"]`).checked ? 1 : 0);
+  if (!hari.some(Boolean)) { toast("Pilih minimal satu hari belajar."); return; }
+  S.profil = { nama: $("#pNama").value.trim().slice(0, 30), kelas: $("#pKelas").value.trim().slice(0, 12), tglTes: tgl, mulai, menit: clamp($("#pMenit").value, 15, 240), hari, fokus: $("#pFokus").value };
+  MAPEL.forEach(m => { S.mapel[m.id] = { aktif: $(`[data-aktif="${m.id}"]`).checked, awal: clamp($(`#aw-${m.id}`).value, 0, 100), target: clamp($(`#tg-${m.id}`).value, 0, 100) }; });
+  if (!mapelAktif().length) { S.mapel.MAT.aktif = true; S.mapel.BIN.aktif = true; toast("Minimal satu mapel harus aktif; Matematika dan Bahasa Indonesia diaktifkan."); }
+  if (S.contoh && !S.profil.nama.includes("(contoh)")) S.contoh = false;
+  save(); renderAll(); toast("Tersimpan. Jadwal mingguan diperbarui."); go("jadwal");
+}
+
+/* ---------------- RENDER: JADWAL ---------------- */
+function renderJadwal() {
+  const jad = buatJadwal(); const t = today();
+  const hariTxt = HARI.filter((_, i) => S.profil.hari[i]).join(", ");
+  $("#jadwalInfo").textContent = jad.length ? `${jad.length} minggu · ${S.profil.menit} menit pada hari ${hariTxt} · ${S.profil.fokus === "wajib" ? "Matematika dan Bahasa Indonesia diutamakan" : "porsi menurut selisih target"}` : "Isi tanggal tes di menu Target.";
+  $("#mingguan").innerHTML = jad.map((w, wi) => {
+    let tot = 0, ok = 0; w.isi.forEach(x => x.tugas.forEach((_, i) => { tot++; if (S.cek[`${w.w}|${x.m}|${i}`]) ok++; }));
+    const now = w.w <= t && w.akhir >= t; const lewat = w.akhir < t;
+    return `<details class="week ${now ? "now" : ""}" ${now || (wi === 0 && !jad.some(x => x.w <= t && x.akhir >= t)) ? "open" : ""}>
+      <summary><span><b>Minggu ${wi + 1}</b> · ${fmtS(w.w)} – ${fmtS(w.akhir)} ${now ? '<span class="pill w">minggu ini</span>' : ""} ${lewat ? '<span class="small muted">(lewat)</span>' : ""}</span>
+      <span class="row" style="gap:8px"><span class="phase">${w.fase}</span><span class="prog">${ok}/${tot}</span><span class="small muted">${w.menitMinggu} mnt</span></span></summary>
+      ${w.agenda.length ? `<div style="padding:8px 14px 0">${w.agenda.map(a => `<div class="agenda">Agenda: ${esc(a.t)} (${fmtS(a.a)}–${fmtS(a.b)}) · perkiraan, ikuti info sekolah</div>`).join("")}</div>` : ""}
+      <div class="wbody">${w.isi.map(x => `<div class="mp" style="--c:${cvar(x.m)};padding-left:10px">
+        <div class="row" style="justify-content:space-between"><b>${MP[x.m].nama}</b><span class="small muted">${x.menit} menit</span></div>
+        ${x.tugas.map((tg, i) => { const key = `${w.w}|${x.m}|${i}`; const on = !!S.cek[key]; return `<label class="task ${on ? "done" : ""}" style="font-weight:400;margin:0"><input type="checkbox" data-cek="${esc(key)}" ${on ? "checked" : ""}><span>${esc(tg)}</span></label>`; }).join("")}
+      </div>`).join("")}</div></details>`;
+  }).join("");
+}
+function csvJadwal() {
+  const rows = [["Minggu", "Mulai", "Selesai", "Fase", "Mapel", "Status mapel", "Menit", "Tugas", "Selesai"]];
+  buatJadwal().forEach((w, wi) => w.isi.forEach(x => x.tugas.forEach((tg, i) => rows.push([wi + 1, w.w, w.akhir, w.fase, MP[x.m].nama, MP[x.m].wajib ? "Mapel TKA SMP" : "Penguatan", x.menit, tg, S.cek[`${w.w}|${x.m}|${i}`] ? "ya" : "belum"]))));
+  download("jadwal-belajar-tka.csv", "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\n"), "text/csv");
+}
+
+/* ---------------- RENDER: KEBIASAAN ---------------- */
+const KBS = [["jadwal", "Belajar sesuai jadwal hari ini"], ["kuis", "Kuis kilat 5 soal"], ["baca", "Membaca 15 menit (buku, artikel, atau teks bahasa Inggris)"], ["ulang", "Mengulang satu kesalahan dari catatan"]];
+function streak() {
+  let n = 0; let d = new Date();
+  const aktif = s => { const k = S.kebiasaan[s]; return k && (KBS.some(([id]) => k[id]) || (+k.menit > 0)); };
+  if (!aktif(ymd(d))) d = addDays(d, -1);
+  while (aktif(ymd(d)) && n < 999) { n++; d = addDays(d, -1); }
+  return n;
+}
+function renderKebiasaan() {
+  const tgl = $("#kTgl").value || today(); $("#kTgl").value = tgl; $("#kTgl").max = today();
+  const k = S.kebiasaan[tgl] || {};
+  $("#habitList").innerHTML = KBS.map(([id, t]) => `<label class="habit ${k[id] ? "on" : ""}" style="font-weight:400;margin:0"><input type="checkbox" data-hb="${id}" ${k[id] ? "checked" : ""}><span>${t}</span></label>`).join("");
+  $("#kMenit").value = k.menit || "";
+  $("#streak").textContent = streak();
+  let m7 = 0; for (let i = 0; i < 7; i++) m7 += +((S.kebiasaan[ymd(addDays(new Date(), -i))] || {}).menit || 0);
+  $("#menit7").textContent = m7;
+  const start = addDays(monday(new Date()), -21); let aktif = 0;
+  let html = HARI.map(h => `<div class="hd">${h}</div>`).join("");
+  for (let i = 0; i < 28; i++) {
+    const d = ymd(addDays(start, i)); const x = S.kebiasaan[d] || {}; const n = KBS.filter(([id]) => x[id]).length;
+    const fut = d > today(); if (!fut && n) aktif++;
+    const lv = n >= 3 ? "l3" : n === 2 ? "l2" : n === 1 ? "l1" : "";
+    html += `<div class="${lv} ${d === today() ? "today" : ""}" title="${fmt(d)}: ${n} kebiasaan, ${x.menit || 0} menit" style="${fut ? "opacity:.35" : ""}">${parse(d).getDate()}</div>`;
+  }
+  $("#heat").innerHTML = html; $("#aktif28").textContent = aktif;
+}
+function setHabit(tgl, id, val) {
+  const k = S.kebiasaan[tgl] || (S.kebiasaan[tgl] = { menit: 0 });
+  k[id] = val; delete k.contoh; save();
+}
+
+/* ---------------- RENDER: KUIS ---------------- */
+let Q = null; // sesi kuis aktif {tgl, ids, i, jawab, latihan}
+function renderKuis() {
+  const t = today();
+  $("#bankInfo").textContent = `Bank: ${BANK.length} soal${S.cfg.pakaiAI && S.aiSoal.length ? ` + ${S.aiSoal.length} soal AI` : ""}`;
+  const rec = S.kuis[t];
+  if (!Q || Q.tgl !== t) {
+    if (rec && rec.selesai) Q = { tgl: t, ids: rec.ids, i: rec.ids.length, jawab: rec.jawab.slice(), latihan: false };
+    else Q = { tgl: t, ids: rec ? rec.ids : pilihKuis(t), i: 0, jawab: [], latihan: false };
+    if (rec && !rec.selesai) { Q.jawab = rec.jawab.slice(); Q.i = Q.jawab.length; }
+  }
+  drawKuis(); renderRiwayat();
+}
+function drawKuis(fokus) {
+  const box = $("#kuisBox");
+  const dots = `<div class="dots" aria-hidden="true">${Q.ids.map((id, i) => { const q = soalById(id); let c = ""; if (i < Q.jawab.length) c = q && Q.jawab[i] === q.k ? "ok" : "no"; else if (i === Q.i) c = "cur"; return `<span class="${c}"></span>`; }).join("")}</div>`;
+  if (Q.i >= Q.ids.length) {
+    const benar = Q.ids.filter((id, i) => { const q = soalById(id); return q && Q.jawab[i] === q.k; }).length;
+    const pesan = benar === 5 ? "Sempurna! Pertahankan ritmenya." : benar >= 3 ? "Bagus. Ulang pembahasan soal yang salah, ya." : "Tidak apa-apa. Kesalahan hari ini adalah bahan belajar besok.";
+    box.innerHTML = `${dots}<h3>${Q.latihan ? "Latihan ulang selesai" : "Kuis hari ini selesai"}: ${benar}/5 benar</h3><p>${pesan}</p>
+      <div class="tscroll"><table class="tbl"><tr><th>No</th><th>Mapel · domain</th><th>Hasil</th></tr>${Q.ids.map((id, i) => { const q = soalById(id); if (!q) return ""; const ok = Q.jawab[i] === q.k; return `<tr><td>${i + 1}</td><td>${MP[q.m].nama} · ${esc(q.d)}</td><td>${ok ? "✔ benar" : `✘ kunci: ${hurufKunci(q)}`}</td></tr>`; }).join("")}</table></div>
+      <div class="row" style="margin-top:12px"><button class="btn pri" type="button" id="btnUlang">Ulangi sebagai latihan</button><button class="btn" type="button" id="btnTambah">5 soal acak tambahan</button><button class="btn" type="button" data-go="refleksi">Tulis refleksi</button></div>
+      ${Q.latihan ? '<p class="small muted">Hasil latihan ulang/tambahan tidak mengubah catatan kuis harian.</p>' : ""}`;
+    $("#btnUlang").onclick = () => { Q = { tgl: Q.tgl, ids: Q.ids, i: 0, jawab: [], latihan: true }; drawKuis(true); };
+    $("#btnTambah").onclick = () => { const r = rng(Date.now()); const all = pool().slice().sort(() => r() - .5).filter(q => S.mapel[q.m].aktif).slice(0, 5); Q = { tgl: Q.tgl, ids: all.map(q => q.id), i: 0, jawab: [], latihan: true }; drawKuis(true); };
+    return;
+  }
+  const q = soalById(Q.ids[Q.i]);
+  if (!q) { Q.i++; return drawKuis(fokus); }
+  const answered = Q.jawab.length > Q.i;
+  const isAI = !!q.ai;
+  const html = v => isAI ? esc(v) : v; // soal AI selalu di-escape
+  box.innerHTML = `${dots}<div class="qmeta"><span class="pill c">Soal ${Q.i + 1}/5</span><span class="pill c" style="color:${cvar(q.m)}">${MP[q.m].nama}</span>${pillStatus(q.m)}<span class="pill c">${esc(q.d)}</span><span class="pill c">${esc(q.lv)}</span>${isAI ? '<span class="pill ai">perlu dicek guru</span>' : ""}</div>
+    ${q.s ? `<div class="stim" ${q.m === "ING" ? 'lang="en"' : ""}>${html(q.s)}</div>` : ""}
+    <p id="qTeks" style="font-weight:700" ${q.m === "ING" ? 'lang="en"' : ""}>${html(q.q)}</p>
+    <div class="opts" role="group" aria-labelledby="qTeks">${urutOpsi(q).map((j, pos) => {
+    const o = q.o[j];
+    let c = ""; if (answered) { if (j === q.k) c = "ok"; else if (j === Q.jawab[Q.i]) c = "no"; }
+    return `<button type="button" class="opt ${c}" data-opt="${j}" ${answered ? "disabled" : ""} ${q.m === "ING" ? 'lang="en"' : ""}><b>${"ABCD"[pos]}</b><span>${html(o)}</span></button>`;
+  }).join("")}</div>
+    <div id="fbBox">${answered ? fbHtml(q, Q.jawab[Q.i]) : ""}</div>`;
+  if (answered) { const n = $("#btnNext"); if (n && fokus) n.focus(); }
+  else if (fokus) { const f = $(".opt", box); if (f) f.focus(); }
+}
+function urutOpsi(q) { // acak urutan pilihan per soal & tanggal agar letak kunci tidak bisa ditebak
+  const r = rng(hash(q.id + "|" + (Q ? Q.tgl : "") + (Q && Q.latihan ? "L" : "")));
+  const a = q.o.map((_, i) => i);
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+const hurufKunci = q => "ABCD"[urutOpsi(q).indexOf(q.k)];
+function fbHtml(q, j) {
+  const ok = j === q.k;
+  return `<div class="fb ${ok ? "ok" : "no"}" role="status"><b>${ok ? "Benar!" : `Belum tepat. Jawaban benar: ${hurufKunci(q)}.`}</b><p style="margin:.3em 0 0">${q.ai ? esc(q.p) : q.p}</p><div id="aiJelas"></div></div>
+    <div class="row" style="margin-top:10px"><button class="btn pri" type="button" id="btnNext">${Q.i + 1 >= Q.ids.length ? "Lihat hasil" : "Soal berikutnya"}</button>${S.cfg.apiKey ? '<button class="btn" type="button" id="btnJelas">Jelaskan ulang dengan AI</button>' : ""}</div>`;
+}
+function jawab(j) {
+  const q = soalById(Q.ids[Q.i]); if (!q || Q.jawab.length > Q.i) return;
+  Q.jawab[Q.i] = j;
+  if (!Q.latihan) {
+    const t = Q.tgl; const selesai = Q.jawab.length >= Q.ids.length;
+    S.kuis[t] = { ids: Q.ids, jawab: Q.jawab.slice(), selesai };
+    if (selesai) { setHabit(t, "kuis", true); }
+    save();
+  }
+  drawKuis(); const n = $("#btnNext"); if (n) n.focus();
+}
+function renderRiwayat() {
+  const rows = Object.entries(S.kuis).filter(([, k]) => k.selesai).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 30);
+  $("#tblKuis").innerHTML = rows.length ? `<tr><th>Tanggal</th><th>Skor</th><th>Rincian</th></tr>` + rows.map(([t, k]) => {
+    const det = k.ids.map((id, i) => { const q = soalById(id); return q ? `${k.jawab[i] === q.k ? "✔" : "✘"} ${MP[q.m].nama.split(" ").pop()}` : ""; }).join(" · ");
+    const sk = k.ids.filter((id, i) => { const q = soalById(id); return q && k.jawab[i] === q.k; }).length;
+    return `<tr><td>${fmtS(t)}${k.contoh ? ' <span class="pill c">contoh</span>' : ""}</td><td><b>${sk}/5</b></td><td class="small">${det}</td></tr>`;
+  }).join("") : `<tr><td class="muted">Belum ada riwayat.</td></tr>`;
+}
+
+/* ---------------- REFLEKSI ---------------- */
+const RASA = ["Bingung", "Ragu", "Lumayan", "Yakin", "Sangat yakin"];
+function renderRefleksi() {
+  if (!$("#rTgl").value) $("#rTgl").value = today();
+  if (!$("#rRasa").innerHTML) $("#rRasa").innerHTML = RASA.map((r, i) => `<label><input type="radio" name="rasa" value="${i + 1}" ${i === 2 ? "checked" : ""}> ${i + 1} · ${r}</label>`).join("");
+  const list = S.refleksi.slice().sort((a, b) => b.tgl.localeCompare(a.tgl));
+  $("#rList").innerHTML = list.length ? list.map(r => `<article><div class="row" style="justify-content:space-between"><b>${fmt(r.tgl)}</b><span class="row" style="gap:6px">${r.contoh ? '<span class="pill c">contoh</span>' : ""}<span class="pill c">${r.rasa} · ${RASA[r.rasa - 1] || ""}</span><button class="btn ghost" type="button" style="padding:2px 8px" data-hapusref="${esc(r.tgl)}" aria-label="Hapus refleksi ${fmt(r.tgl)}">Hapus</button></span></div>
+    ${r.belajar ? `<p style="margin:.3em 0"><b>Kupelajari:</b> ${esc(r.belajar)}</p>` : ""}${r.sulit ? `<p style="margin:.3em 0"><b>Masih sulit:</b> ${esc(r.sulit)}</p>` : ""}${r.besok ? `<p style="margin:.3em 0"><b>Besok:</b> ${esc(r.besok)}</p>` : ""}</article>`).join("")
+    : `<p class="muted">Belum ada refleksi. Tulis 2–3 kalimat saja setiap selesai belajar.</p>`;
+}
+function simpanRefleksi(e) {
+  e.preventDefault();
+  const tgl = $("#rTgl").value || today();
+  const r = { tgl, rasa: +(($("input[name=rasa]:checked") || {}).value || 3), belajar: $("#rBelajar").value.trim(), sulit: $("#rSulit").value.trim(), besok: $("#rBesok").value.trim() };
+  if (!r.belajar && !r.sulit && !r.besok) { toast("Tulis minimal satu isian."); return; }
+  S.refleksi = S.refleksi.filter(x => x.tgl !== tgl); S.refleksi.push(r); save();
+  $("#rBelajar").value = $("#rSulit").value = $("#rBesok").value = "";
+  renderRefleksi(); toast("Refleksi tersimpan.");
+}
+
+/* ---------------- KARTU ---------------- */
+function renderKartu() {
+  const p = S.profil; const jad = buatJadwal();
+  const hariTxt = HARI.filter((_, i) => p.hari[i]).join(", ");
+  $("#kartuCetak").innerHTML = `<div class="ktop"><div><div style="font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:#c2410c;font-weight:700">Kartu Target TKA</div>
+    <h2>${esc(p.nama || "Nama: ...................")}</h2><div>Kelas ${esc(p.kelas || "......")}</div></div>
+    <div class="kbig"><b>${p.tglTes ? esc(fmtS(p.tglTes)) : "–"}</b><span style="font-size:.8rem">${p.tglTes ? parse(p.tglTes).getFullYear() : ""} · hari tes</span></div></div>
+    <table class="ktab"><tr><th>Mapel</th><th>Status</th><th>Skor saat ini</th><th>Target</th></tr>
+    ${mapelAktif().map(m => `<tr><td><b>${m.nama}</b></td><td>${m.wajib ? "Mapel TKA SMP" : "Penguatan"}</td><td>${skorKini(m.id).v}</td><td><b>${+S.mapel[m.id].target}</b></td></tr>`).join("")}</table>
+    <p style="margin:.3em 0"><b>Janjiku:</b> belajar ${p.menit} menit pada hari ${esc(hariTxt)}, mengerjakan kuis kilat setiap hari, dan mencatat kesalahan untuk diulang.</p>
+    <p style="margin:.3em 0"><b>Rencana:</b> ${jad.length} minggu · ${[...new Set(jad.map(w => w.fase))].join(" → ")}.</p>
+    <p style="margin:.3em 0;font-style:italic">“Sedikit setiap hari lebih kuat daripada banyak semalam.”</p>
+    <div class="ksign"><div>Siswa</div><div>Orang tua/wali</div><div>Wali kelas</div></div>`;
+}
+
+/* ---------------- PENGATURAN & AI ---------------- */
+function renderAtur() {
+  $("#sTema").value = S.cfg.tema; $("#sKey").value = S.cfg.apiKey; $("#sModel").value = S.cfg.model; $("#sPakaiAI").checked = !!S.cfg.pakaiAI;
+  if (!$("#aiMapel").options.length) $("#aiMapel").innerHTML = MAPEL.map(m => `<option value="${m.id}">${m.nama}${m.wajib ? "" : " (penguatan)"}</option>`).join("");
+  isiDomainAI();
+  $("#aiList").innerHTML = S.aiSoal.length ? `<p class="small"><b>${S.aiSoal.length} soal AI tersimpan</b> <span class="pill ai">perlu dicek guru</span></p>` + S.aiSoal.slice(-6).reverse().map(q => `<div class="small" style="border-top:1px solid var(--line);padding:6px 0">${MP[q.m].nama} · ${esc(q.d)} — ${esc(q.q).slice(0, 110)}… <button type="button" class="btn ghost" style="padding:1px 8px" data-hapusai="${esc(q.id)}">Hapus</button></div>`).join("") : "";
+}
+function isiDomainAI() { const m = $("#aiMapel").value || "MAT"; const cur = $("#aiDomain").value; $("#aiDomain").innerHTML = MP[m].domain.map(d => `<option ${d === cur ? "selected" : ""}>${esc(d)}</option>`).join(""); }
+async function gemini(prompt, json) {
+  const key = S.cfg.apiKey.trim(); if (!key) throw new Error("Isi kunci API Gemini di Pengaturan.");
+  const model = (S.cfg.model || "gemini-2.5-flash").replace(/[^a-zA-Z0-9.\-]/g, "");
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+    method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: Object.assign({ temperature: 0.7 }, json ? { responseMimeType: "application/json" } : {}) })
+  });
+  if (!res.ok) throw new Error("Gemini menolak permintaan (" + res.status + "). Periksa kunci API dan nama model.");
+  const d = await res.json();
+  return ((((d.candidates || [])[0] || {}).content || {}).parts || []).map(p => p.text || "").join("");
+}
+async function buatSoalAI() {
+  const m = $("#aiMapel").value, dom = $("#aiDomain").value; const st = $("#aiStatus");
+  const bhs = m === "ING" ? "Tulis stimulus, pertanyaan, dan pilihan dalam bahasa Inggris sederhana (A2), pembahasan dalam bahasa Indonesia." : "Tulis dalam bahasa Indonesia.";
+  const prompt = `Buat 3 soal pilihan ganda orisinal untuk siswa SMP kelas 9 Indonesia, mapel ${MP[m].nama}, domain "${dom}", gaya Tes Kemampuan Akademik (soal berstimulus konteks sehari-hari, bukan hafalan). ${bhs} Masing-masing tepat 4 pilihan dan TEPAT SATU jawaban benar. Jangan memakai nama orang terkenal. Kembalikan JSON array saja dengan format: [{"s":"stimulus singkat (boleh kosong)","q":"pertanyaan","o":["A","B","C","D"],"k":indeks_kunci_0_sampai_3,"p":"pembahasan singkat langkah demi langkah","lv":"Pemahaman|Penerapan|Penalaran"}]`;
+  st.textContent = "Meminta soal ke Gemini…"; $("#btnAI").disabled = true;
+  try {
+    const txt = await gemini(prompt, true);
+    let arr = JSON.parse(txt.replace(/^```(json)?|```$/g, "").trim());
+    if (!Array.isArray(arr)) arr = [arr];
+    const ok = arr.filter(x => x && typeof x.q === "string" && Array.isArray(x.o) && x.o.length === 4 && Number.isInteger(x.k) && x.k >= 0 && x.k < 4).slice(0, 5)
+      .map((x, i) => ({ id: "AI" + Date.now().toString(36) + i, m, d: dom, lv: ["Pemahaman", "Penerapan", "Penalaran"].includes(x.lv) ? x.lv : "Penerapan", s: String(x.s || "").slice(0, 1200), q: String(x.q).slice(0, 600), o: x.o.map(o => String(o).slice(0, 200)), k: x.k, p: String(x.p || "").slice(0, 800), ai: true }));
+    if (!ok.length) throw new Error("Format jawaban AI tidak sesuai. Coba lagi.");
+    S.aiSoal.push(...ok); save(); renderAtur();
+    st.textContent = `${ok.length} soal ditambahkan (perlu dicek guru).` + (S.cfg.pakaiAI ? "" : " Centang “Sertakan soal buatan AI” agar muncul di kuis.");
+  } catch (e) { st.textContent = e.message || "Gagal menghubungi Gemini."; }
+  finally { $("#btnAI").disabled = false; }
+}
+async function jelaskanAI() {
+  const q = soalById(Q.ids[Q.i]); const box = $("#aiJelas"); if (!q || !box) return;
+  box.innerHTML = '<p class="small muted">Meminta penjelasan…</p>';
+  const strip = s => String(s).replace(/<[^>]+>/g, " ");
+  try {
+    const txt = await gemini(`Jelaskan ulang soal berikut untuk siswa SMP dengan bahasa Indonesia yang sederhana, maksimal 120 kata, langkah demi langkah, dan beri satu tips agar tidak salah lagi.\nStimulus: ${strip(q.s)}\nSoal: ${strip(q.q)}\nPilihan: ${q.o.map((o, i) => "ABCD"[i] + ". " + strip(o)).join("; ")}\nKunci: ${"ABCD"[q.k]}\nPembahasan awal: ${strip(q.p)}`, false);
+    box.innerHTML = `<div style="border-top:1px dashed currentColor;margin-top:8px;padding-top:6px"><span class="pill ai">penjelasan AI · perlu dicek guru</span><p style="white-space:pre-line;margin:.4em 0 0">${esc(txt.trim())}</p></div>`;
+  } catch (e) { box.innerHTML = `<p class="small">${esc(e.message)}</p>`; }
+}
+
+/* ---------------- EKSPOR/IMPOR ---------------- */
+function eksporJSON() {
+  const o = JSON.parse(JSON.stringify(S)); o.cfg.apiKey = ""; o.ekspor = new Date().toISOString(); o.aplikasi = "Perencana Belajar TKA Siswa";
+  download(`rencana-tka-${today()}.json`, JSON.stringify(o, null, 2), "application/json");
+}
+function eksporCSV() {
+  const rows = [["Jenis", "Tanggal", "Menit", "Jadwal", "Kuis", "Baca", "Ulang kesalahan", "Skor kuis", "Rincian kuis", "Contoh"]];
+  const tgls = [...new Set(Object.keys(S.kebiasaan).concat(Object.keys(S.kuis)))].sort();
+  tgls.forEach(t => {
+    const k = S.kebiasaan[t] || {}; const q = S.kuis[t];
+    let sk = "", det = "";
+    if (q && q.selesai) { sk = q.ids.filter((id, i) => { const s = soalById(id); return s && q.jawab[i] === s.k; }).length + "/5"; det = q.ids.map((id, i) => { const s = soalById(id); return s ? `${s.id}:${q.jawab[i] === s.k ? "B" : "S"}` : id; }).join(" "); }
+    rows.push(["harian", t, k.menit || 0, k.jadwal ? 1 : 0, k.kuis ? 1 : 0, k.baca ? 1 : 0, k.ulang ? 1 : 0, sk, det, (k.contoh || (q && q.contoh)) ? "contoh" : ""]);
+  });
+  download(`kebiasaan-kuis-tka-${today()}.csv`, "﻿" + rows.map(r => r.map(csvCell).join(",")).join("\n"), "text/csv");
+}
+function impor(file) {
+  const fr = new FileReader();
+  fr.onload = () => {
+    try {
+      const o = JSON.parse(fr.result); if (!o || typeof o !== "object" || !o.profil) throw 0;
+      const key = S.cfg.apiKey; S = merge(defState(), o); S.cfg.apiKey = key; save(); Q = null; renderAll(); toast("Data berhasil diimpor.");
+    } catch (e) { toast("Berkas tidak dikenali. Pilih berkas JSON hasil ekspor aplikasi ini."); }
+  };
+  fr.readAsText(file);
+}
+
+/* ---------------- WIRING ---------------- */
+function renderAll() { applyTheme(); renderHeader(); renderBeranda(); renderTarget(); renderJadwal(); renderKebiasaan(); renderRefleksi(); renderKartu(); renderAtur(); if (curTab === "kuis") renderKuis(); }
+function init() {
+  load(); buildTabs(); renderAll();
+  let t0 = "beranda"; try { t0 = sessionStorage.getItem(LS + ".tab") || "beranda"; } catch (e) { }
+  if (location.hash && TABS.some(x => "#" + x[0] === location.hash)) t0 = location.hash.slice(1);
+  go(TABS.some(x => x[0] === t0) ? t0 : "beranda");
+  document.addEventListener("click", e => {
+    const g = e.target.closest("[data-go]"); if (g) { go(g.dataset.go); $("#isi").focus({ preventScroll: true }); return; }
+    const o = e.target.closest("[data-opt]"); if (o && !o.disabled) { jawab(+o.dataset.opt); return; }
+    if (e.target.closest("#btnNext")) { Q.i++; drawKuis(true); if (Q.i >= Q.ids.length) { renderRiwayat(); renderBeranda(); renderKebiasaan(); renderHeader(); } return; }
+    if (e.target.closest("#btnJelas")) { jelaskanAI(); return; }
+    const hr = e.target.closest("[data-hapusref]"); if (hr) { if (confirm("Hapus refleksi ini?")) { S.refleksi = S.refleksi.filter(x => x.tgl !== hr.dataset.hapusref); save(); renderRefleksi(); } return; }
+    const ha = e.target.closest("[data-hapusai]"); if (ha) { S.aiSoal = S.aiSoal.filter(x => x.id !== ha.dataset.hapusai); save(); renderAtur(); return; }
+  });
+  $("#mingguan").addEventListener("change", e => {
+    const c = e.target.closest("[data-cek]"); if (!c) return;
+    if (c.checked) S.cek[c.dataset.cek] = true; else delete S.cek[c.dataset.cek];
+    save(); c.closest(".task").classList.toggle("done", c.checked);
+    const det = c.closest("details"); const all = $$("[data-cek]", det); det.querySelector(".prog").textContent = `${all.filter(x => x.checked).length}/${all.length}`;
+    renderBeranda();
+  });
+  $("#fProfil").addEventListener("submit", simpanProfil);
+  $("#btnBukaSemua").onclick = () => { const ds = $$("#mingguan details"); const buka = ds.some(d => !d.open); ds.forEach(d => d.open = buka); $("#btnBukaSemua").textContent = buka ? "Tutup semua minggu" : "Buka semua minggu"; };
+  $("#btnCsvJadwal").onclick = csvJadwal;
+  $("#kTgl").addEventListener("change", renderKebiasaan);
+  $("#habitList").addEventListener("change", e => { const c = e.target.closest("[data-hb]"); if (!c) return; setHabit($("#kTgl").value || today(), c.dataset.hb, c.checked); renderKebiasaan(); renderBeranda(); renderHeader(); });
+  $("#kMenit").addEventListener("change", e => { const t = $("#kTgl").value || today(); const k = S.kebiasaan[t] || (S.kebiasaan[t] = {}); k.menit = Math.max(0, Math.min(600, Math.round(+e.target.value || 0))); delete k.contoh; save(); renderKebiasaan(); renderBeranda(); });
+  $("#fRefleksi").addEventListener("submit", simpanRefleksi);
+  $("#btnCetak").onclick = () => { renderKartu(); go("kartu"); setTimeout(() => window.print(), 50); };
+  $("#sTema").onchange = e => { S.cfg.tema = e.target.value; save(); applyTheme(); };
+  $("#sKey").onchange = e => { S.cfg.apiKey = e.target.value.trim(); save(); };
+  $("#sModel").onchange = e => { S.cfg.model = e.target.value.trim() || "gemini-2.5-flash"; save(); };
+  $("#sPakaiAI").onchange = e => { S.cfg.pakaiAI = e.target.checked; save(); renderKuis(); };
+  $("#aiMapel").onchange = isiDomainAI;
+  $("#btnAI").onclick = buatSoalAI;
+  $("#btnJson").onclick = eksporJSON; $("#btnCsv").onclick = eksporCSV;
+  $("#fImpor").onchange = e => { if (e.target.files[0]) impor(e.target.files[0]); e.target.value = ""; };
+  $("#btnHapusContoh1").onclick = hapusContoh; $("#btnHapusContoh2").onclick = hapusContoh;
+  $("#btnReset").onclick = () => { if (!confirm("Hapus SEMUA data di perangkat ini (rencana, kebiasaan, kuis, refleksi)?")) return; const cfg = S.cfg; S = defState(); S.cfg = cfg; save(); Q = null; renderAll(); go("target"); toast("Semua data dihapus."); };
+}
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

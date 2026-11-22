@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Perencana Belajar TKA Siswa",
+    kategori: "Persiapan TKA",
+    jenis: "HTML",
+    deskripsi: "Siswa menetapkan tanggal tes dan target per mapel, lalu aplikasi menyusun jadwal mundur mingguan (Pemetaan, Penguatan per domain, Latihan campuran, Pemantapan) yang mengutamakan Matematika dan Bahasa Indonesia; dilengkapi pelacak kebiasaan harian, kuis kilat 5 soal campuran per hari dari 48 soal orisinal, refleksi singkat, kartu target yang bisa dicetak, ekspor CSV/JSON, dan soal tambahan Gemini opsional.",
+    tanggal: "2026-11-23",
+    tautan: "tka-rencana-belajar/",
+    status: "aktif"
+  },
+  {
     nama: "Perencana Kokurikuler",
     kategori: "Pembelajaran",
     jenis: "HTML",
