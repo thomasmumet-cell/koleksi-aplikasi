@@ -10,6 +10,15 @@
 
 const APLIKASI = [
   {
+    nama: "Kunjungan Rumah & Konferensi Kasus",
+    kategori: "Bimbingan Konseling",
+    jenis: "HTML",
+    deskripsi: "Ruang kerja rahasia guru BK untuk menangani kasus secara utuh: berkas kasus dengan tanda perlu rujukan, rencana kunjungan rumah (tujuan, ceklis izin dan persiapan, daftar pertanyaan) dan laporannya, notulen konferensi kasus berurutan (komitmen kerahasiaan, hal positif, gejala, upaya, keputusan) dengan daftar peserta, kesepakatan dengan orang tua, pemantauan tindak lanjut berlinimasa, serta cetak rencana, laporan, undangan, notulen dan daftar hadir, lembar kesepakatan, dan rekap pemantauan. Data hanya di perangkat, dikunci PIN.",
+    tanggal: "2026-11-24",
+    tautan: "bk-kunjungan-rumah/",
+    status: "aktif"
+  },
+  {
     nama: "Kisi-kisi & Bank Soal Sumatif",
     kategori: "Pembelajaran",
     jenis: "HTML",

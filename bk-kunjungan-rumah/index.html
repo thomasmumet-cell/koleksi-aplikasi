@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kunjungan Rumah &amp; Konferensi Kasus</title>
+<meta name="description" content="Ruang kerja rahasia guru BK SMP: rencana dan laporan kunjungan rumah, notulen konferensi kasus, daftar peserta, kesepakatan dengan orang tua, rencana dan pemantauan tindak lanjut, serta cetak laporan. Data hanya di perangkat, dikunci PIN.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Literata:opsz,wght@7..72,600;7..72,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4eee6;--paper:#fffdf9;--paper2:#faf5ee;--ink:#2a211c;--mut:#675a50;--line:#e2d6c8;
+  --acc:#a3421b;--acc-ink:#fff;--acc-soft:#f6e3d6;--teal:#1b5d64;--teal-soft:#dcefef;
+  --ok:#2a7a3c;--ok-bg:#e5f4e8;--warn:#8f5a00;--warn-bg:#fdf0d2;--bad:#b3261e;--bad-bg:#fbe5e3;
+  --shadow:0 1px 0 var(--line),0 10px 26px -18px rgba(70,35,10,.45);--r:14px;color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1a1512;--paper:#241d19;--paper2:#2c241f;--ink:#f3ebe3;--mut:#bcab9e;--line:#3d322b;
+  --acc:#f2905f;--acc-ink:#2a1206;--acc-soft:#3f2a1f;--teal:#72c7cf;--teal-soft:#183538;
+  --ok:#72d28a;--ok-bg:#173021;--warn:#f5c15a;--warn-bg:#3a2d13;--bad:#ff8f86;--bad-bg:#3e1b19;
+  --shadow:0 1px 0 #000,0 10px 26px -16px #000;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1a1512;--paper:#241d19;--paper2:#2c241f;--ink:#f3ebe3;--mut:#bcab9e;--line:#3d322b;
+  --acc:#f2905f;--acc-ink:#2a1206;--acc-soft:#3f2a1f;--teal:#72c7cf;--teal-soft:#183538;
+  --ok:#72d28a;--ok-bg:#173021;--warn:#f5c15a;--warn-bg:#3a2d13;--bad:#ff8f86;--bad-bg:#3e1b19;
+  --shadow:0 1px 0 #000,0 10px 26px -16px #000;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Atkinson Hyperlegible",system-ui,sans-serif;min-height:100vh}
+h1,h2,h3,.disp{font-family:Literata,Georgia,serif;line-height:1.2;margin:0;font-weight:800}
+h2{font-size:clamp(21px,4.6vw,27px)}
+h3{font-size:18px;font-weight:600}
+a{color:var(--acc)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+[hidden]{display:none!important}
+
+header.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;gap:12px;padding:10px 0 4px}
+.logo{width:42px;height:42px;flex:none;border-radius:12px;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center}
+.hd h1{font-size:clamp(16px,4.2vw,22px)}
+.hd small{display:block;color:var(--mut);font-size:13px;line-height:1.3}
+.hd .sp{flex:1;min-width:0}
+.ib{border:1px solid var(--line);background:var(--paper);border-radius:10px;min-width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:none;padding:0 8px}
+.ib:hover{border-color:var(--acc)}
+.ib[aria-pressed="true"]{background:var(--teal);color:var(--paper);border-color:var(--teal)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;padding:4px 0 9px;scrollbar-width:thin}
+nav.tabs button{border:0;background:none;padding:8px 13px;border-radius:10px;cursor:pointer;white-space:nowrap;color:var(--mut);font-weight:700}
+nav.tabs button[aria-current="page"]{background:var(--ink);color:var(--bg)}
+nav.tabs button:hover:not([aria-current="page"]){background:var(--acc-soft);color:var(--ink)}
+.nb{display:inline-block;min-width:20px;padding:0 6px;border-radius:999px;background:var(--bad);color:#fff;font-size:12px;margin-left:4px;line-height:20px;text-align:center}
+
+main{padding:18px 0 70px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.between{justify-content:space-between}
+.mut{color:var(--mut)}
+.note{font-size:14px;color:var(--mut)}
+.mt{margin-top:14px}.mt2{margin-top:22px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:700;text-decoration:none;color:var(--ink);min-height:40px}
+.btn:hover{border-color:var(--acc)}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.btn.pri:hover{filter:brightness(1.07)}
+.btn.tl{background:var(--teal);color:var(--paper);border-color:var(--teal)}
+.btn.bad{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.btn.sm{padding:4px 10px;min-height:32px;font-size:14px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.rahasia{display:flex;gap:10px;align-items:flex-start;background:var(--teal-soft);border-left:5px solid var(--teal);border-radius:10px;padding:10px 14px;margin:0 0 16px;font-size:14px}
+.rahasia svg{flex:none;margin-top:2px;color:var(--teal)}
+.rahasia .x{margin-left:auto}
+.alert{border-radius:12px;padding:12px 14px;border:1px solid}
+.alert.bad{background:var(--bad-bg);border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
+.alert.warn{background:var(--warn-bg);border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
+.alert.ok{background:var(--ok-bg);border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
+
+.stat{padding:14px 16px;border-radius:var(--r);background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow)}
+.stat b{display:block;font:800 30px/1.1 Literata,Georgia,serif}
+.stat span{font-size:14px;color:var(--mut)}
+.stat.hot b{color:var(--bad)}
+.stat.acc b{color:var(--acc)}
+.stat.tl b{color:var(--teal)}
+
+.chip{display:inline-block;padding:1px 9px;border-radius:999px;font-size:13px;font-weight:700;background:var(--paper2);border:1px solid var(--line);white-space:nowrap}
+.chip.c-aktif,.chip.c-berjalan{background:var(--acc-soft);border-color:transparent;color:var(--acc)}
+.chip.c-dipantau,.chip.c-direncanakan{background:var(--teal-soft);border-color:transparent;color:var(--teal)}
+.chip.c-dirujuk,.chip.c-tinggi,.chip.c-terlambat,.chip.c-batal{background:var(--bad-bg);border-color:transparent;color:var(--bad)}
+.chip.c-selesai,.chip.c-terlaksana{background:var(--ok-bg);border-color:transparent;color:var(--ok)}
+.chip.c-sedang,.chip.c-ditunda,.chip.c-belum{background:var(--warn-bg);border-color:transparent;color:var(--warn)}
+.chip.contoh{background:transparent;border:1px dashed var(--mut);color:var(--mut);font-weight:400}
+
+.list{list-style:none;margin:0;padding:0}
+.item{display:flex;gap:12px;align-items:flex-start;padding:12px 4px;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item .tgl{flex:none;width:56px;text-align:center;border-radius:10px;background:var(--paper2);border:1px solid var(--line);padding:4px 0;line-height:1.1}
+.item .tgl b{display:block;font:800 21px/1.1 Literata,Georgia,serif}
+.item .tgl small{font-size:12px;color:var(--mut)}
+.item .bd{flex:1;min-width:0}
+.item .bd p{margin:2px 0 0;font-size:14px;color:var(--mut)}
+button.linkish{border:0;background:none;padding:0;cursor:pointer;color:var(--ink);font-weight:700;text-align:left}
+button.linkish:hover{color:var(--acc);text-decoration:underline}
+
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top;font-size:15px}
+th{font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.03em}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+td.late{color:var(--bad);font-weight:700}
+
+form .f{margin:0 0 14px}
+label,.lbl{display:block;font-weight:700;margin:0 0 4px;font-size:15px}
+.hint{font-size:13px;color:var(--mut);margin:2px 0 0}
+input[type=text],input[type=date],input[type=time],input[type=number],input[type=password],select,textarea{width:100%;border:1px solid var(--line);background:var(--paper2);border-radius:10px;padding:9px 11px;min-height:42px}
+textarea{min-height:92px;resize:vertical;line-height:1.5}
+input:focus,select:focus,textarea:focus{border-color:var(--teal)}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 14px}
+.checks label{font-weight:400;display:flex;gap:8px;align-items:flex-start;margin:0;padding:4px 0;font-size:15px}
+.checks input{width:18px;height:18px;margin-top:3px;flex:none;accent-color:var(--acc)}
+.fg{display:grid;gap:0 14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.fg .wide{grid-column:1/-1}
+fieldset{border:1px solid var(--line);border-radius:12px;padding:12px 14px 4px;margin:0 0 16px}
+legend{font:600 17px Literata,Georgia,serif;padding:0 6px}
+.step{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--acc);color:var(--acc-ink);font-weight:700;font-size:14px;margin-right:6px}
+.subt td,.subt th{padding:6px 4px}
+.subt input,.subt select{min-height:36px;padding:6px 8px}
+.sticky-act{position:sticky;bottom:0;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:10px 0;margin:10px -18px -18px;padding-left:18px;padding-right:18px;border-radius:0 0 var(--r) var(--r);z-index:5}
+
+.bar{height:12px;border-radius:999px;background:var(--paper2);border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--acc))}
+.hbar{display:grid;grid-template-columns:110px 1fr 34px;gap:8px;align-items:center;font-size:14px;margin:6px 0}
+.hbar .t{height:14px;border-radius:6px;background:var(--paper2);overflow:hidden}
+.hbar .t i{display:block;height:100%;border-radius:6px}
+
+.tline{position:relative;margin:0;padding:0 0 0 22px;list-style:none}
+.tline:before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tline li{position:relative;margin:0 0 14px}
+.tline li:before{content:"";position:absolute;left:-20px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:3px solid var(--teal)}
+.tline li.k:before{border-color:var(--acc)}
+.tline li.t:before{border-color:var(--mut)}
+.tline .when{font-size:13px;color:var(--mut)}
+
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--paper);color:var(--ink);padding:0;max-width:min(620px,calc(100vw - 24px));width:100%;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(20,12,6,.55)}
+.dh{padding:16px 18px 0}
+.db{padding:12px 18px 18px;max-height:70vh;overflow:auto}
+.da{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;padding:0 18px 16px}
+pre.kirim{white-space:pre-wrap;background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:13px;max-height:220px;overflow:auto}
+
+#lock{position:fixed;inset:0;z-index:90;background:var(--bg);display:grid;place-items:center;padding:16px;overflow:auto}
+#lock .box{max-width:430px;width:100%}
+#lock .house{display:block;margin:0 auto 10px;color:var(--acc)}
+input.pin{font-size:24px;letter-spacing:.4em;text-align:center}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:100;max-width:calc(100% - 32px);font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+
+.paper{background:#fff;color:#111;border-radius:6px;padding:28px 30px;box-shadow:var(--shadow);border:1px solid var(--line);font:14.5px/1.5 "Atkinson Hyperlegible",Arial,sans-serif;max-width:820px;margin:0 auto}
+.paper h1,.paper h2,.paper h3{color:#111}
+.doc .kop{display:flex;justify-content:space-between;gap:10px;border-bottom:3px double #333;padding-bottom:8px;margin-bottom:14px}
+.doc .kop b{font-size:16px}
+.doc .rhs{border:2px solid #b3261e;color:#b3261e;font-weight:700;padding:2px 10px;border-radius:4px;align-self:flex-start;letter-spacing:.1em;font-size:12px}
+.doc h2{font:800 18px Literata,Georgia,serif;text-align:center;margin:6px 0 2px;text-transform:uppercase}
+.doc .sub{text-align:center;margin:0 0 14px;font-size:13px}
+.doc table{margin:4px 0 12px}
+.doc th,.doc td{border:1px solid #777;padding:5px 7px;font-size:13.5px;color:#111}
+.doc th{background:#f1ede8;text-transform:none;letter-spacing:0}
+.doc table.kv td{border:0;padding:2px 6px}
+.doc table.kv td:first-child{width:200px;color:#333}
+.doc .sec{font-weight:700;margin:12px 0 4px}
+.doc .box{border:1px solid #999;padding:6px 9px;min-height:30px;white-space:pre-wrap;border-radius:3px}
+.doc .ttd{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px;margin-top:26px;text-align:center;font-size:13.5px}
+.doc .ttd .sp{height:58px}
+.doc .foot{margin-top:18px;font-size:11.5px;color:#555;border-top:1px solid #bbb;padding-top:6px}
+
+footer{border-top:1px solid var(--line);padding:18px 0 40px;font-size:13px;color:var(--mut)}
+
+@media (max-width:560px){
+  .card{padding:14px}
+  .sticky-act{margin:10px -14px -14px;padding-left:14px;padding-right:14px}
+  .paper{padding:16px 12px}
+  .hbar{grid-template-columns:86px 1fr 30px}
+  .hd small{display:none}
+}
+@media print{
+  body{background:#fff}
+  body>*:not(#cetak){display:none!important}
+  #cetak{display:block!important}
+  #cetak .paper{box-shadow:none;border:0;padding:0;max-width:none}
+  .doc{page-break-after:always}
+  @page{size:A4;margin:16mm 15mm}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a href="#main" class="sr">Lewati ke isi</a>
+
+<div id="lock" role="dialog" aria-modal="true" aria-labelledby="lockT">
+  <div class="box card">
+    <svg class="house" width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><rect x="10" y="13" width="4" height="4" rx="1"/><path d="M12 15v.01"/></svg>
+    <div id="lockSetup" hidden>
+      <h1 id="lockT" style="text-align:center;font-size:22px">Buat PIN guru BK</h1>
+      <p>Catatan kunjungan rumah dan konferensi kasus bersifat <b>rahasia</b> (asas kerahasiaan kode etik BK). Buat PIN 4–8 angka untuk mengunci tampilan aplikasi di perangkat ini. Yang disimpan hanya <i>hash</i> PIN, di perangkat ini saja.</p>
+      <div class="f"><label for="pin1">PIN baru</label><input id="pin1" class="pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8"></div>
+      <div class="f mt"><label for="pin2">Ulangi PIN</label><input id="pin2" class="pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="8"></div>
+      <p class="note">Ini <b>kunci tampilan</b>, bukan enkripsi: orang yang paham teknis dan memegang perangkat ini masih bisa membaca penyimpanan browser. Gunakan perangkat pribadi atau akun pengguna terpisah. PIN yang terlupa hanya bisa diatasi dengan menghapus semua data.</p>
+      <button class="btn pri" id="btnSetPin" type="button" style="width:100%;justify-content:center">Simpan PIN dan buka</button>
+    </div>
+    <div id="lockEnter" hidden>
+      <h1 style="text-align:center;font-size:22px">Terkunci</h1>
+      <p style="text-align:center">Masukkan PIN guru BK untuk membuka catatan.</p>
+      <div class="f"><label for="pinIn">PIN</label><input id="pinIn" class="pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="8"></div>
+      <p id="pinMsg" class="note" role="alert" style="min-height:1.5em;color:var(--bad)"></p>
+      <button class="btn pri" id="btnUnlock" type="button" style="width:100%;justify-content:center">Buka</button>
+      <p style="margin:14px 0 0;text-align:center"><button class="btn sm bad" id="btnForgot" type="button">Lupa PIN? Hapus semua data</button></p>
+    </div>
+  </div>
+</div>
+
+<header class="top" id="topbar" hidden>
+  <div class="wrap">
+    <div class="hd">
+      <div class="logo" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-5h6v5"/></svg></div>
+      <div class="sp"><h1>Kunjungan Rumah &amp; Konferensi Kasus</h1><small id="subSekolah">Ruang kerja rahasia guru BK</small></div>
+      <button class="ib" id="btnSamar" type="button" aria-pressed="false" title="Samarkan nama murid menjadi inisial (untuk layar yang terlihat orang lain)"><span aria-hidden="true">A.B.</span><span class="sr">Samarkan nama</span></button>
+      <button class="ib" id="btnTema" type="button" title="Ganti tema terang/gelap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span class="sr">Ganti tema</span></button>
+      <button class="ib" id="btnKunci" type="button" title="Kunci sekarang"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span class="sr">Kunci aplikasi</span></button>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Menu utama"></nav>
+  </div>
+</header>
+
+<main id="main" class="wrap" tabindex="-1" hidden></main>
+
+<footer class="wrap" id="foot" hidden>
+  <p>Kunjungan Rumah &amp; Konferensi Kasus · bagian dari koleksi aplikasi sekolah digital. Semua data tersimpan hanya di browser perangkat ini; tidak ada pengiriman ke server kecuali fitur AI opsional yang Anda aktifkan sendiri. Aplikasi ini alat bantu administrasi layanan BK, <b>bukan</b> alat diagnosis klinis.</p>
+</footer>
+
+<div id="cetak" hidden></div>
+<dialog id="dlg" aria-labelledby="dlgT"><div class="dh"><h3 id="dlgT"></h3></div><div class="db" id="dlgB"></div><div class="da" id="dlgA"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script>
+"use strict";
+/* =====================================================================
+   Kunjungan Rumah & Konferensi Kasus — aplikasi guru BK (satu file).
+   Data hanya di localStorage perangkat ini. Tidak ada kunci API, PIN,
+   atau data pribadi yang ditanam. Fitur AI (Gemini) opsional memakai
+   kunci milik pengguna sendiri dan hanya mengirim teks yang disamarkan.
+   ===================================================================== */
+var KEY="bkKR.v1",KEY_PIN="bkKR.pin",KEY_THEME="bkKR.tema",KEY_SAMAR="bkKR.samar",KEY_INGAT="bkKR.tutupIngat";
+var MEM={},STORAGE_OK=true;
+function lsGet(k){try{var v=localStorage.getItem(k);if(v!==null)return v;}catch(e){STORAGE_OK=false;}return Object.prototype.hasOwnProperty.call(MEM,k)?MEM[k]:null;}
+function lsSet(k,v){MEM[k]=v;try{localStorage.setItem(k,v);return true;}catch(e){STORAGE_OK=false;return false;}}
+function lsDel(k){delete MEM[k];try{localStorage.removeItem(k);}catch(e){}}
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function uid(){return Date.now().toString(36).slice(-5)+Math.random().toString(36).slice(2,7);}
+function toast(m){var t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){t.hidden=true;},3200);}
+function pad2(n){return (n<10?"0":"")+n;}
+function iso(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());}
+function today(){return iso(new Date());}
+function geser(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d);}
+var BULAN=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+var BLN3=["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+var HARI=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+function fmtTgl(s,hari){if(!s)return "-";var p=String(s).split("-");if(p.length<3)return s;var t=(+p[2])+" "+(BULAN[+p[1]-1]||"")+" "+p[0];if(hari){var d=new Date(+p[0],+p[1]-1,+p[2]);t=HARI[d.getDay()]+", "+t;}return t;}
+function selisih(s){if(!s)return null;var p=s.split("-"),d=new Date(+p[0],+p[1]-1,+p[2]),n=new Date();n.setHours(0,0,0,0);return Math.round((d-n)/864e5);}
+function arr(x){return Array.isArray(x)?x:(x?[x]:[]);}
+function ttg(s){return String(s||"").trim();}
+
+/* ---------- SHA-256 kecil (hash PIN) ---------- */
+function sha256(ascii){
+  function rr(v,a){return (v>>>a)|(v<<(32-a));}
+  var mp=Math.pow,maxWord=mp(2,32),result="",words=[],asciiBitLength=ascii.length*8,i,j;
+  var hash=[],k=[],primeCounter=0,isComposite={};
+  for(var c=2;primeCounter<64;c++){if(!isComposite[c]){for(i=0;i<313;i+=c)isComposite[i]=c;hash[primeCounter]=(mp(c,.5)*maxWord)|0;k[primeCounter++]=(mp(c,1/3)*maxWord)|0;}}
+  hash=hash.slice(0,8);
+  ascii+="\x80";while(ascii.length%64-56)ascii+="\x00";
+  for(i=0;i<ascii.length;i++){j=ascii.charCodeAt(i);if(j>>8)return "";words[i>>2]|=j<<((3-i)%4)*8;}
+  words[words.length]=((asciiBitLength/maxWord)|0);words[words.length]=(asciiBitLength);
+  for(j=0;j<words.length;){
+    var w=words.slice(j,j+=16),oldHash=hash;hash=hash.slice(0,8);
+    for(i=0;i<64;i++){
+      var w15=w[i-15],w2=w[i-2],a=hash[0],e=hash[4];
+      var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+      var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+      hash=[(temp1+temp2)|0].concat(hash);hash[4]=(hash[4]+temp1)|0;
+    }
+    for(i=0;i<8;i++)hash[i]=(hash[i]+oldHash[i])|0;
+  }
+  for(i=0;i<8;i++)for(j=3;j+1;j--){var b=(hash[i]>>(j*8))&255;result+=((b<16)?0:"")+b.toString(16);}
+  return result;
+}
+function hashPin(pin,salt){var h=salt+":"+pin;for(var i=0;i<1500;i++)h=sha256(h+salt);return h;}
+function pinData(){var r=lsGet(KEY_PIN);if(!r)return null;try{return JSON.parse(r);}catch(e){return null;}}
+function pinOK(v){var p=pinData();return !!(p&&hashPin(String(v),p.salt)===p.hash);}
+function setPin(v){var salt=uid()+uid();return lsSet(KEY_PIN,JSON.stringify({salt:salt,hash:hashPin(String(v),salt)}));}
+
+/* ---------- Konstanta isian ---------- */
+var BIDANG=["Pribadi","Sosial","Belajar","Karier"];
+var SUMBER=["Wali kelas","Guru mata pelajaran","Orang tua/wali","Murid sendiri (datang sukarela)","Teman sebaya","Tim pencegahan & penanganan kekerasan sekolah","Hasil asesmen kebutuhan (AKPD/DCM)","Lainnya"];
+var ST_KASUS=["Aktif","Dipantau","Dirujuk","Selesai"];
+var PRIOR=["Rendah","Sedang","Tinggi"];
+var TANDA=[
+  "Ada risiko terhadap keselamatan murid atau orang lain",
+  "Dugaan kekerasan/perundungan (wajib dilaporkan ke tim sekolah aman)",
+  "Gejala emosi/perilaku berat yang menetap lebih dari dua minggu",
+  "Dugaan masalah kesehatan fisik atau penggunaan zat",
+  "Masalah hukum atau di luar kewenangan guru BK",
+  "Upaya sekolah belum berhasil setelah konferensi kasus"
+];
+var ST_KUNJ=["Direncanakan","Terlaksana","Ditunda","Batal"];
+var TUJUAN_KUNJ=["Membangun hubungan baik dengan keluarga","Melengkapi/klarifikasi data murid","Mengenal kondisi belajar di rumah","Membahas pemecahan masalah bersama orang tua","Menyampaikan perkembangan murid","Memantau pelaksanaan kesepakatan"];
+var SIAP_KUNJ=["Izin dan surat tugas dari kepala sekolah","Kontak awal dan kesepakatan waktu dengan orang tua","Murid sudah diberi tahu tentang kunjungan","Daftar pertanyaan wawancara disiapkan","Pedoman observasi disiapkan","Data pendukung (presensi, catatan perkembangan) dibawa","Petugas minimal dua orang (mis. guru BK dan wali kelas)"];
+var DITEMUI=["Ayah","Ibu","Wali","Kakek/Nenek","Saudara kandung","Murid"];
+var PENERIMAAN=["Sangat terbuka","Terbuka","Kurang terbuka","Menolak kunjungan"];
+var OBS=["Tersedia tempat belajar yang layak","Ada pengaturan waktu belajar di rumah","Orang tua memantau penggunaan gawai","Komunikasi keluarga tampak hangat","Murid memikul tugas rumah tangga yang berat","Lingkungan sekitar kurang mendukung belajar","Akses internet/perangkat belajar terbatas"];
+var PERTANYAAN_DEF="1. Bagaimana kegiatan harian anak di rumah (bangun, belajar, istirahat, gawai)?\n2. Apa yang orang tua amati tentang perubahan sikap anak akhir-akhir ini?\n3. Hal apa yang paling disukai dan menjadi kekuatan anak?\n4. Kendala apa yang dirasakan keluarga dalam mendampingi belajar?\n5. Dukungan apa yang orang tua harapkan dari sekolah?\n6. Apa yang dapat kita sepakati bersama untuk dua sampai empat minggu ke depan?";
+var ST_KONF=["Direncanakan","Terlaksana","Ditunda","Batal"];
+var RUJUK=["Belum perlu rujukan","Rujuk ke psikolog","Rujuk ke puskesmas/layanan kesehatan","Rujuk ke layanan perlindungan anak (UPTD PPA)","Koordinasi dengan tim pencegahan & penanganan kekerasan sekolah","Rujuk ke lembaga lain"];
+var PERAN=["Kepala sekolah","Wakil kepala sekolah kesiswaan","Guru BK","Wali kelas","Guru mata pelajaran","Orang tua/wali","Murid","Tim sekolah aman","Tenaga ahli (psikolog/dokter)","Lainnya"];
+var PIHAK=["Sekolah","Orang tua","Murid","Pihak luar"];
+var ST_TL=["Belum","Berjalan","Selesai","Tidak terlaksana"];
+
+/* ---------- Data ---------- */
+function defAtur(){return {sekolah:"",kota:"",guru:"",nipGuru:"",kepsek:"",nipKepsek:"",ta:"",autolock:5,aiKey:"",aiModel:"gemini-2.5-flash"};}
+function defDB(){return {versi:1,atur:defAtur(),kasus:[],kunj:[],konf:[],tindak:[],contohDimuat:false};}
+var DB=defDB();
+function muat(){var r=lsGet(KEY);if(!r)return false;try{var o=JSON.parse(r);if(!o||typeof o!=="object")return false;DB=normal(o);return true;}catch(e){return false;}}
+function normal(o){var d=defDB();d.atur=Object.assign(defAtur(),o.atur||{});["kasus","kunj","konf","tindak"].forEach(function(k){d[k]=Array.isArray(o[k])?o[k].filter(function(x){return x&&x.id;}):[];});d.contohDimuat=!!o.contohDimuat;d.tindak.forEach(function(t){t.log=Array.isArray(t.log)?t.log:[];});return d;}
+function simpan(){if(!lsSet(KEY,JSON.stringify(DB)))toast("Penyimpanan browser tidak tersedia; data hanya bertahan sampai halaman ditutup.");}
+function byId(list,id){for(var i=0;i<list.length;i++)if(list[i].id===id)return list[i];return null;}
+function kasusOf(id){return byId(DB.kasus,id);}
+
+/* ---------- Samarkan nama ---------- */
+var SAMAR=lsGet(KEY_SAMAR)==="1";
+function inisial(n){return String(n||"").replace(/\(contoh\)/i,"").trim().split(/\s+/).filter(Boolean).map(function(w){return w[0].toUpperCase()+".";}).join("")||"?";}
+function nm(n){return SAMAR?inisial(n):String(n||"");}
+function labelKasus(k){if(!k)return "(kasus terhapus)";return nm(k.nama)+(k.kelas?" · "+k.kelas:"");}
+
+/* ---------- Data contoh (nama fiktif, tanggal relatif hari ini) ---------- */
+function isiContoh(){
+  var A="kc1"+uid(),B="kc2"+uid(),C="kc3"+uid(),V1="vc1"+uid(),V2="vc2"+uid(),F1="fc1"+uid(),F2="fc2"+uid();
+  DB.kasus.push(
+    {id:A,contoh:true,kode:"KS-01",nama:"Bima Prasetya (contoh)",kelas:"8B",bidang:"Belajar",sumber:"Wali kelas",tglBuka:geser(-30),prioritas:"Sedang",status:"Dipantau",
+     masalah:"Tidak masuk sekolah 7 hari dalam sebulan terakhir (3 tanpa keterangan). Sering mengantuk di jam pertama dan tugas beberapa mapel belum dikumpulkan.",
+     kekuatan:"Ramah, terampil memperbaiki sepeda, aktif di ekstrakurikuler pramuka.",
+     upaya:"Konseling individual dua kali; komunikasi wali kelas dengan orang tua melalui pesan singkat.",tanda:[],catRujuk:""},
+    {id:B,contoh:true,kode:"KS-02",nama:"Nadia Kirana (contoh)",kelas:"7A",bidang:"Sosial",sumber:"Guru mata pelajaran",tglBuka:geser(-18),prioritas:"Tinggi",status:"Aktif",
+     masalah:"Menarik diri dari kelompok setelah konflik di grup percakapan kelas; dua kali menangis di kelas; menolak kerja kelompok.",
+     kekuatan:"Rajin mencatat, nilai Bahasa Indonesia baik, gemar menggambar.",
+     upaya:"Konseling individual; wali kelas menata ulang kelompok belajar; laporan awal ke tim sekolah aman untuk ditelaah.",
+     tanda:["Dugaan kekerasan/perundungan (wajib dilaporkan ke tim sekolah aman)"],catRujuk:"Laporan awal ke tim sekolah aman sudah disampaikan; menunggu hasil telaah."},
+    {id:C,contoh:true,kode:"KS-03",nama:"Raka Aditya (contoh)",kelas:"9C",bidang:"Karier",sumber:"Murid sendiri (datang sukarela)",tglBuka:geser(-6),prioritas:"Rendah",status:"Aktif",
+     masalah:"Bingung memilih antara SMK dan SMA; ada perbedaan harapan dengan orang tua.",kekuatan:"Nilai praktik informatika tinggi, mandiri.",upaya:"Bimbingan karier klasikal; satu sesi konseling individual.",tanda:[],catRujuk:""}
+  );
+  DB.kunj.push(
+    {id:V1,contoh:true,kasusId:A,status:"Terlaksana",tgl:geser(-21),jam:"15:30",durasi:60,alamat:"Kelurahan contoh, RT 03",tujuan:[TUJUAN_KUNJ[0],TUJUAN_KUNJ[2],TUJUAN_KUNJ[3]],tujuanLain:"Mencari tahu penyebab sering absen dan mengantuk.",
+     petugas:"Guru BK dan wali kelas 8B",noSurat:"",siap:SIAP_KUNJ.slice(0,6),pertanyaan:PERTANYAAN_DEF,
+     tglLaks:geser(-21),durasiLaks:70,ditemui:["Ibu","Murid"],penerimaan:"Terbuka",obs:[OBS[1],OBS[4]],
+     hasilW:"Ibu bekerja shift malam; murid membantu menjaga adik hingga larut. Murid bermain gim daring setelah adik tidur.",
+     hasilO:"Rumah rapi; tidak ada meja belajar khusus; ponsel dipakai bersama.",kekuatanK:"Ibu sangat peduli dan bersedia berkomunikasi rutin dengan wali kelas.",
+     hambatan:"Jadwal kerja orang tua; belum ada aturan penggunaan gawai.",catKhusus:"",evaluasi:"Pantau presensi dan keterlambatan selama empat minggu; konseling individual lanjutan."},
+    {id:V2,contoh:true,kasusId:B,status:"Direncanakan",tgl:geser(4),jam:"16:00",durasi:60,alamat:"Kelurahan contoh, RW 05",tujuan:[TUJUAN_KUNJ[0],TUJUAN_KUNJ[3],TUJUAN_KUNJ[4]],tujuanLain:"Menyampaikan hasil konferensi kasus dan menyepakati dukungan di rumah.",
+     petugas:"Guru BK dan wali kelas 7A",noSurat:"",siap:SIAP_KUNJ.slice(0,2),pertanyaan:PERTANYAAN_DEF,tglLaks:"",durasiLaks:"",ditemui:[],penerimaan:"",obs:[],hasilW:"",hasilO:"",kekuatanK:"",hambatan:"",catKhusus:"",evaluasi:""}
+  );
+  DB.konf.push(
+    {id:F1,contoh:true,kasusId:B,status:"Terlaksana",tgl:geser(-5),jam:"13:00",tempat:"Ruang BK",pemimpin:"Wakil kepala sekolah kesiswaan",notulis:"Guru BK",rahasia:true,
+     peserta:[{peran:"Wakil kepala sekolah kesiswaan",nama:"",hadir:true},{peran:"Guru BK",nama:"",hadir:true},{peran:"Wali kelas",nama:"",hadir:true},{peran:"Guru mata pelajaran",nama:"",hadir:true},{peran:"Orang tua/wali",nama:"Ibu dari murid",hadir:true},{peran:"Tim sekolah aman",nama:"",hadir:false}],
+     positif:"Murid rajin mencatat, nilai Bahasa Indonesia baik, gemar menggambar, dekat dengan satu teman sebangku.",
+     gejala:"Menarik diri dua minggu terakhir; dua kali menangis di kelas; menolak kerja kelompok; ada tangkapan layar ejekan di grup percakapan kelas.",
+     upayaK:"Dua kali konseling individual; penataan ulang kelompok belajar; laporan awal ke tim sekolah aman.",
+     masukan:"Orang tua menyampaikan murid sulit tidur dan enggan berangkat sekolah. Guru mapel mengusulkan peran sebagai ilustrator dalam proyek kelas. Wali kelas siap memantau grup percakapan kelas bersama pengurus kelas.",
+     kesimpulan:"1. Kasus ejekan di grup percakapan ditangani tim sekolah aman sesuai prosedur.\n2. Konseling individual mingguan selama satu bulan.\n3. Bimbingan klasikal etika bermedia sosial di kelas 7A.\n4. Bila keluhan sulit tidur menetap, orang tua dianjurkan berkonsultasi ke psikolog puskesmas.",
+     rujukan:"Koordinasi dengan tim pencegahan & penanganan kekerasan sekolah"},
+    {id:F2,contoh:true,kasusId:A,status:"Direncanakan",tgl:geser(9),jam:"13:30",tempat:"Ruang rapat",pemimpin:"Kepala sekolah",notulis:"Guru BK",rahasia:false,
+     peserta:[{peran:"Kepala sekolah",nama:"",hadir:false},{peran:"Guru BK",nama:"",hadir:false},{peran:"Wali kelas",nama:"",hadir:false},{peran:"Orang tua/wali",nama:"",hadir:false}],
+     positif:"",gejala:"",upayaK:"",masukan:"",kesimpulan:"",rujukan:RUJUK[0]}
+  );
+  DB.tindak.push(
+    {id:"tc1"+uid(),contoh:true,kasusId:A,sumber:"kunj:"+V1,uraian:"Murid tidur paling lambat pukul 22.00; gawai dikumpulkan ke ibu pukul 21.00.",pihak:"Orang tua",pj:"Ibu dan murid",tenggat:geser(7),status:"Berjalan",log:[{tgl:geser(-14),catatan:"Terlambat masuk turun dari 4 kali menjadi 1 kali dalam seminggu."},{tgl:geser(-7),catatan:"Murid melaporkan dua kali melanggar jam gawai."}]},
+    {id:"tc2"+uid(),contoh:true,kasusId:A,sumber:"kunj:"+V1,uraian:"Wali kelas mengirim rekap presensi mingguan kepada orang tua.",pihak:"Sekolah",pj:"Wali kelas 8B",tenggat:geser(14),status:"Berjalan",log:[{tgl:geser(-14),catatan:"Rekap pertama terkirim."}]},
+    {id:"tc0"+uid(),contoh:true,kasusId:A,sumber:"kunj:"+V1,uraian:"Wali kelas dan ibu menyepakati jalur komunikasi rutin setiap Jumat.",pihak:"Sekolah",pj:"Wali kelas 8B",tenggat:geser(-18),status:"Selesai",log:[{tgl:geser(-18),catatan:"Jalur komunikasi sudah berjalan."}]},
+    {id:"tc3"+uid(),contoh:true,kasusId:A,sumber:"kunj:"+V1,uraian:"Konseling individual lanjutan tentang pengelolaan waktu.",pihak:"Sekolah",pj:"Guru BK",tenggat:geser(-3),status:"Belum",log:[]},
+    {id:"tc4"+uid(),contoh:true,kasusId:B,sumber:"konf:"+F1,uraian:"Konseling individual mingguan selama satu bulan.",pihak:"Sekolah",pj:"Guru BK",tenggat:geser(25),status:"Berjalan",log:[{tgl:geser(-2),catatan:"Sesi pertama: murid mulai mau bercerita, menyebut satu teman yang mendukung."}]},
+    {id:"tc5"+uid(),contoh:true,kasusId:B,sumber:"konf:"+F1,uraian:"Bimbingan klasikal etika bermedia sosial di kelas 7A.",pihak:"Sekolah",pj:"Guru BK",tenggat:geser(6),status:"Belum",log:[]},
+    {id:"tc6"+uid(),contoh:true,kasusId:B,sumber:"konf:"+F1,uraian:"Orang tua mendampingi rutinitas malam dan mencatat pola tidur selama dua minggu.",pihak:"Orang tua",pj:"Orang tua/wali",tenggat:geser(9),status:"Berjalan",log:[]},
+    {id:"tc7"+uid(),contoh:true,kasusId:B,sumber:"konf:"+F1,uraian:"Murid berperan sebagai ilustrator dalam proyek kelompok Bahasa Indonesia.",pihak:"Murid",pj:"Murid, didampingi guru mapel",tenggat:geser(12),status:"Belum",log:[]}
+  );
+  DB.contohDimuat=true;simpan();
+}
+function hapusContoh(){["kasus","kunj","konf","tindak"].forEach(function(k){DB[k]=DB[k].filter(function(x){return !x.contoh;});});DB.contohDimuat=true;simpan();}
+function adaContoh(){return ["kasus","kunj","konf","tindak"].some(function(k){return DB[k].some(function(x){return x.contoh;});});}
+
+/* ---------- Mesin formulir sederhana ---------- */
+function opsi(o,v){return o.map(function(x){return '<option'+(x===v?' selected':'')+'>'+esc(x)+'</option>';}).join("");}
+function fld(f,obj,px){
+  var id=px+f.k,v=obj[f.k],h=f.hint?'<p class="hint" id="'+id+'_h">'+esc(f.hint)+'</p>':"",db=f.hint?' aria-describedby="'+id+'_h"':"",cls="f"+(f.w?" wide":"");
+  if(f.t==="checks"){var vs=arr(v);return '<div class="'+cls+'" role="group" aria-labelledby="'+id+'_l"><span class="lbl" id="'+id+'_l">'+esc(f.l)+'</span><div class="checks">'+f.o.map(function(o,i){return '<label><input type="checkbox" name="'+id+'" value="'+esc(o)+'"'+(vs.indexOf(o)>=0?' checked':'')+'> <span>'+esc(o)+'</span></label>';}).join("")+'</div>'+h+'</div>';}
+  if(f.t==="check")return '<div class="'+cls+'"><div class="checks"><label><input type="checkbox" id="'+id+'"'+(v?' checked':'')+'> <span><b>'+esc(f.l)+'</b></span></label></div>'+h+'</div>';
+  var lab='<label for="'+id+'">'+esc(f.l)+(f.req?' <span aria-hidden="true" style="color:var(--bad)">*</span>':'')+'</label>';
+  if(f.t==="area")return '<div class="'+cls+'">'+lab+'<textarea id="'+id+'"'+db+(f.rows?' rows="'+f.rows+'"':'')+'>'+esc(v)+'</textarea>'+h+'</div>';
+  if(f.t==="select")return '<div class="'+cls+'">'+lab+'<select id="'+id+'"'+db+'>'+(f.kosong?'<option value="">— pilih —</option>':'')+opsi(f.o,v)+'</select>'+h+'</div>';
+  if(f.t==="kasus"){var ks=DB.kasus.slice().sort(function(a,b){return (a.status==="Selesai")-(b.status==="Selesai")||String(a.nama).localeCompare(b.nama);});
+    return '<div class="'+cls+'">'+lab+'<select id="'+id+'"'+db+' required><option value="">— pilih kasus/murid —</option>'+ks.map(function(k){return '<option value="'+k.id+'"'+(k.id===v?' selected':'')+'>'+esc((k.kode?k.kode+" · ":"")+labelKasus(k))+'</option>';}).join("")+'</select>'+h+'</div>';}
+  var tp=f.t==="date"?"date":f.t==="time"?"time":f.t==="number"?"number":"text";
+  return '<div class="'+cls+'">'+lab+'<input type="'+tp+'" id="'+id+'"'+db+(f.req?' required':'')+(tp==="number"?' min="0" inputmode="numeric"':'')+' value="'+esc(v)+'"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'>'+h+'</div>';
+}
+function formHTML(spec,obj,px){return '<div class="fg">'+spec.map(function(f){return fld(f,obj,px);}).join("")+'</div>';}
+function bacaForm(spec,obj,px){spec.forEach(function(f){var id=px+f.k;
+  if(f.t==="checks"){obj[f.k]=[].slice.call(document.querySelectorAll('input[name="'+id+'"]:checked')).map(function(x){return x.value;});return;}
+  var el=$(id);if(!el)return;
+  if(f.t==="check"){obj[f.k]=el.checked;return;}
+  obj[f.k]=f.t==="number"?(el.value===""?"":Math.max(0,+el.value||0)):el.value.trim();});return obj;}
+
+/* ---------- Spesifikasi formulir ---------- */
+var F_KASUS=[
+  {k:"nama",l:"Nama murid",req:1,hint:"Boleh inisial saja. Jangan memasukkan data yang tidak diperlukan."},
+  {k:"kelas",l:"Kelas",ph:"mis. 8B"},
+  {k:"kode",l:"Kode kasus",hint:"Dipakai di cetakan agar nama tidak perlu ditulis."},
+  {k:"bidang",l:"Bidang layanan",t:"select",o:BIDANG},
+  {k:"sumber",l:"Sumber informasi/rujukan awal",t:"select",o:SUMBER},
+  {k:"tglBuka",l:"Tanggal kasus dibuka",t:"date"},
+  {k:"prioritas",l:"Prioritas",t:"select",o:PRIOR},
+  {k:"status",l:"Status",t:"select",o:ST_KASUS},
+  {k:"masalah",l:"Gambaran masalah",t:"area",w:1,hint:"Tulis fakta yang teramati (perilaku, frekuensi, sejak kapan), bukan label atau diagnosis."},
+  {k:"kekuatan",l:"Kekuatan dan potensi murid",t:"area",w:1,rows:2},
+  {k:"upaya",l:"Upaya yang sudah dilakukan",t:"area",w:1,rows:2},
+  {k:"tanda",l:"Tanda perlu rujukan/penanganan khusus",t:"checks",o:TANDA,w:1,hint:"Bila ada yang dicentang, koordinasikan dengan kepala sekolah dan rujuk ke tenaga profesional atau tim sekolah aman sesuai prosedur."},
+  {k:"catRujuk",l:"Catatan rujukan (lembaga, tanggal, persetujuan orang tua, hasil)",t:"area",w:1,rows:2}
+];
+var F_KUNJ_R=[
+  {k:"kasusId",l:"Kasus/murid",t:"kasus",req:1},
+  {k:"status",l:"Status",t:"select",o:ST_KUNJ},
+  {k:"tgl",l:"Tanggal rencana",t:"date",req:1},
+  {k:"jam",l:"Jam",t:"time"},
+  {k:"durasi",l:"Perkiraan durasi (menit)",t:"number"},
+  {k:"alamat",l:"Wilayah tujuan",hint:"Cukup kelurahan/RT; alamat lengkap tetap di buku induk."},
+  {k:"petugas",l:"Petugas (peran)",ph:"Guru BK dan wali kelas"},
+  {k:"noSurat",l:"Nomor surat tugas",ph:"diisi bila sudah terbit"},
+  {k:"tujuan",l:"Tujuan kunjungan",t:"checks",o:TUJUAN_KUNJ,w:1},
+  {k:"tujuanLain",l:"Tujuan khusus",t:"area",w:1,rows:2},
+  {k:"siap",l:"Ceklis persiapan",t:"checks",o:SIAP_KUNJ,w:1},
+  {k:"pertanyaan",l:"Daftar pertanyaan wawancara",t:"area",w:1,rows:6}
+];
+var F_KUNJ_L=[
+  {k:"tglLaks",l:"Tanggal pelaksanaan",t:"date"},
+  {k:"durasiLaks",l:"Durasi (menit)",t:"number"},
+  {k:"penerimaan",l:"Penerimaan keluarga",t:"select",o:PENERIMAAN,kosong:1},
+  {k:"ditemui",l:"Yang ditemui",t:"checks",o:DITEMUI,w:1},
+  {k:"obs",l:"Pedoman observasi lingkungan rumah",t:"checks",o:OBS,w:1},
+  {k:"hasilW",l:"Hasil wawancara",t:"area",w:1,hint:"Tulis apa yang disampaikan keluarga, bukan tafsiran."},
+  {k:"hasilO",l:"Catatan observasi",t:"area",w:1,rows:2},
+  {k:"kekuatanK",l:"Kekuatan/dukungan keluarga",t:"area",w:1,rows:2},
+  {k:"hambatan",l:"Hambatan",t:"area",w:1,rows:2},
+  {k:"evaluasi",l:"Rencana evaluasi",t:"area",w:1,rows:2},
+  {k:"catKhusus",l:"Catatan khusus (sangat rahasia, tidak ikut dicetak)",t:"area",w:1,rows:2}
+];
+var F_KONF=[
+  {k:"kasusId",l:"Kasus/murid",t:"kasus",req:1},
+  {k:"status",l:"Status",t:"select",o:ST_KONF},
+  {k:"tgl",l:"Tanggal",t:"date",req:1},
+  {k:"jam",l:"Jam",t:"time"},
+  {k:"tempat",l:"Tempat",ph:"Ruang BK"},
+  {k:"pemimpin",l:"Pemimpin rapat (peran)",ph:"Kepala sekolah"},
+  {k:"notulis",l:"Notulis (peran)",ph:"Guru BK"}
+];
+var F_KONF_N=[
+  {k:"rahasia",l:"Komitmen kerahasiaan sudah dibacakan dan disetujui semua peserta",t:"check",w:1,hint:"Konferensi kasus bersifat terbatas dan tertutup; tujuannya mencari solusi, bukan menghakimi murid."},
+  {k:"positif",l:"1. Hal positif murid (dibahas pertama)",t:"area",w:1,rows:2},
+  {k:"gejala",l:"2. Gejala dan data yang ada",t:"area",w:1,rows:3},
+  {k:"upayaK",l:"3. Upaya yang sudah dilakukan",t:"area",w:1,rows:2},
+  {k:"masukan",l:"4. Pembahasan dan masukan peserta",t:"area",w:1,rows:4},
+  {k:"kesimpulan",l:"5. Kesimpulan dan keputusan",t:"area",w:1,rows:4},
+  {k:"rujukan",l:"Keputusan rujukan",t:"select",o:RUJUK,w:1}
+];
+var F_TL=[
+  {k:"kasusId",l:"Kasus/murid",t:"kasus",req:1},
+  {k:"uraian",l:"Tindak lanjut/kesepakatan",t:"area",w:1,rows:2,req:1},
+  {k:"pihak",l:"Pihak",t:"select",o:PIHAK},
+  {k:"pj",l:"Penanggung jawab (peran)"},
+  {k:"tenggat",l:"Tenggat",t:"date"},
+  {k:"status",l:"Status",t:"select",o:ST_TL}
+];
+
+/* =================== Tampilan =================== */
+var TABS=[["beranda","Beranda"],["kasus","Kasus"],["kunjungan","Kunjungan Rumah"],["konferensi","Konferensi Kasus"],["tindak","Tindak Lanjut"],["cetak","Cetak"],["panduan","Panduan & Sumber"],["atur","Pengaturan"]];
+var ST={view:"beranda",edit:null,detail:null,cariK:"",fK:"",fV:"",fF:"",fT:"",fTP:"",cJ:"rk",cId:"",cNama:"inisial"};
+var TERBUKA=false;
+
+function chip(s){if(!s)return "";var c=String(s).toLowerCase().split(/[\s/]/)[0];return '<span class="chip c-'+esc(c)+'">'+esc(s)+'</span>';}
+function chipContoh(o){return o&&o.contoh?' <span class="chip contoh">contoh</span>':'';}
+function terlambat(t){return !!(t.tenggat&&selisih(t.tenggat)<0&&t.status!=="Selesai"&&t.status!=="Tidak terlaksana");}
+function tglBox(s){if(!s)return '<div class="tgl"><b>?</b><small>tanpa tgl</small></div>';var p=s.split("-");return '<div class="tgl" aria-hidden="true"><b>'+(+p[2])+'</b><small>'+BLN3[+p[1]-1]+' '+p[0].slice(2)+'</small></div>';}
+function sumberLabel(src){if(!src)return "Ditambahkan langsung";var p=src.split(":"),o;if(p[0]==="kunj"){o=byId(DB.kunj,p[1]);return o?"Kunjungan rumah "+fmtTgl(o.tglLaks||o.tgl):"Kunjungan (terhapus)";}if(p[0]==="konf"){o=byId(DB.konf,p[1]);return o?"Konferensi kasus "+fmtTgl(o.tgl):"Konferensi (terhapus)";}return src;}
+function tlKasus(id){return DB.tindak.filter(function(t){return t.kasusId===id;});}
+function progres(list){var a=list.filter(function(t){return t.status!=="Tidak terlaksana";});if(!a.length)return null;return Math.round(a.filter(function(t){return t.status==="Selesai";}).length/a.length*100);}
+function bar(p){return p==null?'<span class="note">belum ada tindak lanjut</span>':'<div class="row" style="gap:8px;flex-wrap:nowrap"><div class="bar" style="flex:1" role="img" aria-label="'+p+'% tindak lanjut selesai"><i style="width:'+p+'%"></i></div><span class="note">'+p+'%</span></div>';}
+
+function renderTabs(){var nTL=DB.tindak.filter(terlambat).length;
+  $("tabs").innerHTML=TABS.map(function(t){return '<button type="button" data-tab="'+t[0]+'"'+(ST.view===t[0]?' aria-current="page"':'')+'>'+t[1]+(t[0]==="tindak"&&nTL?'<span class="nb" aria-label="'+nTL+' terlambat">'+nTL+'</span>':'')+'</button>';}).join("");
+  var a=DB.atur;$("subSekolah").textContent=(a.sekolah?a.sekolah+" · ":"")+"Ruang kerja rahasia guru BK";}
+function render(){if(!TERBUKA)return;renderTabs();var m=$("main"),h="";
+  if(ST.edit)h=renderEdit();
+  else if(ST.view==="kasus"&&ST.detail)h=vDetail();
+  else h=(V[ST.view]||V.beranda)();
+  m.innerHTML=h;}
+function go(v){ST.view=v;ST.edit=null;ST.detail=null;render();window.scrollTo(0,0);$("main").focus({preventScroll:true});}
+
+var INGAT='<div class="rahasia" role="note"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg><div><b>Pengingat kerahasiaan.</b> Catatan ini hanya untuk kepentingan layanan murid. Bagikan seperlunya kepada pihak yang berwenang, tulis fakta bukan label, dan jangan menyusun diagnosis klinis. Kasus berat dirujuk ke tenaga profesional.</div></div>';
+function bannerContoh(){return adaContoh()?'<div class="alert warn row between" style="margin-bottom:16px"><span>Aplikasi berisi <b>data contoh</b> dengan nama fiktif (berlabel <span class="chip contoh">contoh</span>). Hapus sebelum mulai mencatat kasus nyata.</span><button class="btn sm" type="button" data-act="hapusContoh">Hapus data contoh</button></div>':'';}
+
+var V={};
+V.beranda=function(){
+  var aktif=DB.kasus.filter(function(k){return k.status!=="Selesai";});
+  var agK=DB.kunj.filter(function(v){return v.status==="Direncanakan";}),agF=DB.konf.filter(function(f){return f.status==="Direncanakan";});
+  var late=DB.tindak.filter(terlambat),dekat=DB.tindak.filter(function(t){var s=selisih(t.tenggat);return !terlambat(t)&&t.status!=="Selesai"&&t.status!=="Tidak terlaksana"&&s!=null&&s<=7;});
+  var pr=progres(DB.tindak.filter(function(t){var k=kasusOf(t.kasusId);return k&&k.status!=="Selesai";}));
+  var ag=agK.map(function(v){return {j:"v",o:v,t:v.tgl};}).concat(agF.map(function(f){return {j:"f",o:f,t:f.tgl};})).sort(function(a,b){return String(a.t).localeCompare(b.t);});
+  var perhatian=aktif.filter(function(k){return k.prioritas==="Tinggi"||arr(k.tanda).length;});
+  var h=INGAT+bannerContoh()+'<div class="row between"><h2>Selamat bekerja'+(DB.atur.guru?", "+esc(DB.atur.guru.split(/[ ,]/)[0]):"")+'</h2><div class="row"><button class="btn" type="button" data-act="baruKasus">+ Kasus</button><button class="btn tl" type="button" data-act="baruKunj">+ Rencana kunjungan</button><button class="btn pri" type="button" data-act="baruKonf">+ Konferensi kasus</button></div></div>';
+  h+='<div class="grid g4 mt"><div class="stat acc"><b>'+aktif.length+'</b><span>kasus aktif/dipantau</span></div><div class="stat tl"><b>'+agK.length+'</b><span>kunjungan rumah direncanakan</span></div><div class="stat tl"><b>'+agF.length+'</b><span>konferensi kasus direncanakan</span></div><div class="stat'+(late.length?' hot':'')+'"><b>'+late.length+'</b><span>tindak lanjut lewat tenggat</span></div><div class="stat"><b>'+(pr==null?"–":pr+"%")+'</b><span>tindak lanjut kasus aktif selesai</span></div></div>';
+  h+='<div class="grid g2 mt"><section class="card" aria-labelledby="hAg"><h3 id="hAg">Agenda berikutnya</h3>';
+  h+=ag.length?'<ul class="list mt">'+ag.slice(0,8).map(function(x){var s=selisih(x.t),k=kasusOf(x.o.kasusId);return '<li class="item">'+tglBox(x.t)+'<div class="bd"><button class="linkish" type="button" data-act="'+(x.j==="v"?"ubahKunj":"ubahKonf")+'" data-id="'+x.o.id+'">'+(x.j==="v"?"Kunjungan rumah":"Konferensi kasus")+' · '+esc(labelKasus(k))+'</button>'+chipContoh(x.o)+'<p>'+fmtTgl(x.t,1)+(x.o.jam?", "+esc(x.o.jam):"")+(s!=null?' · '+(s<0?'<b style="color:var(--bad)">lewat '+(-s)+' hari, perbarui status</b>':s===0?"hari ini":s+" hari lagi"):"")+'</p></div></li>';}).join("")+'</ul>':'<p class="note">Belum ada agenda. Buat rencana kunjungan rumah atau konferensi kasus.</p>';
+  h+='</section><section class="card" aria-labelledby="hTL"><h3 id="hTL">Tindak lanjut yang perlu dipantau</h3>';
+  var tl=late.concat(dekat);
+  h+=tl.length?'<ul class="list mt">'+tl.slice(0,8).map(function(t){var k=kasusOf(t.kasusId),s=selisih(t.tenggat);return '<li class="item"><div class="bd"><button class="linkish" type="button" data-act="catat" data-id="'+t.id+'">'+esc(t.uraian)+'</button>'+chipContoh(t)+'<p>'+esc(labelKasus(k))+' · '+esc(t.pihak)+' · '+(s<0?'<b style="color:var(--bad)">terlambat '+(-s)+' hari</b>':s===0?"tenggat hari ini":"tenggat "+s+" hari lagi")+'</p></div>'+chip(t.status)+'</li>';}).join("")+'</ul>':'<p class="note">Tidak ada tindak lanjut yang terlambat atau jatuh tempo dalam 7 hari.</p>';
+  h+='</section></div>';
+  if(perhatian.length){h+='<section class="card mt" aria-labelledby="hPh"><h3 id="hPh">Kasus yang perlu perhatian khusus</h3><ul class="list mt">'+perhatian.map(function(k){return '<li class="item"><div class="bd"><button class="linkish" type="button" data-act="detail" data-id="'+k.id+'">'+esc((k.kode?k.kode+" · ":"")+labelKasus(k))+'</button>'+chipContoh(k)+'<p>'+(arr(k.tanda).length?'Tanda rujukan: '+esc(arr(k.tanda).join("; ")):"Prioritas tinggi")+'</p></div>'+chip(k.prioritas)+'</li>';}).join("")+'</ul><p class="note">Kasus dengan tanda risiko dikoordinasikan dengan kepala sekolah dan dirujuk ke tenaga profesional atau tim sekolah aman. Lihat <button class="linkish" type="button" data-tab="panduan" style="color:var(--acc)">Panduan</button>.</p></section>';}
+  var byB={};BIDANG.forEach(function(b){byB[b]=0;});aktif.forEach(function(k){byB[k.bidang]=(byB[k.bidang]||0)+1;});var mx=Math.max(1,Math.max.apply(null,BIDANG.map(function(b){return byB[b];})));
+  var warna={Pribadi:"var(--acc)",Sosial:"var(--teal)",Belajar:"#4c7d2e",Karier:"#8a5a00"};
+  h+='<section class="card mt" aria-labelledby="hBd"><h3 id="hBd">Sebaran kasus aktif per bidang</h3>'+BIDANG.map(function(b){return '<div class="hbar"><span>'+b+'</span><div class="t"><i style="width:'+(byB[b]/mx*100)+'%;background:'+warna[b]+'"></i></div><b>'+byB[b]+'</b></div>';}).join("")+'</section>';
+  return h;
+};
+
+V.kasus=function(){
+  var q=ST.cariK.toLowerCase(),list=DB.kasus.filter(function(k){return (!ST.fK||k.status===ST.fK)&&(!q||(k.nama+" "+k.kelas+" "+k.kode).toLowerCase().indexOf(q)>=0);}).sort(function(a,b){return (a.status==="Selesai")-(b.status==="Selesai")||PRIOR.indexOf(b.prioritas)-PRIOR.indexOf(a.prioritas)||String(b.tglBuka).localeCompare(a.tglBuka);});
+  var h=INGAT+'<div class="row between"><h2>Berkas kasus</h2><button class="btn pri" type="button" data-act="baruKasus">+ Kasus baru</button></div>';
+  h+='<div class="row mt"><div style="flex:1;min-width:200px"><label class="sr" for="cariK">Cari kasus</label><input type="text" id="cariK" placeholder="Cari nama, kelas, atau kode…" value="'+esc(ST.cariK)+'"></div><div><label class="sr" for="fK">Saring status</label><select id="fK"><option value="">Semua status</option>'+opsi(ST_KASUS,ST.fK)+'</select></div></div>';
+  h+='<div class="card mt">'+(list.length?'<ul class="list">'+list.map(function(k){var tl=tlKasus(k.id),nv=DB.kunj.filter(function(v){return v.kasusId===k.id;}).length,nf=DB.konf.filter(function(f){return f.kasusId===k.id;}).length;
+    return '<li class="item"><div class="bd"><div class="row" style="gap:6px"><button class="linkish" type="button" data-act="detail" data-id="'+k.id+'">'+esc((k.kode?k.kode+" · ":"")+labelKasus(k))+'</button>'+chip(k.status)+(k.prioritas==="Tinggi"?chip("Tinggi"):"")+chipContoh(k)+'</div><p>'+esc(k.bidang)+' · dibuka '+fmtTgl(k.tglBuka)+' · '+nv+' kunjungan · '+nf+' konferensi · '+tl.length+' tindak lanjut'+(arr(k.tanda).length?' · <b style="color:var(--bad)">perlu rujukan</b>':'')+'</p><div style="max-width:360px;margin-top:6px">'+bar(progres(tl))+'</div></div></li>';}).join("")+'</ul>':'<p class="note">Belum ada kasus'+(q||ST.fK?" yang cocok":"")+'.</p>')+'</div>';
+  return h;
+};
+
+function vDetail(){
+  var k=kasusOf(ST.detail);if(!k){ST.detail=null;return V.kasus();}
+  var vs=DB.kunj.filter(function(v){return v.kasusId===k.id;}),fs=DB.konf.filter(function(f){return f.kasusId===k.id;}),tl=tlKasus(k.id);
+  var h='<p><button class="btn sm" type="button" data-act="tutupDetail">← Semua kasus</button></p>';
+  h+='<div class="card"><div class="row between"><div><h2>'+esc(labelKasus(k))+'</h2><p class="mut" style="margin:4px 0 0">'+esc(k.kode||"")+' · bidang '+esc(k.bidang)+' · sumber: '+esc(k.sumber)+' · dibuka '+fmtTgl(k.tglBuka)+'</p></div><div class="row">'+chip(k.status)+chip("Prioritas "+k.prioritas)+chipContoh(k)+'</div></div>';
+  if(arr(k.tanda).length)h+='<div class="alert bad mt"><b>Tanda perlu rujukan/penanganan khusus:</b><ul style="margin:6px 0 0 18px;padding:0">'+arr(k.tanda).map(function(t){return '<li>'+esc(t)+'</li>';}).join("")+'</ul><p style="margin:6px 0 0">Koordinasikan dengan kepala sekolah; rujuk ke psikolog/layanan profesional atau tim sekolah aman sesuai prosedur. '+(k.catRujuk?'<br><b>Catatan rujukan:</b> '+esc(k.catRujuk):'')+'</p></div>';
+  h+='<div class="grid g2 mt"><div><h3>Gambaran masalah</h3><p style="white-space:pre-wrap">'+esc(k.masalah||"-")+'</p></div><div><h3>Kekuatan murid</h3><p style="white-space:pre-wrap">'+esc(k.kekuatan||"-")+'</p><h3>Upaya yang sudah dilakukan</h3><p style="white-space:pre-wrap">'+esc(k.upaya||"-")+'</p></div></div>';
+  h+='<div class="row mt"><button class="btn" type="button" data-act="ubahKasus" data-id="'+k.id+'">Ubah data kasus</button><button class="btn tl" type="button" data-act="baruKunj" data-k="'+k.id+'">+ Kunjungan rumah</button><button class="btn pri" type="button" data-act="baruKonf" data-k="'+k.id+'">+ Konferensi kasus</button><button class="btn" type="button" data-act="baruTL" data-k="'+k.id+'">+ Tindak lanjut</button><button class="btn" type="button" data-act="cetakKe" data-j="rp" data-id="'+k.id+'">Cetak rekap pemantauan</button></div></div>';
+  var ev=[{t:k.tglBuka,c:"",h:'<b>Kasus dibuka</b> · sumber: '+esc(k.sumber)}];
+  vs.forEach(function(v){ev.push({t:v.tglLaks||v.tgl,c:"",h:'<b>Kunjungan rumah</b> '+chip(v.status)+' <button class="btn sm" type="button" data-act="ubahKunj" data-id="'+v.id+'">Buka</button><br><span class="note">'+esc(arr(v.tujuan).slice(0,2).join("; "))+'</span>'});});
+  fs.forEach(function(f){ev.push({t:f.tgl,c:"k",h:'<b>Konferensi kasus</b> '+chip(f.status)+' <button class="btn sm" type="button" data-act="ubahKonf" data-id="'+f.id+'">Buka</button><br><span class="note">'+esc(f.rujukan&&f.rujukan!==RUJUK[0]?"Keputusan: "+f.rujukan:(f.tempat||""))+'</span>'});});
+  tl.forEach(function(t){t.log.forEach(function(l){ev.push({t:l.tgl,c:"t",h:'Pemantauan: <i>'+esc(t.uraian)+'</i><br><span class="note">'+esc(l.catatan)+'</span>'});});});
+  ev.sort(function(a,b){return String(b.t).localeCompare(a.t);});
+  h+='<div class="grid g2 mt"><section class="card"><h3>Linimasa</h3><ul class="tline mt">'+ev.map(function(e){return '<li class="'+e.c+'"><div class="when">'+fmtTgl(e.t,1)+'</div>'+e.h+'</li>';}).join("")+'</ul></section>';
+  h+='<section class="card"><h3>Tindak lanjut &amp; kesepakatan</h3>'+bar(progres(tl))+(tl.length?'<ul class="list mt">'+tl.map(function(t){return '<li class="item"><div class="bd"><button class="linkish" type="button" data-act="catat" data-id="'+t.id+'">'+esc(t.uraian)+'</button><p>'+esc(t.pihak)+' · '+esc(t.pj||"-")+' · tenggat '+fmtTgl(t.tenggat)+(terlambat(t)?' <b style="color:var(--bad)">(terlambat)</b>':'')+' · '+t.log.length+' catatan pantau</p></div>'+chip(t.status)+'</li>';}).join("")+'</ul>':'<p class="note mt">Belum ada tindak lanjut.</p>')+'</section></div>';
+  return h;
+}
+
+V.kunjungan=function(){
+  var list=DB.kunj.filter(function(v){return !ST.fV||v.status===ST.fV;}).sort(function(a,b){return String(b.tgl).localeCompare(a.tgl);});
+  var h=INGAT+'<div class="row between"><h2>Kunjungan rumah</h2><button class="btn pri" type="button" data-act="baruKunj">+ Rencana kunjungan</button></div>';
+  h+='<p class="note">Alur: <b>rencana</b> (tujuan, izin, ceklis persiapan, daftar pertanyaan) → <b>laporan</b> (yang ditemui, wawancara, observasi, hambatan) → <b>kesepakatan</b> dengan orang tua → <b>pemantauan</b> di menu Tindak Lanjut.</p>';
+  h+='<div class="row"><label for="fV" class="sr">Saring status</label><select id="fV" style="max-width:240px"><option value="">Semua status</option>'+opsi(ST_KUNJ,ST.fV)+'</select></div>';
+  h+='<div class="card mt">'+(list.length?'<ul class="list">'+list.map(function(v){var k=kasusOf(v.kasusId),nk=DB.tindak.filter(function(t){return t.sumber==="kunj:"+v.id;}).length,sp=arr(v.siap).length;
+    return '<li class="item">'+tglBox(v.tglLaks||v.tgl)+'<div class="bd"><div class="row" style="gap:6px"><button class="linkish" type="button" data-act="ubahKunj" data-id="'+v.id+'">'+esc(labelKasus(k))+'</button>'+chip(v.status)+chipContoh(v)+'</div><p>'+fmtTgl(v.tglLaks||v.tgl,1)+(v.jam?" "+esc(v.jam):"")+' · '+esc(v.petugas||"petugas belum diisi")+' · persiapan '+sp+'/'+SIAP_KUNJ.length+' · '+nk+' kesepakatan</p><div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-act="cetakKe" data-j="rk" data-id="'+v.id+'">Cetak rencana</button>'+(v.status==="Terlaksana"?'<button class="btn sm" type="button" data-act="cetakKe" data-j="lk" data-id="'+v.id+'">Cetak laporan</button>':'')+(nk?'<button class="btn sm" type="button" data-act="cetakKe" data-j="ks" data-id="kunj:'+v.id+'">Lembar kesepakatan</button>':'')+'</div></div></li>';}).join("")+'</ul>':'<p class="note">Belum ada kunjungan rumah.</p>')+'</div>';
+  return h;
+};
+
+V.konferensi=function(){
+  var list=DB.konf.filter(function(f){return !ST.fF||f.status===ST.fF;}).sort(function(a,b){return String(b.tgl).localeCompare(a.tgl);});
+  var h=INGAT+'<div class="row between"><h2>Konferensi kasus</h2><button class="btn pri" type="button" data-act="baruKonf">+ Konferensi kasus</button></div>';
+  h+='<p class="note">Pertemuan terbatas dan tertutup bersama pihak yang dapat memberi keterangan, kemudahan, dan komitmen. Dibuka dengan komitmen kerahasiaan, dimulai dari hal positif murid, berorientasi solusi, dan diakhiri pembagian peran.</p>';
+  h+='<div class="row"><label for="fF" class="sr">Saring status</label><select id="fF" style="max-width:240px"><option value="">Semua status</option>'+opsi(ST_KONF,ST.fF)+'</select></div>';
+  h+='<div class="card mt">'+(list.length?'<ul class="list">'+list.map(function(f){var k=kasusOf(f.kasusId),hd=arr(f.peserta).filter(function(p){return p.hadir;}).length,nk=DB.tindak.filter(function(t){return t.sumber==="konf:"+f.id;}).length;
+    return '<li class="item">'+tglBox(f.tgl)+'<div class="bd"><div class="row" style="gap:6px"><button class="linkish" type="button" data-act="ubahKonf" data-id="'+f.id+'">'+esc(labelKasus(k))+'</button>'+chip(f.status)+chipContoh(f)+'</div><p>'+fmtTgl(f.tgl,1)+(f.jam?" "+esc(f.jam):"")+' · '+esc(f.tempat||"-")+' · peserta '+hd+'/'+arr(f.peserta).length+' hadir · '+nk+' tindak lanjut'+(f.status==="Terlaksana"&&!f.rahasia?' · <b style="color:var(--warn)">komitmen kerahasiaan belum dicentang</b>':'')+'</p><div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-act="cetakKe" data-j="uk" data-id="'+f.id+'">Cetak undangan</button><button class="btn sm" type="button" data-act="cetakKe" data-j="nk" data-id="'+f.id+'">Cetak notulen &amp; daftar hadir</button>'+(nk?'<button class="btn sm" type="button" data-act="cetakKe" data-j="ks" data-id="konf:'+f.id+'">Lembar kesepakatan</button>':'')+'</div></div></li>';}).join("")+'</ul>':'<p class="note">Belum ada konferensi kasus.</p>')+'</div>';
+  return h;
+};
+
+V.tindak=function(){
+  var list=DB.tindak.filter(function(t){return (!ST.fT||(ST.fT==="Terlambat"?terlambat(t):t.status===ST.fT))&&(!ST.fTP||t.pihak===ST.fTP);}).sort(function(a,b){return (a.status==="Selesai")-(b.status==="Selesai")||String(a.tenggat||"9").localeCompare(b.tenggat||"9");});
+  var h=INGAT+'<div class="row between"><h2>Rencana &amp; pemantauan tindak lanjut</h2><div class="row"><button class="btn" type="button" data-act="csvTL">Ekspor CSV</button><button class="btn pri" type="button" data-act="baruTL">+ Tindak lanjut</button></div></div>';
+  h+='<div class="row mt"><label class="sr" for="fT">Saring status</label><select id="fT" style="max-width:220px"><option value="">Semua status</option><option'+(ST.fT==="Terlambat"?' selected':'')+'>Terlambat</option>'+opsi(ST_TL,ST.fT)+'</select><label class="sr" for="fTP">Saring pihak</label><select id="fTP" style="max-width:200px"><option value="">Semua pihak</option>'+opsi(PIHAK,ST.fTP)+'</select></div>';
+  h+='<div class="card mt"><div class="tw"><table><thead><tr><th scope="col">Tenggat</th><th scope="col">Tindak lanjut / kesepakatan</th><th scope="col">Kasus</th><th scope="col">Pihak · PJ</th><th scope="col">Status</th><th scope="col">Pantau</th></tr></thead><tbody>'+
+   (list.length?list.map(function(t){var k=kasusOf(t.kasusId);return '<tr><td class="'+(terlambat(t)?"late":"")+'">'+fmtTgl(t.tenggat)+(terlambat(t)?'<br><small>terlambat</small>':'')+'</td><td><button class="linkish" type="button" data-act="ubahTL" data-id="'+t.id+'">'+esc(t.uraian)+'</button>'+chipContoh(t)+'<br><small class="mut">'+esc(sumberLabel(t.sumber))+'</small></td><td>'+esc(labelKasus(k))+'</td><td>'+esc(t.pihak)+'<br><small class="mut">'+esc(t.pj||"-")+'</small></td><td><label class="sr" for="st_'+t.id+'">Status</label><select id="st_'+t.id+'" data-st="'+t.id+'" style="min-width:130px">'+opsi(ST_TL,t.status)+'</select></td><td><button class="btn sm" type="button" data-act="catat" data-id="'+t.id+'">Catat ('+t.log.length+')</button></td></tr>';}).join(""):'<tr><td colspan="6" class="note">Tidak ada tindak lanjut.</td></tr>')+'</tbody></table></div></div>';
+  return h;
+};
+
+/* =================== Editor =================== */
+function salin(o){return JSON.parse(JSON.stringify(o));}
+function kesDari(src){return DB.tindak.filter(function(t){return t.sumber===src;}).map(salin);}
+function bukaEdit(jenis,obj,baru,ekstra){ST.edit=Object.assign({jenis:jenis,obj:obj,baru:baru},ekstra||{});render();window.scrollTo(0,0);setTimeout(function(){var f=document.querySelector("#main input,#main select,#main textarea");if(f)f.focus();},30);}
+function kasusBaru(){var n=DB.kasus.length+1,kode;do{kode="KS-"+pad2(n++);}while(DB.kasus.some(function(k){return k.kode===kode;}));return {id:"k"+uid(),kode:kode,nama:"",kelas:"",bidang:"Pribadi",sumber:SUMBER[0],tglBuka:today(),prioritas:"Sedang",status:"Aktif",masalah:"",kekuatan:"",upaya:"",tanda:[],catRujuk:""};}
+function kunjBaru(kid){return {id:"v"+uid(),kasusId:kid||"",status:"Direncanakan",tgl:geser(3),jam:"15:30",durasi:60,alamat:"",tujuan:[TUJUAN_KUNJ[0]],tujuanLain:"",petugas:"Guru BK dan wali kelas",noSurat:"",siap:[],pertanyaan:PERTANYAAN_DEF,tglLaks:"",durasiLaks:"",ditemui:[],penerimaan:"",obs:[],hasilW:"",hasilO:"",kekuatanK:"",hambatan:"",catKhusus:"",evaluasi:""};}
+function konfBaru(kid){return {id:"f"+uid(),kasusId:kid||"",status:"Direncanakan",tgl:geser(7),jam:"13:00",tempat:"Ruang BK",pemimpin:"Kepala sekolah",notulis:"Guru BK",rahasia:false,peserta:["Kepala sekolah","Guru BK","Wali kelas","Orang tua/wali"].map(function(p){return {peran:p,nama:"",hadir:false};}),positif:"",gejala:"",upayaK:"",masukan:"",kesimpulan:"",rujukan:RUJUK[0]};}
+function tlBaru(kid){return {id:"t"+uid(),kasusId:kid||"",sumber:"",uraian:"",pihak:"Sekolah",pj:"",tenggat:geser(14),status:"Belum",log:[]};}
+
+function kesHTML(){var r=ST.edit.kes;return '<div class="tw"><table class="subt"><thead><tr><th scope="col">Kesepakatan / tindak lanjut</th><th scope="col">Pihak</th><th scope="col">Penanggung jawab</th><th scope="col">Tenggat</th><th scope="col"><span class="sr">Hapus</span></th></tr></thead><tbody>'+
+  (r.length?r.map(function(t,i){return '<tr data-kes="'+i+'"><td style="min-width:220px"><label class="sr" for="kU'+i+'">Uraian '+(i+1)+'</label><input type="text" id="kU'+i+'" class="kU" value="'+esc(t.uraian)+'" placeholder="mis. Orang tua memantau jam belajar"></td><td><label class="sr" for="kP'+i+'">Pihak</label><select id="kP'+i+'" class="kP">'+opsi(PIHAK,t.pihak)+'</select></td><td><label class="sr" for="kJ'+i+'">Penanggung jawab</label><input type="text" id="kJ'+i+'" class="kJ" value="'+esc(t.pj)+'"></td><td><label class="sr" for="kT'+i+'">Tenggat</label><input type="date" id="kT'+i+'" class="kT" value="'+esc(t.tenggat)+'"></td><td><button class="btn sm bad" type="button" data-act="hapusKes" data-i="'+i+'" aria-label="Hapus baris '+(i+1)+'">×</button></td></tr>';}).join(""):'<tr><td colspan="5" class="note">Belum ada kesepakatan.</td></tr>')+'</tbody></table></div><button class="btn sm mt" type="button" data-act="tambahKes">+ Baris kesepakatan</button>';}
+function syncKes(){if(!ST.edit||!ST.edit.kes)return;document.querySelectorAll("tr[data-kes]").forEach(function(tr){var t=ST.edit.kes[+tr.getAttribute("data-kes")];if(!t)return;t.uraian=tr.querySelector(".kU").value.trim();t.pihak=tr.querySelector(".kP").value;t.pj=tr.querySelector(".kJ").value.trim();t.tenggat=tr.querySelector(".kT").value;});}
+function pesHTML(){var r=ST.edit.obj.peserta;return '<div class="tw"><table class="subt"><thead><tr><th scope="col">Peran</th><th scope="col">Nama (opsional)</th><th scope="col">Hadir</th><th scope="col"><span class="sr">Hapus</span></th></tr></thead><tbody>'+
+  r.map(function(p,i){return '<tr data-pes="'+i+'"><td><label class="sr" for="pR'+i+'">Peran</label><select id="pR'+i+'" class="pR">'+opsi(PERAN.indexOf(p.peran)<0?PERAN.concat([p.peran]):PERAN,p.peran)+'</select></td><td><label class="sr" for="pN'+i+'">Nama</label><input type="text" id="pN'+i+'" class="pN" value="'+esc(p.nama)+'"></td><td><label><span class="sr">Hadir</span><input type="checkbox" class="pH"'+(p.hadir?' checked':'')+' style="width:20px;height:20px;accent-color:var(--acc)"></label></td><td><button class="btn sm bad" type="button" data-act="hapusPes" data-i="'+i+'" aria-label="Hapus peserta '+(i+1)+'">×</button></td></tr>';}).join("")+'</tbody></table></div><button class="btn sm mt" type="button" data-act="tambahPes">+ Peserta</button>';}
+function syncPes(){if(!ST.edit||!ST.edit.obj.peserta)return;document.querySelectorAll("tr[data-pes]").forEach(function(tr){var p=ST.edit.obj.peserta[+tr.getAttribute("data-pes")];if(!p)return;p.peran=tr.querySelector(".pR").value;p.nama=tr.querySelector(".pN").value.trim();p.hadir=tr.querySelector(".pH").checked;});}
+
+function aksiEdit(){var e=ST.edit;return '<div class="sticky-act row"><button class="btn pri" type="button" data-act="simpanEdit">Simpan</button><button class="btn" type="button" data-act="batalEdit">Batal</button>'+(e.baru?'':'<button class="btn bad" type="button" data-act="hapusEdit" style="margin-left:auto">Hapus</button>')+'</div>';}
+function renderEdit(){var e=ST.edit,o=e.obj,h="";
+  if(e.jenis==="kasus")h='<h2>'+(e.baru?"Kasus baru":"Ubah data kasus")+'</h2><p class="note">Isi seperlunya. Tulis fakta yang teramati; jangan menuliskan diagnosis.</p><form class="mt" onsubmit="return false">'+formHTML(F_KASUS,o,"e_")+'</form>';
+  else if(e.jenis==="kunj")h='<h2>'+(e.baru?"Rencana kunjungan rumah":"Kunjungan rumah")+'</h2>'+(DB.kasus.length?'':'<div class="alert warn mt">Buat berkas kasus terlebih dahulu di menu Kasus.</div>')+'<form class="mt" onsubmit="return false"><fieldset><legend><span class="step">1</span>Rencana &amp; persiapan</legend>'+formHTML(F_KUNJ_R,o,"e_")+'</fieldset><fieldset><legend><span class="step">2</span>Laporan pelaksanaan</legend><p class="note" style="margin-top:0">Isi setelah kunjungan, lalu ubah status menjadi <b>Terlaksana</b>.</p>'+formHTML(F_KUNJ_L,o,"e_")+'</fieldset><fieldset><legend><span class="step">3</span>Kesepakatan dengan orang tua &amp; tindak lanjut</legend><div id="kesBox">'+kesHTML()+'</div><p class="note">Kesepakatan otomatis masuk ke menu Tindak Lanjut untuk dipantau, dan bisa dicetak sebagai lembar kesepakatan untuk ditandatangani.</p></fieldset></form>';
+  else if(e.jenis==="konf")h='<h2>'+(e.baru?"Konferensi kasus baru":"Konferensi kasus")+'</h2>'+(DB.kasus.length?'':'<div class="alert warn mt">Buat berkas kasus terlebih dahulu di menu Kasus.</div>')+'<form class="mt" onsubmit="return false"><fieldset><legend><span class="step">1</span>Jadwal</legend>'+formHTML(F_KONF,o,"e_")+'</fieldset><fieldset><legend><span class="step">2</span>Peserta terbatas</legend><p class="note" style="margin-top:0">Undang hanya pihak yang dapat memberi keterangan, kemudahan, dan komitmen penyelesaian.</p><div id="pesBox">'+pesHTML()+'</div></fieldset><fieldset><legend><span class="step">3</span>Notulen</legend>'+formHTML(F_KONF_N,o,"e_")+'<div class="row"><button class="btn sm" type="button" data-act="aiKonf">Draf kesimpulan dengan AI (opsional)</button><span class="note">Teks disamarkan dan ditampilkan dulu sebelum dikirim.</span></div></fieldset><fieldset><legend><span class="step">4</span>Pembagian peran &amp; tindak lanjut</legend><div id="kesBox">'+kesHTML()+'</div></fieldset></form>';
+  else if(e.jenis==="tl"){h='<h2>'+(e.baru?"Tindak lanjut baru":"Ubah tindak lanjut")+'</h2><form class="mt" onsubmit="return false">'+formHTML(F_TL,o,"e_")+'</form>';
+    if(o.log.length)h+='<h3 class="mt">Catatan pemantauan</h3><ul class="tline mt">'+o.log.slice().reverse().map(function(l){return '<li class="t"><div class="when">'+fmtTgl(l.tgl,1)+'</div>'+esc(l.catatan)+'</li>';}).join("")+'</ul>';}
+  return '<div class="card">'+h+aksiEdit()+'</div>';
+}
+function simpanEdit(){var e=ST.edit,o=e.obj,src;
+  if(e.jenis==="kasus"){bacaForm(F_KASUS,o,"e_");if(!o.nama){toast("Nama murid wajib diisi.");$("e_nama").focus();return;}
+    if(e.baru)DB.kasus.push(o);else{var i=DB.kasus.findIndex(function(x){return x.id===o.id;});DB.kasus[i]=o;}simpan();ST.edit=null;ST.view="kasus";ST.detail=o.id;render();toast("Kasus disimpan.");return;}
+  if(e.jenis==="tl"){bacaForm(F_TL,o,"e_");if(!o.kasusId||!o.uraian){toast("Pilih kasus dan isi uraian tindak lanjut.");return;}
+    if(e.baru)DB.tindak.push(o);else{var j=DB.tindak.findIndex(function(x){return x.id===o.id;});DB.tindak[j]=o;}simpan();ST.edit=null;render();toast("Tindak lanjut disimpan.");return;}
+  if(e.jenis==="kunj"){bacaForm(F_KUNJ_R,o,"e_");bacaForm(F_KUNJ_L,o,"e_");src="kunj:"+o.id;}
+  else{bacaForm(F_KONF,o,"e_");bacaForm(F_KONF_N,o,"e_");syncPes();o.peserta=o.peserta.filter(function(p){return p.peran;});src="konf:"+o.id;}
+  if(!o.kasusId){toast("Pilih kasus/murid terlebih dahulu.");$("e_kasusId").focus();return;}
+  if(!o.tgl){toast("Tanggal wajib diisi.");$("e_tgl").focus();return;}
+  syncKes();var kes=e.kes.filter(function(t){return t.uraian;}),ids=kes.map(function(t){return t.id;});
+  DB.tindak=DB.tindak.filter(function(t){return t.sumber!==src||ids.indexOf(t.id)>=0;});
+  kes.forEach(function(t){t.kasusId=o.kasusId;t.sumber=src;if(o.contoh)t.contoh=true;var ix=DB.tindak.findIndex(function(x){return x.id===t.id;});if(ix>=0)DB.tindak[ix]=t;else DB.tindak.push(t);});
+  var L=e.jenis==="kunj"?DB.kunj:DB.konf;if(e.baru)L.push(o);else{var m=L.findIndex(function(x){return x.id===o.id;});L[m]=o;}
+  simpan();ST.edit=null;render();toast(e.jenis==="kunj"?"Kunjungan rumah disimpan.":"Konferensi kasus disimpan.");
+}
+function hapusEdit(){var e=ST.edit,o=e.obj;
+  if(e.jenis==="kasus"){var nv=DB.kunj.filter(function(v){return v.kasusId===o.id;}).length,nf=DB.konf.filter(function(f){return f.kasusId===o.id;}).length,nt=tlKasus(o.id).length;
+    konfirmasi("Hapus kasus?","Berkas kasus beserta "+nv+" kunjungan, "+nf+" konferensi, dan "+nt+" tindak lanjut terkait akan dihapus dari perangkat ini.","Hapus",function(){DB.kasus=DB.kasus.filter(function(x){return x.id!==o.id;});DB.kunj=DB.kunj.filter(function(x){return x.kasusId!==o.id;});DB.konf=DB.konf.filter(function(x){return x.kasusId!==o.id;});DB.tindak=DB.tindak.filter(function(x){return x.kasusId!==o.id;});simpan();ST.edit=null;ST.detail=null;ST.view="kasus";render();toast("Kasus dihapus.");});return;}
+  var nama={kunj:"kunjungan rumah",konf:"konferensi kasus",tl:"tindak lanjut"}[e.jenis];
+  konfirmasi("Hapus "+nama+"?",e.jenis==="tl"?"Catatan pemantauannya ikut terhapus.":"Kesepakatan/tindak lanjut yang berasal dari "+nama+" ini ikut terhapus.","Hapus",function(){
+    if(e.jenis==="tl")DB.tindak=DB.tindak.filter(function(x){return x.id!==o.id;});
+    else{var L=e.jenis==="kunj"?"kunj":"konf";DB[L]=DB[L].filter(function(x){return x.id!==o.id;});DB.tindak=DB.tindak.filter(function(x){return x.sumber!==L+":"+o.id;});}
+    simpan();ST.edit=null;render();toast("Dihapus.");});
+}
+
+/* =================== Dialog =================== */
+function dialog(judul,isi,tombol){var d=$("dlg");$("dlgT").textContent=judul;$("dlgB").innerHTML=isi;var a=$("dlgA");a.innerHTML="";
+  tombol.forEach(function(t){var b=document.createElement("button");b.type="button";b.className="btn "+(t.c||"");b.textContent=t.l;b.onclick=function(){if(t.f&&t.f()===false)return;tutupDlg();};a.appendChild(b);});
+  try{d.showModal();}catch(e){d.setAttribute("open","");}var f=d.querySelector("#dlgB input,#dlgB textarea,#dlgB select")||a.lastChild;if(f)f.focus();}
+function tutupDlg(){var d=$("dlg");try{d.close();}catch(e){d.removeAttribute("open");}}
+function konfirmasi(j,t,ok,f){dialog(j,'<p>'+esc(t)+'</p>',[{l:"Batal"},{l:ok,c:"bad",f:f}]);}
+
+function catatPantau(id){var t=byId(DB.tindak,id);if(!t)return;var k=kasusOf(t.kasusId);
+  dialog("Catatan pemantauan",'<p style="margin-top:0"><b>'+esc(t.uraian)+'</b><br><span class="note">'+esc(labelKasus(k))+' · '+esc(t.pihak)+' · tenggat '+fmtTgl(t.tenggat)+'</span></p>'+
+   (t.log.length?'<ul class="tline">'+t.log.slice().reverse().map(function(l){return '<li class="t"><div class="when">'+fmtTgl(l.tgl,1)+'</div>'+esc(l.catatan)+'</li>';}).join("")+'</ul>':'<p class="note">Belum ada catatan.</p>')+
+   '<div class="fg mt"><div class="f"><label for="cTgl">Tanggal</label><input type="date" id="cTgl" value="'+today()+'"></div><div class="f"><label for="cSt">Status sekarang</label><select id="cSt">'+opsi(ST_TL,t.status)+'</select></div><div class="f wide"><label for="cIsi">Hasil pemantauan</label><textarea id="cIsi" rows="3" placeholder="Apa yang terjadi, siapa yang melaporkan, perlu penyesuaian apa?"></textarea></div></div>',
+   [{l:"Tutup"},{l:"Simpan catatan",c:"pri",f:function(){var c=$("cIsi").value.trim(),s=$("cSt").value;if(!c&&s===t.status){toast("Tulis hasil pemantauan atau ubah status.");return false;}if(c)t.log.push({tgl:$("cTgl").value||today(),catatan:c});t.status=s;simpan();render();toast("Pemantauan dicatat.");}}]);}
+
+/* =================== Cetak =================== */
+var CETAK=[["rk","Rencana kunjungan rumah"],["lk","Laporan kunjungan rumah"],["uk","Undangan konferensi kasus"],["nk","Notulen & daftar hadir konferensi kasus"],["ks","Lembar kesepakatan bersama orang tua"],["rp","Rekap pemantauan tindak lanjut"]];
+function itemCetak(j){
+  if(j==="rk"||j==="lk")return DB.kunj.slice().sort(function(a,b){return String(b.tgl).localeCompare(a.tgl);}).map(function(v){return [v.id,fmtTgl(v.tglLaks||v.tgl)+" · "+labelKasus(kasusOf(v.kasusId))+" ("+v.status+")"];});
+  if(j==="uk"||j==="nk")return DB.konf.slice().sort(function(a,b){return String(b.tgl).localeCompare(a.tgl);}).map(function(f){return [f.id,fmtTgl(f.tgl)+" · "+labelKasus(kasusOf(f.kasusId))+" ("+f.status+")"];});
+  if(j==="ks"){var o=[];DB.kunj.forEach(function(v){if(DB.tindak.some(function(t){return t.sumber==="kunj:"+v.id;}))o.push(["kunj:"+v.id,"Kunjungan "+fmtTgl(v.tglLaks||v.tgl)+" · "+labelKasus(kasusOf(v.kasusId))]);});DB.konf.forEach(function(f){if(DB.tindak.some(function(t){return t.sumber==="konf:"+f.id;}))o.push(["konf:"+f.id,"Konferensi "+fmtTgl(f.tgl)+" · "+labelKasus(kasusOf(f.kasusId))]);});return o;}
+  return [["semua","Semua kasus yang belum selesai"]].concat(DB.kasus.map(function(k){return [k.id,(k.kode?k.kode+" · ":"")+labelKasus(k)];}));
+}
+function idMurid(k){if(!k)return "-";var n=String(k.nama||"");return ST.cNama==="nama"?n+(k.kelas?" (kelas "+k.kelas+")":""):inisial(n)+(k.kode?" · "+k.kode:"")+(k.kelas?" · kelas "+k.kelas:"");}
+function kop(judul,sub){var a=DB.atur;return '<div class="kop"><div><b>'+esc(a.sekolah||"[Nama sekolah — isi di Pengaturan]")+'</b><br>Layanan Bimbingan dan Konseling'+(a.ta?' · Tahun ajaran '+esc(a.ta):'')+'</div><span class="rhs">RAHASIA</span></div><h2>'+esc(judul)+'</h2><p class="sub">'+(sub||"")+'</p>';}
+function kv(rows){return '<table class="kv">'+rows.map(function(r){return '<tr><td>'+esc(r[0])+'</td><td>: '+(r[2]?r[1]:esc(r[1]||"-"))+'</td></tr>';}).join("")+'</table>';}
+function box(l,t){return '<p class="sec">'+esc(l)+'</p><div class="box">'+esc(t||"-")+'</div>';}
+function cek(list,dipilih){dipilih=arr(dipilih);return '<div>'+list.map(function(o){return '<div>'+(dipilih.indexOf(o)>=0?"☑":"☐")+' '+esc(o)+'</div>';}).join("")+'</div>';}
+function garisNip(nip){return nip?"NIP "+esc(nip):"NIP ...............................";}
+function ttd(list){var a=DB.atur;return '<div class="ttd">'+list.map(function(p,i){return '<div>'+(i===list.length-1?esc(a.kota||"..............")+", "+fmtTgl(today())+"<br>":"<br>")+esc(p.j)+'<div class="sp"></div><b>'+(p.n?esc(p.n):"(...................................)")+'</b>'+(p.nip!==undefined?'<br>'+garisNip(p.nip):'')+'</div>';}).join("")+'</div>';}
+function ttdBK(){var a=DB.atur;return [{j:"Mengetahui,<br>Kepala Sekolah",n:a.kepsek,nip:a.nipKepsek},{j:"Guru BK",n:a.guru,nip:a.nipGuru}].map(function(p){return p;});}
+function foot(){return '<div class="foot">Dokumen rahasia layanan bimbingan dan konseling. Simpan terbatas dan jangan disebarluaskan. Dicetak '+fmtTgl(today())+'.</div>';}
+function ttdHTML(list){var a=DB.atur;return '<div class="ttd">'+list.map(function(p,i){return '<div>'+(i===list.length-1?esc(a.kota||"..............")+", "+fmtTgl(today()):"&nbsp;")+'<br>'+p.j+'<div class="sp"></div><b>'+(p.n?esc(p.n):"(...................................)")+'</b>'+(p.nip!==undefined?'<br>'+garisNip(p.nip):'')+'</div>';}).join("")+'</div>';}
+function tabelTL(list,denganLog){if(!list.length)return '<p>-</p>';return '<table><thead><tr><th>No</th><th>Kesepakatan / tindak lanjut</th><th>Pihak</th><th>Penanggung jawab</th><th>Tenggat</th>'+(denganLog?'<th>Status</th><th>Pemantauan terakhir</th>':'')+'</tr></thead><tbody>'+list.map(function(t,i){var l=t.log[t.log.length-1];return '<tr><td>'+(i+1)+'</td><td>'+esc(t.uraian)+'</td><td>'+esc(t.pihak)+'</td><td>'+esc(t.pj||"-")+'</td><td>'+fmtTgl(t.tenggat)+'</td>'+(denganLog?'<td>'+esc(t.status)+'</td><td>'+(l?fmtTgl(l.tgl)+": "+esc(l.catatan):"-")+'</td>':'')+'</tr>';}).join("")+'</tbody></table>';}
+
+function docRK(v){var k=kasusOf(v.kasusId),a=DB.atur;
+  return '<div class="doc">'+kop("Rencana Kunjungan Rumah","Disusun "+fmtTgl(today()))+kv([["Murid",idMurid(k)],["Bidang layanan",k&&k.bidang],["Hari, tanggal",fmtTgl(v.tgl,1)],["Jam / perkiraan durasi",(v.jam||"-")+(v.durasi?" / "+v.durasi+" menit":"")],["Wilayah tujuan",v.alamat],["Petugas",v.petugas],["Nomor surat tugas",v.noSurat]])+
+  '<p class="sec">Tujuan kunjungan</p>'+cek(TUJUAN_KUNJ,v.tujuan)+(v.tujuanLain?box("Tujuan khusus",v.tujuanLain):"")+
+  '<p class="sec">Ceklis persiapan</p>'+cek(SIAP_KUNJ,v.siap)+box("Daftar pertanyaan wawancara",v.pertanyaan)+
+  '<p class="sec">Pedoman observasi (diisi di lapangan)</p><table><thead><tr><th>Aspek</th><th style="width:60px">Ya</th><th style="width:60px">Tidak</th><th>Catatan</th></tr></thead><tbody>'+OBS.map(function(o){return '<tr><td>'+esc(o)+'</td><td></td><td></td><td></td></tr>';}).join("")+'</tbody></table>'+
+  ttdHTML(ttdBK())+foot()+'</div>';}
+function docLK(v){var k=kasusOf(v.kasusId),kes=DB.tindak.filter(function(t){return t.sumber==="kunj:"+v.id;});
+  return '<div class="doc">'+kop("Laporan Kunjungan Rumah","Status: "+esc(v.status))+kv([["Murid",idMurid(k)],["Bidang layanan",k&&k.bidang],["Tanggal / durasi",fmtTgl(v.tglLaks||v.tgl,1)+(v.durasiLaks?" / "+v.durasiLaks+" menit":"")],["Wilayah",v.alamat],["Petugas",v.petugas],["Yang ditemui",arr(v.ditemui).join(", ")],["Penerimaan keluarga",v.penerimaan]])+
+  box("Permasalahan",k&&k.masalah)+box("Tujuan kunjungan",arr(v.tujuan).join("; ")+(v.tujuanLain?"\n"+v.tujuanLain:""))+box("Hasil wawancara",v.hasilW)+
+  '<p class="sec">Hasil observasi</p>'+cek(OBS,v.obs)+(v.hasilO?'<div class="box" style="margin-top:6px">'+esc(v.hasilO)+'</div>':'')+
+  box("Kekuatan/dukungan keluarga",v.kekuatanK)+box("Hambatan",v.hambatan)+'<p class="sec">Kesepakatan dan tindak lanjut</p>'+tabelTL(kes)+box("Rencana evaluasi",v.evaluasi)+
+  ttdHTML(ttdBK())+foot()+'</div>';}
+function docUK(f){var k=kasusOf(f.kasusId),a=DB.atur;
+  return '<div class="doc">'+kop("Undangan Konferensi Kasus","Terbatas dan rahasia")+kv([["Nomor","......................................"],["Perihal","Undangan konferensi kasus"]])+
+  '<p>Yth. Bapak/Ibu peserta konferensi kasus:</p><ol>'+arr(f.peserta).map(function(p){return '<li>'+esc(p.peran)+(p.nama?" ("+esc(p.nama)+")":"")+'</li>';}).join("")+'</ol>'+
+  '<p>Dengan hormat, kami mengundang Bapak/Ibu untuk hadir dalam konferensi kasus guna membahas upaya terbaik pendampingan murid dengan kode kasus <b>'+esc(k&&k.kode||"-")+'</b> (kelas '+esc(k&&k.kelas||"-")+'), yang akan dilaksanakan pada:</p>'+
+  kv([["Hari, tanggal",fmtTgl(f.tgl,1)],["Jam",f.jam],["Tempat",f.tempat]])+
+  '<p>Pertemuan ini bersifat terbatas dan tertutup. Seluruh informasi yang dibahas dijaga kerahasiaannya dan hanya digunakan untuk kepentingan terbaik murid. Atas perhatian dan kehadiran Bapak/Ibu, kami sampaikan terima kasih.</p>'+
+  ttdHTML([{j:"Guru BK",n:a.guru,nip:a.nipGuru},{j:"Kepala Sekolah",n:a.kepsek,nip:a.nipKepsek}])+foot()+'</div>';}
+function docNK(f){var k=kasusOf(f.kasusId),kes=DB.tindak.filter(function(t){return t.sumber==="konf:"+f.id;}),ps=arr(f.peserta);
+  var h='<div class="doc">'+kop("Notulen Konferensi Kasus","Status: "+esc(f.status))+kv([["Hari, tanggal",fmtTgl(f.tgl,1)],["Jam / tempat",(f.jam||"-")+" / "+(f.tempat||"-")],["Pemimpin rapat",f.pemimpin],["Notulis",f.notulis],["Murid",idMurid(k)],["Komitmen kerahasiaan",f.rahasia?"Sudah dibacakan dan disetujui peserta":"Belum dicatat"]])+
+  box("1. Hal positif murid",f.positif)+box("2. Gejala dan data",f.gejala)+box("3. Upaya yang sudah dilakukan",f.upayaK)+box("4. Pembahasan dan masukan peserta",f.masukan)+box("5. Kesimpulan dan keputusan",f.kesimpulan)+
+  kv([["Keputusan rujukan",f.rujukan]])+'<p class="sec">Pembagian peran dan tindak lanjut</p>'+tabelTL(kes)+
+  ttdHTML([{j:"Notulis",n:"",nip:undefined},{j:"Pemimpin rapat",n:"",nip:undefined}])+foot()+'</div>';
+  h+='<div class="doc">'+kop("Daftar Hadir Konferensi Kasus",fmtTgl(f.tgl,1)+" · kode kasus "+esc(k&&k.kode||"-"))+'<table><thead><tr><th style="width:36px">No</th><th>Peran</th><th>Nama</th><th style="width:170px">Tanda tangan</th></tr></thead><tbody>'+
+   ps.concat([{peran:"",nama:""},{peran:"",nama:""}]).map(function(p,i){return '<tr style="height:40px"><td>'+(i+1)+'</td><td>'+esc(p.peran)+'</td><td>'+esc(p.nama)+'</td><td>'+(i%2?"":(i+1)+".")+'</td></tr>';}).join("")+'</tbody></table><p style="font-size:13px">Dengan menandatangani daftar hadir ini, peserta menyatakan bersedia menjaga kerahasiaan seluruh informasi yang dibahas.</p>'+foot()+'</div>';
+  return h;}
+function docKS(src){var p=String(src).split(":"),o=p[0]==="kunj"?byId(DB.kunj,p[1]):byId(DB.konf,p[1]);if(!o)return '<p>Sumber tidak ditemukan.</p>';var k=kasusOf(o.kasusId),kes=DB.tindak.filter(function(t){return t.sumber===src;}),a=DB.atur;
+  var tg=p[0]==="kunj"?(o.tglLaks||o.tgl):o.tgl,ev=kes.reduce(function(m,t){return t.tenggat&&t.tenggat>m?t.tenggat:m;},"");
+  return '<div class="doc">'+kop("Lembar Kesepakatan Bersama","Hasil "+(p[0]==="kunj"?"kunjungan rumah":"konferensi kasus")+" · "+fmtTgl(tg,1))+
+  '<p>Pada hari ini, '+fmtTgl(tg,1)+', kami yang bertanda tangan di bawah ini—orang tua/wali, murid, dan pihak sekolah—bersepakat untuk bersama-sama mendukung perkembangan ananda <b>'+esc(idMurid(k))+'</b> melalui langkah-langkah berikut.</p>'+tabelTL(kes)+
+  '<p>Kesepakatan ini dievaluasi bersama '+(ev?'paling lambat '+fmtTgl(ev):'pada waktu yang disepakati')+' dan dapat disesuaikan sesuai perkembangan. Seluruh isi kesepakatan bersifat rahasia dan hanya digunakan untuk kepentingan terbaik murid.</p>'+
+  ttdHTML([{j:"Orang tua/wali",n:""},{j:"Murid",n:""},{j:"Wali kelas",n:""},{j:"Guru BK",n:a.guru,nip:a.nipGuru}])+
+  '<div class="ttd" style="margin-top:6px"><div>Mengetahui,<br>Kepala Sekolah<div class="sp"></div><b>'+(a.kepsek?esc(a.kepsek):"(...................................)")+'</b><br>'+garisNip(a.nipKepsek)+'</div></div>'+foot()+'</div>';}
+function docRP(id){var ks=id==="semua"?DB.kasus.filter(function(k){return k.status!=="Selesai";}):[kasusOf(id)].filter(Boolean);if(!ks.length)return '<p>Tidak ada kasus.</p>';
+  return '<div class="doc">'+kop("Rekap Pemantauan Tindak Lanjut",id==="semua"?"Semua kasus yang belum selesai · per "+fmtTgl(today()):"Per "+fmtTgl(today()))+ks.map(function(k){var tl=tlKasus(k.id),p=progres(tl);
+    return '<p class="sec" style="font-size:15px;border-bottom:1px solid #999;padding-bottom:2px;margin-top:16px">'+esc(idMurid(k))+'</p>'+kv([["Bidang / status",(k.bidang||"-")+" / "+(k.status||"-")],["Kunjungan rumah",String(DB.kunj.filter(function(v){return v.kasusId===k.id;}).length)+" kali"],["Konferensi kasus",String(DB.konf.filter(function(f){return f.kasusId===k.id;}).length)+" kali"],["Ketercapaian tindak lanjut",p==null?"-":p+"% selesai"]])+tabelTL(tl,true);}).join("")+
+  ttdHTML(ttdBK())+foot()+'</div>';}
+function docHTML(){var j=ST.cJ,id=ST.cId;if(!id)return '<p class="note" style="text-align:center">Pilih data yang akan dicetak.</p>';
+  if(j==="rk"||j==="lk"){var v=byId(DB.kunj,id);return v?(j==="rk"?docRK(v):docLK(v)):"";}
+  if(j==="uk"||j==="nk"){var f=byId(DB.konf,id);return f?(j==="uk"?docUK(f):docNK(f)):"";}
+  if(j==="ks")return docKS(id);return docRP(id);}
+V.cetak=function(){var it=itemCetak(ST.cJ);if(!it.some(function(x){return x[0]===ST.cId;}))ST.cId=it.length?it[0][0]:"";
+  var h='<h2>Cetak dokumen</h2><p class="note">Pratinjau di bawah dicetak lewat dialog cetak browser (pilih "Simpan sebagai PDF" bila perlu). Catatan khusus yang sangat rahasia tidak ikut dicetak.</p>';
+  h+='<div class="card"><div class="fg"><div class="f"><label for="cJ">Jenis dokumen</label><select id="cJ">'+CETAK.map(function(c){return '<option value="'+c[0]+'"'+(c[0]===ST.cJ?' selected':'')+'>'+esc(c[1])+'</option>';}).join("")+'</select></div><div class="f"><label for="cId">Data</label><select id="cId">'+(it.length?it.map(function(x){return '<option value="'+esc(x[0])+'"'+(x[0]===ST.cId?' selected':'')+'>'+esc(x[1])+'</option>';}).join(""):'<option value="">(belum ada data)</option>')+'</select></div><div class="f"><label for="cNama">Identitas murid di cetakan</label><select id="cNama"><option value="inisial"'+(ST.cNama==="inisial"?' selected':'')+'>Inisial dan kode kasus</option><option value="nama"'+(ST.cNama==="nama"?' selected':'')+'>Nama lengkap</option></select></div></div><div class="row mt"><button class="btn pri" type="button" data-act="cetak"'+(ST.cId?'':' disabled')+'>Cetak / simpan PDF</button></div></div>';
+  h+='<div class="paper mt" id="pratinjau">'+docHTML()+'</div>';return h;};
+function cetakSekarang(){var c=$("cetak");c.innerHTML='<div class="paper">'+docHTML()+'</div>';c.hidden=false;setTimeout(function(){try{window.print();}catch(e){}setTimeout(function(){c.hidden=true;c.innerHTML="";},500);},60);}
+
+/* =================== Panduan & Sumber =================== */
+V.panduan=function(){
+  var S=[
+    ["Permendikbud Nomor 111 Tahun 2014 tentang Bimbingan dan Konseling pada Pendidikan Dasar dan Pendidikan Menengah (JDIH peraturan.go.id)","https://peraturan.go.id/files/bn1544-2014.pdf","Dasar layanan BK, termasuk kegiatan pendukung kunjungan rumah, konferensi kasus, dan alih tangan kasus."],
+    ["Panduan Operasional Penyelenggaraan Bimbingan dan Konseling, Ditjen GTK Kemendikbud 2016 (salinan di eprints UNY)","https://eprints.uny.ac.id/54129/1/1.%20PANDUAN%20BK%20SD%202016,DITJEN%20GTK%20revisi%20final%2021%20Des%202016.pdf","Langkah persiapan–pelaksanaan–laporan kunjungan rumah, tahapan konferensi kasus (komitmen kerahasiaan, mulai dari hal positif, pembagian peran), dan alur alih tangan kasus. Seri panduan yang sama juga terbit untuk jenjang SMP."],
+    ["Permendikdasmen Nomor 6 Tahun 2026 tentang Budaya Sekolah Aman dan Nyaman (JDIH BPK)","https://peraturan.bpk.go.id/Details/345185/permendikdasmen-no-6-tahun-2026","Acuan koordinasi bila kasus menyangkut dugaan kekerasan atau perundungan."],
+    ["Konferensi Kasus sebagai Teknik Pemecahan Masalah Konseli (Seminar BK, Universitas Negeri Malang)","https://journal2.um.ac.id/index.php/sembk/article/view/1298","Praktik baik konferensi kasus yang terbatas, rahasia, dan berorientasi solusi."]
+  ];
+  var h='<h2>Panduan &amp; sumber</h2><div class="grid g2 mt">';
+  h+='<section class="card"><h3>Alur kunjungan rumah</h3><ol><li><b>Persiapan.</b> Tetapkan tujuan dan waktu, minta izin dan surat tugas kepala sekolah, hubungi orang tua untuk menyepakati waktu, siapkan daftar pertanyaan dan pedoman observasi. Berangkat minimal berdua.</li><li><b>Pelaksanaan.</b> Jelaskan maksud kunjungan dengan ramah, wawancara dan amati seperlunya. Dengarkan; hindari menyalahkan keluarga.</li><li><b>Mengakhiri.</b> Rangkum hasil, sepakati langkah bersama (siapa, apa, kapan), sampaikan cara menghubungi sekolah.</li><li><b>Laporan &amp; tindak lanjut.</b> Tulis laporan segera, catat kesepakatan, pantau, dan evaluasi pada waktu yang disepakati.</li></ol></section>';
+  h+='<section class="card"><h3>Tahapan konferensi kasus</h3><ol><li><b>Persiapan.</b> Guru BK mengajukan ke kepala sekolah; undang peserta terbatas yang dapat memberi keterangan, kemudahan, dan komitmen.</li><li><b>Pembukaan.</b> Sampaikan maksud dan tujuan, bacakan dan mintakan komitmen kerahasiaan.</li><li><b>Uraian kasus.</b> Mulai dari hal positif murid, lalu gejala, data, dan upaya yang sudah dilakukan.</li><li><b>Diskusi.</b> Klarifikasi data yang berbeda, tampung masukan, cari alternatif terbaik.</li><li><b>Keputusan.</b> Simpulkan, bagi peran, tetapkan tenggat dan perlu tidaknya rujukan.</li><li><b>Pemantauan.</b> Catat perkembangan tiap tindak lanjut dan laporkan kembali.</li></ol></section>';
+  h+='<section class="card"><h3>Kapan merujuk (alih tangan kasus)</h3><p>Rujuk bila masalah di luar kewenangan guru BK, ada risiko keselamatan, atau upaya sekolah belum berhasil. Langkahnya: bicarakan dengan murid dan orang tua untuk memperoleh persetujuan, konsultasikan dengan kepala sekolah, buat surat pengantar dengan data pendukung seperlunya, pantau, dan terima laporan dari tenaga ahli.</p><div class="alert bad"><b>Penting:</b> aplikasi ini tidak menyusun diagnosis. Dugaan gangguan psikologis atau kesehatan dirujuk ke psikolog, puskesmas, atau layanan profesional. Dugaan kekerasan dan perundungan ditangani bersama tim sekolah aman sesuai Permendikdasmen 6/2026. Bila ada bahaya yang mendesak, hubungi layanan darurat setempat.</div></section>';
+  h+='<section class="card"><h3>Etika &amp; kerahasiaan</h3><ul><li>Catat fakta yang teramati, bukan label atau penilaian pribadi.</li><li>Bagikan informasi hanya kepada pihak yang perlu tahu dan untuk kepentingan terbaik murid.</li><li>Gunakan <b>kode kasus dan inisial</b> di dokumen yang beredar; undangan konferensi tidak memuat nama murid.</li><li>Kolom <i>catatan khusus</i> tidak ikut dicetak.</li><li>Aktifkan tombol <b>A.B.</b> (samarkan nama) saat layar terlihat orang lain.</li><li>Data tersimpan hanya di browser perangkat ini. PIN adalah <b>kunci tampilan, bukan enkripsi</b>. Buat cadangan JSON secara berkala dan simpan di tempat aman.</li></ul></section></div>';
+  h+='<section class="card mt" aria-labelledby="hSb"><h3 id="hSb">Dasar dan sumber</h3><ol>'+S.map(function(s){return '<li style="margin-bottom:8px"><a href="'+s[1]+'" target="_blank" rel="noopener">'+esc(s[0])+'</a><br><span class="note">'+esc(s[2])+'</span></li>';}).join("")+'</ol><p class="note">Isi formulir disusun ulang dari panduan di atas dan disesuaikan untuk SMP. Sesuaikan dengan kebijakan sekolah dan dinas pendidikan setempat.</p></section>';
+  return h;};
+
+/* =================== Pengaturan =================== */
+var F_ATUR=[{k:"sekolah",l:"Nama sekolah"},{k:"kota",l:"Kota (untuk tanda tangan)"},{k:"ta",l:"Tahun ajaran",ph:"2026/2027"},{k:"guru",l:"Nama guru BK"},{k:"nipGuru",l:"NIP guru BK (opsional)"},{k:"kepsek",l:"Nama kepala sekolah"},{k:"nipKepsek",l:"NIP kepala sekolah (opsional)"}];
+V.atur=function(){var a=DB.atur;
+  var h='<h2>Pengaturan</h2><div class="grid g2 mt">';
+  h+='<section class="card"><h3>Identitas untuk cetakan</h3><p class="note">Hanya disimpan di perangkat ini.</p><form onsubmit="return false">'+formHTML(F_ATUR,a,"a_")+'</form><button class="btn pri" type="button" data-act="simpanAtur">Simpan identitas</button></section>';
+  h+='<section class="card"><h3>Keamanan</h3><div class="fg"><div class="f"><label for="pOld">PIN lama</label><input type="password" id="pOld" inputmode="numeric" maxlength="8" autocomplete="current-password"></div><div class="f"><label for="pNew">PIN baru (4–8 angka)</label><input type="password" id="pNew" inputmode="numeric" maxlength="8" autocomplete="new-password"></div></div><div class="row"><button class="btn" type="button" data-act="gantiPin">Ganti PIN</button><button class="btn" type="button" data-act="kunci">Kunci sekarang</button></div>'+
+   '<div class="f mt"><label for="aLock">Kunci otomatis setelah tidak aktif (menit, 0 = mati)</label><input type="number" id="aLock" min="0" max="60" value="'+esc(a.autolock)+'" style="max-width:140px"></div><button class="btn sm" type="button" data-act="simpanLock">Simpan</button>'+
+   '<p class="note">PIN hanya mengunci <b>tampilan</b>, bukan enkripsi. Hash PIN disimpan di perangkat ini. Gunakan perangkat pribadi.</p></section>';
+  h+='<section class="card"><h3>AI opsional (Gemini)</h3><p class="note">Dipakai hanya untuk tombol <i>Draf kesimpulan dengan AI</i> di notulen konferensi. Teks dikirim ke Google <b>setelah</b> Anda melihat dan menyetujuinya; nama murid dan nama peserta diganti dengan peran. Kosongkan kunci untuk mematikan.</p><div class="f"><label for="aiKey">Kunci API Gemini milik Anda</label><input type="password" id="aiKey" autocomplete="off" value="'+esc(a.aiKey)+'"></div><div class="f"><label for="aiModel">Model</label><input type="text" id="aiModel" value="'+esc(a.aiModel)+'"></div><button class="btn" type="button" data-act="simpanAI">Simpan pengaturan AI</button></section>';
+  h+='<section class="card"><h3>Cadangan &amp; data</h3><p class="note">Cadangan JSON berisi data rahasia: simpan di tempat aman dan jangan dibagikan.</p><div class="row"><button class="btn tl" type="button" data-act="eksporJSON">Ekspor cadangan JSON</button><label class="btn" for="impor" style="margin:0">Impor cadangan JSON</label><input type="file" id="impor" accept="application/json,.json" class="sr"><button class="btn" type="button" data-act="csvTL">Ekspor CSV tindak lanjut</button></div>'+
+   '<div class="row mt">'+(adaContoh()?'<button class="btn bad" type="button" data-act="hapusContoh">Hapus data contoh</button>':'<button class="btn" type="button" data-act="muatContoh">Muat data contoh</button>')+'<button class="btn bad" type="button" data-act="hapusSemua">Hapus semua data &amp; PIN</button></div>'+(STORAGE_OK?'':'<p class="alert warn mt">Penyimpanan browser tidak tersedia; data akan hilang saat halaman ditutup. Segera ekspor cadangan.</p>')+'</section></div>';
+  return h;};
+
+/* =================== Ekspor / impor =================== */
+function unduh(nama,isi,tipe){try{var b=new Blob([isi],{type:tipe}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=nama;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},800);}catch(e){toast("Gagal mengunduh berkas.");}}
+function csvSel(v){v=String(v==null?"":v);return /[",\n;]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function eksporCSV(){var rows=[["Kode kasus","Inisial murid","Kelas","Sumber","Tindak lanjut","Pihak","Penanggung jawab","Tenggat","Status","Terlambat","Jumlah catatan pantau","Catatan terakhir"]];
+  DB.tindak.forEach(function(t){var k=kasusOf(t.kasusId)||{},l=t.log[t.log.length-1];rows.push([k.kode,inisial(k.nama),k.kelas,sumberLabel(t.sumber),t.uraian,t.pihak,t.pj,t.tenggat,t.status,terlambat(t)?"ya":"",t.log.length,l?l.tgl+": "+l.catatan:""]);});
+  unduh("tindak-lanjut-bk-"+today()+".csv","﻿"+rows.map(function(r){return r.map(csvSel).join(",");}).join("\r\n"),"text/csv;charset=utf-8");toast("CSV diunduh (nama ditulis sebagai inisial).");}
+function eksporJSON(){unduh("cadangan-kunjungan-rumah-bk-"+today()+".json",JSON.stringify({aplikasi:"bk-kunjungan-rumah",diekspor:new Date().toISOString(),data:Object.assign({},DB,{atur:Object.assign({},DB.atur,{aiKey:""})})},null,1),"application/json");toast("Cadangan diunduh (kunci API tidak ikut).");}
+function imporJSON(file){var r=new FileReader();r.onload=function(){try{var o=JSON.parse(r.result),d=o&&o.data?o.data:o;if(!d||!Array.isArray(d.kasus))throw 0;
+    konfirmasi("Ganti data dengan cadangan?","Data di perangkat ini akan diganti dengan isi cadangan ("+d.kasus.length+" kasus). Kunci API AI yang tersimpan tetap dipakai.","Ganti data",function(){var key=DB.atur.aiKey;DB=normal(d);if(!DB.atur.aiKey)DB.atur.aiKey=key;DB.contohDimuat=true;simpan();render();toast("Cadangan dipulihkan.");});
+  }catch(e){toast("Berkas bukan cadangan aplikasi ini.");}};r.readAsText(file);}
+
+/* =================== AI opsional =================== */
+function aiKonf(){var e=ST.edit,o=e.obj;bacaForm(F_KONF,o,"e_");bacaForm(F_KONF_N,o,"e_");syncPes();syncKes();
+  var a=DB.atur;if(!a.aiKey){dialog("AI belum aktif",'<p>Fitur ini opsional. Isi kunci API Gemini milik Anda sendiri di <b>Pengaturan</b> untuk mengaktifkannya.</p>',[{l:"Tutup"}]);return;}
+  var k=kasusOf(o.kasusId),nama=k?String(k.nama).replace(/\(contoh\)/i,"").trim():"",teks=[["Hal positif",o.positif],["Gejala dan data",o.gejala],["Upaya",o.upayaK],["Masukan peserta",o.masukan]].map(function(x){return x[0]+": "+(x[1]||"-");}).join("\n");
+  var ganti=[];if(nama){ganti.push(nama);nama.split(/\s+/).forEach(function(w){if(w.length>2)ganti.push(w);});}arr(o.peserta).forEach(function(p){if(p.nama)ganti.push(p.nama);});
+  ganti.sort(function(x,y){return y.length-x.length;}).forEach(function(w){teks=teks.split(w).join("[murid/peserta]");});
+  var kirim="Bidang: "+(k?k.bidang:"-")+"\nPeserta (peran): "+arr(o.peserta).map(function(p){return p.peran;}).join(", ")+"\n"+teks;
+  dialog("Kirim teks ini ke Gemini?",'<p class="note" style="margin-top:0">Periksa: pastikan tidak ada nama, alamat, atau detail yang dapat mengidentifikasi murid. Anda bisa membatalkan.</p><pre class="kirim">'+esc(kirim)+'</pre>',[{l:"Batal"},{l:"Kirim dan buat draf",c:"pri",f:function(){mintaAI(kirim);}}]);}
+function mintaAI(kirim){var a=DB.atur;toast("Menyusun draf…");
+  var prompt="Anda membantu guru BK SMP di Indonesia menyusun draf KESIMPULAN konferensi kasus. Gunakan bahasa Indonesia yang santun dan ringkas. Jangan membuat diagnosis klinis atau label. Fokus pada solusi, kekuatan murid, dan pembagian peran sekolah–orang tua–murid. Jika ada tanda risiko keselamatan, kekerasan, atau gejala berat, sarankan rujukan ke tenaga profesional atau tim sekolah aman. Format: daftar bernomor 3–6 keputusan, masing-masing menyebut pihak dan perkiraan waktu.\n\nData (sudah disamarkan):\n"+kirim;
+  fetch("https://generativelanguage.googleapis.com/v1beta/models/"+encodeURIComponent(a.aiModel||"gemini-2.5-flash")+":generateContent",{method:"POST",headers:{"Content-Type":"application/json","x-goog-api-key":a.aiKey},body:JSON.stringify({contents:[{role:"user",parts:[{text:prompt}]}],generationConfig:{temperature:.4}})})
+  .then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error((j.error&&j.error.message)||("HTTP "+r.status));return j;});})
+  .then(function(j){var t="";try{t=j.candidates[0].content.parts.map(function(p){return p.text||"";}).join("").trim();}catch(e){}if(!t)throw new Error("Jawaban kosong");
+    var el=$("e_kesimpulan");if(el){el.value=(el.value?el.value+"\n\n":"")+"[Draf AI — periksa dan sunting]\n"+t;el.focus();}toast("Draf ditambahkan ke kolom kesimpulan. Periksa sebelum menyimpan.");})
+  .catch(function(e){toast("AI gagal: "+e.message);});}
+
+/* =================== Kunci =================== */
+var lastAct=Date.now();
+function tampilKunci(){TERBUKA=false;$("main").innerHTML="";["topbar","main","foot"].forEach(function(i){$(i).hidden=true;});$("lock").hidden=false;var ada=!!pinData();$("lockSetup").hidden=ada;$("lockEnter").hidden=!ada;$("pinMsg").textContent="";["pin1","pin2","pinIn"].forEach(function(i){$(i).value="";});setTimeout(function(){var f=ada?$("pinIn"):$("pin1");if(f)f.focus();},30);}
+function buka(){TERBUKA=true;lastAct=Date.now();$("lock").hidden=true;["topbar","main","foot"].forEach(function(i){$(i).hidden=false;});
+  if(!DB.contohDimuat&&!DB.kasus.length)isiContoh();render();}
+function aturPin(){var a=$("pin1").value,b=$("pin2").value;if(!/^\d{4,8}$/.test(a)){toast("PIN harus 4–8 angka.");return;}if(a!==b){toast("Kedua PIN tidak sama.");return;}setPin(a);toast("PIN dibuat. Ingat baik-baik.");buka();}
+function bukaPin(){if(pinOK($("pinIn").value))buka();else{$("pinMsg").textContent="PIN salah.";$("pinIn").select();}}
+setInterval(function(){var m=+DB.atur.autolock||0;if(TERBUKA&&m>0&&Date.now()-lastAct>m*60000){tutupDlg();ST.edit=null;tampilKunci();}},15000);
+["pointerdown","keydown","scroll"].forEach(function(ev){document.addEventListener(ev,function(){lastAct=Date.now();},{passive:true});});
+
+/* =================== Tema & samar =================== */
+var TEMA=lsGet(KEY_THEME)||"auto";
+function terapTema(){var r=document.documentElement;if(TEMA==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",TEMA);$("btnTema").title="Tema: "+({auto:"ikuti perangkat",light:"terang",dark:"gelap"})[TEMA]+" (klik untuk ganti)";}
+function terapSamar(){$("btnSamar").setAttribute("aria-pressed",SAMAR?"true":"false");}
+
+/* =================== Aksi =================== */
+var ACT={
+  baruKasus:function(){bukaEdit("kasus",kasusBaru(),true);},
+  baruKunj:function(el){bukaEdit("kunj",kunjBaru(el.getAttribute("data-k")),true,{kes:[]});},
+  baruKonf:function(el){bukaEdit("konf",konfBaru(el.getAttribute("data-k")),true,{kes:[]});},
+  baruTL:function(el){bukaEdit("tl",tlBaru(el.getAttribute("data-k")),true);},
+  ubahKasus:function(el){var o=kasusOf(el.getAttribute("data-id"));if(o)bukaEdit("kasus",salin(o),false);},
+  ubahKunj:function(el){var o=byId(DB.kunj,el.getAttribute("data-id"));if(o)bukaEdit("kunj",salin(o),false,{kes:kesDari("kunj:"+o.id)});},
+  ubahKonf:function(el){var o=byId(DB.konf,el.getAttribute("data-id"));if(o)bukaEdit("konf",salin(o),false,{kes:kesDari("konf:"+o.id)});},
+  ubahTL:function(el){var o=byId(DB.tindak,el.getAttribute("data-id"));if(o)bukaEdit("tl",salin(o),false);},
+  detail:function(el){ST.view="kasus";ST.edit=null;ST.detail=el.getAttribute("data-id");render();window.scrollTo(0,0);},
+  tutupDetail:function(){ST.detail=null;render();},
+  simpanEdit:simpanEdit,
+  batalEdit:function(){ST.edit=null;render();},
+  hapusEdit:hapusEdit,
+  tambahKes:function(){syncKes();var o=ST.edit.obj;ST.edit.kes.push({id:"t"+uid(),kasusId:o.kasusId,sumber:"",uraian:"",pihak:"Orang tua",pj:"",tenggat:geser(14),status:"Belum",log:[]});$("kesBox").innerHTML=kesHTML();var l=document.querySelectorAll(".kU");if(l.length)l[l.length-1].focus();},
+  hapusKes:function(el){syncKes();ST.edit.kes.splice(+el.getAttribute("data-i"),1);$("kesBox").innerHTML=kesHTML();},
+  tambahPes:function(){syncPes();ST.edit.obj.peserta.push({peran:"Guru mata pelajaran",nama:"",hadir:false});$("pesBox").innerHTML=pesHTML();var l=document.querySelectorAll(".pR");if(l.length)l[l.length-1].focus();},
+  hapusPes:function(el){syncPes();ST.edit.obj.peserta.splice(+el.getAttribute("data-i"),1);$("pesBox").innerHTML=pesHTML();},
+  aiKonf:aiKonf,
+  catat:function(el){catatPantau(el.getAttribute("data-id"));},
+  cetakKe:function(el){ST.view="cetak";ST.edit=null;ST.detail=null;ST.cJ=el.getAttribute("data-j");ST.cId=el.getAttribute("data-id");render();window.scrollTo(0,0);},
+  cetak:cetakSekarang,
+  csvTL:eksporCSV,eksporJSON:eksporJSON,
+  hapusContoh:function(){konfirmasi("Hapus data contoh?","Semua data berlabel contoh akan dihapus. Data Anda sendiri tetap ada.","Hapus contoh",function(){hapusContoh();render();toast("Data contoh dihapus.");});},
+  muatContoh:function(){isiContoh();render();toast("Data contoh dimuat.");},
+  hapusSemua:function(){konfirmasi("Hapus SEMUA data?","Seluruh kasus, kunjungan, konferensi, tindak lanjut, pengaturan, dan PIN di perangkat ini akan dihapus permanen. Ekspor cadangan dulu bila perlu.","Hapus semua",function(){[KEY,KEY_PIN,KEY_SAMAR,KEY_INGAT].forEach(lsDel);DB=defDB();DB.contohDimuat=true;simpan();ST.edit=null;ST.detail=null;ST.view="beranda";tampilKunci();toast("Semua data dihapus.");});},
+  simpanAtur:function(){bacaForm(F_ATUR,DB.atur,"a_");simpan();render();toast("Identitas disimpan.");},
+  simpanLock:function(){DB.atur.autolock=Math.max(0,Math.min(60,+$("aLock").value||0));simpan();toast("Kunci otomatis: "+(DB.atur.autolock?DB.atur.autolock+" menit":"mati")+".");},
+  simpanAI:function(){DB.atur.aiKey=$("aiKey").value.trim();DB.atur.aiModel=$("aiModel").value.trim()||"gemini-2.5-flash";simpan();toast(DB.atur.aiKey?"Pengaturan AI disimpan.":"AI dimatikan.");},
+  gantiPin:function(){var o=$("pOld").value,n=$("pNew").value;if(!pinOK(o)){toast("PIN lama salah.");return;}if(!/^\d{4,8}$/.test(n)){toast("PIN baru harus 4–8 angka.");return;}setPin(n);$("pOld").value=$("pNew").value="";toast("PIN diganti.");},
+  kunci:function(){ST.edit=null;tampilKunci();}
+};
+document.addEventListener("click",function(e){var t=e.target.closest("[data-tab]");if(t&&TERBUKA){go(t.getAttribute("data-tab"));return;}var a=e.target.closest("[data-act]");if(a&&TERBUKA&&ACT[a.getAttribute("data-act")]){e.preventDefault();ACT[a.getAttribute("data-act")](a);}});
+$("main").addEventListener("input",function(e){if(e.target.id==="cariK"){ST.cariK=e.target.value;var p=e.target.selectionStart;render();var c=$("cariK");c.focus();try{c.setSelectionRange(p,p);}catch(x){}}});
+$("main").addEventListener("change",function(e){var t=e.target,id=t.id;
+  if(id==="fK"||id==="fV"||id==="fF"||id==="fT"||id==="fTP"){ST[id]=t.value;render();$(id).focus();return;}
+  if(id==="cJ"||id==="cId"||id==="cNama"){ST[id]=t.value;if(id==="cJ")ST.cId="";render();$(id).focus();return;}
+  if(t.hasAttribute("data-st")){var x=byId(DB.tindak,t.getAttribute("data-st"));if(x){x.status=t.value;simpan();renderTabs();toast("Status diperbarui.");}return;}
+  if(id==="impor"&&t.files&&t.files[0]){imporJSON(t.files[0]);t.value="";}});
+$("tabs").addEventListener("keydown",function(e){if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;var b=[].slice.call($("tabs").querySelectorAll("button")),i=b.indexOf(document.activeElement);if(i<0)return;e.preventDefault();b[(i+(e.key==="ArrowRight"?1:b.length-1))%b.length].focus();});
+$("btnSetPin").addEventListener("click",aturPin);
+$("pin2").addEventListener("keydown",function(e){if(e.key==="Enter")aturPin();});
+$("btnUnlock").addEventListener("click",bukaPin);
+$("pinIn").addEventListener("keydown",function(e){if(e.key==="Enter")bukaPin();});
+$("btnForgot").addEventListener("click",function(){konfirmasi("Hapus semua data?","Tanpa PIN, satu-satunya cara membuka aplikasi adalah menghapus semua data di perangkat ini. Lanjutkan?","Hapus semua",function(){[KEY,KEY_PIN,KEY_SAMAR,KEY_INGAT].forEach(lsDel);DB=defDB();tampilKunci();toast("Data dihapus. Buat PIN baru.");});});
+$("btnKunci").addEventListener("click",function(){ST.edit=null;tutupDlg();tampilKunci();});
+$("btnTema").addEventListener("click",function(){TEMA={auto:"light",light:"dark",dark:"auto"}[TEMA];lsSet(KEY_THEME,TEMA);terapTema();toast("Tema: "+({auto:"ikuti perangkat",light:"terang",dark:"gelap"})[TEMA]);});
+$("btnSamar").addEventListener("click",function(){if(ST.edit){toast("Simpan atau batalkan isian dulu.");return;}SAMAR=!SAMAR;lsSet(KEY_SAMAR,SAMAR?"1":"0");terapSamar();render();toast(SAMAR?"Nama murid disamarkan menjadi inisial.":"Nama murid ditampilkan.");});
+$("dlg").addEventListener("cancel",function(){});
+
+/* =================== Mulai =================== */
+muat();terapTema();terapSamar();tampilKunci();
+</script>
+</body>
+</html>
